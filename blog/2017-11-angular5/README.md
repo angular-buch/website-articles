@@ -56,7 +56,7 @@ export class MyComponent
 </div>
 ```
 
-Weitere Infos zu `preservWhitespaces` finden Sie in der [offiziellen Dokumentation](https://angular.io/api/core/Component#preserveWhitespaces).
+Weitere Infos zu `preserveWhitespaces` finden Sie in der [offiziellen Dokumentation](https://angular.io/api/core/Component#preserveWhitespaces).
 
 
 ## Lokalisierte Pipes
@@ -73,5 +73,13 @@ Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel.
 
 ## HttpClient
 
+Mit [Angular 4.3](https://github.com/angular/angular/blob/master/CHANGELOG.md#430-2017-07-14) wurde der neue `HttpClient` eingeführt – und löst damit das `HttpModule` ab, das wir Kapitel 10.1 im Angular-Buch beschrieben haben.
+Der neue HttpClient wird weitgehend gleich verwendet, allerdings entfällt ein wesentlicher Schritt: die manuelle Umwandlung von JSON.
+
+Außerdem bietet der HttpClient zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
+
+Wir empfehlen Ihnen die Migration auf das neue Modul.
+Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue HttpClient]()
 
 ## RxJS Lettable Operators
+
