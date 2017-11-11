@@ -29,12 +29,11 @@ Beispielsweise werden Datumsangaben im Locale `en_US` anders dargestellt als fü
 Ein weiteres Beispiel sind Dezimal- und Tausendertrennzeichen (Punkt und Komma) bei Zahlen.
 
 In der Anwendung muss immer ein Locale festgelegt werden.
-Im einfachsten Fall legen wir die Sprache schon zur Entwicklungszeit fest.
-Es existieren natürlich auch dynamische und flexiblere Wege.
+Im einfachsten Fall legen wir die Sprache schon zur Entwicklungszeit fest, aber es existieren natürlich auch dynamische und flexiblere Wege.
 
-Das aktuelle Locale ist Token `LOCALE_ID` festgelegt.
+Das aktuelle Locale ist im Token `LOCALE_ID` festgelegt.
 Um den Wert zu ändern, können wir das Token im DI-Container überladen.
-Diesen Weg ebschreiben wir so auch im Buch im Abschnitt 13.1.2 "Die Sprache einstellen":
+Diesen Weg beschreiben wir so auch im Buch im Abschnitt 13.1.2 "Die Sprache einstellen":
 
 ```typescript
 @NgModule({
