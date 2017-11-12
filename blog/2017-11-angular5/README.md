@@ -23,7 +23,7 @@ Beim Update auf Angular 5 hilft der [Angular Update Guide](https://angular-updat
 
 ## Build Optimizer / White Spaces
 
-In Projekten mit Angular 5 ist ab sofort automatisch der *Build Optimizer* aktiv.
+In Projekten mit Angular 5 und der aktuellen Angular CLI (ab Version 1.5) ist ab sofort automatisch der *Build Optimizer* aktiv.
 Dadurch wird die effektive Bundle-Größe weiter reduziert und die Start-Performance verbessert.
 
 Außerdem wurde für den Compiler die neue Option `preserveWhitespaces` eingeführt.
@@ -81,5 +81,81 @@ Außerdem bietet der HttpClient zusätzliche Features wie verbesserte Typisierun
 Wir empfehlen Ihnen die Migration auf das neue Modul.
 Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue HttpClient]()
 
+
+
 ## RxJS Lettable Operators
+
+Mit Angular 5 wurde *RxJS* auf die neueste Version 5.5 aktualisiert.
+Damit kommt auch das Konzept der *Lettable Operators* in die Angular-Welt.
+
+Für den Entwickler ändert sich dabei die Verwendung der RxJS-Operatoren.
+Anstatt die Operatoren zu verketten, wird ab sofort die Methode `pipe()` eingesetzt.
+Sie erhält als Argumente die gesamte Pipeline von Operatoren.
+Die Operatoren werden weiterhin einzeln importiert, allerdings als *Named Imports* aus dem zentralen Modul `rxjs/operators`.
+
+Das folgende Beispiel ist aus dem *Listing 10-31* aus dem Angular-Buch entnommen:
+
+```typescript
+// Originales Beispiel aus dem Buch
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+// ...
+
+this.keyup
+  .debounceTime(500)
+  .distinctUntilChanged()
+  .switchMap(searchTerm => this.bs.getAllSearch(searchTerm))
+  .subscribe(books => console.log(books));
+```
+
+```typescript
+// mit Lettable Operators
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+
+this.keyup.pipe(
+  debounceTime(500),
+  distinctUntilChanged(),
+  switchMap(searchTerm => this.bs.getAllSearch(searchTerm)),
+)
+.subscribe(books => console.log(books));
+```
+
+Wichtig: Einige Operator-Namen haben sich geändert, um Konflikte mit bestehenden Namen in JavaScript zu vermeiden.
+
+* `do()` => `tap()`
+* `catch()` => `catchError()`
+* `switch()` => `switchAll()`
+* `finally()` => `finalize()`
+
+
+Die alten (und im Buch beschriebenen) Imports und verkettbaren Operatoren werden weiterhin unterstützt.
+Wir empfehlen Ihnen aber die Migration, denn die neuen Operatoren können wesentlich besser optimiert werden.
+Außerdem können Sie einfach eigene Operatoren entwickeln und in Ihren Pipelines verwenden.
+
+Mehr Infos zu *Lettable Operators* finden Sie in der [RxJS-Dokumentation](https://github.com/ReactiveX/rxjs/blob/master/doc/lettable-operators.md).
+
+
+## Verbesserung der Build-Geschwindigkeit
+
+Die Angular CLI 1.5 setzt für den Build nun auf TypeScript Transforms.
+Damit wird der inkrementelle Rebuild bei der Ahead-Of-Time-Kompilierung (AOT) unterstützt, die nun endlich auch zur Entwicklungszeit ohne lange Wartezeit einsetzbar ist:
+
+```bash
+$ ng serve --aot
+```
+
+Übrigens: AOT-Kompilierung wird in absehbarer Zeit die JIT-Kompilierung auch zur Entwicklungszeit ablösen.
+
+
+
+## Zusammenfassung
+
+Die neue Angular-Version bringt zwar einige Breaking Changes mit sich, beschert dem Entwickler aber insgesamt viele gute Neuerungen.
+Der Umstieg auf Angular 5 ist in den meisten Projekten ohne große Anpassungen möglich, denn die stabilen APIs haben sich kaum geändert.
+
+Alle wichtigen Neuerungen sind im [Angular-Blog](https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced) zusammengefasst.
+
+Wir wünschen Ihnen viel Spaß mit Angular 5 und beim Lesen unseres Buchs!
+
 
