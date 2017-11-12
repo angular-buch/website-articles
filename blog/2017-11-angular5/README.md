@@ -28,7 +28,7 @@ Dadurch wird die effektive Bundle-Größe weiter reduziert und die Start-Perform
 
 Außerdem wurde für den Compiler die neue Option `preserveWhitespaces` eingeführt.
 Wird die Option deaktiviert, werden White Space Characters in den Templates automatisch entfernt – und damit die Bundle-Größe weiter reduziert.
-Die Option kann in den Komponenten oder global in der `tsconfig.json` angepasst werden.
+Die Option kann in den Komponenten oder global in der `tsconfig.app.json` angepasst werden.
 
 ```js
 // tsconfig.app.json
@@ -65,8 +65,8 @@ Einige der eingebauten Pipes basieren auf lokalisierten Informationen: `DatePipe
 Bisher war für die Lokalisierung ein Polyfill nötig. In Angular 5 wurde das Polyfill entfernt und die Lokalisierung wurde mit anderen Regeln gelöst.
 
 Damit ändern sich allerdings folgende Feinheiten:
-- Die oben genannten Pipes verhalten sich zu Teil anders und haben geänderte Signaturen
-- Zum Einstellen der Sprache sind zusätzliche Schritte nötig
+- Die oben genannten Pipes verhalten sich zu Teil anders und haben geänderte Signaturen.
+- Zum Einstellen der Sprache sind zusätzliche Schritte nötig.
 
 Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel.
 
@@ -74,9 +74,9 @@ Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel.
 ## HttpClient
 
 Mit [Angular 4.3](https://github.com/angular/angular/blob/master/CHANGELOG.md#430-2017-07-14) wurde der neue `HttpClient` eingeführt – und löst damit das `HttpModule` ab, das wir Kapitel 10.1 im Angular-Buch beschrieben haben.
-Der neue HttpClient wird weitgehend gleich verwendet, allerdings entfällt ein wesentlicher Schritt: die manuelle Umwandlung von JSON.
+Der neue `HttpClient` wird weitgehend gleich verwendet, allerdings entfällt ein wesentlicher Schritt: die manuelle Umwandlung von JSON mit `res.json()`.
 
-Außerdem bietet der HttpClient zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
+Außerdem bietet der `HttpClient` zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
 
 Wir empfehlen Ihnen die Migration auf das neue Modul.
 Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue HttpClient]()
@@ -86,7 +86,7 @@ Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue H
 ## RxJS Lettable Operators
 
 Mit Angular 5 wurde *RxJS* auf die neueste Version 5.5 aktualisiert.
-Damit kommt auch das Konzept der *Lettable Operators* in die Angular-Welt.
+Damit kommt auch das Konzept der [Lettable Operators](https://github.com/ReactiveX/rxjs/blob/master/doc/lettable-operators.md) in die Angular-Welt.
 
 Für den Entwickler ändert sich dabei die Verwendung der RxJS-Operatoren.
 Anstatt die Operatoren zu verketten, wird ab sofort die Methode `pipe()` eingesetzt.
@@ -123,17 +123,16 @@ this.keyup.pipe(
 
 Wichtig: Einige Operator-Namen haben sich geändert, um Konflikte mit bestehenden Namen in JavaScript zu vermeiden.
 
-* `do()` => `tap()`
-* `catch()` => `catchError()`
-* `switch()` => `switchAll()`
-* `finally()` => `finalize()`
-
+| **alt** | **neu** |
+|-----|-----|
+| `do()`  | `tap()` |
+| `catch()`  | `catchError()` |
+| `switch()`  | `switchAll()` |
+| `finally()`  | `finalize()` |
 
 Die alten (und im Buch beschriebenen) Imports und verkettbaren Operatoren werden weiterhin unterstützt.
 Wir empfehlen Ihnen aber die Migration, denn die neuen Operatoren können wesentlich besser optimiert werden.
 Außerdem können Sie einfach eigene Operatoren entwickeln und in Ihren Pipelines verwenden.
-
-Mehr Infos zu *Lettable Operators* finden Sie in der [RxJS-Dokumentation](https://github.com/ReactiveX/rxjs/blob/master/doc/lettable-operators.md).
 
 
 ## Verbesserung der Build-Geschwindigkeit
@@ -142,7 +141,7 @@ Die Angular CLI 1.5 setzt für den Build nun auf TypeScript Transforms.
 Damit wird der inkrementelle Rebuild bei der Ahead-Of-Time-Kompilierung (AOT) unterstützt, die nun endlich auch zur Entwicklungszeit ohne lange Wartezeit einsetzbar ist:
 
 ```bash
-$ ng serve --aot
+ng serve --aot
 ```
 
 Übrigens: AOT-Kompilierung wird in absehbarer Zeit die JIT-Kompilierung auch zur Entwicklungszeit ablösen.
@@ -156,6 +155,6 @@ Der Umstieg auf Angular 5 ist in den meisten Projekten ohne große Anpassungen m
 
 Alle wichtigen Neuerungen sind im [Angular-Blog](https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced) zusammengefasst.
 
-Wir wünschen Ihnen viel Spaß mit Angular 5 und beim Lesen unseres Buchs!
+**Wir wünschen Ihnen viel Spaß mit Angular 5 und beim Lesen unseres Buchs!**
 
 
