@@ -1,0 +1,15 @@
+{
+  "name": "website-articles",
+  "version": "1.0.0",
+  "description": "This repo contains content for [https://angular-buch.com/blog](https://angular-buch.com/blog).   Pull requests are welcome!",
+  "devDependencies": {
+    "camo-purge": "^1.0.2"
+  },
+  "scripts": {
+    "purge-images": "camo-purge"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular-buch/website-articles.git"
+  }
+}
