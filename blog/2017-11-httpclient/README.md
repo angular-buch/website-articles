@@ -10,7 +10,6 @@ keywords:
   - HTTP
 language: de
 thumbnail: ../angular5.png
-darken-thumbnail: true
 ---
 
 ## Abstract
