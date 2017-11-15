@@ -8,6 +8,7 @@ keywords:
   - Angular 5
 language: de
 thumbnail: ../angular5.png
+darken-thumbnail: true
 sticky: true
 ---
 
