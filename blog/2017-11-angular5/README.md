@@ -122,7 +122,7 @@ this.keyup.pipe(
 .subscribe(books => console.log(books));
 ```
 
-Wichtig: Einige Operator-Namen haben sich geändert, um Konflikte mit bestehenden Namen in JavaScript zu vermeiden.
+Wichtig: Einige Operator-Namen haben sich geändert, um Konflikte mit bestehenden Schlüsselworten in JavaScript zu vermeiden.
 
 | **alt** | **neu** |
 |-----|-----|
