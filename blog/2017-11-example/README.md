@@ -7,7 +7,8 @@ keywords:
   - Angular
   - VSCode
 language: de
-thumbnail: angular.png
+thumbnail: ../angular5.png
+hidden: true
 ---
 
 # Wir wünschen viel Spaß mit Angular! 

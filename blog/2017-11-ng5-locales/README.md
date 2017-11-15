@@ -7,7 +7,7 @@ keywords:
   - Angular
   - Angular 5
 language: de
-thumbnail: angular.png
+thumbnail: ../angular5.png
 ---
 
 !! WIP !!
