@@ -1,7 +1,7 @@
 ---
 title: "Angular 5 ist da!"
-author: Ferdinand Malcher
-mail: mail@fmalcher.de
+author: Angular Buch Team
+mail: team@angular-buch.com
 published: 2017-11-10
 keywords:
   - Angular
