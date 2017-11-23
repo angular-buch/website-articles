@@ -9,6 +9,7 @@ keywords:
   - Angular-CLI
 language: de
 thumbnail: ../angular5.png
+hidden: true
 ---
 
 Mit der Angular CLI ist es ziemlich einfach, eine neue Anwendung mit dem der aktuellen Version von Angular zu erstellen. Doch was ist zu tun, wenn wir ein bestehendes Projekt auf dem neuesten Stand bringen wollen?
