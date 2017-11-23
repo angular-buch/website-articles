@@ -81,7 +81,7 @@ Der neue `HttpClient` wird weitgehend gleich verwendet, allerdings entfällt ein
 Außerdem bietet der `HttpClient` zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
 
 Wir empfehlen Ihnen die Migration auf das neue Modul.  
-**Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue HttpClient](../2017-11-httpclient)**
+**Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue HttpClient](/blog/2017-11-httpclient)**
 
 
 
