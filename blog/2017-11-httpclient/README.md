@@ -167,6 +167,7 @@ Dazu wird die Liste mit Hilfe des RxJS-Operators `map` transformiert.
 
 > An dieser Stelle sei der Hinweis gestattet, dass RxJS-Operatoren zusätzlich importiert werden müssen.
 > Der `map`-Operator kann mit folgendem Statement geladen werden: `import 'rxjs/add/operator/map';`
+> Auf die *Lettable Operators* haben wir an dieser Stelle noch verzichtet. Auf GitHub ist der gesamte Quelltext allerdings aktualisiert.
 
 Das Mapping wird in die Methode `provideBooksFrom()` ausgelagert, damit der Code lesbarer ist.
 Sie werden bemerken, dass der Übergabeparameter `raws` im `map`-Operator mit `BookRaw[]` typisiert ist.
