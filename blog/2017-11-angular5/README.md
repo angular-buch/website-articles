@@ -12,7 +12,7 @@ sticky: true
 ---
 
 Angular 5 ist da! Anfang November 2017 erschien die neue Major-Version von Angular und bringt einige Neuerungen mit sich. Die gute Nachricht: Ihre alten Projekte mit Angular 4 sind weiterhin lauffähig – nur an einigen wenigen Stellen müssen Kleinigkeiten angepasst werden.
-Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert.
+**Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert!**
 
 In diesem Artikel stellen wir Ihnen die wichtigsten Neuerungen vor.
 Zu einzelnen Themen haben wir separate Artikel verfasst, um Ihnen einen fundierten Überblick zu geben.
@@ -50,6 +50,8 @@ Die Option kann in den Komponenten oder global in der `tsconfig.app.json` angepa
 })
 export class MyComponent
 ```
+
+In einzelnen Blöcken können wir die Whitespace Preservation schließlich wieder selektiv aktivieren:
 
 ```html
 <!-- my.component.html -->
