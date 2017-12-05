@@ -89,7 +89,7 @@ Die Änderungen sind schnell gemacht, die Änderungen sind in folgendem Diff zus
 
 ## 4. Den neue HttpClient verwenden
 
-Mit Version 4.3 des Angular-Frameworks steht der neuer `HttpClient` bereit. Dieser ersetzt den nun den veralteten `Http`-Service (siehe [#18906](https://github.com/angular/angular/pull/18906)). Dem neuen HttpClient widmen wir uns in einem [ausführlichen Blogpost](/blog/2017-11-httpclient). Hier sind in aller Kürze nur die notwendigen Änderungen:
+Mit Version 4.3 des Angular-Frameworks steht der neuer `HttpClient` bereit. Dieser ersetzt den veralteten `Http`-Service (siehe [#18906](https://github.com/angular/angular/pull/18906)). Dem neuen HttpClient widmen wir uns in einem [ausführlichen Blogpost](/blog/2017-11-httpclient). Hier sind in aller Kürze die notwendigen Änderungen:
 
 * __[Update to new HttpClient](https://github.com/book-monkey2-build/iteration-7-i18n/commit/efd88396773ba0c5b52494e0f1aef958f7cc3c3e)__
 
