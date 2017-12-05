@@ -60,11 +60,11 @@ Neu ist das Argument `--skip-install`. Wir benötigen keine fertige Installation
 * `tslint.json`
 
 Vorsichtig müssen wir bei den Dateien `.angular-cli.json` und `package.json` sein.
-Hier sollten wir nicht die Dateien komplett überschreiben, denn wir haben während der Entwicklung des BookMonkey einige Zeilen hinzugefügt. Für die Einbindung des CSS-Frameworks haben wir in der Datei `.angular-cli.json` die Zeile `"../node_modules/semantic-ui-css/semantic.css"` im Styles-Array hinzugefügt. Bei der Datei `package.json` haben wir ein paar Einträge zu den `scripts` hinzugefügt und die Abhängigkeiten `angular-date-value-accessor` sowie `semantic-ui-css` eingeführt (`npm i angular-date-value-accessor` sowie `npm i semantic-ui-css`). Am leichtesten übernimmt man die neuen Zeilen mit einem Diff-Tool. Der Rest der genannten Dateien kann getrost überschrieben werden. Unser Diff mit einem Angular-CLI 1.0.0 Projekt so aus:
+Hier sollten wir nicht die Dateien komplett überschreiben, denn wir haben während der Entwicklung des BookMonkey einige Zeilen hinzugefügt. Für die Einbindung des CSS-Frameworks haben wir in der Datei `.angular-cli.json` die Zeile `"../node_modules/semantic-ui-css/semantic.css"` im Styles-Array hinzugefügt. Bei der Datei `package.json` haben wir ein paar Einträge zu den `scripts` hinzugefügt und die Abhängigkeiten `angular-date-value-accessor` sowie `semantic-ui-css` eingeführt (`npm i angular-date-value-accessor` sowie `npm i semantic-ui-css`). Am leichtesten übernimmt man die neuen Zeilen mit einem Diff-Tool. Der Rest der genannten Dateien kann getrost überschrieben werden. Unser Diff mit einem Angular-CLI 1.0.0 Projekt sieht so aus:
 
 * __[Update CLI project to 1.5.4](https://github.com/book-monkey2-build/iteration-7-i18n/commit/3c607f0bef8b6577029cf15dcec8fe9c6ff05874)__
 
-Wenn Sie bereits einen neueren Stand der CLI haben, so sind bei Ihnen weniger Änderungen sichtbar.
+Wenn Sie bereits einen neueren Stand der CLI haben, so sind bei Ihnen weniger Änderungen notwendig.
 
 
 ## 3. i18n-Kommentare ersetzen
