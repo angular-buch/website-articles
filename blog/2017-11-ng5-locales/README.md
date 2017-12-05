@@ -11,7 +11,7 @@ thumbnail: ../angular5.png
 hidden: true
 ---
 
-## !! WIP !! Dieser Artikel ist noch nicht vollsändig
+## !! WIP !! Dieser Artikel ist noch nicht vollständig
 
 Bis Version 4 hat Angular auf die Intl-API gesetzt, die in den modernen Browsern nativ implementiert ist.
 Dieser Weg bringt allerdings zwei wesentliche Nachteile mit sich:
