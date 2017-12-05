@@ -90,7 +90,7 @@ Die Änderungen sind schnell gemacht, die Änderungen sind in folgendem Diff zus
 
 ## 4. Den neue HttpClient verwenden
 
-Mit Version 4.3 des Angular-Frameworks steht der neuer `HttpClient` bereit. Dieser ersetzt den nun den veralteten `Http`-Service (siehe [#18906](https://github.com/angular/angular/pull/18906)). Dem neuen HttpClient widmen wir uns in einem [ausführlichen Blogpost](/blog/2017-11-httpclient).  Hier sind in aller Kürze nur die notwendigen Änderungen:
+Mit Version 4.3 des Angular-Frameworks steht der neuer `HttpClient` bereit. Dieser ersetzt den nun den veralteten `Http`-Service (siehe [#18906](https://github.com/angular/angular/pull/18906)). Dem neuen HttpClient widmen wir uns in einem [ausführlichen Blogpost](/blog/2017-11-httpclient). Hier sind in aller Kürze nur die notwendigen Änderungen:
 
 * __[Update to new HttpClient](https://github.com/book-monkey2-build/iteration-7-i18n/commit/efd88396773ba0c5b52494e0f1aef958f7cc3c3e)__
 
@@ -103,9 +103,15 @@ Mit Angular 5 kommt das Konzept der Lettable Operators in die Angular-Welt.
 * __[Introduce lettable RxJS operators](https://github.com/book-monkey2-build/iteration-7-i18n/commit/043a3d0bb509aea3b6d714fdda75f55d7283c842)__
 
 
-## 6. TODO: Use registerLocaleData()
+## 6. Lokalisierungs-Daten importieren und registrieren
+
+Ab Angular 5 müssen die verfügbaren Locales einzeln importiert und registriert werden.
+Dafür wurde die Funktion `registerLocaleData()` eingeführt, die z.B. im `AppModule` aufgerufen werden kann:
 
 * __[Use registerLocaleData()](https://github.com/book-monkey2-build/iteration-7-i18n/commit/0e924f6ab5e540db4ce4c98f2b95c44f42a5b775)__
+
+Es gibt noch weitere Änderungen, welche die Mehrsprachigkeit betreffen - wor aber in unserem Fall keine Änderungen beim BookMonkey notwendig sind.
+Der Blogpost [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales) stellt diese im Einzelnen vor.
 
 
 ## 7. TODO: Introduce interface BookRaw for HTTP response
