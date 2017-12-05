@@ -63,7 +63,7 @@ Neu ist das Argument `--skip-install`. Wir benötigen keine fertige Installation
 Vorsichtig müssen wir bei den Dateien `.angular-cli.json` und `package.json` sein.
 Hier sollten wir nicht die Dateien komplett überschreiben, denn wir haben während der Entwicklung des BookMonkey einige Zeilen hinzugefügt. Für die Einbindung des CSS-Frameworks haben wir in der Datei `.angular-cli.json` die Zeile `"../node_modules/semantic-ui-css/semantic.css"` im Styles-Array hinzugefügt. Bei der Datei `package.json` haben wir ein paar Einträge zu den `scripts` hinzugefügt und die Abhängigkeiten `angular-date-value-accessor` sowie `semantic-ui-css` eingeführt (`npm i angular-date-value-accessor` sowie `npm i semantic-ui-css`). Am leichtesten übernimmt man die neuen Zeilen mit einem Diff-Tool. Der Rest der genannten Dateien kann getrost überschrieben werden. Unser Diff mit einem Angular-CLI 1.0.0 Projekt so aus:
 
-* __[Update CLI project to 1.5.4](https://github.com/book-monkey2-build/iteration-1-components/commit/c0a611a7b2947758fd3009691e3b8365ecc67cf4)__
+* __[Update CLI project to 1.5.4](https://github.com/book-monkey2-build/iteration-7-i18n/commit/3c607f0bef8b6577029cf15dcec8fe9c6ff05874)__
 
 Wenn Sie bereits einen neueren Stand der CLI haben, so sind bei Ihnen weniger Änderungen sichtbar.
 
@@ -85,5 +85,30 @@ wird:
 
 Die Änderungen sind schnell gemacht, die Änderungen sind in folgendem Diff zusammen gefasst:
 
-* __[Use ng-container over i18n comments](https://github.com/angular-buch/book-monkey2/commit/e6ff2047fcf7f718c3930b4550a26f1fc4bb78b0)__
+* __[Use ng-container over i18n comments](https://github.com/book-monkey2-build/iteration-7-i18n/commit/6e54598b2e05aff8e804e2bce7e47577a7c3b216)__
+
+
+## 4. Den neue HttpClient verwenden
+
+Mit Version 4.3 des Angular-Frameworks steht der neuer `HttpClient` bereit. Dieser ersetzt den nun den veralteten `Http`-Service (siehe [#18906](https://github.com/angular/angular/pull/18906)). Dem neuen HttpClient widmen wir uns in einem [ausführlichen Blogpost](/blog/2017-11-httpclient).  Hier sind in aller Kürze nur die notwendigen Änderungen:
+
+* __[Update to new HttpClient](https://github.com/book-monkey2-build/iteration-7-i18n/commit/efd88396773ba0c5b52494e0f1aef958f7cc3c3e)__
+
+
+## 5. RxJS Lettable Operators verwenden
+
+Mit Angular 5 kommt das Konzept der Lettable Operators in die Angular-Welt.
+Über die neuen Operatoren haben wir im [Angular-5 Blogpost](/2017-11-angular5#rxjs-lettable-operators) berichtet.
+
+* __[Introduce lettable RxJS operators](https://github.com/book-monkey2-build/iteration-7-i18n/commit/043a3d0bb509aea3b6d714fdda75f55d7283c842)__
+
+
+## 6. TODO: Use registerLocaleData()
+
+* __[Use registerLocaleData()](https://github.com/book-monkey2-build/iteration-7-i18n/commit/0e924f6ab5e540db4ce4c98f2b95c44f42a5b775)__
+
+
+## 7. TODO: Introduce interface BookRaw for HTTP response
+
+* __[Introduce interface BookRaw for HTTP response](https://github.com/book-monkey2-build/iteration-7-i18n/commit/f2d380af5171f079d37036370d03d6538e2f18f8)__
 
