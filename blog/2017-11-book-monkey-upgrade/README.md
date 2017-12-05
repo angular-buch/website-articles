@@ -70,7 +70,7 @@ Wenn Sie bereits einen neueren Stand der CLI haben, so sind bei Ihnen weniger Ä
 ## 3. i18n-Kommentare ersetzen
 
 Zum Abschluss der Reise mit dem BookMonkey hatten wir die Anwendung internationalisiert.
-In zwei Dateien haben wir einen Text zu übersetzen, der nicht direkt von einem HTML-Element umschlossen wird. Wir haben hierfür HTML-Kommentare verwendet. Diese magischen Kommentare sind jetzt "deprecated" und sollten durch den `ng-container` ersetzt werden (siehe [#18998](https://github.com/angular/angular/pull/18998)).
+In zwei Dateien haben wir einen Text übersetzt, der nicht direkt von einem HTML-Element umschlossen wird. Wir haben hierfür HTML-Kommentare verwendet. Diese magischen Kommentare sind jetzt "deprecated" und sollten durch den `ng-container` ersetzt werden (siehe [#18998](https://github.com/angular/angular/pull/18998)).
 
 Aus
 ```html
