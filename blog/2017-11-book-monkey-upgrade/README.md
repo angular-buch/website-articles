@@ -9,7 +9,6 @@ keywords:
   - Angular-CLI
 language: de
 thumbnail: ../angular5.png
-hidden: true
 ---
 
 Dank der Angular CLI ist es ziemlich einfach, eine neue Anwendung mit dem der aktuellen Version von Angular zu erstellen. Doch was ist zu tun, wenn wir ein bestehendes Projekt auf dem neuesten Stand bringen wollen?
@@ -37,9 +36,9 @@ Das Tool stellt eine Checkliste und die passenden Befehle für das Update per `n
 Das ist formal korrekt, die Angular-Pakete sind nach Anwendung des "Angular Update Guide" auf dem aktuellen Stand. Dies gilt jedoch nicht für die vielen Dateien, welche die Angular CLI beim Befehl `ng new` anlegt. Hier tut sich ständig etwas. Viele kleine Verbesserungen sind seit Frühjahr 2017 geschehen.
 Leider gibt es hier kein automatisches Tooling. Es führt kein weg daran vorbei: Wir müssen eine Reihe von Dateien vergleichen und ersetzen, um das gesamte Projekt aufzufrischen.
 
-Zunächst löschen wir die Datei `package.lock.json` aus dem BookMonkey-Verzeichnis - sofern diese vorhanden ist.
+Zunächst löschen wir die Datei `package.lock.json` aus dem BookMonkey-Verzeichnis - sofern diese vorhanden ist. Wenn dieser Schritt vergessen wird, dann werden die manuellen Änderungen an der `package.json` nicht berücksichtigt.
 
-Wir erzeugen nun ein zweites Projekt, mit den selben Argumenten wie im Buch:
+Wir erzeugen nun ein zweites leeres Projekt, mit den selben Argumenten wie im Buch:
 
 ```bash
 ng new BookMonkey -p bm -is --skip-install
@@ -110,7 +109,7 @@ Dafür wurde die Funktion `registerLocaleData()` eingeführt, die z.B. im `AppMo
 
 * __[Use registerLocaleData()](https://github.com/book-monkey2-build/iteration-7-i18n/commit/0e924f6ab5e540db4ce4c98f2b95c44f42a5b775)__
 
-Es gibt noch weitere Änderungen, welche die Mehrsprachigkeit betreffen - wor aber in unserem Fall keine Änderungen beim BookMonkey notwendig sind.
+Es gibt noch weitere Änderungen, welche die Mehrsprachigkeit betreffen - wobei aber in unserem Fall keine Änderungen beim BookMonkey notwendig sind.
 Der Blogpost [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales) stellt diese im Einzelnen vor.
 
 

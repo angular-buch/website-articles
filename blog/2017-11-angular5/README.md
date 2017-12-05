@@ -12,15 +12,19 @@ sticky: true
 ---
 
 Angular 5 ist da! Anfang November 2017 erschien die neue Major-Version von Angular und bringt einige Neuerungen mit sich. Die gute Nachricht: Ihre alten Projekte mit Angular 4 sind weiterhin lauffähig – nur an einigen wenigen Stellen müssen Kleinigkeiten angepasst werden.
-**Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert!**
-
-In diesem Artikel stellen wir Ihnen die wichtigsten Neuerungen vor.
-Zu einzelnen Themen haben wir separate Artikel verfasst, um Ihnen einen fundierten Überblick zu geben.
 
 Die offizielle Ankündigung zum Angular-5-Release finden Sie im [Angular-Blog](https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced).
 Für Details zu einzelnen Änderungen lohnt sich außerdem ein Blick in den [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
-
 Beim Update auf Angular 5 hilft der [Angular Update Guide](https://angular-update-guide.firebaseapp.com/). Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit.
+
+**Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert!**
+
+In diesem Blogpost stellen wir Ihnen im Folgenden die wichtigsten Neuerungen vor.
+Zu einzelnen Themen haben wir drei weitere separate Artikel verfasst, um Ihnen einen fundierten Überblick zu geben.
+
+* [Angular 5: Den Book-Monkey upgraden](/blog/2017-11-book-monkey-upgrade)
+* [Der neue HttpClient](/blog/2017-11-httpclient)
+* [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales)
 
 
 ## Build Optimizer / White Spaces
@@ -72,7 +76,7 @@ Damit ändern sich allerdings folgende Feinheiten:
 - Die oben genannten Pipes verhalten sich zu Teil anders und haben geänderte Signaturen.
 - Zum Einstellen der Sprache sind zusätzliche Schritte nötig.
 
-Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel.
+**Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel: [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales).**
 
 
 ## HttpClient
@@ -154,10 +158,12 @@ ng serve --aot
 
 ## Zusammenfassung
 
-Die neue Angular-Version bringt zwar einige Breaking Changes mit sich, beschert dem Entwickler aber insgesamt viele gute Neuerungen.
+Die neue Angular-Version bringt zwar ein paar kleinere Breaking Changes mit sich, beschert dem Entwickler aber insgesamt viele gute Neuerungen.
 Der Umstieg auf Angular 5 ist in den meisten Projekten ohne große Anpassungen möglich, denn die stabilen APIs haben sich kaum geändert.
 
+<!--
 Alle wichtigen Neuerungen sind im [Angular-Blog](https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced) zusammengefasst.
+-->
 
 **Wir wünschen Ihnen viel Spaß mit Angular 5 und beim Lesen unseres Buchs!**
 
