@@ -1,5 +1,5 @@
 ---
-title: "Angular 5: Den Book-Monkey upgraden"
+title: "Angular 5: Den BookMonkey upgraden"
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 published: 2017-11-23
@@ -14,7 +14,7 @@ thumbnail: ../angular5.png
 Dank der Angular CLI ist es ziemlich einfach, eine neue Anwendung mit der aktuellen Version von Angular zu erstellen.
 Doch was ist zu tun, wenn wir ein bestehendes Projekt auf den neuesten Stand bringen wollen?
 
-Im konkreten Fall werden wir in diesem Artikel das Beispielprojekt ["Book Monkey 2"](http://book-monkey2.angular-buch.com/) aktualisieren.
+Im konkreten Fall werden wir in diesem Artikel das Beispielprojekt ["BookMonkey 2"](http://book-monkey2.angular-buch.com/) aktualisieren.
 Ich gehe davon aus, dass Sie den Anleitungen aus dem Buch gefolgt sind
 und Sie nun den BookMonkey mit Angular 4.x und einer Version der Angular CLI unter 1.5 vorliegen haben.
 Selbstverständlich werden die meisten Schritte auch für jede andere Angular-Anwendung anwendbar sein. 
@@ -191,13 +191,14 @@ export interface BookRaw {
 Wir helfen damit dem Compiler auf die Sprünge.
 Bei allen nachfolgende RxJs-Pipes können wir nun auf automatische Code-Vervollständigung setzen. 
 Wir ersparen uns aber vor allem auch eine potentielle Quelle für Laufzeitfehler - welche stets schwer zu finden sind.
-Das ganze Funktioniert natürlich nur, wenn wiederum keine Tippfehler im Interface vorhanden sind - TypeScript muss uns hier weiterhin "blind" vertrauen.
+Das ganze funktioniert natürlich nur, wenn wiederum keine Tippfehler im Interface vorhanden sind - TypeScript muss uns hier weiterhin "blind" vertrauen.
 
 Auch diese optionalen Änderungen finden Sie in auf Github:
 * __[Introduce interface BookRaw for HTTP response](https://github.com/book-monkey2-build/iteration-7-i18n/commit/f2d380af5171f079d37036370d03d6538e2f18f8)__
 
 
 ## 8. Optionaler Tipp: Swagger
+<!-- daraus mache ich noch einen eigenen Artikel! -->
 
 Beim Datenaustausch zwischen Backend und Frontend knirscht es immer wieder gerne.
 Im Backend wir ein Typ verändert, die Änderungen werden nicht im Frontend nachgezogen - **Boom: Exception** zur Laufzeit! Für den BookMonkey heißt das: wir müssen das Interface `BookRaw` sowie alle URLs stets im Auge behalten. Es könnte womöglich eine Änderung bei der API gegeben haben, die Sie nicht mitbekommen haben! _(Das ist natürlich rein hypothetisch. Wir ändern die BM-API nicht, versprochen! :smile:)_
@@ -224,6 +225,6 @@ Herzlichen Glückwunsch.
 Der BookMonkey ist auf dem neuesten Stand und wurde auch gleich noch ein wenig modernisiert.
 Das gesamte finale Projekt können Sie hier herunter laden:
 
- * [Der finale BookMonkey (ZIP)](https://github.com/book-monkey2-build/iteration-7-i18n/archive/master.zip)
+ * [Der finale BookMonkey 2 (ZIP)](https://github.com/book-monkey2-build/iteration-7-i18n/archive/master.zip)
 
 **Ich wünsche Ihnen weiterhin viel Spaß mit Angular 5 und unserem Buch.**
