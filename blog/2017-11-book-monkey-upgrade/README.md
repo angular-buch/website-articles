@@ -14,7 +14,7 @@ thumbnail: ../angular5.png
 Dank der Angular CLI ist es ziemlich einfach, eine neue Anwendung mit der aktuellen Version von Angular zu erstellen.
 Doch was ist zu tun, wenn wir ein bestehendes Projekt auf den neuesten Stand bringen wollen?
 
-Im konkreten Fall werden wir in diesem Artikel das Beispielprojekt ["BookMonkey 2"](http://book-monkey2.angular-buch.com/) aktualisieren.
+Im konkreten Fall werden wir in diesem Artikel das Beispielprojekt ["BookMonkey 2"](https://book-monkey2.angular-buch.com/) aktualisieren.
 Ich gehe davon aus, dass Sie den Anleitungen aus dem Buch gefolgt sind
 und Sie nun den BookMonkey mit Angular 4.x und einer Version der Angular CLI unter 1.5 vorliegen haben.
 Selbstverständlich werden die meisten Schritte auch für jede andere Angular-Anwendung anwendbar sein. 
