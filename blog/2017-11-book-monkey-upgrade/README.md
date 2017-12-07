@@ -147,7 +147,7 @@ Dafür wurde die Funktion `registerLocaleData()` eingeführt, die z.B. im `AppMo
 
 Es gibt noch weitere Änderungen, welche die Mehrsprachigkeit betreffen –
 wobei aber in unserem Fall keine Änderungen im BookMonkey notwendig sind.
-Der Blogpost [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales) stellt diese im Einzelnen vor.
+Der Blogpost [Änderungen für i18n in Angular 5](/blog/2017-11-ng5-i18n) stellt diese im Einzelnen vor.
 
 
 ## 7. Neu: Das Interface `BookRaw`

@@ -24,7 +24,7 @@ Zu einzelnen Themen haben wir drei weitere separate Artikel verfasst, um Ihnen e
 
 * [Angular 5: Den Book-Monkey upgraden](/blog/2017-11-book-monkey-upgrade)
 * [Der neue HttpClient](/blog/2017-11-httpclient)
-* [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales)
+* [Änderungen für i18n in Angular 5](/blog/2017-11-ng5-i18n)
 
 
 ## Build Optimizer / White Spaces
