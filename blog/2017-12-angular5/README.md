@@ -2,7 +2,7 @@
 title: "Angular 5 ist da!"
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2017-11-10
+published: 2017-12-05
 keywords:
   - Angular
   - Angular 5
@@ -22,10 +22,9 @@ Beim Update auf Angular 5 hilft der [Angular Update Guide](https://angular-updat
 In diesem Blogpost stellen wir Ihnen im Folgenden die wichtigsten Neuerungen vor.
 Zu einzelnen Themen haben wir drei weitere separate Artikel verfasst, um Ihnen einen fundierten Überblick zu geben.
 
-* [Angular 5: Den Book-Monkey upgraden](/blog/2017-11-book-monkey-upgrade)
-* [Der neue HttpClient](/blog/2017-11-httpclient)
-* [Änderungen für i18n in Angular 5](/blog/2017-11-ng5-i18n)
-
+* [Angular 5: Den Book-Monkey upgraden](/blog/2017-12-book-monkey-upgrade)
+* [Angular 5: Änderungen für i18n](/blog/2017-12-ng5-i18n)
+* [Angular 4.3: Der neue HttpClient](/blog/2017-11-httpclient)
 
 ## Build Optimizer / White Spaces
 
@@ -76,7 +75,7 @@ Damit ändern sich allerdings folgende Feinheiten:
 - Die oben genannten Pipes verhalten sich zu Teil anders und haben geänderte Signaturen.
 - Zum Einstellen der Sprache sind zusätzliche Schritte nötig.
 
-**Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel: [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales).**
+**Mehr zu dem Thema erfahren Sie demnächst in unserem zusätzlichen Blogartikel: [Angular 5: Änderungen für i18n](/blog/2017-12-ng5-i18n).**
 
 
 ## HttpClient
@@ -87,7 +86,7 @@ Der neue `HttpClient` wird weitgehend gleich verwendet, allerdings entfällt ein
 Außerdem bietet der `HttpClient` zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
 
 Wir empfehlen Ihnen die Migration auf das neue Modul.  
-**Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Der neue HttpClient](/blog/2017-11-httpclient)**
+**Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Angular 4.3: Der neue HttpClient](/blog/2017-11-httpclient)**
 
 
 

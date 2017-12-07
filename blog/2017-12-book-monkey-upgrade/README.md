@@ -2,7 +2,7 @@
 title: "Angular 5: Den BookMonkey upgraden"
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
-published: 2017-11-23
+published: 2017-12-06
 keywords:
   - Angular
   - Angular 5
@@ -133,7 +133,7 @@ Hier sind in aller Kürze die notwendigen Änderungen:
 ## 5. RxJS Lettable Operators verwenden
 
 Mit Angular 5 kommt das Konzept der Lettable Operators in die Angular-Welt.
-Über die neuen Operatoren haben wir im [Blogpost zu Angular 5](/2017-11-angular5#rxjs-lettable-operators) berichtet.
+Über die neuen Operatoren haben wir im [Blogpost zu Angular 5](/2017-12-angular5#rxjs-lettable-operators) berichtet.
 
 * __[Introduce lettable RxJS operators](https://github.com/book-monkey2-build/iteration-7-i18n/commit/043a3d0bb509aea3b6d714fdda75f55d7283c842)__
 
@@ -147,7 +147,7 @@ Dafür wurde die Funktion `registerLocaleData()` eingeführt, die z.B. im `AppMo
 
 Es gibt noch weitere Änderungen, welche die Mehrsprachigkeit betreffen –
 wobei aber in unserem Fall keine Änderungen im BookMonkey notwendig sind.
-Der Blogpost [Änderungen für i18n in Angular 5](/blog/2017-11-ng5-i18n) stellt diese im Einzelnen vor.
+Der Blogpost [Angular 5: Änderungen für i18n](/blog/2017-12-ng5-i18n) stellt diese im Einzelnen vor.
 
 
 ## 7. Neu: Das Interface `BookRaw`

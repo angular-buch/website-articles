@@ -1,10 +1,11 @@
 ---
-title: "Der neue HttpClient"
+title: "Angular 4.3: Der neue HttpClient"
 author: Gregor Woiwode
 mail: gregor.woiwode@gmail.com
 published: 2017-11-05
 keywords:
   - Angular
+  - Angular 4
   - Angular 5
   - HttpClient
   - HTTP
