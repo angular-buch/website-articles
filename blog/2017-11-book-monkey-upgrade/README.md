@@ -152,7 +152,7 @@ Der Blogpost [Internationalisierung in Angular 5](/blog/2017-11-ng5-locales) ste
 
 ## 7. Neu: Das Interface `BookRaw`
 
-Ein optionales aber sehr hilfreiches Feature sind die generischen Methoden des neuen `HttpClient`.
+Ein optionales, aber sehr hilfreiches Feature sind die generischen Methoden des neuen `HttpClient`.
 Im Buch haben wir noch den alten Service und damit die untypisierte Syntax verwendet:
 
 ```ts
@@ -160,14 +160,14 @@ this.http.get(`${this.api}/books`)
 ```
 
 Der zurück gegebene Wert ist vom Typ `Observable<Object>`.
-TypeScript kann uns so beim  Kompilieren und bei der automatischen Code-Vervollständigung kaum unterstützen.
+TypeScript kann uns so beim Kompilieren und bei der automatischen Code-Vervollständigung kaum unterstützen.
 Die neue API hat nun für jede der bekannten HTTP-Methoden eine generische Variante dabei:
 
 ```ts
 this.http.get<T>(`${this.api}/books`)
 ```
 
-Der zurück gegebene Wert ist nun vom Typ `Observable<T>`.
+Der zurückgegebene Wert ist nun vom Typ `Observable<T>`.
 Statt `T` müssen wir natürlich einen existierenden Typ angeben.
 In unserem Fall wollen wir ein Interface verwenden:
 
@@ -188,12 +188,14 @@ export interface BookRaw {
 }
 
 ```
-Wir helfen damit dem Compiler auf die Sprünge.
-Bei allen nachfolgende RxJs-Pipes können wir nun auf automatische Code-Vervollständigung setzen. 
-Wir ersparen uns aber vor allem auch eine potentielle Quelle für Laufzeitfehler - welche stets schwer zu finden sind.
-Das ganze funktioniert natürlich nur, wenn wiederum keine Tippfehler im Interface vorhanden sind - TypeScript muss uns hier weiterhin "blind" vertrauen.
 
-Auch diese optionalen Änderungen finden Sie in auf Github:
+
+Wir helfen damit dem Compiler auf die Sprünge.
+Bei allen nachfolgenden Operatoren in der RxJS-Pipeline können wir nun auf automatische Code-Vervollständigung setzen. 
+Wir ersparen uns aber vor allem auch eine potentielle Quelle für Laufzeitfehler – welche stets schwer zu finden sind.
+Das ganze funktioniert natürlich nur, wenn wiederum keine Tippfehler im Interface vorhanden sind – TypeScript muss uns hier weiterhin "blind" vertrauen.
+
+Auch diese optionalen Änderungen finden Sie in auf GitHub:
 * __[Introduce interface BookRaw for HTTP response](https://github.com/book-monkey2-build/iteration-7-i18n/commit/f2d380af5171f079d37036370d03d6538e2f18f8)__
 
 
@@ -201,7 +203,7 @@ Auch diese optionalen Änderungen finden Sie in auf Github:
 <!-- daraus mache ich noch einen eigenen Artikel! -->
 
 Beim Datenaustausch zwischen Backend und Frontend knirscht es immer wieder gerne.
-Im Backend wir ein Typ verändert, die Änderungen werden nicht im Frontend nachgezogen - **Boom: Exception** zur Laufzeit! Für den BookMonkey heißt das: wir müssen das Interface `BookRaw` sowie alle URLs stets im Auge behalten. Es könnte womöglich eine Änderung bei der API gegeben haben, die Sie nicht mitbekommen haben! _(Das ist natürlich rein hypothetisch. Wir ändern die BM-API nicht, versprochen! :smile:)_
+Im Backend wir ein Typ verändert, die Änderungen werden nicht im Frontend nachgezogen – **Boom: Exception** zur Laufzeit! Für den BookMonkey heißt das: Wir müssen das Interface `BookRaw` sowie alle URLs stets im Auge behalten. Es könnte womöglich eine Änderung bei der API gegeben haben, die Sie nicht mitbekommen haben! _(Das ist natürlich rein hypothetisch. Wir ändern die BookMonkey-API nicht, versprochen! :smile:)_
 
 Ich empfehle Ihnen wärmstens, Ihre API per Swagger zu definieren.
 Sowohl Mensch als auch Maschine können das Swagger-Format leicht lesen und passend verwerten.
@@ -216,14 +218,14 @@ Das ist schon sehr beeindruckend.
 Das beste Feature ist allerdings die automatische Code-Generierung per [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
 Setzen Sie am besten gleich auf die kommende v3 und verwenden Sie den Generator `typescript-angular`.
 Einmal eingerichtet und in das Continuous-Deployment eingebunden, bekommen wir ein fertiges Angular-Modul, passende Services und alle Entitäten als Interfaces automatisch generiert.
-Stand heute muss aber noch ein kleiner Workaround angewendet werden: [#6722](https://github.com/swagger-api/swagger-codegen/issues/6722)
+Nach heutigem Stand muss aber noch ein kleiner Workaround angewendet werden: [#6722](https://github.com/swagger-api/swagger-codegen/issues/6722)
 
 
 ## 9. Geschafft!
 
-Herzlichen Glückwunsch.
+Herzlichen Glückwunsch!
 Der BookMonkey ist auf dem neuesten Stand und wurde auch gleich noch ein wenig modernisiert.
-Das gesamte finale Projekt können Sie hier herunter laden:
+Das gesamte finale Projekt können Sie hier herunterladen:
 
  * [Der finale BookMonkey 2 (ZIP)](https://github.com/book-monkey2-build/iteration-7-i18n/archive/master.zip)
 
