@@ -25,14 +25,14 @@ Das betrifft besonders die Pipes, die auf Lokalisierung setzen: `DatePipe`, `Dec
 
 ## Sprache festlegen
 
-Die besagten Pipes verarbeiten Informationen, die spezifisch für eine Region sind.
+Die genannten Pipes verarbeiten Informationen, die spezifisch für eine Region sind.
 Beispielsweise werden Datumsangaben im Locale `en_US` anders dargestellt als für `de_DE`.
 Ein weiteres Beispiel sind Dezimal- und Tausendertrennzeichen (Punkt und Komma) bei Zahlen.
 
-In der Anwendung muss immer ein Locale festgelegt werden.
+In der Anwendung muss immer ein aktives Locale festgelegt werden.
 Im einfachsten Fall legen wir die Sprache schon zur Entwicklungszeit fest, aber es existieren natürlich auch dynamische und flexiblere Wege.
 
-Das aktuelle Locale ist im Token `LOCALE_ID` festgelegt.
+Das aktuelle Locale ist im Token `LOCALE_ID` hinterlegt.
 Um den Wert zu ändern, können wir das Token im DI-Container überladen.
 Diesen Weg beschreiben wir so auch im Buch im Abschnitt 13.1.2 "Die Sprache einstellen":
 
@@ -70,4 +70,41 @@ export class AppModule {
 
 ## Änderungen bei den Pipes
 
-TODO!
+### DatePipe
+
+Im Zuge dieser Änderungen hat sich auch das Verhalten der lokalisierten Pipes geändert.
+Die Tabellen mit den Platzhaltern für das Format der `DatePipe` (Seite 263 f. im Angular-Buch) sind damit nicht mehr komplett zutreffend, denn einige Platzhalter haben sich verändert.
+Besonders die vordefinierten Aliase (z.B. `medium`) haben eine geänderte Signatur und es sind einige neue Patterns hinzugekommen.
+
+In den meisten Fällen sind hier nur wenige Änderungen nötig.
+Überprüfen Sie aber unbedint alle Datumsangaben in Ihren Anwendungen.
+Alle aktuellen Platzhalter finden Sie in der [Dokumentation für die DatePipe](https://angular.io/api/common/DatePipe).
+
+
+
+### CurrencyPipe
+
+Die [CurrencyPipe](https://angular.io/api/common/CurrencyPipe) hat ab Angular 5 eine geänderte Signatur:
+
+```
+expression | currency[:currencyCode[:display[:digitInfo[:locale]]]]
+```
+
+Damit fällt das alte Argument `symbolDisplay` weg und macht Platz für das neue `display`:
+
+```
+display = { 'code' | 'symbol' | 'symbol-narrow' }
+```
+
+`display` entscheidet, ob das Währungskürzel als Text (z.B. *EUR*), Symbol (z.B. *€*) oder gekürztes Symbol (relevant bei zusammengesetzten Währungen wie *AU$*, wird angezeigt als *$*) angezeigt werden soll.
+
+Außerdem kann über das Argument `locale` ein spezifisches Locale angegeben werden, nach dem die Währungsangabe geparst wird.
+
+Diese Beispiele veranschaulichen das neue Verhalten:
+
+```
+3.141 | currency:'EUR'                          // 3,14 €
+3.141 | currency:'USD':'code'                   // 3,14 USD
+3.141 | currency:'EUR':'code':'1.2-2'           // 3,14 EUR
+3.141 | currency:'USD':'symbol':'1.2-2':'en_US' // $3.14
+```
