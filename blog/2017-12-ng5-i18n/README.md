@@ -15,7 +15,14 @@ thumbnail: ../angular5.png
 ---
 
 
-Bis Version 4 setzte Angular auf die [Intl-API](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Intl), die in den modernen Browsern nativ implementiert ist.
+Bis Version 4 setzte Angular auf die [Intl-API](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Intl).
+In Angular 5 wurde diese Abhängigkeit verworfen – dadurch ändern sich einige Details bei der Internationalisierung und den lokalisierten Pipes.
+In diesem Artikel haben wir die wichtigsten Änderungen zusammengefasst.
+
+
+## Intl-API
+
+Bis Angular 4 kam zur Lokalisierung die Intl-API zum Einsatz, die in den modernen Browsern nativ implementiert ist.
 Dieser Weg bringt allerdings zwei wesentliche Nachteile mit sich:
 
 1. Die API ist in den Browsern unterschiedlich implementiert.
