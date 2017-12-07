@@ -1,19 +1,21 @@
 ---
-title: "Internationalisierung in Angular 5"
+title: "Änderungen für i18n in Angular 5"
 author: Ferdinand Malcher
 mail: mail@fmalcher.de
-published: 2017-11-03
+published: 2017-12-07
 keywords:
   - Angular
   - Angular 5
+  - i18n
+  - Internationalisierung
+  - Pipes
+  - Locale
 language: de
 thumbnail: ../angular5.png
-hidden: true
 ---
 
-## !! WIP !! Dieser Artikel ist noch nicht vollständig
 
-Bis Version 4 hat Angular auf die Intl-API gesetzt, die in den modernen Browsern nativ implementiert ist.
+Bis Version 4 setzte Angular auf die [Intl-API](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Intl), die in den modernen Browsern nativ implementiert ist.
 Dieser Weg bringt allerdings zwei wesentliche Nachteile mit sich:
 
 1. Die API ist in den Browsern unterschiedlich implementiert.
