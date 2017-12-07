@@ -108,3 +108,56 @@ Diese Beispiele veranschaulichen das neue Verhalten:
 3.141 | currency:'EUR':'code':'1.2-2'           // 3,14 EUR
 3.141 | currency:'USD':'symbol':'1.2-2':'en_US' // $3.14
 ```
+
+
+
+
+## i18n-Kommentare
+
+Eine kleine Änderung gibt es in Sachen Mehrsprachigkeit.
+Um Textknoten zur Übersetzung zu markieren, wird das `i18n`-Attribut eingesetzt.
+Diese Syntax beschreiben wir im Angular-Buch auf Seite 352:
+
+```html
+<h1 i18n="meaning|description">Hallo Welt!</h1>
+```
+
+Für Text ohne abgegrenztes DOM-Element konnten wir bis Angular 4 auch HTML-Kommentare verwenden.
+**Diese Magic Comments werden ab Angular 5 nicht mehr unterstützt!**
+
+```html
+<!--i18n: meaning|description -->
+Meine Nachricht
+<!--/i18n-->
+```
+
+Stattdessen müssen wir in diesem Fall nun den `<ng-container>` als umgebendes Element einsetzen.
+Auf dem Container können wir dann wie gewohnt das `i18n`-Attribut verwenden:
+
+```html
+<ng-container i18n="meaning/description">
+Meine Nachricht
+</ng-container>
+```
+
+Der `<ng-container>` ist ein Hilfselement für Angular und ist im Browser später nicht mehr sichtbar.
+
+Mit dieser Änderung ist die Markierung von Texten nun konsistent: Es wird in jedem Fall das `i18n`-Attribut eingesetzt.
+
+
+<!--
+### i18n-Attribute mit CSS markieren
+
+Um bei der Arbeit mit i18n nicht den Überblick zu verlieren, konnten wir Elemente mit dem `i18n`-Attribut per CSS markieren.
+Diesen Tipp geben wir auch im Angular-Buch auf Seite 359:
+
+```css
+[i18n],
+[i18n-placeholder],
+[i18n-title] {
+  border: 1px solid green !important;
+}
+```
+
+Leider funktioniert dieses Hilfsmittel nicht mehr, da alle `i18n`-Attribute automatisch aus dem Kompilat entfernt werden (siehe [#11042](https://github.com/angular/angular/issues/11042)).
+-->
