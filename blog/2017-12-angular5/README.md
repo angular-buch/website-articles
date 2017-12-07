@@ -166,4 +166,12 @@ Alle wichtigen Neuerungen sind im [Angular-Blog](https://blog.angular.io/version
 
 **Wir wünschen Ihnen viel Spaß mit Angular 5 und beim Lesen unseres Buchs!**
 
+---
+
+Lesen Sie hier weiter:
+
+* [Angular 5: Den Book-Monkey upgraden](/blog/2017-12-book-monkey-upgrade)
+* [Angular 5: Änderungen für i18n](/blog/2017-12-ng5-i18n)
+* [Angular 4.3: Der neue HttpClient](/blog/2017-11-httpclient)
+
 
