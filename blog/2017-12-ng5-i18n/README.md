@@ -154,7 +154,6 @@ Der `<ng-container>` ist ein Hilfselement für Angular und ist im Browser späte
 Mit dieser Änderung ist die Markierung von Texten nun konsistent: Es wird in jedem Fall das `i18n`-Attribut eingesetzt.
 
 
-<!--
 ### i18n-Attribute mit CSS markieren
 
 Um bei der Arbeit mit i18n nicht den Überblick zu verlieren, konnten wir Elemente mit dem `i18n`-Attribut per CSS markieren.
@@ -168,5 +167,4 @@ Diesen Tipp geben wir auch im Angular-Buch auf Seite 359:
 }
 ```
 
-Leider funktioniert dieses Hilfsmittel nicht mehr, da alle `i18n`-Attribute automatisch aus dem Kompilat entfernt werden (siehe [#11042](https://github.com/angular/angular/issues/11042)).
--->
+Leider funktioniert dieses Hilfsmittel seit Angular 4.3 nicht mehr, da alle `i18n`-Attribute automatisch aus dem Kompilat entfernt werden (siehe [#11042](https://github.com/angular/angular/issues/11042)). Dies geschieht leider immer, egal ob die Anwendung übersetzt wird, oder nicht. Vielleicht kommen die Attribute aber irgendwann wieder zurück. Das Problem wurde immerhin als Feature-Request klassifiziert (siehe [#20055](https://github.com/angular/angular/issues/20055)).
