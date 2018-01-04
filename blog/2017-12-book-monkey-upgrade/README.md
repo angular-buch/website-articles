@@ -97,6 +97,9 @@ Unser Diff mit einem Projekt der Angular CLI 1.0.0 sieht so aus:
 
 Wenn Sie bereits einen neueren Stand der CLI haben, so sind bei Ihnen weniger Änderungen notwendig.
 
+Zur Kontrolle können wir noch einmal die Datei `package.json` überprüfen.
+Unsere Datei sollte nun der Version vom Angular-CLI Schematic ähneln: [@angular-devkit/schematics	-- package.json](https://github.com/angular/devkit/blob/master/packages/schematics/angular/application/files/package.json)
+
 
 ## 3. i18n-Kommentare ersetzen
 
