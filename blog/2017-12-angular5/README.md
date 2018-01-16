@@ -90,10 +90,11 @@ Wir empfehlen Ihnen die Migration auf das neue Modul.
 
 
 
-## RxJS Lettable Operators
+## RxJS Pipeable Operators (ehemals *Lettable*)
 
 Mit Angular 5 wurde *RxJS* auf die neueste Version 5.5 aktualisiert.
-Damit kommt auch das Konzept der [Lettable Operators](https://github.com/ReactiveX/rxjs/blob/master/doc/lettable-operators.md) in die Angular-Welt.
+Damit kommt auch das Konzept der [Pipeable Operators](https://github.com/ReactiveX/rxjs/blob/master/doc/pipeable-operators.md) in die Angular-Welt.
+(**Achtung:** Pipeable Operators sind auch bekannt unter dem alten Namen *Lettable Operators*.)
 
 Für den Entwickler ändert sich dabei die Verwendung der RxJS-Operatoren.
 Anstatt die Operatoren zu verketten, wird ab sofort die Methode `pipe()` eingesetzt.

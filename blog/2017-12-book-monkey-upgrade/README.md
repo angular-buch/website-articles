@@ -133,10 +133,10 @@ Hier sind in aller Kürze die notwendigen Änderungen:
 * __[Update to new HttpClient](https://github.com/book-monkey2-build/iteration-7-i18n/commit/efd88396773ba0c5b52494e0f1aef958f7cc3c3e)__
 
 
-## 5. RxJS Lettable Operators verwenden
+## 5. RxJS Pipeable Operators verwenden
 
-Mit Angular 5 kommt das Konzept der Lettable Operators in die Angular-Welt.
-Über die neuen Operatoren haben wir im [Blogpost zu Angular 5](/blog/2017-12-angular5#rxjs-lettable-operators) berichtet.
+Mit Angular 5 kommt das Konzept der Pipeable Operators in die Angular-Welt (auch bekannt unter dem alten Namen *Lettable Operators*).
+Über die neuen Operatoren haben wir im [Blogpost zu Angular 5](/blog/2017-12-angular5#rxjs-pipeable-operators) berichtet.
 
 * __[Introduce lettable RxJS operators](https://github.com/book-monkey2-build/iteration-7-i18n/commit/043a3d0bb509aea3b6d714fdda75f55d7283c842)__
 
