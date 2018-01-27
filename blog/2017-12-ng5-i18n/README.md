@@ -86,7 +86,7 @@ Die Tabellen mit den Platzhaltern für das Format der `DatePipe` (Seite 263 f. i
 Besonders die vordefinierten Aliase (z.B. `medium`) haben eine geänderte Signatur und es sind einige neue Patterns hinzugekommen.
 
 In den meisten Fällen sind hier nur wenige Änderungen nötig.
-Überprüfen Sie aber unbedint alle Datumsangaben in Ihren Anwendungen.
+Überprüfen Sie aber unbedingt alle Datumsangaben in Ihren Anwendungen.
 Alle aktuellen Platzhalter finden Sie in der [Dokumentation für die DatePipe](https://angular.io/api/common/DatePipe).
 
 
