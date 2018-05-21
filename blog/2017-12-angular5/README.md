@@ -8,7 +8,6 @@ keywords:
   - Angular 5
 language: de
 thumbnail: ../angular5.png
-sticky: true
 ---
 
 Angular 5 ist da! Anfang November 2017 erschien die neue Major-Version von Angular und bringt einige Neuerungen mit sich. Die gute Nachricht: Ihre alten Projekte mit Angular 4 sind weiterhin lauffähig – nur an einigen wenigen Stellen müssen Kleinigkeiten angepasst werden.
