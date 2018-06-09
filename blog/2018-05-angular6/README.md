@@ -25,9 +25,11 @@ Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit
 
 **Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert!**
 
-In Kürze veröffentlichen wir an dieser Stelle eine Anleitung, um die Beispielanwendung
+Im Gegensatz zum [Update von Version 4 auf 5](2017-12-angular5) ist der Aufwand ist sehr gering, da uns der neue Befehl `ng update` hilft.
+Bald veröffentlichen wir an dieser Stelle eine deutschsprachige Anleitung, um die Beispielanwendung
 "Book Monkey 2" auf den neuesten Stand zu bringen.
-Der Aufwand wird sehr gering sein, da uns der neue Befehl `ng update` hilft.
+
+In englischer Sprache steht Ihnen bereits jetzt der [Angular Update Guide](https://update.angular.io/) bereit.
 
 
 **Wir wünschen Ihnen viel Spaß mit Angular 6 und beim Lesen unseres Buchs!**

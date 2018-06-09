@@ -202,29 +202,7 @@ Auch diese optionalen Änderungen finden Sie in auf GitHub:
 * __[Introduce interface BookRaw for HTTP response](https://github.com/book-monkey2-build/iteration-7-i18n/commit/f2d380af5171f079d37036370d03d6538e2f18f8)__
 
 
-## 8. Optionaler Tipp: Swagger
-<!-- daraus mache ich noch einen eigenen Artikel! -->
-
-Beim Datenaustausch zwischen Backend und Frontend knirscht es immer wieder gerne.
-Im Backend wir ein Typ verändert, die Änderungen werden nicht im Frontend nachgezogen – **Boom: Exception** zur Laufzeit! Für den BookMonkey heißt das: Wir müssen das Interface `BookRaw` sowie alle URLs stets im Auge behalten. Es könnte womöglich eine Änderung bei der API gegeben haben, die Sie nicht mitbekommen haben! _(Das ist natürlich rein hypothetisch. Wir ändern die BookMonkey-API nicht, versprochen! :smile:)_
-
-Ich empfehle Ihnen wärmstens, Ihre API per Swagger zu definieren.
-Sowohl Mensch als auch Maschine können das Swagger-Format leicht lesen und passend verwerten.
-Natürlich setzt auch unser BookMonkey auf Swagger.
-Mithilfe des Swagger-Formats wird folgendes User-Interface on-the-fly aufgebaut:
-
-* https://book-monkey2-api.angular-buch.com/swagger-ui/#/book
-
-Eine neue API zu testen wird so zum Kinderspiel.
-
-Das ist schon sehr beeindruckend.
-Das beste Feature ist allerdings die automatische Code-Generierung per [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
-Setzen Sie am besten gleich auf die kommende v3 und verwenden Sie den Generator `typescript-angular`.
-Einmal eingerichtet und in das Continuous-Deployment eingebunden, bekommen wir ein fertiges Angular-Modul, passende Services und alle Entitäten als Interfaces automatisch generiert.
-Nach heutigem Stand muss aber noch ein kleiner Workaround angewendet werden: [#6722](https://github.com/swagger-api/swagger-codegen/issues/6722)
-
-
-## 9. Geschafft!
+## 8. Geschafft!
 
 Herzlichen Glückwunsch!
 Der BookMonkey ist auf dem neuesten Stand und wurde auch gleich noch ein wenig modernisiert.
