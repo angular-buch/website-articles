@@ -164,27 +164,23 @@ Jetzt geht es ans Eingemachte: Mit dem Wissen über die neuen Features von Angul
 Mit dem neuen Befehl `ng update` wird das Update sehr einfach.
 Wir empfehlen Ihnen immer den Einstieg über den offiziellen [Angular Update Guide](https://update.angular.io/).
 
+Los geht es im Ordner `book-monkey`:
 
-### Vorab: NPM Install
+```
+cd book-monkey
+```
+
+Bitte überprüfen Sie zur Sicherheit doppelt, am besten mit `dir` (Windows) oder `ls` (Linux/Mac), dass Sie im richtigen Verzeichnis sind.
+
+
+### Vorab: NPM Frühjahrsputz
 
 Als Grundlage für diese Anleitung haben wir den [aktualisierten Book Monkey vom Dezember 2017](/blog/2017-12-book-monkey-upgrade) verwendet.
 Das heißt, wir sind schon auf Anguar 5 und nutzen die neue `package-lock.json`, welche mit NPM 5 hinzu gekommen ist.
-Bei diesem speziellen Setup ist uns aufgefallen, dass ein normales `npm install` nicht mehr funktioniert.
 
-__Fehlermeldung:__
-```bash
-> node-sass@4.7.2 install /angular-buch/iteration-7-i18n/node_modules/node-sass
-> node scripts/install.js
-
-module.js:557
-    throw err;
-    ^
-
-Error: Cannot find module 'true-case-path'
-```
-
-Das ist etwas ärgerlich, aber leicht behoben.
-__Lösung:__ Einfach den Ordner `node_modules` und die Datei `package-lock.json` löschen. Danach geht der `npm i` wieder. [Laut Stack Overflow](https://stackoverflow.com/a/48322891) sollte es ebenso ausreichen, node.js und NPM auf den allerneusten Stand zu bringen. Nun gut. Weiter geht es!
+Wir haben zwei Fehler ausgemacht, die beide mit der NPM-Installation zusammen hängen.
+Sollte es zu einem Fehler kommen, so scrollen Sie bitte nach ganz unten.
+Wollen Sie den Fehler gleich vermeiden, so löschen Sie beherzt die Datei `package-lock.json`.
 
 ### Abhängigkeiten aktualisieren mit `ng update`
 
@@ -196,6 +192,16 @@ npm install -g @angular/cli
 
 # Angular CLi lokal im Projekt aktualisieren
 npm install @angular/cli
+
+# Eigentlich nicht noch einmal notwendig
+# aber dies vermeidet Issue Nr. 9307 (siehe Troubleshooter 2)
+npm install @angular/cli
+
+# Zur Kontrolle.
+# Es sollte keine Warnung:
+# > "Your global Angular CLI version (6.0.x) is greater than your local version (1.x.x)."
+# erscheinen!!!
+ng -v
 
 # Update!
 ng update @angular/cli
@@ -218,6 +224,7 @@ Und zum Schluss fehlt nur noch ein:
 ng update @angular/core
 ```
 
+
 ### RxJS 6
 
 Die Aktualisierung von RxJS hat ein eigenes Tool:
@@ -233,7 +240,7 @@ Wenn Sie keine Pipeable Operators mehr verwenden und auch keine Drittabieterbibl
 
 In unserem Fall war schon alles auf Pipeable Operators umgestellt und `rxjs-compat` wurde nicht hinzugefügt, weswegen wir es auch nicht entfernen mussten.
 
-Danach sollte das Projekt mit Angular 6 lauffähig sein – in wenigen automatisierten Schritten!
+Unser Projekt ist wieder auf dem aktuellsten Stand – in das in wenigen automatisierten Schritten!
 Sollten wir einen Schritt bzw. einen Fall übersehen haben, so schreiben Sie uns bitte an __team@angular-buch.com__ oder senden Sie doch gleich einen [pull request](https://github.com/angular-buch/website-articles/blob/gh-pages/blog/2018-05-angular6/README.md).
 
 
@@ -276,3 +283,72 @@ export class AppModule {}
 - __Danny, Ferdinand und Johannes__
 
 
+
+----
+----
+
+## Troubleshooter 1 - `Error: Cannot find module 'true-case-path'`
+
+Bei unserem Setup (NPM 5 mit `package-lok.json`) ist uns aufgefallen, dass ein normales `npm install` nicht mehr funktioniert:
+
+```bash
+npm install
+```
+
+__Fehlermeldung:__
+
+```bash
+> node-sass@4.7.2 install /angular-buch/iteration-7-i18n/node_modules/node-sass
+> node scripts/install.js
+
+module.js:557
+    throw err;
+    ^
+
+Error: Cannot find module 'true-case-path'
+```
+
+Das ist etwas ärgerlich, aber leicht behoben.
+Übertäter ist die Datei `package-lock.json`.
+Die Aufgabe der Datei ist es, einen "Schnappschuss" von einer funktionierenden Kombination an NPM-Paketen zu machen.
+Beim Upgraden kann dies fürchterlich hinderlich sein.
+Hier wollen wir von allen Paketen natürlich den neuesten Stand - und nicht einen Stand mit neuesten und nicht ganz so neuen Paketen.
+Daher kann die Lock-Datei gelöscht werden, sie wird beim nächsten `npm install` sowieso wieder erstellt:
+
+1. `package-lock.json` löschen
+2. `node_modules` löschen (zur Sicherheit)
+3. `npm install` - sollte jetzt problemlos durchlaufen
+
+[Laut Stack Overflow](https://stackoverflow.com/a/48322891) sollte es ebenso ausreichen, node.js und NPM auf den allerneusten Stand zu bringen.
+
+
+
+## Troubleshooter 2 - `Error: Cannot find module '@angular-devkit/core'`
+
+Beim zweiten uns bekannten Fehler funktioniert das Upgraden des Projekts nicht richtig.
+Wir danken unseren Leser Jens für den Hinweis!
+
+```bash
+npm install
+npm install @angular/cli
+ng update @angular/cli
+```
+
+__Fehlermeldung:__
+```bash
+module.js:557
+    throw err;
+    ^
+
+Error: Cannot find module '@angular-devkit/core'
+```
+
+Dieser [Bug](https://github.com/angular/angular-cli/issues/9307) ist mit über 100 Kommentaren sehr populär.
+Wir konnten diesen Bug reproduzieren und haben eine [sehr simple Lösung](https://github.com/angular/angular-cli/issues/9307#issuecomment-396081033) gefunden.
+Bitte einfach __noch einmal__ ausführen:
+
+```
+npm install @angular/cli
+```
+
+Schon ist das vermisste NPM-Paket `@angular-devkit/core` wieder da.
