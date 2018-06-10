@@ -287,7 +287,7 @@ export class AppModule {}
 <br>
 ----
 
-## Troubleshooter 1 - `Error: Cannot find module 'true-case-path'`
+#### Troubleshooter 1 - `Error: Cannot find module 'true-case-path'`
 
 Bei unserem Setup (NPM 5 mit `package-lok.json`) ist uns aufgefallen, dass ein normales `npm install` nicht mehr funktioniert:
 
@@ -323,7 +323,7 @@ Daher kann die Lock-Datei gelöscht werden, sie wird beim nächsten `npm install
 
 
 
-## Troubleshooter 2 - `Error: Cannot find module '@angular-devkit/core'`
+### Troubleshooter 2 - `Error: Cannot find module '@angular-devkit/core'`
 
 Beim zweiten uns bekannten Fehler funktioniert das Upgraden des Projekts nicht richtig.
 Wir danken unseren Leser Jens für den Hinweis!
