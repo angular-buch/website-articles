@@ -173,7 +173,8 @@ Bei diesem speziellen Setup ist uns aufgefallen, dass ein normales `npm install`
 
 __Fehlermeldung:__
 ```bash
-node scripts/install.js
+> node-sass@4.7.2 install /Users/johanneshoppe/Work/angular-buch/iteration-7-i18n/node_modules/node-sass
+> node scripts/install.js
 
 module.js:557
     throw err;
