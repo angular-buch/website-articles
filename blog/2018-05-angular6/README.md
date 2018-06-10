@@ -287,7 +287,7 @@ export class AppModule {}
 <br>
 ----
 
-#### Troubleshooter 1 - `Error: Cannot find module 'true-case-path'`
+### Troubleshooter 1 - `Error: Cannot find module 'true-case-path'`
 
 Bei unserem Setup (NPM 5 mit `package-lok.json`) ist uns aufgefallen, dass ein normales `npm install` nicht mehr funktioniert:
 
