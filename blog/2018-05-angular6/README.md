@@ -240,7 +240,7 @@ Wenn Sie keine Pipeable Operators mehr verwenden und auch keine Drittabieterbibl
 
 In unserem Fall war schon alles auf Pipeable Operators umgestellt und `rxjs-compat` wurde nicht hinzugefügt, weswegen wir es auch nicht entfernen mussten.
 
-Unser Projekt ist wieder auf dem aktuellsten Stand – in das in wenigen automatisierten Schritten!
+Unser Projekt ist wieder auf dem aktuellsten Stand – und das in wenigen automatisierten Schritten!
 Sollten wir einen Schritt bzw. einen Fall übersehen haben, so schreiben Sie uns bitte an __team@angular-buch.com__ oder senden Sie doch gleich einen [pull request](https://github.com/angular-buch/website-articles/blob/gh-pages/blog/2018-05-angular6/README.md).
 
 
