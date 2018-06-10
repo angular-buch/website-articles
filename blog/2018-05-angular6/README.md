@@ -145,7 +145,7 @@ myObservable$.pipe(
 ```
 
 Um Abwärtskompatibilität zu wahren, wird zusätzlich das Paket [`rxjs-compat`](https://www.npmjs.com/package/rxjs-compat) bereitgestellt.
-Nachdem alle Abhängigkeiten auf RxJS 6 aktualisiert wurden, sollten Sie dieses Paket entfernen.
+Nachdem alle Abhängigkeiten auf RxJS 6 aktualisiert wurden, sollten Sie dieses Paket entfernen. Das spart Platz.
 
 
 ### Angular Elements
@@ -165,39 +165,83 @@ Mit dem neuen Befehl `ng update` wird das Update sehr einfach.
 Wir empfehlen Ihnen immer den Einstieg über den offiziellen [Angular Update Guide](https://update.angular.io/).
 
 
+### Vorab: NPM Install
+
+Als Grundlage für diese Anleitung haben wir den [aktualisierten Book Monkey vom Dezember 2017](/blog/2017-12-book-monkey-upgrade) verwendet.
+Das heißt, wir sind schon auf Anguar 5 und nutzen die neue `package-lock.json`, welche mit NPM 5 hinzu gekommen ist.
+Bei diesem speziellen Setup ist uns aufgefallen, dass ein normales `npm install` nicht mehr funktioniert.
+
+__Fehlermeldung:__
+```bash
+node scripts/install.js
+
+module.js:557
+    throw err;
+    ^
+
+Error: Cannot find module 'true-case-path'
+```
+
+Das ist etwas ärgerlich, aber leicht behoben.
+__Lösung:__ Einfach den Ordner `node_modules` und die Datei `package-lock.json` löschen. Danach geht der `npm i` wieder. [Laut Stack Overflow](https://stackoverflow.com/a/48322891) sollte es ebenso ausreichen, node.js und NPM auf den allerneusten Stand zu bringen. Nun gut. Weiter geht es!
+
 ### Abhängigkeiten aktualisieren mit `ng update`
 
-Für das Update sind folgende Befehle nötig:
+Für das Update unserer Anwendung sind folgende Befehle nötig:
 
 ```bash
 # Angular CLI global aktualisieren
 npm install -g @angular/cli
 
-# Angular CLi lokal im Projekt aktualisieren (ggf. vorher node_modules löschen)
+# Angular CLi lokal im Projekt aktualisieren
 npm install @angular/cli
 
 # Update!
 ng update @angular/cli
+```
+
+Je nach der vorherigen Projekt-Version erscheint folgende Meldung:
+
+> The Angular CLI configuration format has been changed, and your existing configuration can be updated automatically by running the following command:
+> `ng update @angular/cli`
+
+Der Hinweis ist eindeutig. Also noch einmal:
+
+```bash
+ng update @angular/cli
+```
+
+Und zum Schluss fehlt nur noch ein:
+
+```bash
 ng update @angular/core
 ```
 
-Danach sollte das Projekt mit Angular 6 lauffähig sein – in vier kleinen Schritten!
+### RxJS 6
 
-### RxJS Pipeable Operators
-
-Sollten Sie noch die alten RxJS-Operatoren verwenden, so können Sie auch diese automatisch aktualisieren:
+Die Aktualisierung von RxJS hat ein eigenes Tool:
 
 ```bash
 npm install -g rxjs-tslint
 rxjs-5-to-6-migrate -p src/tsconfig.app.json
 ```
 
-Wenn Sie keine Pipeable Operators mehr verwenden und auch keine Drittabieterbibliotheken mehr darauf basieren, können Sie das Paket `rxjs-compat` entfernen.
+Sollten Sie noch irgendwo die alten RxJS-Operatoren statt der Pipeable Operators verwenden,
+so werden diese automatisch mittels `rxjs-compat` weiterhin laufen.
+Wenn Sie keine Pipeable Operators mehr verwenden und auch keine Drittabieterbibliotheken mehr darauf basieren, können und sollten Sie das Paket `rxjs-compat` entfernen.
+
+In unserem Fall war schon alles auf Pipeable Operators umgestellt und `rxjs-compat` wurde nicht hinzugefügt, weswegen wir es auch nicht entfernen mussten.
+
+Danach sollte das Projekt mit Angular 6 lauffähig sein – in wenigen automatisierten Schritten!
+Sollten wir einen Schritt bzw. einen Fall übersehen haben, so schreiben Sie uns bitte an __team@angular-buch.com__.
+
+
 
 ### Tree-Shakable Providers
 
 Der `BookStoreService` wird im Moment explizit im `AppModule` provided.
-Dieser Weg wird auch weiterhin unterstützt. Möchten Sie den Service trotzdem auf den neuen *tree-shakable* Weg migrieren, sind folgende Schritte nötig:
+Dieser Weg wird auch weiterhin unterstützt.
+Möchten Sie den Service trotzdem auf den neuen *tree-shakable* Weg migrieren, sind folgende Schritte nötig:
 
 #### 1.) `providedIn` im Service hinzufügen
 
