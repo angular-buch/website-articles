@@ -97,6 +97,14 @@ Verschiedene Anwendungen innerhalb eines Workspaces können sein z.B.
 Um diese neue Projektstruktur abzubilden, wurde eine neue Konfigurationsdatei geschaffen.
 **Die neue `angular.json` löst die bisherige `.angular-cli.json` ab!**
 Die Struktur innerhalb der Datei hat sich stark geändert, viele der Optionen sind aber trotzdem wiederzufinden und funktionieren genauso wie vorher.
+Die wichtigsten Punkte, die wir auch im Buch verwenden, haben wir hier gesammelt:
+
+- Das `styles`-Array zum Einbinden zusätzlicher externer Stylesheets (Kapitel 5, Seite 60) ist jetzt zu finden unter `projects > book-monkey > architect > build > options > styles`.
+- Für die standardmäßige Style-Extension und für generelle Inline-Styles (Kapitel 5, Seite 60) gibt es keine einfach zu findende Option mehr in der `angular.json`. Wenn wir die entsprechenden Optionen schon beim Erstellen des Projekts angeben, werden sie aber in die `angular.json` übernommen: `ng new my-project --style=scss --inline-style`
+- Die Environments (Kapitel 18, Seite 409) heißen jetzt `configurations`. Die Environment-Files liegen weiterhin im Ordner `src/environments`. Zusätzlich befinden sich aber in der `angular.json` zusätzliche Einstellungsmöglichkeiten, die wir bisher mit einzelnen Kommandozeilenparametern steuern mussten. Um eine Konfiguration beim Build zu verwenden, ist der folgende Befehl nötig: `ng build --configuration=production`. Die Kurzform `ng build --prod` existiert weiterhin, muss aber jetzt immer mit zwei Minuszeichen angeführt werden (nicht `-prod`).
+
+Sollten Ihnen noch weitere Unterschiede zum Buch auffallen, sind wir über einen Hinweis dankbar – wir nehmen gern weitere Punkte in die Liste auf.
+
 
 #### `ng update`
 
