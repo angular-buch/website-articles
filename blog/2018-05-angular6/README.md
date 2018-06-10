@@ -309,7 +309,7 @@ Error: Cannot find module 'true-case-path'
 ```
 
 Das ist etwas ärgerlich, aber leicht behoben.
-Übertäter ist die Datei `package-lock.json`.
+Übeltäter ist die Datei `package-lock.json`.
 Die Aufgabe der Datei ist es, einen "Schnappschuss" von einer funktionierenden Kombination an NPM-Paketen zu machen.
 Beim Upgraden kann dies fürchterlich hinderlich sein.
 Hier wollen wir von allen Paketen natürlich den neuesten Stand - und nicht einen Stand mit neuesten und nicht ganz so neuen Paketen.
