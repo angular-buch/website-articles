@@ -370,6 +370,10 @@ In älteren Projekten fand sich in der `package.json` folgende Angabe:
     "@angular/cli": "1.5.4"
  ```
 
+Mittlerweile schreibt man hier stets ein Zirkumflex __^__ hinein.  
+__Warum?__ Weil das `npm install @angular/cli` die Version nicht auf 1.7.4 bringen wird, sondern bei v1.5.4 bleibt.  
+__Problem:__ Erst mit der [v1.7.0](https://github.com/angular/angular-cli/releases/tag/v1.7.0) wurde der `ng update` eingeführt.
+
 Der Befehl:
 
 ```bash
@@ -386,11 +390,7 @@ To disable this warning use "ng config -g cli.warnings.versionMismatch false".
 The specified command update is invalid. For available options, see `ng help`.
 ```
 
-Mittlerweile schreibt man hier stets ein Zirkumflex __^__ hinein.  
-__Warum?__ Weil das `npm install @angular/cli` die Version nicht auf 1.7.4 bringen wird, sondern bei v1.5.4 bleibt.  
-__Problem:__ Erst mit der [1.7.0](https://github.com/angular/angular-cli/releases/tag/v1.7.0) wurde der `ng update` eingeführt.
-
-Allerdings steht nach Ausführung nun Folgendes in der `package.json`:
+Allerdings steht nach der ersten Ausführung  `npm install @angular/cli` nun Folgendes in der `package.json`:
 
 ```
   "devDependencies": {
