@@ -24,7 +24,7 @@ In diesem Artikel stellen wir Ihnen kurz die Neuerungen vor und aktualisieren da
 ## Angular 6: Alles ist neu?
 
 Die Neuerungen in Angular 6 betreffen vor allem Themen aus dem Hintergrund des Frameworks.
-An der öffentlichen API von Angular hat sich so gt wie nichts geändert. Das Upgrade auf Angular 6 ist also ein Kinderspiel.
+An der öffentlichen API von Angular hat sich so gut wie nichts geändert. Das Upgrade auf Angular 6 ist also ein Kinderspiel.
 
 Die offizielle Ankündigung zum Angular-6-Release finden Sie im
 [Angular-Blog](https://blog.angular.io/version-6-of-angular-now-available-cc56b0efa7a4).
