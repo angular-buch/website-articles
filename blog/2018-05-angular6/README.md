@@ -390,7 +390,7 @@ To disable this warning use "ng config -g cli.warnings.versionMismatch false".
 The specified command update is invalid. For available options, see `ng help`.
 ```
 
-Allerdings steht nach der ersten Ausführung  `npm install @angular/cli` nun Folgendes in der `package.json`:
+Allerdings steht nach der ersten Ausführung von `npm install @angular/cli` nun Folgendes in der `package.json`:
 
 ```
   "devDependencies": {
