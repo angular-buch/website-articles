@@ -186,7 +186,7 @@ Bitte überprüfen Sie zur Sicherheit doppelt, am besten mit `dir` (Windows) ode
 Als Grundlage für diese Anleitung haben wir den [aktualisierten Book Monkey vom Dezember 2017](/blog/2017-12-book-monkey-upgrade) verwendet.
 Das heißt, wir sind schon auf Anguar 5 und nutzen die neue `package-lock.json`, welche mit NPM 5 hinzu gekommen ist.
 
-Wir haben zwei Fehler ausgemacht, die beide mit der NPM-Installation zusammen hängen.
+Wir haben drei Fehler ausgemacht, die beide mit der NPM-Installation zusammen hängen.
 Sollte es zu einem Fehler kommen, so scrollen Sie bitte nach ganz unten.
 Wollen Sie den Fehler gleich vermeiden, so löschen Sie beherzt die Datei `package-lock.json`.
 
