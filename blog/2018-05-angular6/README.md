@@ -201,14 +201,13 @@ npm install -g @angular/cli
 # Angular CLi lokal im Projekt aktualisieren
 npm install @angular/cli
 
-# Eigentlich nicht noch einmal notwendig
-# aber dies vermeidet Issue Nr. 9307 (siehe Troubleshooter 2)
+# Eigentlich nicht noch einmal notwendig,
+# aber siehe Troubleshooter 2 & 3
 npm install @angular/cli
 
-# Zur Kontrolle.
-# Es sollte keine Warnung:
-# > "Your global Angular CLI version (6.0.x) is greater than your local version (1.x.x)."
-# erscheinen!!!
+# Zur Kontrolle, die lokale Version muss 1.7.4 sein
+# Diese Warnung ist OK: Your global Angular CLI version (6.x.x) is greater than your local version (1.7.4).
+# Diese Warnung nicht OK: Your global Angular CLI version (6.x.x) is greater than your local version (1.5.4).
 ng -v
 
 # Update!
@@ -360,3 +359,42 @@ npm install @angular/cli
 ```
 
 Schon ist das vermisste NPM-Paket `@angular-devkit/core` wieder da.
+
+
+### Troubleshooter 3 - `The specified command update is invalid.`
+
+In älteren Projekten fand sich in der `package.json` folgende Angabe:
+
+```
+  "devDependencies": {
+    "@angular/cli": "1.5.4"
+ ```
+
+Der Befehl:
+
+```bash
+ng update @angular/cli
+```
+
+führt dann natürlich zu folgender __Fehlermeldung:__
+
+```bash
+Your global Angular CLI version (6.0.8) is greater than your local
+version (1.5.4). The local Angular CLI version is used.
+
+To disable this warning use "ng config -g cli.warnings.versionMismatch false".
+The specified command update is invalid. For available options, see `ng help`.
+```
+
+Mittlerweile schreibt man hier stets ein Zirkumflex __^__ hinein.  
+__Warum?__ Weil das `npm install @angular/cli` die Version nicht auf 1.7.4 bringen wird, sondern bei v1.5.4 bleibt.  
+__Problem:__ Erst mit der [1.7.0](https://github.com/angular/angular-cli/releases/tag/v1.7.0) wurde der `ng update` eingeführt.
+
+Allerdings steht nach Ausführung nun Folgendes in der `package.json`:
+
+```
+  "devDependencies": {
+    "@angular/cli": "^1.5.4"
+ ```
+ 
+ Ein erneutes `npm install @angular/cli` bringt uns nun endlich auf die gewünschte v1.7.4.
