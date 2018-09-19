@@ -11,7 +11,7 @@ thumbnail: ../angular5.png
 ---
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 6 ist da!](/blog/angular-6)
+> * [Angular 6 ist da!](/blog/2018-05-angular6)
 
 <br>
 <br>
