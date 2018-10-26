@@ -3,7 +3,7 @@ title: "Angular 6 ist da!"
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2018-05-21
-lastModified: 2018-06-10
+lastModified: 2018-10-18
 keywords:
   - Angular
   - Angular 6
@@ -14,6 +14,12 @@ language: de
 thumbnail: ../angular6.png
 sticky: true
 ---
+
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 7 ist da!](/blog/2018-10-angular7)
+
+<br>
+<br>
 
 Angular 6 ist da! Am 04. Mai 2018 erschien die neue Major-Version von Angular.
 Obwohl das zunächst nach komplizierten Upgrades und vielen Breaking Changes klingt, können Sie aufatmen:
