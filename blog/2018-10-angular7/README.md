@@ -10,7 +10,6 @@ keywords:
 language: de
 thumbnail: ./angular7.png
 sticky: true
-hidden: true
 ---
 
 Wieder sind 6 Monate vergangen und Angular strahlt mit einem neuen Major-Release: Am 18. Oktober 2018 wurde Angular 7.0.0 veröffentlicht!

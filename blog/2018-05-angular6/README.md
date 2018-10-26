@@ -12,7 +12,7 @@ keywords:
   - Angular CLI
 language: de
 thumbnail: ../angular6.png
-sticky: true
+sticky: false
 ---
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
