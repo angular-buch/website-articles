@@ -7,6 +7,8 @@ lastModified: 2019-05-28
 keywords:
   - Angular
   - Angular 8
+  - Differential Loading
+  - Ivy
 language: de
 thumbnail: ./angular8.png
 sticky: true
@@ -166,6 +168,9 @@ Somit können moderne Browser auf neuere Features zugreifen und müssen nicht zu
 Die Neuerung führt vor allem bei modernen Browsern zu Performance-Verbessungen, weil weniger Code geladen werden muss.
 
 
+TODO: Screenshot Build?
+
+
 
 ## Angular CLI Builders API
 
@@ -178,5 +183,7 @@ Einen Einstiegsartikel zur Verwendung der API und der Entwicklung eines eigenen 
 
 <hr>
 
-Viel Spaß mit Angular wünschen<br>
-Johannes, Danny und Ferdinand
+Haben Sie Fragen zur neue Version, zum Update oder zu Angular? Schreiben Sie uns!
+
+**Viel Spaß mit Angular wünschen<br>
+Johannes, Danny und Ferdinand**
