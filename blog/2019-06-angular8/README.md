@@ -33,73 +33,96 @@ Sie können sich auch eine Liste der notwenigen Schritte zwischen ihrer aktuelle
 
 
 ## Breaking Change: @ViewChild und @ContentChild
-Ab Angular 8 müssen alle Queries mit den Dekoratoren `@ViewChild` und `@ContentChild` mit dem `static` Flag versehen werden.
-Das Flag defniert, ob es sich bei dem zugehörigen Element um eine statisches oder dynamisch veränderbares Element handelt.
 
-### Vorher
-Bis Angular 7 wurden `@ViewChild` und `@ContentChild` wie folgt verwendet:
+Mit den Dekoratoren `@ViewChild()` und `@ContentChild()` können wir Querys auf DOM-Elemente in der View einer Komponente/Direktive stellen.
+Ab Angular 8 müssen alle solche Querys zusätzlich mit dem Flag `static` versehen werden.
+Damit wird definiert, ob es sich bei der Abfrage um eine statisches oder dynamisch veränderbares Element handelt.
+Statische Elemente werden einmalig gerendert und sind dann zur Laufzeit der Komponente verfügbar, dynamische Elemente werden zur Laufzeit verändert.
+
+
+**Bis Angular 7** wurden `@ViewChild()` und `@ContentChild()` wie folgt verwendet.
+Je nach Template und Struktur der Komponente ist das Ergebnis dann im LifeCycle-Hook `ngOnInit()` oder `ngAfterViewInit()` verfügbar:
+
 ```ts
-// Je nach Template ist das Ergebnis ist im LifeCycle-Hook `ngOnInit` oder `ngAfterViewInit` verfügbar
 @ViewChild('foo') foo: ElementRef;
-
-// Je nach Template ist das Ergebnis ist im LifeCycle-Hook `ngOnInit` oder `ngAfterContentInit` verfügbar
 @ViewChild('bar') bar: ElementRef;
 ```
 
-### Nachher (ab Angular 8)
-Ab Angular 8 müssen `@ViewChild` und `@ContentChild` den das `static` Flag übermittelt bekommen.
+**Ab Angular 8** müssen `@ViewChild()` und `@ContentChild()` immer das Flag `static` tragen:
 
 ```ts
-// Das Ergebnis ist im LifeCycle-Hook `ngOnInit` verfügbar
-@ViewChild('foo', {static: true}) foo: ElementRef;
+// Statische Query: Ergebnis ist im LifeCycle-Hook `ngOnInit` verfügbar
+@ViewChild('foo', { static: true }) foo: ElementRef;
+@ContentChild('bar', { static: true }) bar: ElementRef;
 
-// Das Ergebnis ist im LifeCycle-Hook `ngOnInit` verfügbar
-@ContentChild('bar', {static: true}) bar: ElementRef;
+// Dynamische Query: Ergebnis ist im LifeCycle-Hook `ngAfterViewInit` verfügbar
+@ViewChild('foo', { static: false }) foo: ElementRef;
+@ContentChild('bar', { static: false }) bar: ElementRef;
 ```
 
-Bzw.:
+### Automatische Migration
 
-```ts
-// Das Ergebnis ist im LifeCycle-Hook `ngAfterViewInit` verfügbar
-@ViewChild('foo', {static: false}) foo: ElementRef;
-
-// Das Ergebnis ist im LifeCycle-Hook `ngAfterContentInit` verfügbar
-@ContentChild('bar', {static: false}) bar: ElementRef;
-```
-
-Verwenden Sie die Angular CLI und führen ein Update auf Angular 8 durch, wird diese ihren Quellcode im Regelfall automatisch an den entsprechenden Stellen anzupassen.
-Sollte die Angular CLI nicht identifiziern können, welcher Wert für `static` gesetzt werden soll, so wird an der entsprechenden Stelle ein Hinweis eingefügt und Sie müssen manuell Hand anlegen:
+Verwenden Sie die Angular CLI für das Update auf Angular 8, so wird die Migration automatisch durchgeführt.
+Sollte das Migrationsskript nicht identifiziern können, welcher Wert für `static` gesetzt werden muss, so wird an der entsprechenden Stelle ein Hinweis eingefügt, und Sie müssen manuell Hand anlegen:
 
 ```ts
 /* TODO: add static flag */
 ```
 
-### Wann verwende ich was?  `{static: true}` VS.  `{static: false}`
-Im Regelfall empfehlen wir Ihnen `{static: false}` zu verwenden, da dies dazu führt, dass das Abfrageresultat im Lifecycle-Hook `ngAfterViewInit` bzw. `ngAfterContentInit` verfügbar ist.
-Somit können Sie sicher gehen, dass die Change Detection vollständig ausgeführt wurde und demzufolge das Element auf das Sie zugreifen wollen vollständig geladen wurde.
+### Statisch oder dynamisch? -- die richtige Einstellung wählen
 
-`{static: true}` benötigen Sie nur in wenigen Fällen, beispielsweise wenn Sie eingebettete Views on-the-fly generieren wollen. Lesen Sie mehr hierzu in der offiziellen [Angular-Dokumentation](https://next.angular.io/guide/static-query-migration#is-there-a-case-where-i-should-use-static-true).
+Wir empfehlen Ihnen, im Regelfall für das Flag die Einstellung `false` zu verwenden.
+Das führt dazu, dass das Ergebnis der Abfrage im Lifecycle-Hook
+
+Im Regelfall empfehlen wir Ihnen `{static: false}` zu verwenden, da dies dazu führt, dass das Abfrageresultat im Lifecycle-Hook `ngAfterViewInit()` bzw. `ngAfterContentInit()` verfügbar ist.
+Somit können Sie sichergehen, dass die Change Detection vollständig ausgeführt wurde und das angefragte Element vollständig geladen wurde.
+
+Die Einstellung `{static: true}` benötigen Sie nur in wenigen Fällen, beispielsweise wenn Sie eingebettete Views "on-the-fly" generieren wollen.
+Lesen Sie mehr hierzu in der offiziellen [Angular-Dokumentation](https://next.angular.io/guide/static-query-migration#is-there-a-case-where-i-should-use-static-true).
+
+Übrigens: Falls Sie `@ViewChildren()` verwenden, müssen Sie nichts ändern.
+Solche Querys sind immer dynamisch. 
 
 
-## Lazy Loading - Import-Systax statt Magic-String
-Angular unterstützt nun die _Import_-Syntax zum nachladen von Modulen in der Routingkonfiguration.
-Die bisherige Syntax die auch als Magic-String bezeichnet wird, wurde vom Angular-Team als _deprecated_ gekennzeichnet.
-Wenn Sie das Update mit der Angular CLI vollziehen, konvertiert diese die Magic-Strings autoimatisch zur neuen Import-Syntax.
 
-### Vorher
+## Lazy Loading: Dynamische Imports statt Magic-String
+
+Angular unterstützt nun von Haus aus das `import()`-Statement zum Nachladen von Modulen.
+Dadurch ändert sich die Schreibweise beim Routing, um Lazy Loading zu konfigurieren.
+Die bisherige Syntax verwendet einen "Magic String", um das zu ladende Modul anzugeben:
+
 ```ts
-loadChildren: './foo/foo.module#FooModule'
+{
+  path: 'mypath',
+  loadChildren: './foo/foo.module#FooModule'
+}
 ```
 
-### Nachher (ab Angular 8)
+Diese Schreibweise ist **ab Angular 8** als **deprecated** gekennzeichnet.
+Stattdessen wird ein dynamischer Import verwendet, um das Modul beim Routing nachzuladen:
+
 ```ts
-loadChildren: () => import('./foo/foo.module').then(m => m.FooModule)
+{
+  path: 'mypath',
+  loadChildren: () => import('./foo/foo.module').then(m => m.FooModule)
+}
 ```
 
+Die Syntax sieht zunächst komplizierter aus.
+Im Wesentlichen besteht der Befehl allerdings nur aus einer anonymen Funktion, die aufgerufen wird, wenn die Route aktiviert wird.
+Sie ruft `import()` auf und extrahiert im zweiten Schritt das Angular-Modul `FooModule` aus dem heruntergeladenen Bundle.
+Diese neue Variante arbeitet vollständig mit nativ unterstützten Features und ohne einen Magic String, der spezifisch für Angular ist.
+Dadurch unterstützt die IDE den Entwickler mit Autovervollständigung und Typprüfung.
 
-## Ivy Opt-In Preview
-Die neue Rendering-Engine _Ivy_ kann in Angular 8 aktiviert und genutzt werden.
-Um Ivy zu aktivieren und auszuprobieren können Sie nach dem Update auf Angular 8 in der Datei `src/tsconfig.app.json` das Flag `enableIvy` setzen.
+Wenn Sie das Update mit der Angular CLI durchführen, werden die Magic Strings automatisch zur neuen Schreibweise migriert.
+In der zweiten Auflage des Angular-Buchs, die im Juni 2019 erscheint, ist der neue Weg übrigens schon beschrieben.
+
+
+
+## Der neue Ivy-Renderer: Opt-In Preview
+
+Die neue Rendering-Engine _Ivy_ kann in Angular 8 als freiwilliges Opt-In aktiviert und genutzt werden.
+Zum Ausprobieren können Sie in einem Projekt mit Angular 8 in der Datei `src/tsconfig.app.json` das Flag `enableIvy` setzen:
 
 ```json
 {
@@ -111,18 +134,43 @@ Um Ivy zu aktivieren und auszuprobieren können Sie nach dem Update auf Angular 
 }
 ```
 
-Für detaillierte Informationen zu Ivy können wir den Blogartikel [Understanding Angular Ivy: Incremental DOM and Virtual DOM](https://blog.nrwl.io/243be844bf36) von Victor Savkin empfehlen.
+Alternativ können Sie beim Anlegen eines neuen Angular-Projekts auch direkt die Option `--enable-ivy` nutzen:
+
+```bash
+ng new my-app --enable-ivy
+```
+
+Ivy wird vermutlich mit Angular 9 standardmäßig für alle Projekte aktiviert.
+Bis dahin wird die neue Engine noch einem umfangreichen Praxistest unterzogen.
+Einige Features lassen noch auf sich warten, zum Beispiel die Integration für Internationalisierung (i18n).
+Das neue Tooling soll Übersetzungen zur Laufzeit erlauben und auch einen Service zur programmatischen Übersetzung mitbringen.
+
+Für detaillierte Informationen zu Ivy können wir den Blogartikel ["Understanding Angular Ivy: Incremental DOM and Virtual DOM"](https://blog.nrwl.io/243be844bf36) von Victor Savkin empfehlen.
 
 
-## Differential Loading
-Die Angular CLI produziert jetzt verschiedene Bundles, die abhängig vom verwendeten Browser geladen werden.
-Somit können moderne Browser auf neuere Features zugreifen und müssen nicht zusätzlich Polyfill-Dateien für Features laden, die Sie bereits von Hause aus verarbeiten können.
-Ältere Browser greifen auf die sogenannten Legacy Bundles zurück und Laden Polyfills und fehlende Funktionen zusätzlich zum Anwendungscode.
+## Differential Loading: Mehrere Bundles für unterschiedliche Browser
 
-Die Neuerung führt vor allem bei modernen Browsern zu Performance-Verbessungen, da diese weniger Code laden müssen.
+Ein bekanntes Praxisproblem mit Angular ist die Größe der ausgelieferten Bundles.
+Warum ein Bundle groß und "unhandlich" wird, kann verschiedene Ursachen haben und kann auf verschiedene Weise strategisch gelöst werden, z. B. durch Code Splitting, Tree Shaking und Lazy Loading.
+
+Alle modernen Browser unterstützen mindestens den JavaScript-Standard ES2015.
+Dennoch werden die meisten Angular-Anwendungen weiterhin in ES5 kompiliert, um auch in älteren Browsern lauffähig zu sein.
+Das führt zu größeren Bundles, und es ist nötig, Polyfills für ältere Browser mit auszuliefern.
+
+An dieser Stelle kommt ein neues Feature der Angular CLI ins Spiel: Differential Loading.
+Die Angular CLI produziert dabei verschiedene Bundles der Anwendung -- für ältere Browser in ES5 und für neuere Browser in ES2015 oder höher.
+Der Browser lädt nur die Bundles, die für ihn relevant sind.
+Somit können moderne Browser auf neuere Features zugreifen und müssen nicht zusätzlich Polyfill-Dateien für Features laden, die Sie bereits von Haus aus verarbeiten können.
+Ältere Browser greifen auf die sogenannten "Legacy Bundles" zurück und laden Polyfills und fehlende Funktionen zusätzlich zum Anwendungscode.
+
+Die Neuerung führt vor allem bei modernen Browsern zu Performance-Verbessungen, weil weniger Code geladen werden muss.
+
 
 
 ## Angular CLI Builders API
+
+TODO: müssen wir noch spezifischer schreiben (oder weglassen)
+
 Mit Veröffentlichung der Angular CLI 8 kommt noch ein weiteres Feature: Die Builders API.
 Diese erlaubt es Ihnen Features zur CLI hinzuzufügen oder bestehende Features zu modifizieren.
 
