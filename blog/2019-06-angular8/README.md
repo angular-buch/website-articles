@@ -43,7 +43,7 @@ Statische Elemente werden einmalig gerendert und sind dann zur Laufzeit der Komp
 
 
 **Bis Angular 7** wurden `@ViewChild()` und `@ContentChild()` wie folgt verwendet.
-Je nach Template und Struktur der Komponente ist das Ergebnis dann im LifeCycle-Hook `ngOnInit()` oder `ngAfterViewInit()` verfügbar:
+Je nach Template und Struktur der Komponente ist das Ergebnis dann im LifeCycle-Hook `ngOnInit()` *oder* `ngAfterViewInit()` verfügbar -- das genaue Verhalten ist jedoch nicht vorhersehbar:
 
 ```ts
 @ViewChild('foo') foo: ElementRef;
@@ -77,17 +77,20 @@ Wir empfehlen Ihnen, im Regelfall für das Flag die Einstellung `false` zu verwe
 Das führt dazu, dass das Ergebnis der Abfrage im Lifecycle-Hook `ngAfterViewInit()` bzw. `ngAfterContentInit()` verfügbar ist.
 Somit können Sie sichergehen, dass die Change Detection vollständig ausgeführt wurde und das angefragte Element vollständig geladen wurde.
 
-Die Einstellung `{static: true}` benötigen Sie nur in wenigen Fällen, beispielsweise wenn Sie eingebettete Views "on-the-fly" generieren wollen.
-Lesen Sie mehr hierzu in der offiziellen [Angular-Dokumentation](https://next.angular.io/guide/static-query-migration#is-there-a-case-where-i-should-use-static-true).
+Die Einstellung `{ static: true }` benötigen Sie nur in wenigen Fällen, beispielsweise wenn Sie auf ein `TemplateRef` zugreifen wollen, um daraus eine eingebettete View zu generieren.
+Diese Aktion können Sie nicht in `ngAfterViewInit()` ausführen, weil die Change Detection bereits ausgeführt wurde und die Aktion dann nicht in der View sichtbar wäre.
 
-Übrigens: Falls Sie `@ViewChildren()` verwenden, müssen Sie nichts ändern.
-Solche Querys sind immer dynamisch. 
+Lesen Sie mehr zum Thema in der offiziellen [Angular-Dokumentation](https://next.angular.io/guide/static-query-migration).
+
+// TODO: "next" weg, wenn Release durch ist
+
+Übrigens: Falls Sie `@ViewChildren()` oder `@ContentChildren()` verwenden, müssen Sie nichts ändern -- solche Querys sind immer dynamisch.
 
 
 
 ## Lazy Loading: Dynamische Imports statt Magic-String
 
-Angular unterstützt nun von Haus aus das `import()`-Statement zum Nachladen von Modulen.
+Angular unterstützt nun von Haus aus das `import()`-Statement zum programmatischen Nachladen von Modulen.
 Dadurch ändert sich die Schreibweise beim Routing, um Lazy Loading zu konfigurieren.
 Die bisherige Syntax verwendet einen "Magic String", um das zu ladende Modul anzugeben:
 
@@ -140,7 +143,7 @@ Alternativ können Sie beim Anlegen eines neuen Angular-Projekts auch direkt die
 ng new my-app --enable-ivy
 ```
 
-Ivy wird vermutlich mit Angular 9 standardmäßig für alle Projekte aktiviert.
+Ivy soll mit Angular 9 standardmäßig für alle Projekte aktiviert werden.
 Bis dahin wird die neue Engine noch einem umfangreichen Praxistest unterzogen.
 Einige Features lassen noch auf sich warten, zum Beispiel die Integration für Internationalisierung (i18n).
 Das neue Tooling soll Übersetzungen zur Laufzeit erlauben und auch einen Service zur programmatischen Übersetzung mitbringen.
