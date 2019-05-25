@@ -9,8 +9,11 @@ keywords:
   - Angular 7
 language: de
 thumbnail: ./angular7.png
-sticky: true
+sticky: false
 ---
+
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 8 ist da!](/blog/2019-06-angular8)
 
 Wieder sind 6 Monate vergangen und Angular strahlt mit einem neuen Major-Release: Am 18. Oktober 2018 wurde Angular 7.0.0 veröffentlicht!
 Die beste Nachricht zuerst: Es gibt keine Breaking Changes und das Upgrade funktioniert schnell und reibungslos.

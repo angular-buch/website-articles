@@ -12,6 +12,7 @@ thumbnail: ./angular8.png
 sticky: true
 ---
 
+
 Es ist wieder soweit, das Angular-Team veröffentlichte am 28. Mai 2019 die neue Major-Version Angular 8.0.0.
 Angular 8 und die Angular CLI 8, bringen wieder viele interessante Neuerungen mit sich.
 Das Beste hierbei: Es gibt kaum Breaking Changes. Somit funktioniert das Upgrade sehr schnell und reibungslos.
