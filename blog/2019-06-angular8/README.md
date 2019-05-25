@@ -24,17 +24,17 @@ Die offizielle Ankündigung des neuen Releases finden Sie im [Angular Blog](http
 
 
 ## Update auf Angular 8
-Das Update zur neuen Angular Version ist kinderleicht. hierzu führen Sie einfach den folgenden Befehl in der Konsole aus:
+Das Update zur neuen Angular-Version ist kinderleicht. Hierzu führen Sie einfach den folgenden Befehl in einem bestehenden Projekt aus:
 
 ```sh
 ng update @angular/cli @angular/core
 ```
 
-Sie können sich auch eine Liste der notwenigen Schritte zwischen ihrer aktuellen Version und Angular 8 auf [update.angular.io](https://update.angular.io/) anzeigen lassen.
+Sie können sich auch eine Liste der notwenigen Schritte zwischen Ihrer aktuellen Version und Angular 8 auf [update.angular.io](https://update.angular.io/) anzeigen lassen.
 
 
 
-## Breaking Change: @ViewChild und @ContentChild
+## Breaking Change: @ViewChild() und @ContentChild()
 
 Mit den Dekoratoren `@ViewChild()` und `@ContentChild()` können wir Querys auf DOM-Elemente in der View einer Komponente/Direktive stellen.
 Ab Angular 8 müssen alle solche Querys zusätzlich mit dem Flag `static` versehen werden.
@@ -65,7 +65,7 @@ Je nach Template und Struktur der Komponente ist das Ergebnis dann im LifeCycle-
 ### Automatische Migration
 
 Verwenden Sie die Angular CLI für das Update auf Angular 8, so wird die Migration automatisch durchgeführt.
-Sollte das Migrationsskript nicht identifiziern können, welcher Wert für `static` gesetzt werden muss, so wird an der entsprechenden Stelle ein Hinweis eingefügt, und Sie müssen manuell Hand anlegen:
+Sollte das Migrationsskript nicht identifizieren können, welcher Wert für `static` gesetzt werden muss, so wird an der entsprechenden Stelle ein Hinweis eingefügt, und Sie müssen manuell Hand anlegen:
 
 ```ts
 /* TODO: add static flag */
@@ -74,9 +74,7 @@ Sollte das Migrationsskript nicht identifiziern können, welcher Wert für `stat
 ### Statisch oder dynamisch? -- die richtige Einstellung wählen
 
 Wir empfehlen Ihnen, im Regelfall für das Flag die Einstellung `false` zu verwenden.
-Das führt dazu, dass das Ergebnis der Abfrage im Lifecycle-Hook
-
-Im Regelfall empfehlen wir Ihnen `{static: false}` zu verwenden, da dies dazu führt, dass das Abfrageresultat im Lifecycle-Hook `ngAfterViewInit()` bzw. `ngAfterContentInit()` verfügbar ist.
+Das führt dazu, dass das Ergebnis der Abfrage im Lifecycle-Hook `ngAfterViewInit()` bzw. `ngAfterContentInit()` verfügbar ist.
 Somit können Sie sichergehen, dass die Change Detection vollständig ausgeführt wurde und das angefragte Element vollständig geladen wurde.
 
 Die Einstellung `{static: true}` benötigen Sie nur in wenigen Fällen, beispielsweise wenn Sie eingebettete Views "on-the-fly" generieren wollen.
