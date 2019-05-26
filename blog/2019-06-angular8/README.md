@@ -55,7 +55,7 @@ Somit können moderne Browser auf neuere Features zugreifen und müssen nicht zu
 Die Neuerung führt vor allem bei modernen Browsern zu Performance-Verbessungen, weil weniger Code geladen werden muss.
 
 
-TODO: Screenshot Build?
+![Screenshot Build mit Differential Loading](diffloading.png)
 
 
 
