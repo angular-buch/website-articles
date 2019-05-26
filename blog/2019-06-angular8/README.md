@@ -211,3 +211,5 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 Johannes, Danny und Ferdinand**
 
 > **Übrigens: Unser neues Angular-Buch erscheint am 14. Juni 2019 im Handel -- vollständig aktualisiert und erweitert. Alle Beispiele sind bereits auf dem Stand von Angular 8. 😊**
+
+<small>**Titelbild:** Badwater Basin, Death Valley National Park, California, 2019</small>
