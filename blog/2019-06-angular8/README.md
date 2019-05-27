@@ -20,7 +20,7 @@ Der neueste Wurf aus der Softwareschmiede Google ist vollbracht: **Angular 8 ist
 Am 28. Mai 2019 erschien die neue Major-Version 8.0.0 und bringt wieder einige interessante Neuerungen mit sich.
 
 Die wichtigsten Punkte sind Differential Loading und die neue Syntax für Lazy Loading.
-Es gibt Breaking Changes, doch seien Sie beruhigt: Das Update geht leicht von der Hand und es sind nur wenige manuelle Anpassungen nötig.
+Es gibt kleine Breaking Changes, doch seien Sie beruhigt: Das Update geht leicht von der Hand und es sind nur selten manuelle Anpassungen nötig.
 
 In diesem Artikel möchten wir kurz die wichtigsten Neuigkeiten vorstellen.
 Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https://blog.angular.io/xxxxxxxxxx).
@@ -33,7 +33,7 @@ Das Update zur neuen Angular-Version ist kinderleicht. Hierzu führen Sie einfac
 ng update @angular/cli @angular/core
 ```
 
-Das Tool führt automatisch alle nötigen Anpassungen am Code der Anwendung durch.
+Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch.
 Auf [update.angular.io](https://update.angular.io/) können Sie außerdem alle Migrationsschritte nachvollziehen.
 
 
@@ -44,11 +44,11 @@ Ein bekanntes Praxisproblem mit Angular ist die Größe der ausgelieferten Bundl
 Warum ein Bundle groß und "unhandlich" wird, kann verschiedene Ursachen haben und kann auf verschiedene Weise strategisch gelöst werden, z. B. durch Code Splitting, Tree Shaking oder Lazy Loading.
 
 Alle modernen Browser unterstützen mindestens den JavaScript-Standard ES2015.
-Dennoch werden die meisten Angular-Anwendungen weiterhin in ES5 kompiliert, um auch in älteren Browsern lauffähig zu sein – eine der tragendsten Ursachen für wachsende Bundles.
+Dennoch werden die meisten Angular-Anwendungen weiterhin in ES5 kompiliert, um auch in älteren Browsern lauffähig zu sein -- ein wichtiger Grund für wachsende Bundles.
 Außerdem müssen Polyfills ausgeliefert werden, um Funktionalitäten in älteren Browsern nachzurüsten.
 
 An dieser Stelle kommt ein neues Feature der Angular CLI ins Spiel: Differential Loading.
-Die Angular CLI produziert dabei verschiedene Bundles der Anwendung – für ältere Browser in ES5 und für neuere Browser in ES2015 oder höher.
+Die Angular CLI produziert dabei verschiedene Bundles der Anwendung -- für ältere Browser in ES5 und für neuere Browser in ES2015 oder höher.
 Der Browser lädt schließlich nur die Bundles herunter, die für ihn relevant sind.
 Somit können moderne Browser auf neuere Features zugreifen und müssen nicht zusätzlich Polyfills für Features laden, die Sie bereits nativ unterstützen.
 Ältere Browser greifen auf die sogenannten "Legacy Bundles" zurück und laden Polyfills und fehlende Funktionen zusätzlich zum Anwendungscode.
@@ -60,7 +60,7 @@ Die Neuerung führt vor allem bei modernen Browsern zu Performance-Verbessungen,
 
 
 
-## Lazy Loading: Dynamische Imports statt Magic-String
+## Lazy Loading: Dynamische Imports statt Magic-Strings
 
 Angular unterstützt nun von Haus aus das `import()`-Statement zum programmatischen Nachladen von Modulen.
 Dadurch ändert sich die Schreibweise beim Routing, um Lazy Loading zu konfigurieren.
@@ -83,7 +83,7 @@ Stattdessen wird ein dynamischer Import verwendet, um das Modul beim Routing nac
 }
 ```
 
-Die Syntax sieht zunächst komplizierter aus.
+Die Syntax sieht zunächst ungewohnt aus.
 Im Wesentlichen besteht der Befehl allerdings nur aus einer anonymen Funktion, die aufgerufen wird, wenn die Route aktiviert wird.
 Sie ruft `import()` auf und extrahiert im zweiten Schritt das Angular-Modul `FooModule` aus dem heruntergeladenen Bundle.
 Diese neue Variante arbeitet vollständig mit nativen Features und ohne einen Magic String, der spezifisch für Angular ist.
@@ -98,13 +98,13 @@ In der zweiten Auflage des Angular-Buchs, die im Juni 2019 erscheint, ist der ne
 ## Breaking Change: `@ViewChild()` und `@ContentChild()`
 
 Mit den Dekoratoren `@ViewChild()` und `@ContentChild()` können Querys auf DOM-Elemente in der View einer Komponente/Direktive gestellt werden.
-Ab Angular 8 müssen diese Querys zusätzlich mit dem Flag `static` versehen werden.
+Bisher war das Verhalten der Querys nicht gut nachvollziebar. Das Verhalten ist nun besser dokumentiert und man soll sich bei bestehendem Code über die Auswirkungen Gedanken machen. In Angular 8 gibt zu diesem Zwecke eine Übergangsphase in der man das Verhalten explizit angeben muss. Hierzu müssen Querys zusätzlich mit dem Flag `static` versehen werden.
 Damit wird definiert, ob es sich bei der Abfrage um eine statisches oder dynamisch veränderbares Element handelt.
 Statische Elemente werden einmalig gerendert und sind dann zur Laufzeit der Komponente verfügbar, dynamische Elemente werden zur Laufzeit verändert.
 
 
 **Bis Angular 7** wurden `@ViewChild()` und `@ContentChild()` wie folgt verwendet.
-Das Ergebnis ist dann im LifeCycle-Hook `ngOnInit()` *oder* `ngAfterViewInit()` verfügbar – das genaue Verhalten richtet sich jedoch nach der Struktur des Templates und ist nicht sicher vorhersehbar:
+Das Ergebnis ist dann im LifeCycle-Hook `ngOnInit()` *oder* `ngAfterViewInit()` verfügbar -- das genaue Verhalten richtet sich jedoch nach der Struktur des Templates und ist nicht sicher vorhersehbar:
 
 ```ts
 @ViewChild('foo') foo: ElementRef;
@@ -123,18 +123,18 @@ Das Ergebnis ist dann im LifeCycle-Hook `ngOnInit()` *oder* `ngAfterViewInit()` 
 @ContentChild('bar', { static: false }) bar: ElementRef;
 ```
 
-**Ab Angular 9** wird der Wert `false` das Standardverhalten sein.
+**Ab Angular 9** wird der Wert `false` wieder das Standardverhalten sein.
 
 ### Automatische Migration
 
 Verwenden Sie die Angular CLI für das Update auf Angular 8, so wird die Migration automatisch durchgeführt.
-Sollte das Migrationsskript nicht identifizieren können, welcher Wert für `static` gesetzt werden muss, so wird an der entsprechenden Stelle ein Hinweis eingefügt, und Sie müssen manuell Hand anlegen:
+Sollte das Migrationsskript nicht identifizieren können, welcher Wert für `static` gesetzt werden muss, so wird an der entsprechenden Stelle ein Hinweis eingefügt, und Sie müssen manuell „Hand anlegen“:
 
 ```ts
 /* TODO: add static flag */
 ```
 
-### Statisch oder dynamisch? – die richtige Einstellung wählen
+### Statisch oder dynamisch? -- die richtige Einstellung wählen
 
 Wir empfehlen Ihnen, im Regelfall die Einstellung `false` zu verwenden.
 Das führt dazu, dass das Ergebnis der Abfrage im Lifecycle-Hook `ngAfterViewInit()` bzw. `ngAfterContentInit()` verfügbar ist.
@@ -147,7 +147,7 @@ Lesen Sie mehr zum Thema in der offiziellen [Angular-Dokumentation](https://next
 
 // TODO: "next" weg, wenn Release durch ist
 
-Übrigens: Falls Sie `@ViewChildren()` oder `@ContentChildren()` verwenden, müssen Sie nichts ändern – solche Querys sind immer dynamisch.
+Übrigens: Falls Sie `@ViewChildren()` oder `@ContentChildren()` verwenden, müssen Sie nichts ändern -- solche Querys sind immer dynamisch.
 
 
 
@@ -176,7 +176,7 @@ ng new my-app --enable-ivy
 Ivy soll mit Angular 9 standardmäßig für alle Projekte aktiviert werden.
 Bis dahin wird die neue Engine noch einem umfangreichen Praxistest unterzogen.
 Einige Features lassen auf sich warten, zum Beispiel die Integration für Internationalisierung (i18n).
-Das neue Tooling soll Übersetzungen zur Laufzeit erlauben und auch einen Service zur programmatischen Übersetzung mitbringen.
+Das neue Tooling soll Übersetzungen zur Laufzeit erlauben und auch einen Service zur programmatischen Übersetzung mitbringen. Bis dahin müssen wir uns aber noch gedulden. Sollte Ihre Anwendung die Internationalisierung von Angular verwenden, so können Sie nicht Ivy aktivieren. 
 
 Für detaillierte Informationen zu Ivy können wir den Blogartikel ["Understanding Angular Ivy: Incremental DOM and Virtual DOM"](https://blog.nrwl.io/243be844bf36) von Victor Savkin empfehlen.
 
@@ -191,7 +191,7 @@ Beispielsweise verfügt die Angular CLI 8 über die neue **Builders API**.
 Damit kann der Buildprozess für ein Projekt durch eigene Skripte gesteuert werden.
 Einen Einstieg in die neue Schnittstelle [liefert Hans Larsen in einem Blogartikel](https://blog.angular.io/d012d4489f1b).
 
-Zusätzlich wird die Integration von **Googles Buildwerkzeug [Bazel](https://bazel.angular.io/)** stetig verbessert – auch hierzu sind im neuen Release von Angular einige Commits zu finden.
+Zusätzlich wird die Integration von **Googles Buildwerkzeug [Bazel](https://bazel.angular.io/)** stetig verbessert -- auch hierzu sind im neuen Release von Angular einige Commits zu finden.
 Bazel für Angular ist derzeit als Opt-In Preview verfügbar.
 Zum Thema möchten wir einen [Vortrag von Alex Eagle von der ng-conf 2019](https://www.youtube.com/watch?v=J1lnp-nU4wM) empfehlen.
 
@@ -211,6 +211,6 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß mit Angular wünschen<br>
 Johannes, Danny und Ferdinand**
 
-> **Übrigens: Unser neues Angular-Buch erscheint am 14. Juni 2019 im Handel – vollständig aktualisiert und erweitert. Alle Beispiele sind bereits auf dem Stand von Angular 8. 😊**
+> **Übrigens: Unser neues Angular-Buch erscheint am 14. Juni 2019 im Handel -- vollständig aktualisiert und erweitert. Alle Beispiele sind bereits auf dem Stand von Angular 8. 😊**
 
 <small>**Titelbild:** Badwater Basin, Death Valley National Park, California, 2019</small>
