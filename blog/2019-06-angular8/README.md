@@ -13,6 +13,7 @@ keywords:
 language: de
 thumbnail: ./angular8.png
 sticky: true
+hidden: true
 ---
 
 Der neueste Wurf aus der Softwareschmiede Google ist vollbracht: **Angular 8 ist da!**
