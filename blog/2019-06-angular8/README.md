@@ -44,11 +44,11 @@ Ein bekanntes Praxisproblem mit Angular ist die Größe der ausgelieferten Bundl
 Warum ein Bundle groß und "unhandlich" wird, kann verschiedene Ursachen haben und kann auf verschiedene Weise strategisch gelöst werden, z. B. durch Code Splitting, Tree Shaking oder Lazy Loading.
 
 Alle modernen Browser unterstützen mindestens den JavaScript-Standard ES2015.
-Dennoch werden die meisten Angular-Anwendungen weiterhin in ES5 kompiliert, um auch in älteren Browsern lauffähig zu sein -- eine der tragendsten Ursachen für wachsende Bundles.
+Dennoch werden die meisten Angular-Anwendungen weiterhin in ES5 kompiliert, um auch in älteren Browsern lauffähig zu sein – eine der tragendsten Ursachen für wachsende Bundles.
 Außerdem müssen Polyfills ausgeliefert werden, um Funktionalitäten in älteren Browsern nachzurüsten.
 
 An dieser Stelle kommt ein neues Feature der Angular CLI ins Spiel: Differential Loading.
-Die Angular CLI produziert dabei verschiedene Bundles der Anwendung -- für ältere Browser in ES5 und für neuere Browser in ES2015 oder höher.
+Die Angular CLI produziert dabei verschiedene Bundles der Anwendung – für ältere Browser in ES5 und für neuere Browser in ES2015 oder höher.
 Der Browser lädt schließlich nur die Bundles herunter, die für ihn relevant sind.
 Somit können moderne Browser auf neuere Features zugreifen und müssen nicht zusätzlich Polyfills für Features laden, die Sie bereits nativ unterstützen.
 Ältere Browser greifen auf die sogenannten "Legacy Bundles" zurück und laden Polyfills und fehlende Funktionen zusätzlich zum Anwendungscode.
@@ -104,7 +104,7 @@ Statische Elemente werden einmalig gerendert und sind dann zur Laufzeit der Komp
 
 
 **Bis Angular 7** wurden `@ViewChild()` und `@ContentChild()` wie folgt verwendet.
-Das Ergebnis ist dann im LifeCycle-Hook `ngOnInit()` *oder* `ngAfterViewInit()` verfügbar -- das genaue Verhalten richtet sich jedoch nach der Struktur des Templates und ist nicht sicher vorhersehbar:
+Das Ergebnis ist dann im LifeCycle-Hook `ngOnInit()` *oder* `ngAfterViewInit()` verfügbar – das genaue Verhalten richtet sich jedoch nach der Struktur des Templates und ist nicht sicher vorhersehbar:
 
 ```ts
 @ViewChild('foo') foo: ElementRef;
@@ -134,7 +134,7 @@ Sollte das Migrationsskript nicht identifizieren können, welcher Wert für `sta
 /* TODO: add static flag */
 ```
 
-### Statisch oder dynamisch? -- die richtige Einstellung wählen
+### Statisch oder dynamisch? – die richtige Einstellung wählen
 
 Wir empfehlen Ihnen, im Regelfall die Einstellung `false` zu verwenden.
 Das führt dazu, dass das Ergebnis der Abfrage im Lifecycle-Hook `ngAfterViewInit()` bzw. `ngAfterContentInit()` verfügbar ist.
@@ -147,7 +147,7 @@ Lesen Sie mehr zum Thema in der offiziellen [Angular-Dokumentation](https://next
 
 // TODO: "next" weg, wenn Release durch ist
 
-Übrigens: Falls Sie `@ViewChildren()` oder `@ContentChildren()` verwenden, müssen Sie nichts ändern -- solche Querys sind immer dynamisch.
+Übrigens: Falls Sie `@ViewChildren()` oder `@ContentChildren()` verwenden, müssen Sie nichts ändern – solche Querys sind immer dynamisch.
 
 
 
@@ -191,7 +191,7 @@ Beispielsweise verfügt die Angular CLI 8 über die neue **Builders API**.
 Damit kann der Buildprozess für ein Projekt durch eigene Skripte gesteuert werden.
 Einen Einstieg in die neue Schnittstelle [liefert Hans Larsen in einem Blogartikel](https://blog.angular.io/d012d4489f1b).
 
-Zusätzlich wird die Integration von **Googles Buildwerkzeug [Bazel](https://bazel.angular.io/)** stetig verbessert -- auch hierzu sind im neuen Release von Angular einige Commits zu finden.
+Zusätzlich wird die Integration von **Googles Buildwerkzeug [Bazel](https://bazel.angular.io/)** stetig verbessert – auch hierzu sind im neuen Release von Angular einige Commits zu finden.
 Bazel für Angular ist derzeit als Opt-In Preview verfügbar.
 Zum Thema möchten wir einen [Vortrag von Alex Eagle von der ng-conf 2019](https://www.youtube.com/watch?v=J1lnp-nU4wM) empfehlen.
 
@@ -211,6 +211,6 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß mit Angular wünschen<br>
 Johannes, Danny und Ferdinand**
 
-> **Übrigens: Unser neues Angular-Buch erscheint am 14. Juni 2019 im Handel -- vollständig aktualisiert und erweitert. Alle Beispiele sind bereits auf dem Stand von Angular 8. 😊**
+> **Übrigens: Unser neues Angular-Buch erscheint am 14. Juni 2019 im Handel – vollständig aktualisiert und erweitert. Alle Beispiele sind bereits auf dem Stand von Angular 8. 😊**
 
 <small>**Titelbild:** Badwater Basin, Death Valley National Park, California, 2019</small>
