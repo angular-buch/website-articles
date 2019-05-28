@@ -92,6 +92,7 @@ Dadurch unterstützt die IDE den Entwickler mit Autovervollständigung und Typpr
 Wenn Sie das Update mit der Angular CLI durchführen, werden die Magic Strings automatisch zur neuen Schreibweise migriert.
 In der zweiten Auflage des Angular-Buchs, die im Juni 2019 erscheint, ist der neue Weg übrigens schon beschrieben.
 
+Mehr zur neuen Schreibweise für Lazy Loading erfahren Sie auch in der [Angular-Dokumentation](https://v8.angular.io/guide/deprecations#loadchildren-string-syntax).
 
 
 
@@ -143,9 +144,7 @@ Somit können Sie sichergehen, dass die Change Detection vollständig ausgeführ
 Die Einstellung `{ static: true }` benötigen Sie nur in wenigen Fällen, beispielsweise wenn Sie auf ein `TemplateRef` zugreifen wollen, um daraus eine eingebettete View zu generieren.
 Diese Aktion können Sie nicht in `ngAfterViewInit()` ausführen, weil die Change Detection bereits ausgeführt wurde und die Aktion dann nicht in der View sichtbar wäre.
 
-Lesen Sie mehr zum Thema in der offiziellen [Angular-Dokumentation](https://next.angular.io/guide/static-query-migration).
-
-// TODO: "next" weg, wenn Release durch ist
+Lesen Sie mehr zum Thema in der offiziellen [Angular-Dokumentation](https://v8.angular.io/guide/static-query-migration).
 
 Übrigens: Falls Sie `@ViewChildren()` oder `@ContentChildren()` verwenden, müssen Sie nichts ändern – solche Querys sind immer dynamisch.
 
