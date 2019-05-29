@@ -13,7 +13,7 @@ keywords:
 language: de
 thumbnail: ./angular8.jpg
 sticky: true
-hidden: true
+hidden: false
 ---
 
 Der neueste Wurf aus der Softwareschmiede Google ist vollbracht: **Angular 8 ist da!**
@@ -23,7 +23,7 @@ Die wichtigsten Punkte sind Differential Loading und die neue Syntax für Lazy L
 Es gibt kleine Breaking Changes, doch seien Sie beruhigt: Das Update geht leicht von der Hand, und es sind nur selten manuelle Anpassungen nötig.
 
 In diesem Artikel möchten wir kurz die wichtigsten Neuigkeiten vorstellen.
-Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https://blog.angular.io/xxxxxxxxxx).
+Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https://blog.angular.io/af0261112a27).
 
 
 ## Update auf Angular 8
