@@ -7,7 +7,7 @@ keywords:
   - Angular
   - Angular 5
 language: de
-thumbnail: ./angular5.png
+thumbnail: ../angular5.png
 ---
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
