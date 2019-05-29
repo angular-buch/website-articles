@@ -12,15 +12,14 @@ thumbnail: ./angular7.png
 sticky: false
 ---
 
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 8 ist da!](/blog/2019-06-angular8)
-
 Wieder sind 6 Monate vergangen und Angular strahlt mit einem neuen Major-Release: Am 18. Oktober 2018 wurde Angular 7.0.0 veröffentlicht!
 Die beste Nachricht zuerst: Es gibt keine Breaking Changes und das Upgrade funktioniert schnell und reibungslos.
 In diesem Artikel stellen wir Ihnen wie immer die wichtigsten Neuigkeiten vor und zeigen Ihnen auch, wie Sie das Beispielprojekt *Book Monkey* auf die neue Version aktualisieren.
 
-Die offizielle Ankündigung des neuen Release finden Sie im [Angular Blog](https://blog.angular.io/version-7-of-angular-cli-prompts-virtual-scroll-drag-and-drop-and-more-c594e22e7b8c).
+Die offizielle Ankündigung des neuen Release finden Sie im [Angular Blog](https://blog.angular.io/c594e22e7b8c).
 
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 8 ist da!](/blog/2019-06-angular8)
 
 ## CLI Prompt
 

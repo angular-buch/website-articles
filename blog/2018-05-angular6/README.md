@@ -15,17 +15,14 @@ thumbnail: ./angular6.png
 sticky: false
 ---
 
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 7 ist da!](/blog/2018-10-angular7)
-
-<br>
-<br>
-
 Angular 6 ist da! Am 04. Mai 2018 erschien die neue Major-Version von Angular.
 Obwohl das zunächst nach komplizierten Upgrades und vielen Breaking Changes klingt, können Sie aufatmen:
 Ihre aktuellen Projekte mit Angular 4 oder 5 sind weiterhin lauffähig und das Upgrade ist in kurzer Zeit erledigt.
 
 In diesem Artikel stellen wir Ihnen kurz die Neuerungen vor und aktualisieren das Beispielprojekt "Book Monkey".
+
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 7 ist da!](/blog/2018-10-angular7)
 
 ## Angular 6: Alles ist neu?
 
