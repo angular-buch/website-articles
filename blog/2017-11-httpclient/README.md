@@ -28,7 +28,7 @@ Das `HttpModule` ist bereits als *deprecated* gekennzeichnet. Das bedeutet, dass
 **Die kurze Antwort lautet: Das Update lohnt sich nicht nur, es ist darüber hinaus auch notwendig.**
 
 > **Eine Anmerkung zu @angular/http**
-Wenn *@angular/common/http* eingesetzt wird, kann in vielen Fällen *@angular/http* aus dem Projekt entfernt werden. An dieser Stelle ist etwas Vorsicht geboten: Angular-Bibliotheken, die von der Community oder Drittanbietern entwickelt wurden, können nach wie vor eine Abhängigkeit zu *@angular/http* aufweisen. Darum ist es für bestehende Projekte empfehlenswert zu prüfen, ob die vorherige Version des HTTP-Moduls entfernt werden kann oder ob eine Migration nötig ist.
+Wenn `@angular/common/http` eingesetzt wird, kann in vielen Fällen `@angular/http` aus dem Projekt entfernt werden. An dieser Stelle ist etwas Vorsicht geboten: Angular-Bibliotheken, die von der Community oder Drittanbietern entwickelt wurden, können nach wie vor eine Abhängigkeit zu `@angular/http` aufweisen. Darum ist es für bestehende Projekte empfehlenswert zu prüfen, ob die vorherige Version des HTTP-Moduls entfernt werden kann oder ob eine Migration nötig ist.
 
 ## Die neue HTTP-Bibliothek im Überblick
 
@@ -129,7 +129,7 @@ this.http
 ```
 
 Durch die stärkere Typisierung können wir nun spezifizieren, welche Daten von der API erwartet werden.
-Für die Daten der [BookMonkey-API](`https://book-monkey2-api.angular-buch.com`) kann beispielswise folgendes Interface bereitgestellt werden, um die JSON-Daten zu beschreiben:
+Für die Daten der [BookMonkey-API](https://book-monkey2-api.angular-buch.com) kann beispielswise folgendes Interface bereitgestellt werden, um die JSON-Daten zu beschreiben:
 
 ```typescript
 export interface BookRaw {
@@ -161,7 +161,7 @@ export class Book implements BookRaw {
 
 Um aus den Daten der API die gewünschten Klasseninstanzen zu erzeugen, kann mit den bekannten Operatoren gearbeitet werden.
 Im folgenden Beispiel wird der Service `BookStoreService` erweitert.
-Eine Bücherliste wird von der [BookMonkey-API](`https://book-monkey2-api.angular-buch.com`) geladen.
+Eine Bücherliste wird von der [BookMonkey-API](https://book-monkey2-api.angular-buch.com) geladen.
 Die geladenen Daten haben den Typ `BookRaw[]`.
 Der Service sorgt dafür, dass Komponenten mit dem Typ `Book[]` arbeiten können.
 Dazu wird die Liste mit Hilfe des RxJS-Operators `map` transformiert.
