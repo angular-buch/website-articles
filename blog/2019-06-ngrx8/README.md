@@ -18,7 +18,7 @@ hidden: true
 Pünktlich zum Pfingstwochenende wurde am 7. Juni 2019 die neue Major-Version von NgRx veröffentlicht!
 Das neue Release 8.0.0 bringt einige Neuerungen mit sich, die vor allem die Produktivität des Entwicklers verbessern sollen.
 Das wahrscheinlich wichtigste Feature sind die neuen Creator-Funktionen für Actions, Reducer und Effects.
-Dazu kommt eine Reihe von kleineren Funktionen, die wir in diesem Blogartikel vorstellen möchten.
+Dazu kommt eine Reihe von kleineren Features, die wir in diesem Blogartikel vorstellen möchten.
 
 Lesen Sie dazu auch den offiziellen [V8 Migration Guide](https://next.ngrx.io/guide/migration/v8) in der NgRx-Dokumentation.
 
@@ -64,7 +64,7 @@ Um dieses Problem zu lösen, wurden aus der Commmunity heraus verschiedene Bibli
 Die Ideen von `ts-action` wurden mit dem neuen Release schließlich fest in NgRx integriert.
 
 In Anlehnung an die Funktion `createSelector()` zum Erstellen von Selektoren kommen nun die neuen Funktionen `createAction()`, `createReducer()` und `createEffect()` hinzu, um die Implementierung von Actions, Reducern und Effects zu vereinfachen.
-Wir möchten einmal alle Funktionen in alter und neuer Schreibweise gegenüberstellen.
+Wir möchten einmal alle Bausteine in alter und neuer Schreibweise gegenüberstellen.
 
 Das Beispielprojekt `book-monkey3-ngrx` haben wir [auf dem separaten Branch `ng8creators`](https://github.com/angular-buch/book-monkey3-ngrx/tree/ng8creators) bereits auf die neue Schreibweise migriert, sodass Sie den Code am Beispiel nachvollziehen können.
 
@@ -72,7 +72,7 @@ Das Beispielprojekt `book-monkey3-ngrx` haben wir [auf dem separaten Branch `ng8
 ### Schematics: Code mit Creator-Funktionen generieren
 
 Obwohl die neuen Funktionen nun fest in NgRx integriert sind, müssen Sie keinesfalls sofort umsteigen – Sie können weiterhin den herkömmlichen Weg verwenden.
-Auch in den Schenatics zu NgRx versteckt sich das neue Feature hinter einem Flag.
+Auch in den Schematics zu NgRx versteckt sich das neue Feature hinter einem Flag.
 Möchten Sie Code mit Creator-Funktionen erzeugen, können Sie die Option `--creators` einsetzen:
 
 ```bash
@@ -138,7 +138,7 @@ Die Action `LoadBooksSuccess` hat also in diesem Beispiel die folgende Struktur:
 
 #### Action dispatchen
 
-Um eine Action zu dispatchen musste bisher eine Instanz der Action-Klasse erstellt werden.
+Um eine Action zu dispatchen, musste bisher eine Instanz der Action-Klasse erstellt werden.
 Mit `createAction()` verkürzt sich diese Schreibweise zu einem einfachen Funktionsaufruf:
 
 ```typescript
@@ -301,13 +301,13 @@ loadBooks$ = createEffect(
 
 ## Runtime Checks: Immutability und Serialisierbarkeit
 
-Zwei wichtige Eigenschaften von NgRx sind die Immutability und Serialisierbarkeit.
+Zwei wichtige Eigenschaften von NgRx sind *Immutability* und *Serialisierbarkeit*.
 Das bedeutet, dass Actions und Zustände niemals verändert werden dürfen.
 Stattdessen müssen wir z.B. im Reducer stets einen *neuen* State erzeugen, anstatt den aktuellen zu ändern.
 
-Serialisierbarkeit von Actions und State sorgt schleßlich dafür, dass diese Objekte stets problemlos in JSON serialisiert werden können, ohne dass Informationen verloren gehen.
+Das Thema Serialisierbarkeit von Actions und State sorgt schließlich dafür, dass diese Objekte stets problemlos in JSON serialisiert werden können, ohne dass Informationen verloren gehen.
 
-Die Einheltung dieser beiden "Auflagen" ist essentiell für NgRx.
+Die Einhaltung dieser beiden "Auflagen" ist essentiell für NgRx.
 Beide Regeln sind allerdings nicht immer offensichtlich.
 Das Paket `ngrx-store-freeze` sorgte deshalb bisher dafür, solche Fehler schon frühzeitig zu erkennen.
 Die Funktionalität wurde nun direkt in NgRx integriert, und es werden *Runtime Checks*  durchgeführt.
@@ -340,14 +340,13 @@ export class AppModule { }
 ```
 
 Voraussichtlich mit Version 9 werden die Immutability-Checks im Entwicklungsmodus standardmäßig aktiviert.
-
 Mehr Infos zu den Runtime Checks und Beispiele finden Sie in der [Dokumentation von NgRx](https://next.ngrx.io/guide/store/configuration/runtime-checks).
 
 
 
 ## Router Store: Selektoren und `forRoot()`
 
-Das Modul `@ngrx/router-store` ermöglicht es, den Zustand des Router ebenfalls über NgRx zu verwalten.
+Das Modul `@ngrx/router-store` ermöglicht es, den Zustand des Routers ebenfalls über NgRx zu verwalten.
 Hier gibt es im neuen Release zwei wichtige Änderungen.
 
 ### Modul-Import mit `forRoot()` 
