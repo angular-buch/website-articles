@@ -12,7 +12,7 @@ keywords:
 language: de
 thumbnail: ./ngrx8.jpg
 sticky: false
-hidden: true
+hidden: false
 ---
 
 Pünktlich zum Pfingstwochenende wurde am 7. Juni 2019 die neue Major-Version von NgRx veröffentlicht!
@@ -20,7 +20,7 @@ Das neue Release 8.0.0 bringt einige Neuerungen mit sich, die vor allem die Prod
 Das wahrscheinlich wichtigste Feature sind die neuen Creator-Funktionen für Actions, Reducer und Effects.
 Dazu kommt eine Reihe von kleineren Features, die wir in diesem Blogartikel vorstellen möchten.
 
-Lesen Sie dazu auch den offiziellen [V8 Migration Guide](https://next.ngrx.io/guide/migration/v8) in der NgRx-Dokumentation.
+Lesen Sie dazu auch den offiziellen [V8 Migration Guide](https://ngrx.io/guide/migration/v8) in der NgRx-Dokumentation.
 
 
 ## Update auf NgRx 8
@@ -340,7 +340,7 @@ export class AppModule { }
 ```
 
 Voraussichtlich mit Version 9 werden die Immutability-Checks im Entwicklungsmodus standardmäßig aktiviert.
-Mehr Infos zu den Runtime Checks und Beispiele finden Sie in der [Dokumentation von NgRx](https://next.ngrx.io/guide/store/configuration/runtime-checks).
+Mehr Infos zu den Runtime Checks und Beispiele finden Sie in der [Dokumentation von NgRx](https://ngrx.io/guide/store/configuration/runtime-checks).
 
 
 
@@ -399,7 +399,7 @@ const {
 ## Sonstiges
 
 Das neue Release bringt noch einige weitere Änderungen und Neuigkeiten mit sich, die den Rahmen dieses Artikels sprengen würden.
-Wir möchten deshalb auf den [offiziellen Migrationsleitfaden](https://next.ngrx.io/guide/migration/v8) und auf den [Changelog von NgRx](https://github.com/ngrx/platform/blob/master/CHANGELOG.md) verweisen, wo Sie stets Informationen zu neuen Features erhalten.
+Wir möchten deshalb auf den [offiziellen Migrationsleitfaden](https://ngrx.io/guide/migration/v8) und auf den [Changelog von NgRx](https://github.com/ngrx/platform/blob/master/CHANGELOG.md) verweisen, wo Sie stets Informationen zu neuen Features erhalten.
 
 
 
