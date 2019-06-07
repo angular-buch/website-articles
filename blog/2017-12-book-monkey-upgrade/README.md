@@ -6,9 +6,9 @@ published: 2017-12-06
 keywords:
   - Angular
   - Angular 5
-  - Angular-CLI
+  - Angular CLI
 language: de
-thumbnail: ../angular5.png
+thumbnail: ../shared/angular5.png
 ---
 
 Dank der Angular CLI ist es ziemlich einfach, eine neue Anwendung mit der aktuellen Version von Angular zu erstellen.

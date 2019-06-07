@@ -11,7 +11,7 @@ keywords:
   - Tree-Shakable Providers
   - Angular CLI
 language: de
-thumbnail: ../angular6.png
+thumbnail: ./angular6.png
 sticky: false
 ---
 
@@ -23,6 +23,7 @@ In diesem Artikel stellen wir Ihnen kurz die Neuerungen vor und aktualisieren da
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 7 ist da!](/blog/2018-10-angular7)
+> * [Angular 8 ist da!](/blog/2019-06-angular8)
 
 ## Angular 6: Alles ist neu?
 
