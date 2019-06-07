@@ -57,9 +57,8 @@ export class LoadBooksSuccess implements Action {
 export type BookActions = LoadBooks | LoadBooksSuccess;
 ```
 
-Diese "Dreifaltigkeit" ist sehr explizit und lässt viel Spielraum bei der konkreten Implementierung.
-Dennoch ist die Wahrscheinlichkeit von Tippfehlern hoch, und das Anlegen einer Action ist vergleichsweise aufwendig.
-
+Diese Herangehensweise ist sehr fehleranfällig: Vergisst man ein Detail, so gibt es später einen Fehler, der nicht sofort zu erkennen ist.
+Am meisten fällt aber vermutlich die Menge an Code auf: Das Anlegen einer Action ist vergleichsweise aufwendig.
 
 Um dieses Problem zu lösen, wurden aus der Commmunity heraus verschiedene Bibliotheken entwickelt, um die Erzeugung von Actions (und Reducern und Effects) impliziter zu gestalten – darunter die Projekte [`ts-action`](https://github.com/cartant/ts-action/blob/master/packages/ts-action/README.md) und [`ngrx-ducks`](https://github.com/co-IT/ngrx-ducks).
 Die Ideen von `ts-action` wurden mit dem neuen Release schließlich fest in NgRx integriert.
@@ -154,8 +153,8 @@ this.store.dispatch(loadBook(isbn));
 ### Reducer mit `createReducer()`
 
 Ein Reducer entscheidet anhand einer eintreffenden Action, in welcher Weise der aktuelle State neu berechnet werden muss.
-Für diese Unterscheidung wird traditionell im Reducer ein switch/case-Statement eingesetzt, um auf bestimmte Action-Typen zu reagieren.
-Diese Herangehensweise ist pragmatisch, folgt aber nur wenig den Prinzipien der funktionalen Programmierung.
+Für diese Unterscheidung wird traditionell im Reducer ein *switch/case*-Statement eingesetzt, um auf bestimmte Action-Typen zu reagieren.
+Diese Lösung ist pragmatisch, aber erfordert wieder einiges Vorwissen: Wir können nicht die Action-Klasse zur Unterscheidung verwenden, sondern nur den Action-*Typ*.
 Wichtig ist hier besonders, nicht den `default`-Fall zu vergessen, da sonst das System nicht korrekt funktioniert.
 
 ```typescript
@@ -405,4 +404,4 @@ Wir möchten deshalb auf den [offiziellen Migrationsleitfaden](https://next.ngrx
 
 
 
-<small>**Titelbild:** Badwater Basin, Death Valley National Park, California, 2019</small>
+<small>**Titelbild:** Zabriskie Point, Death Valley National Park, California, 2019</small>
