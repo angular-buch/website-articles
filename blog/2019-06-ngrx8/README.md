@@ -57,10 +57,10 @@ export class LoadBooksSuccess implements Action {
 export type BookActions = LoadBooks | LoadBooksSuccess;
 ```
 
-Bei der Umsetzung dieses Patterns kann man Fehler machen: Vergisst oder vertauscht man ein Detail, so gibt es später einen Fehler, der nicht immer leicht zu erkennen ist. Erstellt man z.B. eine weitere Action durch copy & paste und versäumt es den Type anzupassen – so ergibt sich ein schwer zu identifizierender Bug:
+Bei der Umsetzung dieses Patterns kann man Fehler machen: Vergisst oder vertauscht man ein Detail, so gibt es später einen Fehler, der nicht immer leicht zu erkennen ist. Erstellt man z.B. eine weitere Action durch Copy & Paste und versäumt, es den Type anzupassen – so ergibt sich ein schwer zu identifizierender Bug:
 
 ```typescript
-// vorher - Achtung Fehler!
+// vorher – Achtung Fehler!
 export class LoadBookSuccess implements Action {
   readonly type = BookActionTypes.LoadBooksSuccess;
   constructor(public payload: { book: Book }) { }
@@ -69,7 +69,7 @@ export class LoadBookSuccess implements Action {
 
 Am meisten fällt aber die Menge an Code auf: Das Anlegen einer Action ist vergleichsweise aufwendig.
 
-Um dieses Problem zu lösen, wurden aus der Commmunity heraus verschiedene Bibliotheken entwickelt, um die Erzeugung von Actions (und Reducern und Effects) ausdrucksstarker zu gestalten – darunter die Projekte [`ts-action`](https://github.com/cartant/ts-action/blob/master/packages/ts-action/README.md) und [`ngrx-ducks`](https://github.com/co-IT/ngrx-ducks).
+Um dieses Problem zu lösen, wurden aus der Commmunity heraus verschiedene Bibliotheken entwickelt, um die Erzeugung von Actions (und Reducern und Effects) ausdrucksstärker zu gestalten – darunter die Projekte [`ts-action`](https://github.com/cartant/ts-action/blob/master/packages/ts-action/README.md) und [`ngrx-ducks`](https://github.com/co-IT/ngrx-ducks).
 Die Ideen von `ts-action` wurden mit dem neuen Release schließlich fest in NgRx integriert.
 
 In Anlehnung an die Funktion `createSelector()` zum Erstellen von Selektoren kommen nun die neuen Funktionen `createAction()`, `createReducer()` und `createEffect()` hinzu, um die Implementierung von Actions, Reducern und Effects zu vereinfachen.
@@ -80,7 +80,7 @@ Das Beispielprojekt `book-monkey3-ngrx` haben wir [auf dem separaten Branch `ng8
 
 ### Schematics: Code mit Creator-Funktionen generieren
 
-Obwohl die neuen Funktionen nun fest in NgRx integriert sind, müssen Sie keinesfalls sofort umsteigen – Sie können weiterhin den herkömmlichen Weg verwenden. Es
+Obwohl die neuen Funktionen nun fest in NgRx integriert sind, müssen Sie keinesfalls sofort umsteigen – Sie können weiterhin den herkömmlichen Weg verwenden.
 Auch in den Schematics zu NgRx versteckt sich das neue Feature hinter einem Flag.
 Möchten Sie Code mit Creator-Funktionen erzeugen, können Sie die Option `--creators` einsetzen:
 
@@ -119,7 +119,7 @@ export type BookActions = LoadBooks | LoadBooksSuccess;
 ```
 
 Diese drei Bestandteile werden mit `createAction()` in einem einzigen Aufruf kombiniert.
-Die Struktur des Payloads wird per Typparameter über die Funktion `props()` definiert.
+Die Struktur des Payloads wird mittels Typparameter über die Funktion `props()` definiert.
 
 ```typescript
 // nachher
@@ -145,13 +145,10 @@ Die Action `LoadBooksSuccess` hat also in diesem Beispiel die folgende Struktur:
 }
 ```
 
-Womöglich haben Sie den `payload` mittlerweile lieb gewonnen.
-Oder Sie haben bestehenden Code, der aufwändig migriert werden müsste.
+Womöglich haben Sie den `payload` mittlerweile lieb gewonnen – oder Sie haben bestehenden Code, der aufwendig migriert werden müsste.
 Natürlich können Sie auch weiterhin mit dem alten Property arbeiten, wenn Sie den Type entsprechend definieren:
 
 ```typescript
-import { createAction, props } from '@ngrx/store';
-
 export const loadBooksSuccess = createAction(
   '[Book] Load Books Success',
   props<{ payload: { books: Book[] } }>()
@@ -176,11 +173,11 @@ this.store.dispatch(loadBook(isbn));
 
 Ein Reducer entscheidet anhand einer eintreffenden Action, in welcher Weise der aktuelle State neu berechnet werden muss.
 Für diese Unterscheidung wird traditionell im Reducer ein *switch/case*-Statement eingesetzt, um auf bestimmte Action-Typen zu reagieren.
-Diese Lösung ist pragmatisch, aber erfordert einiges an Aufmerksamkeit und Vorwissen: Wir können nicht die Action-Klasse zur Unterscheidung verwenden, sondern nur den Action-*Typ*.
+Diese Lösung ist pragmatisch, erfordert aber einiges an Aufmerksamkeit und Vorwissen: Wir können nicht die Action-Klasse zur Unterscheidung verwenden, sondern nur den Action-*Typ*.
 Wichtig ist hier besonders, nicht den `default`-Fall zu vergessen, da sonst das System nicht korrekt funktioniert.
 
 ```typescript
-// vorher - Achtung Fehler!
+// vorher – Achtung Fehler!
 export function reducer(state = initialState, action: BookActions): State {
   switch (action.type) {
 
@@ -333,8 +330,8 @@ Das Thema Serialisierbarkeit von Actions und State sorgt schließlich dafür, da
 
 Die Einhaltung dieser beiden "Auflagen" ist essentiell für NgRx.
 Beide Regeln sind allerdings nicht immer offensichtlich.
-Das Paket `ngrx-store-freeze` halft deshalb bisher dafür, unbeabsichtigte Mutationen zu entdeckend.
-Diese Funktionalität und weitere Prüfungen wurden nun direkt in NgRx integriert, und es werden *Runtime Checks*  durchgeführt.
+Das Paket `ngrx-store-freeze` half deshalb bisher dabei, unbeabsichtigte Mutationen zu entdecken.
+Diese Funktionalität und weitere Prüfungen wurden nun direkt in NgRx integriert, und es werden *Runtime Checks* durchgeführt.
 Dabei können vier verschiedene Regeln geprüft werden:
 
 * `strictStateImmutability`: State muss immutable behandelt werden
@@ -426,5 +423,5 @@ Das neue Release bringt noch einige weitere Änderungen und Neuigkeiten mit sich
 Wir möchten deshalb auf den [offiziellen Migrationsleitfaden](https://ngrx.io/guide/migration/v8) und auf den [Changelog von NgRx](https://github.com/ngrx/platform/blob/master/CHANGELOG.md) verweisen, wo Sie stets Informationen zu neuen Features erhalten.
 
 
-
+<small>Vielen Dank an **Johannes Hoppe** für Review und Ergänzungen!</small><br>
 <small>**Titelbild:** Zabriskie Point, Death Valley National Park, California, 2019</small>
