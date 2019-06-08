@@ -57,21 +57,30 @@ export class LoadBooksSuccess implements Action {
 export type BookActions = LoadBooks | LoadBooksSuccess;
 ```
 
-Diese Herangehensweise ist sehr fehleranfällig: Vergisst man ein Detail, so gibt es später einen Fehler, der nicht sofort zu erkennen ist.
-Am meisten fällt aber vermutlich die Menge an Code auf: Das Anlegen einer Action ist vergleichsweise aufwendig.
+Bei der Umsetzung dieses Patterns kann man Fehler machen: Vergisst oder vertauscht man ein Detail, so gibt es später einen Fehler, der nicht immer leicht zu erkennen ist. Erstellt man z.B. eine weitere Action durch copy & paste und versäumt es den Type anzupassen – so ergibt sich ein schwer zu identifizierender Bug:
 
-Um dieses Problem zu lösen, wurden aus der Commmunity heraus verschiedene Bibliotheken entwickelt, um die Erzeugung von Actions (und Reducern und Effects) impliziter zu gestalten – darunter die Projekte [`ts-action`](https://github.com/cartant/ts-action/blob/master/packages/ts-action/README.md) und [`ngrx-ducks`](https://github.com/co-IT/ngrx-ducks).
+```typescript
+// vorher - Achtung Fehler!
+export class LoadBookSuccess implements Action {
+  readonly type = BookActionTypes.LoadBooksSuccess;
+  constructor(public payload: { book: Book }) { }
+}
+```
+
+Am meisten fällt aber die Menge an Code auf: Das Anlegen einer Action ist vergleichsweise aufwendig.
+
+Um dieses Problem zu lösen, wurden aus der Commmunity heraus verschiedene Bibliotheken entwickelt, um die Erzeugung von Actions (und Reducern und Effects) ausdrucksstarker zu gestalten – darunter die Projekte [`ts-action`](https://github.com/cartant/ts-action/blob/master/packages/ts-action/README.md) und [`ngrx-ducks`](https://github.com/co-IT/ngrx-ducks).
 Die Ideen von `ts-action` wurden mit dem neuen Release schließlich fest in NgRx integriert.
 
 In Anlehnung an die Funktion `createSelector()` zum Erstellen von Selektoren kommen nun die neuen Funktionen `createAction()`, `createReducer()` und `createEffect()` hinzu, um die Implementierung von Actions, Reducern und Effects zu vereinfachen.
 Wir möchten einmal alle Bausteine in alter und neuer Schreibweise gegenüberstellen.
 
-Das Beispielprojekt `book-monkey3-ngrx` haben wir [auf dem separaten Branch `ng8creators`](https://github.com/angular-buch/book-monkey3-ngrx/tree/ng8creators) bereits auf die neue Schreibweise migriert, sodass Sie den Code am Beispiel nachvollziehen können.
+Das Beispielprojekt `book-monkey3-ngrx` haben wir [auf dem separaten Branch `ng8creators`](https://github.com/angular-buch/book-monkey3-ngrx/tree/ng8creators) bereits auf die neue API migriert, sodass Sie den Code am Beispiel nachvollziehen können.
 
 
 ### Schematics: Code mit Creator-Funktionen generieren
 
-Obwohl die neuen Funktionen nun fest in NgRx integriert sind, müssen Sie keinesfalls sofort umsteigen – Sie können weiterhin den herkömmlichen Weg verwenden.
+Obwohl die neuen Funktionen nun fest in NgRx integriert sind, müssen Sie keinesfalls sofort umsteigen – Sie können weiterhin den herkömmlichen Weg verwenden. Es
 Auch in den Schematics zu NgRx versteckt sich das neue Feature hinter einem Flag.
 Möchten Sie Code mit Creator-Funktionen erzeugen, können Sie die Option `--creators` einsetzen:
 
@@ -110,7 +119,7 @@ export type BookActions = LoadBooks | LoadBooksSuccess;
 ```
 
 Diese drei Bestandteile werden mit `createAction()` in einem einzigen Aufruf kombiniert.
-Die Struktur des Payloads wird als Typparameter an die Funktion `props()` übergeben.
+Die Struktur des Payloads wird per Typparameter über die Funktion `props()` definiert.
 
 ```typescript
 // nachher
@@ -136,6 +145,19 @@ Die Action `LoadBooksSuccess` hat also in diesem Beispiel die folgende Struktur:
 }
 ```
 
+Womöglich haben Sie den `payload` mittlerweile lieb gewonnen.
+Oder Sie haben bestehenden Code, der aufwändig migriert werden müsste.
+Natürlich können Sie auch weiterhin mit dem alten Property arbeiten, wenn Sie den Type entsprechend definieren:
+
+```typescript
+import { createAction, props } from '@ngrx/store';
+
+export const loadBooksSuccess = createAction(
+  '[Book] Load Books Success',
+  props<{ payload: { books: Book[] } }>()
+);
+```
+
 #### Action dispatchen
 
 Um eine Action zu dispatchen, musste bisher eine Instanz der Action-Klasse erstellt werden.
@@ -154,11 +176,11 @@ this.store.dispatch(loadBook(isbn));
 
 Ein Reducer entscheidet anhand einer eintreffenden Action, in welcher Weise der aktuelle State neu berechnet werden muss.
 Für diese Unterscheidung wird traditionell im Reducer ein *switch/case*-Statement eingesetzt, um auf bestimmte Action-Typen zu reagieren.
-Diese Lösung ist pragmatisch, aber erfordert wieder einiges Vorwissen: Wir können nicht die Action-Klasse zur Unterscheidung verwenden, sondern nur den Action-*Typ*.
+Diese Lösung ist pragmatisch, aber erfordert einiges an Aufmerksamkeit und Vorwissen: Wir können nicht die Action-Klasse zur Unterscheidung verwenden, sondern nur den Action-*Typ*.
 Wichtig ist hier besonders, nicht den `default`-Fall zu vergessen, da sonst das System nicht korrekt funktioniert.
 
 ```typescript
-// vorher
+// vorher - Achtung Fehler!
 export function reducer(state = initialState, action: BookActions): State {
   switch (action.type) {
 
@@ -173,6 +195,8 @@ export function reducer(state = initialState, action: BookActions): State {
         loading: false
       };
     }
+    
+    // default vergessen! :-(
 }
 ```
 
@@ -205,12 +229,12 @@ export function reducer(state: State | undefined, action: Action): State {
 ```
 
 Der Import `BookActions` stellt alle exportierten Actions zur Verfügung, die zuvor mithilfe von `createAction()` definiert wurden.
-Beachten Sie auch, dass wir den Payload der Action nicht mehr aus dem Property `payload` beziehen, sondern direkt aus dem Action-Objekt.
+Beachten Sie auch, dass wir aufgrund der neuen Struktur den Payload der Action nicht mehr aus dem Property `payload` beziehen, sondern direkt aus dem Action-Objekt.
 
 ### Effects mit `createEffect()`
 
 Der Vollständigkeit halber wird auch für Effects eine Creator-Funktion bereitgestellt.
-Damit wird im Wesentlichen damit der Decorator `@Effect()` eingespart.
+Damit wird im Wesentlichen der Decorator `@Effect()` eingespart.
 
 ```typescript
 // vorher
@@ -260,7 +284,7 @@ export class BookEffects {
 }
 ```
 
-Beachten Sie, dass die Actions hier wieder als Funktionen verwendet werden, nicht mehr als Klassen (ähnlich wie beim Dispatchen).
+Bitte beachten Sie, dass die Actions hier wieder als Funktionen verwendet werden, nicht mehr als Klassen (ähnlich wie beim Dispatchen).
 Durch das neue Action-Format erübrigt sich auch die Typisierung für das `Actions`-Observable, das in den Constructor injiziert wird.
 
 #### Einstellungen für Effects
@@ -284,7 +308,7 @@ Ein Datenstrom aus einem Observable wird bei Fehlern beendet – das ist eine de
 Das gilt auch für Effects; hier allerdings kann es zu Problemen führen, wenn ein Fehler in einem Effect nicht korrekt gefangen wird.
 Wird das Observable beendet, ist der Effect inaktiv und kann nicht wiederbelebt werden.
 
-Dieses Problem ließ sich bisher nur mit Disziplin oder unschönen Hilfsmitteln lösen, z.B. ein Operator, der Fehler verschluckt und damit das Observable am Leben hält.
+Dieses Problem ließ sich bisher nur mit Disziplin oder unschönen Hilfsmitteln lösen, z.B. ein Operator, der Fehler verschluckt und damit das Observable am Leben hält ([siehe Beispiel](https://gist.github.com/JohannesHoppe/6c52f721c42f19b8c63cf563f5665a81)).
 
 Mit NgRx in Version 8 wurde dieses Verhalten geändert: Tritt ein Fehler im Effect auf, so wird automatisch eine neue Subscription erzeugt, sodass der Effect weiter aktiv ist.
 Diese Änderung ist ein Breaking Change!
@@ -309,8 +333,8 @@ Das Thema Serialisierbarkeit von Actions und State sorgt schließlich dafür, da
 
 Die Einhaltung dieser beiden "Auflagen" ist essentiell für NgRx.
 Beide Regeln sind allerdings nicht immer offensichtlich.
-Das Paket `ngrx-store-freeze` sorgte deshalb bisher dafür, solche Fehler schon frühzeitig zu erkennen.
-Die Funktionalität wurde nun direkt in NgRx integriert, und es werden *Runtime Checks*  durchgeführt.
+Das Paket `ngrx-store-freeze` halft deshalb bisher dafür, unbeabsichtigte Mutationen zu entdeckend.
+Diese Funktionalität und weitere Prüfungen wurden nun direkt in NgRx integriert, und es werden *Runtime Checks*  durchgeführt.
 Dabei können vier verschiedene Regeln geprüft werden:
 
 * `strictStateImmutability`: State muss immutable behandelt werden
@@ -398,7 +422,7 @@ const {
 
 ## Sonstiges
 
-Das neue Release bringt noch einige weitere Änderungen und Neuigkeiten mit sich, die den Rahmen dieses Artikels sprengen würden.
+Das neue Release bringt noch einige weitere Änderungen und Neuigkeiten mit sich.
 Wir möchten deshalb auf den [offiziellen Migrationsleitfaden](https://ngrx.io/guide/migration/v8) und auf den [Changelog von NgRx](https://github.com/ngrx/platform/blob/master/CHANGELOG.md) verweisen, wo Sie stets Informationen zu neuen Features erhalten.
 
 
