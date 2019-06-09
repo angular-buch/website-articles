@@ -25,7 +25,7 @@ Alle Inhalte und Beispiele sind auf dem Stand der aktuellen Angular-Version 8 un
 Dabei wurden große Teile des Buchs vollständig überarbeitet und neu strukturiert.
 
 Zusätzlich wurden neue Themen in das Buch aufgenommen, sodass es seiner Rolle als Standardwerk gerecht werden kann.
-Im [Changelog zur zweiten Auflage]() erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
+Im [Changelog zur zweiten Auflage](/blog/2019-06-changelog-zweite-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
 Auch für die Leser der ersten Auflage lohnt sich der Umstieg.
 
 Das Buch ist zum Preis von 36,90 EUR in jeder Buchhandlung und im Online-Handel erhältlich.

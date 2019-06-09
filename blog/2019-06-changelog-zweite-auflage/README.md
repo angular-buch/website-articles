@@ -44,25 +44,25 @@ Folgende Kapitel und Abschnitte sind in dieser Auflage neu hinzugekommen:
 Einige bereits in der ersten Auflage existierende Kapitel wurden für die zweite Auflage vollständig neu aufgerollt:
 
 ### Schnellstart (Kapitel 1)
-Der Schnellstart basierte in der ersten Auflage auf einer lokalen Lösung mit SystemJS und Paketen aus einem CDN. Der neue Schnellstart setzt auf die Online-Plattform StackBlitz zum schnellen Prototyping von Webanwendungen.
+Der Schnellstart basierte in der ersten Auflage auf einer lokalen Lösung mit SystemJS und Paketen aus einem CDN. Der neue Schnellstart setzt auf die Online-Plattform [StackBlitz](https://stackblitz.com) zum schnellen Prototyping von Webanwendungen.
 
 ### Reaktive Programmierung mit RxJS (Kapitel 10.2)
-Das Prinzip der reaktiven Programmierung und das Framework RxJS haben in den letzten Jahren weiter an Bedeutung gewonnen. Das alte Kapitel zu RxJS lieferte nur einen kurzen Überblick, ohne auf Details einzugehen. Mit dieser Neufassung finden Sie jetzt eine ausführliche Einführung in die Prinzipien von reaktiver Programmierung und Observables, und es werden alle wichtigen Konzepte anhand von Beispielen erklärt. Im Gegensatz zur ersten Auflage verwenden alle Beispiele im Buch die aktuelle Syntax von RxJS mit den \emph{Pipeable Operators}.
+Das Prinzip der reaktiven Programmierung und das Framework RxJS haben in den letzten Jahren weiter an Bedeutung gewonnen. Das alte Kapitel zu RxJS lieferte nur einen kurzen Überblick, ohne auf Details einzugehen. Mit dieser Neufassung finden Sie jetzt eine ausführliche Einführung in die Prinzipien von reaktiver Programmierung und Observables, und es werden alle wichtigen Konzepte anhand von Beispielen erklärt. Im Gegensatz zur ersten Auflage verwenden alle Beispiele im Buch die aktuelle Syntax von RxJS mit den *Pipeable Operators*.
 
 ### Formularverarbeitung & Validierung: Iteration IV (Kapitel 12)
-In der ersten Auflage haben wir sowohl \emph{Template-Driven Forms} als auch \emph{Reactive Forms} gleichbedeutend vorgestellt. Wir empfehlen mittlerweile nicht mehr den Einsatz von Template-Driven Forms. Daher stellen wir zwar beide Ansätze weiterhin vor, legen aber im Kapitel zur Formularverarbeitung einen stärkeren Fokus auf Reactive Forms. Das Praxisbeispiel wurde neu entworfen, um eine saubere Trennung der Zuständigkeiten der Komponenten zu ermöglichen. Die Erläuterungen im Grundlagenteil wurden neu formuliert, um besser für die Anforderungen aus der Praxis geeignet zu sein.
+In der ersten Auflage haben wir sowohl *Template-Driven Forms* als auch *Reactive Forms* gleichbedeutend vorgestellt. Wir empfehlen mittlerweile nicht mehr den Einsatz von Template-Driven Forms. Daher stellen wir zwar beide Ansätze weiterhin vor, legen aber im Kapitel zur Formularverarbeitung einen stärkeren Fokus auf Reactive Forms. Das Praxisbeispiel wurde neu entworfen, um eine saubere Trennung der Zuständigkeiten der Komponenten zu ermöglichen. Die Erläuterungen im Grundlagenteil wurden neu formuliert, um besser für die Anforderungen aus der Praxis geeignet zu sein.
 
 ### State Management mit Redux (Kapitel 20)
-In den letzten zwei Jahren hat sich unserer Ansicht nach das Framework \emph{NgRx} gegen weitere Frameworks wie \emph{angular-redux} klar durchgesetzt. Während die erste Auflage in diesem Kapitel noch auf angular-redux setzte, arbeitet das neue Kapitel durchgehend mit den \emph{Reactive Extensions for Angular (NgRx)}. Das neue Kapitel erarbeitet in der Einführung schrittweise ein Modell für zentrales State Management, um die Architektur von Redux zu erläutern, ohne eine konkrete Bibliothek zu nutzen.
+In den letzten zwei Jahren hat sich unserer Ansicht nach das Framework *NgRx* gegen weitere Frameworks wie *angular-redux* klar durchgesetzt. Während die erste Auflage in diesem Kapitel noch auf angular-redux setzte, arbeitet das neue Kapitel durchgehend mit den *Reactive Extensions for Angular (NgRx)*. Das neue Kapitel erarbeitet in der Einführung schrittweise ein Modell für zentrales State Management, um die Architektur von Redux zu erläutern, ohne eine konkrete Bibliothek zu nutzen.
 
 
 ## Stark überarbeitete und erweiterte Kapitel
 
 ### Einführung in TypeScript (Kapitel 4)
-Das Grundlagenkapitel zu TypeScript wurde neu strukturiert und behandelt zusätzlich auch neuere Features von ECMAScript/TypeScript, z.\,B. Destrukturierung, Spread-Operator und Rest-Syntax.
+Das Grundlagenkapitel zu TypeScript wurde neu strukturiert und behandelt zusätzlich auch neuere Features von ECMAScript/TypeScript, z. B. Destrukturierung, Spread-Operator und Rest-Syntax.
 
 ### HTTP-Kommunikation: ein Server-Backendanbinden (Kapitel 10.1)
-Das HTTP-Kapitel setzt durchgehend auf den \texttt{HttpClient}, der mit Angular 4.3 eingeführt wurde.
+Das HTTP-Kapitel setzt durchgehend auf den `HttpClient`, der mit Angular 4.3 eingeführt wurde.
 Dabei wird der Blick auch auf die erweiterten Features des Clients geworfen. Themen, die spezifisch für RxJS sind, wurden aus diesem Kapitel herausgelöst und werden nun im RxJS-Kapitel behandelt.
 
 ### Resolver: asynchrone Daten beim Routing vorladen (Kapitel 14.4.1)
@@ -70,7 +70,7 @@ Resolver sind aus unserer Sicht nicht die beste Wahl, um reguläre Daten über H
 
 ### i18n: mehrere Sprachen und Kulturen anbieten (Kapitel 15.1)
 Die Möglichkeiten zur Konfiguration des Builds wurden mit Angular 6 stark vorangebracht.
-Viele zuvor notwendige Kommandozeilenparameter sind nun nicht mehr notwendig, die Konfigurationsdatei \file{angular.json} löst diese ab. Dadurch konnten wir das Kapitel zur Internationalisierung (i18n) kürzen und verständlicher gestalten. Im Gegensatz zur ersten Auflage zeigen wir nicht mehr, wie man eine Anwendung im JIT-Modus internationalisiert, der hauptsächlich für die Entwicklung vorgesehen ist, aber nicht für produktive Anwendungen. % denn wir haben die Befürchtung, dass sonst eine produktive Anwendung im Debug-Modus betrieben werden könnte.
+Viele zuvor notwendige Kommandozeilenparameter sind nun nicht mehr notwendig, die Konfigurationsdatei `angular.json` löst diese ab. Dadurch konnten wir das Kapitel zur Internationalisierung (i18n) kürzen und verständlicher gestalten. Im Gegensatz zur ersten Auflage zeigen wir nicht mehr, wie man eine Anwendung im JIT-Modus internationalisiert, der hauptsächlich für die Entwicklung vorgesehen ist, aber nicht für produktive Anwendungen.
 
 ### Softwaretests (Kapitel 17.1)
 Das Kapitel zum Testen von Angular-Anwendungen wurde stark erweitert. Neben den reinen Werkzeugen wird der Fokus besonders auf Philosophien, Patterns und Herangehensweisen gelegt. Zusätzlich werden die mitgelieferten Tools zum Testen von HTTP und Routing betrachtet.
