@@ -11,7 +11,7 @@ keywords:
   - Buchhandel
   - Zweite Auflage
 language: de
-thumbnail: ./buchblogheader_.png
+thumbnail: ./buchblogheader.png
 sticky: true
 hidden: true
 ---
