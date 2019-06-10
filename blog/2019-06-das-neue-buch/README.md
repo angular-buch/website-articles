@@ -30,8 +30,6 @@ Auch für die Leser der ersten Auflage lohnt sich der Umstieg.
 
 Das Buch ist zum Preis von 36,90 EUR in jeder Buchhandlung und im Online-Handel erhältlich.
 
-<!-- Fotos -->
-
 ## Hintergrund
 
 Die erste Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien im Mai 2017 im Handel.
