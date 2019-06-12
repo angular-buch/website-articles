@@ -1,5 +1,5 @@
 ---
-title: "Das neue Angular-Buch v2 ist da!"
+title: "Das neue Angular-Buch ist da!"
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2019-06-14
