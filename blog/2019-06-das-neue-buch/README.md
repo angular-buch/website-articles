@@ -18,7 +18,7 @@ sticky: true
 **Das neue deutschsprachige Angular-Buch ist da!**  
 Ab sofort ist die 2. Auflage des erfolgreichen Standardwerks im Handel verfügbar.
 
-Mit der neuen Ausgabe erwarten Sie 740 Seiten mit aktuellem Inhalt zum Web-Framework Angular.
+Mit der neuen Ausgabe erwarten Sie 740 Seiten mit aktuellem Inhalt zum Webframework Angular.
 Die neue Ausgabe wurde grundlegend aktualisiert und erweitert.
 Alle Inhalte und Beispiele sind auf dem Stand der aktuellen Angular-Version 8 und wurden an etablierte Best Practices angepasst.
 Dabei wurden große Teile des Buchs vollständig überarbeitet und neu strukturiert.
@@ -32,16 +32,16 @@ Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und [i
 
 ## Fundierter Einstieg in Angular
 
-Lernen Sie die Grundlagen, fortgeschrittene Themen sowie Best Practices zu Angular mit diesem Praxisbuch!
-Mit einem [zusammenhängenden Beispielprojekt](https://book-monkey3.angular-buch.com/) führen wir Sie durch die Welt von Angular.
-Lernen Sie Schritt für Schritt, wie Sie modulare Single-Page-Anwendungen entwickeln.
-Praktisch: Der Programmcode zu jeder einzelnen Entwicklungsphase ist [auf GitHub](https://github.com/angular-buch/book-monkey3) verfügbar.
-So können Sie alle Schritte gut nachvollziehen und auch Teile überspringen.
+Lernen Sie die Grundlagen, fortgeschrittene Themen und Best Practices zu Angular mit diesem Praxisbuch!
+Mit einem [zusammenhängenden Beispielprojekt](https://book-monkey3.angular-buch.com/) führen wir Sie durch die Welt von Angular.
+Lernen Sie Schritt für Schritt, wie Sie modulare Single-Page-Anwendungen entwickeln.
+Praktisch: Der Programmcode zu jeder einzelnen Entwicklungsphase ist [auf GitHub](https://github.com/angular-buch/book-monkey3) verfügbar.
+So können Sie alle Schritte gut nachvollziehen und auch Teile überspringen.
 
 Neben den Grundlagen werden auch behandelt:
 
 * Reaktive Programmierung mit RxJS
-* State-Management mit Redux
+* State-Management mit Redux/NgRx
 * Testing mit Jasmine, Karma und Protractor
 * Routing und Modulsystem
 * HTTP und Interceptoren
@@ -53,15 +53,15 @@ Neben den Grundlagen werden auch behandelt:
 * und vieles mehr
 
 Das Buch setzt Vorkenntnisse in JavaScript, HTML und CSS voraus.
-Wer noch nicht mit TypeScript vertraut ist, findet im Buch eine kompakte Einführung.
+Wer noch nicht mit TypeScript vertraut ist, findet im Buch eine kompakte Einführung.
 
 
 ## Hintergrund
 
 Die erste Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien im Mai 2017 im Handel.
 Das Buch war durchweg auf dem Stand von Angular 4.
-Ein Technologie-Buch befindet sich stets in einem Spannungsfeld:
-Einerseits ist ein gedrucktes Buch für Beständigkeit über mehrere Jahre ausgelegt, andererseits muss ein Enterprise-Framework wie Angular schnell beweglich sein, um mit technologische Fortschritt mitzuhalten.
+Ein Technologiebuch befindet sich stets in einem Spannungsfeld:
+Einerseits ist ein gedrucktes Buch für Beständigkeit über mehrere Jahre ausgelegt, andererseits muss ein Enterprise-Framework wie Angular schnell beweglich sein, um mit dem technologischen Fortschritt mitzuhalten.
 
 Wir haben deshalb regelmäßig in [Blogartikeln](/updates) über neue Features und Änderungen informiert.
 Die grundsätzlichen Schnittstellen des Frameworks blieben beständig, allerdings waren einige Breaking Changes unvermeidbar.
@@ -70,13 +70,13 @@ Zwei Jahre nach dem Erscheinen der ersten Auflage waren so viele Änderungen ges
 Im Sommer 2018 begannen wir die Arbeit an der neuen Auflage.
 Dabei haben wir einen guten Kompromiss zwischen einer reinen Aktualisierung und einer vollständigen Neuauflage gefunden.
 Einige Inhalte sind komplett neu, andere Kapitel haben wir vollständig gelöscht und neu aufgerollt.
-Das Leser-Feedback der letzten zwei Jahre wurde ebenso berücksichtigt und es wurden viele unklare Stellen vom ersten Buch vereinfacht.
+Das Leser-Feedback der letzten zwei Jahre wurde ebenso berücksichtigt, und es wurden viele unklare Stellen des ersten Buchs vereinfacht.
 Abschließend kann man sagen, dass jeder Abschnitt im Buch mehr oder weniger stark angepasst wurde.
 Das neue Angular-Buch bewegt sich damit wieder am Puls der Zeit und sollte auch in zwei Jahren noch genug Aktualität besitzen.
 
 Wir wünschen Ihnen viel Spaß beim Lesen!
 Sollten Sie Feedback, Anmerkungen oder Fragen haben, zögern Sie nicht, uns zu schreiben!
-Wir sind per Mail [team@angular-buch.com](mailto:team@angular-buch.com) oder [Twitter](https://twitter.com/angular_buch) für Sie da.
+Wir sind per Mail unter [team@angular-buch.com](mailto:team@angular-buch.com) oder [Twitter](https://twitter.com/angular_buch) für Sie da.
 
 Mit besten Grüßen –
 das Autorenteam<br>
@@ -102,6 +102,3 @@ Wertvolles Feedback zur ersten Auflage dieses Buchs haben uns außerdem
 
 Dem Team vom dpunkt.verlag, insbesondere **René Schönfeldt** und **Sabrina Dietze**, danken wir für die persönliche Unterstützung und die guten Anregungen zum Buch.
 Außerdem danken wir dem **Angular-Team** und der Community dafür, dass sie eine großartige Plattform geschaffen haben, die uns den Entwickleralltag angenehmer macht.
-
-
-<small>**Titelbild:** Zabriskie Point, Death Valley National Park, California, 2019</small>
