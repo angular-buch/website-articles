@@ -12,7 +12,7 @@ keywords:
   - Ivy
 language: de
 thumbnail: ./angular8.jpg
-sticky: true
+sticky: false
 hidden: false
 ---
 
