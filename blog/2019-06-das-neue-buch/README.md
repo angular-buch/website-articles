@@ -27,7 +27,7 @@ Zusätzlich wurden neue Themen in das Buch aufgenommen, sodass es seiner Rolle a
 Im [Changelog zur zweiten Auflage](/blog/2019-06-changelog-zweite-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
 Auch für die Leser der ersten Auflage lohnt sich der Umstieg.
 
-Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und [im Online-Handel bei Amazon](https://amzn.to/2Wuo7cd) erhältlich.
+Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://www.dpunkt.de/buecher/13231/9783864906466-angular.html) oder bei [Amazon](https://amzn.to/2Wuo7cd).
 
 
 ## Fundierter Einstieg in Angular
