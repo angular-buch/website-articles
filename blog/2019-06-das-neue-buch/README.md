@@ -16,10 +16,10 @@ sticky: true
 hidden: true
 ---
 
-**Das neue deutschsprachige Angular-Buch ist da!**
+**Das neue deutschsprachige Angular-Buch ist da!**  
 Ab sofort ist die 2. Auflage des erfolgreichen Standardwerks im Handel verfügbar.
 
-Mit der neuen Ausgabe erwarten Sie 740 Seiten mit aktuellem Inhalt zu Web-Framework Angular.
+Mit der neuen Ausgabe erwarten Sie 740 Seiten mit aktuellem Inhalt zum Web-Framework Angular.
 Die neue Ausgabe wurde grundlegend aktualisiert und erweitert.
 Alle Inhalte und Beispiele sind auf dem Stand der aktuellen Angular-Version 8 und wurden an etablierte Best Practices angepasst.
 Dabei wurden große Teile des Buchs vollständig überarbeitet und neu strukturiert.
@@ -69,7 +69,7 @@ Die grundsätzlichen Schnittstellen des Frameworks blieben beständig, allerding
 Zwei Jahre nach dem Erscheinen der ersten Auflage waren so viele Änderungen geschehen, dass eine zweite Auflage ratsam wurde.
 
 Im Sommer 2018 begannen wir die Arbeit an der neuen Auflage.
-Dabei haben wir einen guten Kompromiss zwischen einer reinen Aktualisierung und einem vollständigen Neuauflage gefunden.
+Dabei haben wir einen guten Kompromiss zwischen einer reinen Aktualisierung und einer vollständigen Neuauflage gefunden.
 Einige Inhalte sind komplett neu, andere Kapitel haben wir vollständig gelöscht und neu aufgerollt.
 Das Leser-Feedback der letzten zwei Jahre wurde ebenso berücksichtigt und es wurden viele unklare Stellen vom ersten Buch vereinfacht.
 Abschließend kann man sagen, dass jeder Abschnitt im Buch mehr oder weniger stark angepasst wurde.
