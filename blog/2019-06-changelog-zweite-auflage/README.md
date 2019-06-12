@@ -2,15 +2,15 @@
 title: "Changelog zur 2. Auflage"
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2019-06-11
-lastModified: 2019-06-11
+published: 2019-06-14
+lastModified: 2019-06-14
 keywords:
   - Angular
   - Buch
   - Changelog
   - Zweite Auflage
 language: de
-thumbnail: ./buch.jpg
+thumbnail: ../shared/buchblogheader.png
 sticky: false
 hidden: true
 ---
