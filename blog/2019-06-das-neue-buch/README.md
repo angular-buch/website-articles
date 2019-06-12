@@ -13,7 +13,6 @@ keywords:
 language: de
 thumbnail: ../shared/buchblogheader.png
 sticky: true
-hidden: true
 ---
 
 **Das neue deutschsprachige Angular-Buch ist da!**  
