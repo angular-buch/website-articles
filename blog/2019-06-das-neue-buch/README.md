@@ -30,6 +30,19 @@ Auch für die Leser der ersten Auflage lohnt sich der Umstieg.
 Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://www.dpunkt.de/buecher/13231/9783864906466-angular.html) oder bei [Amazon](https://amzn.to/2Wuo7cd).
 
 
+<div class="row">
+  <div class="row-4">
+    <img src="./buch700/IMG_9851.jpg" alt="">
+  </div>
+  <div class="row-4">
+    <img src="./buch700/IMG_9853.jpg" alt="">
+  </div>
+  <div class="row-4">
+    <img src="./buch700/IMG_9855.jpg" alt="">
+  </div>
+</div>
+
+
 ## Fundierter Einstieg in Angular
 
 Lernen Sie die Grundlagen, fortgeschrittene Themen und Best Practices zu Angular mit diesem Praxisbuch!
