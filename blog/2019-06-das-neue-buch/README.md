@@ -32,13 +32,13 @@ Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im
 
 <div class="row">
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9851.jpg" alt="">
-  </div>
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9853.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9862.jpg" alt="">
   </div>
   <div class="col-4">
     <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9855.jpg" alt="">
+  </div>
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9867.jpg" alt="">
   </div>
 </div>
 
@@ -93,6 +93,18 @@ Wir sind per Mail unter [team@angular-buch.com](mailto:team@angular-buch.com) od
 Mit besten Grüßen –
 das Autorenteam<br>
 **Ferdinand Malcher, Johannes Hoppe und Danny Koppenhagen**
+
+<div class="row">
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9853.jpg" alt="">
+  </div>
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9868.jpg" alt="">
+  </div>
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9864.jpg" alt="">
+  </div>
+</div>
 
 
 ## Danksagung
