@@ -56,12 +56,14 @@ Soweit so gut. Das wichtigste ist bereits erledigt. Wir können jetzt schon unse
 ng build --prod
 ```
 
-Nach dem Estellen der Anwendung, wollen wir uns diese im Browser ansehen. Dafür nutzen wir den global installieren `http-server`.
-Der Schalter `-c-1` desaktiviert den Cache des Servers.
+Nach dem Estellen der Anwendung, wollen wir uns diese im Browser ansehen. Dafür nutzen wir den global installieren `angular-http-server`.
+
+> Der `angular-http-server` leitet im Gegensatz zum `http-server` alle Anfragen zu nicht existierenden Verzeichnissen oder Dateien an die Datei `index.html` weiter.
+Dies ist notwendig, da das Routing durch Angular und nicht durch den Webserver durchgeführt wird.
 
 ```bash
-npm i -g http-server
-http-server -p 8080 -c-1 dist/BookMonkey
+npm i -g angular-http-server
+angular-http-server --path=dist/BookMonkey
 ```
 
 Um nun zu testen, ob wir tatsächlich eine PWA erhalten haben, rufen wir am besten die Google Chrome Developer Tools auf. Dort können wir im Tab _Network_ die Checkbox _Offline_ setzen.
@@ -153,7 +155,7 @@ Eine ausführliche Beschreibung der einzelnen Prameter findet man in der offizie
 Die beiden großen Blöcke der Konfiguration sind die `assetGroups` und die `dataGroup`. Im Array `asssetGroups` ist die Konfiguration zu Ressourcen enthalten die zur App selbst gehören. Hierzu zählen zum Biespiel statische Bilder, CSS-Stylesheets, Third-Party Ressourcen welche von CDNs geladen werden etc.
 Das `dataGroup` Array, beinhaltet Ressourcen, die nicht zur App selbst gehören. Hierzu zählen zum Beispiel API-Aufrufe und andere Daten-Abhängigkeiten.
 
-Wir wollen bei unserer Beispielanwendung als nächstes erwirken, die Liste der Bücher ebenfalls gecached wird und auch angezeigt werden kann, wenn wir keine Netzwerkverbindung haben.
+Wir wollen bei unserer Beispielanwendung als nächstes erwirken, die Liste der Bücher sowie bereits angesehene Bücher als auch die Suchresultate ebenfalls gecached werden und auch angezeigt werden können, sofern keine Netzwerkverbindung besteht.
 Dazu passen wir die Datei `ngsw-config.json` an und erweitern diese wie folgt:
 
 > Achtung! Wenn Sie Änderungen am Quellcode durchführen, werden ihnen ggf. beim Aktualisieren der Anwendung im Browser alte (gecachte) Daten angezeigt. Sie sollten deshalb während der Entwicklung stets einen neuen neuen Icognito Tab nutzen. Schließen Sie diesen und laden die Anwendung neu, erhalten Sie eine "frische" Anwednung. Achten Sie auch darauf, dass in den Google Chrome Developer Tools die Option _Disable Cache_ deaktiviert ist.
@@ -165,12 +167,16 @@ Dazu passen wir die Datei `ngsw-config.json` an und erweitern diese wie folgt:
   "assetGroups": [ /* ... */ ],
   "dataGroups": [
     {
-      "name": "BookList",
-      "urls": ["/books"],
+      "name": "Books",
+      "urls": [
+        "/secure/books",
+        "/secure/books/search/**",
+        "/secure/book/**"
+      ],
       "cacheConfig": {
         "strategy": "freshness",
-        "maxSize": 20,
-        "maxAge": "1d 2h",
+        "maxSize": 50,
+        "maxAge": "1d2h",
         "timeout": "3s"
       }
     }
@@ -182,12 +188,17 @@ Wir verwenden an dieser Stelle den `dataGroups` Block, da unsere Buchdatenbank k
 Dem Block in `dataGroups` geben wir die Bezeichnung `BookList`. Wir legen fest, dass alle Aufrufe unter `/books` vom Service Worker behandelt werden sollen.
 Im letzten Schritt definieren wir das Verhalten des Caches. Wir wollen hier die `freshness` Strategie verwenden. Diese besagt, dass idealerweise die aktuellen Daten abgerufen werden.
 Erhalten wir jedoch ein Netzwerk-Timeout nach Ablauf der definierten Zeit im `timeout` Parameter, werden die zuletzt gecachten Daten ausgeliefert. Die Strategie eigent sich vor allem für dynamische Daten, die über eine API bezogen werden und die möglichst immer im aktuellen Stand repräsentiert werden sollen.
-Die Option `maxSize` definiert die maximale Anzahl von Einträgen im Cache. `maxAge` gibt die maximale Gültigkeit der Daten im Cache an.
+Die Option `maxSize` definiert die maximale Anzahl von Einträgen im Cache. `maxAge` gibt die maximale Gültigkeit der Daten im Cache an, in unserem Fall sollen die Daten einen Tag und 2 Stunden gültig sein.
 
 Eine zweite Strategie für den Cache wäre übrigens die `performance` Strategie. Diese liefert immer zunächst die Daten aus dem Cache solange diese gültig sind.
 Erst wenn der `timeout` abläuft, werden die Daten im Cache aktualisiert. Diese Strategie eignet sich vorallem für Daten, die nicht sehr oft geändert werden müssen oder bei denen eine hohe Aktualität keine große Relevanz hat.
 
 Schauen wir uns nun wieder unsere Anwendung an und deaktivieren die Netzwerkverbindung, nach dem erstmaligen Abrufen der Buchliste, so sehen wir, dass weiterhin Buch-Daten angezeigt werden, wenn wir die Anwendung neu laden oder in ihr navigieren.
+
+### Update der PWA
+TODO: Display dialog: Update available, so you want to update?, display version
+TODO: Display alert: App has been Updates, display version
+https://angular.io/api/service-worker/SwUpdate
 
 ### Weiterführende Themen
 Dies war nur ein kleiner Einblick in PWAs mit Angular. PWAs bieten noch weitere interessante Möglichkeiten.
