@@ -267,6 +267,7 @@ Erzeugen wir die Anwendung neu und starten wieder den Webserver, so sehen wir, d
 
 ![Screenshot Anzeiege eines Updates der PWA](bm-pwa-update.png)
 
+Der fertige BookMonkey als PWA kann auch [auf Github](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
 
 ### Weiterführende Themen
 Dies war nur ein kleiner Einblick in PWAs mit Angular. PWAs bieten noch weitere interessante Möglichkeiten.
