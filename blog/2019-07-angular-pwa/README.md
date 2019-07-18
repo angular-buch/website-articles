@@ -2,8 +2,8 @@
 title: "Mach auf deiner Webanwendung eine PWA"
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
-published: 2019-07-17
-lastModified: 2019-07-17
+published: 2019-07-18
+lastModified: 2019-07-18
 keywords:
   - PWA
   - Progressive Web App
@@ -15,7 +15,7 @@ sticky: false
 hidden: true
 ---
 
-Immer öfter stößt man im Webumfeld auf den Begriff PWA. Doch was genau steckt dahiner und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder eine App?
+Immer öfter stößt man im Webumfeld auf den Begriff PWA. Doch was genau steckt dahiner und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder einer App?
 PWA steht als Abkürzung für _Progressive Web App_ und bezeichnet eine Webanwendung, die beim Aufruf einer Website als App auf einem lokalen Gerät installiert werden kann.
 
 ## Webanwendung VS. PWAs VS. App
@@ -25,12 +25,13 @@ Mit Hilfe einer Webanwendung kann ein Nutzer über eine URL im Browser Informati
 
 ## Service Worker
 
-Die Grundvoraussetzung für eine PWA sind die sogenannten Service Worker. Service Woker sind gewissermaßen kleine Helfer des Browsers, die bestimmt Aufgaben im Hintergrund übernehmen.
-Hierzu zählt vor allem des Speichern und Abrufen der Daten auf einem lokalen Endgerät. Die Service Worker prüfen ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
+Die Grundvoraussetzung für eine PWA sind die sogenannten Service Worker. Service Woker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
+Hierzu zählen vor allem des Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
 
 ## Eine bestehende Angular-Anwendung in eine PWA verwandeln
 
-Schauen wir uns das Ganze an einem Beispiel an. Wie wollen die Anwendung BookMonkey in eine PWA verwandeln. Somit können Nutzer diese auf ihrem Gerät installieren und erhalten stets Buchdaten, auch wenn Sie gerade keine Netzwerkkonnektivität haben. Zunächst klonen wir uns hierfür die bestehende Webanwendung in ein lokales Repository:
+Schauen wir uns das Ganze an einem Beispiel an.
+Wie wollen die Anwendung BookMonkey in eine PWA verwandeln. Somit können Nutzer diese auf ihrem Gerät installieren und erhalten stets Buchdaten, auch wenn Sie gerade keine Netzwerkkonnektivität haben. Zunächst klonen wir uns hierfür die bestehende Webanwendung in ein lokales Repository:
 
 ```bash
 git clone git@github.com:book-monkey3/iteration-7-i18n.git BookMonkey
@@ -196,9 +197,76 @@ Erst wenn der `timeout` abläuft, werden die Daten im Cache aktualisiert. Diese 
 Schauen wir uns nun wieder unsere Anwendung an und deaktivieren die Netzwerkverbindung, nach dem erstmaligen Abrufen der Buchliste, so sehen wir, dass weiterhin Buch-Daten angezeigt werden, wenn wir die Anwendung neu laden oder in ihr navigieren.
 
 ### Update der PWA
-TODO: Display dialog: Update available, so you want to update?, display version
-TODO: Display alert: App has been Updates, display version
-https://angular.io/api/service-worker/SwUpdate
+Service Worker Updates werden in Angular über den `SwUpdate`-Service behandelt. Dieser liefert uns Infomrationen über ein verfügbares bzw. durchgeführtes Update auf die wir reagieren können. In der Regel werden Service Worker im Hintergrund geupdatet und Nutzer bekommen davon nichts mit.
+Es kann jedoch hilfreich sein, dem Nutzer mitzuteilen, dass ein Update vorliegt, um ihm beispielsweise über die Neuerungen zu informieren.
+Wir wollen genau diesen Fall implementieren.
+
+Zunächst passen wir dafür die Datei `ngsw-config.json` an. Hier fügen wir den Abschnitt `appData` ein. Dieser kann Informationen wie eine Beschreibung, die Version und weiteres enthalten. Wir wollen in diesem Abschnitt eine Versionsnummer sowie einen Changelog hinterlegen, den wir später bei einem Update den Nutzern anzeigen wollen.
+Die Versionsnummer dient lediglich als Nutzerinformation. Hinter den Kulissen erfolgt jedoch ein Binärvergleich des erzeugten Service Workers aus der `ngsw-config.json`. Jede kleinste Änderung an der `ngsw-config.json` führt somit zu einem neuen Service Worker unabhängig von der von uns hinterlegten Versionsnummer.
+
+```json
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "appData": {
+    "version": "1.1.0",
+    "changelog": "aktuelle Version"
+  },
+  // ...
+}
+```
+
+Anschließend erzeugen wir die Anwendung und rufen diese auf. Bis hierhin ist alles wie gehabt.
+Nun wollen wir, dass Nutzer über Änderungen informiert werden.
+Dafür nutzen wir den `SwUpdate`-Service von Angular. Wir abbonieren hier das Observable `available`.
+Sobald eine neuer Service Worker erzeugt wird, greift dieses Event.
+Wir können nun einen Confirm-Dialog anzeigen und den Nutzer fragen, ob er ein Update durchführen möchte.
+Das Event aus dem Observable liefert uns außerdem die komplette Konfiguration von `appData` aus der `ngsw-config.json` in der aktuellen Version sowie in der neuen Version des Service Workers.
+Bestätigt der Nutzer nun den Dialog mit _Ok_, erfolgt ein Neuladen der Seite, was ein Update des Service Workers zur Folge hat.
+
+```ts
+import { Component, OnInit } from '@angular/core';
+import { SwUpdate } from '@angular/service-worker';
+
+@Component({ /* ... */ })
+export class AppComponent implements OnInit {
+
+  constructor(private swUpdate: SwUpdate) {}
+
+  ngOnInit() {
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe((evt) => {
+        const updateApp = window.confirm(`
+          Ein Update ist verfügbar (${evt.current.appData['version']} => ${evt.available.appData['version']}).
+          Änderungen: ${evt.current.appData['changelog']}
+          Wollen Sie das Update jetzt installieren?
+        `);
+        if (updateApp) { window.location.reload(); }
+      });
+    }
+  }
+}
+```
+
+Um nun tatsächlich einen neuen Service Worker zu erhalten, müssen wir noch Änderungen an der `ngsw-config.json` vornehmen, damit nach dem Binärvergleich eine neue Service Worker Version erzeugt wird. Wir ändern hier lediglich die Versionsnummer sowie das Changelog.
+
+> An dieser Stelle sei nochmals angemerkt, dass die Versionsnummer keine tatsächliche Version des Service Workers darstellt. Wir könnten hier auch eine niedrigere Versionsnummer angeben und es würde trotzdem ein Update des Service Workers erfolgen.
+
+```json
+{
+  // ...
+  "appData": {
+    "version": "2.0.0",
+    "changelog": "Caching bereits abgerufener Bücher"
+  },
+  // ...
+}
+```
+
+Erzeugen wir die Anwendung neu und starten wieder den Webserver, so sehen wir, dass kurz nach dem Laden der Seite ein Hinweis zum Update erscheint. Bestätigen wir diesen, wird die Seite neu geladen und es wird fortan der neu erzeugte Service Worker verwendet.
+
+![Screenshot Anzeiege eines Updates der PWA](bm-pwa-update.png)
+
 
 ### Weiterführende Themen
 Dies war nur ein kleiner Einblick in PWAs mit Angular. PWAs bieten noch weitere interessante Möglichkeiten.
