@@ -23,12 +23,18 @@ PWA steht als Abkürzung für _Progressive Web App_ und bezeichnet eine Webanwen
 ## Webanwendung VS. PWAs VS. App
 
 Wir wollen zunächst den Begriff der PWA etwas konkreter einordnen. Dazu schauen wir uns den Unterschied einer PWA im Vergleich zu einer herkömmlichen Webanwendung und einer App an.
-Mithilfe einer Webanwendung kann ein Nutzer über eine URL im Browser Informationen abrufen und verarbeiten. Eine App erfüllt einen ähnlichen Zweck, wird allerdings auf einem Gerät lokal installiert und benötigt keinen Browser zur Informationsverarbeitung. Eine PWA stellt nun eine Art Mix von beidem dar: Es handelt sich grundlegend auch um eine Webanwendung, sie wird allerdings durch den Nutzer heruntergeladen und auf dem lokalen Gerät gespeichert. Weiterhin sorgt eine PWA dafür, dass die wichtigsten Daten gecacht werden. Somit bleiben Informationen, die die Anwendung liefert, stets abrufbar – auch wenn ggf. keine durchgängige Internetverbindung vorhanden ist.
+Mithilfe einer Webanwendung kann ein Nutzer über eine URL im Browser Informationen abrufen und verarbeiten. Eine App erfüllt einen ähnlichen Zweck, wird allerdings auf einem Gerät lokal installiert und benötigt keinen Browser zur Informationsverarbeitung. Weiterhin kann eine App in der Regel  auch Offline genutzt werden und sie hat oft Zugriff auf Funktionen des Gerätes (Push-Notifications sowie Zugriff auf das Dateisystem sowie Kamera- und Sensorik). Eine PWA stellt nun eine Art Mix von beidem dar: Es handelt sich grundlegend auch um eine Webanwendung, sie wird allerdings durch den Nutzer heruntergeladen und auf dem lokalen Gerät gespeichert. Weiterhin sorgt eine PWA dafür, dass die wichtigsten Daten gecacht werden. Somit bleiben Informationen, die die Anwendung liefert, stets abrufbar – auch wenn ggf. keine durchgängige Internetverbindung vorhanden ist. Außerdem kann eine PWA auch Push-Notofications erhalten.
+
+Die drei wichtigstens Charakteristiken eine PWA sind also zusammengefasst folgende:
+- Add-to-Homescreen Funktionalität
+- Offline-Fähigkeit
+- Push Notifications
 
 ## Service Worker
 
-Die Grundvoraussetzung für eine PWA sind die sogenannten *Service Worker*. Service Woker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
-Hierzu zählen vor allem des Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
+Als Grundvoraussetzung um eine PWA offlinefähig zu machen und Push-Benachrichtigungen zu versenden, werden die sogenannten *Service Worker* benötigt. Service Woker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
+Hierzu zählen das Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
+Eine weitere Aufgabe ist das Empfangen von Push-Benachrichtigungen.
 
 ## Eine bestehende Angular-Anwendung in eine PWA verwandeln
 
