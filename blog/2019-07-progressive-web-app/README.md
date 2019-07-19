@@ -157,7 +157,8 @@ Wir können als Wert für `content` zwischen den folgenden Einstellungen wählen
 | `black`             | Weiß                | Schwarz                                 |
 | `black-translucent` | Weiß                | Hintergrundfarbe der App (`body`-Element) |
 
-Schauen wir uns nun das Ergebnis an, sehen wir, dass die App die korrekten Icons nutzt und uns nach der Installation und dem Start zunächst kurz den Splashscreen zeigt, bevor die App vollflächig dargestellt wird. Die Statusbar ist in unserem Fall Schwarz, wie zuvor angegeben.
+Schauen wir uns nun das Ergebnis im Safari-Bwoser unter iOS an. Nach dem Öffnen der Seite können wir diese über die Funktion Add-to-Homescreen auf dem Apple-Gerät speichern.
+Wir sehen, dass die App die korrekten Icons nutzt und uns nach der Installation und dem Start zunächst kurz den Splashscreen zeigt, bevor die App vollflächig dargestellt wird. Die Statusbar ist in unserem Fall Schwarz, wie zuvor angegeben.
 
 ![Der BookMonkey als PWA mit Splashscreen unter iOS](bm-pwa-ios-homescreen-splashscreen-start.png)
 
@@ -285,7 +286,7 @@ Erzeugen wir die Anwendung neu und starten wieder den Webserver, so sehen wir, d
 Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
 
 ### Weiterführende Themen
-Dies war nur ein kleiner Einblick in PWAs mit Angular. PWAs bieten noch weitere interessante Möglichkeiten.
-Wir wollen hierzu gern den Blogpost [Build a production ready PWA with Angular and Firebase](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfehlen.
+Dies war nur ein kleiner Einblick in PWAs mit Angular. Wer noch mehr über PWAs mit Angular erfahren möchte, sollte sich den Blogpost [Build a production ready PWA with Angular and Firebase](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan ansehen.
+Weiterhin haben wir uns in diesem Blogpost nicht der dritten Charakteristik von PWAs gewidmet: den Push-Notifications. Hierzu muss neben der der Fähigkeit der PWA Push-Notifications entgegen zu nehmen auch ein Sender der Nachrichten erzeugt werden. Hierzu wollen wir den Artikel [Angular Push Notifications: a Complete Step-by-Step Guide](https://blog.angular-university.io/angular-push-notifications/) der Angular University empfehlen.
 
 Viel Spaß beim Programmieren!
