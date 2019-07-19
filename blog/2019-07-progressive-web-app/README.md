@@ -17,7 +17,7 @@ sticky: false
 hidden: true
 ---
 
-Immer öfter stößt man im Webumfeld auf den Begriff PWA. Doch was genau steckt dahiner und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder einer App?
+Immer öfter stößt man im Webumfeld auf den Begriff PWA. Doch was genau steckt dahinter und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder einer App?
 PWA steht als Abkürzung für _Progressive Web App_ und bezeichnet eine Webanwendung, die beim Aufruf einer Website als App auf einem lokalen Gerät installiert werden kann – zum Beispiel auf dem Telefon oder Tablet.
 
 ## Webanwendung VS. PWAs VS. App
@@ -27,8 +27,8 @@ Mithilfe einer Webanwendung kann ein Nutzer über eine URL im Browser Informatio
 
 ## Service Worker
 
-Die Grundvoraussetzung für eine PWA sind die sogenannten *Service Worker*. Service Woker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
-Hierzu zählen vor allem des Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
+Die Grundvoraussetzung für eine PWA sind die sogenannten *Service Worker*. Service Worker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
+Hierzu zählen vor allem das Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
 
 ## Eine bestehende Angular-Anwendung in eine PWA verwandeln
 
@@ -45,7 +45,7 @@ Die dahinterliegenden Schematics nehmen uns bereits einen Großteil der Arbeit z
 
 - Hinzufügen des Pakets `@angular/service-worker` zu unserem Projekt
 - Aktivieren des Build Support für Service Worker in der Angular CLI
-- Importieren und Registieren des `ServiceWorkerModule` im `AppModule`
+- Importieren und Registrieren des `ServiceWorkerModule` im `AppModule`
 - Update der Datei `index.html` mit einem Link zum Web App Manifest (`manifest.json`) sowie Hinzufügen relevanter Meta-Tags
 - Erzeugen und Verlinken von Icon-Dateien
 - Erzeugen der Konfigurationsdatei `ngsw-config.json` für den Service Worker
@@ -67,6 +67,7 @@ Nach dem Build der Anwendung wollen wir uns diese im Browser ansehen. Dafür kö
 > Dies ist notwendig, da das Routing durch Angular und nicht durch den Webserver durchgeführt wird.
 
 ```bash
+npm i angular-http-server --save-dev
 npx angular-http-server --path=dist/BookMonkey
 ```
 
@@ -81,7 +82,7 @@ Navigieren wir allerdings zur Buchliste, so können keine Bücher angezeigt werd
 
 ### Das Web App Manifests anpassen (`manifest.json`)
 
-Das Web App Manifest ist eine JSON-Datei, die dem Browser mitteilt, wie sich die Anwendung verhalten soll, wenn Sie installiert wird. Hier wird beispielsweise eine Hintergrundfarbe für die Menüleiste auf den nativen Engeräten hinterlegt, und es werden die Pfade zu hinterlegten Icons angegeben.
+Das Web App Manifest ist eine JSON-Datei, die dem Browser mitteilt, wie sich die Anwendung verhalten soll, wenn Sie installiert wird. Hier wird beispielsweise eine Hintergrundfarbe für die Menüleiste auf den nativen Endgeräten hinterlegt, und es werden die Pfade zu hinterlegten Icons angegeben.
 
 Wir wollen die Standard-Datei, die uns die PWA Schematics generiert haben, noch etwas anpassen. Um dies nicht händisch zu tun, verwenden wir am besten einen Generator.
 Wir empfehlen hier den [Web App Manifest Generator](https://app-manifest.firebaseapp.com/).
@@ -111,7 +112,7 @@ Weiterhin können wir über die `link`-Tags für iOS ein Splashscreen-Bild hinte
 Auch hierfür existiert ein Generator, der uns die Bilder in den entsprechenden Größen erzeugt und und die generierten `link`-Tags anzeigt: [iOS Splash Screen Generator](https://appsco.pe/developer/splash-screens/).
 
 Anschließend fügen wir die Tags ebenfalls in die `index.html` ein. Wir müssen an dieser Stelle noch den Pfad zu den Bildern so anpassen, dass er korrekt auf die tatsächlichen Dateien zeigt.
-Die erste Zeile teilt iOS-Geräten mit, dass die Webanwendung als App gneutzt werden kann. Nur wenn diese Zeile in der `index.html` angegeben wurde, liest das iOS-Gerät den `link`-Tag mit der Angabe zum Splashscreen aus.
+Die erste Zeile teilt iOS-Geräten mit, dass die Webanwendung als App genutzt werden kann. Nur wenn diese Zeile in der `index.html` angegeben wurde, liest das iOS-Gerät den `link`-Tag mit der Angabe zum Splashscreen aus.
 
 ```html
 <head>
@@ -131,7 +132,7 @@ Die erste Zeile teilt iOS-Geräten mit, dass die Webanwendung als App gneutzt we
 </head>
 ```
 
-Als Letztes haben wir noch die Möglichkeit, die Statusbar der App hinsichtlich ihrer Farbe anzupassen. Dazu fürgen wir den folgenden Metatag zur `index.html` hinzu.
+Als Letztes haben wir noch die Möglichkeit, die Statusbar der App hinsichtlich ihrer Farbe anzupassen. Dazu führen wir das folgenden Metatag zur `index.html` hinzu.
 
 ```html
 <head>
@@ -156,7 +157,7 @@ Schauen wir uns nun das Ergebnis an, sehen wir, dass die App die korrekten Icons
 
 ### Konfiguration für Angular Service Worker anpassen (`ngsw-config.json`)
 
-Die Konfigurationsdatei für Angular Service Worker definiert, welche Ressoucen und Pfade gecacht werden sollen und welche Strategie hierfür verwendet wird.
+Die Konfigurationsdatei für Angular Service Worker definiert, welche Ressourcen und Pfade gecacht werden sollen und welche Strategie hierfür verwendet wird.
 Eine ausführliche Beschreibung der einzelnen Parameter findet man in der offiziellen Dokumentation auf [angular.io](https://angular.io/guide/service-worker-config).
 
 Die beiden großen Blöcke der Konfiguration sind die `assetGroups` und die `dataGroup`. Im Array `asssetGroups` ist die Konfiguration zu Ressourcen enthalten, die zur App selbst gehören. Hierzu zählen zum Beispiel statische Bilder, CSS-Stylesheets, Third-Party-Ressourcen, die von CDNs geladen werden etc.
@@ -166,7 +167,7 @@ Wir wollen bei unserer Beispielanwendung zunächst erwirken, dass die Antworten 
 Diese Ergebnisse können dann also auch angezeigt werden, wenn keine Netzwerkverbindung besteht.
 Dazu passen wir die Datei `ngsw-config.json` an und erweitern diese wie folgt:
 
-> Achtung! Wenn Sie Änderungen am Quellcode durchführen, werden Ihnen ggf. beim Aktualisieren der Anwendung im Browser alte (gecachte) Daten angezeigt. Sie sollten deshalb während der Entwicklung stets einen neuen neuen Incognito Tab im Browser nutzen. Schließen Sie den Tab und laden die Anwendung neu, erhalten Sie eine "frische" Anwendung. Achten Sie auch darauf, dass in den Google Chrome Developer Tools die Option _Disable Cache_ deaktiviert ist.
+> Achtung! Wenn Sie Änderungen am Quellcode durchführen, werden Ihnen ggf. beim Aktualisieren der Anwendung im Browser alte (gecachte) Daten angezeigt. Sie sollten deshalb während der Entwicklung stets einen neuen neuen Incognito-Tab im Browser nutzen. Schließen Sie den Tab und laden die Anwendung neu, erhalten Sie eine "frische" Anwendung. Achten Sie auch darauf, dass in den Google Chrome Developer Tools die Option _Disable Cache_ deaktiviert ist.
 
 ```json
 {
@@ -273,7 +274,7 @@ Um nun tatsächlich einen neuen Service Worker zu erhalten, müssen wir noch Än
 
 Erzeugen wir die Anwendung neu und starten wieder den Webserver, so sehen wir, dass kurz nach dem Laden der Seite ein Hinweis zum Update erscheint. Bestätigen wir diesen, wird die Seite neu geladen und es wird fortan der neu erzeugte Service Worker verwendet.
 
-![Screenshot Anzeiege eines Updates der PWA](bm-pwa-update.png)
+![Screenshot Anzeige eines Updates der PWA](bm-pwa-update.png)
 
 Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
 
