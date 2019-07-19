@@ -74,6 +74,8 @@ Navigieren wir allerdings zur Buchliste, so können keine Bücher angezeigt werd
 
 ![Screenshot BookMonkey PWA, Offline-Modus in den Google Chrome Developer Tools aktivieren](bm-pwa-offline.png)
 
+> Achtung: Die PWA verwendet Service Worker. Diese können ausschließlich über gesicherte Verbindungen mit HTTPS oder über eine Localhost-Verbindung genutzt werden. Rufen Sie die App, die mittels `angular-http-server` ohne SSL ausgeleifert wird also über ein anderes Gerät auf, so werden die Service Worker nicht wie gewünscht funktionieren.
+
 ### Anpassen des Web App Manifests (`manifest.json`)
 
 Das Web App Manifest ist eine JSON-Datei, die dem Browser mitteilt, wie sich die Anwendung verhalten soll, wenn Sie installiert wird. Hier wird beispieltweise eine Hintergrundfarbe für die Menüleiste auf den nativen Engeräten hinterlegt und es werden die Pfade zu hinterlgten Icons angegeben.
