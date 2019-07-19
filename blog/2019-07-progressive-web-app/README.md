@@ -287,6 +287,7 @@ Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular
 
 ### Weiterführende Themen
 Dies war nur ein kleiner Einblick in PWAs mit Angular. Wer noch mehr über PWAs mit Angular erfahren möchte, sollte sich den Blogpost [Build a production ready PWA with Angular and Firebase](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan ansehen.
-Weiterhin haben wir uns in diesem Blogpost nicht der dritten Charakteristik von PWAs gewidmet: den Push-Notifications. Hierzu muss neben der der Fähigkeit der PWA Push-Notifications entgegen zu nehmen auch ein Sender der Nachrichten erzeugt werden. Hierzu wollen wir den Artikel [Angular Push Notifications: a Complete Step-by-Step Guide](https://blog.angular-university.io/angular-push-notifications/) der Angular University empfehlen.
+Weiterhin haben wir uns in diesem Blogpost nicht der dritten Charakteristik von PWAs gewidmet: den Push-Notifications. Hierzu muss neben der der Fähigkeit der PWA Push-Notifications entgegen zu nehmen auch ein Sender der Nachrichten erzeugt werden. Hierzu wollen wir den Artikel [Angular’s PWA: SwPush and SwUpdate](https://medium.com/@arjenbrandenburgh/angulars-pwa-swpush-and-swupdate-15a7e5c154ac) von Arjen Brandenburgh empfehlen.
+
 
 Viel Spaß beim Programmieren!
