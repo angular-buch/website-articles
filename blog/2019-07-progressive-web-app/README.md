@@ -32,8 +32,9 @@ Die drei wichtigstens Charakteristiken eine PWA sind also zusammengefasst folgen
 
 ## Service Worker
 
-Die Grundvoraussetzung für eine PWA sind die sogenannten *Service Worker*. Service Worker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
-Hierzu zählen vor allem das Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
+Als Grundvoraussetzung um eine PWA offlinefähig zu machen und Push-Benachrichtigungen zu versenden, werden die sogenannten *Service Worker* benötigt. Service Woker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
+Hierzu zählen das Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht und senden zur Webanwendung je nach Konfiguration Daten aus dem Cache oder versuchen die Daten online abzurufen.
+Eine weitere Aufgabe ist das Empfangen von Push-Benachrichtigungen.
 
 ## Eine bestehende Angular-Anwendung in eine PWA verwandeln
 
