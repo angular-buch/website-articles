@@ -86,6 +86,13 @@ Navigieren wir allerdings zur Buchliste, so können keine Bücher angezeigt werd
 
 > Achtung: Die PWA verwendet Service Worker. Diese können ausschließlich über gesicherte Verbindungen mit HTTPS oder über eine localhost-Verbindung genutzt werden. Rufen Sie die App, die mittels `angular-http-server` ohne SSL ausgeliefert wird, also über ein anderes Gerät auf, so werden die Service Worker nicht wie gewünscht funktionieren.
 
+## Add-to-Homescreen
+Prinzipiell kann jede Website zum Homescreen unter Android oder iOS hinzugefügt werden. Unter iOS wird hierfür der Safari-Browser benötigt.
+Über den Button _Teilen_ (kleines Rechteck mit einem Pfeil nach oben) kann ein Menü geöffnet werden, in dem die Auswahl "Zum Home-Bildschirm" zu finden ist. Nach Besstätigung des Dialogfeldes wird eine Verknüfung auf dem HomeScreen angelegt. Haben wir hier jedoch noch keine speziellen Icons hinterlegt, wird ggf. eine Miniatur der Website angezeigt.
+
+TODO: Prüfen, Screenshot:
+- Unter Android erscheint die Add-to-Homescreen funktion beim Aufruf einer PWA als Dialog.
+
 ### Das Web App Manifests anpassen (`manifest.json`)
 
 Das Web App Manifest ist eine JSON-Datei, die dem Browser mitteilt, wie sich die Anwendung verhalten soll, wenn Sie installiert wird. Hier wird beispielsweise eine Hintergrundfarbe für die Menüleiste auf den nativen Endgeräten hinterlegt, und es werden die Pfade zu hinterlegten Icons angegeben.
@@ -162,6 +169,7 @@ Wir sehen, dass die App die korrekten Icons nutzt und uns nach der Installation 
 
 ![Der BookMonkey als PWA mit Splashscreen unter iOS](bm-pwa-ios-homescreen-splashscreen-start.png)
 
+## Offline-Funktionalität
 ### Konfiguration für Angular Service Worker anpassen (`ngsw-config.json`)
 
 Die Konfigurationsdatei für Angular Service Worker definiert, welche Ressourcen und Pfade gecacht werden sollen und welche Strategie hierfür verwendet wird.
@@ -283,11 +291,90 @@ Erzeugen wir die Anwendung neu und starten wieder den Webserver, so sehen wir, d
 
 ![Screenshot Anzeige eines Updates der PWA](bm-pwa-update.png)
 
-Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
+## Push-Notifications
+Zum Abschluss wollen wir uns noch der dritten Charakteristik von PWAs widmen: den Push-Notifications.
+Diese ermöglichen es uns per Server-Push Benachrichtigungen an alle Clients zu senden, die zuvor den Benachrichtigungsdienst aktiviert haben.
+Push-Notifications werden ebenfalls über Service Worker implementiert.
 
+Die nachfolgende Abbildung stellt den Ablauf von Push-Benachrichtigungen schematisch dar. Im ersten Schritt abbonieren ein oder mehrere Clients die Benachrichtigungen (1).
+Anschließend soll in unserem Fall ein Anlegen eines neuen Buches (2) dazu führen, dass alle Abbonenten darüber benachrichtigt werden (3). Im Schritt 4 wollen wir darauf reagieren, wenn die Benachrichtigung angeklickt wird und das neu angelegte Buch öffnen (4).
+
+![Flow: PWA Push-Notifications](pwa-notification-flow.png)
+
+### Abbonieren von Benachrichtigungen
+
+Wir legen uns als erstes einen neuen Service an, der sich um die Push-Notifications kümmern soll. Hierzu verwenden wir am besten die Angular-CLI: `ng generate service WebNotification`.
+Das read-only property `VAPID_PUBLIC_KEY` enthält den Public-Key der BookMonkey API. Dieser wird für die Kommunikation zwischen dem Service Worker und dem Server mit web-push zwingend benötigt.
+
+Über den `isEnabled` greifen wir auf `SwPush` zu und wir erhalten Aufschluss darüber ob der verwendete Browser bzw. der genutzte Gerät Push-Notifications unterstützen.
+Die Methode `subscribeToNotifications()` greift auf die Angular `SwPush` API zu und fordert mit Übermittlung der Public-Keys des Servers die Aktivierung von Push-Notifications durch den Browser an. Sobald der Zugriff vom Nutzer genehmigt wird, wird die Methode `sendToServer()` mit dem zurückgeleiferten `PushSubscriptionJSON`-Objekt aufgerufen.
+Dieses enthält die notwendigen Abonnement-Daten, die der Server für die Speicherung und Adressierung der einzelnen Abbonenten benötigt.
+Wir übermitteln das Objekt per POST-Request an den Server. Um den Request auch tatsächlich abzusetzen müssen wir noch `subscribe()` auf dem Observable des `HttpClient`s aufrufen.
+
+```ts
+// ...
+import { HttpClient } from '@angular/common/http';
+import { SwPush } from '@angular/service-worker';
+
+@Injectable({ /* ... */ })
+export class WebNotificationService {
+  readonly VAPID_PUBLIC_KEY = 'BGk2Rx3DEjXdRv9qP8aKrypFoNjISAZ54l-3V05xpPOV-5ZQJvVH9OB9Rz5Ug7H_qH6CEr40f4Pi3DpjzYLbfCA';
+  private baseUrl = 'https://api3.angular-buch.com/notifications';
+
+  constructor(
+    private http: HttpClient,
+    private swPush: SwPush
+  ) { }
+
+  get isEnabled() {
+    return this.swPush.isEnabled;
+  }
+
+  subscribeToNotifications(): Promise<any> {
+    return this.swPush.requestSubscription({
+      serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+    .then(sub => this.sendToServer(sub))
+    .catch(err => console.error('Could not subscribe to notifications', err));
+  }
+
+  private sendToServer(params: PushSubscriptionJSON) {
+    this.http.post(this.baseUrl, params).subscribe();
+  }
+}
+```
+
+TODO:
+- describe changes in app.component.ts
+- describe changes in app.component.html
+
+Als letztes wollen wir noch darauf reagieren, dass ein Nutzer auf die angezeigte Benachrichtigung klickt.
+Hierfür abbonieren wir das Observable `notificationClicks`.
+Mit der Benachrichtigung wird im Property `data` eine URL angegeben, die zur Seite des neu angelegten Buches führt.
+Wir wollen diese URL nutzen und ein neues Browser-Fenster mit der aneggebenen URL öffen.
+An dieser Stelle nutzen wir `window.open()` und nicht den Angular Router, die Methode `notificationClicks` im Service Worker aufgerufen wird und die Benachrichtigung ggf. erschein, wenn wir wir App bereits geschlossen haben.
+
+```ts
+// ...
+@Injectable({ /* ... */ })
+export class WebNotificationService {
+  // ...
+  constructor(
+    private http: HttpClient,
+    private swPush: SwPush
+  ) {
+    this.swPush.notificationClicks.subscribe(event => {
+      const url = event.notification.data.url;
+      window.open(url, '_blank');
+    });
+  }
+  // ...
+}
+```
+
+
+Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
 ### Weiterführende Themen
 Dies war nur ein kleiner Einblick in PWAs mit Angular. Wer noch mehr über PWAs mit Angular erfahren möchte, sollte sich den Blogpost [Build a production ready PWA with Angular and Firebase](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan ansehen.
-Weiterhin haben wir uns in diesem Blogpost nicht der dritten Charakteristik von PWAs gewidmet: den Push-Notifications. Hierzu muss neben der der Fähigkeit der PWA Push-Notifications entgegen zu nehmen auch ein Sender der Nachrichten erzeugt werden. Hierzu wollen wir den Artikel [Angular’s PWA: SwPush and SwUpdate](https://medium.com/@arjenbrandenburgh/angulars-pwa-swpush-and-swupdate-15a7e5c154ac) von Arjen Brandenburgh empfehlen.
-
 
 Viel Spaß beim Programmieren!
