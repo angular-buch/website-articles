@@ -292,6 +292,7 @@ Erzeugen wir die Anwendung neu und starten wieder den Webserver, so sehen wir, d
 ![Screenshot Anzeige eines Updates der PWA](bm-pwa-update.png)
 
 ## Push-Notifications
+
 Zum Abschluss wollen wir uns noch der dritten Charakteristik von PWAs widmen: den Push-Notifications.
 Diese ermöglichen es uns per Server-Push Benachrichtigungen an alle Clients zu senden, die zuvor den Benachrichtigungsdienst aktiviert haben.
 Push-Notifications werden ebenfalls über Service Worker implementiert.
@@ -301,15 +302,13 @@ Anschließend soll in unserem Fall ein Anlegen eines neuen Buches (2) dazu führ
 
 ![Flow: PWA Push-Notifications](pwa-notification-flow.png)
 
-### Abbonieren von Benachrichtigungen
-
 Wir legen uns als erstes einen neuen Service an, der sich um die Push-Notifications kümmern soll. Hierzu verwenden wir am besten die Angular-CLI: `ng generate service WebNotification`.
 Das read-only property `VAPID_PUBLIC_KEY` enthält den Public-Key der BookMonkey API. Dieser wird für die Kommunikation zwischen dem Service Worker und dem Server mit web-push zwingend benötigt.
 
-Über den `isEnabled` greifen wir auf `SwPush` zu und wir erhalten Aufschluss darüber ob der verwendete Browser bzw. der genutzte Gerät Push-Notifications unterstützen.
-Die Methode `subscribeToNotifications()` greift auf die Angular `SwPush` API zu und fordert mit Übermittlung der Public-Keys des Servers die Aktivierung von Push-Notifications durch den Browser an. Sobald der Zugriff vom Nutzer genehmigt wird, wird die Methode `sendToServer()` mit dem zurückgeleiferten `PushSubscriptionJSON`-Objekt aufgerufen.
+Über `isEnabled` greifen wir auf `SwPush` zu und wir erhalten Aufschluss darüber ob der verwendete Browser bzw. das genutzte Gerät Push-Notifications unterstützt.
+Die Methode `subscribeToNotifications()` greift auf die Angular `SwPush` API zu und fordert mit Übermittlung des Public-Keys des Servers die Aktivierung von Push-Notifications durch den Browser an. Sobald der Zugriff vom Nutzer genehmigt wird, wird die Methode `sendToServer()` mit dem zurückgeleiferten Objekt `PushSubscriptionJSON` aufgerufen.
 Dieses enthält die notwendigen Abonnement-Daten, die der Server für die Speicherung und Adressierung der einzelnen Abbonenten benötigt.
-Wir übermitteln das Objekt per POST-Request an den Server. Um den Request auch tatsächlich abzusetzen müssen wir noch `subscribe()` auf dem Observable des `HttpClient`s aufrufen.
+Wir übermitteln das Objekt per HTTP POST-Request an den Server. Um den Request auch tatsächlich abzusetzen müssen wir noch `subscribe()` auf dem Observable des `HttpClient`'s aufrufen.
 
 ```ts
 // ...
@@ -344,15 +343,91 @@ export class WebNotificationService {
 }
 ```
 
-TODO:
-- describe changes in app.component.ts
-- describe changes in app.component.html
+Im nächsten Schritt wollen wir den gerade erstellten Service konsumieren. Hierzu bearbeiten wir die Datei `app.component.ts`.
+Wir legen die beiden Properties `isEnabled` und `permission` als Hilfe an, um den Nutzern später im Template den enstprechenden Status der Push-Notifications anzuzeigen.
+Über `Notification.permission` erhalten wir vom Browser den Wert `default`, sofern noch keine Auswahl getroffen wurde, ob Benachrichtigungen durch den Nutzer genehmigt wurden.
+Bestätigt ein Nutzer die Nachfrage, wird der Wert `granted` gesetzt. Bei Ablehnung erhalten wir den Wert `denied`.
+Zum Abschluss benötigen wir noch die Methode `submitNotification()`. Diese soll beim Klick auf einen Button ausgeführt werden. Sie nutzt unseren Service, der zuvor über Dependency Injection injiziert wurde. Sobald uns die Promise `subscribeToNotifications()` einen neuen Zustand liefert (Ein Nutzer hat eine Auswahl getroffen), wollen wir den Wert des Propertys `permission` updaten.
 
-Als letztes wollen wir noch darauf reagieren, dass ein Nutzer auf die angezeigte Benachrichtigung klickt.
+```ts
+// ...
+import { WebNotificationService } from './shared/web-notification.service';
+
+@Component({/* ... */})
+export class AppComponent implements OnInit {
+  isEnabled = false;
+  permission = Notification.permission;
+
+  constructor(
+    private swUpdate: SwUpdate,
+    private webNotificationService: WebNotificationService
+  ) {}
+
+  ngOnInit() {
+    // ...
+    this.isEnabled = this.webNotificationService.isEnabled;
+  }
+
+  submitNotification() {
+    this.webNotificationService.subscribeToNotifications()
+      .then(() => this.permission = Notification.permission);
+  }
+}
+```
+
+Zum Schluss fehlen nur noch ein paar kleine Anpassungen am Template (`app.component.html`).
+Hier wollen wir einen Menüpunkt mit einem Button im rechten Bereich der Menüleiste einfügen.
+Der Button soll deaktiviert sein, sofern keine Push-Notifikations unterstützt werden (z.B. im Development-Mode von Angular oder wenn der genutzte Browser diese Funktion nicht unterstützt).
+Wird die Funktion unterstützt, prüfen wir noch auf die drei Zustände `default`, `granted` und `denied`. Die [CSS-Klassen von Semantic UI](https://semantic-ui.com/elements/button.html) sorgen für das entsprechende Styling.
+
+```html
+<div class="ui menu">
+  <!-- ... -->
+  <div class="right menu">
+    <div class="item">
+      <div class="ui button"
+        (click)="submitNotification()"
+        [ngClass]="{
+          'disabled': !isEnabled,
+          'default':  isEnabled && permission === 'default',
+          'positive': isEnabled && permission === 'granted',
+          'negative': isEnabled && permission === 'denied'
+        }"
+      >Benachrichtigungen</div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+```
+
+Geschafft! Schauen wir uns nun das Resultat im Development-Modus an, sehen wir, dass der Button ausgegraut und nicht klickbar ist, da hier die Notifications nicht unterstützt werden.
+
+![Screenshot: PWA Push-Notifications disabled](pwa-notification-disabled.png)
+
+Bauen wir die Anwendung hingegen im Production mode und starten den `angular-http-server`, so ist der Button klickbar und ist zunächst im `default` Zustand.
+Klicken wir den Button an, fragt uns der Browser, ob wir Push-Notifications aktivieren wollen.
+
+![Screenshot: PWA Access to Push-Notifications default](pwa-notification-default.png)
+
+Wenn wir den Zugriff gewähren, wird der Button durch die CSS-Klasse `success` grün und wir erhalten vom Server direkt eine erste Bestätigung, dass die Benachrichtigungen aktiviert wurden.
+
+![Screenshot: PWA Success Push-Notification](pwa-notification-success.png)
+
+![Screenshot: PWA Access to Push-Notifications granted](pwa-notification-granted.png)
+
+Wird nun ein neues Buch zur API hinzugefügt, erhalten wir immer eine Benachrichtigung darüber. Sie können das ausprobieren indem Sie entwerder über die App selbst ein Buch hinzufügen oder indem Sie die [BookMonkey API](https://api3.angular-buch.com/swagger-ui/#/book/post_book) dafür nutzen.
+
+![Screenshot: PWA Push-Notification bei einem neuen Buch](pwa-notification-new-book.png)
+
+Lehnen wir hingegen ab, Benachrichtigungen zu erhalten, so färbt sich der Button rot und wir werden nicht über Neue Bücher informiert.
+
+![Screenshot: PWA Access to Push-Notifications denied](pwa-notification-denied.png)
+
+Wir wollen noch einen Schritt weriter gehen und darauf reagieren, dass ein Nutzer auf die angezeigte Benachrichtigung klickt.
 Hierfür abbonieren wir das Observable `notificationClicks`.
 Mit der Benachrichtigung wird im Property `data` eine URL angegeben, die zur Seite des neu angelegten Buches führt.
 Wir wollen diese URL nutzen und ein neues Browser-Fenster mit der aneggebenen URL öffen.
-An dieser Stelle nutzen wir `window.open()` und nicht den Angular Router, die Methode `notificationClicks` im Service Worker aufgerufen wird und die Benachrichtigung ggf. erschein, wenn wir wir App bereits geschlossen haben.
+An dieser Stelle nutzen wir `window.open()` und nicht den Angular Router, da die Methode `notificationClicks()` im Service Worker aufgerufen wird und die Benachrichtigung ggf. erscheint, wenn wir die App bereits geschlossen haben.
 
 ```ts
 // ...
@@ -372,9 +447,10 @@ export class WebNotificationService {
 }
 ```
 
-
 Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
+
 ### Weiterführende Themen
+
 Dies war nur ein kleiner Einblick in PWAs mit Angular. Wer noch mehr über PWAs mit Angular erfahren möchte, sollte sich den Blogpost [Build a production ready PWA with Angular and Firebase](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan ansehen.
 
 Viel Spaß beim Programmieren!
