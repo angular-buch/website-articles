@@ -379,9 +379,10 @@ Zum Schluss fehlen nur noch ein paar kleine Anpassungen am Template (`app.compon
 Hier wollen wir einen Menüpunkt mit einem Button im rechten Bereich der Menüleiste einfügen.
 Der Button soll deaktiviert sein, sofern keine Push-Notifikations unterstützt werden (z.B. im Development-Mode von Angular oder wenn der genutzte Browser diese Funktion nicht unterstützt).
 Wird die Funktion unterstützt, prüfen wir noch auf die drei Zustände `default`, `granted` und `denied`. Die [CSS-Klassen von Semantic UI](https://semantic-ui.com/elements/button.html) sorgen für das entsprechende Styling.
+Die CSS-Klasse `mini` im übergeordneten `div` macht das Menü etwas kleiner, sodass es auch auf dem Smartphone gut aussieht.
 
 ```html
-<div class="ui menu">
+<div class="ui mini menu">
   <!-- ... -->
   <div class="right menu">
     <div class="item">
@@ -393,7 +394,7 @@ Wird die Funktion unterstützt, prüfen wir noch auf die drei Zustände `default
           'positive': permission === 'granted',
           'negative': permission === 'denied'
         }"
-      >Benachrichtigungen</div>
+      >🔔</div>
     </div>
   </div>
 </div>
