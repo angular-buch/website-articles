@@ -344,9 +344,10 @@ export class WebNotificationService {
 ```
 
 Im nächsten Schritt wollen wir den gerade erstellten Service konsumieren. Hierzu bearbeiten wir die Datei `app.component.ts`.
-Wir legen die beiden Properties `isEnabled` und `permission` als Hilfe an, um den Nutzern später im Template den enstprechenden Status der Push-Notifications anzuzeigen.
+Wir legen das Property `permission` als Hilfe an, um den Nutzern später im Template den enstprechenden Status der Push-Notifications anzuzeigen.
 Über `Notification.permission` erhalten wir vom Browser den Wert `default`, sofern noch keine Auswahl getroffen wurde, ob Benachrichtigungen durch den Nutzer genehmigt wurden.
 Bestätigt ein Nutzer die Nachfrage, wird der Wert `granted` gesetzt. Bei Ablehnung erhalten wir den Wert `denied`.
+Als initialen Wert wollen wir `null` verwenden. Dieser wird ebenso verwendet, wenn der Benachrichtigungsdienst nicht unterstützt wird.
 Zum Abschluss benötigen wir noch die Methode `submitNotification()`. Diese soll beim Klick auf einen Button ausgeführt werden. Sie nutzt unseren Service, der zuvor über Dependency Injection injiziert wurde. Sobald uns die Promise `subscribeToNotifications()` einen neuen Zustand liefert (Ein Nutzer hat eine Auswahl getroffen), wollen wir den Wert des Propertys `permission` updaten.
 
 ```ts
@@ -355,8 +356,7 @@ import { WebNotificationService } from './shared/web-notification.service';
 
 @Component({/* ... */})
 export class AppComponent implements OnInit {
-  isEnabled = false;
-  permission = Notification.permission;
+  permission: NotificationPermission | null = null;
 
   constructor(
     private swUpdate: SwUpdate,
@@ -365,7 +365,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     // ...
-    this.isEnabled = this.webNotificationService.isEnabled;
+    this.permission = this.webNotificationService.isEnabled ? Notification.permission : null;
   }
 
   submitNotification() {
@@ -388,10 +388,10 @@ Wird die Funktion unterstützt, prüfen wir noch auf die drei Zustände `default
       <div class="ui button"
         (click)="submitNotification()"
         [ngClass]="{
-          'disabled': !isEnabled,
-          'default':  isEnabled && permission === 'default',
-          'positive': isEnabled && permission === 'granted',
-          'negative': isEnabled && permission === 'denied'
+          'disabled': !permission,
+          'default':  permission === 'default',
+          'positive': permission === 'granted',
+          'negative': permission === 'denied'
         }"
       >Benachrichtigungen</div>
     </div>
