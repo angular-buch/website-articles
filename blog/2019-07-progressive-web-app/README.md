@@ -316,7 +316,8 @@ Anschließend soll in unserem Fall das Anlegen eines neuen Buchs auf dem Server 
 
 ![Flow: PWA Push-Notifications](pwa-notification-flow.png)
 
-Um Push-Benachrichtigungen vom Server an die Clients zu schicken, kommt die Technologie [WebPush](https://developers.google.com/web/fundamentals/push-notifications/) zum Einsatz, die moderne Browser nativ unterstützen.
+Um Push-Benachrichtigungen vom Server an die Clients zu schicken, kommt die sogenannte [Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) zum Einsatz, die moderne Browser nativ unterstützen.
+Die Technologie wird auch _WebPush_ genannt.
 
 Wir legen als Erstes einen neuen Service an, der sich um die Push Notifications kümmern soll: `ng generate service web-notification`.
 Das read-only Property `VAPID_PUBLIC_KEY` enthält den Public-Key der BookMonkey API. Dieser wird für die Kommunikation zwischen dem Service Worker und dem Server mit WebPush zwingend benötigt.
