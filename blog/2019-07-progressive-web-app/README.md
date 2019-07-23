@@ -5,13 +5,13 @@ mail: mail@d-koppenhagen.de
 published: 2019-07-18
 lastModified: 2019-07-18
 keywords:
-  - PWA
-  - Progressive Web App
-  - Angular
-  - Service Worker
-  - Web App Manifest
-  - Caching
-  - Push Notification
+  * PWA
+  * Progressive Web App
+  * Angular
+  * Service Worker
+  * Web App Manifest
+  * Caching
+  * Push Notification
 language: de
 thumbnail: ./pwaheader.jpg
 sticky: false
@@ -31,17 +31,16 @@ Inhalt:
 * [Offline-Funktionalität](/blog/2019-07-progressive-web-app#offline-funktionalit-t)
 * [Push Notifications](/blog/2019-07-progressive-web-app#push-notifications)
 
-
-
 ## Webanwendung vs. PWA vs. App
 
 Wir wollen zunächst den Begriff der PWA etwas konkreter einordnen. Dazu schauen wir uns den Unterschied einer PWA im Vergleich zu einer herkömmlichen Webanwendung und einer App an.
 Mithilfe einer Webanwendung kann ein Nutzer über eine URL im Browser Informationen abrufen und verarbeiten. Eine App erfüllt einen ähnlichen Zweck, wird allerdings auf einem Gerät lokal installiert und benötigt in der Regel keinen Browser zur Informationsverarbeitung. Weiterhin kann eine App prinzipiell auch offline genutzt werden, und sie hat oft Zugriff auf native Funktionen des Geräts: Push Notifications und Zugriff auf das Dateisystem sowie Kamera und Sensorik. Eine PWA stellt nun eine Art Mix von beidem dar: Es handelt sich grundlegend auch um eine Webanwendung, sie wird allerdings durch den Nutzer heruntergeladen und auf dem lokalen Gerät gespeichert. Weiterhin sorgt eine PWA dafür, dass die wichtigsten Daten im Client gecacht werden. Somit bleiben Informationen, die die Anwendung liefert, stets abrufbar – auch wenn ggf. keine durchgängige Internetverbindung vorhanden ist. Außerdem kann eine PWA auch Push Notifications erhalten und anzeigen.
 
 Die drei wichtigsten Charakteristiken einer PWA sind also folgende:
-- "Add to Homescreen"-Funktionalität
-- Offline-Fähigkeit
-- Push Notifications
+
+* "Add to Homescreen"-Funktionalität
+* Offline-Fähigkeit
+* Push Notifications
 
 ### Service Worker
 
@@ -62,12 +61,12 @@ cd BookMonkey-PWA
 Als Nächstes fügen wir das Paket `@angular/pwa` mithilfe von `ng add` zum Projekt hinzu.
 Die dahinterliegenden Schematics nehmen uns bereits einen Großteil der Arbeit zum Erzeugen der PWA ab:
 
-- Hinzufügen des Pakets `@angular/service-worker` zu unserem Projekt
-- Aktivieren des Build Support für Service Worker in der Angular CLI
-- Importieren und Registrieren des `ServiceWorkerModule` im `AppModule`
-- Update der Datei `index.html` mit einem Link zum Web App Manifest (`manifest.json`) sowie Hinzufügen relevanter Meta-Tags
-- Erzeugen und Verlinken von Icon-Dateien
-- Erzeugen der Konfigurationsdatei `ngsw-config.json` für den Service Worker
+* Hinzufügen des Pakets `@angular/service-worker` zu unserem Projekt
+* Aktivieren des Build Support für Service Worker in der Angular CLI
+* Importieren und Registrieren des `ServiceWorkerModule` im `AppModule`
+* Update der Datei `index.html` mit einem Link zum Web App Manifest (`manifest.json`) sowie Hinzufügen relevanter Meta-Tags
+* Erzeugen und Verlinken von Icon-Dateien
+* Erzeugen der Konfigurationsdatei `ngsw-config.json` für den Service Worker
 
 ```bash
 ng add @angular/pwa --project BookMonkey
@@ -108,9 +107,6 @@ Im Safari kann über den Button _Teilen_ (kleines Rechteck mit einem Pfeil nach 
 Nach Bestätigung des Dialogfelds wird eine Verknüfung auf dem Homescreen angelegt.
 Aber: Haben wir hier noch keine speziellen Icons hinterlegt, wird ggf. nur eine Miniatur der Website als Icon angezeigt.
 
-<!-- TODO: Prüfen, Screenshot:
-- Unter Android erscheint die Add-to-Homescreen funktion beim Aufruf einer PWA als Dialog. -->
-
 ### Das Web App Manifest anpassen (`manifest.json`)
 
 Das Web App Manifest ist eine JSON-Datei, die dem Browser mitteilt, wie sich die Anwendung verhalten soll, wenn Sie installiert wird. Hier wird beispielsweise eine Hintergrundfarbe für die Menüleiste auf den nativen Endgeräten hinterlegt, und es werden die Pfade zu hinterlegten Icons angegeben.
@@ -124,7 +120,7 @@ Wollen wir das Standard-Icon ändern, laden wir hier einfach ein Bild hoch und l
 ### Anpassungen für iOS (`index.html`)
 
 Wollen wir unsere PWA unter iOS installieren, sind noch einige Anpassungen an der Datei `index.html` notwendig.
-iOS-Geräte benötigen spezielle `meta`- und `link`-Tags zur Identifizierung der zugehörigen Icons, denn sie extrahieren diese Informationen nicht aus dem Web-Manifest.
+iOS-Geräte benötigen spezielle `meta`* und `link`-Tags zur Identifizierung der zugehörigen Icons, denn sie extrahieren diese Informationen nicht aus dem Web-Manifest.
 
 Um das Icon für den Homescreen zu definieren, müssen die folgenden Zeilen in die Datei `index.html` eingefügt werden:
 
@@ -149,16 +145,16 @@ Die erste Zeile teilt iOS-Geräten mit, dass die Webanwendung als App genutzt we
   ...
   <meta name="apple-mobile-web-app-capable" content="yes">
   ...
-  <link href="assets/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="assets/splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+  <link href="assets/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+  <link href="assets/splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 </head>
 ```
 
@@ -174,7 +170,7 @@ Als Letztes haben wir noch die Möglichkeit, die Statusbar der App hinsichtlich 
 
 Wir können als Wert für `content` zwischen den folgenden Einstellungen wählen:
 
-|                     | Text- und Iconfarbe | Hintergrundfarbe                        |
+|                     | Text* und Iconfarbe | Hintergrundfarbe                        |
 |---------------------|---------------------|-----------------------------------------|
 | `default`           | Schwarz             | Weiß                                    |
 | `white`             | Schwarz             | Weiß                                    |
@@ -416,7 +412,7 @@ Die CSS-Klasse `mini` im übergeordneten `<div>` macht das Menü etwas kleiner, 
 
 ```html
 <div class="ui mini menu">
-  <!-- ... -->
+  <!-* ... -->
   <div class="right menu">
     <div class="item">
       <div class="ui button"
@@ -427,7 +423,7 @@ Die CSS-Klasse `mini` im übergeordneten `<div>` macht das Menü etwas kleiner, 
           'positive': permission === 'granted',
           'negative': permission === 'denied'
         }"
-      >🔔</div>
+      >Benachrichtigungen</div>
     </div>
   </div>
 </div>
@@ -499,11 +495,11 @@ So wird es ermöglicht, dass auch Nachrichten empfangen werden können, wenn die
 Aber wie funktioniert der Rückkanal vom Server zum Client?
 Dazu schauen wir uns das automatisch generierte Objekt vom Typ `PushSubscription` einmal genauer an:
 
-```js
+```json
 {
   "endpoint": "https://fcm.googleapis.com/fcm/send/erSmNAsF0ew:APA91bGfjlCRi8nIpG9fvxezt_2E0JcfJ0I_4gnm2M29JQ3kF3d_XxUqrlQatWNGotPtsW-M57vsLxhNz9vRz0IQr3KB50Dm2wjm7gAbVo1c00VpDv7-2JynXNGk1RqimZ-TfYzzAjdu",
   "expirationTime": null,
-  "keys": { 
+  "keys": {
     "p256dh":"BO4BdhfvZ4bo3hh7NBJDb--OZWcQ37M0O8XZY6lJ67g3x7JvmzMJhz_w_EaEVKFLskkDccO3iKsXkxtlSromdzU",
     "auth":"IH-eOcRdlxZ8P8uLl-2e6g"
   }
@@ -517,9 +513,6 @@ Die Notwendigkeit der Verschlüsselung mit den VAPID-Keys wird hier noch einmal 
 Ebenso interessant ist, dass die Endpoint-URL aus dem Universum des Browserherstellers kommt.
 Bitte behalten Sie diesen Punkt stets im Hinterkopf: Alle Push-Nachrichten werden immer durch einen fremden Server zum Client gebracht.
 
-
-
-
 ## Weiterführende Themen
 
 Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
@@ -529,7 +522,4 @@ Dies war nur ein kleiner Einblick in Progressive Web Apps mit Angular. Wer noch 
 
 Viel Spaß beim Programmieren!
 
-
 <small>**Titelbild:** Photo by rawpixel.com from Pexels, angepasst</small>
-
-
