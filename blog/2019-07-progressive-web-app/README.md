@@ -493,8 +493,7 @@ Haben wir alle Teile korrekt implementiert, kann der Client Push-Nachrichten vom
 Wir wiederholen kurz dem Ablauf:
 Der Client macht sich zunächst beim Server bekannt, indem er ein Objekt vom Typ `PushSubscription` an den Server übermittelt.
 In unserem Beispiel haben wir dazu die Service-Methode `sendToServer()` verwendet.
-Der Server speichert dieses Objekt und verwendet es, um Nachrichten an genau diesen Client zu übermitteln.
-Die Nachrichten werden nicht an die Anwendung übermittelt, sondern an den registrierten Service Worker.
+Der Server speichert dieses Objekt und verwendet es, um Nachrichten an den registrieren Service Worker zu übermitteln.
 So wird es ermöglicht, dass auch Nachrichten empfangen werden können, wenn die Anwendung geschlossen ist.
 
 Aber wie funktioniert der Rückkanal vom Server zum Client?
@@ -515,9 +514,8 @@ Besonders interessant ist das Property `endpoint`: Der Browser übermittelt eine
 Der Server sendet dazu lediglich einen HTTP-Request an diese URL.
 Die Notwendigkeit der Verschlüsselung mit den VAPID-Keys wird hier noch einmal deutlicher.
 
-Ebenso interessant ist, dass die Endpoint-URL aus dem Universum von Google stammt.
-Bitte behalten Sie diesen Punkt stets im Hinterkopf: Alle Push-Nachrichten werden immer durch die Server von Google zum Client gebracht.
-Für Firefox wird natürlich entsprechend ein Server von Mozilla verwendet.
+Ebenso interessant ist, dass die Endpoint-URL aus dem Universum des Browserherstellers kommt.
+Bitte behalten Sie diesen Punkt stets im Hinterkopf: Alle Push-Nachrichten werden immer durch einen fremden Server zum Client gebracht.
 
 
 
