@@ -487,6 +487,40 @@ Die Nachricht verhält sich wie eine native Benachrichtigung jeder anderen App.
 Im Hintergrund wird die Technologie WebPush eingesetzt, die fest mit dem Angular-Service `SwPush` verdrahtet ist.
 `SwPush` bietet also keine einfache Möglichkeit, eine Nachricht aus einer lokalen Quelle anzuzeigen.
 
+### Ein Blick unter die Haube von Push Notifications
+
+Haben wir alle Teile korrekt implementiert, kann der Client Push-Nachrichten vom Server empfangen.
+Wir wiederholen kurz dem Ablauf:
+Der Client macht sich zunächst beim Server bekannt, indem er ein Objekt vom Typ `PushSubscription` an den Server übermittelt.
+In unserem Beispiel haben wir dazu die Service-Methode `sendToServer()` verwendet.
+Der Server speichert dieses Objekt und verwendet es, um Nachrichten an genau diesen Client zu übermitteln.
+Die Nachrichten werden nicht an die Anwendung übermittelt, sondern an den registrierten Service Worker.
+So wird es ermöglicht, dass auch Nachrichten empfangen werden können, wenn die Anwendung geschlossen ist.
+
+Aber wie funktioniert der Rückkanal vom Server zum Client?
+Dazu schauen wir uns das automatisch generierte Objekt vom Typ `PushSubscription` einmal genauer an:
+
+```js
+{
+  "endpoint": "https://fcm.googleapis.com/fcm/send/erSmNAsF0ew:APA91bGfjlCRi8nIpG9fvxezt_2E0JcfJ0I_4gnm2M29JQ3kF3d_XxUqrlQatWNGotPtsW-M57vsLxhNz9vRz0IQr3KB50Dm2wjm7gAbVo1c00VpDv7-2JynXNGk1RqimZ-TfYzzAjdu",
+  "expirationTime": null,
+  "keys": { 
+    "p256dh":"BO4BdhfvZ4bo3hh7NBJDb--OZWcQ37M0O8XZY6lJ67g3x7JvmzMJhz_w_EaEVKFLskkDccO3iKsXkxtlSromdzU",
+    "auth":"IH-eOcRdlxZ8P8uLl-2e6g"
+  }
+}
+```
+
+Besonders interessant ist das Property `endpoint`: Der Browser übermittelt eine URL, über die der Server Nachrichten an den Client schicken kann.
+Der Server sendet dazu lediglich einen HTTP-Request an diese URL.
+Die Notwendigkeit der Verschlüsselung mit den VAPID-Keys wird hier noch einmal deutlicher.
+
+Ebenso interessant ist, dass die Endpoint-URL aus dem Universum von Google stammt.
+Bitte behalten Sie diesen Punkt stets im Hinterkopf: Alle Push-Nachrichten werden immer durch die Server von Google zum Client gebracht.
+Für Firefox wird natürlich entsprechend ein Server von Mozilla verwendet.
+
+
+
 
 ## Weiterführende Themen
 
