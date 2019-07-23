@@ -22,6 +22,17 @@ Immer häufiger stößt man im Webumfeld auf den Begriff der Progessive Web App 
 Als _Progressive Web App_ bezeichnen wir eine Webanwendung, die beim Aufruf einer Website als App auf einem lokalen Gerät installiert werden kann – zum Beispiel auf dem Telefon oder Tablet.
 Die PWA lässt sich wie jede andere App nutzen, inklusive Push-Benachrichtigungen!
 
+<hr>
+
+Inhalt:
+
+* [Webanwendung vs. PWA vs. App](/blog/2019-07-progressive-web-app#webanwendung-vs-pwa-vs-app)
+* [Add to Homescreen](/blog/2019-07-progressive-web-app#add-to-homescreen)
+* [Offline-Funktionalität](/blog/2019-07-progressive-web-app#offline-funktionalit-t)
+* [Push Notifications](/blog/2019-07-progressive-web-app#push-notifications)
+
+
+
 ## Webanwendung vs. PWA vs. App
 
 Wir wollen zunächst den Begriff der PWA etwas konkreter einordnen. Dazu schauen wir uns den Unterschied einer PWA im Vergleich zu einer herkömmlichen Webanwendung und einer App an.
@@ -32,13 +43,13 @@ Die drei wichtigsten Charakteristiken einer PWA sind also folgende:
 - Offline-Fähigkeit
 - Push Notifications
 
-## Service Worker
+### Service Worker
 
 Als Grundvoraussetzung, um eine PWA offlinefähig zu machen und Push-Benachrichtigungen zu versenden, werden die sogenannten *Service Worker* benötigt. Service Worker sind gewissermaßen kleine Helfer des Browsers, die bestimmte Aufgaben im Hintergrund übernehmen.
 Hierzu zählen das Speichern und Abrufen der Daten auf einem Endgerät. Service Worker prüfen beispielsweise, ob eine Netzwerkverbindung besteht, und senden  – je nach Konfiguration – Daten aus dem Cache an die Anwendung, oder versuchen, die Daten online abzurufen.
 Eine weitere Aufgabe ist das Empfangen von Push-Benachrichtigungen vom Server.
 
-## Eine bestehende Angular-Anwendung in eine PWA verwandeln
+### Eine bestehende Angular-Anwendung in eine PWA verwandeln
 
 Schauen wir uns das Ganze an einem Beispiel an.
 Wie wollen das [Beispielprojekt BookMonkey](https://book-monkey3.angular-buch.com) aus dem Angular-Buch in eine PWA verwandeln. Somit können Nutzer die App auf ihrem Gerät installieren und erhalten stets Buchdaten, auch wenn gerade keine Netzwerkkonnektivität vorhanden ist. Zunächst klonen wir uns hierfür die bestehende Webanwendung in ein lokales Repository:
@@ -477,7 +488,7 @@ Im Hintergrund wird die Technologie WebPush eingesetzt, die fest mit dem Angular
 `SwPush` bietet also keine einfache Möglichkeit, eine Nachricht aus einer lokalen Quelle anzuzeigen.
 
 
-### Weiterführende Themen
+## Weiterführende Themen
 
 Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
 Eine Demo finden Sie unter https://bm3-pwa.angular-buch.com.
