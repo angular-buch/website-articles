@@ -5,13 +5,13 @@ mail: mail@d-koppenhagen.de
 published: 2019-07-18
 lastModified: 2019-07-18
 keywords:
-  * PWA
-  * Progressive Web App
-  * Angular
-  * Service Worker
-  * Web App Manifest
-  * Caching
-  * Push Notification
+  - PWA
+  - Progressive Web App
+  - Angular
+  - Service Worker
+  - Web App Manifest
+  - Caching
+  - Push Notification
 language: de
 thumbnail: ./pwaheader.jpg
 sticky: false
