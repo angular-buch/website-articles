@@ -13,7 +13,7 @@ keywords:
   - Caching
   - Push Notification
 language: de
-thumbnail: ./pwa.jpg
+thumbnail: ./pwaheader.jpg
 sticky: false
 hidden: true
 ---
@@ -480,8 +480,13 @@ Im Hintergrund wird die Technologie WebPush eingesetzt, die fest mit dem Angular
 ### Weiterführende Themen
 
 Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
-Eine Demo finden Sie unter https://book-monkey3-pwa.angular-buch.com.
+Eine Demo finden Sie unter https://bm3-pwa.angular-buch.com.
 
 Dies war nur ein kleiner Einblick in Progressive Web Apps mit Angular. Wer noch mehr über PWAs mit Angular erfahren möchte, dem sei der Blogpost ["Build a production ready PWA with Angular and Firebase"](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfohlen.
 
 Viel Spaß beim Programmieren!
+
+
+<small>**Titelbild:** Photo by rawpixel.com from Pexels, angepasst</small>
+
+
