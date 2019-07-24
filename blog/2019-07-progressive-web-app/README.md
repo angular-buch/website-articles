@@ -2,8 +2,8 @@
 title: "Mach aus deiner Webanwendung eine PWA"
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
-published: 2019-07-18
-lastModified: 2019-07-18
+published: 2019-07-24
+lastModified: 2019-07-24
 keywords:
   - PWA
   - Progressive Web App
@@ -15,7 +15,6 @@ keywords:
 language: de
 thumbnail: ./pwaheader.jpg
 sticky: false
-hidden: true
 ---
 
 Immer häufiger stößt man im Webumfeld auf den Begriff der Progessive Web App – kurz: PWA. Doch was genau steckt dahinter und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder einer App?
