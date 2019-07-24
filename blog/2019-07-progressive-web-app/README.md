@@ -162,9 +162,9 @@ Als Letztes haben wir noch die Möglichkeit, die Statusbar der App hinsichtlich 
 
 ```html
 <head>
-  ...
+  <!-- ... -->
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  ...
+  <!-- ... -->
 </head>
 ```
 
