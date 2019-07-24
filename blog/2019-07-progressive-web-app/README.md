@@ -320,7 +320,7 @@ Push Notifications werden ebenfalls mithilfe von Service Workern implementiert.
 Die nachfolgende Abbildung stellt den Ablauf von Push-Benachrichtigungen schematisch dar. Im ersten Schritt abonnieren ein oder mehrere Clients die Benachrichtigungen (1).
 Anschließend soll in unserem Fall das Anlegen eines neuen Buchs auf dem Server (2) dazu führen, dass alle Abonnenten darüber benachrichtigt werden (3). In Schritt 4 wollen wir reagieren, wenn die Benachrichtigung angeklickt wird und wollen das neu angelegte Buch öffnen (4).
 
-![Flow: PWA Push-Notifications](pwa-notification-flow.png)
+![Flow: PWA Push-Notifications](pwa-notification-flow.svg)
 
 Um Push-Benachrichtigungen vom Server an die Clients zu schicken, kommt die sogenannte [Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) zum Einsatz, die moderne Browser nativ unterstützen.
 Die Technologie wird auch _WebPush_ genannt.
