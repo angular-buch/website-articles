@@ -1,5 +1,5 @@
 ---
-title: "Mach aus deiner Webanwendung eine PWA"
+title: "Mach aus deiner Angular-App eine PWA"
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
 published: 2019-07-24
