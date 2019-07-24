@@ -142,9 +142,9 @@ Die erste Zeile teilt iOS-Geräten mit, dass die Webanwendung als App genutzt we
 
 ```html
 <head>
-  ...
+  <!-- ... -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  ...
+  <!-- ... -->
   <link href="assets/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
   <link href="assets/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
   <link href="assets/splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image">
