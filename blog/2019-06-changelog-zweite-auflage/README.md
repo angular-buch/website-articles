@@ -11,7 +11,7 @@ keywords:
   - Zweite Auflage
 language: de
 thumbnail: ../x_shared/buchblogheader.png
-sticky: true
+sticky: false
 ---
 
 Im Juni 2019 erschien die zweite Auflage des deutschsprachigen Angular-Buchs.

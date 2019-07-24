@@ -14,7 +14,7 @@ keywords:
   - Push Notification
 language: de
 thumbnail: ./pwaheader.jpg
-sticky: false
+sticky: false 
 ---
 
 Immer häufiger stößt man im Webumfeld auf den Begriff der Progessive Web App – kurz: PWA. Doch was genau steckt dahinter und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder einer App?
