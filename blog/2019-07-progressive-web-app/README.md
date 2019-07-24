@@ -321,7 +321,7 @@ Push Notifications werden ebenfalls mithilfe von Service Workern implementiert.
 Die nachfolgende Abbildung stellt den Ablauf von Push-Benachrichtigungen schematisch dar. Im ersten Schritt abonnieren ein oder mehrere Clients die Benachrichtigungen (1).
 Anschließend soll in unserem Fall das Anlegen eines neuen Buchs auf dem Server (2) dazu führen, dass alle Abonnenten darüber benachrichtigt werden (3). In Schritt 4 wollen wir reagieren, wenn die Benachrichtigung angeklickt wird und wollen das neu angelegte Buch öffnen (4).
 
-![Flow: PWA Push-Notifications](pwa-notification-flow.svg)
+![Flow: PWA Push Notifications](pwa-notification-flow.svg)
 
 Um Push-Benachrichtigungen vom Server an die Clients zu schicken, kommt die sogenannte [Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) zum Einsatz, die moderne Browser nativ unterstützen.
 Die Technologie wird auch _WebPush_ genannt.
@@ -406,7 +406,7 @@ export class AppComponent implements OnInit {
 
 Zum Schluss fehlen nur noch ein paar kleine Anpassungen am Template (`app.component.html`).
 Hier wollen wir einen Menüpunkt mit einem Button im rechten Bereich der Menüleiste einfügen.
-Der Button soll deaktiviert sein, sofern keine Push-Notifikations unterstützt werden (z. B. im Development-Modus von Angular oder wenn der genutzte Browser diese Funktion nicht unterstützt).
+Der Button soll deaktiviert sein, sofern keine Push Notifications unterstützt werden (z. B. im Development-Modus von Angular oder wenn der genutzte Browser diese Funktion nicht unterstützt).
 Wird die Funktion unterstützt, prüfen wir noch auf die drei Zustände `default`, `granted` und `denied`. Die [CSS-Klassen von Semantic UI](https://semantic-ui.com/elements/button.html) sorgen für das entsprechende Styling.
 Die CSS-Klasse `mini` im übergeordneten `<div>` macht das Menü etwas kleiner, sodass es auch auf dem Smartphone gut aussieht.
 
@@ -432,7 +432,7 @@ Die CSS-Klasse `mini` im übergeordneten `<div>` macht das Menü etwas kleiner, 
 
 Geschafft! Schauen wir uns nun das Resultat im Development-Modus an, sehen wir, dass der Button ausgegraut und nicht klickbar ist, da hier die Notifications nicht unterstützt werden.
 
-![Screenshot: PWA Push-Notifications disabled](pwa-notification-disabled.png)
+![Screenshot: PWA Push Notifications disabled](pwa-notification-disabled.png)
 
 Bauen wir die Anwendung hingegen im Production-Modus und starten den `angular-http-server`, so ist der Button klickbar und ist zunächst im Zustand `default`.
 Klicken wir den Button an, fragt uns der Browser, ob wir Push Notifications aktivieren wollen.
@@ -443,7 +443,7 @@ Wenn wir den Zugriff gewähren, wird der Button durch die CSS-Klasse `success` g
 
 ![Screenshot: PWA Success Push Notification](pwa-notification-success.png)
 
-![Screenshot: PWA Access to Push-Notifications granted](pwa-notification-granted.png)
+![Screenshot: PWA Access to Push Notifications granted](pwa-notification-granted.png)
 
 Der API-Server unterstützt bereits WebPush: Wird nun ein neues Buch zur API hinzugefügt, erhalten wir eine Push-Benachrichtigung! Sie können das Feature ausprobieren, indem Sie entweder über die App selbst ein Buch hinzufügen, oder indem Sie die [BookMonkey API](https://api3.angular-buch.com/swagger-ui/#/book/post_book) dafür nutzen.
 
@@ -451,7 +451,7 @@ Der API-Server unterstützt bereits WebPush: Wird nun ein neues Buch zur API hin
 
 Lehnen wir hingegen ab, Benachrichtigungen zu erhalten, so färbt sich der Button rot, und wir werden nicht über neue Bücher informiert.
 
-![Screenshot: PWA Access to Push-Notifications denied](pwa-notification-denied.png)
+![Screenshot: PWA Access to Push Notifications denied](pwa-notification-denied.png)
 
 Unter iOS wird die Funktionalität nicht unterstützt, daher bleibt der Button ausgegraut:
 
@@ -461,7 +461,7 @@ Screenshot Android | Screenshot iOS
 
 
 
-### Auf die Push-Notification reagieren
+### Auf die Push Notification reagieren
 
 Wir wollen zum Abschluss noch einen Schritt weiter gehen und darauf reagieren, dass ein Nutzer auf die angezeigte Benachrichtigung klickt.
 Hierfür stellt der Service `SwPush` das Observable `notificationClicks` zur Verfügung.
@@ -528,10 +528,10 @@ Bitte behalten Sie diesen Punkt stets im Hinterkopf: Alle Push-Nachrichten werde
 Wie Sie sehen, gelingt der Einstieg in die Entwicklung von Progressive Web Apps ohne Probleme.
 Dank der vorbereiteten Schematics können wir uns auf die eigentliche Implementierung von Features konzentrieren.
 Dies war aber nur ein kleiner Einblick in Progressive Web Apps mit Angular.
-Wer noch mehr über PWAs mit Angular erfahren möchte, dem sei der Blogpost ["Build a production ready PWA with Angular and Firebase"](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfohlen.
+Wer noch mehr zum Thema erfahren möchte, dem sei der Blogpost ["Build a production ready PWA with Angular and Firebase"](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfohlen.
 
-Den vollständige Quelltext aus diesem Artikel können Sie auf [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) herunter laden.  
-Eine **Demo des BookMonkey als PWA** finden Sie unter der https://bm3-pwa.angular-buch.com – probieren Sie die App am Besten von Ihrem Smartphone aus! 
+Den vollständigen Quelltext aus diesem Artikel können Sie auf [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) herunterladen.  
+Eine **Demo des BookMonkey als PWA** finden Sie unter der https://bm3-pwa.angular-buch.com – probieren Sie die App am Besten auf Ihrem Smartphone aus! 
 
 Viel Spaß beim Programmieren!
 
