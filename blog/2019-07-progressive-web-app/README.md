@@ -120,7 +120,7 @@ Wollen wir das Standard-Icon ändern, laden wir hier einfach ein Bild hoch und l
 ### Anpassungen für iOS (`index.html`)
 
 Wollen wir unsere PWA unter iOS installieren, sind noch einige Anpassungen an der Datei `index.html` notwendig.
-iOS-Geräte benötigen spezielle `meta`* und `link`-Tags zur Identifizierung der zugehörigen Icons, denn sie extrahieren diese Informationen nicht aus dem Web-Manifest.
+iOS-Geräte benötigen spezielle `meta`- und `link`-Tags zur Identifizierung der zugehörigen Icons, denn sie extrahieren diese Informationen nicht aus dem Web-Manifest.
 
 Um das Icon für den Homescreen zu definieren, müssen die folgenden Zeilen in die Datei `index.html` eingefügt werden:
 
@@ -170,7 +170,7 @@ Als Letztes haben wir noch die Möglichkeit, die Statusbar der App hinsichtlich 
 
 Wir können als Wert für `content` zwischen den folgenden Einstellungen wählen:
 
-|                     | Text* und Iconfarbe | Hintergrundfarbe                        |
+|                     | Text- und Iconfarbe | Hintergrundfarbe                        |
 |---------------------|---------------------|-----------------------------------------|
 | `default`           | Schwarz             | Weiß                                    |
 | `white`             | Schwarz             | Weiß                                    |
