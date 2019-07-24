@@ -453,6 +453,16 @@ Lehnen wir hingegen ab, Benachrichtigungen zu erhalten, so färbt sich der Butto
 
 ![Screenshot: PWA Access to Push-Notifications denied](pwa-notification-denied.png)
 
+Unter iOS wird die Funktionalität nicht unterstützt, daher bleibt der Button ausgegraut:
+
+Screenshot Android | Screenshot iOS
+:---:|:---:
+![Screenshot Android](pwa-notification-enabled-android.png) <small>Benachrichtigungen werden unterstützt</small> | ![Screenshot iOS](pwa-notification-not-enabled-ios.png)  <small>Benachrichtigungen werden nicht unterstützt</small>
+
+
+
+### Auf die Push-Notification reagieren
+
 Wir wollen zum Abschluss noch einen Schritt weiter gehen und darauf reagieren, dass ein Nutzer auf die angezeigte Benachrichtigung klickt.
 Hierfür stellt der Service `SwPush` das Observable `notificationClicks` zur Verfügung.
 Mit der Benachrichtigung wird im Property `data` eine URL angegeben, die zur Seite des neu angelegten Buchs führt.
