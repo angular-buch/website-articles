@@ -29,6 +29,7 @@ Inhalt:
 * [Add to Homescreen](/blog/2019-07-progressive-web-app#add-to-homescreen)
 * [Offline-Funktionalität](/blog/2019-07-progressive-web-app#offline-funktionalit-t)
 * [Push Notifications](/blog/2019-07-progressive-web-app#push-notifications)
+* [Zusammenfassung](/blog/2019-07-progressive-web-app#zusammenfassung)
 
 ## Webanwendung vs. PWA vs. App
 
@@ -512,13 +513,18 @@ Die Notwendigkeit der Verschlüsselung mit den VAPID-Keys wird hier noch einmal 
 Ebenso interessant ist, dass die Endpoint-URL aus dem Universum des Browserherstellers kommt.
 Bitte behalten Sie diesen Punkt stets im Hinterkopf: Alle Push-Nachrichten werden immer durch einen fremden Server zum Client gebracht.
 
-## Weiterführende Themen
+## Zusammenfassung
 
-Der fertige BookMonkey als PWA kann auch [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) abgerufen werden.
-Eine Demo finden Sie unter https://bm3-pwa.angular-buch.com.
+Wie Sie sehen, gelingt der Einstieg in die Entwicklung von Progressive Web Apps ohne Probleme.
+Dank der vorbereiteten Schematics können wir uns auf die eigentliche Implementierung von Features konzentrieren.
+Dies war aber nur ein kleiner Einblick in Progressive Web Apps mit Angular.
+Wer noch mehr über PWAs mit Angular erfahren möchte, dem sei der Blogpost ["Build a production ready PWA with Angular and Firebase"](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfohlen.
 
-Dies war nur ein kleiner Einblick in Progressive Web Apps mit Angular. Wer noch mehr über PWAs mit Angular erfahren möchte, dem sei der Blogpost ["Build a production ready PWA with Angular and Firebase"](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfohlen.
+Den vollständige Quelltext aus diesem Artikel können Sie auf [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) herunter laden.  
+Eine **Demo des BookMonkey als PWA** finden Sie unter der https://bm3-pwa.angular-buch.com – probieren Sie die App am Besten von Ihrem Smartphone aus! 
 
 Viel Spaß beim Programmieren!
+
+---
 
 <small>**Titelbild:** Photo by rawpixel.com from Pexels, angepasst</small>
