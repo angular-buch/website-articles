@@ -13,20 +13,19 @@ thumbnail: TODO.jpg
 hidden: true 
 ---
 
+TODO Intro: In diesem Teil....
+
 Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-1-Simple-Case).
 
-Es ist ganz einfach, eine Angular-App zu "dockerisieren". Sie brauchen keinerlei
-Code in Ihrer App zu ändern, um sie in einem Docker-Container zu betreiben. Sie
-müssen lediglich die Dateien hinzufügen, die ich Ihnen in diesem Artikel
-vorstelle.
+Es ist ganz einfach, eine Angular-App zu "dockerisieren". Sie brauchen keinerlei Code in Ihrer App zu ändern, um sie in einem Docker-Container zu betreiben.
+Sie müssen lediglich die Dateien hinzufügen, die ich Ihnen in diesem Artikel vorstelle.
 
-## Konfiguration des Web-Servers
+## Konfiguration des Webservers
 
-Als Web-Server werden wir [nginx](http://nginx.org/) verwenden. Keine Sorge,
-wenn Sie diesen noch nie selbst benutzt, geschweige denn konfiguriert haben.
-Erstellen Sie im Wurzelverzeichnis Ihrer App ein Verzeichnis namens `nginx` und
-legen Sie darin eine Datei namens `default.conf` mit folgendem Inhalt an:
+Als Webserver werden wir [nginx](http://nginx.org/) verwenden.
+Keine Sorge, wenn Sie diesen noch nie selbst benutzt, geschweige denn konfiguriert haben.
+Erstellen Sie im Wurzelverzeichnis Ihrer App ein Verzeichnis namens `nginx` und legen Sie darin eine Datei namens `default.conf` mit folgendem Inhalt an:
 
 ```nginx
 server {
@@ -42,17 +41,16 @@ server {
 }
 ```
 
-Im Wesentlichen besagt diese Konfiguration, dass der Web-Server _im Container_
-auf Port 80 lauschen wird, die App im Verzeichnis `/usr/share/nginx/html`
-abgelegt ist und jeder URL auf `/index` umgebogen ist. Im Betrieb können Sie den
-Container auf jedem beliebigen Port Ihres Rechners betreiben. Dieser Port wird
-dann an den Container-Port 80 weitergeleitet.
+Im Wesentlichen besagt diese Konfiguration, dass der Webserver _im Container_
+auf Port 80 lauschen wird, die App im Verzeichnis `/usr/share/nginx/html` abgelegt ist und jeder URL auf `/index.html` "umgebogen" wird.
+Im Betrieb können Sie den Container auf jedem beliebigen Port Ihres Rechners betreiben.
+Dieser Port wird dann an den Container-Port 80 weitergeleitet und landet damit auf dem Webserver im Container.
 
 ## Das Dockerfile
 
 Als nächstes erstellen Sie ebenfalls im Wurzelverzeichnis Ihrer App eine Datei
-namens `Dockerfile`. Docker verwendet diese Datei, um ein Image mit Ihrer App zu
-erstellen.
+namens `Dockerfile`.
+Docker verwendet diese Datei, um ein Image mit Ihrer App zu erstellen.
 
 ```dockerfile
 FROM nginx
@@ -61,19 +59,11 @@ COPY nginx/default.conf /etc/nginx/conf.d
 COPY dist/dockerized-app /usr/share/nginx/html
 ```
 
-Diese Datei verwendet das jeweils neueste `nginx`-Image als Basis, setzt darin
-Ihren Namen als den des Zuständigen, kopiert die Konfigurationsdatei und
-schließlich Ihre Angular-App in das Image.
-
-Falls Sie diese Anleitung mit Ihrer eigenen App nachvollziehen, setzen Sie für
-`dist/dockerized-app` bitte das entsprechende Verzeichnis Ihrer App ein.
+Diese Datei verwendet das jeweils neueste `nginx`-Image als Basis, setzt darin Ihren Namen als den des Zuständigen, kopiert die Konfigurationsdatei und schließlich Ihre (bereits gebaute) Angular-App in das Image.
+Falls Sie diese Anleitung mit Ihrer eigenen App nachvollziehen, setzen Sie für `dist/dockerized-app` bitte das entsprechende Verzeichnis Ihrer App ein.
 
 Damit könnten wir das Docker-Image nun bereits bauen.
-
-Um den nötigen Zeitaufwand zum Bau zu verringern, sollten Sie eine
-`.dockerignore`-Datei folgenden Inhalts erstellen, um zu verhindern, dass dabei
-jedes Mal unnötige Dateien und Verzeichnisse an den Docker-Daemon übertragen
-werden:
+Um den nötigen Zeitaufwand zum Bau zu verringern, sollten Sie eine Datei `.dockerignore` folgenden Inhalts erstellen, um zu verhindern, dass dabei jedes Mal unnötige Dateien und Verzeichnisse vom Docker-Daemon verarbeitet werden:
 
 ```
 .dockerignore
@@ -96,17 +86,10 @@ yarn.lock
 
 ## Das Build-Skript
 
-Das Docker-Image mit Ihrer App können Sie nun erstellen, indem Sie folgende
-Beschwörungsformeln in der angegebenen Reihenfolge murmeln: `yarn install` (oder
-`npm install`, wenn Sie Ihre Pakete stattdessen mit `npm` verwalten), `ng build
---prod` und schließlich `docker build -t dockerized-app .` (bitte vergessen Sie
-den Punkt am Ende nicht!). Auch hier sollten Sie das `dockerized-app` durch den
-Namen Ihrer App ersetzen, denn unter diesem Namen legt Docker das Image auf
-Ihrem Rechner ab.
+Das Docker-Image mit Ihrer App können Sie nun erstellen, indem Sie folgende Beschwörungsformeln in der angegebenen Reihenfolge murmeln: `npm install` (oder `yarn install`, wenn Sie Ihre Pakete stattdessen mit `yarn` verwalten), `ng build --prod` und schließlich `docker build -t dockerized-app .` (bitte vergessen Sie den Punkt am Ende nicht!).
+Auch hier sollten Sie das `dockerized-app` durch den Namen Ihrer App ersetzen, denn unter diesem Namen legt Docker das Image auf Ihrem Rechner ab.
 
-Ich bin ein großer Fan davon, all die Schritte zu automatisieren, die ich
-ständig wiederholen muss. Deshalb habe ich diese Schritte in einem
-`dockerize.sh`-Skript zusammengefasst:
+Ich bin ein großer Fan davon, all die Schritte zu automatisieren, die ich ständig wiederholen muss. Deshalb habe ich diese Schritte in einem Skript `dockerize.sh` zusammengefasst:
 
 ```bash
 #!/bin/bash
@@ -115,12 +98,9 @@ ng build --prod
 docker build -t dockerized-app .
 ```
 
-Sollten Sie statt auf macOS oder Linux auf Windows unterwegs sein, müssen Sie
-stattdessen ein Batch-File oder ein PowerShell-Skript mit entsprechender Syntax
-verwenden.
+Sollten Sie statt auf macOS oder Linux auf Windows unterwegs sein, müssen Sie stattdessen ein Batch-File oder ein PowerShell-Skript mit entsprechender Syntax verwenden.
 
-Am besten ist es, wenn Sie das Skript gleich ausprobieren. Bei mir sieht das so
-aus:
+Am besten ist es, wenn Sie das Skript gleich ausprobieren. Bei mir sieht das so aus:
 
 ```console
 $ ./dockerize.sh
@@ -154,8 +134,8 @@ Successfully built a6f5cd965884
 Successfully tagged dockerized-app:latest
 ```
 
-Damit sollte auf Ihrer Docker-Instanz ein Image namens `dockerized-app`
-vorliegen. Sie können das mittels `docker images` ganz leicht überprüfen:
+Damit sollte auf Ihrer Docker-Instanz ein Image namens `dockerized-app` vorliegen.
+Sie können das mit dem Befehl `docker images` überprüfen:
 
 ```console
 $ docker images
@@ -165,23 +145,20 @@ dockerized-app  latest  419869cfab04   10 seconds ago  110MB
 
 ## Den Container starten
 
-Um nun einen Container auf Basis des eben erzeugten Image zu starten (zur
-Erinnerung: Container zu Image verhält sich wie Instanz zu Klasse), verwenden
-Sie `docker run -p 8093:80 -d --name web dockerized-app` (bzw. den Namen Ihrer
-App statt `dockerized-app`). Das stellt einen Container namens "web" auf Ihrem
-Rechner auf Port 8093 bereit. Ihr Browser sollte Ihre App also unter
-`http://localhost:8093/` anzeigen, falls sie den Container auf Ihrer Workstation
-gestartet haben. Ansonsten verwenden Sie bitte den passenden Rechnernamen statt
-`localhost`.
+Wir wollen nun einen Container auf Basis des eben erzeugten Images starten.
+Zur Erinnerung: Container zu Image verhält sich wie Instanz zu Klasse in der objektorientierten Programmierung.
+Verwenden Sie den Befehl `docker run -p 8093:80 -d --name web dockerized-app`, um einen Container zu erstellen.
+Er stellt einen Container namens `web` auf Ihrem Rechner auf Port 8093 bereit.
+Ihr Browser sollte Ihre App also unter `http://localhost:8093/` anzeigen, falls sie den Container auf Ihrer Workstation gestartet haben.
+Ansonsten verwenden Sie natürich den passenden Rechnernamen statt `localhost`.
 
 Um den Container wieder zu stoppen, geben Sie `docker stop web` ein.
+Alle laufenden Container können Sie jederzeit mit dem Befehl `docker ps` anzeigen.
 
-Auch das können wir über ein Skript automatisieren. Gerade für komplexere
-Szenarien mit mehreren Containern hat Docker
-[docker-compose](https://docs.docker.com/compose/) entwickelt. Für unseren
-vereinfachten Anwendungsfall mit nur einem Service sieht die zu obigem Aufruf
-über die Kommandozeile identische Konfigurationsdatei `docker-compose.yml`
-folgendermaßen aus:
+Auch das Erstellen eines Containers können wir über ein Skript automatisieren.
+Gerade für komplexere Szenarien mit mehreren Containern hat Docker das Tool [docker-compose](https://docs.docker.com/compose/) entwickelt.
+Für unseren vereinfachten Anwendungsfall mit nur einem Service sieht die zu obigem Aufruf
+über die Kommandozeile identische Konfigurationsdatei `docker-compose.yml` folgendermaßen aus:
 
 ```yaml
 version: "3"
@@ -193,18 +170,16 @@ services:
             - "8093:80"
 ```
 
-Um Ihren Container zu starten, verwenden Sie nun einfach `docker-compose up -d`.
-Vergessen Sie bitte nicht das `-d`, da Ihr Container sonst im Vordergrund läuft
-und Sie ihre Shell solange nicht mehr nutzen können, bis Sie ihn wieder beendet
-haben. Das erreichen Sie mit `docker-compose down`.
+Um Ihren Container zu starten, verwenden Sie nun einfach den Befehl `docker-compose up -d`.
+Vergessen Sie bitte nicht das `-d`, da Ihr Container sonst im Vordergrund läuft und Sie ihre Shell solange nicht mehr nutzen können, bis der Container beendet ist.
+Das erreichen Sie übrigens mit `docker-compose down`.
 
-Jedes Mal, wenn Sie Ihre App ändern, müssen Sie ein neues Image bauen. Das geht
-schnell, da alle Images aus Schichten (engl. _layers_) bestehen, die Docker
-zwischenspeichert, und Ihre Änderung nur die letzte Schicht (die mit dem
-`COPY dist/dockerized-app /usr/share/nginx/html`) betrifft. Um dieses neueste
-Image zur Ausführung zu bringen, müssen Sie den alten Container erst beenden und
-den neuen starten. Auch hier bietet sich ein Skript an. Ich nenne es
-`redeploy.sh`:
+Jedes Mal, wenn Sie Ihre App ändern, müssen Sie ein neues Image bauen.
+Das geht schnell, da alle Images aus Schichten (engl. _layers_) bestehen, die von Docker zwischengespeichert werden.
+Unsere Änderung betrifft allerdings nur die letzte Schicht (die mit dem
+`COPY dist/dockerized-app /usr/share/nginx/html`), sodass auch nur diese Schicht neu gebaut wird.
+Um dieses neueste Image zur Ausführung zu bringen, müssen Sie den alten Container erst beenden und den neuen starten.
+Auch hier bietet sich ein Skript an, ich nenne es `redeploy.sh`:
 
 ```bash
 #! /bin/bash
@@ -212,9 +187,6 @@ docker-compose down --remove-orphans
 docker-compose up -d
 ```
 
-Damit haben Sie alles Nötige zur Hand, um Ihre App sinnvoll in einem
-Docker-Container zu betreiben.
+Damit haben Sie alles Nötige zur Hand, um Ihre App sinnvoll in einem Docker-Container zu betreiben.
 
-Im nächsten Artikel zeige ich Ihnen, wie Sie Ihre App von Docker aus
-konfigurieren können. Das ist dann wichtig, wenn Sie beispielsweise gegen ein
-Backend programmieren und den URL zum Backend über Docker vorgeben möchten.
+Im nächsten Artikel zeige ich Ihnen, wie Sie Ihre App von Docker aus konfigurieren können. Das ist dann wichtig, wenn Sie beispielsweise gegen ein Backend programmieren und den URL zum Backend über Docker vorgeben möchten.
