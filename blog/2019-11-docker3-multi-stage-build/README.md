@@ -105,41 +105,23 @@ Hintergrund ist, dass wir das Sandboxing ausschalten müssen, damit die Tests
 ausgeführt werden.
 Da Sie selbst den Container unter Kontrolle haben, sollte dieses Risiko akzeptabel sein.
 
-Als nächstes müssen wir unser `Dockerfile` erweitern:
+Als Nächstes müssen wir unser `Dockerfile` erweitern:
 
 ```dockerfile
-FROM node:10-alpine as node
+FROM node:10-buster as node
 
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@7.3.5
 
-# Install the latest Chromium package
-RUN echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \
-    && echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories \
-    && apk add --no-cache \
-    chromium@edge \
-    harfbuzz@edge \
-    nss@edge \
-    && rm -rf /var/cache/*
+# install Google Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update && apt-get install -yq google-chrome-stable
 
-# Add Chrome as a user
-RUN mkdir -p /usr/src/app \
-    && adduser -D chrome \
-    && chown -R chrome:chrome /usr/src/app
-
-# Run Chrome non-privileged
-USER chrome
-
-ENV CHROME_BIN=/usr/bin/chromium-browser \
-    CHROME_PATH=/usr/lib/chromium/
-
-# Copy the app into the image
+# now test and build the app
 WORKDIR /usr/src/app
 COPY . ./
-
-# Install NPM dependencies
-RUN yarn
-
-# Make sure the unit tests work, then build the app
+RUN yarn install
+# ChromeHeadless needs to be run with --no-sandbox
 RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox && ng build --prod
 
 # Stage 2
@@ -151,12 +133,12 @@ COPY nginx/default.conf /etc/nginx/conf.d
 COPY --from=node /usr/src/app/dist/dockerized-app /usr/share/nginx/html
 ```
 
-Eine kurze Erklärung dazu: Dieses Dockerfile basiert auf einem Image mit Node.js 10 und legt darin die Angular CLI und den Chromium-Browser ab.
+Eine kurze Erklärung dazu: Dieses Dockerfile basiert auf einem Image mit Node.js 10 und legt darin die Angular CLI und den Chrome-Browser ab.
 Anschließend baut es die App, genau so, wie wir es bisher von Hand getan haben – na, nicht ganz, wir lassen nun die Tests laufen, denn das gehört doch sicher auch bei Ihnen dazu, nicht wahr?
 Ansonsten kommentieren Sie die Zeile `RUN ng test ...` einfach aus.
 Im zweiten Schritt (gekennzeichnet durch den Kommentar "Stage 2") kopiert Docker die fertiggestellte App aus dem ersten Image in das zweite.
 
-Die entscheidenden Stellen sind `FROM node:10-alpine as node`, die die Bezeichnung `node` für das erste Image vorgibt, und `COPY --from=node ...`, die unter Verwendung dieser Bezeichnung aus dem ersten in das zweite Image kopiert.
+Die entscheidenden Stellen sind `FROM node:10-buster as node`, die die Bezeichnung `node` für das erste Image vorgibt, und `COPY --from=node ...`, die unter Verwendung dieser Bezeichnung aus dem ersten in das zweite Image kopiert.
 
 Jetzt entfernen wir noch den Build der App aus dem Skript `dockerize.sh`, da sich das `Dockerfile` ab jetzt um diesen Schritt kümmert:
 
@@ -171,73 +153,78 @@ Um das Image mit der App zu bauen, gehen wir genauso vor wie bisher: Wir führen
 
 ```console
 $ ./dockerize.sh
-Sending build context to Docker daemon  375.3kB
-Step 1/14 : FROM node:10-alpine as node
- ---> 94f3c8956482
-Step 2/14 : RUN npm install -g @angular/cli
- ---> Using cache
- ---> fa482a783256
-Step 3/14 : RUN echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories     && echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories     && apk add --no-cache     chromium@edge     harfbuzz@edge     nss@edge     && rm -rf /var/cache/*
- ---> Using cache
- ---> 5564ed996f5f
-Step 4/14 : RUN mkdir -p /usr/src/app     && adduser -D chrome     && chown -R chrome:chrome /usr/src/app
- ---> Using cache
- ---> 4386166be7c2
-Step 5/14 : USER chrome
- ---> Using cache
- ---> 7cb58fa5c1a2
-Step 6/14 : ENV CHROME_BIN=/usr/bin/chromium-browser     CHROME_PATH=/usr/lib/chromium/
- ---> Using cache
- ---> d6ebad5eb164
-Step 7/14 : WORKDIR /usr/src/app
- ---> Using cache
- ---> 13013d263739
-Step 8/14 : COPY . ./
- ---> dc4a22077f73
-Step 9/14 : RUN yarn
- ---> Running in 6437e5fa60d9
-yarn install v1.13.0
+Sending build context to Docker daemon  370.7kB
+Step 1/11 : FROM node:10-buster as node
+ ---> d71f0dc8e93b
+Step 2/11 : RUN npm install -g @angular/cli@7.3.5
+ ---> Running in 0ddecfd06f16
++ @angular/cli@7.3.5
+added 289 packages from 181 contributors in 9.717s
+Removing intermediate container 0ddecfd06f16
+ ---> fd9b8afe37ec
+Step 3/11 : RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'     && apt-get update && apt-get install -yq google-chrome-stable
+ ---> Running in f85a552bb159
+Get:1 http://deb.debian.org/debian buster InRelease [122 kB]
+...
+Fetched 8230 kB in 2s (5416 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  adwaita-icon-theme at-spi2-core dbus dbus-user-session
+  ...
+Setting up google-chrome-stable (78.0.3904.97-1) ...
+Removing intermediate container f85a552bb159
+ ---> 92e5bb2bbaed
+Step 4/11 : WORKDIR /usr/src/app
+ ---> Running in 86a7a6c9204f
+Removing intermediate container 86a7a6c9204f
+ ---> 0c06bb302e39
+Step 5/11 : COPY . ./
+ ---> 9d6b58feea14
+Step 6/11 : RUN yarn
+ ---> Running in a35c44a28667
+yarn install v1.19.1
 [1/4] Resolving packages...
 [2/4] Fetching packages...
-info fsevents@1.2.7: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.7" is an optional dependency and failed compatibility check. Excluding it from installation.
 [3/4] Linking dependencies...
 [4/4] Building fresh packages...
-Done in 42.82s.
-Removing intermediate container 6437e5fa60d9
- ---> 90e56dd32b15
-Step 10/14 : RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox && ng build --prod
- ---> Running in d1ddaffc16cb
-13 03 2019 21:00:50.648:INFO [karma-server]: Karma v4.0.1 server started at http://0.0.0.0:9876/
-13 03 2019 21:00:50.650:INFO [launcher]: Launching browsers ChromeHeadlessNoSandbox with concurrency unlimited
-13 03 2019 21:00:50.669:INFO [launcher]: Starting browser ChromeHeadless
-13 03 2019 21:00:53.547:INFO [HeadlessChrome 72.0.3626 (Linux 0.0.0)]: Connected on socket 3N6EMwCRhxGyDnspAAAA with id 6433480
-HeadlessChrome 72.0.3626 (Linux 0.0.0): Executed 7 of 7 SUCCESS (0.236 secs / 0.224 secs)
-TOTAL: 7 SUCCESS
-TOTAL: 7 SUCCESS
+Done in 17.33s.
+Removing intermediate container a35c44a28667
+ ---> 5959d3240af1
+Step 7/11 : RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox && ng build --prod
+ ---> Running in e8e73909da63
+11 11 2019 17:51:51.637:INFO [karma-server]: Karma v4.0.1 server started at http://0.0.0.0:9876/
+11 11 2019 17:51:51.638:INFO [launcher]: Launching browsers ChromeHeadlessNoSandbox with concurrency unlimited
+11 11 2019 17:51:51.640:INFO [launcher]: Starting browser ChromeHeadless
+11 11 2019 17:51:53.962:INFO [HeadlessChrome 78.0.3904 (Linux 0.0.0)]: Connected on socket x67ZoJs6ERhBn45OAAAA with id 98052412
+TOTAL: 9 SUCCESS
+TOTAL: 9 SUCCESS
 
-Date: 2019-03-13T21:01:17.137Z
-Hash: b37badaa2a2a81628c08
-Time: 18579ms
+Date: 2019-11-11T17:52:15.005Z
+Hash: 046f0c97454b9144a096
+Time: 17593ms
 chunk {0} runtime.a5dd35324ddfd942bef1.js (runtime) 1.41 kB [entry] [rendered]
 chunk {1} es2015-polyfills.4a4cfea0ce682043f4e9.js (es2015-polyfills) 56.4 kB [initial] [rendered]
-chunk {2} main.93dfc87f5d440cbc16ac.js (main) 262 kB [initial] [rendered]
+chunk {2} main.0c51b538c84777d5bf5e.js (main) 262 kB [initial] [rendered]
 chunk {3} polyfills.9f3702a215d30daac9b6.js (polyfills) 41 kB [initial] [rendered]
 chunk {4} styles.3ff695c00d717f2d2a11.css (styles) 0 bytes [initial] [rendered]
-Removing intermediate container d1ddaffc16cb
- ---> 2827acaf8241
-Step 11/14 : FROM nginx
- ---> 42b4762643dc
-Step 12/14 : LABEL maintainer="Michael Kaaden <github@kaaden.net>"
+Removing intermediate container e8e73909da63
+ ---> 3a3d2d063b02
+Step 8/11 : FROM nginx
+ ---> 53f3fd8007f7
+Step 9/11 : LABEL maintainer="Michael Kaaden <github@kaaden.net>"
  ---> Using cache
- ---> e90650758b69
-Step 13/14 : COPY nginx/default.conf /etc/nginx/conf.d
+ ---> 974a15c23b4f
+Step 10/11 : COPY nginx/default.conf /etc/nginx/conf.d
  ---> Using cache
- ---> 036bfc0c7c36
-Step 14/14 : COPY --from=node /usr/src/app/dist/dockerized-app /usr/share/nginx/html
- ---> 990a8e08cc46
-Successfully built 990a8e08cc46
-Successfully tagged dockerized-app:latest
+ ---> cb36b6c88fbc
+Step 11/11 : COPY --from=node /usr/src/app/dist/dockerized-app /usr/share/nginx/html
+ ---> Using cache
+ ---> 005ab4ca56a3
+Successfully built 005ab4ca56a3
+Successfully tagged dockerized-app-multistage:latest
 ```
 
 Wenn Sie das Meldungspaar "Successfully built .../Successfully tagged ..." sehen, haben Sie es geschafft: Der Multi-Stage Build hat geklappt.
