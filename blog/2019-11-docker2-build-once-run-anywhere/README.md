@@ -13,7 +13,8 @@ thumbnail: TODO.jpg
 hidden: true 
 ---
 
-TODO Intro: In diesem Teil...
+**Build Once, Run Anywhere: Wie man die Angular-App zur Laufzeit an beliebige Umgebungen anpasst.
+Dies ist der 3. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
 Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-2-Build-Once-Run-Anywhere).
@@ -135,6 +136,10 @@ Der zugehörige Unit-Test sieht folgendermaßen aus:
 
 ```typescript
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
+import {
+    HttpClientTestingModule,
+    HttpTestingController,
+} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { Settings } from "../models/settings";
 
@@ -192,7 +197,10 @@ describe("SettingsInitializerService", () => {
 
         const request = httpMock.expectOne("assets/settings.json");
         expect(request.request.method).toBe("GET");
-        request.flush(testSettings, { status: 500, statusText: "Some Weird Server Error" });
+        request.flush(testSettings, {
+            status: 500,
+            statusText: "Some Weird Server Error",
+        });
     });
 });
 ```

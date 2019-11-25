@@ -11,8 +11,8 @@ thumbnail: TODO.jpg
 hidden: true 
 ---
 
-TODO Intro: In dieser Artikelserie ...
-
+**Warum Angular und Docker bestens zusammenpassen.
+Dies ist der Start unserer vierteiligen Artikelserie von unserem Gastautor Michael Kaaden.**
 
 Es ist soweit: Die Angular-App, die Sie Dank der zweiten Auflage des famosen Angular-Buchs erstellt haben, ist fertig!
 Die Unit- und End-to-End-Tests leuchten tiefgrün.

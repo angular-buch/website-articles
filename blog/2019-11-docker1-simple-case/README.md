@@ -13,7 +13,8 @@ thumbnail: TODO.jpg
 hidden: true 
 ---
 
-TODO Intro: In diesem Teil....
+**First Steps: Wie man eine Angular-App in ein Docker-Image packt und in einem Container bequem zur Ausführung bringt.
+Dies ist der 2. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
 Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-1-Simple-Case).
