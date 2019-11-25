@@ -14,7 +14,9 @@ thumbnail: TODO.jpg
 hidden: true 
 ---
 
-**Build Once, Run Anywhere: Wie man die Angular-App zur Laufzeit an beliebige Umgebungen anpasst.
+**Build Once, Run Anywhere:
+Wie Sie ein einziges Image zur Laufzeit an beliebige Umgebungen anpassen.
+Bleiben Sie auch ohne Code-Änderung flexibel!
 Dies ist der 3. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
 Sie finden den Code zum Artikel auf

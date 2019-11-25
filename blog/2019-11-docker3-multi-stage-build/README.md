@@ -12,7 +12,8 @@ thumbnail: TODO.jpg
 hidden: true 
 ---
 
-**Multi-Stage Builds für Angular: Wie man Apps im Container baut und schlanke Docker-Images erstellt.
+**Multi-Stage Builds für Angular:
+Wie Sie Apps gleich im Container bauen und trotzdem schlanke Docker-Images erstellen.
 Vermeiden Sie Risiken durch externe Abhängigkeiten!
 Dies ist der letzte Teil unserer Artikelserie zu Angular und Docker.**
 
