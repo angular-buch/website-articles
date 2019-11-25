@@ -110,7 +110,7 @@ Als Nächstes müssen wir unser `Dockerfile` erweitern:
 ```dockerfile
 FROM node:10-buster as node
 
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@7.3.5
 
 # install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -156,7 +156,7 @@ $ ./dockerize.sh
 Sending build context to Docker daemon  370.7kB
 Step 1/11 : FROM node:10-buster as node
  ---> d71f0dc8e93b
-Step 2/11 : RUN npm install -g @angular/cli
+Step 2/11 : RUN npm install -g @angular/cli@7.3.5
  ---> Running in 0ddecfd06f16
 + @angular/cli@7.3.5
 added 289 packages from 181 contributors in 9.717s
