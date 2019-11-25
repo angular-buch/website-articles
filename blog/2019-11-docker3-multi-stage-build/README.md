@@ -279,20 +279,15 @@ Mit der vorgestellten Lösung können wir unsere App jederzeit mit den von uns f
 
 Mittelfristig verändern sich die Images natürlich, die die Basis der Lösung darstellen.
 Node 10 wird in neueren Versionen vorliegen, das Debian 10-Image wird ebenfalls mit Updates versorgt.
-Unsere App wird davon weitgehend unbeeinflusst bleiben.
-Allerdings benötigen einige NPM-Pakete wie `node-gyp` beispielsweise sowohl den installierten Python-Interpreter wie C++-Compiler.
-Das kann im Einzelfall zu der einen oder anderen Änderungen in der erzeugten App führen, was meist nicht auffallen wird, weil Sie sowieso das eine oder andere Sicherheitsupdate für von Ihnen verwendete NPM-Pakete einpflegen müssen.
-Die dadurch folgenden Veränderungen Ihrer App dürften Sie im Zweifelsfall viel mehr beschäftigen.
+Unsere App wird davon weitestgehend unbeeinflusst bleiben.
+Allerdings benötigen einige NPM-Pakete wie `node-gyp` beispielsweise sowohl den installierten Python-Interpreter als auch den C++-Compiler.
+Das kann im Einzelfall zu der einen oder anderen Änderungen in der von `ng build` erzeugten App führen, was meist nicht auffallen wird, weil Sie sowieso das eine oder andere Sicherheitsupdate für von Ihnen verwendete NPM-Pakete einpflegen müssen.
 
-Betrachten wir einen Zeitraum von zehn Jahren, sieht die Situation schon weniger rosig aus, weil es dann evtl. gar kein Node 10-Image mehr gibt.
-Dann müssten Sie sich aus dem zugehörigen Dckerfile selber eines bauen und dazu ggf.  auch die Node 10-Sourcen aufbewahren -- und die eine oder andere weitere Abhängigkeit wie ein Debian 10.
-Alternativ könnten Sie beispielsweise ein Basis-Image sicher aufbewahren, das dem Stand bis einschließlich dem `yarn install` entspricht.
-Ihr `Dockerfile` müssten Sie dann so verändern, dass es auf Basis dieses Image die App testet und baut und im letzten Schritt den nginx bestückt.
-Schön ist das allerdings nicht, denn die Idee hinter Docker ist, Images jederzeit frisch zu erzeugen, statt angegammelte Exemplare aus irgendeinem Backup zu kratzen.
-Möglich ist es dennoch.
+Betrachten wir einen Zeitraum von zehn Jahren, sieht die Situation schon weniger rosig aus, weil es dann evtl. gar kein Node 10-Image mehr gibt...
 
 Damit sollte klar sein, dass die vorgestellte Lösung keine Art von Langzeit-Archivierung der Build-Umgebung bieten kann, weil kein Langzeit-Archiv der Abhängigkeiten wie der Basis-Images existiert.
 Falls dennoch genau das für Ihren Auftraggeber wichtig sein sollte, dann hat er das Problem typischerweise schon selbst für seine eigene Software im Griff, so dass Sie auf dessen Problemlösung zur Archivierung der Build-Umgebung zurückgreifen können (und sollten).
+Falls Sie sich selber darum kümmern müssten, müssen Sie letztendlich auf irgendeine Art für die Langzeitarchivierung der Abhängigkeiten aus obigem `Dockerfile` sorgen.
 
 Sie sehen, zumindest kurz- und mittelfristig brauchen Sie sich keine ernsthaften Gedanken um Ihre Build-Umgebung zu machen.
 Langfristig sieht das allerdings anders aus.
