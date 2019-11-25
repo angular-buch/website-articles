@@ -133,10 +133,10 @@ COPY nginx/default.conf /etc/nginx/conf.d
 COPY --from=node /usr/src/app/dist/dockerized-app /usr/share/nginx/html
 ```
 
-Eine kurze Erklärung dazu: Dieses Dockerfile basiert auf einem Image mit Node.js 10 und legt darin die Angular CLI und den Chrome-Browser ab.
-Anschließend baut es die App, genau so, wie wir es bisher von Hand getan haben – na, nicht ganz, wir lassen nun die Tests laufen, denn das gehört doch sicher auch bei Ihnen dazu, nicht wahr?
-Ansonsten kommentieren Sie die Zeile `RUN ng test ...` einfach aus.
-Im zweiten Schritt (gekennzeichnet durch den Kommentar "Stage 2") kopiert Docker die fertiggestellte App aus dem ersten Image in das zweite.
+Eine kurze Erklärung dazu: Dieses Dockerfile basiert auf einem Image mit Node.js 10 und legt darin `@angular/cli` in Version 7.3.5 (passend zur Version in der `package.json`-Datei) und den Chrome-Browser ab. 
+Anschließend baut es die App, genau so, wie wir es bisher von Hand getan haben -- na, nicht ganz, wir lassen nun die Tests laufen, denn das gehört doch sicher auch bei Ihnen dazu, nicht wahr?
+Ansonsten kommentieren Sie die Zeile mit `RUN ng test ...` einfach aus.
+Im zweiten Schritt (gekennzeichnet durch den Kommentar "Stage 2") kopiert es die fertiggestellte App aus dem ersten Image in das zweite.
 
 Die entscheidenden Stellen sind `FROM node:10-buster as node`, die die Bezeichnung `node` für das erste Image vorgibt, und `COPY --from=node ...`, die unter Verwendung dieser Bezeichnung aus dem ersten in das zweite Image kopiert.
 
