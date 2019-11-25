@@ -26,7 +26,7 @@ In diesem letzten Teil der Serie kümmern wir uns darum, die Build-Umgebung desk
 
 ## Interne und externe Abhängigkeiten
 
-Kennen Sie das? Sie entwickeln ein Projekt nach allen Regeln der Ingenieurskunst durch, übergeben es dem Betrieb oder dem Kunden – und dann fassen Sie es solange nicht mehr an, bis sich jemand bei Ihnen meldet und nach Änderungen verlangt.
+Kennen Sie das? Sie entwickeln ein Projekt nach allen Regeln der Ingenieurskunst durch, übergeben es dem Betrieb oder dem Kunden – und dann fassen Sie es nicht mehr an, bis sich jemand bei Ihnen meldet und nach Änderungen verlangt.
 
 Das ist dann der Moment, an dem Sie den Staub vom Projekt pusten und sich vielleicht als erstes fragen, wie Sie das damals gebaut haben.
 Beschränken wir uns auf TypeScript- oder JavaScript-Projekte, dann haben Sie vielleicht in der Sektion `scripts` in der `package.json` das entsprechende Kommando hinterlegt.
@@ -37,7 +37,7 @@ Sie stellen dann fest, dass es wohl daran liegt, dass Sie derzeit mit Node.js in
 Und schon laden Sie beide Versionen herunter und probieren herum.
 Schnell ist dann die erste Stunde investiert, ohne dass Sie produktiv gewesen wären. Dabei ist Zeit doch Geld...
 
-Was ist schief gelaufen? Sie haben nicht beachtet, dass Sie es in Ihrem Projekt nicht nur mit _internen_ Abhängigkeiten zu tun haben, die Sie fein säuberlich in der `package.json` aufführen, sondern auch mit _externen_ Abhängigkeiten, etwa der eingesetzten Node.js-Version.
+Was ist schiefgelaufen? Sie haben nicht beachtet, dass Sie es in Ihrem Projekt nicht nur mit _internen_ Abhängigkeiten zu tun haben, die Sie fein säuberlich in der `package.json` aufführen, sondern auch mit _externen_ Abhängigkeiten, etwa der eingesetzten Node.js-Version.
 
 ## Externe Abhängigkeiten handhaben
 
