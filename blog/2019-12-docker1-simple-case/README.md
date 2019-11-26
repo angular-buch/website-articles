@@ -3,7 +3,7 @@ title: "[Docker Serie 2/4] Angular-App über Docker bereitstellen"
 author: Michael Kaaden
 mail: blog@kaaden.net
 bio: "Michael Kaaden ist als Software-Architekt und Manager für ein mittelständisches Unternehmen in Nürnberg tätig. Dort ist er für die technische Seite einer Cloud-Produktline verantwortlich. In dieser Eigenschaft kümmert er sich trotz seiner grundsätzlichen Affinität zu Angular nicht nur um Frontends, sondern neben der Gesamtarchitektur unter anderem auch um APIs, Backends, Datenbanken sowie Software-Entwicklungs- und Build-Prozesse. Wenn er in seiner Freizeit nicht gerade mit seiner Familie unterwegs ist, Full-Stack Developer spielt oder seine Nase in neue Technologien steckt, versucht er, seinen Laufstil zu verbessern und endlich den für ihn perfekten Fotoapparat zu finden."
-published: 2019-11-30
+published: 2019-12-09
 keywords:
   - Docker
   - nginx
@@ -19,7 +19,15 @@ Wie Sie Ihre Angular-App in ein Docker-Image packen und als Container zur Ausfü
 Vergessen Sie Ihre Sorgen über den korrekten Build und das richtige Deployment!
 Dies ist der 2. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
-Sie finden den Code zum Artikel auf
+Inhaltsverzeichnis:
+
+- [Konfiguration des Webservers](/blog/2019-12-docker1-simple-case#konfiguration-des-webservers)
+- [Das Dockerfile](/blog/2019-12-docker1-simple-case#das-dockerfile)
+- [Das Build-Skript](/blog/2019-12-docker1-simple-case#das-build-skript)
+- [Den Container starten](/blog/2019-12-docker1-simple-case#den-container-starten)
+- [Ausblick](/blog/2019-12-docker1-simple-case#ausblick)
+
+> Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-1-Simple-Case).
 
 Es ist ganz einfach, eine Angular-App zu "dockerisieren". Sie brauchen keinerlei Code in Ihrer App zu ändern, um sie in einem Docker-Container zu betreiben.
@@ -193,4 +201,14 @@ docker-compose up -d
 
 Damit haben Sie alles Nötige zur Hand, um Ihre App sinnvoll in einem Docker-Container zu betreiben.
 
-Im nächsten Artikel zeige ich Ihnen, wie Sie Ihre App von Docker aus konfigurieren können. Das ist dann wichtig, wenn Sie beispielsweise gegen ein Backend programmieren und den URL zum Backend über Docker vorgeben möchten.
+## Ausblick 
+
+Die Artikelserie besteht aus den folgenden Teilen:
+
+1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro)
+2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case) **(der aktuelle Artikel)**
+3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
+4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
+
+Im nächsten Artikel zeige ich Ihnen, wie Sie Ihre App von Docker aus konfigurieren können.
+Das ist dann wichtig, wenn Sie beispielsweise gegen ein Backend programmieren und den URL zum Backend über Docker vorgeben möchten.

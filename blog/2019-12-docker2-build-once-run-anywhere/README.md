@@ -3,7 +3,7 @@ title: "[Docker Serie 3/4] Build Once, Run Anywhere oder: Konfiguration über Do
 author: Michael Kaaden
 mail: blog@kaaden.net
 bio: "Michael Kaaden ist als Software-Architekt und Manager für ein mittelständisches Unternehmen in Nürnberg tätig. Dort ist er für die technische Seite einer Cloud-Produktline verantwortlich. In dieser Eigenschaft kümmert er sich trotz seiner grundsätzlichen Affinität zu Angular nicht nur um Frontends, sondern neben der Gesamtarchitektur unter anderem auch um APIs, Backends, Datenbanken sowie Software-Entwicklungs- und Build-Prozesse. Wenn er in seiner Freizeit nicht gerade mit seiner Familie unterwegs ist, Full-Stack Developer spielt oder seine Nase in neue Technologien steckt, versucht er, seinen Laufstil zu verbessern und endlich den für ihn perfekten Fotoapparat zu finden."
-published: 2019-11-30
+published: 2019-12-16
 keywords:
   - Docker
   - Settings
@@ -18,6 +18,14 @@ hidden: true
 Wie Sie ein einziges Image zur Laufzeit an beliebige Umgebungen anpassen.
 Bleiben Sie auch ohne Code-Änderung flexibel!
 Dies ist der 3. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
+
+Inhaltsverzeichnis:
+
+- [Motivation](/blog/2019-12-docker2-build-once-run-anywhere#motivation)
+- [Anforderungen an die Konfigurierbarkeit](/blog/2019-12-docker2-build-once-run-anywhere#anforderungen-an-die-konfigurierbarkeit)
+- [Konfigurierbarkeit umsetzen](/blog/2019-12-docker2-build-once-run-anywhere#konfigurierbarkeit-umsetzen)
+- [Umgebung mit Docker konfigurieren](/blog/2019-12-docker2-build-once-run-anywhere#umgebung-mit-docker-konfigurieren)
+- [Ausblick](/blog/2019-12-docker2-build-once-run-anywhere#ausblick)
 
 Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-2-Build-Once-Run-Anywhere).
@@ -327,5 +335,14 @@ BASE_URL=http://some.official.server:444
 
 Damit haben wir endlich alle Puzzleteile zusammen, um den Docker-Container mit der gewünschten Umgebung zu starten: Sie benötigen je Umgebung lediglich eine Datei `docker.env` und darin die jeweils passenden Umgebungsvariablen.
 Die Skripte `dockerize.sh` und `redeploy.sh` aus dem vorherigen Teil funktionieren übrigens ohne Änderung weiterhin.
+
+## Ausblick 
+
+Die Artikelserie besteht aus den folgenden Teilen:
+
+1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro)
+2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case)
+3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere) **(der aktuelle Artikel)**
+4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
 
 Im letzten Teil der Artikelserie zeige ich Ihnen, wie sie die Buildumgebung über die Projektlaufzeit im Griff behalten, auch wenn Sie Ihr System durch neue Versionen der benötigten Werkzeuge verändern.

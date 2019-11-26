@@ -3,7 +3,7 @@ title: "[Docker Serie 4/4] Multi-Stage Builds oder: Immer die Build-Umgebung dab
 author: Michael Kaaden
 mail: blog@kaaden.net
 bio: "Michael Kaaden ist als Software-Architekt und Manager für ein mittelständisches Unternehmen in Nürnberg tätig. Dort ist er für die technische Seite einer Cloud-Produktline verantwortlich. In dieser Eigenschaft kümmert er sich trotz seiner grundsätzlichen Affinität zu Angular nicht nur um Frontends, sondern neben der Gesamtarchitektur unter anderem auch um APIs, Backends, Datenbanken sowie Software-Entwicklungs- und Build-Prozesse. Wenn er in seiner Freizeit nicht gerade mit seiner Familie unterwegs ist, Full-Stack Developer spielt oder seine Nase in neue Technologien steckt, versucht er, seinen Laufstil zu verbessern und endlich den für ihn perfekten Fotoapparat zu finden."
-published: 2019-11-30
+published: 2019-12-23
 keywords:
   - Docker
   - Multi-Stage Builds
@@ -17,7 +17,19 @@ Wie Sie Apps gleich im Container bauen und trotzdem schlanke Docker-Images erste
 Vermeiden Sie Risiken durch externe Abhängigkeiten!
 Dies ist der letzte Teil unserer Artikelserie zu Angular und Docker.**
 
-Sie finden den Code zum Artikel auf
+Inhaltsverzeichnis:
+
+- [Interne und externe Abhängigkeiten](#abhaengigkeiten)
+- [Externe Abhängigkeiten handhaben](#externe-abhaengigkeiten-handhaben)
+- [Docker To The Rescue](#docker-to-the-rescue)
+- [Multi-Stage Builds](#multi-stage-builds)
+- [Das Image bauen](#das-image-bauen)
+- [Vergleich](#vergleich)
+- [Grenzen der vorgestellten Lösung](#grenzen-der-vorgestellten-loesung)
+- [Fazit](#fazit)
+- [Rückblick](#rueckblick)
+
+> Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-3-Multi-Stage-Build).
 
 In Teil I dieser Artikelserie haben Sie gelernt, wie Sie Ihre Angular-App in ein Docker-Image verpacken und in einem Container zur Ausführung bringen können.
@@ -28,7 +40,7 @@ In diesem letzten Teil der Serie kümmern wir uns darum, die Build-Umgebung desk
 
 ---
 
-## Interne und externe Abhängigkeiten
+## Interne und externe Abhängigkeiten <a name="abhaengigkeiten"></a>
 
 Kennen Sie das? Sie entwickeln ein Projekt nach allen Regeln der Ingenieurskunst durch, übergeben es dem Betrieb oder dem Kunden – und dann fassen Sie es nicht mehr an, bis sich jemand bei Ihnen meldet und nach Änderungen verlangt.
 
@@ -43,7 +55,7 @@ Schnell ist dann die erste Stunde investiert, ohne dass Sie produktiv gewesen w�
 
 Was ist schiefgelaufen? Sie haben nicht beachtet, dass Sie es in Ihrem Projekt nicht nur mit _internen_ Abhängigkeiten zu tun haben, die Sie fein säuberlich in der `package.json` aufführen, sondern auch mit _externen_ Abhängigkeiten, etwa der eingesetzten Node.js-Version.
 
-## Externe Abhängigkeiten handhaben
+## Externe Abhängigkeiten handhaben <a name="externe-abhaengigkeiten-handhaben"></a>
 
 Natürlich gibt es Lösungen, um mehrere Versionen von Node.js gleichzeitig auf Ihrem Rechner vorzuhalten und zwischen diesen zu wechseln, etwa mit Tools wie [n](https://github.com/tj/n) oder [nvm](https://github.com/creationix/nvm), aber das ist gar nicht mein Punkt. 
 Der Punkt ist, dass Sie _daran denken_ müssen, jeweils auf die richtige Version umzustellen, wenn Sie zwischen Ihren Projekten wechseln.
@@ -275,7 +287,7 @@ Spaßeshalber habe ich die Größe des ersten Stage des Multi-Stage Builds gemes
 1 GB ist eine stolze Größe. Das Image existiert allerdings nur auf dem Buildsystem und nicht auf dem Produktivserver.
 Würden wir unsere App mit diesem Image betreiben, hätten wir den zehnfachen Speicherbedarf...
 
-## Grenzen der vorgestellten Lösung
+## Grenzen der vorgestellten Lösung <a name="grenzen-der-vorgestellten-loesung"></a>
 
 Mit der vorgestellten Lösung können wir unsere App jederzeit mit den von uns festgelegten NPM-Paketen bauen, zumindest unter der Annahme, dass diese Pakete auch in Zukunft noch verfügbar sind. Die NPM Registry vergisst nichts, insofern bin ich da äußerst zuversichtlich.
 
@@ -308,3 +320,12 @@ auf dem Zielsystem zum Laufen bringt.
 
 Somit können Sie sich in Zukunft auf Ihre Kernkompetenzen beschränken und das tun, was Ihnen Spaß macht. Software entwickeln.
 Um den Build und das Deployment kümmern sich Ihre Automatismen, die dank Docker unkompliziert einzurichten sind.
+
+## Rückblick <a name="rueckblick"></a>
+
+Die Artikelserie besteht aus den folgenden Teilen:
+
+1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro)
+2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case)
+3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
+4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build) **(der aktuelle Artikel)**
