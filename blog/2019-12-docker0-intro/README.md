@@ -3,7 +3,7 @@ title: "[Docker Serie 1/4] Angular-Apps und Docker: Einleitung"
 author: Michael Kaaden
 mail: blog@kaaden.net
 bio: "Michael Kaaden ist als Software-Architekt und Manager für ein mittelständisches Unternehmen in Nürnberg tätig. Dort ist er für die technische Seite einer Cloud-Produktline verantwortlich. In dieser Eigenschaft kümmert er sich trotz seiner grundsätzlichen Affinität zu Angular nicht nur um Frontends, sondern neben der Gesamtarchitektur unter anderem auch um APIs, Backends, Datenbanken sowie Software-Entwicklungs- und Build-Prozesse. Wenn er in seiner Freizeit nicht gerade mit seiner Familie unterwegs ist, Full-Stack Developer spielt oder seine Nase in neue Technologien steckt, versucht er, seinen Laufstil zu verbessern und endlich den für ihn perfekten Fotoapparat zu finden."
-published: 2019-11-30
+published: 2019-12-02
 keywords:
   - Docker
   - Deployment
@@ -14,6 +14,19 @@ hidden: true
 
 **Warum Sie Docker nutzen sollten, um neue Versionen Ihrer Angular-App jederzeit problemlos bauen, deployen und auch in mehreren Versionen parallel zueinander betreiben zu können.
 Dies ist der Start unserer vierteiligen Artikelserie von unserem Gastautor Michael Kaaden.**
+
+Inhaltsverzeichnis:
+
+- [Prinzipielles Deployment](/blog/2019-12-docker0-intro#prinzipielles-deployment)
+- [Problemstellung](/blog/2019-12-docker0-intro#problemstellung)
+- [Die Beispiel-App](/blog/2019-12-docker0-intro#die-beispiel-app)
+- [Grundsätzliches zu Docker](/blog/2019-12-docker0-intro#grundsaetzliches-zu-docker)
+  - [Images und Container](/blog/2019-12-docker0-intro#images-und-container)
+  - [Portabilität](/blog/2019-12-docker0-intro#portabilitaet)
+  - [Isoliert, schnell und ressourcenschonend](/blog/2019-12-docker0-intro#isoliert-schnell-und-ressourcenschonend)
+  - [Repositorys](/blog/2019-12-docker0-intro#repositorys)
+  - [Lösungsskizze](/blog/2019-12-docker0-intro#loesungsskizze)
+- [Ausblick](/blog/2019-12-docker0-intro#ausblick)
 
 Es ist soweit: Die Angular-App, die Sie Dank der zweiten Auflage des famosen Angular-Buchs erstellt haben, ist fertig!
 Die Unit- und End-to-End-Tests leuchten tiefgrün.
@@ -45,7 +58,7 @@ Als Beispiel soll uns über die Artikel hinweg eine ganz einfache App dienen: Si
 
 Diese App bleibt aus der Perspektive des Nutzer über die ganze Artikelserie hinweg identisch. Tatsächlich werden wir sie, wo nötig, erweitern, um den Erfordernissen zu genügen. Sie finden die App auf [GitHub](https://github.com/MichaelKaaden/dockerized-app). Die `Part-...`-Verzeichnisse entsprechen den jeweiligen Teilen dieser Serie.
 
-## Grundsätzliches zu Docker
+## Grundsätzliches zu Docker <a name="grundsaetzliches-zu-docker"></a>
 
 Falls Sie mit Docker noch nichts zu tun haben, teasere ich in diesem Abschnitt kurz einige der Vorteile von Docker an, um bereits die Lösung für die o. g. Fragen zu skizzieren.
 Ich werde hier jedoch keine Docker-Konzepte vorstellen.
@@ -60,7 +73,7 @@ Docker erstellt sog. _Images_, die eine Software wie die Angular-App und die not
 Zur Laufzeit werden Images in _Container_ instanziiert, die jeweils einem Prozess entsprechen.
 Somit verhält sich ein Container zu einem Image wie eine Instanz zu einer Klasse in gängigen objektorientierten Programmiersprachen.
 
-### Portabilität
+### Portabilität <a name="portabilitaet"></a>
 
 Da ein Docker-Container seine eigene Umgebung vollständig mitbringt, können Sie eine Software, die etwa ein Debian-Linux benötigt, problemlos auf Windows laufen lassen. Container sind somit portabel und benötigen auf dem Hostsystem nur die Docker-Software.
 
@@ -71,8 +84,8 @@ Somit benötigt ein Docker-Container nur unwesentlich mehr Ressourcen als ein na
 Software in einem Docker-Container läuft dadurch fast genauso schnell und mit fast gleichem Ressourcenverbrauch wie im nativen Betrieb.
 Sie können somit dutzende oder hunderte von Containern auf einem handelsüblichen Rechner betreiben.
 
-![Docker-Virtualisierung](https://docs.docker.com/images/VM%402x.png) Quelle:
-[https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)
+![Docker-Virtualisierung](docker-vm.png)<small>Quelle:
+[https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)</small>
 
 ### Repositorys
 
@@ -83,7 +96,7 @@ Die Installation ist extrem einfach, denn auch das Repository kommt als Docker-I
 Server, baut ein Docker-Image und schiebt dieses in das Repository.
 Rechner B, Ihr Webserver, holt sich das jeweils neueste Image vom Repository und startet damit den Container neu. Schon haben Sie eine neue Version Ihrer App zum Laufen gebracht.
 
-### Lösungsskizze
+### Lösungsskizze <a name="loesungsskizze"></a>
 
 Weiter oben habe ich schon die Problematik angedeutet, dass Sie ständig neue Versionen Ihrer App auf ihren Webserver aufspielen müssen.
 Wenn Sie bei jedem Commit in Ihrem Versionsverwaltungssystem automatisiert ein neues Docker-Image erzeugen und dieses von Ihrem Webserver aus holen und zur Ausführung bringen, brauchen Sie sich keine Gedanken mehr darüber zu machen, wie und wo Sie Ihre App bereitstellen.
@@ -98,11 +111,11 @@ Sie sehen, dass Docker viele Probleme löst, über die Sie früher oder später 
 
 Die Artikelserie besteht aus den folgenden Teilen:
 
-1. Angular-App über Docker bereitstellen
-2. Build Once, Run Anywhere oder: Konfiguration über Docker verwalten
-3. Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben
+1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro) **(der aktuelle Artikel)**
+2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case)
+3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
+4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
 
-Für den Rest der Artikelserie gehe ich davon aus, dass Docker auf Ihrem System
-einwandfrei funktioniert. Wie Sie das prüfen können, zeigt der o. g. [_Getting
-Started Guide_](https://docs.docker.com/get-started/#test-docker-installation).
+Für den Rest der Artikelserie gehe ich davon aus, dass Docker auf Ihrem System einwandfrei funktioniert.
+Wie Sie das prüfen können, zeigt der o. g. [_Getting Started Guide_](https://docs.docker.com/get-started/#test-docker-installation).
 
