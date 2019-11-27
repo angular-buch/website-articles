@@ -90,11 +90,13 @@ Sie können somit dutzende oder hunderte von Containern auf einem handelsüblich
 ### Repositorys
 
 Docker-Images können über _Repositorys_ verteilt werden.
-Das können öffentliche Repos wie der [Docker Hub](https://hub.docker.com/) sein, oder auch private in Ihrem lokalen
-Netz.
-Die Installation ist extrem einfach, denn auch das Repository kommt als Docker-Image auf Ihren Rechner. Sie können Images über ein Repository in Ihrem Netzwerk verteilen: Rechner A, sei es Ihr Entwicklerrechner oder ein Build
-Server, baut ein Docker-Image und schiebt dieses in das Repository.
-Rechner B, Ihr Webserver, holt sich das jeweils neueste Image vom Repository und startet damit den Container neu. Schon haben Sie eine neue Version Ihrer App zum Laufen gebracht.
+Das können öffentliche Repos wie der [Docker Hub](https://hub.docker.com/) sein, oder auch private in Ihrem lokalen Netz.
+Die Installation ist extrem einfach, denn auch das Repository kommt als Docker-Image auf Ihren Rechner.
+Sie können Images über ein Repository in Ihrem Netzwerk verteilen: Rechner A, sei es Ihr Entwicklerrechner oder ein Build Server, baut ein Docker-Image und schiebt dieses in das Repository.
+Rechner B, Ihr Webserver, holt sich das jeweils neueste Image vom Repository und startet damit den Container neu.
+Schon haben Sie eine neue Version Ihrer App zum Laufen gebracht.
+Wenn Sie zu dem Thema erfahren wollen, so empfehle ich Ihnen einen Blick in die offizielle Dokumentation zur [Docker Registry](https://docs.docker.com/registry/).
+Mit der Docker Registry kann man eine bzw. mehrere Repositorys hosten.
 
 ### Lösungsskizze <a name="loesungsskizze"></a>
 
