@@ -96,7 +96,7 @@ Sie können Images über ein Repository in Ihrem Netzwerk verteilen: Rechner A, 
 Rechner B, Ihr Webserver, holt sich das jeweils neueste Image vom Repository und startet damit den Container neu.
 Schon haben Sie eine neue Version Ihrer App zum Laufen gebracht.
 Wenn Sie zu dem Thema erfahren wollen, so empfehle ich Ihnen einen Blick in die offizielle Dokumentation zur [Docker Registry](https://docs.docker.com/registry/).
-Mit der Docker Registry kann man eine bzw. mehrere Repositorys hosten.
+Diese ermöglicht es Ihnen, Ihre Docker-Images selbst zu hosten.
 
 ### Lösungsskizze <a name="loesungsskizze"></a>
 
