@@ -24,7 +24,7 @@ Inhaltsverzeichnis:
   - [Images und Container](/blog/2019-12-docker0-intro#images-und-container)
   - [Portabilität](/blog/2019-12-docker0-intro#portabilitaet)
   - [Isoliert, schnell und ressourcenschonend](/blog/2019-12-docker0-intro#isoliert-schnell-und-ressourcenschonend)
-  - [Repositorys](/blog/2019-12-docker0-intro#repositorys)
+  - [Repositorys](/blog/2019-12-docker0-intro#docker-registrys)
   - [Lösungsskizze](/blog/2019-12-docker0-intro#loesungsskizze)
 - [Ausblick](/blog/2019-12-docker0-intro#ausblick)
 
@@ -87,16 +87,19 @@ Sie können somit dutzende oder hunderte von Containern auf einem handelsüblich
 ![Docker-Virtualisierung](docker-vm.png)<small>Quelle:
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)</small>
 
-### Repositorys
+### Docker Registrys
 
-Docker-Images können über _Repositorys_ verteilt werden.
-Das können öffentliche Repos wie der [Docker Hub](https://hub.docker.com/) sein, oder auch private in Ihrem lokalen Netz.
-Die Installation ist extrem einfach, denn auch das Repository kommt als Docker-Image auf Ihren Rechner.
-Sie können Images über ein Repository in Ihrem Netzwerk verteilen: Rechner A, sei es Ihr Entwicklerrechner oder ein Build Server, baut ein Docker-Image und schiebt dieses in das Repository.
-Rechner B, Ihr Webserver, holt sich das jeweils neueste Image vom Repository und startet damit den Container neu.
+Docker-Images können über sog. _Docker Registrys_ verteilt werden.
+Das können öffentliche wie der [Docker Hub](https://hub.docker.com/) oder auch private in Ihrem lokalen Netz sein.
+Die Installation ist extrem einfach, denn auch die Registry kommt als Docker-Image auf Ihren Rechner.
+
+Sie können Images über eine Registry in Ihrem Netzwerk verteilen:
+Rechner A, sei es Ihr Entwicklerrechner oder ein Build Server, baut ein Docker-Image und schiebt dieses in die Registry.
+Rechner B, Ihr Web-Server, holt sich das jeweils neueste Image von der Registry und startet damit den Container neu.
 Schon haben Sie eine neue Version Ihrer App zum Laufen gebracht.
-Wenn Sie zu dem Thema erfahren wollen, so empfehle ich Ihnen einen Blick in die offizielle Dokumentation zur [Docker Registry](https://docs.docker.com/registry/).
-Diese ermöglicht es Ihnen, Ihre Docker-Images selbst zu hosten.
+
+Wenn Sie mehr zu dem Thema erfahren wollen, so empfehle ich Ihnen einen Blick in die offizielle Dokumentation zur [Docker Registry](https://docs.docker.com/registry/) zu werfen.
+Diese ermöglicht es Ihnen, Ihre selbstgebauten Images zu hosten.
 
 ### Lösungsskizze <a name="loesungsskizze"></a>
 
