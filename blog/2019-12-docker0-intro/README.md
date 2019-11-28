@@ -54,9 +54,9 @@ In diesem und den folgenden Blog-Artikeln möchte ich Ihnen zeigen, wie Sie mit 
 
 ## Die Beispiel-App
 
-Als Beispiel soll uns über die Artikel hinweg eine ganz einfache App dienen: Sie besteht aus zwei Komponenten, zwischen denen wir mittels Routing wechseln können. Die eine Komponente zeigt eine "1" an, die andere eine "2". Sinn dessen ist, zu zeigen, dass die App samt Routing auch nach einem Reload in Ihrem Browser noch funktioniert. Setzen Sie ihren Webserver nämlich falsch auf, wird das zu einer Fehlermeldung führen.
+Als Beispiel soll uns über die Artikel hinweg eine ganz einfache App dienen: Sie besteht aus zwei Komponenten, zwischen denen wir mittels Routing wechseln können. Die eine Komponente zeigt eine "1" an, die andere eine "2". Sinn dessen ist, zu zeigen, dass die App samt Routing auch nach einem Reload in Ihrem Browser noch funktioniert. Setzen Sie Ihren Webserver nämlich falsch auf, wird das zu einer Fehlermeldung führen.
 
-Diese App bleibt aus der Perspektive des Nutzer über die ganze Artikelserie hinweg identisch. Tatsächlich werden wir sie, wo nötig, erweitern, um den Erfordernissen zu genügen. Sie finden die App auf [GitHub](https://github.com/MichaelKaaden/dockerized-app). Die `Part-...`-Verzeichnisse entsprechen den jeweiligen Teilen dieser Serie.
+Diese App bleibt aus der Perspektive des Nutzers über die ganze Artikelserie hinweg identisch. Tatsächlich werden wir sie, wo nötig, erweitern, um den Erfordernissen zu genügen. Sie finden die App auf [GitHub](https://github.com/MichaelKaaden/dockerized-app). Die `Part-...`-Verzeichnisse entsprechen den jeweiligen Teilen dieser Serie.
 
 ## Grundsätzliches zu Docker <a name="grundsaetzliches-zu-docker"></a>
 
@@ -95,7 +95,7 @@ Die Installation ist extrem einfach, denn auch die Registry kommt als Docker-Ima
 
 Sie können Images über eine Registry in Ihrem Netzwerk verteilen:
 Rechner A, sei es Ihr Entwicklerrechner oder ein Build Server, baut ein Docker-Image und schiebt dieses in die Registry.
-Rechner B, Ihr Web-Server, holt sich das jeweils neueste Image von der Registry und startet damit den Container neu.
+Rechner B, Ihr Webserver, holt sich das jeweils neueste Image von der Registry und startet damit den Container neu.
 Schon haben Sie eine neue Version Ihrer App zum Laufen gebracht.
 
 Wenn Sie mehr zu dem Thema erfahren wollen, so empfehle ich Ihnen einen Blick in die offizielle Dokumentation zur [Docker Registry](https://docs.docker.com/registry/) zu werfen.
@@ -103,11 +103,11 @@ Diese ermöglicht es Ihnen, Ihre selbstgebauten Images zu hosten.
 
 ### Lösungsskizze <a name="loesungsskizze"></a>
 
-Weiter oben habe ich schon die Problematik angedeutet, dass Sie ständig neue Versionen Ihrer App auf ihren Webserver aufspielen müssen.
+Weiter oben habe ich schon die Problematik angedeutet, dass Sie ständig neue Versionen Ihrer App auf Ihren Webserver aufspielen müssen.
 Wenn Sie bei jedem Commit in Ihrem Versionsverwaltungssystem automatisiert ein neues Docker-Image erzeugen und dieses von Ihrem Webserver aus holen und zur Ausführung bringen, brauchen Sie sich keine Gedanken mehr darüber zu machen, wie und wo Sie Ihre App bereitstellen.
 
 Jedes Image kann mit sog. _Tags_ versehen werden.
-Das entspricht etwa der Versionsnummer des Images und kann z. B. den Zeitpunkt des Builds, den Namen des aktuellen Entwicklungszweigs oder die Versionsnummer der Software enthalten.
+Diese zeichnen Images mit Metadaten wie z. B. dem Zeitpunkt des Builds, dem Namen des aktuellen Entwicklungszweigs oder der Versionsnummer Ihrer Software aus.
 Dadurch haben Sie nicht nur die Möglichkeit, mehrere Stände parallel bereitzuhalten, sondern Sie haben Ihre Images gleichzeitig auch versioniert vorliegen und können problemlos ein beliebiges Image aus der Versionshistorie zur Ausführung bringen.
 
 Sie sehen, dass Docker viele Probleme löst, über die Sie früher oder später stolpern würden.
