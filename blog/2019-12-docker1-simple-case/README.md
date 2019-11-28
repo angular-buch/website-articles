@@ -212,3 +212,6 @@ Die Artikelserie besteht aus den folgenden Teilen:
 
 Im nächsten Artikel zeige ich Ihnen, wie Sie Ihre App von Docker aus konfigurieren können.
 Das ist dann wichtig, wenn Sie beispielsweise gegen ein Backend programmieren und den URL zum Backend über Docker vorgeben möchten.
+
+
+<small>**Titelbild:** Bild von [Guillaume Bolduc](https://unsplash.com/@guibolduc) auf [Unsplash](https://unsplash.com), bearbeitet</small>

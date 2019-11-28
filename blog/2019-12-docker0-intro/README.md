@@ -124,3 +124,5 @@ Die Artikelserie besteht aus den folgenden Teilen:
 Für den Rest der Artikelserie gehe ich davon aus, dass Docker auf Ihrem System einwandfrei funktioniert.
 Wie Sie das prüfen können, zeigt der o. g. [_Getting Started Guide_](https://docs.docker.com/get-started/#test-docker-installation).
 
+
+<small>**Titelbild:** Bild von [Thomas G.](https://pixabay.com/de/users/Thomas_G-7083/) auf [Pixabay](https://pixabay.com/de/), bearbeitet</small>

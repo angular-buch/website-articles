@@ -346,3 +346,6 @@ Die Artikelserie besteht aus den folgenden Teilen:
 4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
 
 Im letzten Teil der Artikelserie zeige ich Ihnen, wie sie die Buildumgebung über die Projektlaufzeit im Griff behalten, auch wenn Sie Ihr System durch neue Versionen der benötigten Werkzeuge verändern.
+
+
+<small>**Titelbild:** Bild von [chuttersnap](https://unsplash.com/@chuttersnap) auf [Unsplash](https://unsplash.com), bearbeitet</small>

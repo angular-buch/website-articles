@@ -329,3 +329,6 @@ Die Artikelserie besteht aus den folgenden Teilen:
 2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case)
 3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
 4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build) **(der aktuelle Artikel)**
+
+
+<small>**Titelbild:** Bild von [chuttersnap](https://unsplash.com/@chuttersnap) auf [Unsplash](https://unsplash.com), bearbeitet</small>
