@@ -183,7 +183,7 @@ services:
 ```
 
 Um Ihren Container zu starten, verwenden Sie nun einfach den Befehl `docker-compose up -d`.
-Vergessen Sie bitte nicht das `-d`, da Ihr Container sonst im Vordergrund läuft und Sie ihre Shell solange nicht mehr nutzen können, bis der Container beendet ist.
+Vergessen Sie bitte nicht das `-d`, da Ihr Container sonst im Vordergrund läuft und Sie Ihre Shell solange nicht mehr nutzen können, bis der Container beendet ist.
 Das erreichen Sie übrigens mit `docker-compose down`.
 
 Jedes Mal, wenn Sie Ihre App ändern, müssen Sie ein neues Image bauen.

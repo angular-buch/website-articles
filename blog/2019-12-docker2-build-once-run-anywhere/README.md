@@ -97,7 +97,7 @@ export interface Settings {
 }
 ```
 
-Jetzt benötigen wir noch einen Service, den wir den wir überall dort injizieren können, wo wir Zugriff auf die Konfiguration benötigen.
+Jetzt benötigen wir noch einen Service, den wir überall dort injizieren können, wo wir Zugriff auf die Konfiguration benötigen.
 Wir erstellen diesen `SettingsService` mit der Angular CLI: `ng g service services/settings`.
 
 ```typescript
@@ -151,7 +151,6 @@ Der Mechanismus, über den wir in Kürze alles miteinander verdrahten, erwartet 
 Der zugehörige Unit-Test sieht folgendermaßen aus:
 
 ```typescript
-import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
 import {
     HttpClientTestingModule,
     HttpTestingController,
@@ -189,7 +188,7 @@ describe("SettingsInitializerService", () => {
         expect(service).toBeTruthy();
     });
 
-    it("should initialize settings new", (done) => {
+    it("should initialize settings", (done) => {
         service.initializeSettings().then(() => {
             expect(settingsService.settings).toEqual(testSettings);
             done();
