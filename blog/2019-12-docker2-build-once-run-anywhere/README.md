@@ -10,7 +10,7 @@ keywords:
   - Angular
   - APP_INITIALIZER
 language: de
-thumbnail: TODO.jpg
+thumbnail: header2.jpg
 hidden: true 
 ---
 

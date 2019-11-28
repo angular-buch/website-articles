@@ -10,7 +10,7 @@ keywords:
   - Build
   - docker-compose
 language: de
-thumbnail: TODO.jpg
+thumbnail: header1.jpg
 hidden: true 
 ---
 

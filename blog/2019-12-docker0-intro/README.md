@@ -8,7 +8,7 @@ keywords:
   - Docker
   - Deployment
 language: de
-thumbnail: TODO.jpg
+thumbnail: header0.jpg
 hidden: true 
 ---
 

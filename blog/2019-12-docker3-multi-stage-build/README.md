@@ -8,7 +8,7 @@ keywords:
   - Docker
   - Multi-Stage Builds
 language: de
-thumbnail: TODO.jpg
+thumbnail: header3.jpg
 hidden: true 
 ---
 
