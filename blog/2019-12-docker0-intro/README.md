@@ -9,7 +9,6 @@ keywords:
   - Deployment
 language: de
 thumbnail: header0.jpg
-hidden: true 
 ---
 
 **Warum Sie Docker nutzen sollten, um neue Versionen Ihrer Angular-App jederzeit problemlos bauen, deployen und auch in mehreren Versionen parallel zueinander betreiben zu können.
@@ -112,17 +111,21 @@ Dadurch haben Sie nicht nur die Möglichkeit, mehrere Stände parallel bereitzuh
 
 Sie sehen, dass Docker viele Probleme löst, über die Sie früher oder später stolpern würden.
 
-## Ausblick
-
-Die Artikelserie besteht aus den folgenden Teilen:
-
-1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro) **(der aktuelle Artikel)**
-2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case)
-3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
-4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben"](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
-
 Für den Rest der Artikelserie gehe ich davon aus, dass Docker auf Ihrem System einwandfrei funktioniert.
 Wie Sie das prüfen können, zeigt der o. g. [_Getting Started Guide_](https://docs.docker.com/get-started/#test-docker-installation).
 
+## Ausblick
+
+Ich werde Ihnen in drei weiteren Artikeln die wichtigsten Punkte zu Angular mit Docker vermitteln.
+Nach jedem Advent veröffentliche ich hierzu einen weiteren Artikel.
+Die Artikelserie besteht aus den folgenden Teilen:
+
+1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro) **(der aktuelle Artikel)**
+2. Angular-App über Docker bereitstellen _(Artikel erscheint Montag, den 09.12.2019)_
+3. Build Once, Run Anywhere oder: Konfiguration über Docker verwalten _(Artikel erscheint Montag, den 16.12.2019)_
+4. Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben _(Artikel erscheint Montag, den 23.12.2019)_
+
+<br>
+<hr>
 
 <small>**Titelbild:** Bild von [Thomas G.](https://pixabay.com/de/users/Thomas_G-7083/) auf [Pixabay](https://pixabay.com/de/), bearbeitet</small>
