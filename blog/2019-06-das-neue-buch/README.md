@@ -12,7 +12,6 @@ keywords:
   - Zweite Auflage
 language: de
 thumbnail: ../x_shared/buchblogheader.png
-sticky: true
 ---
 
 **Das neue deutschsprachige Angular-Buch ist da!**  

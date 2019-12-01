@@ -23,7 +23,7 @@ Inhaltsverzeichnis:
   - [Images und Container](/blog/2019-12-docker0-intro#images-und-container)
   - [Portabilität](/blog/2019-12-docker0-intro#portabilitaet)
   - [Isoliert, schnell und ressourcenschonend](/blog/2019-12-docker0-intro#isoliert-schnell-und-ressourcenschonend)
-  - [Repositorys](/blog/2019-12-docker0-intro#docker-registrys)
+  - [Docker Registrys](/blog/2019-12-docker0-intro#docker-registrys)
   - [Lösungsskizze](/blog/2019-12-docker0-intro#loesungsskizze)
 - [Ausblick](/blog/2019-12-docker0-intro#ausblick)
 
@@ -83,7 +83,8 @@ Somit benötigt ein Docker-Container nur unwesentlich mehr Ressourcen als ein na
 Software in einem Docker-Container läuft dadurch fast genauso schnell und mit fast gleichem Ressourcenverbrauch wie im nativen Betrieb.
 Sie können somit dutzende oder hunderte von Containern auf einem handelsüblichen Rechner betreiben.
 
-![Docker-Virtualisierung](docker-vm.png)<small>Quelle:
+<img src="https://website-articles.angular-buch.com/blog/2019-12-docker0-intro/docker-vm.png" alt="Docker-Virtualisierung" width="50%">  
+<small>Quelle:
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)</small>
 
 ### Docker Registrys
@@ -117,7 +118,7 @@ Wie Sie das prüfen können, zeigt der o. g. [_Getting Started Guide_](https://d
 ## Ausblick
 
 Ich werde Ihnen in drei weiteren Artikeln die wichtigsten Punkte zu Angular mit Docker vermitteln.
-Nach jedem Advent veröffentliche ich hierzu einen weiteren Artikel.
+Nach jedem Advent veröffentliche ich hierzu einen neuen Artikel.
 Die Artikelserie besteht aus den folgenden Teilen:
 
 1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro) **(der aktuelle Artikel)**
