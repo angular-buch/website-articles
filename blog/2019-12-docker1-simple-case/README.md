@@ -11,7 +11,6 @@ keywords:
   - docker-compose
 language: de
 thumbnail: header1.jpg
-hidden: true 
 ---
 
 **First Steps:
@@ -207,8 +206,8 @@ Die Artikelserie besteht aus den folgenden Teilen:
 
 1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro)
 2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case) **(der aktuelle Artikel)**
-3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
-4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
+3. Build Once, Run Anywhere oder: Konfiguration über Docker verwalten _(Artikel erscheint Montag, den 16.12.2019)_
+4. Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben _(Artikel erscheint Montag, den 23.12.2019)_
 
 Im nächsten Artikel zeige ich Ihnen, wie Sie Ihre App von Docker aus konfigurieren können.
 Das ist dann wichtig, wenn Sie beispielsweise gegen ein Backend programmieren und den URL zum Backend über Docker vorgeben möchten.
