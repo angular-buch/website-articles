@@ -161,7 +161,7 @@ Zur Erinnerung: Container zu Image verhält sich wie Instanz zu Klasse in der ob
 Verwenden Sie den Befehl `docker run -p 8093:80 -d --name web dockerized-app`, um einen Container zu erstellen.
 Er stellt einen Container namens `web` auf Ihrem Rechner auf Port 8093 bereit.
 Ihr Browser sollte Ihre App also unter `http://localhost:8093/` anzeigen, falls sie den Container auf Ihrer Workstation gestartet haben.
-Ansonsten verwenden Sie natürich den passenden Rechnernamen statt `localhost`.
+Ansonsten verwenden Sie natürlich den passenden Rechnernamen statt `localhost`.
 
 Um den Container wieder zu stoppen, geben Sie `docker stop web` ein.
 Alle laufenden Container können Sie jederzeit mit dem Befehl `docker ps` anzeigen.
