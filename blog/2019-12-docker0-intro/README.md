@@ -124,7 +124,7 @@ Die Artikelserie besteht aus den folgenden Teilen:
 1. [Angular-Apps und Docker: Einleitung](https://angular-buch.com/blog/2019-12-docker0-intro) **(der aktuelle Artikel)**
 2. [Angular-App über Docker bereitstellen](https://angular-buch.com/blog/2019-12-docker1-simple-case)
 3. [Build Once, Run Anywhere oder: Konfiguration über Docker verwalten](https://angular-buch.com/blog/2019-12-docker2-build-once-run-anywhere)
-4. Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben _(Artikel erscheint Montag, den 23.12.2019)_
+4. [Multi-Stage Builds oder: Immer die Build-Umgebung dabei haben](https://angular-buch.com/blog/2019-12-docker3-multi-stage-build)
 
 <br>
 <hr>

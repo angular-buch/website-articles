@@ -9,7 +9,6 @@ keywords:
   - Multi-Stage Builds
 language: de
 thumbnail: header3.jpg
-hidden: true 
 ---
 
 **Multi-Stage Builds für Angular:
