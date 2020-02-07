@@ -18,18 +18,19 @@ sticky: false
 hidden: true
 ---
 
-Endlich ist es soweit: Das lang erwartet neue Release **Angular 9 ist da!**
-Am 6. Februar 2020 erschien die neue Major-Version 9.0.0 und bringt wieder einige interessante Neuerungen mit sich.
+Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0.0**!
 
-Der wohl wichtigste Punkt ist die Umsetllung auf den neuen Renderer _Ivy_, der einige Features und vor allem Performance improvements mit sich bringt.
-Es gibt auch wieder ein paar kleine Breaking Changes, doch seien Sie beruhigt: Das Update geht leicht von der Hand, und es sind nur selten manuelle Anpassungen nötig.
+Durch eine Reihe von Bugs und offene Features hatte sich das Release um einige Wochen verzögert – ursprünglich angestrebt war das Release im November.
+Der wohl wichtigste Punkt ist die Umstellung auf den neuen Renderer _Ivy_, der einige Features und vor allem Verbesserungen in der Performance mit sich bringt.
+Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Version ist undramatisch und geht leicht von der Hand.
 
-In diesem Artikel möchten wir kurz die wichtigsten Neuigkeiten vorstellen.
-Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https://blog.angular.io/23c97b63cfa3).
+Wir möchten Ihnen in diesem Artikel kurz die wichtigsten Neuerungen vorstellen.
+Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular Blog](https://blog.angular.io/23c97b63cfa3).
 
 ## Update auf Angular 9
 
-Das Update zur neuen Angular-Version ist kinderleicht. Hierzu updaten Sie zunächst auf die letzte Version von Angular 8.
+
+Das Update zur neuen Angular-Version ist kinderleicht. Dalls Ihr Projekt noch nicht in der letzten Version von Angular 8 vorliegt, machen Sie zunächst das folgende Update:
 
 ```sh
 ng update @angular/cli@8 @angular/core@8
@@ -42,7 +43,9 @@ ng update @angular/cli @angular/core
 ```
 
 Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch, sofern notwendig.
-Auf [update.angular.io](https://update.angular.io) können Sie außerdem alle Migrationsschritte im Detail nachvollziehen.
+Hier zeigt sich bereits die erste Änderung: Beim `ng update` werden ab sofort ausführliche Informationen ausgegeben, die Ihnen beim Update helfen.
+Auf [update.angular.io](https://update.angular.io) können Sie außerdem alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
+
 
 ## topic 1
 
