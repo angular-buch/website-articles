@@ -29,7 +29,8 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 
 ## Update auf Angular 9
 
-Das Update zur neuen Angular-Version ist kinderleicht. Dalls Ihr Projekt noch nicht in der letzten Version von Angular 8 vorliegt, machen Sie zunächst das folgende Update:
+Das Update zur neuen Angular-Version ist in wenigen Schritten getan.
+Falls Ihr Projekt noch nicht in der letzten Version von Angular 8 vorliegt, sollten Sie zunächst das folgende Update erledigen:
 
 ```sh
 ng update @angular/cli@8 @angular/core@8
@@ -42,23 +43,43 @@ ng update @angular/cli @angular/core
 ```
 
 Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch, sofern notwendig.
-Hier zeigt sich bereits die erste Änderung: Beim `ng update` werden ab sofort ausführliche Informationen ausgegeben, die Ihnen beim Update helfen.
-Außerdem verwendet die Angular CLI ab Version 8.3.19 immer die Zielupdate-Version der Angular CLI zur Durchführung des Updates.
+Hier zeigt sich bereits die erste Neuerung: Beim `ng update` werden ab sofort ausführliche Informationen zu neuen Features ausgegeben, die Ihnen beim Update helfen.
+Außerdem verwendet die Angular CLI jetzt zur Durchführung des Updates unter der Haube jetzt immer die Version, auf die Sie updaten wollen.
 
-Auf [update.angular.io](https://update.angular.io) können Sie außerdem alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
+Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
+
+
+## Der neue Ivy-Renderer
+
+
+
+## Server-Side Rendering
+
+
+
+## TestBed.inject(): Abhängigkeiten im Test anfordern
+
+
+
+## i18n mit `@angular/localize`
+
+
 
 ## `@ViewChild()` und `@ContentChild()`
 
-Mit der Einführung von Angular in der Version 8, gab es einen Breaking Change, der sich auf die Verwendung der Dekoratoren `@ViewChild()` und `@ContentChild()` auswirkte.
-Der Breaking Change war notwendig, da das Standard-Verhalten der beiden Dekoratoren geändert wurde.
-In unserem [Artikel zum Upodate auf Angular 8](https://angular-buch.com/blog/2019-06-angular8#breaking-change-viewchild-und-contentchild-), haben wir den Change im Detail beschrieben.
+Mit Angular 8 gab es einen Breaking Change bei den Dekoratoren `@ViewChild()` und `@ContentChild()`: Es wurde das Flag `static` eingeführt, mit dem eine solche Query als statisch oder dynamisch markiert werden muss.
+Die Änderung war notwendig, weil sich das Standardverhalten der beiden Dekoratoren mit Angular 9 ändern sollte.
+In unserem [Artikel zum Update auf Angular 8](https://angular-buch.com/blog/2019-06-angular8#breaking-change-viewchild-und-contentchild-), haben wir die Thematik im Detail beschrieben.
 
-Mit Angular 9 kommt nun die Finalisierung der Übergangsphase.
-Das explizite Setzen des `static` Flags mit dem Wert `false` für `@ViewChild()` und `@ContentChild()` ist nun nicht länger notwendig:
+Mit Angular 9 ist die Änderung final umgesetzt: Alle Querys sind nun grundsätzlich dynamisch, falls nicht anders angegeben.
+Es ist also nicht länger notwendig, das `static`-Flag für `@ViewChild()` und `@ContentChild()` explizit auf `false` zu setzen.
 
 ```ts
+// Dynamische Query ab Angular 9:
+@ViewChild('foo') foo: ElementRef;
+@ContentChild('bar') bar: ElementRef;
+
 // Statische Query ab Angular 8:
-// Das Ergebnis ist im LifeCycle-Hook `ngOnInit()` verfügbar
 @ViewChild('foo', { static: true }) foo: ElementRef;
 @ContentChild('bar', { static: true }) bar: ElementRef;
 
@@ -67,25 +88,58 @@ Das explizite Setzen des `static` Flags mit dem Wert `false` für `@ViewChild()`
 // `{ static: false }` musste explizit gesetzt werden
 @ViewChild('foo', { static: false }) foo: ElementRef;
 @ContentChild('bar', { static: false }) bar: ElementRef;
-
-// Dynamische Query ab Angular 9:
-// `{ static: false }` muss nicht mehr explizit gesetzt werden
-@ViewChild('foo') foo: ElementRef;
-@ContentChild('bar') bar: ElementRef;
 ```
 
 ## Weitere Neuigkeiten
 
-Wir haben in diesem Artikel natürlich nur die wichtigsten Änderungen und Neuigkeiten erwähnt.
+Wir haben in diesem Artikel nur die wichtigsten Änderungen und Neuigkeiten erwähnt.
 Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unter der Haube und kleinere Features, die für die meisten Entwicklerinnen und Entwickler zunächst nicht relevant sind.
 
-TODO: hier ein paar ausgewählte weitere Änderungen beschreiebn
+Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
 
-Außerdem sind die folgenden Änderungen interessant:
 
-- TODO: Auslistung weiterer interessanter kleiner Änderungen
+### Schematics für Interceptoren
 
-Eine detaillierte Liste alle Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
+Neu hinzugekommen ist auch ein Workflow zur Erstellung von HTTP-Interceptoren.
+Bisher musste man die Interceptor-Klasse per Hand bauen, ab sofort unterstützt die Angular CLI uns dabei mit folgendem Befehl:
+
+```sh
+ng generate interceptor
+```
+
+### `providedIn` für Services: `any` und `platform`
+
+Für Services wird ab Angular 6.0.0 standardmäßig die Option `providedIn: 'root'` verwendet (wir haben dazu im [Update-Artikel zu Angular 6](https://angular-buch.com/blog/2018-05-angular6) berichtet).
+Mit Angular 9 kommen neben `root` zwei neue Optionen für die Sichtbarkeit eines Providers hinzu: `any` und `platform`.
+
+* `root`: Die Anwendung erhält *eine einzige Instanz* des Services.
+* `any`: Jedes Modul der Anwendung erhält eine *eigene Instanz* des Services.
+* `platform`: Alle Anwendungen auf der Seite teilen sich *dieselbe Instanz*. Das ist vor allem im Kontext von [Angular Elements](https://angular.io/guide/elements) interessant, wenn mehrere Anwendungen auf einer Seite gebootstrappt werden.
+
+
+### Optional Chaining mit TypeScript
+
+TypeScript wurde auf Version 3.7 aktualisiert. Damit ist auch ein neues interessantes Sprachfeature in Angular verwendbar: [Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
+
+Bei der Arbeit mit verschachtelten Objekten musste man bisher jeden Schritt im Objektpfad einzeln auf Existenz prüfen, um Fehler zu vermeiden.
+Wollen wir beispielsweise die Thumbnail-URL eiens Buchs ermitteln, müssen wir so vorgehen, wenn nicht sicher ist, ob das Thumbnail existiert:
+
+```ts
+const book = {
+  title: '',
+  thumbnail: { url: '', title: '' },
+};
+
+const url = book.thumbnail && book.thumbnail.url;
+```
+
+Mit Optional Chaining vereinfacht sich das Vorgehen. Wir verwenden den `?`-Operator, um die Evaluierung des Ausdrucks abzubrechen, falls ein Teilstück des Objekts nicht existiert:
+
+```ts
+const url = book.thumbnail?.url;
+```
+
+
 
 <hr>
 
