@@ -113,11 +113,10 @@ npm run prerender # Alternativ: Kurzform als NPM-Skript
 Die notwendigen Schritte erledigt die Angular CLI bzw. der Universal Builder nun für uns.
 Damit verringert sich die Fehleranfälligkeit, die es bisher mit selbst konfigurierten Skripten gab.
 
-
 ## `TestBed.inject<T>`: Abhängigkeiten im Test anfordern
 
 Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>()` angeforert.
-Mit Angular 9 wurde diese Methode als *deprecated* markiert.
+Mit Angular 9 wurde diese Methode als _deprecated_ markiert.
 Stattdessen sollte nun `TestBed.inject<T>` genutzt werden.
 Der Unterschied liegt hier in der Typsicherheit:
 Mit `TestBed.inject()` ist der Rückgabewert mittels Typinferenz korrekt typisiert, und wir können auf die Propertys der Klasse zugreifen.
@@ -133,7 +132,6 @@ it('infers dependency types', () => {
 
 Grundsätzlich können beide Methoden synonym verwendet werden.
 Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nötig, die Änderung über eine neue Methode anzubieten.
-
 
 ## i18n mit `@angular/localize`
 
@@ -189,10 +187,11 @@ Hierfür gibt es die neue Funktion `loadTranslations`:
 import { loadTranslations } from '@angular/localize';
 
 loadTranslations({
-  HelloWorld: 'Hallo Welt!!'
+  HelloWorld: 'Hallo Welt!!',
 });
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
   .catch(err => console.error(err));
 ```
 
@@ -208,19 +207,15 @@ import { loadTranslations } from '@angular/localize';
 import { getTranslations, ParsedTranslationBundle } from '@locl/core';
 
 const messages = '/assets/i18n/messages.de.json';
-getTranslations(messages).then(
-  (data: ParsedTranslationBundle) => {
-    loadTranslations(data.translations);
-    platformBrowserDynamic()
-      .bootstrapModule(AppModule)
-      .catch(err => console.error(err));
-  }
-);
+getTranslations(messages).then((data: ParsedTranslationBundle) => {
+  loadTranslations(data.translations);
+  platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .catch(err => console.error(err));
+});
 ```
 
 Mehr zu der Methode `getTranslations()` erfahren Sie auf der [GitHub-Seite vom Projekt](https://github.com/loclapp/locl/tree/master/libs/core#usage).
-
-
 
 ## `@ViewChild()` und `@ContentChild()`
 
@@ -321,27 +316,27 @@ Ein weiteres neues TypeScript-Feature von TypeScript ist _Nullish Coalescing_.
 Damit kann in einem Ausdruck ein Fallback-Wert definiert werden, der eingesetzt wird, wenn der geprüfte Wert ungültig ist.
 
 Für diese Semantik konnte bisher der `||`-Operator verwendet werden.
-Ist der Wert von `foo` *falsy* (also `null`, `undefined`, `0`, `NaN`, `false` oder leerer String), wird stattdessen der Wert `default` eingesetzt:
+Ist der Wert von `foo` _falsy_ (also `null`, `undefined`, `0`, `NaN`, `false` oder leerer String), wird stattdessen der Wert `default` eingesetzt:
 
 ```ts
 const value = foo || 'default';
 ```
 
-Mit dem neuen _Nullish Coalescing_ gelten `0` oder leerer String als gültige Werte.
-Der Rückfall mit dem `??`-Operator greift im Gegensatz zu `||` also nur bei den Werten `null` oder `undefined`.
+Mit dem neuen _Nullish Coalescing_ gelten `0`, `false`, `NaN` oder leerer String als gültige Werte.
+Der Rückfall mit dem `??`-Operator greift im Gegensatz zu `||` also ausschließlich bei den Werten `null` oder `undefined`.
 
 ```ts
 const foo = 0;
 
-// Prüfung auf falsy values (null, undefined, '', 0, false)
+// Prüfung auf falsy values (null, undefined, '', 0, false, NaN)
 const value = foo || 'default';
 // value = 'default'
 
-// Zuweisung eines Standardwerts ohne Nullish Coalescing (false, '' und 0 sind erlaubt)
+// Zuweisung eines Standardwerts ohne Nullish Coalescing ('', 0, false und NaN sind erlaubt)
 const value = foo !== null && foo !== undefined ? foo : 'default';
 // value = 0
 
-// Zuweisung eines Standardwerts mit Nullish Coalescing (false, '' und 0 sind erlaubt)
+// Zuweisung eines Standardwerts mit Nullish Coalescing ('', 0, false und NaN sind erlaubt)
 const value = foo ?? 'default';
 // value = 0
 ```
