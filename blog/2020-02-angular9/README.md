@@ -118,7 +118,24 @@ Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unt
 
 Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
 
-### `fullTemplateTypeCheck`
+### Verbesserte Typenüberprüfung
+
+Angular 9 bringt auch Verbesserungen in der Typenüberprüfung mit sich.
+Wir können zwei optionale Features aktivieren:
+
+- `fullTemplateTypeCheck`: Wenn das Flag aktiviert ist wird nicht nur der TypeScript Code auf Typen geprüft, sondern auch die zugehörigen Auswertungen in den Templates (z.B. die Direktiven `ngIf` und `ngFor`).
+- `strictTemplates`: Wird dieses Flag gesetzt, werden zusätzliche Typenüberprüfungen aktiv.
+
+Wir können die Optionen über die `angularCompilerOptions` in der Datei `tsconfig.json` aktivieren:
+
+```json
+{
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": true
+  }
+}
+```
 
 ### Schematics für Interceptoren
 
