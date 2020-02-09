@@ -177,6 +177,18 @@ Mit Optional Chaining vereinfacht sich das Vorgehen. Wir verwenden den `?`-Opera
 const url = book.thumbnail?.url;
 ```
 
+### Nullish Coalescing mit TypeScript
+
+Ein weiteres neues Feature von TypeScript ist das _Nullish Coalescing_, das als Rückfall auf einen Standard-Wert angesehen werden kann.
+
+```ts
+// Zuweisung eines Standard-Wertes ohne Nullish Coalescing
+const value = foo !== null && foo !== undefined ? foo : bar();
+
+// Zuweisung eines Standard-Wertes mit Nullish Coalescing
+const value = foo ?? bar();
+```
+
 <hr>
 
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
