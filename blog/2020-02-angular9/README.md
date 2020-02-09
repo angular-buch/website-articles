@@ -54,6 +54,18 @@ TODO
 
 ### AOT per Default
 
+In der Vergangenheit wurde beim Ausführen von `ng serve` (Development Server) als auch bei der Ausfürhung der Tests standardmäßig die _Just-in-Time_ (_JIT_) Kompilierung genutzt.
+Dabei wird die Anwendung zur Laufzeit im Browser kompiliert.
+Dies hatte vor allem den Hintergrund, dass die JIT Kompilierung deutlich schneller war als die _Ahead-of-Time_ (_AOT_) Kompilierung, die die Anwendung zur Build-Zeit kompiliert.
+Somit war die JIT während der Entwicklung wesentlich geeigneter.
+Bei Erzeugung des Prod-Builds wurde anschließend die AOT-Kompilierung verwendet.
+Ein unerwünschter Nebeneffekt, der in manchen Fällen hierbei auftreten konnte: Bei der Entwicklung lief die Anwendung reibungslos und auch alle Test waren positiv.
+Allerdings konnte es zu Fehlern kommen, die nur im AOT Modus auftraten.
+Diese konnten also im Worst-Case erst erkannt werden, wenn die App bereits Live geschaltet war.
+
+Mit Ivy hat sich die Performance massiv verbessert und der AOT Modus ist per default immer aktiv.
+Somit können wir uns sicher sein, dass wir Fehler, die bei der AOT Kompilierung auftreten, bereits während der Entwicklung erkennen und beheben können.
+
 ### Performance
 
 ### Change Detection
