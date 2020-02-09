@@ -74,7 +74,7 @@ Mit Version 9 wurde das Tooling für Server-Side Rendering mit Angular Universal
 Angular Universal bringt nun eigene Builder mit, die den Buildprozess erledigen.
 Es ist nicht mehr notwendig, die Webpack-Config für den Serverprozess oder das Pre-Rendering selbst zu pflegen.
 
-Mithilfe von `ng add` können wir alles nötige einrichten, um Angular Universal zu verwenden:
+Mithilfe von `ng add` können wir alles Nötige einrichten, um Angular Universal zu verwenden:
 
 ```bash
 ng add @nguniversal/express-engine
@@ -110,7 +110,7 @@ ng run book-rating:prerender
 npm run prerender # Alternativ: Kurzform als NPM-Skript
 ```
 
-Alles nötige hinter den Kulissen erledigt die Angular CLI bzw. der Universal Builder für uns.
+Die notwendigen Schritte erledigt die Angular CLI bzw. der Universal Builder nun für uns.
 Damit verringert sich die Fehleranfälligkeit, die es bisher mit selbst konfigurierten Skripten gab.
 
 
@@ -132,7 +132,7 @@ it('infers dependency types', () => {
 ```
 
 Grundsätzlich können beide Methoden synonym verwendet werden.
-Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nötig, die Änderung in einer neuen Methode zu verpacken.
+Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nötig, die Änderung über eine neue Methode anzubieten.
 
 
 ## i18n mit `@angular/localize`
@@ -195,8 +195,8 @@ Mehr Informationen dazu finden Sie in der [Angular-Dokumentation](https://angula
 
 ### Schematics für Interceptoren
 
-Neu hinzugekommen ist auch ein Workflow zur Erstellung von HTTP-Interceptoren.
-Bisher musste man die Interceptor-Klasse per Hand bauen, ab sofort unterstützt die Angular CLI uns dabei mit folgendem Befehl:
+Neu hinzugekommen ist auch ein Generator zur Erstellung von HTTP-Interceptoren.
+Bisher musste man die Interceptor-Klasse per Hand erstellen, ab sofort unterstützt die Angular CLI uns dabei mit folgendem Befehl:
 
 ```sh
 ng generate interceptor
@@ -209,14 +209,14 @@ Mit Angular 9 kommen neben `root` zwei neue Optionen für die Sichtbarkeit eines
 
 - `root`: Die Anwendung erhält _eine einzige Instanz_ des Services.
 - `any`: Jedes Modul der Anwendung erhält eine _eigene Instanz_ des Services.
-- `platform`: Alle Anwendungen auf der Seite teilen sich _dieselbe Instanz_. Das ist vor allem im Kontext von [Angular Elements](https://angular.io/guide/elements) interessant, wenn mehrere Anwendungen auf einer Seite gebootstrappt werden.
+- `platform`: Alle Anwendungen auf der Seite teilen sich _dieselbe Instanz_. Das ist vor allem im Kontext von [Angular Elements](https://angular.io/guide/elements) interessant, wenn mehrere Anwendungen auf einer Seite "gebootstrappt" (gestartet) werden.
 
 ### Optional Chaining mit TypeScript
 
-TypeScript wurde auf Version 3.7 aktualisiert. Damit ist auch ein neues interessantes Sprachfeature in Angular verwendbar: [Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
+Die von Angular verwendete Version von TypeScript wurde auf die Nummer 3.7 aktualisiert. Damit ist auch ein neues interessantes Sprachfeature im Code verwendbar: [Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
 
 Bei der Arbeit mit verschachtelten Objekten musste man bisher jeden Schritt im Objektpfad einzeln auf Existenz prüfen, um Fehler zu vermeiden.
-Wollen wir beispielsweise die Thumbnail-URL eiens Buchs ermitteln, müssen wir so vorgehen, wenn nicht sicher ist, ob das Thumbnail existiert:
+Wollen wir beispielsweise die Thumbnail-URL eines Buchs ermitteln, müssen wir so vorgehen, wenn nicht sicher ist, ob das Thumbnail existiert:
 
 ```ts
 const book = {
