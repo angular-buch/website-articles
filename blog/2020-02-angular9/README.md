@@ -48,22 +48,37 @@ Außerdem verwendet die Angular CLI jetzt zur Durchführung des Updates unter de
 
 Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
 
-
 ## Der neue Ivy-Renderer
 
+Wer sich einen guten Überblick über den Prozess der Change Detection mit Ivy machen will, sollte einen Blick auf die [Visualierung von Alexey Zuev](https://alexzuza.github.io/angular-9-ivy-change-detection-preview/) werfen.
 
+### Testing
+
+Mit dem neuen Ivy-Renderer wird nicht nur die Anwendung signifikant performanter, sondern auch die Ausführung der Tests.
+Bis einschließlich Angular 8 wurden vor jedem Testschritt alle Komponenten neu kompiliert.
+Ab Angular 9 werden die Komponenten und Module bei der Verwendung von `Testbed` gecached.
+Somit können die Tests erheblich schneller ausgeführt werden.
 
 ## Server-Side Rendering
 
+## `TestBed.inject<T>`: Abhängigkeiten im Test anfordern
 
+Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>` angeforert.
+Mit Angular 9 ist dieser Aufruf als `deprecated` markiert worden.
+Stattdessen sollte nun `TestBed.inject<T>` genutzt werden.
+Die API der beiden Implementierungen sieht für den Nutzer zunächst gleich aus.
+Der Unterschied liegt hier in der Typsicherheit.
+Durch die Nutzung von `TestBed.inject` kann per Typinferenz auf die konkrete Klasse oder die abstrakte Klasse und deren Properties zugreifen.
 
-## TestBed.inject(): Abhängigkeiten im Test anfordern
-
-
+```ts
+// book-store.service.spec.ts
+it('infers dependency types', () => {
+  // `service` ist vom Typ `BookStoreService` in Angular 9 dank Typinferenz
+  const service = TestBed.inject(BookStoreService);
+});
+```
 
 ## i18n mit `@angular/localize`
-
-
 
 ## `@ViewChild()` und `@ContentChild()`
 
@@ -97,6 +112,7 @@ Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unt
 
 Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
 
+### `fullTemplateTypeCheck`
 
 ### Schematics für Interceptoren
 
@@ -112,10 +128,9 @@ ng generate interceptor
 Für Services wird ab Angular 6.0.0 standardmäßig die Option `providedIn: 'root'` verwendet (wir haben dazu im [Update-Artikel zu Angular 6](https://angular-buch.com/blog/2018-05-angular6) berichtet).
 Mit Angular 9 kommen neben `root` zwei neue Optionen für die Sichtbarkeit eines Providers hinzu: `any` und `platform`.
 
-* `root`: Die Anwendung erhält *eine einzige Instanz* des Services.
-* `any`: Jedes Modul der Anwendung erhält eine *eigene Instanz* des Services.
-* `platform`: Alle Anwendungen auf der Seite teilen sich *dieselbe Instanz*. Das ist vor allem im Kontext von [Angular Elements](https://angular.io/guide/elements) interessant, wenn mehrere Anwendungen auf einer Seite gebootstrappt werden.
-
+- `root`: Die Anwendung erhält _eine einzige Instanz_ des Services.
+- `any`: Jedes Modul der Anwendung erhält eine _eigene Instanz_ des Services.
+- `platform`: Alle Anwendungen auf der Seite teilen sich _dieselbe Instanz_. Das ist vor allem im Kontext von [Angular Elements](https://angular.io/guide/elements) interessant, wenn mehrere Anwendungen auf einer Seite gebootstrappt werden.
 
 ### Optional Chaining mit TypeScript
 
@@ -138,8 +153,6 @@ Mit Optional Chaining vereinfacht sich das Vorgehen. Wir verwenden den `?`-Opera
 ```ts
 const url = book.thumbnail?.url;
 ```
-
-
 
 <hr>
 
