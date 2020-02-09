@@ -50,6 +50,12 @@ Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Mi
 
 ## Der neue Ivy-Renderer
 
+### AOT per Default
+
+### Performance
+
+### Change Detection
+
 Wer sich einen guten Überblick über den Prozess der Change Detection mit Ivy machen will, sollte einen Blick auf die [Visualierung von Alexey Zuev](https://alexzuza.github.io/angular-9-ivy-change-detection-preview/) werfen.
 
 ### Testing
