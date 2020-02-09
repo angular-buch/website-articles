@@ -136,24 +136,25 @@ Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nöti
 ## i18n mit `@angular/localize`
 
 Ein neues Paket mit dem Namen `@angular/localize` wurde mit Angular 9 eingeführt.
-Dieses Paket ist ab jetzt die Grundlage für die Internationalisierung (i18n) in Angular
+Dieses Paket ist ab sofort die Grundlage für die Internationalisierung (i18n) in Angular
 
-Bei einem bestehenden Projekt mit Internationalisierung wird der Update-Prozess ein paar Änderungen an der `angular.json` durchführen. Bei Start der Applikation werden Sie anschließend folgende Nachricht in der Konsole sehen:
+Bei einem bestehenden Projekt mit Internationalisierung wird der Update-Prozess einige Änderungen an der `angular.json` durchführen.
+Beim Start der Applikation werden Sie anschließend folgende Nachricht in der Konsole sehen:
 
 > ERROR Error: Uncaught (in promise): Error: It looks like your application or one of its dependencies is using i18n.
 > Angular 9 introduced a global `$localize()` function that needs to be loaded.
 > Please run `ng add @angular/localize` from the Angular CLI.
 
-Wie in der Nachricht bereits ausgeführt, müssen wir folgenden Befehl ausführen:
+Wie in der Nachricht bereits vorgeschlagen müssen wir folgenden Befehl ausführen:
 
 ```bash
 ng add @angular/localize
 ```
 
-Die Datei `polyfills.ts` wird um einen neuen Import ergänzt.
+Die Datei `polyfills.ts` wird um einen neuen Import ergänzt, der die Funktion `$localize()` verfügbar macht.
 Schon ist das Update prinzipiell durchgeführt.
 Die Syntax zur Übersetzung von Templates wurde nicht verändert.
-Weiterhin markieren wir die zu übersetzenden Stellen im HTML durch das i18n-Attribut:
+Weiterhin markieren wir die zu übersetzenden Stellen im HTML durch das `i18n`-Attribut:
 
 ```html
 <h1 i18n="@@HelloWorld">Hello World!!</h1>
@@ -166,8 +167,8 @@ Dieses dringend benötigte Feature ist nun endlich verfügbar:
 const test = $localize`@@HelloWorld`;
 ```
 
-Wir sehen hier den Einsatz der neuen global verfügbaren Funktion `$localize`.
-Diese Methode muss nicht importiert werden und kann als ["Tagged-Template"](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) verwendet werden.
+Wir sehen hier den Einsatz der neuen global verfügbaren Funktion `$localize()`.
+Diese Methode muss nicht importiert werden und kann als ["Tagged Template"](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) verwendet werden.
 
 In dem obigen Beispiel fehlt noch die Standard-Übersetzung – im Template-Beispiel lautete diese `Hello World!!`.
 Das entsprechende Äquivalent können wir mit zwei zusätzlichen Doppelpunkten ausdrücken:
@@ -180,7 +181,7 @@ Eine weitere stark nachgefragte Funktionalität sind Übersetzungen zur Laufzeit
 Damit kann Angular leider immer noch nicht (ganz) aufwarten.
 Angular unterstützt nun aber die Möglichkeit, zum Start der Applikation (also vor dem "Boostrapping") die notwendigen Übersetzungen bereitzustellen.
 Dadurch muss man die Applikation nicht mehr langwierig in diverse Sprachen kompilieren.
-Hierfür gibt es die neue Funktion `loadTranslations`:
+Hierfür gibt es die neue Funktion `loadTranslations()`:
 
 ```ts
 // main.ts
@@ -195,11 +196,11 @@ platformBrowserDynamic()
   .catch(err => console.error(err));
 ```
 
-Wir können auch einen Schritt weiter gehen, und die Übersetzungen per JSON-Datei nachladen.
-Wichtig ist dabei nur, das `loadTranslations()` vor `bootstrapModule()` ausgeführt werden muss.
+Wir können auch einen Schritt weiter gehen und die Übersetzungen aus einer JSON-Datei nachladen.
+Wichtig ist dabei nur, dass `loadTranslations()` vor `bootstrapModule()` ausgeführt werden muss.
 Hierfür stellt Angular (noch) keinen Helfer bereit.
-Diese Lücke füllt das Projekt `locl` vom ehemaligen Angular-Teammitglied Olivier Combe.
-Folgendes Beispiel demonstriert das Nachladen von Übersetzungen vor dem "Boostrapping":
+Diese Lücke füllt das Projekt [`locl`](https://github.com/loclapp/locl) vom ehemaligen Angular-Teammitglied Olivier Combe.
+Folgendes Beispiel demonstriert das Nachladen von Übersetzungen vor dem "Bootstrapping":
 
 ```ts
 // main.ts
@@ -215,7 +216,7 @@ getTranslations(messages).then((data: ParsedTranslationBundle) => {
 });
 ```
 
-Mehr zu der Methode `getTranslations()` erfahren Sie auf der [GitHub-Seite vom Projekt](https://github.com/loclapp/locl/tree/master/libs/core#usage).
+Mehr zu der Methode `getTranslations()` erfahren Sie auf der [GitHub-Seite des Projekts](https://github.com/loclapp/locl/tree/master/libs/core#usage).
 
 ## `@ViewChild()` und `@ContentChild()`
 
