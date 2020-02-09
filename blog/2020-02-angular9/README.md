@@ -50,6 +50,8 @@ Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Mi
 
 ## Der neue Ivy-Renderer
 
+TODO
+
 ### AOT per Default
 
 ### Performance
@@ -65,26 +67,78 @@ Bis einschließlich Angular 8 wurden vor jedem Testschritt alle Komponenten neu 
 Ab Angular 9 werden die Komponenten und Module bei der Verwendung von `Testbed` gecached.
 Somit können die Tests erheblich schneller ausgeführt werden.
 
-## Server-Side Rendering
+## Server-Side Rendering und Pre-Rendering
+
+Mit Version 9 wurde das Tooling für Server-Side Rendering mit Angular Universal erheblich verbessert.
+
+Angular Universal bringt nun eigene Builder mit, die den Buildprozess erledigen.
+Es ist nicht mehr notwendig, die Webpack-Config für den Serverprozess oder das Pre-Rendering selbst zu pflegen.
+
+Mithilfe von `ng add` können wir alles nötige einrichten, um Angular Universal zu verwenden:
+
+```bash
+ng add @nguniversal/express-engine
+```
+
+Es wird automatisch die Konfiguration für den Universal Builder in die `angular.json` eingefügt.
+Die Datei `server.ts` enthält den Code für den Node.js-Server, der die Anwendung später ausliefert.
+Neu mit Angular 9 ist, dass für die Serverseite nur noch ein einziges Bundle erstellt wird, das die Angular-Anwendung und den Node.js-Server zusammen beinhaltet.
+
+Für Pre-Rendering vereinfacht sich der Workflow enorm.
+Während wir bisher immer ein eigenes Skript erstellen mussten, um statische HTML-Seiten aus der Anwendung zu generieren, übernimmt das Angular-Tooling all das ab sofort automatisch.
+In der `angular.json` befindet sich dazu der folgende neue Abschnitt:
+
+```
+"prerender": {
+  "builder": "@nguniversal/builders:prerender",
+  "options": {
+    "routes": [
+      "/",
+      "/books"
+    ]
+    // ...
+  },
+  // ...
+}
+```
+
+Hier müssen wir lediglich die Routen eintragen, für die das Pre-Rendering ausgeführt werden soll.
+Der folgende Befehl startet dann den Build-Prozess:
+
+```bash
+ng run book-rating:prerender
+npm run prerender # Alternativ: Kurzform als NPM-Skript
+```
+
+Alles nötige hinter den Kulissen erledigt die Angular CLI bzw. der Universal Builder für uns.
+Damit verringert sich die Fehleranfälligkeit, die es bisher mit selbst konfigurierten Skripten gab.
+
 
 ## `TestBed.inject<T>`: Abhängigkeiten im Test anfordern
 
-Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>` angeforert.
-Mit Angular 9 ist dieser Aufruf als `deprecated` markiert worden.
+Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>()` angeforert.
+Mit Angular 9 wurde diese Methode als *deprecated* markiert.
 Stattdessen sollte nun `TestBed.inject<T>` genutzt werden.
-Die API der beiden Implementierungen sieht für den Nutzer zunächst gleich aus.
-Der Unterschied liegt hier in der Typsicherheit.
-Durch die Nutzung von `TestBed.inject` kann per Typinferenz auf die konkrete Klasse oder die abstrakte Klasse und deren Properties zugreifen.
+Der Unterschied liegt hier in der Typsicherheit:
+Mit `TestBed.inject()` ist der Rückgabewert mittels Typinferenz korrekt typisiert, und wir können auf die Propertys der Klasse zugreifen.
+Das alte `TestBed.get()` lieferte hingegen stets `any` zurück.
 
 ```ts
 // book-store.service.spec.ts
 it('infers dependency types', () => {
-  // `service` ist vom Typ `BookStoreService` in Angular 9 dank Typinferenz
+  // `service` ist vom Typ `BookStoreService`
   const service = TestBed.inject(BookStoreService);
 });
 ```
 
+Grundsätzlich können beide Methoden synonym verwendet werden.
+Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nötig, die Änderung in einer neuen Methode zu verpacken.
+
+
 ## i18n mit `@angular/localize`
+
+TODO
+
 
 ## `@ViewChild()` und `@ContentChild()`
 
@@ -118,15 +172,14 @@ Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unt
 
 Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
 
-### Verbesserte Typenüberprüfung
+### Verbesserte Typprüfung in Templates
 
-Angular 9 bringt auch Verbesserungen in der Typenüberprüfung mit sich.
-Wir können zwei optionale Features aktivieren:
+Angular 9 bringt zwei neue Optionen zur Typprüfung mit:
 
-- `fullTemplateTypeCheck`: Wenn das Flag aktiviert ist wird nicht nur der TypeScript Code auf Typen geprüft, sondern auch die zugehörigen Auswertungen in den Templates (z.B. die Direktiven `ngIf` und `ngFor`).
-- `strictTemplates`: Wird dieses Flag gesetzt, werden zusätzliche Typenüberprüfungen aktiv.
+- `fullTemplateTypeCheck`: Wenn das Flag aktiviert ist wird nicht nur der TypeScript-Code auf Typen geprüft, sondern auch die zugehörigen Expressions in den Templates (z. B. die Direktiven `ngIf` und `ngFor`). Diese Option ist in einem neuen Angular-Projekt standardmäßig aktiviert.
+- `strictTemplates`: Wird dieses Flag gesetzt, werden zusätzliche Typprüfungen für Templates aktiv.
 
-Wir können die Optionen über die `angularCompilerOptions` in der Datei `tsconfig.json` aktivieren:
+Wir können die Optionen in der Datei `tsconfig.json` im Abschnitt `angularCompilerOptions` aktivieren:
 
 ```json
 {
@@ -136,6 +189,9 @@ Wir können die Optionen über die `angularCompilerOptions` in der Datei `tsconf
   }
 }
 ```
+
+Im Strict Mode wird beispielsweise geprüft, ob der übergebene Typ eines Property Bindings auch zu dem dazugehörigen `@Input()` passt.
+Mehr Informationen dazu finden Sie in der [Angular-Dokumentation](https://angular.io/guide/template-typecheck#strict-mode).
 
 ### Schematics für Interceptoren
 
@@ -179,22 +235,32 @@ const url = book.thumbnail?.url;
 
 ### Nullish Coalescing mit TypeScript
 
-Ein weiteres neues Feature von TypeScript ist das _Nullish Coalescing_, das als Rückfall auf einen Standard-Wert angesehen werden kann.
-Der Rückfall greift allerdings im Gegensatz zu `||` nur bei den Werten `null` oder `undefined`.
+Ein weiteres neues TypeScript-Feature von TypeScript ist _Nullish Coalescing_.
+Damit kann in einem Ausdruck ein Fallback-Wert definiert werden, der eingesetzt wird, wenn der geprüfte Wert ungültig ist.
+
+Für diese Semantik konnte bisher der `||`-Operator verwendet werden.
+Ist der Wert von `foo` *falsy* (also `null`, `undefined`, `0`, `NaN`, `false` oder leerer String), wird stattdessen der Wert `default` eingesetzt:
+
+```ts
+const value = foo || 'default';
+```
+
+Mit dem neuen _Nullish Coalescing_ gelten `0` oder leerer String als gültige Werte.
+Der Rückfall mit dem `??`-Operator greift im Gegensatz zu `||` also nur bei den Werten `null` oder `undefined`.
 
 ```ts
 const foo = 0;
 
-// Prüfung auf Falsy Werte (null, undefined, '', 0, false)
-let value = foo || 'default';
+// Prüfung auf falsy values (null, undefined, '', 0, false)
+const value = foo || 'default';
 // value = 'default'
 
-// Zuweisung eines Standard-Wertes ohne Nullish Coalescing (false, '' und 0 sind erlaubt)
-let value = foo !== null && foo !== undefined ? foo : 'default';
+// Zuweisung eines Standardwerts ohne Nullish Coalescing (false, '' und 0 sind erlaubt)
+const value = foo !== null && foo !== undefined ? foo : 'default';
 // value = 0
 
-// Zuweisung eines Standard-Wertes mit Nullish Coalescing (false, '' und 0 sind erlaubt)
-let value = foo ?? 'default';
+// Zuweisung eines Standardwerts mit Nullish Coalescing (false, '' und 0 sind erlaubt)
+const value = foo ?? 'default';
 // value = 0
 ```
 
