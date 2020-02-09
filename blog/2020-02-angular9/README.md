@@ -50,11 +50,16 @@ Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Mi
 
 ## Der neue Ivy-Renderer
 
-Die größte Neuerung in Angular 9.0.0 ist der neue Renderer _Ivy_, der bereits mit Angular 8 als Opt-In genutzt werden konnte.
-Ivy löst die vorherige _View Enigne_ als Renderer ab und bringt eine ganze Reihe von Verbesserungen mit sich.
-Hierzu zählen vor allem massive Performance-Verbesserungen, ein verbessertes Tree-Shaking, kleinere Bundle-Sizes, Template Checks und aufschlussreichere Fehlermeldungen.
-Ivy wurde sehr lange getestet um den Übergang von der View Engine nahtlos und ohne Breaking Changes am Quellcode durchzuführen.
-Sollten Sie bei der Migration zu Angular 9 unerwartet dennoch Probleme mit dem neuen Renderer bekommen, so besteht noch immer die Möglichkeit Ivy durch ein Opt-Out wieder zu deaktivieren:
+Die wohl größte Neuerung in Angular 9.0.0 ist der neue Renderer und Compiler _Ivy_ – also der Baustein, der die Templates mit Angular-Ausdrücken in JavaScript-Anweisungen umsetzt, die im Browser den DOM generieren.
+Der neue Ivy-Renderer löst die vorherige _View Engine_ vollständig ab.
+Ivy konnte bereits mit Angular 8 als Opt-In genutzt werden, ist ab sofort aber als default gesetzt.
+
+Ivy soll vollständig abwärtskompatibel sein. Für die meisten Nutzer ändert sich also nichts, in wenigen Ausnahmefällen könnte es zu Problemen mit der Kompatibilität mit alten Anwendungen kommen.
+
+Das Projekt Ivy hat das Angular-Team nun fast zwei Jahre beschäftigt – doch das Ergebnis lässt sich sehen.
+Ivy bringt vor allem massive Performance-Verbesserungen, verbessertes Tree Shaking, kleinere Bundle-Sizes, Template Checks und aufschlussreichere Fehlermeldungen mit sich.
+Ivy wurde sehr lange und intensiv getestet, um den Übergang von der View Engine nahtlos und ohne Breaking Changes am Quellcode durchzuführen.
+Sollten Sie bei der Migration zu Angular 9 dennoch unerwartet Probleme, so besteht noch immer die Möglichkeit, Ivy durch ein Opt-Out wieder zu deaktivieren:
 
 ```json
 // tsconfig.json
@@ -73,17 +78,18 @@ Nachfolgend wollen wir noch etwas konkreter auf ein paar wichtige Features und V
 
 ### AOT per Default
 
-In der Vergangenheit wurde beim Ausführen von `ng serve` (Development Server) als auch bei der Ausfürhung der Tests standardmäßig die _Just-in-Time_ (_JIT_) Kompilierung genutzt.
-Dabei wird die Anwendung zur Laufzeit im Browser kompiliert.
-Dies hatte vor allem den Hintergrund, dass die JIT Kompilierung deutlich schneller war als die _Ahead-of-Time_ (_AOT_) Kompilierung, die die Anwendung zur Build-Zeit kompiliert.
-Somit war die JIT während der Entwicklung wesentlich geeigneter.
-Bei Erzeugung des Prod-Builds wurde anschließend die AOT-Kompilierung verwendet.
-Ein unerwünschter Nebeneffekt, der in manchen Fällen hierbei auftreten konnte: Bei der Entwicklung lief die Anwendung reibungslos und auch alle Test waren positiv.
-Allerdings konnte es zu Fehlern kommen, die nur im AOT Modus auftraten.
-Diese konnten also im Worst-Case erst erkannt werden, wenn die App bereits Live geschaltet war.
+Mit Ivy wird standardmäßig die Ahead-of-Time Compilation (AOT) eingesetzt – auch bei der Entwicklung.
+Das bedeutet, dass die Templates bereits zur Buildzeit in JavaScript umgesetzt werden und nicht erst zur Laufzeit im Browser.
 
-Mit Ivy hat sich die Performance massiv verbessert und der AOT Modus ist per default immer aktiv.
-Somit können wir uns sicher sein, dass wir Fehler, die bei der AOT Kompilierung auftreten, bereits während der Entwicklung erkennen und beheben können.
+Bisher wurde beim Ausführen von `ng serve` (Development Server) und auch bei der Ausführung der Tests _Just-in-Time_ Compilation_ (JIT) genutzt, die Anwendung wird also zur Laufzeit im Browser kompiliert.
+Das lag vor allem daran, dass JIT mit dem alten Renderer deutlich schneller als AOT, wenn häufige Rebuilds zur ENtwicklungszeit durchgeführt werden mussten.
+Für den Produktiv-Build wurde auch bisher schon die AOT-Kompilierung verwendet.
+
+Durch die zwei verschiedenen Compiler-Modi konnte es vereinzelt zu unerwünschten Nebeneffekten kommen: Bei der Entwicklung lief die Anwendung reibungslos und alle Test waren grün.
+Im Produktivmodus mit AOT tauchten dann plötzlich Fehler auf, die vorher nicht erkennbar waren.
+
+Mit Ivy hat sich die Performance massiv verbessert und der AOT-Modus ist standardmäßig immer aktiv.
+Somit kann man sichergehen, dass bei der Entwicklung und im Produktivbetrieb stets derselbe Modus eingesetzt wurd und bereits frühzeitig erkannt werden können.
 
 ### Change Detection
 
