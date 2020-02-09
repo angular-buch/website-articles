@@ -187,7 +187,7 @@ Hierfür gibt es die neue Funktion `loadTranslations`:
 import { loadTranslations } from '@angular/localize';
 
 loadTranslations({
-  HelloWorld: 'Hallo Welt!!',
+  HelloWorld: 'Hallo Welt!!'
 });
 
 platformBrowserDynamic()
