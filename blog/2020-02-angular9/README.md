@@ -50,7 +50,24 @@ Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Mi
 
 ## Der neue Ivy-Renderer
 
-TODO
+Die größte Neuerung in Angular 9.0.0 ist der neue Renderer _Ivy_, der bereits mit Angular 8 als Opt-In genutzt werden konnte.
+Ivy löst die vorherige _View Enigne_ als Renderer ab und bringt eine ganze Reihe von Verbesserungen mit sich.
+Hierzu zählen vor allem massive Performance-Verbesserungen, ein verbessertes Tree-Shaking, kleinere Bundle-Sizes, Template Checks und aufschlussreichere Fehlermeldungen.
+Ivy wurde sehr lange getestet um den Übergang von der View Engine nahtlos und ohne Breaking Changes am Quellcode durchzuführen.
+Sollten Sie bei der Migration zu Angular 9 unerwartet dennoch Probleme mit dem neuen Renderer bekommen, so besteht noch immer die Möglichkeit Ivy durch ein Opt-Out wieder zu deaktivieren:
+
+```json
+// tsconfig.json
+{
+  "angularCompilerOptions": {
+    "enableIvy": false
+  }
+}
+```
+
+Nachfolgend wollen wir noch etwas konkreter auf ein paar wichtige Features und Verbesserungen von Ivy eingehen.
+
+### Performance
 
 ### AOT per Default
 
@@ -65,8 +82,6 @@ Diese konnten also im Worst-Case erst erkannt werden, wenn die App bereits Live 
 
 Mit Ivy hat sich die Performance massiv verbessert und der AOT Modus ist per default immer aktiv.
 Somit können wir uns sicher sein, dass wir Fehler, die bei der AOT Kompilierung auftreten, bereits während der Entwicklung erkennen und beheben können.
-
-### Performance
 
 ### Change Detection
 
