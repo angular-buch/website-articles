@@ -180,13 +180,22 @@ const url = book.thumbnail?.url;
 ### Nullish Coalescing mit TypeScript
 
 Ein weiteres neues Feature von TypeScript ist das _Nullish Coalescing_, das als Rückfall auf einen Standard-Wert angesehen werden kann.
+Der Rückfall greift allerdings im Gegensatz zu `||` nur bei den Werten `null`, `NaN` oder `undefined`.
 
 ```ts
-// Zuweisung eines Standard-Wertes ohne Nullish Coalescing
-const value = foo !== null && foo !== undefined ? foo : bar();
+const foo = 0;
 
-// Zuweisung eines Standard-Wertes mit Nullish Coalescing
-const value = foo ?? bar();
+// Prüfung auf Falsy Werte (null, undefined, NaN, '', 0)
+let value = foo || 'default';
+// value = 'default'
+
+// Zuweisung eines Standard-Wertes ohne Nullish Coalescing ('' und 0 sind erlaubt)
+let value = foo !== null && foo !== undefined ? foo : 'default';
+// value = 0
+
+// Zuweisung eines Standard-Wertes mit Nullish Coalescing ('' und 0 sind erlaubt)
+let value = foo ?? 'default';
+// value = 0
 ```
 
 <hr>
