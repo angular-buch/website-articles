@@ -271,4 +271,4 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß mit Angular wünschen<br>
 Johannes, Danny und Ferdinand**
 
-<small>**Titelbild:** TODO: hier eine kurze Beschreibung einfügen</small>
+<small>**Titelbild:** Yosemite National Park, California, 2019</small>
