@@ -69,6 +69,8 @@ Nachfolgend wollen wir noch etwas konkreter auf ein paar wichtige Features und V
 
 ### Performance
 
+### Bundle Sizes
+
 ### AOT per Default
 
 In der Vergangenheit wurde beim Ausführen von `ng serve` (Development Server) als auch bei der Ausfürhung der Tests standardmäßig die _Just-in-Time_ (_JIT_) Kompilierung genutzt.
