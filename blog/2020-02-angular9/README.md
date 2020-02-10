@@ -18,27 +18,45 @@ sticky: false
 hidden: true
 ---
 
-Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0.0**!
+Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0.0**! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
 
 Durch eine Reihe von Bugs und offene Features hatte sich das Release um einige Wochen verzögert – ursprünglich angestrebt war das Release im November.
 Der wohl wichtigste Punkt ist die Umstellung auf den neuen Renderer _Ivy_, der einige Features und vor allem Verbesserungen in der Performance mit sich bringt.
 Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Version ist undramatisch und geht leicht von der Hand.
 
-Wir möchten Ihnen in diesem Artikel kurz die wichtigsten Neuerungen vorstellen.
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular Blog](https://blog.angular.io/23c97b63cfa3).
+
+**Inhalt**
+
+- [Update auf Angular 9](#update-auf-angular-9)
+- [Der neue Ivy-Renderer](#der-neue-ivy-renderer)
+  - [Bundle Sizes](#bundle-sizes)
+  - [AOT per Default](#aot-per-default)
+  - [Change Detection](#change-detection)
+  - [Testing](#testing)
+- [Server-Side Rendering und Pre-Rendering](#server-side-rendering-und-pre-rendering)
+- [`TestBed.inject<T>`: Abhängigkeiten im Test anfordern](#testbed-inject)
+- [i18n mit `@angular/localize`](#i18n-mit-angularlocalize)
+- [`@ViewChild()` und `@ContentChild()`](#viewchild-und-contentchild)
+- [Weitere Neuigkeiten](#weitere-neuigkeiten)
+  - [Verbesserte Typprüfung in Templates](#template-checks)
+  - [Schematics für Interceptoren](#schematics-interceptor)
+  - [`providedIn` für Services: `any` und `platform`](#provided-in)
+  - [Optional Chaining mit TypeScript](#optional-chaining-mit-typescript)
+  - [Nullish Coalescing mit TypeScript](#nullish-coalescing-mit-typescript)
 
 ## Update auf Angular 9
 
 Das Update zur neuen Angular-Version ist in wenigen Schritten getan.
 Falls Ihr Projekt noch nicht in der letzten Version von Angular 8 vorliegt, sollten Sie zunächst das folgende Update erledigen:
 
-```sh
+```bash
 ng update @angular/cli@8 @angular/core@8
 ```
 
 Anschließend kann das Update auf Angular 9 erfolgen:
 
-```sh
+```bash
 ng update @angular/cli @angular/core
 ```
 
@@ -50,15 +68,16 @@ Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Mi
 
 ## Der neue Ivy-Renderer
 
-Die wohl größte Neuerung in Angular 9.0.0 ist der neue Renderer und Compiler _Ivy_ – also der Baustein, der die Templates mit Angular-Ausdrücken in JavaScript-Anweisungen umsetzt, die im Browser den DOM generieren.
+Die wohl größte Neuerung in Angular 9.0 ist der neue Renderer und Compiler _Ivy_ – also der Baustein, der die Templates mit Angular-Ausdrücken in JavaScript-Anweisungen umsetzt, die im Browser den DOM generieren.
 Der neue Ivy-Renderer löst die vorherige _View Engine_ vollständig ab.
-Ivy konnte bereits mit Angular 8 als Opt-In genutzt werden, ist ab sofort aber als default gesetzt.
+Ivy konnte bereits mit Angular 8 als Opt-In genutzt werden, ist ab sofort standardmäßig aktiv.
 
 Ivy soll vollständig abwärtskompatibel sein. Für die meisten Nutzer ändert sich also nichts, in wenigen Ausnahmefällen könnte es zu Problemen mit der Kompatibilität mit alten Anwendungen kommen.
 
 Das Projekt Ivy hat das Angular-Team nun fast zwei Jahre beschäftigt – doch das Ergebnis lässt sich sehen.
-Ivy bringt vor allem massive Performance-Verbesserungen, verbessertes Tree Shaking, kleinere Bundle-Sizes, Template Checks und aufschlussreichere Fehlermeldungen mit sich.
-Ivy wurde sehr lange und intensiv getestet, um den Übergang von der View Engine nahtlos und ohne Breaking Changes am Quellcode durchzuführen.
+Ivy verspricht vor allem **kleinere Bundles**, was den Download beschleunigt und damit die **generelle Performance** der Anwendung deutlich erhöht.
+Ebenso bringt Ivy deutliche Performance beim Kompilieren, verbessertes Tree Shaking, Template Checks und aufschlussreichere Fehlermeldungen mit sich.
+Ivy wurde sehr lange und intensiv getestet, um in den meisten Projekten eine nahtlose Umstellung zu ermöglichen.
 Sollten Sie bei der Migration zu Angular 9 dennoch unerwartet Probleme, so besteht noch immer die Möglichkeit, Ivy durch ein Opt-Out wieder zu deaktivieren:
 
 ```json
@@ -72,9 +91,16 @@ Sollten Sie bei der Migration zu Angular 9 dennoch unerwartet Probleme, so beste
 
 Nachfolgend wollen wir noch etwas konkreter auf ein paar wichtige Features und Verbesserungen von Ivy eingehen.
 
-### Performance
-
 ### Bundle Sizes
+
+Das Entfernen von ungenutztem Code ("Tree Shaking") wurde mit dem Ivy-Compiler weiter verbessert.
+Von den Verbesserungen profitieren vor allem kleine und große Anwendungen.
+
+![](bundle-sizes.png)
+> Bei kleinen Anwendungen konnte die Paketgröße um etwa 30%, bei großen Anwendungen um 25-40 % und bei mittleren Anwendungen nur minimal reduziert werden. ([Quelle](https://blog.angular.io/23c97b63cfa3))
+
+Da die Anwendung insgesamt kleiner ist, kann sie schneller herunter geladen und ausgeführt werden.
+Dies führt dazu, das die Anwendung deutlich schneller startet.
 
 ### AOT per Default
 
@@ -88,8 +114,8 @@ Für den Produktiv-Build wurde auch bisher schon die AOT-Kompilierung verwendet.
 Durch die zwei verschiedenen Compiler-Modi konnte es vereinzelt zu unerwünschten Nebeneffekten kommen: Bei der Entwicklung lief die Anwendung reibungslos und alle Test waren grün.
 Im Produktivmodus mit AOT tauchten dann plötzlich Fehler auf, die vorher nicht erkennbar waren.
 
-Mit Ivy hat sich die Performance massiv verbessert und der AOT-Modus ist standardmäßig immer aktiv.
-Somit kann man sichergehen, dass bei der Entwicklung und im Produktivbetrieb stets derselbe Modus eingesetzt wurd und bereits frühzeitig erkannt werden können.
+Mit Ivy hat sich die Performance beim Kompilieren massiv verbessert, so dass der AOT-Modus nun standardmäßig immer aktiv sein kann.
+Somit kann man sichergehen, dass bei der Entwicklung und im Produktivbetrieb stets derselbe Modus eingesetzt wird und bereits frühzeitig erkannt werden können.
 
 ### Change Detection
 
@@ -123,7 +149,7 @@ Für Pre-Rendering vereinfacht sich der Workflow enorm.
 Während wir bisher immer ein eigenes Skript erstellen mussten, um statische HTML-Seiten aus der Anwendung zu generieren, übernimmt das Angular-Tooling all das ab sofort automatisch.
 In der `angular.json` befindet sich dazu der folgende neue Abschnitt:
 
-```
+```json
 "prerender": {
   "builder": "@nguniversal/builders:prerender",
   "options": {
@@ -148,7 +174,7 @@ npm run prerender # Alternativ: Kurzform als NPM-Skript
 Die notwendigen Schritte erledigt die Angular CLI bzw. der Universal Builder nun für uns.
 Damit verringert sich die Fehleranfälligkeit, die es bisher mit selbst konfigurierten Skripten gab.
 
-## `TestBed.inject<T>`: Abhängigkeiten im Test anfordern
+## `TestBed.inject<T>`: Abhängigkeiten im Test anfordern <a name="testbed-inject"></a>
 
 Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>()` angeforert.
 Mit Angular 9 wurde diese Methode als _deprecated_ markiert.
@@ -231,7 +257,7 @@ platformBrowserDynamic()
   .catch(err => console.error(err));
 ```
 
-Wir können auch einen Schritt weiter gehen und die Übersetzungen aus einer JSON-Datei nachladen.
+Wir können auch einen Schritt weitergehen und die Übersetzungen aus einer JSON-Datei nachladen.
 Wichtig ist dabei nur, dass `loadTranslations()` vor `bootstrapModule()` ausgeführt werden muss.
 Hierfür stellt Angular (noch) keinen Helfer bereit.
 Diese Lücke füllt das Projekt [`locl`](https://github.com/loclapp/locl) vom ehemaligen Angular-Teammitglied Olivier Combe.
@@ -285,7 +311,7 @@ Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unt
 
 Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
 
-### Verbesserte Typprüfung in Templates
+### Verbesserte Typprüfung in Templates <a name="template-checks"></a>
 
 Angular 9 bringt zwei neue Optionen zur Typprüfung mit:
 
@@ -306,16 +332,16 @@ Wir können die Optionen in der Datei `tsconfig.json` im Abschnitt `angularCompi
 Im Strict Mode wird beispielsweise geprüft, ob der übergebene Typ eines Property Bindings auch zu dem dazugehörigen `@Input()` passt.
 Mehr Informationen dazu finden Sie in der [Angular-Dokumentation](https://angular.io/guide/template-typecheck#strict-mode).
 
-### Schematics für Interceptoren
+### Schematics für Interceptoren <a name="schematics-interceptor"></a>
 
 Neu hinzugekommen ist auch ein Generator zur Erstellung von HTTP-Interceptoren.
 Bisher musste man die Interceptor-Klasse per Hand erstellen, ab sofort unterstützt die Angular CLI uns dabei mit folgendem Befehl:
 
-```sh
+```bash
 ng generate interceptor
 ```
 
-### `providedIn` für Services: `any` und `platform`
+### `providedIn` für Services: `any` und `platform` <a name="provided-in"></a>
 
 Für Services wird ab Angular 6.0.0 standardmäßig die Option `providedIn: 'root'` verwendet (wir haben dazu im [Update-Artikel zu Angular 6](https://angular-buch.com/blog/2018-05-angular6) berichtet).
 Mit Angular 9 kommen neben `root` zwei neue Optionen für die Sichtbarkeit eines Providers hinzu: `any` und `platform`.
@@ -381,7 +407,7 @@ const value = foo ?? 'default';
 
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
 
-**Viel Spaß mit Angular wünschen<br>
+**Viel Spaß mit Angular wünschen  
 Johannes, Danny und Ferdinand**
 
 <small>**Titelbild:** Yosemite National Park, California, 2019</small>
