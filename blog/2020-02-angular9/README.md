@@ -62,23 +62,23 @@ ng update @angular/cli @angular/core
 
 Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch, sofern notwendig.
 Hier zeigt sich bereits die erste Neuerung: Beim `ng update` werden ab sofort ausführliche Informationen zu neuen Features ausgegeben, die Ihnen beim Update helfen.
-Außerdem verwendet die Angular CLI jetzt zur Durchführung des Updates unter der Haube jetzt immer die Version, auf die Sie updaten wollen.
+Außerdem verwendet die Angular CLI zur Durchführung des Updates unter der Haube jetzt immer die Version, auf die Sie updaten wollen.
 
-Auf [update.angular.io](https://update.angular.io) können Sie übrigens alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
+Auf [update.angular.io](https://update.angular.io) können Sie übrigens wie üblich alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
 
 ## Der neue Ivy-Renderer
 
 Die wohl größte Neuerung in Angular 9.0 ist der neue Renderer und Compiler _Ivy_ – also der Baustein, der die Templates mit Angular-Ausdrücken in JavaScript-Anweisungen umsetzt, die im Browser den DOM generieren.
 Der neue Ivy-Renderer löst die vorherige _View Engine_ vollständig ab.
-Ivy konnte bereits mit Angular 8 als Opt-In genutzt werden, ist ab sofort standardmäßig aktiv.
+Ivy konnte bereits mit Angular 8 als Opt-In genutzt werden, ist ab sofort aber standardmäßig aktiv.
 
 Ivy soll vollständig abwärtskompatibel sein. Für die meisten Nutzer ändert sich also nichts, in wenigen Ausnahmefällen könnte es zu Problemen mit der Kompatibilität mit alten Anwendungen kommen.
 
-Das Projekt Ivy hat das Angular-Team nun fast zwei Jahre beschäftigt – doch das Ergebnis lässt sich sehen.
+Das Projekt Ivy hat das Angular-Team nun fast zwei Jahre beschäftigt – doch das Ergebnis kann sich sehen lassen.
 Ivy verspricht vor allem **kleinere Bundles**, was den Download beschleunigt und damit die **generelle Performance** der Anwendung deutlich erhöht.
-Ebenso bringt Ivy deutliche Performance beim Kompilieren, verbessertes Tree Shaking, Template Checks und aufschlussreichere Fehlermeldungen mit sich.
+Ebenso bringt Ivy deutlich bessere Performance beim Kompilieren, verbessertes Tree Shaking, Template Checks und aufschlussreichere Fehlermeldungen mit sich.
 Ivy wurde sehr lange und intensiv getestet, um in den meisten Projekten eine nahtlose Umstellung zu ermöglichen.
-Sollten Sie bei der Migration zu Angular 9 dennoch unerwartet Probleme, so besteht noch immer die Möglichkeit, Ivy durch ein Opt-Out wieder zu deaktivieren:
+Sollten Sie bei der Migration zu Angular 9 dennoch unerwartet Probleme haben, so besteht noch immer die Möglichkeit, Ivy durch ein Opt-Out wieder zu deaktivieren:
 
 ```json
 // tsconfig.json
@@ -97,40 +97,40 @@ Das Entfernen von ungenutztem Code ("Tree Shaking") wurde mit dem Ivy-Compiler w
 Von den Verbesserungen profitieren vor allem kleine und große Anwendungen.
 
 ![](bundle-sizes.png)
-> Bei kleinen Anwendungen konnte die Paketgröße um etwa 30%, bei großen Anwendungen um 25-40 % und bei mittleren Anwendungen nur minimal reduziert werden. ([Quelle](https://blog.angular.io/23c97b63cfa3))
+> Bei kleinen Anwendungen konnte die Paketgröße um etwa 30 %, bei großen Anwendungen um 25-40 % und bei mittleren Anwendungen nur minimal reduziert werden. ([Quelle](https://blog.angular.io/23c97b63cfa3))
 
-Da die Anwendung insgesamt kleiner ist, kann sie schneller herunter geladen und ausgeführt werden.
-Dies führt dazu, das die Anwendung deutlich schneller startet.
+Da die Anwendung insgesamt kleiner ist, kann sie schneller heruntergeladen und ausgeführt werden.
+Dadurch startet die Anwendung auch deutlich schneller.
 
 ### AOT per Default
 
-Mit Ivy wird standardmäßig die Ahead-of-Time Compilation (AOT) eingesetzt – auch bei der Entwicklung.
+Mit Ivy wird standardmäßig die _Ahead-of-Time Compilation (AOT)_ eingesetzt – auch bei der Entwicklung.
 Das bedeutet, dass die Templates bereits zur Buildzeit in JavaScript umgesetzt werden und nicht erst zur Laufzeit im Browser.
 
-Bisher wurde beim Ausführen von `ng serve` (Development Server) und auch bei der Ausführung der Tests _Just-in-Time_ Compilation_ (JIT) genutzt, die Anwendung wird also zur Laufzeit im Browser kompiliert.
-Das lag vor allem daran, dass JIT mit dem alten Renderer deutlich schneller als AOT, wenn häufige Rebuilds zur ENtwicklungszeit durchgeführt werden mussten.
+Bisher wurde beim Ausführen von `ng serve` (Development Server) und auch bei der Ausführung der Tests die _Just-in-Time Compilation (JIT)_ genutzt – die Anwendung wird also zur Laufzeit im Browser kompiliert.
+Das lag vor allem daran, dass JIT mit dem alten Renderer deutlich schneller arbeitet als AOT, wenn häufige Rebuilds zur Entwicklungszeit durchgeführt werden mussten.
 Für den Produktiv-Build wurde auch bisher schon die AOT-Kompilierung verwendet.
 
-Durch die zwei verschiedenen Compiler-Modi konnte es vereinzelt zu unerwünschten Nebeneffekten kommen: Bei der Entwicklung lief die Anwendung reibungslos und alle Test waren grün.
+Durch die zwei verschiedenen Compiler-Modi konnte es vereinzelt zu unerwünschten Nebeneffekten kommen: Bei der Entwicklung lief die Anwendung reibungslos und alle Tests waren grün.
 Im Produktivmodus mit AOT tauchten dann plötzlich Fehler auf, die vorher nicht erkennbar waren.
 
 Mit Ivy hat sich die Performance beim Kompilieren massiv verbessert, so dass der AOT-Modus nun standardmäßig immer aktiv sein kann.
-Somit kann man sichergehen, dass bei der Entwicklung und im Produktivbetrieb stets derselbe Modus eingesetzt wird und bereits frühzeitig erkannt werden können.
+Somit kann man sichergehen, dass bei der Entwicklung und im Produktivbetrieb stets derselbe Modus eingesetzt wird und Fehler bereits frühzeitig erkannt werden können.
 
 ### Change Detection
 
-Wer sich einen guten Überblick über den Prozess der Change Detection mit Ivy machen will, sollte einen Blick auf die [Visualierung von Alexey Zuev](https://alexzuza.github.io/angular-9-ivy-change-detection-preview/) werfen.
+Wer sich einen Überblick über den Prozess der Change Detection mit Ivy machen will, sollte einen Blick auf die [Visualierung von Alexey Zuev](https://alexzuza.github.io/angular-9-ivy-change-detection-preview/) werfen.
 
 ### Testing
 
-Mit dem neuen Ivy-Renderer wird nicht nur die Anwendung signifikant performanter, sondern auch die Ausführung der Tests.
+Mit Ivy wird nicht nur die Anwendung performanter, sondern auch die Ausführung der Tests.
 Bis einschließlich Angular 8 wurden vor jedem Testschritt alle Komponenten neu kompiliert.
-Ab Angular 9 werden die Komponenten und Module bei der Verwendung von `Testbed` gecached.
+Ab Angular 9 werden die Komponenten und Module bei der Verwendung von `TestBed` gecachet.
 Somit können die Tests erheblich schneller ausgeführt werden.
 
 ## Server-Side Rendering und Pre-Rendering
 
-Mit Version 9 wurde das Tooling für Server-Side Rendering mit Angular Universal erheblich verbessert.
+Mit Version 9 wurde das Tooling für Server-Side Rendering mit Angular Universal verbessert.
 
 Angular Universal bringt nun eigene Builder mit, die den Buildprozess erledigen.
 Es ist nicht mehr notwendig, die Webpack-Config für den Serverprozess oder das Pre-Rendering selbst zu pflegen.
@@ -176,9 +176,8 @@ Damit verringert sich die Fehleranfälligkeit, die es bisher mit selbst konfigur
 
 ## `TestBed.inject<T>`: Abhängigkeiten im Test anfordern <a name="testbed-inject"></a>
 
-Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>()` angeforert.
-Mit Angular 9 wurde diese Methode als _deprecated_ markiert.
-Stattdessen sollte nun `TestBed.inject<T>` genutzt werden.
+Bisher wurden Abhängigkeiten in Tests mittels `Testbed.get<any>()` angefordert.
+Mit Angular 9 wurde diese Methode als _deprecated_ markiert – stattdessen sollte nun `TestBed.inject<T>` genutzt werden.
 Der Unterschied liegt hier in der Typsicherheit:
 Mit `TestBed.inject()` ist der Rückgabewert mittels Typinferenz korrekt typisiert, und wir können auf die Propertys der Klasse zugreifen.
 Das alte `TestBed.get()` lieferte hingegen stets `any` zurück.
@@ -197,7 +196,7 @@ Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nöti
 ## i18n mit `@angular/localize` <a name="i18n-localize"></a>
 
 Ein neues Paket mit dem Namen `@angular/localize` wurde mit Angular 9 eingeführt.
-Dieses Paket ist ab sofort die Grundlage für die Internationalisierung (i18n) in Angular
+Dieses Paket ist ab sofort die Grundlage für die Internationalisierung (i18n) in Angular.
 
 Bei einem bestehenden Projekt mit Internationalisierung wird der Update-Prozess einige Änderungen an der `angular.json` durchführen.
 Beim Start der Applikation werden Sie anschließend folgende Nachricht in der Konsole sehen:
@@ -259,7 +258,7 @@ platformBrowserDynamic()
 
 Wir können auch einen Schritt weitergehen und die Übersetzungen aus einer JSON-Datei nachladen.
 Wichtig ist dabei nur, dass `loadTranslations()` vor `bootstrapModule()` ausgeführt werden muss.
-Hierfür stellt Angular (noch) keinen Helfer bereit.
+Hierfür stellt Angular derzeit keinen Helfer bereit.
 Diese Lücke füllt das Projekt [`locl`](https://github.com/loclapp/locl) vom ehemaligen Angular-Teammitglied Olivier Combe.
 Folgendes Beispiel demonstriert das Nachladen von Übersetzungen vor dem "Bootstrapping":
 
@@ -315,7 +314,7 @@ Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog v
 
 Angular 9 bringt zwei neue Optionen zur Typprüfung mit:
 
-- `fullTemplateTypeCheck`: Wenn das Flag aktiviert ist wird nicht nur der TypeScript-Code auf Typen geprüft, sondern auch die zugehörigen Expressions in den Templates (z. B. die Direktiven `ngIf` und `ngFor`). Diese Option ist in einem neuen Angular-Projekt standardmäßig aktiviert.
+- `fullTemplateTypeCheck`: Wenn das Flag aktiviert ist, wird nicht nur der TypeScript-Code auf Typen geprüft, sondern auch die Expressions in den Templates (z. B. die Direktiven `ngIf` und `ngFor`). Diese Option ist in einem neuen Angular-Projekt standardmäßig aktiviert.
 - `strictTemplates`: Wird dieses Flag gesetzt, werden zusätzliche Typprüfungen für Templates aktiv.
 
 Wir können die Optionen in der Datei `tsconfig.json` im Abschnitt `angularCompilerOptions` aktivieren:
@@ -352,7 +351,7 @@ Mit Angular 9 kommen neben `root` zwei neue Optionen für die Sichtbarkeit eines
 
 ### Optional Chaining mit TypeScript
 
-Die von Angular verwendete Version von TypeScript wurde auf die Nummer 3.7 aktualisiert. Damit ist auch ein neues interessantes Sprachfeature im Code verwendbar: [Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
+Die von Angular verwendete Version von TypeScript wurde auf 3.7 aktualisiert. Damit ist auch ein neues interessantes Sprachfeature im Code verwendbar: [Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
 
 Bei der Arbeit mit verschachtelten Objekten musste man bisher jeden Schritt im Objektpfad einzeln auf Existenz prüfen, um Fehler zu vermeiden.
 Wollen wir beispielsweise die Thumbnail-URL eines Buchs ermitteln, müssen wir so vorgehen, wenn nicht sicher ist, ob das Thumbnail existiert:
@@ -374,7 +373,7 @@ const url = book.thumbnail?.url;
 
 ### Nullish Coalescing mit TypeScript
 
-Ein weiteres neues TypeScript-Feature von TypeScript ist _Nullish Coalescing_.
+Ein weiteres neues Feature von TypeScript ist [Nullish Coalescing](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator).
 Damit kann in einem Ausdruck ein Fallback-Wert definiert werden, der eingesetzt wird, wenn der geprüfte Wert ungültig ist.
 
 Für diese Semantik konnte bisher der `||`-Operator verwendet werden.
@@ -405,9 +404,10 @@ const value = foo ?? 'default';
 
 <hr>
 
+Wir wünschen Ihnen viel Spaß mit Angular 9!
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
 
-**Viel Spaß mit Angular wünschen  
+**Viel Spaß wünschen  
 Johannes, Danny und Ferdinand**
 
 <small>**Titelbild:** Yosemite National Park, California, 2019</small>
