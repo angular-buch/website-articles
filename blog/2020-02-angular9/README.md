@@ -28,7 +28,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 
 **Inhalt**
 
-- [Update auf Angular 9]((/blog/2020-02-angular9#update-auf-angular-9)
+- [Update auf Angular 9](/blog/2020-02-angular9#update-auf-angular-9)
 - [Der neue Ivy-Renderer](/blog/2020-02-angular9#der-neue-ivy-renderer)
   - [Bundle Sizes](/blog/2020-02-angular9#bundle-sizes)
   - [AOT per Default](/blog/2020-02-angular9#aot-per-default)
@@ -36,8 +36,8 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
   - [Testing](/blog/2020-02-angular9#testing)
 - [Server-Side Rendering und Pre-Rendering](/blog/2020-02-angular9#server-side-rendering-und-pre-rendering)
 - [`TestBed.inject<T>`: Abhängigkeiten im Test anfordern](/blog/2020-02-angular9#testbed-inject)
-- [i18n mit `@angular/localize`](/blog/2020-02-angular9#i18n-mit-angularlocalize)
-- [`@ViewChild()` und `@ContentChild()`](/blog/2020-02-angular9#viewchild-und-contentchild)
+- [i18n mit `@angular/localize`](/blog/2020-02-angular9#i18n-localize)
+- [`@ViewChild()` und `@ContentChild()`](/blog/2020-02-angular9#viewchild-contentchild)
 - [Weitere Neuigkeiten](/blog/2020-02-angular9#weitere-neuigkeiten)
   - [Verbesserte Typprüfung in Templates](/blog/2020-02-angular9#template-checks)
   - [Schematics für Interceptoren](/blog/2020-02-angular9#schematics-interceptor)
@@ -194,7 +194,7 @@ it('infers dependency types', () => {
 Grundsätzlich können beide Methoden synonym verwendet werden.
 Technisch handelt es sich dennoch um einen Breaking Change, deshalb war es nötig, die Änderung über eine neue Methode anzubieten.
 
-## i18n mit `@angular/localize`
+## i18n mit `@angular/localize` <a name="i18n-localize"></a>
 
 Ein neues Paket mit dem Namen `@angular/localize` wurde mit Angular 9 eingeführt.
 Dieses Paket ist ab sofort die Grundlage für die Internationalisierung (i18n) in Angular
@@ -279,7 +279,7 @@ getTranslations(messages).then((data: ParsedTranslationBundle) => {
 
 Mehr zu der Methode `getTranslations()` erfahren Sie auf der [GitHub-Seite des Projekts](https://github.com/loclapp/locl/tree/master/libs/core#usage).
 
-## `@ViewChild()` und `@ContentChild()`
+## `@ViewChild()` und `@ContentChild()` <a name="viewchild-contentchild"></a>
 
 Mit Angular 8 gab es einen Breaking Change bei den Dekoratoren `@ViewChild()` und `@ContentChild()`: Es wurde das Flag `static` eingeführt, mit dem eine solche Query als statisch oder dynamisch markiert werden muss.
 Die Änderung war notwendig, weil sich das Standardverhalten der beiden Dekoratoren mit Angular 9 ändern sollte.
