@@ -17,7 +17,7 @@ thumbnail: ./angular9.jpg
 sticky: false
 ---
 
-Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0**! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
+Am 6. Februar 2020 wurde bei Google in Kalifornien der rote Knopf gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0**! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
 
 Durch eine Reihe von Bugs und offene Features hatte sich das Release um einige Wochen verzögert – ursprünglich angestrebt war das Release im November.
 Der wohl wichtigste Punkt ist die Umstellung auf den neuen Renderer _Ivy_, der einige Features und vor allem Verbesserungen in der Performance mit sich bringt.
