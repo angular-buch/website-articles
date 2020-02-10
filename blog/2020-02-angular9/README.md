@@ -18,7 +18,7 @@ sticky: false
 hidden: true
 ---
 
-Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0.0**! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
+Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0**! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
 
 Durch eine Reihe von Bugs und offene Features hatte sich das Release um einige Wochen verzögert – ursprünglich angestrebt war das Release im November.
 Der wohl wichtigste Punkt ist die Umstellung auf den neuen Renderer _Ivy_, der einige Features und vor allem Verbesserungen in der Performance mit sich bringt.
@@ -308,7 +308,7 @@ Es ist also nicht länger notwendig, das `static`-Flag für `@ViewChild()` und `
 Wir haben in diesem Artikel nur die wichtigsten Änderungen und Neuigkeiten erwähnt.
 Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unter der Haube und kleinere Features, die für die meisten Entwicklerinnen und Entwickler zunächst nicht relevant sind.
 
-Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.0.
+Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.
 
 ### Verbesserte Typprüfung in Templates <a name="template-checks"></a>
 
