@@ -15,7 +15,6 @@ keywords:
 language: de
 thumbnail: ./angular9.jpg
 sticky: false
-hidden: true
 ---
 
 Am 6. Februar 2020 wurde bei Google in Kalifornien der "rote Knopf" gedrückt: Das lang erwartete neue Release ist da – die neue Major-Version **Angular 9.0**! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
