@@ -120,7 +120,7 @@ Alle anderen `tsconfig.*.json` laden die Basiseinstellungen über `extends` von 
 
 Wenn in ihrem Projekt eine Abhänigkeit zu einem Package existiert, dass auf das CommonJS Format setzt, erscheint ab sofort eine Warnung beim Build der Anwendung.
 Die Warnung besagt, dass die Nutzung von CommonJS die [Bundle-Size der resultierenden Anwendung erheblich vergrößert](https://web.dev/commonjs-larger-bundles/).
-Um die Warbnung zu beheben, prüfen Sie am besten, ob sie das abhängige Package in einem anderen Format beziehen können oder stellen Sie ein Issue beim Provider des Packages ein.
+Um die Warnung zu beheben, prüfen Sie am besten, ob sie das abhängige Paket in einem anderen Format beziehen können oder stellen Sie auch hier ein Issue im Repository des Projekts ein.
 
 ## Setup mit strikten Compiler-Optionen
 
