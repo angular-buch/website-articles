@@ -102,7 +102,7 @@ safari 12
 ```
 
 Sie können die [Werte hier selbstverständlich anpassen](https://github.com/browserslist/browserslist).
-Wollen Sie beispielweise den Internet Explorer 11 unterstützen, fügen Sie einfach `IE 11` zur Datei hinzu.
+Wollen Sie beispielweise den Internet Explorer 11 unterstützen, fügen Sie einfach den Eintrag `IE 11` zur Datei hinzu.
 Angular berücksichtigt die Einstellungen beim Build und erstellt beispielsweise Bundles mit ES5 Unterstützung, sofern sich ein Browser unter den Zielen befindet, die einen neueren JavaScript-Standard nicht unterstützen.
 
 ## TypeScript Konfiguration `tsconfig.base.json`
