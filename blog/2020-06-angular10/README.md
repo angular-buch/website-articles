@@ -70,7 +70,7 @@ Prüfen Sie ggf. beim Repository der Bibliothek ob bereits ein Issue zu diesem T
 
 ### TSLint 6.0.0
 
-Ab Angular 10 wird TSLint in der Version 6.0.0 unterstützt.
+Ab Angular 10 wird TSLint in der Version 6.0.0 verwendet.
 Sämtliche Änderungen an der Datei `tslint.json` führen die Angular Schematics bei der Ausführung von `ng update` automatisch durch.
 
 
