@@ -79,7 +79,7 @@ Sämtliche Änderungen an der Datei `tslint.json` führen die Angular Schematics
 Mit Angular 10 wurde die Standardkonfiguration für unterstütze Browser etwas aufgeräumt.
 Weiterhin hat sich der Dateiname von `browserslist` zu `.browserslistrc` geändert.
 
-Standardmäßig wird nun vor allem die letzte oder die letzten beiden Version der meist genutzten Browser unterstützt.
+Standardmäßig wird nun vor allem die neueste oder die letzten beiden Versionen der wichtigsten Browser unterstützt.
 Wenn Sie das tool `browserslist` über `npx` ausführen, erhalten Sie eine detaillierte Auflistung der unterstützten Browser bei der aktuellen Konfiguration der Datei `.browserslistrc`.
 
 ```bash
