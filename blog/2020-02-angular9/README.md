@@ -59,7 +59,7 @@ ng update @angular/cli@8 @angular/core@8
 Anschließend kann das Update auf Angular 9 erfolgen:
 
 ```bash
-ng update @angular/cli @angular/core
+ng update @angular/cli@9 @angular/core@9
 ```
 
 Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch, sofern notwendig.
