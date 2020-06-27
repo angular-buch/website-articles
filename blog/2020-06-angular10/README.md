@@ -62,7 +62,7 @@ Peer dependency warnings when installing dependencies means that those dependenc
 You can use the '--force' option to ignore incompatible peer dependencies and instead address these warnings later.
 ```
 
-Um dieses Problem zu beheben können Sie in vielen Fällen die Fehlermeldung ignorieren und einfach `ng update` mit dem Flag `--force` ausführen.
+Um dieses Problem zu beheben, können Sie in vielen Fällen die Fehlermeldung ignorieren und einfach `ng update` mit dem Flag `--force` ausführen.
 Hinterher sollten Sie jedoch zur Sicherheit noch einmal genauestens prüfen, ob ihre Anwendung und ihrer Tests korrekt funktionieren.
 
 Ist Ihnen dieser Weg zu risikoreich, empfehlen wir Ihnen noch etwas zu warten, bis die zu nutzende Bibliothek `tslib` 2.0.0 unterstützt.
