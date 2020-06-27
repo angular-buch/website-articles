@@ -20,6 +20,8 @@ Die offizielle Ankündigung des neuen Release finden Sie im [Angular Blog](https
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 8 ist da!](/blog/2019-06-angular8)
+> * [Angular 9 ist da!](/blog/2020-02-angular9)
+> * [Angular 10 ist da!](/blog/2020-06-angular10)
 
 ## CLI Prompt
 
@@ -57,7 +59,7 @@ Derzeit rechnen wir mit einem Release bis April 2019.
 ## Book Monkey updaten
 
 Da es keine Breaking Changes gibt, ist das Update denkbar einfach.
-Ein gutes Hilfsmittel für das Update ist der offizielle [Angular Update Guide](https://update.angular.io/).
+Ein gutes Hilfsmittel für das Update ist der offizielle [Angular Update Guide](https://update.angular.io/#6.0:7.0).
 Außerdem unterstützt uns die Angular CLI mit dem Befehl `ng update`.
 
 Ausgangspunkt für das Update ist der Book Monkey, den wir im Mai 2018 auf Angular aktualisiert haben, siehe [Blogartikel zu Angular 6](/blog/2018-05-angular6). Der passende Befehl lautet wie folgt:

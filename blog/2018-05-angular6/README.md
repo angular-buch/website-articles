@@ -24,6 +24,8 @@ In diesem Artikel stellen wir Ihnen kurz die Neuerungen vor und aktualisieren da
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 7 ist da!](/blog/2018-10-angular7)
 > * [Angular 8 ist da!](/blog/2019-06-angular8)
+> * [Angular 9 ist da!](/blog/2020-02-angular9)
+> * [Angular 10 ist da!](/blog/2020-06-angular10)
 
 ## Angular 6: Alles ist neu?
 
@@ -35,7 +37,7 @@ Die offizielle Ankündigung zum Angular-6-Release finden Sie im
 Für Details zu einzelnen Änderungen lohnt sich außerdem ein Blick in den
 [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
 
-Beim Update auf Angular 6 hilft der [Angular Update Guide](https://update.angular.io/).
+Beim Update auf Angular 6 hilft der [Angular Update Guide](https://update.angular.io/#5.0:6.0).
 Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit.
 
 Angular bietet ab sofort folgenden **Long Term Support (LTS)**:
