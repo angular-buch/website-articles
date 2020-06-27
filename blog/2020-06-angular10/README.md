@@ -65,7 +65,7 @@ You can use the '--force' option to ignore incompatible peer dependencies and in
 Um dieses Problem zu beheben können Sie in vielen Fällen die Fehlermeldung ignorieren und einfach `ng update` mit dem Flag `--force` ausführen.
 Hinterher sollten Sie jedoch zur Sicherheit noch einmal genauestens prüfen, ob ihre Anwendung und ihrer Tests korrekt funktionieren.
 
-Ist Ihnen dieser Weg zu reisikoreich, empfehlen wir Ihnen sich etwas zu gedulden, bis die zu nutzende Bibliothek `tslib` 2.0.0 unterstützt.
+Ist Ihnen dieser Weg zu risikoreich, empfehlen wir Ihnen noch etwas zu warten, bis die zu nutzende Bibliothek `tslib` 2.0.0 unterstützt.
 Prüfen Sie ggf. beim Provider der Bibliothek ob bereits ein Issue zu diesem Thema eröffnet wurde oder stellen Sie ein entsprechendes Issue für die Unterstützung von Angular 10 / tslib 2.0.0 ein.
 
 ### TSLint 6.0.0
