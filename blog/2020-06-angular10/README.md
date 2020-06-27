@@ -143,7 +143,7 @@ Eine detaillierte Beschreibung aller Einstellungen bei Nutzung von `--strict` fi
 
 ## Weitere Verbesserungen
 
-Natürlich gab es im Zuge der Enwircklung von Angular 10 auch wieder eine Vielzahl von kleineren Verbesserungen und Bug Fixings.
+Natürlich gab es im Zuge der Entwicklung von Angular 10 auch wieder eine Vielzahl von kleineren Verbesserungen und Fehlerbehebungen.
 Eine detaillierte Liste aller Änderungen kann dem offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#1000-2020-06-24) und dem [Changelog der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v10.0.0) entnommen werden.
 
 <hr>
