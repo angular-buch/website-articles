@@ -131,7 +131,7 @@ Hierfür nutzen Sie die Option `--strict`:
 ng new my-app --strict
 ```
 
-Die Option bewirkt folgende Änderun gen im Vergleich zum herkömmlichen Setup:
+Die Option bewirkt folgende Änderungen im Vergleich zum herkömmlichen Setup:
 
 - Die [Compiler-Option `strict` für TypeScript](https://dev.to/briwa/how-strict-is-typescript-s-strict-mode-311a) wird gesetzt.
 - [Striktere Templateprüfungen](https://angular.io/guide/template-typecheck#strict-mode) werden aktiv.
