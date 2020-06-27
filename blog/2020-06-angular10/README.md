@@ -15,7 +15,7 @@ sticky: false
 
 Am 24. Juni 2020 wurde die neue Major-Version **Angular 10.0** veröffentlicht! Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
 
-Da sich das vorherige [Major-Release von Angular 9.0](/blog/2020-02-angular9) verzögert hatte, wurde Angular 10 nach nur 4 Monaten Entwicklungszeit statt der üblichen 6 Monate released.
+Da sich das vorherige [Major-Release von Angular 9](/blog/2020-02-angular9) verzögert hatte, wurde Angular 10 nach nur vier Monaten Entwicklungszeit statt der üblichen sechs Monate herausgegeben.
 
 Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Version geht dank der Angular CLI und den Schematics leicht von der Hand.
 
