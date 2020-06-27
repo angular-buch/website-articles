@@ -136,7 +136,7 @@ Die Option bewirkt folgende Änderungen im Vergleich zum herkömmlichen Setup:
 - Die [Compiler-Option `strict` für TypeScript](https://dev.to/briwa/how-strict-is-typescript-s-strict-mode-311a) wird gesetzt.
 - [Striktere Templateprüfungen](https://angular.io/guide/template-typecheck#strict-mode) werden aktiv.
 - Die Überprüfung der maximale Bundle-Größe über den Abschnitt `budgets` in der Datei `angular.json` wird um ca. 75% heruntergesetzt.
-- TSLint wird derart konfiguriert, dass jegliche Nutzung von `any` zu einem Fehler führt.
+- TSLint wird so konfiguriert, dass jegliche Nutzung von `any` zu einem Fehler führt.
 - Angular stellt in der [Webpack Konfiguration](https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free) ein, dass die Anwendung frei von Seiteneffekten ist. Somit kann beim Build der Anwendung ungenutzter Code sicher entfernt werden.
 
 Eine detaillierte Beschreibung aller Einstellungen bei Nutzung von `--strict` finden Sie in den offiziellen [Angular Docs](https://angular.io/guide/strict-mode)
