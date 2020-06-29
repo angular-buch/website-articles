@@ -15,7 +15,6 @@ keywords:
 language: de
 thumbnail: ./angular10.jpg
 sticky: false
-hidden: true
 ---
 
 
