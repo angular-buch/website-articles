@@ -25,6 +25,9 @@ Es gibt kleine Breaking Changes, doch seien Sie beruhigt: Das Update geht leicht
 In diesem Artikel möchten wir kurz die wichtigsten Neuigkeiten vorstellen.
 Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https://blog.angular.io/af0261112a27).
 
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 9 ist da!](/blog/2020-02-angular9)
+> * [Angular 10 ist da!](/blog/2020-06-angular10)
 
 ## Update auf Angular 8
 Das Update zur neuen Angular-Version ist kinderleicht. Hierzu führen Sie einfach den folgenden Befehl in einem bestehenden Projekt aus:
@@ -34,7 +37,7 @@ ng update @angular/cli @angular/core
 ```
 
 Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch.
-Auf [update.angular.io](https://update.angular.io/) können Sie außerdem alle Migrationsschritte nachvollziehen.
+Auf [update.angular.io](https://update.angular.io/#7.0:8.0) können Sie außerdem alle Migrationsschritte nachvollziehen.
 
 
 

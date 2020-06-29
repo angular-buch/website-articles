@@ -25,6 +25,9 @@ Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Vers
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular Blog](https://blog.angular.io/23c97b63cfa3).
 
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 10 ist da!](/blog/2020-06-angular10)
+
 **Inhalt**
 
 - [Update auf Angular 9](/blog/2020-02-angular9#update-auf-angular-9)
@@ -56,14 +59,14 @@ ng update @angular/cli@8 @angular/core@8
 Anschließend kann das Update auf Angular 9 erfolgen:
 
 ```bash
-ng update @angular/cli @angular/core
+ng update @angular/cli@9 @angular/core@9
 ```
 
 Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendung durch, sofern notwendig.
 Hier zeigt sich bereits die erste Neuerung: Beim `ng update` werden ab sofort ausführliche Informationen zu neuen Features ausgegeben, die Ihnen beim Update helfen.
 Außerdem verwendet die Angular CLI zur Durchführung des Updates unter der Haube jetzt immer die Version, auf die Sie updaten wollen.
 
-Auf [update.angular.io](https://update.angular.io) können Sie übrigens wie üblich alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
+Auf [update.angular.io](https://update.angular.io/#8.0:9.0) können Sie übrigens wie üblich alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
 
 ## Der neue Ivy-Renderer
 

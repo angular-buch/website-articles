@@ -14,6 +14,8 @@ thumbnail: ../x_shared/angular5.png
 > * [Angular 6 ist da!](/blog/2018-05-angular6)
 > * [Angular 7 ist da!](/blog/2018-10-angular7)
 > * [Angular 8 ist da!](/blog/2019-06-angular8)
+> * [Angular 9 ist da!](/blog/2020-02-angular9)
+> * [Angular 10 ist da!](/blog/2020-06-angular10)
 
 <br>
 <br>
@@ -22,7 +24,7 @@ Angular 5 ist da! Anfang November 2017 erschien die neue Major-Version von Angul
 
 Die offizielle Ankündigung zum Angular-5-Release finden Sie im [Angular-Blog](https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced).
 Für Details zu einzelnen Änderungen lohnt sich außerdem ein Blick in den [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
-Beim Update auf Angular 5 hilft der [Angular Update Guide](https://angular-update-guide.firebaseapp.com/). Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit.
+Beim Update auf Angular 5 hilft der [Angular Update Guide](https://update.angular.io/#4.0:5.0). Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit.
 
 **Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert!**
 
