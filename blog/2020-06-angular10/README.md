@@ -33,15 +33,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 ## Update auf Angular 10
 
 Das Update zur neuen Angular-Version ist schnell erledigt.
-<!--
-Falls Ihr Projekt noch nicht in der letzten Version von Angular 9 vorliegt, sollten Sie zunächst das folgende Update erledigen:
-
-```bash
-ng update @angular/cli@9 @angular/core@9
-```
-Anschließend können Sie Ihr Projekt ganz einfach auf Angular 10 aktualisieren:
--->
-FÜhren Sie dazu die folgenden Befehle in Ihrem Projekt mit Angular 9 aus:
+Fihren Sie dazu die folgenden Befehle in Ihrem Projekt mit Angular 9 aus:
 
 ```bash
 ng update @angular/cli @angular/core
