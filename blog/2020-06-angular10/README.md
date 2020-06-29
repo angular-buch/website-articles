@@ -26,9 +26,6 @@ Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
 Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Version geht dank der Angular CLI und den Schematics leicht von der Hand.
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/version-10-of-angular-now-available-78960babd41).
 
-**Inhalt**
-
-
 
 ## Update auf Angular 10
 
