@@ -66,9 +66,8 @@ Dafür müssen wir folgende Schritte erledigen:
 - Die Android App in der Google Play Console erstellen
 - Die App-Signatur erzeugen
 - Den App-Signaturschlüssel in der PWA hinterlegen
-- Das Basis-TWA Projekt kopieren
-- Das TWA-Projekt anpassen
-- Die signierte App erzeugen
+- Bubblewrap CLI: Die TWA erzeugen
+- Die signierte App bauen
 - Die App in der Google Play Console bereitstellen
 - Die App über die Google Play Console veröffentlichen
 
@@ -245,9 +244,122 @@ Wichtig ist, dass diese zwingend per _https_ asugeleifert werden muss.
 Überprüfen Sie nach dem Deployment am besten noch einmal, ob Sie die URL `http://mydomain/.well-known/assetlinks.json` aufrufen können.
 In unserem Fall wäre das: `https://bm4-pwa.angular-buch.com/.well-known/assetlinks.json`.
 
-## Das Basis-TWA Projekt kopieren
+## Bubblewrap CLI: Die TWA erzeugen
 
+Wir haben nun unsere PWA für den Konsum der TWA vorbereitet und alle nötigen Vorberitungen in der Google Play Console getroffen.
+Als nächstes wollen die die Android App erstellen, die unser PWA in Form einer TWA aufruft und als eigenständige App kapselt.
 
+Hierfür nutzen wir die [_Bubblewrap CLI_](https://www.npmjs.com/package/@bubblewrap/cli), die genau zu diesem Zweck geschaffen wurde.
+Wir können diese direkt als NPM Paket über `npx` aufrufen und die Anwendung erzeugen lassen.
+Anschließend fürht uns der Interaktive Wizard durch das Setup indem wir einge Fragen beantworten müssen, auf die wir anchfolgend weiter eingehen werden.
+
+```bash
+mkdir monkey4-pwa-twa-wrapper
+cd monkey4-pwa-twa-wrapper
+npx @bubblewrap/cli init --manifest https://bm4-pwa.angular-buch.com/manifest.json
+```
+
+Nutzen wir die Bubblewrap CLI das erste Mal, so werden wir in den ersten zwei Schritten nach den Verzeichnissen für das [Java OpenJDK](https://openjdk.java.net/) und das [AndroidSDK](https://developer.android.com/studio) gefragt.
+Hier geben wir die Pfade zu den entsprechenden Verzeichnissen an:
+
+```bash
+? Path to the JDK: /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+? Path to the Android SDK: /Users/my-user/Library/Android/sdk
+```
+
+> Diese Angaben werden für spätere Installationen in der Datei `~/.llama-pack/llama-pack-config.json` gespeichert und können bei Bedarf angepasst werden.
+
+Im nächsten Schritt liest die Bubblewrap CLI das Web App Manifest unserer PWA aus und stellt uns einige Fragen zur Bezeichnung der App, hinterlegten Icons und Pfaden.
+Diese werden in der Regel schon korrekt ausgelesen und müssen von uns nicht weiter angepasst werden:
+
+```bash
+init Fetching Manifest:  https://bm4-pwa.angular-buch.com/manifest.json
+? Domain being opened in the TWA: bm4-pwa.angular-buch.com
+? Name of the application: BookMonkey 4 PWA
+? Name to be shown on the Android Launcher: BookMonkey
+? Color to be used for the status bar: #DB2828
+? Color to be used for the splash screen background: #FAFAFA
+? Relative path to open the TWA: /
+? URL to an image that is at least 512x512px: https://bm4-pwa.angular-buch.com/assets/icons/icon-512x512.png
+? URL to an image that is at least 512x512px to be used when generating maskable icons undefined
+? Include app shortcuts?
+  Yes
+? Android Package Name (or Application ID): com.angular_buch.bm4_pwa.twa
+```
+
+Nun werden wir nach dem Pfad des Schlüssels zur Signierung der App gefragt.
+Haben wir hier noch keinen erzeugt, werden wir darauf hingewiesen und können einen neuen Schlüssel anlegen.
+Dafür geben müssen wir unseren Namen und Informationen zur Firma und Abteilung hinterlegen.
+Weiterhin müssen wir einen Ländercode angeben (in unserem Fall `DE` für Deutschland).
+Weiterhin müssen wir ein Passwort für den Key Store und eines für den einzelnen Key der Anwendung hinterlegen.
+Dieses benötigen wir später beim Build und der Signierung der App erneut.
+
+```bash
+? Location of the Signing Key: ./android.keystore
+? Key name: android
+...
+? Signing Key could not be found at "./android.keystore". Do you want to create one now? Yes
+? First and Last names (eg: John Doe): John Doe
+? Organizational Unit (eg: Engineering Dept): Engineering Dept
+? Organization (eg: Company Name): My Company
+? Country (2 letter code): DE
+? Password for the Key Store: [hidden]
+? Password for the Key: [hidden]
+keytool Signing Key created successfully
+init
+init Project generated successfully. Build it by running "@bubblewrap/cli build"
+```
+
+Im Ergebnis sollten wir folgende Struktur erhalten:
+
+![Die Dateistruktur nach Erzeugung der TWA mit Hile der Bubblewrap CLI](twa-bubblewrap.png)
+
+Im Prinzip sind wir damit auch schon fertig.
+Wir müssen nun noch die fertige Android App (`*.apk`-Datei) erzeugen.
+
+## Die signierte App bauen
+
+Auch hierfür nutzen wir die Bubblewrap CLI:
+
+```bash
+npx @bubblewrap/cli build
+? KeyStore password: ********
+? Key password: ********
+build Building the Android App...
+```
+
+Wenn wir keinen Fehler erhalten, sollte sich die fertige signierte App unter `app/build/outputs/apk/release/app-release-signed.apk` befinden.
+
+Kommt es zu folgenden Fehler, so können wir die signierte App auch mit Hilfe von Android Studio bauen:
+
+```bash
+cli ERROR Command failed: ./gradlew assembleRelease --stacktrace
+```
+
+Dafür öffnen wir dss Projektverzeichnis in Android Studio.
+Wir warten hier zunächst ab, bis der automatische Gradle-Build nach dem Öffnen des Projektes durchgelaufen ist.
+Den Fortschritt können wir im unten rechts in Android Studio begutachten.
+Anschließend klicken wür im Menü "Build" auf "Generate Signed Bundle / APK".
+
+![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk.png)
+
+Wir wählen hier den Punkt "APK" aus und klicken auf "Next".
+
+![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk2.png)
+
+Im nächsten Schritt wählen wir den erstellten Keystore (`android.keystore`) aus dem Projektverzeichnis aus udn geben das von uns festgelegte Passwort ein.
+Anschließend können wir aus dem Keystore den _Key alias_ auswählen (`android`).
+Auch hier müssen wir das Passwort eingeben, welches wir für den konkreten Key vergeben hatten.
+Haben wir alle Angaben korrekt getätigt, gehen wir weiter mit "Next".
+
+![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
+
+Im nächsten Schritt wählen wir bei der Build Variante _release_ aus und setzen die beiden Checkboxen bei _V1 (Jar Signature)_ und _V2 (Full APK Signature)_.
+Anschließend können wir die Erzeugung mit "Finish" starten.
+
+![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
+
+## Die App in der Google Play Console bereitstellen
 
 **Viel Spaß wünschen
 Johannes, Danny und Ferdinand**
