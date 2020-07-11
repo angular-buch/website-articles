@@ -65,7 +65,7 @@ Dafür müssen wir folgende Schritte erledigen:
 - Einen Android Developer Account registieren
 - Die Android App in der Google Play Console erstellen
 - Die App-Signatur erzeugen
-- Das `assetlink`-File über die PWA bereitstellen
+- Den App-Signaturschlüssel in der PWA hinterlegen
 - Das Basis-TWA Projekt kopieren
 - Das TWA-Projekt anpassen
 - Die signierte App erzeugen
@@ -83,18 +83,18 @@ Den Account können Sie ganz einfach über den folgenden Link registrieren:
 
 Bei der Registrierung wird eine einmalige Registrierungsgebühr in Höhe von 25 USD erhoben. Diese Gebühr gilt für sämtliche Apps, die Sie mit dem hinterlegten Google Account registrieren wollen.
 
-![Google Play Console Registrierung](play-register.png)
+![Google Play Console: Registrierung](play-register.png)
 
 ### Die Android App in der Google Play Console erstellen
 
 Nach der Registierungs des Accounts, müssen wir uns in der [_Google Play Console_ einloggen](https://play.google.com/apps/publish).
 Anschließend können wir über den Menüpunkt _Alle Apps_ mit dem Button _App Erstellen_ eine neue Anwendung anlegen.
 
-![Google Play Console Neue Anwendung erzeugen](play-create.png)
+![Google Play Console: Eine neue Anwendung erzeugen](play-create.png)
 
 Nach Erstellung gelangen wir zur Detailkonfiguration für die neue Android App
 
-![Google Play Console Details zur neuen App](play-after-create.png)
+![Google Play Console: Details zur neuen App](play-after-create.png)
 
 Um nun eine Android App zu veröffentlich müssen wir uns durch alle Schritte arbeiten, die links im Menü mit einem ✅-Icon gekennzeichnet sind.
 
@@ -127,14 +127,126 @@ Um dieses anzulegen gehen wir auf das Menü _App Releases_.
 Hier müssen wir zunächst einen neuen Track erstellen.
 Tracks können verschiedene Ausprägungen haben:
 
-- Produktions-Track:
-- Offener Track:
-- Geschlossener Track:
-- Interner Test-Track:
+- Produktions-Track: Releases die für jeden Nutzer im Google Play Store bereitgestellt werden
+- Offener Track: Releases die für jeden Nutzer im Google Play Store bereitgestellt werden aber als Vorab-Release (Beta Release) gekennzeichnet sind. Offene Tracks können auch auf eine bestimmte Anzahl von Nutzer begrenzt werden
+- Geschlossener Track: Releases, die nur bestimmten Personen zum Download als Vorab-Release (Alpha Release) zur Verfügung stehen.
+- Interner Test-Track: Releases, die zum Test für einen bestimmten personenkreis besipielsweise über einen Link bereitgestellt werden können.
 
-<!--
-TODO: Hinweis: Dotfiles bei GH-Pages includen (`_config.yml`)
--->
+In unserem Szenario wollen wir unsere App direkt bis in den Google Play Store bringen, um zu verifizieren, dass diese auch tatsächlich von allen Nutzern gefunden und installiert werden können.
+Hierfür nutzen wir zunächst am besten den _Offenen Track_ und erstellen ein Beta-Release.
+Dafür klicken wir im Abschnitt _Offener Track_ auf _Verwalten_.
+
+![Google Play Console: Erstellen eines neuen Beta Releases](play-beta.png)
+
+Auf der nächsten Seite klicken wir auf _Release Erstellen_.
+Anschließend gelangen wir in den Abschnitt zur Erzeugung des _App-Signaturschlüssels_.
+Hier klicken wir auf _Weiter_ um den Schlüssel zu aktivieren.
+
+![Google Play Console: Erstellen des App-Signaturschlüssels](play-beta-sign.png)
+
+Bevor wir nun unser Beta-Release veröffentlich müssen wir den erzuegten Schlüssel mit unserer PWA verknüpfen und die TWA erzeugen um Sie anschließend in die Google Play Console zu laden.
+
+### Den App-Signaturschlüssel in der PWA hinterlegen
+
+Wir verlassen zunächst wieder den Menüpunkt zur Erzeugung des Releases und gehen ins Menü _App-Signatur_.
+Hier kopieren wir uns den _Fingerabdruck des SHA-256-Zertifikats_ in die Zwischenablage.
+
+![Google Play Console: Kopieren des App-Signaturschlüssels](play-signature.png)
+
+Dieser Fingerabdruck stellt später sicher, dass beim Aufruf der PWA durch unsere TWA verifiziert werden kann, dass die Anwendung _trusted_ - also verifiziert ist.
+
+Um den Fingerabdruck aufspüren zu können, müssen wir diesen über die spezielle Datei `assetlinks.json` bereitstellen.
+Weiterhin muss die Datei und ihr Inhalt über die spezielle URL `https://my-app.com/.well-known/assetlinks.json` aufrufbar sein.
+
+Dafür erzeugen wir in unserem Angular-Workspace ein neues Verzeichnis `.well-known` unter `src`.
+Darin legen wir die Datei `assetlinks.json` mit dem folgenden Inhalt an:
+
+```json
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "allfront",
+      "package_name": "com.angular_buch.book_monkey4",
+      "sha256_cert_fingerprints": [
+        "22:BD:55:D1...D1:79:D1:13"
+      ]
+    }
+  }
+]
+```
+
+Als `package_name` geben wir die Anwendungs-ID fest, die im Google Play Store eindeutig sein muss und genau auf eine App zeigt.
+Die ID wird in der Regel aus einer Domain gebildet und rückwärts gelistet.
+Sie muss mindestens einen Punkt enthalten, Zeichen hinter einem Punkt dürfen nur Buchstaben sein und die gesamte ID darf lediglich Alphanumerische Zeichen enthalten.
+Zeichen wie `-` sind nicht erlaubt.
+Alle Regeln zur Definition einer validen ID, können der [Android Entwicklerdokumentstion](https://developer.android.com/studio/build/application-id) entnommen werden.
+
+Wie erkenntlich ist, müssen wir weiterhin den kopierten App-Signaturschlüssel unter `sha256_cert_fingerprints` eintragen.
+
+> Achtung kopieren Sie den Fingerprint von der Google Play Console, wird ggf. der Präfix `SHA256: ` mit kopiert. Dieser muss beim Einfügen weggelassen werden.
+
+Jetzt müssen wir Angular noch beibringen, dass der relative URL-Pfad `.well-known/assetlinks.json` nicht durch den Angular-Router behandelt und umgeleitet wird, sondern, dass sich dahinter ein statisches Asset verbrigt, welches direkt über die URL aufrufbar sein soll.
+
+Dafür bearbeiten wir den Abschnitt `build` innerhalb des Projekt-Aschnitts unserer Datei `angular.json`.
+Dort geben wir an, dass alle Dateien unter `src/.well-known` über den relativen Pfad `/.well-known/` bereitgestellt werden sollen:
+
+```json
+{
+  // ...
+  "projects": {
+    "book-monkey": {
+      // ...
+      "architect": {
+        "build": {
+          // ...
+          "options": {
+            // ...
+            "assets": [
+              // ...
+              {
+                "glob": "**/*",
+                "input": "src/.well-known/",
+                "output": "/.well-known/"
+              }
+              // ...
+            ],
+            // ...
+          },
+          // ...
+        },
+        // ...
+      },
+      // ...
+    },
+    // ...
+  },
+  // ...
+}       
+```
+
+Wir überprüfen das Ergebnis am besten indem wir einen Prod-Build ausführen und einen einfachen Webserver starten:
+
+```
+ng build --prod
+cd dist/book-monkey
+npx http-server
+```
+
+Rufen wir nun die URL `http://localhost:8080/.well-known/assetlinks.json` im Browser auf, sehen wir, dass unsere Datei `assetlinks.json` dargestellt wird:
+
+![Test der Auslieferung der Datei assetlinks.json im Browser](assetlinks-browser.png)
+
+War der Test erfolgreich, können wir unsere PWA deployen.
+Wichtig ist, dass diese zwingend per _https_ asugeleifert werden muss.
+
+> Achtung! Nutzen Sie beispielsweise Github Pages zur Auslieferung ihrer Anwendung, so müssen Sie vor dem Deployment im Dist-Verzeichnis (`dist/book-monkey`) eine Datei `_config.yml` mit dem Inhalt `include: [".well-known"]` anlegen, da alle Verzeichnisse beginnend `.` per Default [von Github Pages ignoriert werden](https://github.com/keybase/keybase-issues/issues/366#issuecomment-38749201). Diesen Schritt integrieren Sie am besten in ihre Deployment-Pipelin
+
+Überprüfen Sie nach dem Deployment am besten noch einmal, ob Sie die URL `http://mydomain/.well-known/assetlinks.json` aufrufen können.
+In unserem Fall wäre das: `https://bm4-pwa.angular-buch.com/.well-known/assetlinks.json`.
+
+## Das Basis-TWA Projekt kopieren
+
 
 
 **Viel Spaß wünschen
