@@ -1,7 +1,7 @@
 ---
 title: 'Bring deine Angular PWA als TWA in den Android Store'
-author: Angular Buch Team
-mail: team@angular-buch.com
+author: Danny Koppenhagen
+mail: mail@d-koppenhagen.de
 published: 2020-09-01
 lastModified: 2020-09-01
 keywords:
