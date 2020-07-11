@@ -63,7 +63,7 @@ Genug der Theorie, wir wollen nun erfahren, wie wir eine PWA im Android Store al
 Dafür müssen wir folgende Schritte erledigen:
 
 - Einen Android Developer Account registieren
-- Die Android App in der Google Play Console registrieren
+- Die Android App in der Google Play Console erstellen
 - Die App-Signatur erzeugen
 - Das `assetlink`-File über die PWA bereitstellen
 - Das Basis-TWA Projekt kopieren
@@ -72,6 +72,65 @@ Dafür müssen wir folgende Schritte erledigen:
 - Die App in der Google Play Console bereitstellen
 - Die App über die Google Play Console veröffentlichen
 
+### Einen Android Developer Account registrieren
+
+> Sofern Sie bereits einen Account für die _Google Play Console_ besitzen, können Sie diesen Schritt überspringen.
+
+Um eine App im Google Play Store einzustellen, benötigen wir zunächst einen Account für die _Google Play Console_.
+Den Account können Sie ganz einfach über den folgenden Link registrieren:
+
+[https://play.google.com/apps/publish/signup](https://play.google.com/apps/publish/signup)
+
+Bei der Registrierung wird eine einmalige Registrierungsgebühr in Höhe von 25 USD erhoben. Diese Gebühr gilt für sämtliche Apps, die Sie mit dem hinterlegten Google Account registrieren wollen.
+
+![Google Play Console Registrierung](play-register.png)
+
+### Die Android App in der Google Play Console erstellen
+
+Nach der Registierungs des Accounts, müssen wir uns in der [_Google Play Console_ einloggen](https://play.google.com/apps/publish).
+Anschließend können wir über den Menüpunkt _Alle Apps_ mit dem Button _App Erstellen_ eine neue Anwendung anlegen.
+
+![Google Play Console Neue Anwendung erzeugen](play-create.png)
+
+Nach Erstellung gelangen wir zur Detailkonfiguration für die neue Android App
+
+![Google Play Console Details zur neuen App](play-after-create.png)
+
+Um nun eine Android App zu veröffentlich müssen wir uns durch alle Schritte arbeiten, die links im Menü mit einem ✅-Icon gekennzeichnet sind.
+
+Füllen Sie hierfür als erstes alle obligatorischen Felder unter dem Menüpunkt _Store Eintrag_ aus und laden die entsprechend notwendigen Icons und Screenshots für die Anwendung hoch.
+Diese können Sie im Nachhinein auch noch bearbeiten.
+Wichtig ist zunächst, dass alle Pflichtfelder gefüllt sind.
+Anschließend klicken Sie auf _Entwurf Speichern_.
+
+Als nächstes arbeiten Sie sich durch den Menüpunkt _Einstufung des Inhalts_.
+Hier müssen Sie einen Fragebogen zu den Inhalten ihrer App ausfüllen.
+Anhand der Fragen wird ermittelt, für welche Personenkreise und Altersgruppen die App freigegben werden kann.
+
+Haben Sie hier alle Angaben ausgefüllt und gespeichert, gehen Sie zum Schritt _App-Inhalte_.
+Auch hier müssen Sie zunächst alle Schritte abarbeiten und beispielsweise einen Link zur Datenschutzerklärung angeben, Angaben machen, ob ihre App Werbebanner enthält und ihre Zielgruppe definieren.
+
+Bevor wir nun ein Release erstellen können müssen wir noch den Menüpunkt _Preisgestaltung und Vertrieb_ abarbeiten.
+Hier geben Sie an, ob es sich um eine kostenfreie oder kostenpflichtige App handeln soll und welchen Preis die App haben soll.
+Sofern ihre App kostenflichtig sein soll, benötigen Sie noch ein Händlerkonto, dass Sie direkt über diese Seite einrichten können.
+Im unteren Teil der Seite müssen Sie schlussendlich noch defineiren, in welchen Ländern die App im Google Play Store verfügbar sein soll.
+Hier müssen Sie mindestens ein Land auswählen.
+Weiterhin müssen Sie am Ende der Seite noch den Richtlinien für Inhalte und den Exportbestimmungen der USA zustimmen.
+
+Okay, wir sollten nun bei allen Menüpunkten bis auf _App Releases_ einen grünes ✅ Icon sehen.
+Im nächsten Schritt benötigen wir eine App-Signatur, die wir über die Erzeugung eines ersten Releases erhalten.
+
+### Die App-Signatur erzeugen
+
+Klicken wir auf den Menüpunkt _App-Signatur_, sehen wir zunächst nur einen Hinweis, dass wir zunächst ein Release benötigen.
+Um dieses anzulegen gehen wir auf das Menü _App Releases_.
+Hier müssen wir zunächst einen neuen Track erstellen.
+Tracks können verschiedene Ausprägungen haben:
+
+- Produktions-Track:
+- Offener Track:
+- Geschlossener Track:
+- Interner Test-Track:
 
 <!--
 TODO: Hinweis: Dotfiles bei GH-Pages includen (`_config.yml`)
