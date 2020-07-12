@@ -68,7 +68,6 @@ Dafür müssen wir folgende Schritte erledigen:
 - Den App-Signaturschlüssel in der PWA hinterlegen
 - Bubblewrap CLI: Die TWA erzeugen
 - Die signierte App bauen
-- Die App in der Google Play Console bereitstellen
 - Die App über die Google Play Console veröffentlichen
 
 ### Einen Android Developer Account registrieren
@@ -319,7 +318,11 @@ Wir müssen nun noch die fertige Android App (`*.apk`-Datei) erzeugen.
 
 ## Die signierte App bauen
 
-Auch hierfür nutzen wir die Bubblewrap CLI:
+Wir können unsere signierte Android App entwerder direkt mit Hilfe der Bubblewrap CLI bauen oder wir nutzen hierfür Android Studio.
+
+### Mit der Bublewrap CLI
+
+Nutzen wir die Bubblewrap CLI, so rufen wir das `build` Kommando auf:
 
 ```bash
 npx @bubblewrap/cli build
@@ -328,7 +331,7 @@ npx @bubblewrap/cli build
 build Building the Android App...
 ```
 
-Wenn wir keinen Fehler erhalten, sollte sich die fertige signierte App unter `app/build/outputs/apk/release/app-release-signed.apk` befinden.
+Wenn wir keinen Fehler erhalten, sollte sich die fertige signierte App unter `./app/build/outputs/apk/release/app-release-signed.apk` befinden.
 
 Kommt es zu folgenden Fehler, so können wir die signierte App auch mit Hilfe von Android Studio bauen:
 
@@ -336,8 +339,10 @@ Kommt es zu folgenden Fehler, so können wir die signierte App auch mit Hilfe vo
 cli ERROR Command failed: ./gradlew assembleRelease --stacktrace
 ```
 
-Dafür öffnen wir dss Projektverzeichnis in Android Studio.
-Wir warten hier zunächst ab, bis der automatische Gradle-Build nach dem Öffnen des Projektes durchgelaufen ist.
+### Mit Hilfe von Android Studio
+
+Wir öffnen bei dieser Variante zunächst das Projektverzeichnis in Android Studio.
+Nun warten wir zunächst ab, bis der automatische Gradle-Build nach dem Öffnen des Projektes durchgelaufen ist.
 Den Fortschritt können wir im unten rechts in Android Studio begutachten.
 Anschließend klicken wür im Menü "Build" auf "Generate Signed Bundle / APK".
 
@@ -347,7 +352,8 @@ Wir wählen hier den Punkt "APK" aus und klicken auf "Next".
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk2.png)
 
-Im nächsten Schritt wählen wir den erstellten Keystore (`android.keystore`) aus dem Projektverzeichnis aus udn geben das von uns festgelegte Passwort ein.
+Im nächsten Schritt wählen wir den erstellten Keystore (`android.keystore`) aus dem Projektverzeichnis aus und geben das von uns festgelegte Passwort ein.
+Alternativ können wir auch einen neuen Keystore erstellen.
 Anschließend können wir aus dem Keystore den _Key alias_ auswählen (`android`).
 Auch hier müssen wir das Passwort eingeben, welches wir für den konkreten Key vergeben hatten.
 Haben wir alle Angaben korrekt getätigt, gehen wir weiter mit "Next".
@@ -359,7 +365,34 @@ Anschließend können wir die Erzeugung mit "Finish" starten.
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
 
-## Die App in der Google Play Console bereitstellen
+Dier erzeugte APK Dastei definedet sich nun unter `./app/release/app-release.apk`.
+
+> Kommt es beim erzeugen der signierten APK zu einem Fehler, kann dies ggf. an einem defekten / falschen Keystore liegen. Versuchen Sie in diesem Fall einen neuen Keystore während der vorherigen Schritte zu erzeugen.
+
+## Die App über die Google Play Console veröffentlichen
+
+Im letzten Schritt müssen wir unsere signierte und erzeugte Android App in Form einer TWA noch in der Google Play Console bereitstellen und veröffentlichen.
+Dazu Gehen wir in der Google Play Console in das Menü _App-Releases_ und öffnen unser zuvor bereits vorbereitetes Beta-Release im Abschnitt _Offener Track_.
+Hier klicken wir nun auf _Release Bearbeiten_.
+
+![Google Play Console: Das Beta Release bearbeiten](play-beta-edit.png)
+
+Im nächsten Sc hritt können wir nun unsere erzeugte und signierte Android App (APK) hochladen.
+Weiterhin geben wir eine Versionsnummer und eine Beschreibung zum Release an.
+Haben wir alles ausgefüllt, klicken wir auf "überprüfen".
+
+![Google Play Console: Das Beta Release mit Beschreibung, Version und APK füllen](play-beta-upload.png)
+
+Jetzt habenm wir es fast geschafft.
+Das Beta-Release wurde erstellt.
+Auf den nächsten Seite können wir diese nun veröffentlichen.
+
+![Google Play Console: Das Beta Release veröffentlichen](play-beta-release.png)
+
+Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig und wir können unter "Übersicht" den aktuellen Status zur Veröffentlichung der Android App einsehen.
+Bis die App tatsächlich veröffentlicht und freigegeben wird, können ggf. ein paar Tage vergehen.
+
+![Google Play Console: Übersicht mit Veröffentlichungsstatus](play-release-overview.png)
 
 **Viel Spaß wünschen
 Johannes, Danny und Ferdinand**
