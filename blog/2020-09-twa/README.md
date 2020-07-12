@@ -70,6 +70,16 @@ Dafür müssen wir folgende Schritte erledigen:
 - Die signierte App bauen
 - Die App über die Google Play Console veröffentlichen
 
+Wir wollen als Grundlage für dieses Beispiel die _BookMonkey_ App als PWA verwenden.
+Diese können Sie sich über Github herunterladen:
+
+[https://github.com/book-monkey4/book-monkey4-pwa](https://github.com/book-monkey4/book-monkey4-pwa)
+
+Weiterhin benötigen Sie folgende >Voraussetzung für die Erstellung der Android App als TWA:
+- Java SDK 8.0
+- Android SDK (vorzugsweise Android Studio inkl. SDK)
+- Node.js 10.0 oder höher
+
 ### Einen Android Developer Account registrieren
 
 > Sofern Sie bereits einen Account für die _Google Play Console_ besitzen, können Sie diesen Schritt überspringen.
