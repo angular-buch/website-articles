@@ -284,7 +284,7 @@ Nutzen wir die Bubblewrap CLI das erste Mal, so werden wir in den ersten zwei Sc
 Hier geben wir die Pfade zu den entsprechenden Verzeichnissen an:
 
 ```bash
-? Path to the JDK: /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+? Path to the JDK: /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk
 ? Path to the Android SDK: /Users/my-user/Library/Android/sdk
 ```
 
@@ -352,11 +352,59 @@ npx @bubblewrap/cli build
 ? KeyStore password: ********
 ? Key password: ********
 build Building the Android App...
+build Zip Aligning...
+build Checking PWA Quality Criteria...
+build 
+build Check the full PageSpeed Insights report at:
+build - https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fbm4-pwa.angular-buch.com%2F
+build 
+build 
+build Quality Criteria scores
+build Lighthouse Performance score: ................... 80
+build Lighthouse PWA check: ........................... NO
+build 
+build Web Vitals
+build Largest Contentful Paint (LCP) .................. 3.7 s
+build Maximum Potential First Input Delay (Max FID) ... 391 ms
+build Cumulative Layout Shift (CLS) ................... 0.00
+build 
+build Other scores
+build Lighthouse Accessibility score................... 67
+build 
+build Summary
+build Overall result: ................................. FAIL
+build WARNING PWA Quality Criteria check failed.
+build Signing...
+build Signed Android App generated at "./app-release-signed.apk"
+build Digital Asset Links file generated at ./assetlinks.json
+build Read more about setting up Digital Asset Links at https://developers.google.com/web/android/trusted-web-activity/quick-start#creating-your-asset-link-file
 ```
 
-Wenn wir keinen Fehler erhalten, sollte sich die fertige signierte App unter `./app/build/outputs/apk/release/app-release-signed.apk` befinden.
+Wenn wir keinen Fehler erhalten, sollte sich die fertige signierte App im Hauptverzeichnis befinden und `app-release-signed.apk` heißen.
 
-Kommt es zu folgenden Fehler, so können wir die signierte App auch mit Hilfe von Android Studio bauen:
+Vereinzelt kann es dazu kommen, dass wir eine Fehlermeldung wie die folgende erhalten:
+
+```
+UnhandledPromiseRejectionWarning: Error: Error calling the PageSpeed Insights API: Error: Failed to run the PageSpeed Insight report
+```
+
+In diesem Fall schlägt die Analyse der App fehl. Wir können den Build erneut aufrufen und das Flag `--skipPwaValidation` einfügen.
+
+```bash
+npx @bubblewrap/cli build --skipPwaValidation
+? KeyStore password: ********
+? Key password: ********
+build Building the Android App...
+build Zip Aligning...
+build Signing...
+build Signed Android App generated at "./app-release-signed.apk"
+build Digital Asset Links file generated at ./assetlinks.json
+build Read more about setting up Digital Asset Links at https://developers.google.com/web/android/trusted-web-activity/quick-start#creating-your-asset-link-file
+```
+
+Kommt es zu dem nachfolgenden Fehler, prüfen Sie bitte den Pfad unter `jdkPath` in der Datei `~/.llama-pack/llama-pack-config.json`.
+Dieser sollte auf ihr Hauptverzeichnis vom Java JDK 8 zeigen.
+Alternativ können Sie den Build mithilfe von Android Studio anstoßen.
 
 ```bash
 cli ERROR Command failed: ./gradlew assembleRelease --stacktrace
