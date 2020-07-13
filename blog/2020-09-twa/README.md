@@ -356,6 +356,10 @@ Im Ergebnis sollten wir folgende Struktur erhalten:
 Im Prinzip sind wir damit auch schon fertig.
 Wir müssen nun noch die fertige Android App (`*.apk`-Datei) erzeugen.
 
+Das Ergebnis der TWA Generierung können Sie auch in folgendem Repository nachvollziehen:
+
+[https://github.com/book-monkey4/book-monkey4-pwa-twa-wrapper](https://github.com/book-monkey4/book-monkey4-pwa-twa-wrapper)
+
 ## Die signierte App bauen
 
 Wir können unsere signierte Android App entwerder direkt mit Hilfe der Bubblewrap CLI bauen oder wir nutzen hierfür Android Studio.
