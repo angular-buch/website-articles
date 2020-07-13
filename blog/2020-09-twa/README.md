@@ -410,7 +410,8 @@ Vereinzelt kann es dazu kommen, dass wir eine Fehlermeldung wie die folgende erh
 UnhandledPromiseRejectionWarning: Error: Error calling the PageSpeed Insights API: Error: Failed to run the PageSpeed Insight report
 ```
 
-In diesem Fall schlägt die Analyse der App fehl. Wir können den Build erneut aufrufen und das Flag `--skipPwaValidation` einfügen.
+In diesem Fall schlägt die Analyse der App fehl, weil beispielsweise die Website gerade nicht erreichbar ist. Wir können den Build erneut aufrufen und das Flag `--skipPwaValidation` einfügen.
+In diesem Fall wird die Überprüfung der PWA vor Erzeugung der App als TWA übersprungen.
 
 ```bash
 npx @bubblewrap/cli build --skipPwaValidation
