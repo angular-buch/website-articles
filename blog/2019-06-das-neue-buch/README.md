@@ -11,7 +11,7 @@ keywords:
   - Buchhandel
   - Zweite Auflage
 language: de
-thumbnail: ../x_shared/buchblogheader.png
+thumbnail: ../x_shared/buchblogheader2.png
 ---
 
 **Das neue deutschsprachige Angular-Buch ist da!**  

@@ -10,7 +10,7 @@ keywords:
   - Changelog
   - Zweite Auflage
 language: de
-thumbnail: ../x_shared/buchblogheader.png
+thumbnail: ../x_shared/buchblogheader2.png
 sticky: false
 ---
 
@@ -90,6 +90,3 @@ Für die einzelnen Iterationsschritte aus dem Beispielprojekt bieten wir eine Di
 Zu guter Letzt haben wir an ausgewählten Stellen in diesem Buch Zitate von bekannten Persönlichkeiten aus der Angular-Community aufgeführt.
 Die meisten dieser Zitate haben wir direkt für dieses Buch erbeten.
 Wir freuen uns sehr, dass so viele interessante und humorvolle Worte diesem Buch eine einmalige Note geben.
-
-
-<small>**Titelbild:** Zabriskie Point, Death Valley National Park, California, 2019</small>
