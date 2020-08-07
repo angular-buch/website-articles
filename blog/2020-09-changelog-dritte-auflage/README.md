@@ -91,9 +91,4 @@ Zu guter Letzt haben wir an ausgewählten Stellen in diesem Buch Zitate von Pers
 Die meisten dieser Zitate haben wir direkt für dieses Buch erbeten.
 Wir freuen uns sehr, dass so viele interessante und humorvolle Worte diesem Buch eine einmalige Note geben.
 
-<<<<<<< HEAD
-<a class="btn btn-primary cta__button" role="button" style="white-space: pre;" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe
-jetzt vorbestellen</a>
-=======
 <a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt vorbestellen</a>
->>>>>>> cl3
