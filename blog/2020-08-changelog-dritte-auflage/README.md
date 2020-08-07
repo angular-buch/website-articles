@@ -2,8 +2,8 @@
 title: "Changelog zur 3. Auflage"
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2020-09-20
-lastModified: 2020-09-20
+published: 2020-08-07
+lastModified: 2020-08-07
 keywords:
   - Angular
   - Buch
@@ -17,12 +17,11 @@ keywords:
   - Angular CLI
   - Monorepo
 language: de
-thumbnail: ../x_shared/buchblogheader3.png
+thumbnail: ../x_shared/buchblogheader3-preorder.png
 sticky: false
-hidden: true
 ---
 
-Im September 2020 erscheint die **dritte Auflage** des deutschsprachigen Angular-Buchs.
+Im September 2020 erscheint die **dritte Auflage** des deutschsprachigen Angular-Buchs!
 
 Die Webplattform bewegt sich schnell, und so muss auch ein Framework wie Angular stets an neue Gegebenheiten angepasst werden und mit den Anforderungen wachsen.
 In den drei Jahren seit Veröffentlichung der ersten Auflage dieses Buchs haben sich viele Dinge geändert:
@@ -34,7 +33,6 @@ Dabei haben wir das Feedback unserer Leser berücksichtigt, Fehler korrigiert un
 Wir möchten Ihnen einen kurzen Überblick über die wichtigsten Neuerungen und Aktualisierungen der dritten Auflage geben.
 Alle Texte und Codebeispiele haben wir auf die Angular-Version 10 aktualisiert.
 Dabei betrachten wir auch neue Features.
-Schon in der zweiten Auflage haben wir umfassende Aktualisierungen vorgenommen, die wir am Ende dieses Abschnitts zusammengefasst haben.
 
 <a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt vorbestellen</a>
 
