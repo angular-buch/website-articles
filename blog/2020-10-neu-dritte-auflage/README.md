@@ -15,18 +15,18 @@ thumbnail: ../x_shared/buchblogheader3.png
 ---
 
 **Das neue deutschsprachige Angular-Buch ist da!**
-Ab sofort ist die 2. Auflage des erfolgreichen Standardwerks im Handel verfügbar.
+Ab sofort ist die 3. Auflage des erfolgreichen Standardwerks im Handel verfügbar.
 
-Mit der neuen Ausgabe erwarten Sie 740 Seiten mit aktuellem Inhalt zum Webframework Angular.
+Mit der neuen Ausgabe erwarten Sie 837 Seiten mit aktuellem Inhalt zum Webframework Angular.
 Die neue Ausgabe wurde grundlegend aktualisiert und erweitert.
-Alle Inhalte und Beispiele sind auf dem Stand der aktuellen Angular-Version 8 und wurden an etablierte Best Practices angepasst.
+Alle Inhalte und Beispiele sind auf dem Stand der aktuellen Angular-Version 10 und wurden an etablierte Best Practices angepasst.
 Dabei wurden große Teile des Buchs vollständig überarbeitet und neu strukturiert.
 
 Zusätzlich wurden neue Themen in das Buch aufgenommen, sodass es seiner Rolle als Standardwerk gerecht werden kann.
-Im [Changelog zur zweiten Auflage](/blog/2019-06-changelog-zweite-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
-Auch für die Leser der ersten Auflage lohnt sich der Umstieg.
+Im [Changelog zur dritten Auflage](/blog/2020-08-changelog-dritte-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
+Auch für die Leser der ersten und zweiten Auflage lohnt sich der Umstieg.
 
-Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://www.dpunkt.de/buecher/13231/9783864906466-angular.html) oder bei [Amazon](https://amzn.to/2Wuo7cd).
+Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://dpunkt.de/produkt/angular-4/) oder bei [Amazon](https://www.amazon.de/gp/product/3864907799/ref=as_li_qf_asin_il_tl?ie=UTF8&tag=johandehausho-21&creative=6742&linkCode=as2&creativeASIN=3864906466&linkId=17d814bd1203a786195089510add8390).
 
 
 <!--<div class="row">
@@ -70,16 +70,16 @@ Wer noch nicht mit TypeScript vertraut ist, findet im Buch eine kompakte Einfüh
 
 ## Hintergrund
 
-Die erste Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien im Mai 2017 im Handel.
-Das Buch war durchweg auf dem Stand von Angular 4.
+Die zweite Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien im Juni 2019 im Handel.
+Das Buch war durchweg auf dem Stand von Angular 7.
 Ein Technologiebuch befindet sich stets in einem Spannungsfeld:
 Einerseits ist ein gedrucktes Buch für Beständigkeit über mehrere Jahre ausgelegt, andererseits muss ein Enterprise-Framework wie Angular schnell beweglich sein, um mit dem technologischen Fortschritt mitzuhalten.
 
 Wir haben deshalb regelmäßig in [Blogartikeln](/updates) über neue Features und Änderungen informiert.
 Die grundsätzlichen Schnittstellen des Frameworks blieben beständig, allerdings waren einige Breaking Changes unvermeidbar.
-Zwei Jahre nach dem Erscheinen der ersten Auflage waren so viele Änderungen geschehen, dass eine zweite Auflage ratsam wurde.
+Zwei Jahre nach dem Erscheinen der zweiten Auflage waren so viele Änderungen geschehen, dass eine driite Auflage ratsam wurde.
 
-Im Sommer 2018 begannen wir die Arbeit an der neuen Auflage.
+Im Frühling 2020 begannen wir die Arbeit an der neuen Auflage.
 Dabei haben wir einen guten Kompromiss zwischen einer reinen Aktualisierung und einer vollständigen Neuauflage gefunden.
 Einige Inhalte sind komplett neu, andere Kapitel haben wir vollständig gelöscht und neu aufgerollt.
 Das Leser-Feedback der letzten zwei Jahre wurde ebenso berücksichtigt, und es wurden viele unklare Stellen des ersten Buchs vereinfacht.
