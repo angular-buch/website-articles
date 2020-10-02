@@ -14,7 +14,7 @@ language: de
 thumbnail: ../x_shared/buchblogheader3.png
 ---
 
-**Das neue deutschsprachige Angular-Buch ist da!**  
+**Das neue deutschsprachige Angular-Buch ist da!**
 Ab sofort ist die 2. Auflage des erfolgreichen Standardwerks im Handel verfügbar.
 
 Mit der neuen Ausgabe erwarten Sie 740 Seiten mit aktuellem Inhalt zum Webframework Angular.
@@ -110,19 +110,14 @@ das Autorenteam<br>
 ## Danksagung
 
 Dieses Buch hätte nicht seine Reife erreicht ohne die Hilfe und Unterstützung verschiedener Menschen.
-Wir danken **Gregor Woiwode** für die Mitwirkung als Autor in der ersten Auflage.
-Besonderer Dank geht an **Michael Kaaden** für seine unermüdlichen Anregungen und kritischen Nachfragen.
-Michael hat das gesamte Buch mehrfach auf Verständlichkeit und Fehler abgeklopft, alle Codebeispiele nachvollzogen und viel wertvollen Input geliefert.
-Er hat zudem maßgeblich am Docker-Beispiel mitgewirkt.
-**Matthias Jauernig**, **Dilyana Pavlova**, **Silvio Böhme**, **Danilo Hoffmann** und **Jan-Niklas Wortmann** danken wir ebenso für die hilfreichen Anregungen und Korrekturvorschläge zur zweiten Auflage.
-**Julian Steiner** hat uns mit seiner Expertise zu NativeScript bei der Entwicklung der BookMonkey-Mobile-App unterstützt.
-Wertvolles Feedback zur ersten Auflage dieses Buchs haben uns außerdem
-**Nils Frohne**,
-**Johannes Hamfler**,
-**Stephan Hartmann**,
-**Johannes Hofmeister**,
-**Alexander Szczepanski** und
-**Daniel Vladut** zukommen lassen.
+Besonderer Dank geht an **Michael Kaaden** für seine unermüdlichen Anregungen, kritischen Nachfragen und seine starke Unterstützung beim Kapitel zu Docker.
+**Danilo Hoffmann** und **Jan-Niklas Wortmann** danken wir ebenso für die hilfreichen Anregungen und Korrekturvorschläge.
+Unser Dank geht außerdem an **Michael Hladky** für wertvollen Input zur Change Detection und zur Bibliothek RxAngular.
+Darüber hinaus hat uns **Nathan Walker** mit seiner Zeit und Expertise beim Kapitel zu NativeScript unterstützt.
 
-Dem Team vom dpunkt.verlag, insbesondere **René Schönfeldt** und **Sabrina Dietze**, danken wir für die persönliche Unterstützung und die guten Anregungen zum Buch.
-Außerdem danken wir dem **Angular-Team** und der Community dafür, dass sie eine großartige Plattform geschaffen haben, die uns den Entwickleralltag angenehmer macht.
+Wir danken **Gregor Woiwode** für die Mitwirkung als Autor in der ersten Auflage.
+Dem Team vom dpunkt.verlag, insbesondere **René Schönfeldt**, danken wir für die persönliche Unterstützung und die guten Anregungen zum Buch.
+**Annette Schwarz** danken wir für das gewissenhafte Korrektorat unseres Manuskripts.
+Besonderer Dank gilt dem **Angular-Team** und der Community dafür, dass sie eine großartige Plattform geschaffen haben, die uns den Entwickleralltag angenehmer macht.
+
+Viele Leser haben uns E-Mails mit persönlichem Feedback zum Buch zukommen lassen – vielen Dank für diese wertvollen Rückmeldungen.
