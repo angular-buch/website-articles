@@ -44,29 +44,31 @@ Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im
 
 ## Fundierter Einstieg in Angular
 
-Lernen Sie die Grundlagen, fortgeschrittene Themen und Best Practices zu Angular mit diesem Praxisbuch!
-Mit einem [zusammenhängenden Beispielprojekt](https://book-monkey4.angular-buch.com/) führen wir Sie durch die Welt von Angular.
-Lernen Sie Schritt für Schritt, wie Sie modulare Single-Page-Anwendungen entwickeln.
-Praktisch: Der Programmcode zu jeder einzelnen Entwicklungsphase ist [auf GitHub](https://github.com/angular-buch/book-monkey4) verfügbar.
-So können Sie alle Schritte gut nachvollziehen und auch Teile überspringen.
+Lernen Sie Angular mit diesem Praxisbuch!
 
-Neben den Grundlagen werden auch behandelt:
+Sie werden von Ferdinand Malcher, Johannes Hoppe und Danny Koppenhagen anhand eines [anspruchsvollen Beispielprojekts](https://book-monkey4.angular-buch.com/) durch die Welt von Angular geführt und entwickeln Schritt für Schritt Ihre erste modulare Single-Page-Anwendung.
+
+Praktisch: Der Programmcode zu jeder einzelnen Entwicklungsphase ist auf GitHub verfügbar.
+So können Sie alle Schritte gut nachvollziehen und in Ihrem eigenen Tempo bearbeiten.
+
+Die Autoren sind erfahrene Workshopleiter, Entwickler und internationale Konferenzsprecher. Aufgrund ihres Engagements rund um das Buch und Angular wurden Ferdinand und Johannes als Google Developer Experts (GDE) ausgezeichnet.
+In diesem praktischen Nachschlagewerk vermitteln sie die Best Practices aus ihrer täglichen Arbeit mit Angular.
+
+Aus dem Inhalt:
 
 * Reaktive Programmierung mit RxJS
-* State-Management mit Redux/NgRx
+* State Management mit Redux und NgRx
 * Testing mit Jasmine, Karma und Protractor
-* Routing und Modulsystem
+* Routing, Guards und Modulsystem
 * HTTP und Interceptoren
 * Formularverarbeitung
 * Dependency Injection und Services
 * Internationalisierung (i18n)
-* Mobile Anwendungen mit NativeScript
 * Server-Side Rendering
-* und vieles mehr
+* Progressive Web Apps (PWA) und NativeScript
 
 Das Buch setzt Vorkenntnisse in JavaScript, HTML und CSS voraus.
-Wer noch nicht mit TypeScript vertraut ist, findet im Buch eine kompakte Einführung.
-
+Wer nicht mit TypeScript vertraut ist, findet hier eine kompakte Einführung.
 
 ## Hintergrund
 
