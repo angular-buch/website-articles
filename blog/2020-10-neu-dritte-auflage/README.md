@@ -26,7 +26,7 @@ Zusätzlich wurden neue Themen in das Buch aufgenommen, sodass es seiner Rolle a
 Im [Changelog zur dritten Auflage](/blog/2020-08-changelog-dritte-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
 Auch für die Leser der ersten und zweiten Auflage lohnt sich der Umstieg.
 
-Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://dpunkt.de/produkt/angular-4/) oder bei [Amazon](https://www.amazon.de/gp/product/3864907799/ref=as_li_qf_asin_il_tl?ie=UTF8&tag=johandehausho-21&creative=6742&linkCode=as2&creativeASIN=3864906466&linkId=17d814bd1203a786195089510add8390).
+Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://dpunkt.de/produkt/angular-4/) oder bei [Amazon](https://amzn.to/30s4mVX).
 
 
 <!--<div class="row">
