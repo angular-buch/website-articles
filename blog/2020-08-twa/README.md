@@ -161,29 +161,29 @@ Im nächsten Schritt benötigen wir eine App-Signatur, die wir über die Erzeugu
 
 ### Die App-Signatur erzeugen
 
-Klicken wir auf den Menüpunkt _"App-Signatur"_, sehen wir zunächst nur einen Hinweis, dass wir zunächst ein Release benötigen.
-Um dieses anzulegen gehen wir auf das Menü _"App Releases"_.
-Hier müssen wir zunächst einen neuen Track erstellen.
-Tracks können verschiedene Ausprägungen haben:
+Klicken wir auf den Menüpunkt _"App-Signatur"_, sehen wir zunächst nur einen Hinweis, dass wir ein Release benötigen.
+Um dieses anzulegen, gehen wir auf das Menü _"App Releases"_.
+Hier müssen wir einen neuen Track erstellen.
+Ein solcher Track kann verschiedene Ausprägungen haben:
 
-- **Produktions-Track**: Releases die für jeden Nutzer im Google Play Store bereitgestellt werden
-- **Offener Track**: Releases die für jeden Nutzer im Google Play Store bereitgestellt werden aber als Vorab-Release (Beta Release) gekennzeichnet sind. Offene Tracks können auch auf eine bestimmte Anzahl von Nutzer begrenzt werden.
+- **Produktions-Track**: Releases, die für jeden Nutzer im Google Play Store bereitgestellt werden
+- **Offener Track**: Releases, die für jeden Nutzer im Google Play Store bereitgestellt werden, aber als Vorab-Release (Beta Release) gekennzeichnet sind. Offene Tracks können auch auf eine bestimmte Anzahl von Nutzer begrenzt werden
 - **Geschlossener Track**: Releases, die nur bestimmten Personen zum Download als Vorab-Release (Alpha Release) zur Verfügung stehen.
-- **Interner Test-Track**: Releases, die zum Test für einen bestimmten Personenkreis besipielsweise über einen Link bereitgestellt werden können.
+- **Interner Test-Track**: Releases, die zum Test für einen bestimmten Personenkreis besipielsweise über einen Link bereitgestellt werden können
 
-In unserem Szenario wollen wir unsere App direkt bis in den Google Play Store bringen, um zu verifizieren, dass diese auch tatsächlich von allen Nutzern gefunden und installiert werden können.
+In unserem Szenario wollen wir unsere App direkt bis in den Google Play Store bringen, um zu verifizieren, dass diese auch tatsächlich von allen Nutzern gefunden und installiert werden kann.
 Hierfür nutzen wir den offenen Track und erstellen ein Beta-Release.
 Dafür klicken wir im Abschnitt _"Offener Track"_ auf _"Verwalten"_.
 
-![Google Play Console: Erstellen eines neuen Beta Releases](play-beta.png)
+![Google Play Console: Erstellen eines neuen Beta-Releases](play-beta.png)
 
-Auf der nächsten Seite klicken wir auf _"Release Erstellen"_.
+Auf der nächsten Seite klicken wir auf _"Release erstellen"_.
 Anschließend gelangen wir in den Abschnitt zur Erzeugung des _"App-Signaturschlüssels"_.
-Hier klicken wir auf _"Weiter"_ um den Schlüssel zu aktivieren.
+Hier klicken wir auf _"Weiter"_, um den Schlüssel zu aktivieren.
 
 ![Google Play Console: Erstellen des App-Signaturschlüssels](play-beta-sign.png)
 
-Bevor wir nun unser Beta-Release veröffentlich müssen wir den erzuegten Schlüssel mit unserer PWA verknüpfen und die TWA erzeugen um sie anschließend in die Google Play Console zu laden.
+Bevor wir nun unser Beta-Release veröffentlichen können, müssen wir den erzeugten Schlüssel mit unserer PWA verknüpfen und die TWA erzeugen, um sie anschließend in die Google Play Console zu laden.
 
 ### Den App-Signaturschlüssel in der PWA hinterlegen
 
@@ -192,7 +192,7 @@ Hier kopieren wir uns den Fingerabdruck des SHA-256-Zertifikats in die Zwischena
 
 ![Google Play Console: Kopieren des App-Signaturschlüssels](play-signature.png)
 
-Dieser Fingerabdruck stellt später sicher, dass beim Aufruf der PWA durch unsere TWA verifiziert werden kann, dass die Anwendung _trusted_ - also verifiziert ist.
+Dieser Fingerabdruck stellt später sicher, dass beim Aufruf der PWA durch unsere TWA verifiziert werden kann, dass die Anwendung _trusted_ ist, also von Google verifiziert.
 
 Um den Fingerabdruck aufspüren zu können, müssen wir diesen über die spezielle Datei `assetlinks.json` bereitstellen.
 Weiterhin muss die Datei und ihr Inhalt über die spezielle URL `https://my-app.com/.well-known/assetlinks.json` aufrufbar sein.
@@ -217,17 +217,17 @@ Darin legen wir die Datei `assetlinks.json` mit dem folgenden Inhalt an:
 
 Als `package_name` legen wir die Anwendungs-ID fest, die im Google Play Store eindeutig sein muss und genau auf eine App zeigt.
 Die ID wird in der Regel aus einer Domain gebildet und rückwärts gelistet.
-Sie muss mindestens einen Punkt enthalten, Zeichen hinter einem Punkt dürfen nur Buchstaben sein und die gesamte ID darf lediglich Alphanumerische Zeichen enthalten.
+Sie muss mindestens einen Punkt enthalten, Zeichen hinter einem Punkt dürfen nur Buchstaben sein, und die gesamte ID darf lediglich Alphanumerische Zeichen enthalten.
 Zeichen wie "`-`" sind nicht erlaubt.
-Alle Regeln zur Definition einer validen ID, können der [Android Entwicklerdokumentstion](https://developer.android.com/studio/build/application-id) entnommen werden.
+Alle Regeln zur Definition einer validen ID können Sie der [Android Entwicklerdokumentstion](https://developer.android.com/studio/build/application-id) entnehmen.
 
-Wie erkenntlich ist, müssen wir weiterhin den kopierten App-Signaturschlüssel unter `sha256_cert_fingerprints` eintragen.
+Unter `sha256_cert_fingerprints` müssen wir außerdem den kopierten App-Signaturschlüssel eintragen.
 
-> Achtung kopieren Sie den Fingerprint von der Google Play Console, wird ggf. der Präfix "`SHA256: `" mit kopiert. Dieser muss beim Einfügen weggelassen werden.
+> Achtung: Kopieren Sie den Fingerprint von der Google Play Console, wird ggf. das Präfix "`SHA256: `" mit kopiert. Dieses muss beim Einfügen weggelassen werden.
 
-Jetzt müssen wir Angular noch beibringen, dass der relative URL-Pfad `/.well-known/assetlinks.json` nicht durch den Angular-Router behandelt und umgeleitet wird, sondern, dass sich dahinter ein statisches Asset verbrigt, welches direkt über die URL aufrufbar sein soll.
+Jetzt müssen wir der Angular CLI noch beibringen, dass der URL-Pfad `/.well-known/assetlinks.json` nicht durch den Angular-Router behandelt und umgeleitet werden soll, sondern dass sich dahinter ein statisches Asset verbrigt, das direkt über die URL aufrufbar sein soll.
 
-Dafür bearbeiten wir den Abschnitt `build` innerhalb des Projekt-Aschnitts unserer Datei `angular.json`.
+Dafür bearbeiten wir die Datei `angular.json`: Im Abschnitt `build` > `options` ergänzen wir den Eintrag `assets`.
 Dort geben wir an, dass alle Dateien unter `src/.well-known` über den relativen Pfad `/.well-known/` bereitgestellt werden sollen:
 
 ```json
@@ -264,7 +264,7 @@ Dort geben wir an, dass alle Dateien unter `src/.well-known` über den relativen
 }       
 ```
 
-Wir überprüfen das Ergebnis am besten indem wir einen Prod-Build ausführen und einen einfachen Webserver starten:
+Wir überprüfen das Ergebnis am Besten, indem wir einen Produktiiv-Build ausführen und einen einfachen Webserver starten:
 
 ```bash
 ng build --prod
@@ -274,14 +274,14 @@ npx http-server
 
 Rufen wir nun die URL `http://localhost:8080/.well-known/assetlinks.json` im Browser auf, sehen wir, dass unsere Datei `assetlinks.json` dargestellt wird:
 
-![Test der Auslieferung der Datei assetlinks.json im Browser](assetlinks-browser.png)
+![Test der Auslieferung der Datei `assetlinks.json` im Browser](assetlinks-browser.png)
 
 War der Test erfolgreich, können wir unsere PWA deployen.
-Wichtig ist, dass diese zwingend per _https_ asugeleifert werden muss.
+Wichtig ist, dass diese zwingend per `HTTPS` ausgeleifert werden muss.
 
-> Achtung! Nutzen Sie beispielsweise Github Pages zur Auslieferung ihrer Anwendung, so müssen Sie vor dem Deployment im Dist-Verzeichnis (`dist/book-monkey`) eine Datei `_config.yml` mit dem Inhalt `include: [".well-known"]` anlegen, da alle Verzeichnisse beginnend "`.`" per Default [von Github Pages ignoriert werden](https://github.com/keybase/keybase-issues/issues/366#issuecomment-38749201). Diesen Schritt integrieren Sie am besten in ihre Deployment-Pipelin
+> Achtung: Nutzen Sie beispielsweise Github Pages zur Auslieferung Ihrer Anwendung, so müssen Sie vor dem Deployment im `dist`-Verzeichnis (`dist/book-monkey`) eine Datei `_config.yml` mit dem Inhalt `include: [".well-known"]` anlegen, da alle Verzeichnisse beginnend mit "`.`" per Default [von Github Pages ignoriert werden](https://github.com/keybase/keybase-issues/issues/366#issuecomment-38749201). Diesen Schritt integrieren Sie am besten in Ihre Deployment-Pipeline.
 
-Überprüfen Sie nach dem Deployment am besten noch einmal, ob Sie die URL `http://mydomain/.well-known/assetlinks.json` aufrufen können.
+Überprüfen Sie nach dem Deployment am Besten noch einmal, ob Sie die URL `http://mydomain/.well-known/assetlinks.json` aufrufen können.
 In unserem Fall wäre das: [`https://bm4-pwa.angular-buch.com/.well-known/assetlinks.json`](https://bm4-pwa.angular-buch.com/.well-known/assetlinks.json).
 
 ## Die TWA mit der Bubblewrap CLI erzeugen
