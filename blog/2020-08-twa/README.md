@@ -1,5 +1,5 @@
 ---
-title: 'Bring deine Angular PWA als TWA in den Android Store'
+title: 'Trusted Web Activitys (TWA) mit Angular'
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
 published: 2020-09-01
@@ -18,19 +18,19 @@ sticky: false
 ---
 
 Progressive Web Apps sind in den letzten Jahren immer populärer geworden.
-Sie erlauben es uns Webanwendungen auf einem Smartphone zu installieren und wie eine native installierte App zu benutzen.
-Sie bieten uns die Möglichkeit Daten Offline über Service Worker zu cachen und zu speichern.
-Weiterhin können sie Push-Benachrichtigungen versenden.
+Sie erlauben es uns, Webanwendungen auf dem Home-Bildschirm des Smartphones zu installieren und wie eine nativ installierte App zu benutzen.
+Mit einer PWA können wir Daten mithilfe eines Service Workers cachen, um die Anwendung auch offline zu verwenden.
+Weiterhin kann eine PWA im Hintergrund Push-Benachrichtigungen vom Server empfangen und anzeigen.
 
-> Wenn Sie noch keine Erfahrung mit der Umsetzung einer Angular-App als PWA haben, schauen Sie sich unseren Blog-Post [_"Mach aus deiner Angular-App eine PWA"_](blog/2019-07-progressive-web-app) an oder werfen Sie einen Blick in unser [_Angular Buch_](angular-buch.com), wo wir dieses Thema detailliert erläutern.
+> Wenn Sie noch keine Erfahrung mit der Umsetzung einer Angular-App als PWA haben, schauen Sie sich unseren Blog-Post [_"Mach aus deiner Angular-App eine PWA"_](blog/2019-07-progressive-web-app) an oder werfen Sie einen Blick in unser [_Angular-Buch_](angular-buch.com), wo wir dieses Thema detailliert erläutern.
 
-Nach der Entwicklung einer PWA bleibt jedoch eine Hürde bestehen: Nutzer der Anwedung müssen die URL kennen, über welche die PWA abrufbar ist und installiert werden kann.
-Viele Smartphone-Nutzer sind jedoch einen anderen Weg gewohnt um eine App zu installieren:
-Sie suchen danach in einem App Store – sei es der _Google Play Store_ unter Android oder _App Store_ unter iOS.
+Nach der Entwicklung einer PWA bleibt jedoch eine Hürde bestehen: Nutzer der Anwendung müssen die URL kennen, über welche die PWA abrufbar ist und installiert werden kann.
+Viele Smartphone-Nutzer sind jedoch einen anderen Weg gewohnt, um eine App zu installieren:
+Sie suchen danach in einem App Store wie dem _Google Play Store_ unter Android oder _App Store_ unter iOS.
 
-In diesem Blogpost wollen wir Ihnen zeigen, wie Sie ihre PWA auf einfachem Weg in den Android Store bringen können, ohne eine Android App mit Webview zu entwickeln, die lediglich ihre Website aufruft.
+In diesem Blogpost wollen wir Ihnen zeigen, wie Sie Ihre PWA auf einfachem Weg in den Google Play Store für Android bringen können, ohne eine echte Android-App mit Webview zu entwickeln, die lediglich eine Website aufruft.
 
-> Zur Zeit gibt es noch keine Möglichkeit PWAs in Apples App Store zu deployen.
+> **Zur Zeit gibt es noch keine Möglichkeit, PWAs in Apples App Store zu deployen.**
 
 ---
 
@@ -39,7 +39,7 @@ Inhalt:
 - [TWAs im Detail](#twas-im-detail)
 - [Eine PWA als TWA in den Android Store bringen](#eine-pwa-als-twa-in-den-android-store-bringen)
   - [Einen Android Developer Account registrieren](#einen-android-developer-account-registrieren)
-  - [Die Android App in der Google Play Console erstellen](#die-android-app-in-der-google-play-console-erstellen)
+  - [Die Android-App in der Google Play Console erstellen](#die-android-app-in-der-google-play-console-erstellen)
   - [Die App-Signatur erzeugen](#die-app-signatur-erzeugen)
   - [Den App-Signaturschlüssel in der PWA hinterlegen](#den-app-signaturschlüssel-in-der-pwa-hinterlegen)
   - [Die TWA mit der Bubblewrap CLI erzeugen](#die-twa-mit-der-bubblewrap-cli-erzeugen)
@@ -52,48 +52,49 @@ Inhalt:
 
 ## Trusted Web Activities vs. Webview-Integration
 
-Um PWAs als Android App bereitzustellen benötigen wir eine Art App-Wrapper, der schlussendlich die PWA aufruft und somit unsere Web-Anwendung darstellen kann.
+Um PWAs als Android-App bereitzustellen, benötigen wir eine Art App-Wrapper, der schließlich die PWA aufruft und somit unsere Webanwendung darstellen kann.
 
-In der Vergangenheit wurde dies oft durch Android Apps umgesetzt, die lediglich einen sogenennten [_WebView_](https://developer.android.com/reference/android/webkit/WebView) integrieren.
-Hinter diesem Feature versteckt sich ein integrierter Webbrowser in der Android App, der lediglich den Inhalt der Website darstellt.
-Dieser Weg funktioniert für eine Vielzahl von Websites, gerät jedoch an seine Grenzen, wenn es sich bei der Website um eine PWA handelt.Denn in einem Webview funktionieren die essentiellen Service Worker nicht.
-Somit können die Features wie die Offlinefähigkeit nicht einfach integrieren.
-Weiterhin birgt ein Webview ein gewisses Sicherheitsrisiko, weil lediglich die URL den Inhalt der Anwendung bestimmt und keinerlei Überprüfung des Contents stattfindet.
+In der Vergangenheit wurde dies oft durch Android-Apps umgesetzt, die lediglich einen sogenannten [_WebView_](https://developer.android.com/reference/android/webkit/WebView) integrieren.
+Hinter diesem Feature versteckt sich ein integrierter Webbrowser in der Android-App, der lediglich den Inhalt der Website darstellt.
+Dieser Weg funktioniert für eine Vielzahl von Websites, gerät jedoch an seine Grenzen, wenn es sich bei der Website um eine PWA handelt.
+Der Grund: In einem Webview funktionieren die essenziellen Service Worker nicht.
+Somit können wir Features wie die Offlinefähigkeit nicht einfach in die Anwendung integrieren.
+Weiterhin birgt ein Webview ein gewisses Sicherheitsrisiko, weil lediglich die URL den Inhalt der Anwendung bestimmt und keinerlei Überprüfung des tatsächlichen Contents stattfindet.
 Wird also beispielsweise eine Website _"gekapert"_, bekommt der Nutzer ggf. den Inhalt einer falschen Seite angezeigt.
 
-Bei einer TWA hingegegen wird die PWA lediglich so erweitert, dass diese als Android App deployed werden kann.
+Bei einer TWA hingegen wird die PWA lediglich so erweitert, dass sie als Android-App direkt deployt werden kann.
 Über einen Sicherheitsschlüssel kann verifiziert werden, dass die aufgerufene URL zur App passt.
 
 ## TWAs im Detail
 
-Die Grundidee einer TWA ist Recht simpel: Statt einer vollumfänglichen Android App, die einen Browser Implementiert und eine URL aufruft, wird bei einer TWA leidglich die PWA um eine kleine App-Schicht erweitert, sodass diese in den Google Play Store wandern kann.
-Es muss also auch kein eingebetter Browser in der App integriert werden, sondern es wird auf den vorhandenen Google Chrome Browser zurückgegriffen.
-Voraussetzung hierfür ist, dass auf dem Android Gerät der Google Chrome Browser in der Version 72 oder höher verfügbar ist.
-Beim Öffen der PWA wird der Google Chrome Browser mit der hinterlegten URL geöffnet und es werden sämtliche UI Elemente des Google Chrome Browsers ausgeblendet.
-Im Prinzip passiert also genau das, was auch geschieht wenn wir eine PWA über die _Add To Homescreen_ Funktion auf unserem Smartphone speichern, jedoch in Form einer App, die über den Google Play Store gefunden und installiert werden kann.
-Somit bleiben Features wie Push-Benachrichtigungen, Hintergrundsynchronisierungen, Autofill bei Eingabeformularen, Media-Source-Extensions oder die Sharing API vorllumfänglich erhalten.
-Ein weiterer Vorteil, den wir auf diesem Wege erhalten ist, dass Session-Daten und der Cache im Google Chrome Browser geteilt werden.
-Haben wir uns also beispielsweise bei unserer Web-Anwendung zuvor im Browser angemeldt, so belibt die Anmeldung in der Android App (TWA) bestehen.
+Die Grundidee einer TWA ist schnell erklärt: Statt einer vollumfänglichen Android-App, die einen Browser implementiert und eine URL aufruft, wird bei einer TWA leidglich die PWA um eine App-Schicht erweitert, sodass sie im Google Play Store veröffentlicht werden kann.
+Es muss also auch kein eingebetteter Browser in der App integriert werden, sondern es wird auf den vorhandenen Google Chrome Browser zurückgegriffen.
+Voraussetzung hierfür ist, dass auf dem Android-Gerät die Version 72 oder höher von Google Chrome verfügbar ist.
+Beim Öffnen der PWA wird Chrome mit der hinterlegten URL geöffnet, und es werden sämtliche UI-Elemente des Browsers ausgeblendet.
+Im Prinzip passiert also genau das, was auch geschieht, wenn wir eine PWA über die Funktion _"Add To Homescreen"_ auf Smartphone speichern, jedoch in Form einer App, die über den Google Play Store gefunden und installiert werden kann.
+Somit bleiben Features wie Push-Benachrichtigungen, Hintergrundsynchronisierungen, Autofill bei Eingabeformularen, Media Source Extensions oder die Sharing API vollumfänglich erhalten.
+Ein weiterer Vorteil einer solchen TWA ist, dass Session-Daten und der Cache im Google Chrome geteilt werden.
+Haben wir uns also beispielsweise bei unserer Web-Anwendung zuvor im Browser angemeldet, so belibt die Anmeldung in der Android-App (TWA) bestehen.
 
-Der Name der TWA lässt bereits darauf schließen: TWAs sind _trusted_ also vertraulich.
-Durch eine spezielle Datei, die mit der Webanwendung ausgeliefert wird und die einen Fingerprint enthält, kann sichergestellt werden, dass die Anwendung vertrauenswürdig ist und der Inhalt kann somit sicher geladen werden.
+Die Bezeichnung "Trusted Web Activity" lässt bereits darauf schließen: TWAs sind _trusted_, also vertraulich.
+Durch eine spezielle Datei, die mit der Webanwendung ausgeliefert wird und die einen Fingerprint enthält, kann sichergestellt werden, dass die Anwendung vertrauenswürdig ist, und der Inhalt kann somit sicher geladen werden.
 
 ## Eine PWA als TWA in den Android Store bringen
 
-Genug der Theorie, wir wollen nun erfahren, wie wir eine PWA im Android Store als TWA bereitstellen können.
+Genug der Theorie -- wir wollen nun erfahren, wie wir eine PWA im Android Store als TWA bereitstellen können.
 
-Dafür müssen wir folgende Schritte erledigen:
+Dafür müssen wir folgende Schritte durchführen:
 
 - Einen Android Developer Account registieren
-- Die Android App in der Google Play Console erstellen
+- Die Android-App in der Google Play Console erstellen
 - Die App-Signatur erzeugen
 - Den App-Signaturschlüssel in der PWA hinterlegen
-- Die TWA mit der Bubblewrap CLI erzeugen
+- Die TWA mit der *Bubblewrap CLI* erzeugen
 - Die signierte App bauen
 - Die App über die Google Play Console veröffentlichen
 
-Wir wollen als Grundlage für dieses Beispiel die _BookMonkey_ App als PWA verwenden.
-Diese können Sie sich über Github herunterladen:
+Wir wollen als Grundlage für dieses Beispiel die Angular-Anwendung _BookMonkey_ aus dem Angular-Buch verwenden, die bereits als PWA vorliegt.
+Möchten Sie die Schritte selbst nachvollziehen, können Sie die Anwendung über GitHub herunterladen:
 
 [https://github.com/book-monkey4/book-monkey4-pwa](https://github.com/book-monkey4/book-monkey4-pwa)
 
@@ -105,7 +106,7 @@ Die Online-Version der PWA können Sie unter der folgenden URL abrufen:
 
 [https://bm4-pwa.angular-buch.com/](https://bm4-pwa.angular-buch.com/)
 
-Weiterhin benötigen Sie folgende Voraussetzungen für die Erstellung der Android App als TWA:
+Weiterhin benötigen Sie für die Erstellung der TWA folgende Voraussetzungen auf dem Entwicklungssystem:
 - [Java SDK 8.0](https://openjdk.java.net/install/)
 - [Android SDK (vorzugsweise Android Studio inkl. SDK)](https://developer.android.com/studio)
 - [Node.js 10.0 oder höher](https://nodejs.org)
@@ -115,47 +116,47 @@ Weiterhin benötigen Sie folgende Voraussetzungen für die Erstellung der Androi
 > Sofern Sie bereits einen Account für die _Google Play Console_ besitzen, können Sie diesen Schritt überspringen.
 
 Um eine App im Google Play Store einzustellen, benötigen wir zunächst einen Account für die _Google Play Console_.
-Den Account können Sie ganz einfach über den folgenden Link registrieren:
+Den Account können Sie über den folgenden Link registrieren:
 
 [https://play.google.com/apps/publish/signup](https://play.google.com/apps/publish/signup)
 
-Bei der Registrierung wird eine einmalige Registrierungsgebühr in Höhe von 25 USD erhoben. Diese Gebühr gilt für sämtliche Apps, die Sie mit dem hinterlegten Google Account registrieren wollen.
+Bei der Registrierung wird eine einmalige Registrierungsgebühr in Höhe von 25 USD erhoben. Diese Gebühr gilt für sämtliche Apps, die Sie mit dem hinterlegten Google-Account registrieren wollen.
 
 ![Google Play Console: Registrierung](play-register.png)
 
-### Die Android App in der Google Play Console erstellen
+### Die Android-App in der Google Play Console erstellen
 
-Nach der Registierungs des Accounts, müssen wir uns in der [_Google Play Console_ einloggen](https://play.google.com/apps/publish).
-Anschließend können wir über den Menüpunkt _Alle Apps_ mit dem Button _App Erstellen_ eine neue Anwendung anlegen.
+Nach der Registierungs müssen wir uns in der [_Google Play Console_ einloggen](https://play.google.com/apps/publish).
+Anschließend können wir über den Menüpunkt _"Alle Apps"_ mit dem Button _"App erstellen"_ eine neue Anwendung anlegen.
 
 ![Google Play Console: Eine neue Anwendung erzeugen](play-create.png)
 
-Nach Erstellung gelangen wir zur Detailkonfiguration für die neue Android App
+Danach gelangen wir zur Detailkonfiguration für die neue Android-App.
 
 ![Google Play Console: Details zur neuen App](play-after-create.png)
 
-Um nun eine Android App zu veröffentlich müssen wir uns durch alle Schritte arbeiten, die links im Menü mit einem ✅-Icon gekennzeichnet sind.
+Um nun eine Android-App zu veröffentlichen, müssen wir uns durch alle Schritte arbeiten, die links im Menü mit einem ✅-Icon gekennzeichnet sind.
 
-Füllen Sie hierfür als erstes alle obligatorischen Felder unter dem Menüpunkt _"Store Eintrag"_ aus und laden die entsprechend notwendigen Icons und Screenshots für die Anwendung hoch.
+Füllen Sie hierfür als Erstes alle obligatorischen Felder unter dem Menüpunkt _"Store-Eintrag"_ aus, und laden Sie die notwendigen Icons und Screenshots für die Anwendung hoch.
 Diese können Sie im Nachhinein auch noch bearbeiten.
 Wichtig ist zunächst, dass alle Pflichtfelder gefüllt sind.
-Anschließend klicken Sie auf _"Entwurf Speichern"_.
+Anschließend klicken Sie auf _"Entwurf speichern"_.
 
-Als nächstes arbeiten Sie sich durch den Menüpunkt _"Einstufung des Inhalts"_.
-Hier müssen Sie einen Fragebogen zu den Inhalten ihrer App ausfüllen.
-Anhand der Fragen wird ermittelt, für welche Personenkreise und Altersgruppen die App freigegben werden kann.
+Als Nächstes arbeiten Sie sich durch den Menüpunkt _"Einstufung des Inhalts"_.
+Hier müssen Sie einen Fragebogen zu den Inhalten Ihrer App ausfüllen.
+Anhand der Fragen wird ermittelt, für welche Personenkreise und Altersgruppen die App freigegeben werden kann.
 
 Haben Sie hier alle Angaben ausgefüllt und gespeichert, gehen Sie zum Schritt _"App-Inhalte"_.
-Auch hier müssen Sie zunächst alle Schritte abarbeiten und beispielsweise einen Link zur Datenschutzerklärung angeben, Angaben machen, ob ihre App Werbebanner enthält und ihre Zielgruppe definieren.
+Auch hier müssen Sie zunächst alle Schritte abarbeiten und beispielsweise einen Link zur Datenschutzerklärung angeben, Angaben dazu machen, ob die App Werbebanner enthält und die Zielgruppe definieren.
 
-Bevor wir nun ein Release erstellen können müssen wir noch den Menüpunkt _"Preisgestaltung und Vertrieb"_ abarbeiten.
+Bevor wir nun ein Release erstellen können, müssen wir noch den Menüpunkt _"Preisgestaltung und Vertrieb"_ abarbeiten.
 Hier geben Sie an, ob es sich um eine kostenfreie oder kostenpflichtige App handeln soll und welchen Preis die App haben soll.
-Sofern ihre App kostenflichtig sein soll, benötigen Sie noch ein Händlerkonto, dass Sie direkt über diese Seite einrichten können.
-Im unteren Teil der Seite müssen Sie schlussendlich noch defineiren, in welchen Ländern die App im Google Play Store verfügbar sein soll.
+Sofern die App kostenflichtig ist, benötigen Sie noch ein Händlerkonto, das Sie direkt über diese Seite einrichten können.
+Im unteren Teil der Seite müssen Sie schließlich noch defineiren, in welchen Ländern die App im Google Play Store verfügbar sein soll.
 Hier müssen Sie mindestens ein Land auswählen.
 Weiterhin müssen Sie am Ende der Seite noch den Richtlinien für Inhalte und den Exportbestimmungen der USA zustimmen.
 
-Okay, wir sollten nun bei allen Menüpunkten bis auf _"App Releases"_ einen grünes ✅ Icon sehen.
+Okay, wir sollten nun bei allen Menüpunkten bis auf _"App Releases"_ einen grünes Icon "✅" sehen.
 Im nächsten Schritt benötigen wir eine App-Signatur, die wir über die Erzeugung eines ersten Releases erhalten.
 
 ### Die App-Signatur erzeugen
@@ -286,7 +287,7 @@ In unserem Fall wäre das: [`https://bm4-pwa.angular-buch.com/.well-known/assetl
 ## Die TWA mit der Bubblewrap CLI erzeugen
 
 Wir haben nun unsere PWA für den Konsum der TWA vorbereitet und alle nötigen Vorbereitungen in der Google Play Console getroffen.
-Als nächstes wollen wir die Android App erstellen, die unsere PWA in Form einer TWA aufruft und als eigenständige App kapselt.
+Als nächstes wollen wir die Android-App erstellen, die unsere PWA in Form einer TWA aufruft und als eigenständige App kapselt.
 
 Hierfür nutzen wir die [_Bubblewrap CLI_](https://www.npmjs.com/package/@bubblewrap/cli), die genau zu diesem Zweck geschaffen wurde.
 Wir können diese direkt als NPM Paket über `npx` aufrufen und die Anwendung erzeugen lassen.
@@ -354,7 +355,7 @@ Im Ergebnis sollten wir folgende Struktur erhalten:
 ![Die Dateistruktur nach Erzeugung der TWA mit Hile der Bubblewrap CLI](twa-bubblewrap.png)
 
 Im Prinzip sind wir damit auch schon fertig.
-Wir müssen nun noch die fertige Android App (`*.apk`-Datei) erzeugen.
+Wir müssen nun noch die fertige Android-App (`*.apk`-Datei) erzeugen.
 
 Das Ergebnis der TWA Generierung können Sie auch in folgendem Repository nachvollziehen:
 
@@ -362,7 +363,7 @@ Das Ergebnis der TWA Generierung können Sie auch in folgendem Repository nachvo
 
 ## Die signierte App bauen
 
-Wir können unsere signierte Android App entwerder direkt mit Hilfe der Bubblewrap CLI bauen oder wir nutzen hierfür Android Studio.
+Wir können unsere signierte Android-App entwerder direkt mit Hilfe der Bubblewrap CLI bauen oder wir nutzen hierfür Android Studio.
 
 ### Mit der Bublewrap CLI
 
@@ -373,7 +374,7 @@ Wir müssen nun zunächst das von uns vergebene Passwort für den Key Store und 
 npx @bubblewrap/cli build
 ? KeyStore password: ********
 ? Key password: ********
-build Building the Android App...
+build Building the Android-App...
 build Zip Aligning...
 build Checking PWA Quality Criteria...
 build 
@@ -397,7 +398,7 @@ build Summary
 build Overall result: ................................. FAIL
 build WARNING PWA Quality Criteria check failed.
 build Signing...
-build Signed Android App generated at "./app-release-signed.apk"
+build Signed Android-App generated at "./app-release-signed.apk"
 build Digital Asset Links file generated at ./assetlinks.json
 build Read more about setting up Digital Asset Links at https://developers.google.com/web/android/trusted-web-activity/quick-start#creating-your-asset-link-file
 ```
@@ -417,10 +418,10 @@ In diesem Fall wird die Überprüfung der PWA vor Erzeugung der App als TWA übe
 npx @bubblewrap/cli build --skipPwaValidation
 ? KeyStore password: ********
 ? Key password: ********
-build Building the Android App...
+build Building the Android-App...
 build Zip Aligning...
 build Signing...
-build Signed Android App generated at "./app-release-signed.apk"
+build Signed Android-App generated at "./app-release-signed.apk"
 build Digital Asset Links file generated at ./assetlinks.json
 build Read more about setting up Digital Asset Links at https://developers.google.com/web/android/trusted-web-activity/quick-start#creating-your-asset-link-file
 ```
@@ -465,13 +466,13 @@ Dier erzeugte APK befindet sich nun unter `./app/release/app-release.apk`.
 
 ## Die App über die Google Play Console veröffentlichen
 
-Im letzten Schritt müssen wir unsere signierte und erzeugte Android App in Form einer TWA noch in der Google Play Console bereitstellen und veröffentlichen.
+Im letzten Schritt müssen wir unsere signierte und erzeugte Android-App in Form einer TWA noch in der Google Play Console bereitstellen und veröffentlichen.
 Dazu gehen wir in der Google Play Console in das Menü "_App-Releases_" und öffnen unser zuvor bereits vorbereitetes Beta-Release im Abschnitt "_Offener Track_".
 Hier klicken wir nun auf "_Release Bearbeiten_".
 
 ![Google Play Console: Das Beta Release bearbeiten](play-beta-edit.png)
 
-Im nächsten Schritt können wir nun unsere erzeugte und signierte Android App (APK) hochladen.
+Im nächsten Schritt können wir nun unsere erzeugte und signierte Android-App (APK) hochladen.
 Weiterhin geben wir eine Versionsnummer und eine Beschreibung zum Release an.
 Haben wir alles ausgefüllt, klicken wir auf "_überprüfen_".
 
@@ -483,12 +484,12 @@ Auf den nächsten Seite können wir diese nun veröffentlichen.
 
 ![Google Play Console: Das Beta Release veröffentlichen](play-beta-release.png)
 
-Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig und wir können unter "_Übersicht_" den aktuellen Status zur Veröffentlichung der Android App einsehen.
+Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig und wir können unter "_Übersicht_" den aktuellen Status zur Veröffentlichung der Android-App einsehen.
 Bis die App tatsächlich veröffentlicht und freigegeben wird, können ggf. ein paar Tage vergehen.
 
 ![Google Play Console: Übersicht mit Veröffentlichungsstatus](play-release-overview.png)
 
-Geschafft! Wir haben nun erfolgreich unsere Angular PWA in einer Android App in Form einer TWA integriert und diese im Google Play Store veröffentlicht.
+Geschafft! Wir haben nun erfolgreich unsere Angular PWA in einer Android-App in Form einer TWA integriert und diese im Google Play Store veröffentlicht.
 Nun müssen wir nur noch auf die Freigabe warten und wir können unsere App im Store finden und installieren.
 
 <!--
