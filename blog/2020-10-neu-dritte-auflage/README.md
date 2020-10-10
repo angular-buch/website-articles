@@ -29,6 +29,7 @@ Auch für die Leser der ersten und zweiten Auflage lohnt sich der Umstieg.
 
 Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://dpunkt.de/produkt/angular-4/) oder bei [Amazon](https://amzn.to/30s4mVX).
 
+<a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>
 
 <!--<div class="row">
   <div class="col-4">
@@ -122,3 +123,5 @@ Dem Team vom dpunkt.verlag, insbesondere **René Schönfeldt**, danken wir für 
 Besonderer Dank gilt dem **Angular-Team** und der Community dafür, dass sie eine großartige Plattform geschaffen haben, die uns den Entwickleralltag angenehmer macht.
 
 Viele Leser haben uns E-Mails mit persönlichem Feedback zum Buch zukommen lassen – vielen Dank für diese wertvollen Rückmeldungen.
+
+<a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>

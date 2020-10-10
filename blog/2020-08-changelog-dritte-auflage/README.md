@@ -21,7 +21,7 @@ thumbnail: ../x_shared/buchblogheader3-preorder.png
 sticky: false
 ---
 
-Im September 2020 erscheint die **dritte Auflage** des deutschsprachigen Angular-Buchs!
+Im Oktober 2020 erschien die **dritte Auflage** des deutschsprachigen Angular-Buchs!
 
 Die Webplattform bewegt sich schnell, und so muss auch ein Framework wie Angular stets an neue Gegebenheiten angepasst werden und mit den Anforderungen wachsen.
 In den drei Jahren seit Veröffentlichung der ersten Auflage dieses Buchs haben sich viele Dinge geändert:
