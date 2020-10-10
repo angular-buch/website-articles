@@ -286,12 +286,12 @@ In unserem Fall wäre das: [`https://bm4-pwa.angular-buch.com/.well-known/assetl
 
 ## Die TWA mit der Bubblewrap CLI erzeugen
 
-Wir haben nun unsere PWA für den Konsum der TWA vorbereitet und alle nötigen Vorbereitungen in der Google Play Console getroffen.
-Als nächstes wollen wir die Android-App erstellen, die unsere PWA in Form einer TWA aufruft und als eigenständige App kapselt.
+Wir haben nun unsere PWA so vorbereitet, dass sie als TWA genutzt werden kann. Alle nötigen Vorbereitungen in der Google Play Console haben wir getroffen.
+Als nächstes wollen wir die Android-App erstellen, die unsere PWA als TWA aufruft und als eigenständige App kapselt.
 
-Hierfür nutzen wir die [_Bubblewrap CLI_](https://www.npmjs.com/package/@bubblewrap/cli), die genau zu diesem Zweck geschaffen wurde.
-Wir können diese direkt als NPM Paket über `npx` aufrufen und die Anwendung erzeugen lassen.
-Anschließend führt uns der interaktive Wizard durch das Setup indem wir einge Fragen beantworten müssen, auf die wir anchfolgend weiter eingehen werden.
+Hierfür nutzen wir die [_Bubblewrap CLI_](https://www.npmjs.com/package/@bubblewrap/cli):
+Wir können das Tool direkt als NPM-Paket über `npx` aufrufen und so die App erzeugen lassen.
+Der interaktive Wizard führt uns durch das Setup:
 
 ```bash
 mkdir monkey4-pwa-twa-wrapper
@@ -299,8 +299,9 @@ cd monkey4-pwa-twa-wrapper
 npx @bubblewrap/cli init --manifest https://bm4-pwa.angular-buch.com/manifest.json
 ```
 
-Nutzen wir die Bubblewrap CLI das erste Mal, so werden wir in den ersten zwei Schritten nach den Verzeichnissen für das [Java OpenJDK](https://openjdk.java.net/) und das [AndroidSDK](https://developer.android.com/studio) gefragt.
-Hier geben wir die Pfade zu den entsprechenden Verzeichnissen an:
+Nutzen wir die Bubblewrap CLI zum ersten Mal, so werden wir in den ersten zwei Schritten nach den Verzeichnissen für das [Java OpenJDK](https://openjdk.java.net/) und das [AndroidSDK](https://developer.android.com/studio) gefragt.
+Hier geben wir die Pfade zu den entsprechenden Verzeichnissen an.
+Unter macOS lauten sie zum Beispiel:
 
 ```bash
 ? Path to the JDK: /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk
@@ -309,8 +310,8 @@ Hier geben wir die Pfade zu den entsprechenden Verzeichnissen an:
 
 > Diese Angaben werden für spätere Installationen in der Datei `~/.llama-pack/llama-pack-config.json` gespeichert und können bei Bedarf angepasst werden.
 
-Im nächsten Schritt liest die Bubblewrap CLI das Web App Manifest unserer PWA aus und stellt uns einige Fragen zur Bezeichnung der App, hinterlegten Icons und Pfaden.
-Diese werden in der Regel schon korrekt ausgelesen und müssen von uns nicht weiter angepasst werden:
+Im nächsten Schritt liest die Bubblewrap CLI das Web App Manifest unserer PWA aus und stellt einige Fragen zu den Metadaten der App: Bezeichnung, hinterlegte Icons und Pfade.
+Diese Einstellungen werden in der Regel schon korrekt ausgelesen und müssen nicht manuell angepasst werden:
 
 ```bash
 init Fetching Manifest:  https://bm4-pwa.angular-buch.com/manifest.json
@@ -327,12 +328,11 @@ init Fetching Manifest:  https://bm4-pwa.angular-buch.com/manifest.json
 ? Android Package Name (or Application ID): com.angular_buch.bm4_pwa.twa
 ```
 
-Nun werden wir nach dem Pfad des Schlüssels zur Signierung der App gefragt.
-Haben wir hier noch keinen erzeugt, werden wir darauf hingewiesen und können einen neuen Schlüssel anlegen.
-Dafür müssen wir unseren Namen und Informationen zur Firma und Abteilung hinterlegen.
-Weiterhin müssen wir einen Ländercode angeben (in unserem Fall "`DE`" für Deutschland).
-Weiterhin müssen wir ein Passwort für den _Key Store_ und eines für den einzelnen _Key_ der Anwendung hinterlegen.
-Dieses benötigen wir später beim Build und der Signierung der App erneut.
+In der nächsten Abfrage müssen wir den Schlüssel zur Signierung der App angeben.
+Haben wir hier noch keinen Schlüssel erzeugt, werden wir darauf hingewiesen und können einen neuen Schlüssel anlegen.
+Dafür müssen wir einige Infos zum Ersteller des Schlüssels hinterlegen.
+Außerdem müssen wir ein Passwort für den _Key Store_ und eines für den einzelnen _Key_ der Anwendung angeben.
+Dieses benötigen wir später beim Build und beim Signieren der App erneut.
 
 ```bash
 ? Location of the Signing Key: ./android.keystore
@@ -350,25 +350,25 @@ init
 init Project generated successfully. Build it by running "@bubblewrap/cli build"
 ```
 
-Im Ergebnis sollten wir folgende Struktur erhalten:
+Im Ergebnis sollten wir folgende Dateistruktur erhalten:
 
-![Die Dateistruktur nach Erzeugung der TWA mit Hile der Bubblewrap CLI](twa-bubblewrap.png)
+![Dateistruktur nach Erzeugung der TWA mithilfe der Bubblewrap CLI](twa-bubblewrap.png)
 
-Im Prinzip sind wir damit auch schon fertig.
+Prinzipiell sind wir damit auch schon fertig.
 Wir müssen nun noch die fertige Android-App (`*.apk`-Datei) erzeugen.
 
-Das Ergebnis der TWA Generierung können Sie auch in folgendem Repository nachvollziehen:
+Das Ergebnis der TWA-Generierung können Sie auch in folgendem Repository nachvollziehen:
 
 [https://github.com/book-monkey4/book-monkey4-pwa-twa-wrapper](https://github.com/book-monkey4/book-monkey4-pwa-twa-wrapper)
 
 ## Die signierte App bauen
 
-Wir können unsere signierte Android-App entwerder direkt mit Hilfe der Bubblewrap CLI bauen oder wir nutzen hierfür Android Studio.
+Wir können unsere signierte Android-App entwerder direkt mithilfe der Bubblewrap CLI bauen, oder wir nutzen hierfür Android Studio.
 
 ### Mit der Bublewrap CLI
 
-Nutzen wir die Bubblewrap CLI, so rufen wir das `build` Kommando auf.
-Wir müssen nun zunächst das von uns vergebene Passwort für den Key Store und anschließend das Passwort für den konkreten Key eingeben:
+Wir rufen das `build`-Kommando der Bubblewrap CLI auf.
+Hier müssen wir zunächst das von uns vergebene Passwort für den Key Store und anschließend das Passwort für den konkreten Key eingeben:
 
 ```bash
 npx @bubblewrap/cli build
@@ -411,8 +411,7 @@ Vereinzelt kann es dazu kommen, dass wir eine Fehlermeldung wie die folgende erh
 UnhandledPromiseRejectionWarning: Error: Error calling the PageSpeed Insights API: Error: Failed to run the PageSpeed Insight report
 ```
 
-In diesem Fall schlägt die Analyse der App fehl, weil beispielsweise die Website gerade nicht erreichbar ist. Wir können den Build erneut aufrufen und das Flag `--skipPwaValidation` einfügen.
-In diesem Fall wird die Überprüfung der PWA vor Erzeugung der App als TWA übersprungen.
+In diesem Fall schlägt die Analyse der App fehl, weil beispielsweise die Website gerade nicht erreichbar ist. Wir können den Build erneut aufrufen und das Flag `--skipPwaValidation` verwenden, um die Überprüfung der PWA zu überspringen.
 
 ```bash
 npx @bubblewrap/cli build --skipPwaValidation
@@ -427,18 +426,18 @@ build Read more about setting up Digital Asset Links at https://developers.googl
 ```
 
 Kommt es zu dem nachfolgenden Fehler, prüfen Sie bitte den Pfad unter `jdkPath` in der Datei `~/.llama-pack/llama-pack-config.json`.
-Dieser sollte auf ihr Hauptverzeichnis vom Java JDK 8 zeigen.
+Dieser sollte auf das lokale Hauptverzeichnis des Java JDK 8 zeigen.
 Alternativ können Sie den Build mithilfe von Android Studio anstoßen.
 
 ```bash
 cli ERROR Command failed: ./gradlew assembleRelease --stacktrace
 ```
 
-### Mit Hilfe von Android Studio
+### Mithilfe von Android Studio
 
-Wir öffnen bei dieser Variante zunächst das Projektverzeichnis in Android Studio.
-Nun warten wir zunächst ab, bis der automatische Gradle-Build nach dem Öffnen des Projektes durchgelaufen ist.
-Den Fortschritt können wir unten rechts in Android Studio begutachten.
+Bei dieser Variante öffnen wir zunächst das Projektverzeichnis in Android Studio.
+Nun warten wir ab, bis der automatische Gradle-Build nach dem Öffnen des Projekts durchgelaufen ist.
+Den Fortschritt können wir unten rechts in Android Studio betrachten.
 Anschließend klicken wür im Menü "_Build_" auf "_Generate Signed Bundle / APK_".
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk.png)
@@ -447,50 +446,51 @@ Wir wählen hier den Punkt "_APK_" aus und klicken auf "_Next_".
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk2.png)
 
-Im nächsten Schritt wählen wir den erstellten Keystore (`android.keystore`) aus dem Projektverzeichnis aus und geben das von uns festgelegte Passwort ein.
+Im nächsten Schritt wählen wir den erstellten Keystore (`android.keystore`) aus dem Projektverzeichnis aus und geben das festgelegte Passwort ein.
 Alternativ können wir auch einen neuen Keystore erstellen.
 Anschließend können wir aus dem Keystore den _"Key alias"_ auswählen (`android`).
-Auch hier müssen wir das Passwort eingeben, welches wir für den konkreten Key vergeben hatten.
+Auch hier müssen wir das Passwort eingeben, das wir zuvor für den konkreten Key vergeben haben.
 Haben wir alle Angaben korrekt getätigt, gehen wir weiter mit "_Next_".
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
 
-Im nächsten Schritt wählen wir bei der Build Variante _release_ aus und setzen die beiden Checkboxen bei "_V1 (Jar Signature)_" und "_V2 (Full APK Signature)_".
+Im nächsten Schritt wählen wir als Build-Variante _release_ aus und setzen die beiden Checkboxen bei "_V1 (Jar Signature)_" und "_V2 (Full APK Signature)_".
 Anschließend können wir die Erzeugung mit "_Finish_" starten.
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
 
-Dier erzeugte APK befindet sich nun unter `./app/release/app-release.apk`.
+Die erzeugte APK befindet sich nun unter `./app/release/app-release.apk`.
 
-> Kommt es beim Erzeugen der signierten APK zu einem Fehler, kann dies ggf. an einem defekten / falschen Keystore liegen. Versuchen Sie in diesem Fall einen neuen Keystore während der vorherigen Schritte zu erzeugen.
+> Kommt es beim Erzeugen der signierten APK zu einem Fehler, kann dies ggf. an einem defekten/falschen Keystore liegen. Versuchen Sie in diesem Fall, einen neuen Keystore während der vorherigen Schritte zu erzeugen.
 
 ## Die App über die Google Play Console veröffentlichen
 
-Im letzten Schritt müssen wir unsere signierte und erzeugte Android-App in Form einer TWA noch in der Google Play Console bereitstellen und veröffentlichen.
+Im letzten Schritt müssen wir unsere signierte und erzeugte Android-App noch bereitstellen und veröffentlichen.
 Dazu gehen wir in der Google Play Console in das Menü "_App-Releases_" und öffnen unser zuvor bereits vorbereitetes Beta-Release im Abschnitt "_Offener Track_".
-Hier klicken wir nun auf "_Release Bearbeiten_".
+Hier klicken wir nun auf "_Release bearbeiten_".
 
-![Google Play Console: Das Beta Release bearbeiten](play-beta-edit.png)
+![Google Play Console: Das Beta-Release bearbeiten](play-beta-edit.png)
 
-Im nächsten Schritt können wir nun unsere erzeugte und signierte Android-App (APK) hochladen.
+Im nächsten Schritt können wir nun die zuvor erzeugte APK-Datei hochladen.
 Weiterhin geben wir eine Versionsnummer und eine Beschreibung zum Release an.
-Haben wir alles ausgefüllt, klicken wir auf "_überprüfen_".
+Haben wir alles ausgefüllt, klicken wir auf "_Überprüfen_".
 
-![Google Play Console: Das Beta Release mit Beschreibung, Version und APK füllen](play-beta-upload.png)
+![Google Play Console: Das Beta-Release mit Beschreibung, Version und APK füllen](play-beta-upload.png)
 
-Jetzt haben wir es fast geschafft.
+Jetzt haben wir es fast geschafft:
 Das Beta-Release wurde erstellt.
-Auf den nächsten Seite können wir diese nun veröffentlichen.
+Auf der nächsten Seite können wir die App nun veröffentlichen.
 
-![Google Play Console: Das Beta Release veröffentlichen](play-beta-release.png)
+![Google Play Console: Das Beta-Release veröffentlichen](play-beta-release.png)
 
-Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig und wir können unter "_Übersicht_" den aktuellen Status zur Veröffentlichung der Android-App einsehen.
+Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig, und wir können unter "_Übersicht_" den aktuellen Status zur Veröffentlichung der Android-App einsehen.
 Bis die App tatsächlich veröffentlicht und freigegeben wird, können ggf. ein paar Tage vergehen.
 
 ![Google Play Console: Übersicht mit Veröffentlichungsstatus](play-release-overview.png)
 
-Geschafft! Wir haben nun erfolgreich unsere Angular PWA in einer Android-App in Form einer TWA integriert und diese im Google Play Store veröffentlicht.
-Nun müssen wir nur noch auf die Freigabe warten und wir können unsere App im Store finden und installieren.
+Geschafft! Wir haben nun erfolgreich unsere Angular-PWA in eine Android-App integriert und sie im Google Play Store veröffentlicht.
+Dabei haben wir das Konzept der Trusted Web Activity (TWA) genutzt.
+Nun müssen wir nur noch auf die Freigabe warten, und wir können unsere App im Store finden und installieren.
 
 <!--
 TODO: Bild von veröffentlichter App in Play Store
