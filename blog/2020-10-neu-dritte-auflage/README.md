@@ -17,12 +17,12 @@ thumbnail: ../x_shared/buchblogheader3.png
 **Das neue deutschsprachige Angular-Buch ist da!**
 Ab sofort ist die 3. Auflage des erfolgreichen Standardwerks im Handel verfügbar.
 
-Mit der neuen Ausgabe erwarten Sie 837 Seiten mit aktuellem Inhalt zum Webframework Angular.
-Die neue Ausgabe wurde grundlegend aktualisiert und erweitert.
+Mit der neuen Ausgabe erwarten Sie 870 Seiten mit aktuellen Inhalten zum Webframework Angular.
+Wir haben die neue Ausgabe grundlegend aktualisiert und erweitert.
 Alle Inhalte und Beispiele sind auf dem Stand der aktuellen Angular-Version 10 und wurden an etablierte Best Practices angepasst.
-Dabei wurden große Teile des Buchs vollständig überarbeitet und neu strukturiert.
+Dabei haben wir viele Teile des Buchs vollständig überarbeitet.
 
-Zusätzlich wurden neue Themen in das Buch aufgenommen, sodass es seiner Rolle als Standardwerk gerecht werden kann.
+Zusätzlich haben wir einige neue Themen in das Buch aufgenommen, sodass die neue Auflage etwa 120 Seiten stärker ist als die vorherige.
 Im [Changelog zur dritten Auflage](/blog/2020-08-changelog-dritte-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
 Auch für die Leser der ersten und zweiten Auflage lohnt sich der Umstieg.
 
@@ -72,20 +72,18 @@ Wer nicht mit TypeScript vertraut ist, findet hier eine kompakte Einführung.
 
 ## Hintergrund
 
-Die zweite Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien im Juni 2019 im Handel.
-Das Buch war durchweg auf dem Stand von Angular 7.
-Ein Technologiebuch befindet sich stets in einem Spannungsfeld:
+Die zweite Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien vor einem Jahr, im Juni 2019, im Handel.
+Mit einem IT-Buch befinden wir uns stets in einem Spannungsfeld:
 Einerseits ist ein gedrucktes Buch für Beständigkeit über mehrere Jahre ausgelegt, andererseits muss ein Enterprise-Framework wie Angular schnell beweglich sein, um mit dem technologischen Fortschritt mitzuhalten.
 
 Wir haben deshalb regelmäßig in [Blogartikeln](/updates) über neue Features und Änderungen informiert.
-Die grundsätzlichen Schnittstellen des Frameworks blieben beständig, allerdings waren einige Breaking Changes unvermeidbar.
-Zwei Jahre nach dem Erscheinen der zweiten Auflage waren so viele Änderungen geschehen, dass eine driite Auflage ratsam wurde.
+Die zweite Auflage ist noch immer aktuell, aber wir haben die Gelegenheit genutzt, um viele optionale Baustellen anzugehen.
+Wir haben vor allem Wert darauf gelegt, dass komplexe Themen verständlich vermittelt werden.
+Dabei haben wir unsere tiefgreifende Erfahrung aus dem Alltag mit Projektarbeit, Beratung und Schulungen einfließen lassen.
 
-Im Frühling 2020 begannen wir die Arbeit an der neuen Auflage.
+Im Januar 2020 haben wir den Entschluss zur dritten Auflage gefasst.
 Dabei haben wir einen guten Kompromiss zwischen einer reinen Aktualisierung und einer vollständigen Neuauflage gefunden.
-Einige Inhalte sind komplett neu, andere Kapitel haben wir vollständig gelöscht und neu aufgerollt.
-Das Leser-Feedback der letzten zwei Jahre wurde ebenso berücksichtigt, und es wurden viele unklare Stellen des ersten Buchs vereinfacht.
-Abschließend kann man sagen, dass jeder Abschnitt im Buch mehr oder weniger stark angepasst wurde.
+Das Leser-Feedback zur zweiten Auflage haben wir berücksichtigt, und es wurden viele unklare Stellen des zweiten Buchs vereinfacht.
 Das neue Angular-Buch bewegt sich damit wieder am Puls der Zeit und sollte auch in zwei Jahren noch genug Aktualität besitzen.
 
 Wir wünschen Ihnen viel Spaß beim Lesen!
