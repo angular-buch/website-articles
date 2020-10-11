@@ -29,20 +29,14 @@ Auch für die Leser der ersten und zweiten Auflage lohnt sich der Umstieg.
 
 Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im Online-Handel erhältlich – zum Beispiel direkt beim [dpunkt.verlag](https://dpunkt.de/produkt/angular-4/) oder bei [Amazon](https://amzn.to/30s4mVX).
 
-<a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>
-
-<!--<div class="row">
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9862.jpg" alt="">
+<div class="row">
+  <div class="col-6">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7039.jpg" alt="">
   </div>
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9855.jpg" alt="">
-  </div>
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9867.jpg" alt="">
+  <div class="col-6">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7044.jpg" alt="">
   </div>
 </div>
--->
 
 ## Fundierter Einstieg in Angular
 
@@ -72,6 +66,18 @@ Aus dem Inhalt:
 Das Buch setzt Vorkenntnisse in JavaScript, HTML und CSS voraus.
 Wer nicht mit TypeScript vertraut ist, findet hier eine kompakte Einführung.
 
+<div class="row">
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7047.jpg" alt="">
+  </div>
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7049.jpg" alt="">
+  </div>
+  <div class="col-4">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7051.jpg" alt="">
+  </div>
+</div>
+
 ## Hintergrund
 
 Die zweite Auflage des deutschen Angular-Buchs aus dem dpunkt.verlag erschien vor einem Jahr, im Juni 2019, im Handel.
@@ -96,18 +102,14 @@ Mit besten Grüßen –
 das Autorenteam<br>
 **Ferdinand Malcher, Johannes Hoppe und Danny Koppenhagen**
 
-<!-- <div class="row">
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9853.jpg" alt="">
+<div class="row">
+  <div class="col-6">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7055.jpg" alt="">
   </div>
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9868.jpg" alt="">
-  </div>
-  <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9864.jpg" alt="">
+  <div class="col-6">
+    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7053.jpg" alt="">
   </div>
 </div>
--->
 
 ## Danksagung
 
