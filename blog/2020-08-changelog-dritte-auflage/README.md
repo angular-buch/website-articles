@@ -34,6 +34,7 @@ Wir möchten Ihnen einen kurzen Überblick über die wichtigsten Neuerungen und 
 Alle Texte und Codebeispiele haben wir auf die Angular-Version 10 aktualisiert.
 Dabei betrachten wir auch neue Features.
 
+<a class="btn btn-outline-primary cta__button index__cta mr-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch.com_leseprobe_3.auflage.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
 <a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>
 
 ## Neue Kapitel
@@ -89,4 +90,5 @@ Zu guter Letzt haben wir an ausgewählten Stellen in diesem Buch Zitate von Pers
 Die meisten dieser Zitate haben wir direkt für dieses Buch erbeten.
 Wir freuen uns sehr, dass so viele interessante und humorvolle Worte diesem Buch eine einmalige Note geben.
 
+<a class="btn btn-outline-primary cta__button index__cta mr-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch.com_leseprobe_3.auflage.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
 <a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>
