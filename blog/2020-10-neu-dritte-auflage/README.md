@@ -126,5 +126,5 @@ Besonderer Dank gilt dem **Angular-Team** und der Community dafür, dass sie ein
 
 Viele Leser haben uns E-Mails mit persönlichem Feedback zum Buch zukommen lassen – vielen Dank für diese wertvollen Rückmeldungen.
 
-<a class="btn btn-outline-primary cta__button index__cta mr-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch.com_leseprobe_3.auflage.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
-<a class="btn btn-primary cta__button" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>
+<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch.com_leseprobe_3.auflage.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
+<a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.to/30s4mVX">3. Ausgabe jetzt bestellen</a>
