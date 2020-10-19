@@ -15,6 +15,7 @@ keywords:
 language: de
 thumbnail: ./twa.jpg
 sticky: false
+hidden: true
 ---
 
 Progressive Web Apps sind in den letzten Jahren immer populärer geworden.
