@@ -13,7 +13,7 @@ keywords:
   - Android
   - Android Store
 language: de
-thumbnail: ./twa.jpg
+thumbnail: ./header-play.png
 sticky: false
 hidden: true
 ---
