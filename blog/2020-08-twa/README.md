@@ -41,13 +41,13 @@ Inhalt:
 - [Eine PWA als TWA in den Android Store bringen](#eine-pwa-als-twa-in-den-android-store-bringen)
   - [Einen Android Developer Account registrieren](#einen-android-developer-account-registrieren)
   - [Die Android-App in der Google Play Console erstellen](#die-android-app-in-der-google-play-console-erstellen)
-  - [Die App-Signatur erzeugen](#die-app-signatur-erzeugen)
+  - [Die App-Signatur und das Release erzeugen](#die-app-signatur-und-das-release-erzeugen)
   - [Den App-Signaturschlüssel in der PWA hinterlegen](#den-app-signaturschlüssel-in-der-pwa-hinterlegen)
-  - [Die TWA mit der Bubblewrap CLI erzeugen](#die-twa-mit-der-bubblewrap-cli-erzeugen)
-  - [Die signierte App bauen](#die-signierte-app-bauen)
+- [Die TWA mit der Bubblewrap CLI erzeugen](#die-twa-mit-der-bubblewrap-cli-erzeugen)
+- [Die signierte App bauen](#die-signierte-app-bauen)
   - [Mit der Bublewrap CLI](#mit-der-bublewrap-cli)
-  - [Mit Hilfe von Android Studio](#mit-hilfe-von-android-studio)
-  - [Die App über die Google Play Console veröffentlichen](#die-app-über-die-google-play-console-veröffentlichen)
+  - [Mithilfe von Android Studio](#mithilfe-von-android-studio)
+- [Die App über die Google Play Console veröffentlichen](#die-app-über-die-google-play-console-veröffentlichen)
 
 ---
 
@@ -129,66 +129,68 @@ Bei der Registrierung wird eine einmalige Registrierungsgebühr in Höhe von 25 
 
 Nach der Registierungs müssen wir uns in der [_Google Play Console_ einloggen](https://play.google.com/apps/publish).
 Anschließend können wir über den Menüpunkt _"Alle Apps"_ mit dem Button _"App erstellen"_ eine neue Anwendung anlegen.
+Hier legen wir den Namen der Anwendung, die Standardsprache, den Anwendungstypen (App oder Spiel) sowie den Preis der Anwendung fest.
+Weiterhin müssen wir den Programmierrichtlinien für Entwickler sowie den Exportbestimmungen der USA zustimmen.
 
 ![Google Play Console: Eine neue Anwendung erzeugen](play-create.png)
 
-Danach gelangen wir zur Detailkonfiguration für die neue Android-App.
+Danach gelangen wir zum Dashboard für die neue Android-App.
+Hier arbeiten wir uns im folgenden durch die Ersteinrichtung der App durch.
+Jeder abgeschlossene Punkt wird entsprechend in der Liste markiert.
+Alle Einstellungen finden sich auch im Nachhinein links im Menü wieder und können auch noch später angepasst werden.
 
-![Google Play Console: Details zur neuen App](play-after-create.png)
+![Google Play Console: Dashboard - Ersteinrichtung](play-after-create.png)
 
-Um nun eine Android-App zu veröffentlichen, müssen wir uns durch alle Schritte arbeiten, die links im Menü mit einem ✅-Icon gekennzeichnet sind.
+- **App-Zugriff**: Hier hinterlegen Sie informationen, die darlegen, wie auf die App bei der Überprüfung vor der Freigabe im Google Play Store zugegriffen werden kann.
+  Benötigen die Tester z. B. einen speziellen Account oder Standort oder ist die Anwendung frei zugänglich?
+- **Anzeigen**: An dieser Stelle geben Sie an, ob ihre App Werbung enthält oder nicht.
+- **Einstufung des Inhalts**: Sie werden zu einem Fragebogen zur Überprüfung der Altersfreigaben geleitet, den Sie ausfüllen müssen.
+  Anschließend erhalten Sie eine Bewertung, die Ihnen die Alterseinstufung der Anwendung für verschiedene Länder angibt.
+- **Zielgruppe**: An dieser Stelle geben Sie an, welche Zielgruppe (Altersgruppe) von ihrer Anwendung adressiert wird und ob die Anwendung auch für Kinder interessant ist.
+  Je nach Auswahl kann es sein, dass Sie zusätzlich eine Datenschutzerklärung hinterlegen müssen.
+- **App-Kategorie auswählen und Kontaktdaten angeben**: Hier gelangen Sie zu den _Play Store Einstellungen_.
+  Sie legen hier die Kategorie der App fest in der sie später im Play Store auftauchen soll.
+  Weiterhin können Sie Tags vergeben und Sie müssen Kontaktdaten für den Store-Eintrag hinterlegen.
+- **Store-Eintrag einrichten**: Dieser Punkt führt Sie zur Hauptkonfiguration des Eintrags für den Google Play Store.
+  Sie müssen hier eine kurze sowie eine vollständige Beschreibung der Anwendung, eine App Icon und Screenshots der Anwendung hinterlegen.
 
-Füllen Sie hierfür als Erstes alle obligatorischen Felder unter dem Menüpunkt _"Store-Eintrag"_ aus, und laden Sie die notwendigen Icons und Screenshots für die Anwendung hoch.
-Diese können Sie im Nachhinein auch noch bearbeiten.
-Wichtig ist zunächst, dass alle Pflichtfelder gefüllt sind.
-Anschließend klicken Sie auf _"Entwurf speichern"_.
+Haben wir alle Punkte für die Ersteinrichtung abgeschlossen, verschwindet der Abschnitt auf unserem Dashboard und wir können uns der Bereitstellung der App widmen.
+Dafür benötigen wir ein Release und eine App-Signatur.
 
-Als Nächstes arbeiten Sie sich durch den Menüpunkt _"Einstufung des Inhalts"_.
-Hier müssen Sie einen Fragebogen zu den Inhalten Ihrer App ausfüllen.
-Anhand der Fragen wird ermittelt, für welche Personenkreise und Altersgruppen die App freigegeben werden kann.
+### Die App-Signatur und das Release erzeugen
 
-Haben Sie hier alle Angaben ausgefüllt und gespeichert, gehen Sie zum Schritt _"App-Inhalte"_.
-Auch hier müssen Sie zunächst alle Schritte abarbeiten und beispielsweise einen Link zur Datenschutzerklärung angeben, Angaben dazu machen, ob die App Werbebanner enthält und die Zielgruppe definieren.
+Nach der Ersteinrichtung gilt es unsere App im Play Store bereitzustellen.
+Befinden wir uns auf dem Dashboard, so wird uns eine Übersicht über verschiedene Möglichkeiten zur Veröffentlichung der Anwendung gezeigt.
 
-Bevor wir nun ein Release erstellen können, müssen wir noch den Menüpunkt _"Preisgestaltung und Vertrieb"_ abarbeiten.
-Hier geben Sie an, ob es sich um eine kostenfreie oder kostenpflichtige App handeln soll und welchen Preis die App haben soll.
-Sofern die App kostenflichtig ist, benötigen Sie noch ein Händlerkonto, das Sie direkt über diese Seite einrichten können.
-Im unteren Teil der Seite müssen Sie schließlich noch defineiren, in welchen Ländern die App im Google Play Store verfügbar sein soll.
-Hier müssen Sie mindestens ein Land auswählen.
-Weiterhin müssen Sie am Ende der Seite noch den Richtlinien für Inhalte und den Exportbestimmungen der USA zustimmen.
+![Google Play Console: Dashboard - App veröffentlichen](play-dashboard-release.png)
 
-Okay, wir sollten nun bei allen Menüpunkten bis auf _"App Releases"_ einen grünes Icon "✅" sehen.
-Im nächsten Schritt benötigen wir eine App-Signatur, die wir über die Erzeugung eines ersten Releases erhalten.
-
-### Die App-Signatur erzeugen
-
-Klicken wir auf den Menüpunkt _"App-Signatur"_, sehen wir zunächst nur einen Hinweis, dass wir ein Release benötigen.
-Um dieses anzulegen, gehen wir auf das Menü _"App Releases"_.
-Hier müssen wir einen neuen Track erstellen.
+Diese Wege repräsentieren die sogenannten _Tracks_.
 Ein solcher Track kann verschiedene Ausprägungen haben:
 
-- **Produktions-Track**: Releases, die für jeden Nutzer im Google Play Store bereitgestellt werden
-- **Offener Track**: Releases, die für jeden Nutzer im Google Play Store bereitgestellt werden, aber als Vorab-Release (Beta Release) gekennzeichnet sind. Offene Tracks können auch auf eine bestimmte Anzahl von Nutzer begrenzt werden
-- **Geschlossener Track**: Releases, die nur bestimmten Personen zum Download als Vorab-Release (Alpha Release) zur Verfügung stehen.
-- **Interner Test-Track**: Releases, die zum Test für einen bestimmten Personenkreis besipielsweise über einen Link bereitgestellt werden können
+- **Interner Test**: Releases, die zum Test für einen bestimmten Personenkreis beispielsweise über einen Link bereitgestellt werden können
+- **Geschlossener Test**: Releases, die nur bestimmten Personen zum Download als Vorab-Release (Alpha Release) zur Verfügung stehen.
+- **Offener Test**: Releases, die für jeden Nutzer im Google Play Store bereitgestellt werden, aber als Vorab-Release (Beta Release) gekennzeichnet sind. Offene Tracks können auch auf eine bestimmte Anzahl von Nutzer begrenzt werden
+- **Vorregistrierung**: Releases, deren Store-Eintrag bereits vor Veröffentlichung der Anwendung erstellt werden soll. Nutzer können sich bereits registrieren und erhalten eine Benachrichtigung, sobald die Anwendung verfügbar ist.
+- **Produktion**: Releases, die für jeden Nutzer im Google Play Store bereitgestellt werden
 
 In unserem Szenario wollen wir unsere App direkt bis in den Google Play Store bringen, um zu verifizieren, dass diese auch tatsächlich von allen Nutzern gefunden und installiert werden kann.
-Hierfür nutzen wir den offenen Track und erstellen ein Beta-Release.
-Dafür klicken wir im Abschnitt _"Offener Track"_ auf _"Verwalten"_.
+Hierfür nutzen wir den Track für den offenen Test und erstellen ein Beta-Release.
+Dafür klicken wir unter der Überschrift _"Beliebigen Nutzern die Registrierung für das Testen deiner App bei Google Play erlauben"_ auf _"Aufgaben einblenden"_.
+Hier klicken wir zunächst auf _"Länder und Regionen auswählen"_.
 
-![Google Play Console: Erstellen eines neuen Beta-Releases](play-beta.png)
+![Google Play Console: Dashboard - Einen offenen Track anlegen](play-dashboard-open-track.png)
 
-Auf der nächsten Seite klicken wir auf _"Release erstellen"_.
-Anschließend gelangen wir in den Abschnitt zur Erzeugung des _"App-Signaturschlüssels"_.
-Hier klicken wir auf _"Weiter"_, um den Schlüssel zu aktivieren.
+Wir gelangen nun in das Untermenü zur Erstellung eines offenen Test Tracks und legen die Länder fest, in denen unsere Anwendung im Google Play Store verfügbar sein soll.
+Anschließend erstellen wir ein neues Release.
 
-![Google Play Console: Erstellen des App-Signaturschlüssels](play-beta-sign.png)
+Im nächsten Schritt benötigen wir nun die App, die wir unter _"App Bundles und APKs"_ hinterlegen müssen.
+Damit diese App jedoch erzeugt und verifiziert werden kann, erzeugen wir zunächst unter dem Abschnitt _App-Signatur von Google Play_ über den Button _"Weiter"_ eine neue App Signatur.
 
-Bevor wir nun unser Beta-Release veröffentlichen können, müssen wir den erzeugten Schlüssel mit unserer PWA verknüpfen und die TWA erzeugen, um sie anschließend in die Google Play Console zu laden.
+![Google Play Console: Offenes Testrelease erstellen](play-beta-sign.png)
 
 ### Den App-Signaturschlüssel in der PWA hinterlegen
 
-Wir verlassen zunächst wieder den Menüpunkt zur Erzeugung des Releases und gehen ins Menü _"App-Signatur"_.
+Wir verlassen zunächst wieder den Menüpunkt zur Erzeugung des Releases und gehen ins Menü _"Einrichten"_ > _"App-Signatur"_.
 Hier kopieren wir uns den Fingerabdruck des SHA-256-Zertifikats in die Zwischenablage.
 
 ![Google Play Console: Kopieren des App-Signaturschlüssels](play-signature.png)
@@ -209,7 +211,7 @@ Darin legen wir die Datei `assetlinks.json` mit dem folgenden Inhalt an:
       "namespace": "allfront",
       "package_name": "com.angular_buch.book_monkey4",
       "sha256_cert_fingerprints": [
-        "22:BD:55:D1...D1:79:D1:13"
+        "D1:63:25:CE...A4:FF:79:C0"
       ]
     }
   }
@@ -223,8 +225,6 @@ Zeichen wie "`-`" sind nicht erlaubt.
 Alle Regeln zur Definition einer validen ID können Sie der [Android Entwicklerdokumentstion](https://developer.android.com/studio/build/application-id) entnehmen.
 
 Unter `sha256_cert_fingerprints` müssen wir außerdem den kopierten App-Signaturschlüssel eintragen.
-
-> Achtung: Kopieren Sie den Fingerprint von der Google Play Console, wird ggf. das Präfix "`SHA256: `" mit kopiert. Dieses muss beim Einfügen weggelassen werden.
 
 Jetzt müssen wir der Angular CLI noch beibringen, dass der URL-Pfad `/.well-known/assetlinks.json` nicht durch den Angular-Router behandelt und umgeleitet werden soll, sondern dass sich dahinter ein statisches Asset verbrigt, das direkt über die URL aufrufbar sein soll.
 
@@ -262,7 +262,7 @@ Dort geben wir an, dass alle Dateien unter `src/.well-known` über den relativen
     // ...
   },
   // ...
-}       
+}
 ```
 
 Wir überprüfen das Ergebnis am Besten, indem wir einen Produktiiv-Build ausführen und einen einfachen Webserver starten:
@@ -378,23 +378,23 @@ npx @bubblewrap/cli build
 build Building the Android-App...
 build Zip Aligning...
 build Checking PWA Quality Criteria...
-build 
+build
 build Check the full PageSpeed Insights report at:
 build - https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fbm4-pwa.angular-buch.com%2F
-build 
-build 
+build
+build
 build Quality Criteria scores
 build Lighthouse Performance score: ................... 80
 build Lighthouse PWA check: ........................... NO
-build 
+build
 build Web Vitals
 build Largest Contentful Paint (LCP) .................. 3.7 s
 build Maximum Potential First Input Delay (Max FID) ... 391 ms
 build Cumulative Layout Shift (CLS) ................... 0.00
-build 
+build
 build Other scores
 build Lighthouse Accessibility score................... 67
-build 
+build
 build Summary
 build Overall result: ................................. FAIL
 build WARNING PWA Quality Criteria check failed.
@@ -467,10 +467,9 @@ Die erzeugte APK befindet sich nun unter `./app/release/app-release.apk`.
 ## Die App über die Google Play Console veröffentlichen
 
 Im letzten Schritt müssen wir unsere signierte und erzeugte Android-App noch bereitstellen und veröffentlichen.
-Dazu gehen wir in der Google Play Console in das Menü "_App-Releases_" und öffnen unser zuvor bereits vorbereitetes Beta-Release im Abschnitt "_Offener Track_".
-Hier klicken wir nun auf "_Release bearbeiten_".
+Dazu gehen wir in der Google Play Console in das Menü _"Test"_ > _"Offene Tests"_ und öffnen unser zuvor bereits vorbereitetes Beta-Release im Abschnitt "_Releases_", welches im Status _"Entwurf" ist durch Klick auf den Button _"Bearbeiten"_.
 
-![Google Play Console: Das Beta-Release bearbeiten](play-beta-edit.png)
+<!-- TODO: @JohannesHoppe ab hier weiter :) (Text und Screenshots anpassen) -->
 
 Im nächsten Schritt können wir nun die zuvor erzeugte APK-Datei hochladen.
 Weiterhin geben wir eine Versionsnummer und eine Beschreibung zum Release an.
