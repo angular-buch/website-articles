@@ -439,11 +439,11 @@ cli ERROR Command failed: ./gradlew assembleRelease --stacktrace
 Bei dieser Variante öffnen wir zunächst das Projektverzeichnis in Android Studio.
 Nun warten wir ab, bis der automatische Gradle-Build nach dem Öffnen des Projekts durchgelaufen ist.
 Den Fortschritt können wir unten rechts in Android Studio betrachten.
-Anschließend klicken wür im Menü "_Build_" auf "_Generate Signed Bundle / APK_".
+Anschließend klicken wür im Menü _"Build"_ auf _"Generate Signed Bundle / APK"_.
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk.png)
 
-Wir wählen hier den Punkt "_APK_" aus und klicken auf "_Next_".
+Wir wählen hier den Punkt _"APK"_ aus und klicken auf _"Next"_.
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk2.png)
 
@@ -451,12 +451,12 @@ Im nächsten Schritt wählen wir den erstellten Keystore (`android.keystore`) au
 Alternativ können wir auch einen neuen Keystore erstellen.
 Anschließend können wir aus dem Keystore den _"Key alias"_ auswählen (`android`).
 Auch hier müssen wir das Passwort eingeben, das wir zuvor für den konkreten Key vergeben haben.
-Haben wir alle Angaben korrekt getätigt, gehen wir weiter mit "_Next_".
+Haben wir alle Angaben korrekt getätigt, gehen wir weiter mit _"Next"_.
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
 
-Im nächsten Schritt wählen wir als Build-Variante _release_ aus und setzen die beiden Checkboxen bei "_V1 (Jar Signature)_" und "_V2 (Full APK Signature)_".
-Anschließend können wir die Erzeugung mit "_Finish_" starten.
+Im nächsten Schritt wählen wir als Build-Variante _release_ aus und setzen die beiden Checkboxen bei _"V1 (Jar Signature)"_ und _"V2 (Full APK Signature)"_.
+Anschließend können wir die Erzeugung mit _"Finish"_ starten.
 
 ![Android Studio: Signierte APK erstellen](android-studio-generate-signed-apk3.png)
 
@@ -467,15 +467,13 @@ Die erzeugte APK befindet sich nun unter `./app/release/app-release.apk`.
 ## Die App über die Google Play Console veröffentlichen
 
 Im letzten Schritt müssen wir unsere signierte und erzeugte Android-App noch bereitstellen und veröffentlichen.
-Dazu gehen wir in der Google Play Console in das Menü _"Test"_ > _"Offene Tests"_ und öffnen unser zuvor bereits vorbereitetes Beta-Release im Abschnitt "_Releases_", welches im Status _"Entwurf" ist durch Klick auf den Button _"Bearbeiten"_.
-
-<!-- TODO: @JohannesHoppe ab hier weiter :) (Text und Screenshots anpassen) -->
+Dazu gehen wir in der Google Play Console in das Menü _"Test"_ > _"Offene Tests"_ und öffnen unser zuvor bereits vorbereitetes Release im Abschnitt _"Releases_", welches im Status _"Entwurf"_ ist durch Klick auf den Button _"Bearbeiten"_.
 
 Im nächsten Schritt können wir nun die zuvor erzeugte APK-Datei hochladen.
 Weiterhin geben wir eine Versionsnummer und eine Beschreibung zum Release an.
-Haben wir alles ausgefüllt, klicken wir auf "_Überprüfen_".
+Haben wir alles ausgefüllt, klicken wir auf _"Überprüfen"_.
 
-![Google Play Console: Das Beta-Release mit Beschreibung, Version und APK füllen](play-beta-upload.png)
+<!-- TODO: @JohannesHoppe ab hier weiter :) (Text und Screenshots anpassen) -->
 
 Jetzt haben wir es fast geschafft:
 Das Beta-Release wurde erstellt.
@@ -483,7 +481,7 @@ Auf der nächsten Seite können wir die App nun veröffentlichen.
 
 ![Google Play Console: Das Beta-Release veröffentlichen](play-beta-release.png)
 
-Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig, und wir können unter "_Übersicht_" den aktuellen Status zur Veröffentlichung der Android-App einsehen.
+Haben wir diesen Schritt erledigt, ändert sich unser Menü auf der linken Seite ein wenig, und wir können unter _"Übersicht"_ den aktuellen Status zur Veröffentlichung der Android-App einsehen.
 Bis die App tatsächlich veröffentlicht und freigegeben wird, können ggf. ein paar Tage vergehen.
 
 ![Google Play Console: Übersicht mit Veröffentlichungsstatus](play-release-overview.png)
@@ -492,9 +490,7 @@ Geschafft! Wir haben nun erfolgreich unsere Angular-PWA in eine Android-App inte
 Dabei haben wir das Konzept der Trusted Web Activity (TWA) genutzt.
 Nun müssen wir nur noch auf die Freigabe warten, und wir können unsere App im Store finden und installieren.
 
-<!--
-TODO: Bild von veröffentlichter App in Play Store
--->
+<!-- TODO: @JohannesHoppe Bild von veröffentlichter App in Play Store -->
 
 **Viel Spaß wünschen
 Johannes, Danny und Ferdinand**
