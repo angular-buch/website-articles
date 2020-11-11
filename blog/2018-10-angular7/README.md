@@ -22,6 +22,7 @@ Die offizielle Ankündigung des neuen Release finden Sie im [Angular Blog](https
 > * [Angular 8 ist da!](/blog/2019-06-angular8)
 > * [Angular 9 ist da!](/blog/2020-02-angular9)
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
+> * [Angular 11 ist da!](/blog/2020-11-angular11)
 
 ## CLI Prompt
 

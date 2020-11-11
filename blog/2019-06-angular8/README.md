@@ -28,6 +28,7 @@ Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 9 ist da!](/blog/2020-02-angular9)
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
+> * [Angular 11 ist da!](/blog/2020-11-angular11)
 
 ## Update auf Angular 8
 Das Update zur neuen Angular-Version ist kinderleicht. Hierzu führen Sie einfach den folgenden Befehl in einem bestehenden Projekt aus:
@@ -179,7 +180,7 @@ Ivy soll mit Angular 9 standardmäßig für alle Projekte aktiviert werden.
 Bis dahin wird die neue Engine noch einem umfangreichen Praxistest unterzogen.
 Einige Features lassen auf sich warten, zum Beispiel die Integration für Internationalisierung (i18n).
 Das neue Tooling soll Übersetzungen zur Laufzeit erlauben und auch einen Service zur programmatischen Übersetzung mitbringen. Bis dahin müssen wir uns aber noch gedulden.
-Sollte Ihre Anwendung die Internationalisierung von Angular verwenden, so können Sie Ivy noch nicht aktivieren. 
+Sollte Ihre Anwendung die Internationalisierung von Angular verwenden, so können Sie Ivy noch nicht aktivieren.
 
 Für detaillierte Informationen zu Ivy können wir den Blogartikel ["Understanding Angular Ivy: Incremental DOM and Virtual DOM"](https://blog.nrwl.io/243be844bf36) von Victor Savkin empfehlen.
 

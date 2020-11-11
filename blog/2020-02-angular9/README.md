@@ -27,7 +27,8 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
-
+> * [Angular 11 ist da!](/blog/2020-11-angular11)
+>
 **Inhalt**
 
 - [Update auf Angular 9](/blog/2020-02-angular9#update-auf-angular-9)
@@ -409,7 +410,7 @@ const value = foo ?? 'default';
 Wir wünschen Ihnen viel Spaß mit Angular 9!
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
 
-**Viel Spaß wünschen  
+**Viel Spaß wünschen
 Johannes, Danny und Ferdinand**
 
 <small>**Titelbild:** Yosemite National Park, California, 2019</small>

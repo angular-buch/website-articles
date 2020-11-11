@@ -16,6 +16,7 @@ thumbnail: ../x_shared/angular5.png
 > * [Angular 8 ist da!](/blog/2019-06-angular8)
 > * [Angular 9 ist da!](/blog/2020-02-angular9)
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
+> * [Angular 11 ist da!](/blog/2020-11-angular11)
 
 <br>
 <br>
@@ -94,7 +95,7 @@ Der neue `HttpClient` wird weitgehend gleich verwendet, allerdings entfällt ein
 
 Außerdem bietet der `HttpClient` zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
 
-Wir empfehlen Ihnen die Migration auf das neue Modul.  
+Wir empfehlen Ihnen die Migration auf das neue Modul.
 **Alle Details zum neuen HttpClient finden Sie in unserem Blogartikel: [Angular 4.3: Der neue HttpClient](/blog/2017-11-httpclient)**
 
 

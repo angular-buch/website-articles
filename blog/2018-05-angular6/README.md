@@ -26,6 +26,7 @@ In diesem Artikel stellen wir Ihnen kurz die Neuerungen vor und aktualisieren da
 > * [Angular 8 ist da!](/blog/2019-06-angular8)
 > * [Angular 9 ist da!](/blog/2020-02-angular9)
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
+> * [Angular 11 ist da!](/blog/2020-11-angular11)
 
 ## Angular 6: Alles ist neu?
 
@@ -376,8 +377,8 @@ In älteren Projekten fand sich in der `package.json` folgende Angabe:
     "@angular/cli": "1.5.4"
  ```
 
-Mittlerweile schreibt man hier stets ein Zirkumflex __^__ hinein.  
-__Warum?__ Weil das `npm install @angular/cli` die Version nicht auf 1.7.4 bringen wird, sondern bei v1.5.4 bleibt.  
+Mittlerweile schreibt man hier stets ein Zirkumflex __^__ hinein.
+__Warum?__ Weil das `npm install @angular/cli` die Version nicht auf 1.7.4 bringen wird, sondern bei v1.5.4 bleibt.
 __Problem:__ Erst mit der [v1.7.0](https://github.com/angular/angular-cli/releases/tag/v1.7.0) wurde der `ng update` eingeführt.
 
 Der Befehl:
@@ -402,5 +403,5 @@ Allerdings steht nach der ersten Ausführung von `npm install @angular/cli` nun 
   "devDependencies": {
     "@angular/cli": "^1.5.4"
  ```
- 
+
  Ein erneutes `npm install @angular/cli` bringt uns nun endlich auf die gewünschte v1.7.4.
