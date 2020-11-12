@@ -36,10 +36,11 @@ Die Angular CLI führt automatisch alle nötigen Anpassungen am Code der Anwendu
 
 Im *Angular Update Guide* unter [update.angular.io](https://update.angular.io/#10.0:11.0) können Sie übrigens wie üblich alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
 
-## Thema 1
+## Schöneres Logging
 
+## inline Fonts
 
-## Thema 2
+## `async` wird zu `waitForAsync`
 
 <hr>
 
