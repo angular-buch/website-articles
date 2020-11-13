@@ -83,7 +83,7 @@ Eine Anleitung zur Einrichtung finden Sie [in der Dokumentation](https://github.
 
 Wir haben bis hierhin nur die wichtigsten Neuerungen aufgeführt. Eine ausführliche Aufstellung aller Änderungen finden Sie im [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
 
-- **Font Inlining:** Ab Angular 11 werden Font-Dateien automatisch in die Anwendungsbundles übernommen. Das soll die Startperformance der Anwendung verbessern.
+- **Font Inlining:** Ab Angular 11 werden Font-Dateien automatisch in die Anwendungsbundles übernommen. Das soll den "First Contentful Paint" verbessern.
 - **Language Service:** Der Angular Language Service ermöglicht der Entwicklungsumgebung eine inhaltliche Analyse des Codes, um z. B. bessere Typprüfungen im Template anzubieten. Die aktuelle Implementierung basiert auf der alten "View Engine". Derzeit wird an einer neuen Version gearbeitet, die den neuen Ivy-Comppiler unterstützt. Das Modul kann bereits als Preview ausprobiert werden.
 - **Verbesserung der Typisierung:** Viele Teile des Frameworks wurden hinsichtlich ihrer Typisierung verbessert, z. B. einige Pipes. Das führt in der Theorie zu Breaking Changes, daher ist die Liste der Breaking Changes im aktuellen Changelog sehr lang. Für die meisten Projekte sollte es hier aber keine praktische Auswirkung geben.
 
