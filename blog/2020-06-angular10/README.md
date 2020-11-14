@@ -58,7 +58,7 @@ Um dieses Problem zu beheben, können Sie in vielen Fällen die Fehlermeldung ig
 Hinterher sollten Sie jedoch zur Sicherheit noch einmal genau prüfen, ob Ihre Anwendung und Ihre Tests korrekt funktionieren.
 
 Ist Ihnen dieser Weg zu riskant, empfehlen wir Ihnen, noch etwas zu warten, bis die zu nutzende Bibliothek `tslib` in Version 2.0.0 unterstützt.
-Prüfen Sie ggf. im Repository der Bibliothek, ob bereits ein Issue zu diesem Thema eröffnet wurde, oder stellen Sie ein entsprechendes Issue für die Unterstützung von Angular 10 und tslib 2.0.0 ein. 👍 
+Prüfen Sie ggf. im Repository der Bibliothek, ob bereits ein Issue zu diesem Thema eröffnet wurde, oder stellen Sie ein entsprechendes Issue für die Unterstützung von Angular 10 und tslib 2.0.0 ein. 👍
 
 ### TSLint 6.0.0
 
@@ -138,12 +138,10 @@ Eine detaillierte Beschreibung aller Einstellungen bei Nutzung von `--strict` fi
 Natürlich gab es im Zuge der Entwicklung von Angular 10 auch wieder eine Vielzahl von kleineren Verbesserungen und Fehlerbehebungen.
 Eine detaillierte Liste aller Änderungen können Sie dem offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#1000-2020-06-24) und dem [Changelog der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v10.0.0) entnehmen.
 
-
 ## Angular-Buch in der 3. Auflage
 
-Übrigens arbeiten wir aktuell mit Hochdruck an einer neuen Auflage unseres deutschsprachigen Angular-Buchs!
-Die dritte Auflage haben wir vollständig **auf Angular 10 aktualisiert** und dabei auch neue Themen aufgenommen.
-Das Buch erscheint im Herbst 2020 im Handel.
+Die dritte Auflage des deutschsprachigen Angular-Buchs erschien im Oktober 2020 im Handel.
+Wir haben das Buch vollständig **auf Angular 10 aktualisiert** und haben dabei auch neue Themen aufgenommen.
 
 <hr>
 
