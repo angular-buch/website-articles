@@ -49,7 +49,7 @@ Auch die Gesamtgröße der gebauten Artefakte wird nun ausgegeben.
 
 ## `async` wird zu `waitForAsync`
 
-Für Unit- und Integrationstests mit Karma (oder Jest) stellt Angular die Funktion `async` zur Verfügung.
+Für Unit- und Integrationstests mit Karma (oder Jest) stellt Angular die Funktion `async()` zur Verfügung.
 Dieser Funktionsname sorgte stets für Verwechslung mit dem nativen Schlüsselwort `async`. Die Funktion wurde deshalb nun umbenannt zu `waitForAsync`.
 
 ```ts
