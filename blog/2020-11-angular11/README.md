@@ -64,7 +64,7 @@ it('should do X and Y', waitForAsync(() => {
 
 ## Hot Module Reloading
 
-Der Entwicklungswebserver mit `ng serve` unterstützt nun das sogenannte Hot Module Reloading (HMR). Dabei wird nach einer Code-Änderung nicht die komplette Seite neu geladen, sondern es werden nur die geänderten Bundles "on the fly" ausgetauscht.
+Der Entwicklungswebserver von `ng serve` unterstützt nun das sogenannte Hot Module Reloading (HMR). Dabei wird nach einer Code-Änderung nicht die komplette Seite neu geladen, sondern es werden nur die geänderten Bundles "on the fly" ausgetauscht.
 Dadurch funktioniert das Neuladen noch schneller.
 Um HMR zu nutzen, kann die neue Option `--hmr` genutzt werden:
 
