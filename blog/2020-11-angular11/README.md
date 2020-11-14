@@ -14,6 +14,7 @@ keywords:
 language: de
 thumbnail: ./angular11.jpg
 sticky: false
+hidden: true
 ---
 
 Es hätte kein schöneres Datum sein können: am 11.11.2020 wurde die neue Major-Version **Angular 11.0** veröffentlicht – fünf Monate nach dem [Release von Angular 10](/blog/2020-06-angular10).
