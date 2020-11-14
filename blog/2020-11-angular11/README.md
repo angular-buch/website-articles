@@ -78,8 +78,7 @@ Der TypeScript-Linter TSLint wird seit einiger Zeit nicht mehr weiterentwickelt 
 
 In einem neuen Projekt mit Angular 11 ist TSLint noch standardmäßig eingerichtet; ab Angular 12 soll auch diese Standardimplementierung wegfallen, sodass kein Linter als Standard im Projekt eingerichtet ist.
 
-Das Communityprojekt [angular-eslint](https://github.com/angular-eslint/angular-eslint) wird vom Angular-Team offiziell empfohlen, um ESLint in einem Angular-Projekt zu nutzen.
-Eine Anleitung zur Einrichtung finden Sie [in der Dokumentation](https://github.com/angular-eslint/angular-eslint#migrating-from-codelyzer-and-tslint).
+Das Communityprojekt [angular-eslint](https://github.com/angular-eslint/angular-eslint) wird nun vom Angular-Team offiziell empfohlen. Eine Anleitung zur Einrichtung finden Sie [in der Dokumentation](https://github.com/angular-eslint/angular-eslint#migrating-from-codelyzer-and-tslint).
 
 
 ## Weitere Neuigkeiten
