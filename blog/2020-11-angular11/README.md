@@ -20,7 +20,7 @@ Es hätte kein schöneres Datum sein können: am 11.11.2020 wurde die neue Major
 
 Wie üblich stellen wir Ihnen in diesem Artikel die wichtigsten Neuerungen vor.
 Das neue Major-Update bringt vor allem eine Menge Optimierungen und Stabilisierungen mit.
-Grund dafür ist die "Operation Byelog", mit der sich das Angular-Team das Ziel gesetzt hat, den Großteil der Issues auf GitHub zu kategorisieren und in den nächsten Monaten zu bearbeiten.
+Grund dafür ist die "Operation Byelog", mit der sich das Angular-Team das Ziel gesetzt hat, einen Großteil der Issues auf GitHub zu kategorisieren und in den nächsten Monaten zu bearbeiten.
 
 Besonderer Fokus wurde in Angular 11.0 auf die Verbesserung des Toolings gelegt.
 Dabei sind auch einige kleine Breaking Changes enthalten, die allerdings mithilfe der mitgelieferten Migrationsskripte und `ng update` leicht zu bewältigen sind.
