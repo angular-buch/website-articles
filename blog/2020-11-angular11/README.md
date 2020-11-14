@@ -76,7 +76,7 @@ ng serve --hmr
 
 Der TypeScript-Linter TSLint wird seit einiger Zeit nicht mehr weiterentwickelt und ist [seit 2019 deprecated](https://medium.com/palantir/tslint-in-2019-1a144c2317a9). Es wird der Umstieg auf [ESLint](https://eslint.org/) empfohlen.
 
-In einem neuen Projekt mit Angular 11 ist TSLint noch standardmäßig eingerichtet; ab Angular 12 soll auch diese Standardimplementierung wegfallen, sodass kein Linter von Haus aus im Projekt eingerichtet ist.
+In einem neuen Projekt mit Angular 11 ist TSLint noch standardmäßig eingerichtet; ab Angular 12 soll auch diese Standardimplementierung wegfallen, sodass kein Linter als Standard im Projekt eingerichtet ist.
 
 Das Communityprojekt [angular-eslint](https://github.com/angular-eslint/angular-eslint) wird vom Angular-Team offiziell empfohlen, um ESLint in einem Angular-Projekt zu nutzen.
 Eine Anleitung zur Einrichtung finden Sie [in der Dokumentation](https://github.com/angular-eslint/angular-eslint#migrating-from-codelyzer-and-tslint).
