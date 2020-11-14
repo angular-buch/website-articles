@@ -56,7 +56,9 @@ Dieser Funktionsname sorgte stets für Verwechslung mit dem nativen Schlüsselwo
 import { waitForAsync } from '@angular/core/testing';
 
 it('should do X and Y', waitForAsync(() => {
-  // ...
+  setTimeout(() => {
+    expect(true).toBeTruthy();
+  }, 500);
 }));
 ```
 
