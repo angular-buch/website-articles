@@ -3,7 +3,7 @@ title: "Mach aus deiner Angular-App eine PWA"
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
 published: 2019-07-24
-lastModified: 2019-07-24
+lastModified: 2020-11-17
 keywords:
   - PWA
   - Progressive Web App
@@ -14,7 +14,7 @@ keywords:
   - Push Notification
 language: de
 thumbnail: ./pwaheader.jpg
-sticky: false 
+sticky: false
 ---
 
 Immer häufiger stößt man im Webumfeld auf den Begriff der Progessive Web App – kurz: PWA. Doch was genau steckt dahinter und welche Vorteile hat eine PWA gegenüber einer herkömmlichen Webanwendung oder einer App?
@@ -41,6 +41,9 @@ Die drei wichtigsten Charakteristiken einer PWA sind also folgende:
 * "Add to Homescreen"-Funktionalität
 * Offline-Fähigkeit
 * Push Notifications
+
+> Übrigens: Sie können eine PWA auch ganz einfach als App in Form eine _Trusted Web Activity_ im Android Store bereitstellen.
+> Mehr dazu erfahren Sie in unserem Artikel [_Trusted Web Activitys (TWA) mit Angular_](/blog/2020-11-twa).
 
 ### Service Worker
 
@@ -530,8 +533,8 @@ Dank der vorbereiteten Schematics können wir uns auf die eigentliche Implementi
 Dies war aber nur ein kleiner Einblick in Progressive Web Apps mit Angular.
 Wer noch mehr zum Thema erfahren möchte, dem sei der Blogpost ["Build a production ready PWA with Angular and Firebase"](https://itnext.io/build-a-production-ready-pwa-with-angular-and-firebase-8f2a69824fcc) von Önder Ceylan empfohlen.
 
-Den vollständigen Quelltext aus diesem Artikel können Sie auf [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) herunterladen.  
-Eine **Demo des BookMonkey als PWA** finden Sie unter der https://bm3-pwa.angular-buch.com – probieren Sie die App am Besten auf Ihrem Smartphone aus! 
+Den vollständigen Quelltext aus diesem Artikel können Sie auf [auf GitHub](https://github.com/angular-buch/book-monkey3-pwa) herunterladen.
+Eine **Demo des BookMonkey als PWA** finden Sie unter der https://bm3-pwa.angular-buch.com – probieren Sie die App am Besten auf Ihrem Smartphone aus!
 
 Viel Spaß beim Programmieren!
 
