@@ -493,5 +493,3 @@ Nun müssen wir nur noch auf die Freigabe warten, und wir können unsere App im 
 
 **Viel Spaß wünschen
 Johannes, Danny und Ferdinand**
-
-<small>**Titelbild:** TODO</small>
