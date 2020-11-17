@@ -2,8 +2,8 @@
 title: 'Trusted Web Activitys (TWA) mit Angular'
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
-published: 2020-09-01
-lastModified: 2020-09-01
+published: 2020-11-17
+lastModified: 2020-11-17
 keywords:
   - TWA
   - Trusted Web Activity
