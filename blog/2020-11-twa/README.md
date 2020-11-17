@@ -13,9 +13,8 @@ keywords:
   - Android
   - Android Store
 language: de
-thumbnail: ./header-play.png
+thumbnail: ./header-twa.png
 sticky: false
-hidden: true
 ---
 
 Progressive Web Apps sind in den letzten Jahren immer populärer geworden.
