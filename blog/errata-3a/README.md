@@ -27,13 +27,19 @@ Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.co
 Im Abschnitt 14.1.4 auf Seite 406 erklären wir, dass ein Feature-Modul alle benötigten weiteren Module importieren muss:
 > Je nachem, welche Features außerdem in dem modul benötigt werden, müssen ebenso weitere Module wie `ReactiveFormsModule` oder `HttpClientModule` eingebunden werden.
 
-Für das `HttpClientModule` ist diese Aussage nicht korrekt! Dieses Modul sollte nur einmalig im Hauptmodul der Anwendung importiert werden, aber nicht in die Feature-Module. Darauf weisen wir im Kasten auf Seite 405 sogar ausdrückich hin.
+Für das `HttpClientModule` ist diese Aussage nicht korrekt! Dieses Modul sollte nur einmalig im Hauptmodul der Anwendung importiert werden, aber nicht in die Feature-Module. Darauf weisen wir im Kasten auf Seite 405 sogar ausdrücklich hin.
 Hintergrund ist, dass Providers in lazy geladenen Modulen erneut instanziiert werden können. Dadurch werden unter Umständen die HTTP-Interceptoren von Features-Modulen überschrieben.
 
 ### 14.1.5 Spread-Operator und Compodoc
 
 Im Kasten auf Seite 409 schlagen wir vor, den Spread-Operator zu verwenden, um die Bestandteile eines Moduls ohne Redundanz zu definieren.
 Leider funktioniert das nicht, wenn Sie das Tool *Compodoc* verwenden (siehe Abschnitt 28.5 auf Seite 759). In diesem Fall müssen Sie auf den Trick mit dem Spread-Operator verzichten.
+
+### 14.1.6 Dateibaum mit `book`
+
+Ab Seite 409 unterteilen wir den BookMonkey in mehrere Module.
+Die Module `BooksModule` und `AdminModule` liegen dabei in eigenen Unterordnern `books` und `admin`.
+Im Dateibaum auf Seite 412 haben wir den Ordner allerdings fälschlicherweise `book` genannt – hier fehlt ein `s`.
 
 
 ### 27.2 Typo: *Das größte Vorteil*
