@@ -11,7 +11,7 @@ keywords:
 language: de
 # thumbnail: ./header-twa.jpg
 sticky: false
-hidden: true
+hidden: false
 ---
 
 In der 3. Auflage unseres Angular-Buchs haben wir alle Kapitel überarbeitet und viele Fehler beseitigt.
@@ -41,6 +41,15 @@ Ab Seite 409 unterteilen wir den BookMonkey in mehrere Module.
 Die Module `BooksModule` und `AdminModule` liegen dabei in eigenen Unterordnern `books` und `admin`.
 Im Dateibaum auf Seite 412 haben wir den Ordner allerdings fälschlicherweise `book` genannt – hier fehlt ein `s`.
 
+### 14.3.2 Config für Router.createUrlTree()
+
+Auf Seite 433 enthält das Listing 14-28 einen Fehler:
+Um die Einstellung `relativeTo` zu setzen, muss das Konfigurationsobjekt im zweiten Argument von `createUrlTree()` übergeben werden.
+Korrekt lautet der Code also wie folgt:
+
+```ts
+this.router.createUrlTree(['../login'], { relativeTo: route });
+```
 
 ### 27.2 Typo: *Das größte Vorteil*
 
