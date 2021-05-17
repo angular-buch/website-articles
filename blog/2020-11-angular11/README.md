@@ -27,6 +27,8 @@ Dabei sind auch einige kleine Breaking Changes enthalten, die allerdings mithilf
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/version-11-of-angular-now-available-74721b7952f7).
 
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 12 ist da!](/blog/2021-05-angular12)
 ## Update auf Angular 11
 
 Das Update zur neuen Angular-Version sollte ohne viel Aufwand möglich sein.

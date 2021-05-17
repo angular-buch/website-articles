@@ -25,7 +25,9 @@ Wir werden Ihnen in diesem Artikel die wichtigsten Neuerungen vorstellen.
 Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Version geht dank der Angular CLI und den Schematics leicht von der Hand.
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/version-10-of-angular-now-available-78960babd41).
 
-
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 11 ist da!](/blog/2020-11-angular11)
+> * [Angular 12 ist da!](/blog/2021-05-angular12)
 ## Update auf Angular 10
 
 Das Update zur neuen Angular-Version ist schnell erledigt.
