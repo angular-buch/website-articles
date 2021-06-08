@@ -14,7 +14,6 @@ keywords:
 language: de
 thumbnail: ./angular12.jpg
 sticky: true
-hidden: true
 ---
 
 Am 12.05.2021 wurde die neue Major-Version **Angular 12.0** veröffentlicht – ein halbes Jahr nach dem [Release von Angular 11](/blog/2020-11-angular11).

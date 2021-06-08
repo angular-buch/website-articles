@@ -12,7 +12,7 @@ keywords:
   - Dritte Auflage
 language: de
 thumbnail: ../x_shared/buchblogheader3.png
-sticky: true
+sticky: false
 ---
 
 **Das neue deutschsprachige Angular-Buch ist da!**
