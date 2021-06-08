@@ -77,7 +77,7 @@ Für den BookMonkey ergeben sich einige Änderungen, die wir in einem separaten 
 
 
 
-### Angular DevTools
+## Angular DevTools
 
 Angular verfügt nun über eine offizielle Browser-Extension für Entwickler:innen: die **Angular DevTools**!
 Die neuen Entwicklungswerkzeuge helfen beim Debuggen und Profilen von Angular-Anwendungen und ersetzen die ältere Extension [**Augury**](https://augury.rangle.io/).
