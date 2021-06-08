@@ -22,6 +22,13 @@ Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.co
 
 ------
 
+### Änderungen durch den Strict Mode
+
+Seit Angular 12 ist der Strict Mode beim Anlegen eines neuen Projekts standardmäßig aktiviert.
+Das BookMonkey-Projekt im Buch wurde jedoch ohne Strict Mode entwickelt.
+Es sind deshalb kleinere Änderungen im Code nötig, um die Anforderungen des Strict Mode zu erfüllen.
+Wir informieren darüber demnächst in einem separaten Blogpost.
+
 ### 14.1.4 HttpClientModule in Feature-Modulen
 
 Im Abschnitt 14.1.4 auf Seite 406 erklären wir, dass ein Feature-Modul alle benötigten weiteren Module importieren muss:
@@ -61,6 +68,8 @@ Auf Seite 741 hat sich ein Tippfehler eingeschlichen. Der korrekte Artikel am An
 
 Im Abschnitt *28.11 Angular updaten* wird in der Konsolenausgabe der Befehl `ng update --all` genannt.
 Der Parameter `--all` wurde mit Angular 11.0 entfernt und kann nicht mehr genutzt werden.
+
+
 
 
 
