@@ -7,6 +7,7 @@ lastModified: 2021-06-07
 keywords:
   - Angular
   - Angular 12
+  - Angular DevTools
   - TypeScript
   - Protractor
   - E2E
@@ -75,6 +76,21 @@ Wir empfehlen Ihnen, den Strict Mode zu aktivieren, um von der besseren Typisier
 Für den BookMonkey ergeben sich einige Änderungen, die wir in einem separaten Blogartikel zusammenfassen werden.
 
 
+
+### Angular DevTools
+
+Angular verfügt nun über eine offizielle Browser-Extension für Entwickler:innen: die **Angular DevTools**!
+Die neuen Entwicklungswerkzeuge helfen beim Debuggen und Profilen von Angular-Anwendungen und ersetzen die ältere Extension [**Augury**](https://augury.rangle.io/).
+Die DevTools sind in Zusammenarbeit mit dem langjährigen Partner rangle.io entstanden, aus dessen Feder auch Augury stammte.
+Die Angular DevTools sind für alle Anwendungen ab Angular 9 geeignet, die die Ivy-Engine nutzen.
+Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](https://angular.io/guide/devtools).
+
+**Die Angular Dev Tools sind als [Google Chrome Extension](https://chrome.google.com/webstore/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh) verfügbar.**
+
+![Angular DevTools – Komponentenansicht](./adt1.png)
+![Angular DevTools – Profiler](./adt2.png)
+
+
 ## E2E-Testing mit Protractor
 
 Zur Entwicklung von E2E-Tests wurde bisher in neuen Angular-Projekten stets das Tool *Protractor* mitgeliefert.
@@ -88,18 +104,6 @@ Um zum Beispiel [Cypress](https://www.cypress.io/) für E2E-Tests zu nutzen, kö
 ```ts
 ng add @cypress/schematic
 ```
-
-
-### Angular DevTools
-
-Angular verfügt nun über eine offizielle Browser-Extension für Entwickler:innen: die **Angular DevTools**!
-Die neuen Entwicklungswerkzeuge helfen beim Debuggen und Profilen von Angular-Anwendungen und ersetzen die ältere Extension [**Augury**](https://augury.rangle.io/).
-Die DevTools sind in Zusammenarbeit mit dem langjährigen Partner rangle.io entstanden, aus dessen Feder auch Augury stammte.
-Die Angular DevTools sind für alle Anwendungen ab Angular 9 geeignet, die die Ivy-Engine nutzen.
-Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](https://angular.io/guide/devtools).
-
-**Die Angular Dev Tools sind als [Google Chrome Extension](https://chrome.google.com/webstore/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh) verfügbar.**
-
 
 
 ## Inline Critical CSS / Fonts CSS Inlining
