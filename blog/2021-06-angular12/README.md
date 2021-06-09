@@ -159,7 +159,7 @@ Diese Änderung ist für Sie vor allem interessant, wenn Sie Bibliotheken mit An
 
 Angular 12 wird die letzte Major-Version mit Support für den Internet Explorer 11 sein. Dadurch kann Angular von Altlasten bereinigt werden und in Zukunft auf modernere Web-APIs zurückzugreifen, die nur in aktuellen Browsern unterstützt werden.
 
-Microsoft hat seit geraumer Zeit den Internet Explorer abgekündigt und dessen Weiterentwicklung zugunsten des neuen Browsers [Edge](https://www.microsoft.com/de-de/edge) eingestellt. Ab dem 15. Juni 2022 wird der Internet Explorer dann von Microsoft endgültig ["in Rente geschickt"](https://github.com/angular/angular/issues/41840). Wir begrüßen daher die Entscheidung vom Angular Team sehr, die Unterstützung für den veralteten Internet Explorer ebenso einzustellen. Zuvor wurde die Entscheidung mit der Community über einen [RFC](https://github.com/angular/angular/issues/41840) diskutiert. 
+Microsoft hat seit geraumer Zeit den Internet Explorer abgekündigt und dessen Weiterentwicklung zugunsten des neuen Browsers [Edge](https://www.microsoft.com/de-de/edge) eingestellt. Ab dem 15. Juni 2022 wird der Internet Explorer dann von Microsoft endgültig ["in Rente geschickt"](https://github.com/angular/angular/issues/41840). Wir begrüßen daher die Entscheidung des Angular-Teams sehr, die Unterstützung für den veralteten Internet Explorer ebenso einzustellen. Zuvor wurde die Entscheidung mit der Community über einen [RFC](https://github.com/angular/angular/issues/41840) diskutiert. 
 
 ## Weitere Neuigkeiten
 
