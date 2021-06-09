@@ -3,7 +3,7 @@ title: 'Angular 12 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2021-06-07
-lastModified: 2021-06-07
+lastModified: 2021-06-09
 keywords:
   - Angular
   - Angular 12
@@ -57,8 +57,8 @@ ng build --configuration=development
 ng serve
 ```
 
-Bei bestehenden Angular-Projekten gibt es zunächst keine automatische Migration, und die Build-Konfigurationen in der Angular CLI bleiben wie zuvor konfiguriert.
-Bei Bedarf können die Konfigurationen aber beim Update ebenfalls migriert werden:
+Bei bestehenden Angular-Projekten sind von dieser Änderung nicht direkt betroffen. Es findet zunächst keine automatische Migration statt. Die Build-Konfigurationen in der Angular CLI bleiben wie zuvor konfiguriert.
+Bei Bedarf können die Konfigurationen nach dem regulären Update ebenfalls migriert werden:
 
 ```bash
 ng update @angular/cli --migrate-only production-by-default
@@ -66,14 +66,14 @@ ng update @angular/cli --migrate-only production-by-default
 
 ## Strict Mode by default
 
-In neuen Angular-Projekten ist ab sofort standardmäßig der Strict Mode aktiviert.
+In neuen Angular-Projekten ist ab sofort standardmäßig der Strict Mode aktiviert. Bestehende Projekte sind von dieser Änderung ebenso nicht direkt betroffen.
 
-Zum Release von Angular 10 vor einem Jahr haben wir bereits einige Details zum Strict Mode [im Blog veröffentlicht](/blog/2020-06-angular10#setup-mit-strikten-compiler-optionen).
+Zum Release von Angular 10 vor einem Jahr haben wir bereits einige Details zum Strict Mode [im Blog veröffentlicht](/blog/2020-06-angular10#setup-mit-strikten-compiler-optionen) veröffentlicht.
 In der [Angular-Dokumentation](https://angular.io/guide/strict-mode) finden Sie außerdem eine ausführliche Beschreibung.
 Unter Umständen erfordert der Strict Mode einige Anpassungen in Ihrem Code.
 Wir empfehlen Ihnen, den Strict Mode zu aktivieren, um von der besseren Typisierung zu profitieren.
 
-Für den BookMonkey ergeben sich einige Änderungen, die wir in einem separaten Blogartikel zusammenfassen werden.
+Für den BookMonkey ergeben sich einige Änderungen, die wir in Kürze in einem separaten Blogartikel zusammenfassen werden.
 
 
 
@@ -81,7 +81,7 @@ Für den BookMonkey ergeben sich einige Änderungen, die wir in einem separaten 
 
 Angular verfügt nun über eine offizielle Browser-Extension für Entwickler:innen: die **Angular DevTools**!
 Die neuen Entwicklungswerkzeuge helfen beim Debuggen und Profilen von Angular-Anwendungen und ersetzen die ältere Extension [**Augury**](https://augury.rangle.io/).
-Die DevTools sind in Zusammenarbeit mit dem langjährigen Partner rangle.io entstanden, aus dessen Feder auch Augury stammte.
+Die DevTools sind in Zusammenarbeit mit dem langjährigen Partner rangle.io entstanden, aus dessen Feder auch Augury stammt.
 Die Angular DevTools sind für alle Anwendungen ab Angular 9 geeignet, die die Ivy-Engine nutzen.
 Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](https://angular.io/guide/devtools).
 
@@ -95,7 +95,7 @@ Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](
 
 Zur Entwicklung von E2E-Tests wurde bisher in neuen Angular-Projekten stets das Tool *Protractor* mitgeliefert.
 Seit der Einführung von Protractor 2013 haben sich jedoch andere Tools wie Cypress, TestCafe oder Playwright stark in der Community etabliert.
-Seit Angular 12 setzen neue Angular-Projekte daher **nicht** mehr auf Protractor.
+Seit Angular 12 setzen neue Angular-Projekte daher **nicht** mehr auf Protractor. Neue Anwendungen, die mit der Angular CLI v12 erzeugt werden, haben standardmäßig keinen e2e-Task mehr konfiguriert.
 Damit haben Entwickler:innen ab sofort die freie Wahl eines Tools für E2E-Tests.
 Der Support für Protractor wird voraussichtlich 2022 eingestellt. Wir empfehlen Ihnen daher, Protractor nach Möglichkeit nicht mehr zu verwenden.
 
@@ -149,18 +149,23 @@ Im Gegensatz zur Prüfung mit `||` ist mit Nullish Coalescing auch eine `0` ein 
 ## Ivy Engine in Bibliotheken
 
 Die Ivy-Rendering Engine, die bereits seit Angular 9 standardmäßig verwendet wird, wird nun auch in Library-Projekten stärker forciert.
-Die veraltete *View Engine* wird mit Angular 13 endgültig entfernt.
+Die veraltete *View Engine* wird mit kommenden Version 13 endgültig entfernt.
 Autor:innen von Bibliotheken sollten ihre Releases also innerhalb der nächsten Monate auf Ivy umstellen.
 
 Mehr Details zur Umstellung von Librarys und zu den Hintergründen finden Sie im [Blogpost "Upcoming improvements to Angular library distribution" auf angular.io](https://blog.angular.io/upcoming-improvements-to-angular-library-distribution-76c02f782aa4).
 Diese Änderung ist für Sie vor allem interessant, wenn Sie Bibliotheken mit Angular-Bestandteilen auf NPM veröffentlichen.
+
+## Deprecated: Support für den IE 11
+
+Angular 12 wird die letzte Major-Version mit Support für den Internet Explorer 11 sein. Dadurch kann Angular von Altlasten bereinigt werden und in Zukunft auf modernere Web-APIs zurückzugreifen, die nur in aktuellen Browsern unterstützt werden.
+
+Microsoft hat seit geraumer Zeit den Internet Explorer abgekündigt und dessen Weiterentwicklung zugunsten des neuen Browsers [Edge](https://www.microsoft.com/de-de/edge) eingestellt. Ab dem 15. Juni 2022 wird der Internet Explorer dann von Microsoft endgültig ["in Rente geschickt"](https://github.com/angular/angular/issues/41840). Wir begrüßen daher die Entscheidung vom Angular Team sehr, die Unterstützung für den veralteten Internet Explorer ebenso einzustellen. Zuvor wurde die Entscheidung mit der Community über einen [RFC](https://github.com/angular/angular/issues/41840) diskutiert. 
 
 ## Weitere Neuigkeiten
 
 Wir haben bis hierhin nur die wichtigsten Neuerungen aufgeführt. Eine ausführliche Aufstellung aller Änderungen finden Sie im [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
 Folgende Punkte sind zusätzlich erwähnenswert:
 
-- **Deprecated: Support für IE 11:** Angular 12 wird die letzte Major-Version mit Support für den Internet Explorer 11 sein. Dadurch kann Angular in Zukunft auf modernere Web-APIs zurückzugreifen, die in allen aktuellen Browsern unterstützt werden.
 - **Webpack 5:** Unter der Haube verwendet Angular nun Webpack 5 als Build- und Bundling-Tool. Damit wird das neue Feature der [Module Federation](https://www.angulararchitects.io/en/aktuelles/the-microfrontend-revolution-part-2-module-federation-with-angular/) auch im Zusammenhang mit Angular unterstützt.
 - **Validatoren `min`/`max`:** Verwendet man auf einem Input die Attribute `min` und `max` werden dadurch nun automatisch passende Validatoren aktiv. Bisher mussten diese Validatoren manuell auf das FormControl angewendet werden. Siehe [PR #39063](https://github.com/angular/angular/pull/39063)
 - **`emitEvent` für Formulare:** Einige weitere Methoden auf FormControl, FormArray und FormGroup besitzen jetzt auch die Einstellung `emitEvent`. Damit kann konfiguriert werden, ob die Methode ein Event im Datenstrom `valueChanges` emittiert oder nicht. Neu ist diese Option zum Beispiel bei `FormArray.clear()`, `FormArray.removeAt()` oder `FormGroup.addControl()`. Siehe [PR #31031](https://github.com/angular/angular/pull/31031) 
@@ -176,7 +181,7 @@ Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in de
 Wir wünschen Ihnen viel Spaß mit Angular 12!
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
 
-**Viel Spaß wünschen<br>
+**Viel Spaß wünschen  
 Danny, Ferdinand und Johannes**
 
 <small>**Titelbild:** Antelope Island State Park, Utah, USA, April 2018</small>
