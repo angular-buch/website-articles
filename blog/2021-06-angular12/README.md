@@ -95,7 +95,7 @@ Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](
 
 Zur Entwicklung von E2E-Tests wurde bisher in neuen Angular-Projekten stets das Tool *Protractor* mitgeliefert.
 Seit der Einführung von Protractor 2013 haben sich jedoch andere Tools wie Cypress, TestCafe oder Playwright stark in der Community etabliert.
-Seit Angular 12 setzen neue Angular-Projekte daher **nicht** mehr auf Protractor. Neue Anwendungen, die mit der Angular CLI v12 erzeugt werden, haben standardmäßig keinen e2e-Task mehr konfiguriert.
+Seit Angular 12 setzen neue Angular-Projekte daher **nicht** mehr auf Protractor. Neue Anwendungen, die mit der Angular CLI v12 erzeugt werden, haben standardmäßig keinen `e2e`-Task mehr konfiguriert.
 Damit haben Entwickler:innen ab sofort die freie Wahl eines Tools für E2E-Tests.
 Der Support für Protractor wird voraussichtlich 2022 eingestellt. Wir empfehlen Ihnen daher, Protractor nach Möglichkeit nicht mehr zu verwenden.
 
