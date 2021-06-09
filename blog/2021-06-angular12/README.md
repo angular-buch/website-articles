@@ -68,7 +68,7 @@ ng update @angular/cli --migrate-only production-by-default
 
 In neuen Angular-Projekten ist ab sofort standardmäßig der Strict Mode aktiviert. Bestehende Projekte sind von dieser Änderung ebenso nicht direkt betroffen.
 
-Zum Release von Angular 10 vor einem Jahr haben wir bereits einige Details zum Strict Mode [im Blog veröffentlicht](/blog/2020-06-angular10#setup-mit-strikten-compiler-optionen) veröffentlicht.
+Zum Release von Angular 10 vor einem Jahr haben wir bereits einige Details zum Strict Mode [im Blog veröffentlicht](/blog/2020-06-angular10#setup-mit-strikten-compiler-optionen).
 In der [Angular-Dokumentation](https://angular.io/guide/strict-mode) finden Sie außerdem eine ausführliche Beschreibung.
 Unter Umständen erfordert der Strict Mode einige Anpassungen in Ihrem Code.
 Wir empfehlen Ihnen, den Strict Mode zu aktivieren, um von der besseren Typisierung zu profitieren.
