@@ -57,7 +57,7 @@ ng build --configuration=development
 ng serve
 ```
 
-Bei bestehenden Angular-Projekten sind von dieser Änderung nicht direkt betroffen. Es findet zunächst keine automatische Migration statt. Die Build-Konfigurationen in der Angular CLI bleiben wie zuvor konfiguriert.
+Bestehende Angular-Projekte sind von den neuen Standardwerten zunächst nicht direkt betroffen. Es findet keine automatische Migration der Konfiguration (siehe `angular.json`) statt. 
 Bei Bedarf können die Konfigurationen nach dem regulären Update ebenfalls migriert werden:
 
 ```bash
