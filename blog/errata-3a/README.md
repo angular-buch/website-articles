@@ -26,13 +26,49 @@ Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.co
 
 Seit Angular 12 ist der Strict Mode beim Anlegen eines neuen Projekts standardmäßig aktiviert.
 Das BookMonkey-Projekt im Buch wurde jedoch ohne Strict Mode entwickelt.
-Es sind deshalb kleinere Änderungen im Code nötig, um die Anforderungen des Strict Mode zu erfüllen.
+Es sind deshalb einige Änderungen im Code nötig, um die Anforderungen des Strict Mode zu erfüllen.
+Insbesondere die Meldungen `property has no initializer` oder `is possibly undefined` hängen mit dem Strict Mode zusammen.
 Wir informieren darüber demnächst in einem separaten Blogpost.
+Den Code auf GitHub haben wir entsprechend aktualisiert und mit Kommentaren versehen.
+
+### 10.3.5 OAuth/OIDC: Authorization Code Flow
+
+In der Abbildung 10-15 auf Seite 264 zum Authorization Code Flow ist Schritt (3) falsch beschriftet.
+Im Request vom Client zum Server wird die *Code Challenge* übermittelt, nicht der Verifier.
+Im Text ist der Flow korrekt beschrieben.
+
+### 12.2.8 Template-Driven Forms: ngModel und FormMessagesComponent
+
+In der Iteration zu Template-Driven Forms entwickeln wir die `FormMessagesComponent`, um Meldungen im Formular anzuzeigen.
+Die Komponente erhält als Input-Property ein `AbstractControl`.
+Im Listing 12-17 auf Seite 300 f. für das Template der `BookFormComponent` zeigen wir, dass die Instanz von `ngModel` direkt an die Messages-Komponente übergeben werden kann. Das ist nicht korrekt, denn `ngModel` ist kein `AbstractControl`! Stattdessen müssen wir das Control aus der Property `control` lesen:
+
+```html
+<!-- book-form.component.html -->
+<input name="isbn" ... #isbnInput="ngModel">
+<bm-form-messages
+  [control]="isbnInput.control"
+  controlName="isbn"></bm-form-messages>
+```
+
+Dieser Fix muss auf alle Stellen im Template der `BookFormComponent` angewendet werden. Wir haben den [Code im GitHub-Repo](https://github.com/book-monkey4/iteration-4-template-driven-forms/blob/master/src/app/book-form/book-form.component.html#L11-L18) entsprechend aktualisiert.
+
+### 12.2.8 Template-Driven Forms: `controlName="author"`
+
+Im Listing 12-27 auf Seite 301 hat sich ein Tippfehler eingeschlichen.
+Der `controlName` für das Autorenfeld muss `authors` lauten. Dieser Fehler taucht nur im Buch auf, der Code auf GitHub ist davon nicht betroffen.
+
+```html
+<!-- book-form.component.html -->
+<bm-form-messages
+  [control]="authorInput.control"
+  controlName="authors"></bm-form-messages>
+```
 
 ### 14.1.4 HttpClientModule in Feature-Modulen
 
 Im Abschnitt 14.1.4 auf Seite 406 erklären wir, dass ein Feature-Modul alle benötigten weiteren Module importieren muss:
-> Je nachem, welche Features außerdem in dem Modul benötigt werden, müssen ebenso weitere Module wie `ReactiveFormsModule` oder `HttpClientModule` eingebunden werden.
+> Je nachdem, welche Features außerdem in dem Modul benötigt werden, müssen ebenso weitere Module wie `ReactiveFormsModule` oder `HttpClientModule` eingebunden werden.
 
 Für das `HttpClientModule` ist diese Aussage nicht korrekt! Dieses Modul sollte nur einmalig im Hauptmodul der Anwendung importiert werden, aber nicht in die Feature-Module. Darauf weisen wir im Kasten auf Seite 405 sogar ausdrücklich hin.
 Hintergrund ist, dass Providers in lazy geladenen Modulen erneut instanziiert werden können. Dadurch werden unter Umständen die HTTP-Interceptoren von Features-Modulen überschrieben.
