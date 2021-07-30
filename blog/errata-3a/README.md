@@ -31,6 +31,14 @@ Insbesondere die Meldungen `property has no initializer` oder `is possibly undef
 Wir informieren darüber demnächst in einem separaten Blogpost.
 Den Code auf GitHub haben wir entsprechend aktualisiert und mit Kommentaren versehen.
 
+### 9 Chrome DevTools: Abbildung falsch referenziert
+
+Im Abschnitt "Zwischen mehreren Dateien navigieren" auf Seite 185 haben wir im Text die Abbildung falsch referenziert.
+Der Textabschnit bezieht sich auf die nachfolgende Abbildung 9-13, nicht wie gedruckt auf 9-11.
+
+> Es öffnet sich ein Suchfeld, in dem nach Dateinamen gesucht werden kann (siehe Abbildung 9-13).
+
+
 ### 10.3.5 OAuth/OIDC: Authorization Code Flow
 
 In der Abbildung 10-15 auf Seite 264 zum Authorization Code Flow ist Schritt (3) falsch beschriftet.
