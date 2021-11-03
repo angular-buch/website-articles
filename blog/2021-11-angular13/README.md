@@ -22,15 +22,19 @@ Den Code des Beispielprojekts *BookMonkey* aus dem Angular-Buch halten wir stets
 <!-- Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io). -->
 Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
 
-```bash
-npx @angular/cli@13 update @angular/core@13 @angular/cli@13
-```
+
 
 ## Projekt updaten
 
 Wenn Sie Ihr bestehendes Projekt aktualisieren möchten, folgen Sie bitte den Instruktionen im [Angular Update Guide](https://update.angular.io).
 Mithilfe des Befehls `ng update` erhalten Sie außerdem Infos zu möglichen Updates direkt im Projekt.
 
+```bash
+# Projekt auf Angular 13 aktualisieren
+npx @angular/cli@13 update @angular/core@13 @angular/cli@13
+```
+
+Bitte beachten Sie, dass es noch einige Zeit dauern kann, bis Community-Projekte wie NgRx oder Nrwl Nx ebenso mit Angular 13 kompatibel sind.
 
 ## Neue Versionen: Node.js, TypeScript und RxJS
 
