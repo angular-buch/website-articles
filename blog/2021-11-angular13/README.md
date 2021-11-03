@@ -22,6 +22,15 @@ Den Code des Beispielprojekts *BookMonkey* aus dem Angular-Buch halten wir stets
 <!-- Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io). -->
 Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
 
+```bash
+npx @angular/cli@13 update @angular/core@13 @angular/cli@13
+```
+
+## Projekt updaten
+
+Wenn Sie Ihr bestehendes Projekt aktualisieren möchten, folgen Sie bitte den Instruktionen im [Angular Update Guide](https://update.angular.io).
+Mithilfe des Befehls `ng update` erhalten Sie außerdem Infos zu möglichen Updates direkt im Projekt.
+
 
 ## Neue Versionen: Node.js, TypeScript und RxJS
 
