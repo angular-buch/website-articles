@@ -14,11 +14,13 @@ sticky: true
 ---
 
 Noch vor dem Jahresende erschien Anfang November 2021 die neue Major-Version 13 von Angular.
-Auch diese Version bringt keine großen Änderungen an der Oberfläche des Frameworks mit, sondern verbessert vor allem Details im Hintergrund.
+Auch diese Version bringt keine großen Änderungen an der Oberfläche des Frameworks mit, sondern verbessert vor allem Details im Hintergrund. Es gibt ein paar wenige Breaking Changes, die aber für die meisten Entwicklerinnen und Entwickler nicht interessant sein dürften.
 
 Wir stellen in diesem Blogpost wie immer die wichtigsten Neuigkeiten vor.
 Den Code des Beispielprojekts *BookMonkey* aus dem Angular-Buch halten wir stets [auf GitHub](https://github.com/angular-buch/book-monkey4) aktuell.
+
 <!-- Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io). -->
+Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
 
 
 ## Neue Versionen: Node.js, TypeScript und RxJS
