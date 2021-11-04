@@ -168,11 +168,10 @@ export type FormControlStatus = 'VALID'|'INVALID'|'PENDING'|'DISABLED';
 
 ## Sonstiges
 
-* 
 * **IE11 Support:** Die Unterstützung von Internet Explorer 11 wurde entfernt. Nachdem in der letzen Version der Support bereits "deprecated" wurde, ist Angular jetzt offiziell nicht mehr im Internet Explorer lauffähig.
+* **$localize stable:** Die Funktion `$localize` zur Übersetzung von Texten in der Anwendung gilt jetzt als *stable*. Siehe auch dieser Beitrag im Angular-Blog: [Angular localization with Ivy](https://blog.angular.io/angular-localization-with-ivy-4d8becefb6aa).
 * **Event für routerLinkActive:** Die Direktive `routerLinkActive` emittiert das Event `isActiveChange`, wenn sich der Aktivitätsstatus dieses Links ändert. Das kann man nutzen, um weitere Aktionen anzustoßen, wenn ein RouterLink aktiviert oder deaktiviert wird, siehe [Commit](https://github.com/angular/angular/commit/faf9f5a3bc444bb6cbf75916c8022f60e0742bca).
 * **Adobe Fonts Inlining:** Fonts Inlining wurde bisher "out of the box" für Google Fonts unterstützt. Dabei werden beim Build die Font-Dateien heruntergeladen und zusammen mit der gebauten Anwendung abgelegt. Dieses Verfahren wird jetzt auch für Adobe Fonts unterstützt.
-* **$localize stable:** Die Funktion `$localize` zur Übersetzung von Texten in der Anwendung gilt jetzt als *stable*. Siehe auch dieser Beitrag im Angular-Blog: [Angular localization with Ivy](https://blog.angular.io/angular-localization-with-ivy-4d8becefb6aa).
 * **loadChildren String Syntax:** Die veraltete String-Syntax für Lazy-Loading mit `loadChildren` wurde entfernt. Die alte Schreibweise ist seit Angular 9 deprecated und sollte ohnehin nicht mehr genutzt werden. 
 * **Zeitzone für DatePipe:** Die `DatePipe` nutzt ein neues InjectionToken `DATE_PIPE_DEFAULT_TIMEZONE`, mit dem die Zeitzone eingestellt werden kann, siehe [Commit](https://github.com/angular/angular/commit/adf4481211ac0a2eabf560f42ef5193ca550ec98).
 * **min/max-Validatoren mit `null`:** Bei Template-Driven Forms können die Validatoren für `min` und `max` nun auch den Eingabewert `null` verarbeiten. Der Validator wird dadurch deaktiviert. Ein ähnliches Verhalten wird bereits von `minLength` und `maxLength` unterstützt. Siehe [Commit](https://github.com/angular/angular/commit/d9d8f950e90567c79b43eb156b81810a9f3d5c93).
