@@ -187,4 +187,4 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß wünschen
 Danny, Ferdinand und Johannes**
 
-<small>**Titelbild:** Blick vom Poon Hill, Nepal, 2018</small>
+<small>**Titelbild:** Blick vom Poon Hill, Nepal, 2018. Foto von Ferdinand Malcher</small>

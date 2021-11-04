@@ -424,4 +424,4 @@ Wir möchten deshalb auf den [offiziellen Migrationsleitfaden](https://ngrx.io/g
 
 
 <small>Vielen Dank an **Johannes Hoppe** für Review und Ergänzungen!</small><br>
-<small>**Titelbild:** Zabriskie Point, Death Valley National Park, California, 2019</small>
+<small>**Titelbild:** Zabriskie Point, Death Valley National Park, California, 2019. Foto von Ferdinand Malcher</small>

@@ -153,4 +153,4 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß wünschen
 Johannes, Danny und Ferdinand**
 
-<small>**Titelbild:** Nationalpark Sächsische Schweiz, Juli 2017</small>
+<small>**Titelbild:** Nationalpark Sächsische Schweiz, Juli 2017. Foto von Ferdinand Malcher</small>

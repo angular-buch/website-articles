@@ -93,3 +93,6 @@ ng version
 
 Viel Spaß mit Angular wünschen<br>
 Johannes, Danny und Ferdinand
+
+
+<small>**Titelbild:** Capitol Reef National Park, Utah, USA, 2018. Foto von Ferdinand Malcher</small>

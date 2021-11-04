@@ -184,4 +184,4 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß wünschen  
 Danny, Ferdinand und Johannes**
 
-<small>**Titelbild:** Antelope Island State Park, Utah, USA, April 2018</small>
+<small>**Titelbild:** Antelope Island State Park, Utah, USA, April 2018. Foto von Ferdinand Malcher</small>
