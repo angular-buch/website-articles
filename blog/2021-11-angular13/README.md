@@ -19,7 +19,7 @@ Auch diese Version bringt keine großen Änderungen an der Oberfläche des Frame
 Wir stellen in diesem Blogpost wie immer die wichtigsten Neuigkeiten vor.
 Den Code des Beispielprojekts *BookMonkey* aus dem Angular-Buch halten wir stets [auf GitHub](https://github.com/angular-buch/book-monkey4) aktuell.
 
-<!-- Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io). -->
+Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v13-is-now-available-cce66f7bc296).
 Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
 
 
@@ -97,6 +97,14 @@ import('./my.component').then(m => {
 });
 ```
 
+## Persistent Cache
+
+In Projekten mit Angular 13 ist der neue *Persistent Disk Cache* automatisch aktiv.
+Dabei werden Teile der gebauten Anwendung zwischengespeichert, um zukünftige Builds zu beschleunigen.
+
+Informationen zur Konfiguration des Build Cache finden Sie in der [Angular-Dokumentation](https://angular.io/cli/cache).
+
+
 ## Bibliotheken mit Ivy-Compilation
 
 Nachdem der neue Renderer *Ivy* eingeführt wurde, musste die Kompatibilität mit Anwendungen gewährt werden, die noch auf die veraltete *View Engine* setzten.
@@ -115,6 +123,8 @@ Compiling @angular/common/http : es2015 as esm2015
 Seit Angular 13 können Bibliotheken direkt in Ivy-Instruktionen kompiliert und veröffentlicht werden.
 Der Code ist dann nicht mehr mit der *View Engine* kompatibel.
 Der `ngcc` wird damit weiter an Bedeutung verlieren und künftig entfernt werden können.
+Die View Engine wird seit Angular 13 nicht mehr unterstützt.
+
 Mehr Infos zum Veröffentlichen von Bibliotheken mit Ivy finden Sie in der [Angular-Dokumentation](https://angular.io/guide/creating-libraries#building-libraries-with-ivy).
 
 
@@ -158,10 +168,11 @@ export type FormControlStatus = 'VALID'|'INVALID'|'PENDING'|'DISABLED';
 
 ## Sonstiges
 
+* 
+* **IE11 Support:** Die Unterstützung von Internet Explorer 11 wurde entfernt. Nachdem in der letzen Version der Support bereits "deprecated" wurde, ist Angular jetzt offiziell nicht mehr im Internet Explorer lauffähig.
 * **Event für routerLinkActive:** Die Direktive `routerLinkActive` emittiert das Event `isActiveChange`, wenn sich der Aktivitätsstatus dieses Links ändert. Das kann man nutzen, um weitere Aktionen anzustoßen, wenn ein RouterLink aktiviert oder deaktiviert wird, siehe [Commit](https://github.com/angular/angular/commit/faf9f5a3bc444bb6cbf75916c8022f60e0742bca).
 * **Adobe Fonts Inlining:** Fonts Inlining wurde bisher "out of the box" für Google Fonts unterstützt. Dabei werden beim Build die Font-Dateien heruntergeladen und zusammen mit der gebauten Anwendung abgelegt. Dieses Verfahren wird jetzt auch für Adobe Fonts unterstützt.
 * **$localize stable:** Die Funktion `$localize` zur Übersetzung von Texten in der Anwendung gilt jetzt als *stable*. Siehe auch dieser Beitrag im Angular-Blog: [Angular localization with Ivy](https://blog.angular.io/angular-localization-with-ivy-4d8becefb6aa).
-* **IE11 Support:** Die Unterstützung von Internet Explorer 11 wurde entfernt. Nachdem in der letzen Version der Support bereits "deprecated" wurde, ist Angular jetzt offiziell nicht mehr im Internet Explorer lauffähig.
 * **loadChildren String Syntax:** Die veraltete String-Syntax für Lazy-Loading mit `loadChildren` wurde entfernt. Die alte Schreibweise ist seit Angular 9 deprecated und sollte ohnehin nicht mehr genutzt werden. 
 * **Zeitzone für DatePipe:** Die `DatePipe` nutzt ein neues InjectionToken `DATE_PIPE_DEFAULT_TIMEZONE`, mit dem die Zeitzone eingestellt werden kann, siehe [Commit](https://github.com/angular/angular/commit/adf4481211ac0a2eabf560f42ef5193ca550ec98).
 * **min/max-Validatoren mit `null`:** Bei Template-Driven Forms können die Validatoren für `min` und `max` nun auch den Eingabewert `null` verarbeiten. Der Validator wird dadurch deaktiviert. Ein ähnliches Verhalten wird bereits von `minLength` und `maxLength` unterstützt. Siehe [Commit](https://github.com/angular/angular/commit/d9d8f950e90567c79b43eb156b81810a9f3d5c93).
