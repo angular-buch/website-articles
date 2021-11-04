@@ -101,8 +101,30 @@ import('./my.component').then(m => {
 
 In Projekten mit Angular 13 ist der neue *Persistent Disk Cache* automatisch aktiv.
 Dabei werden Teile der gebauten Anwendung zwischengespeichert, um zukünftige Builds zu beschleunigen.
+Der Cache kann über die `angular.json` konfiguriert werden:
+
+```json
+{
+  // ...
+  "cli": {
+    "cache": {
+      "enabled": true
+    }
+  }
+}
+```
+
 
 Informationen zur Konfiguration des Build Cache finden Sie in der [Angular-Dokumentation](https://angular.io/cli/cache).
+
+
+## Support für IE11 eingestellt
+
+Die Unterstützung für den Internet Explorer 11 wurde entfernt.
+Nachdem in der letzen Version der Support bereits "deprecated" wurde, ist Angular jetzt offiziell nicht mehr im Internet Explorer lauffähig.
+
+Bei der Migration zu Angular 13 werden deshalb einige Einträge aus der `polyfills.ts` entfernt.
+Außerdem ist *Differential Loading*, das mit Angular 8 eingeführt wurde, nicht mehr notwendig. Dabei wurden für ältere Browser separate Bundles in ES5 gebaut. Da alle aktuellen Browser auch modernere Varianten von JavaScript unterstützen, wird Differential Loading nicht mehr genutzt.
 
 
 ## Bibliotheken mit Ivy-Compilation
@@ -168,8 +190,8 @@ export type FormControlStatus = 'VALID'|'INVALID'|'PENDING'|'DISABLED';
 
 ## Sonstiges
 
-* **IE11 Support:** Die Unterstützung von Internet Explorer 11 wurde entfernt. Nachdem in der letzen Version der Support bereits "deprecated" wurde, ist Angular jetzt offiziell nicht mehr im Internet Explorer lauffähig.
 * **$localize stable:** Die Funktion `$localize` zur Übersetzung von Texten in der Anwendung gilt jetzt als *stable*. Siehe auch dieser Beitrag im Angular-Blog: [Angular localization with Ivy](https://blog.angular.io/angular-localization-with-ivy-4d8becefb6aa).
+* **deployUrl**: Die Option `deployUrl` für `ng build` ist nun deprecated. Falls Sie ein ähnliches Verhalten wiederherstellen möchten, eignet sich eine Kombination aus dem Parameter `baseHref` und dem InjectionToken `APP_BASE_HREF`.
 * **Event für routerLinkActive:** Die Direktive `routerLinkActive` emittiert das Event `isActiveChange`, wenn sich der Aktivitätsstatus dieses Links ändert. Das kann man nutzen, um weitere Aktionen anzustoßen, wenn ein RouterLink aktiviert oder deaktiviert wird, siehe [Commit](https://github.com/angular/angular/commit/faf9f5a3bc444bb6cbf75916c8022f60e0742bca).
 * **Adobe Fonts Inlining:** Fonts Inlining wurde bisher "out of the box" für Google Fonts unterstützt. Dabei werden beim Build die Font-Dateien heruntergeladen und zusammen mit der gebauten Anwendung abgelegt. Dieses Verfahren wird jetzt auch für Adobe Fonts unterstützt.
 * **loadChildren String Syntax:** Die veraltete String-Syntax für Lazy-Loading mit `loadChildren` wurde entfernt. Die alte Schreibweise ist seit Angular 9 deprecated und sollte ohnehin nicht mehr genutzt werden. 
