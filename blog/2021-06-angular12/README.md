@@ -45,7 +45,7 @@ Stattdessen muss ein Linting-Tool manuell im Projekt eingerichtet werden.
 
 Wir empfehlen den Linter [ESLint](https://eslint.org/) und das Projekt [`angular-eslint`](https://github.com/angular-eslint/angular-eslint), das bereits sinnvolle Lint-Regeln für Angular-Projekte mitbringt.
 Zusätzlich benötigen Sie die [Extension für ESLint im VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
-Sie können `angualr-eslint` mit dem folgenden Befehl im Projekt einrichten:
+Sie können `angular-eslint` mit dem folgenden Befehl im Projekt einrichten:
 
 ```bash
 ng add @angular-eslint/schematics
