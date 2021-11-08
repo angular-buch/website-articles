@@ -3,13 +3,12 @@ title: "Errata zur 3. Auflage"
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2021-01-25
-lastModified: 2021-01-25
+lastModified: 2021-11-08
 keywords:
   - Angular
   - Errata
   - Fehlerverzeichnis
 language: de
-# thumbnail: ./header-twa.jpg
 sticky: false
 hidden: false
 ---
@@ -30,6 +29,11 @@ Es sind deshalb einige Änderungen im Code nötig, um die Anforderungen des Stri
 Insbesondere die Meldungen `property has no initializer` oder `is possibly undefined` hängen mit dem Strict Mode zusammen.
 Wir informieren darüber demnächst in einem separaten Blogpost.
 Den Code auf GitHub haben wir entsprechend aktualisiert und mit Kommentaren versehen.
+
+### TSLint / ESLint
+
+Im Buch gehen wir auf den Linter *TSLint* ein, erwähnen aber auch, dass TSLint seit 2019 deprecated ist. Seit Angular 12 wird in neuen Projekten kein Linter mehr eingerichtet.
+Wir empfehlen Ihnen, das Tool *ESLint* zu nutzen. Einige Hinweise dazu haben wir im [Blogpost zum Update auf Angular 12](/blog/2021-06-angular12) untergebracht.
 
 ### 9 Chrome DevTools: Abbildung falsch referenziert
 

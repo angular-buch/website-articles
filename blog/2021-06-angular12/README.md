@@ -3,7 +3,7 @@ title: 'Angular 12 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2021-06-07
-lastModified: 2021-06-09
+lastModified: 2021-11-08
 keywords:
   - Angular
   - Angular 12
@@ -12,6 +12,7 @@ keywords:
   - Protractor
   - E2E
   - Strict Mode
+  - ESLint
 language: de
 thumbnail: ./angular12.jpg
 sticky: false
@@ -36,6 +37,35 @@ ng update @angular/cli @angular/core
 ```
 
 Im *Angular Update Guide* unter [update.angular.io](https://update.angular.io/#11.0:12.0) können Sie alle Migrationsschritte im Detail nachvollziehen und die Migration vorbereiten.
+
+## TSLint
+
+Der Linter TSLint, auf den wir im Buch eingehen, ist seit 2019 deprecated. In neuen Projekten mit Angular 12 wird deshalb **standardmäßig kein Linter mehr installiert**.
+Stattdessen muss ein Linting-Tool manuell im Projekt eingerichtet werden.
+
+Wir empfehlen den Linter [ESLint](https://eslint.org/) und das Projekt [`angular-eslint`](https://github.com/angular-eslint/angular-eslint), das bereits sinnvolle Lint-Regeln für Angular-Projekte mitbringt.
+Zusätzlich benötigen Sie die [Extension für ESLint im VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
+Sie können `angualr-eslint` mit dem folgenden Befehl im Projekt einrichten:
+
+```bash
+ng add @angular-eslint/schwematics
+```
+
+
+## E2E-Testing mit Protractor
+
+Zur Entwicklung von E2E-Tests wurde bisher in neuen Angular-Projekten stets das Tool *Protractor* mitgeliefert.
+Seit der Einführung von Protractor 2013 haben sich jedoch andere Tools wie Cypress, TestCafe oder Playwright stark in der Community etabliert.
+Seit Angular 12 setzen neue Angular-Projekte daher **nicht** mehr auf Protractor. Neue Anwendungen, die mit der Angular CLI v12 erzeugt werden, haben standardmäßig keinen `e2e`-Task mehr konfiguriert.
+Damit haben Entwickler:innen ab sofort die freie Wahl eines Tools für E2E-Tests.
+Der Support für Protractor wird voraussichtlich 2022 eingestellt. Wir empfehlen Ihnen daher, Protractor nach Möglichkeit nicht mehr zu verwenden.
+
+Um zum Beispiel [Cypress](https://www.cypress.io/) für E2E-Tests zu nutzen, können Sie die offiziellen Schematics zur Einrichtung verwenden:
+
+```ts
+ng add @cypress/schematic
+```
+
 
 ## Production-Build by default
 
@@ -87,21 +117,6 @@ Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](
 
 ![Angular DevTools – Komponentenansicht](./adt1.png)
 ![Angular DevTools – Profiler](./adt2.png)
-
-
-## E2E-Testing mit Protractor
-
-Zur Entwicklung von E2E-Tests wurde bisher in neuen Angular-Projekten stets das Tool *Protractor* mitgeliefert.
-Seit der Einführung von Protractor 2013 haben sich jedoch andere Tools wie Cypress, TestCafe oder Playwright stark in der Community etabliert.
-Seit Angular 12 setzen neue Angular-Projekte daher **nicht** mehr auf Protractor. Neue Anwendungen, die mit der Angular CLI v12 erzeugt werden, haben standardmäßig keinen `e2e`-Task mehr konfiguriert.
-Damit haben Entwickler:innen ab sofort die freie Wahl eines Tools für E2E-Tests.
-Der Support für Protractor wird voraussichtlich 2022 eingestellt. Wir empfehlen Ihnen daher, Protractor nach Möglichkeit nicht mehr zu verwenden.
-
-Um zum Beispiel [Cypress](https://www.cypress.io/) für E2E-Tests zu nutzen, können Sie die offiziellen Schematics zur Einrichtung verwenden:
-
-```ts
-ng add @cypress/schematic
-```
 
 
 ## Inline Critical CSS / Fonts CSS Inlining
