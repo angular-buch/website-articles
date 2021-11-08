@@ -29,6 +29,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
 > * [Angular 11 ist da!](/blog/2020-11-angular11)
 > * [Angular 12 ist da!](/blog/2021-05-angular12)
+> * [Angular 13 ist da!](/blog/2021-11-angular13)
 
 **Inhalt**
 

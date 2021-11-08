@@ -28,6 +28,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 11 ist da!](/blog/2020-11-angular11)
 > * [Angular 12 ist da!](/blog/2021-05-angular12)
+> * [Angular 13 ist da!](/blog/2021-11-angular13)
 ## Update auf Angular 10
 
 Das Update zur neuen Angular-Version ist schnell erledigt.
