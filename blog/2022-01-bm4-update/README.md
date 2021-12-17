@@ -1,34 +1,64 @@
 ---
-title: 'Angular 12: Denn Book-Monkey v4 updaten (3. Ausgabe)'
+title: 'Den Book-Monkey v4 updaten (3. Ausgabe)'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2021-07-28
+published: 2022-01-01
 keywords:
   - Angular
   - Angular 12
+  - Angular 13
   - Strict Mode
 language: de
 thumbnail: ./angular12.jpg
 ---
 
-Seit Angular 12 sind diverse strikte Einstellung für neue Projekte per Default aktiviert.
-Als wir das Buch im letzten Sommer veröffentlicht haben, war das noch nicht so.
-Sind die strikten Einstellungen aktiv, brechen nun leider einige gezeigte Beispiele, die sich aber mit moderatem Aufwand beheben lassen.
+Das Angular-Ökosystem wird kontinuierlich verbessert.
+Das Release einer neuen Major-Version von Angular bedeutet keineswegs, dass alle Ideen verworfen werden und Ihre Software nach einem Update nicht mehr funktioniert.
+Die Grundideen von Angular sind seit Version 2 konsistent und auf Beständigkeit über einen langen Zeitraum ausgelegt.
+Die in unserem Buch beschriebenen Konzepte behalten ihre Gültigkeit.
 
-In diesem ausführlichen Blogartikel beschreiben wir alle notwendigen Änderungen am Code.
-Außerdem sind alle Repositories auf GitHub aktualisieren, sodass Sie auch auf diesem Weg das Update nachvollziehen können.
+Ein paar kleine Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe ergeben.
+Diese wollen wir hier detailiert besprechen.
+Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellung für neue Projekte per Default aktiviert sind.
+Als wir das Buch im letzten Sommer 2020 veröffentlicht haben, war das noch nicht so.
+Sind die strikten Einstellungen aktiv, brechen nun leider einige gedruckte Beispiele, die sich aber mit moderatem Aufwand beheben lassen.
+
+## Der BookMonkey
 
 Der "BookMonkey" ist das Demo-Projekt zum Buch.
 Anhand des Beispielprojekts führen wir Sie schrittweise an die Entwicklung mit Angular heran.
-Es existiert eine große Version des BookMonkey, der alle Iterationsschritte in einem einzigen Repository beinhaltet. Die einzelnen Schritte befinden sich in seperaten Verzeichnissen bzw. Angular-Modulen.
 
-* **[Alle Änderungen vom großen BookMonkey 4<br>von Angular 10 auf Angular 12](https://github.com/angular-buch/book-monkey4/commit/1c9fca396de63605494b1859f4492ef7bdf5b222)**
+Alle Entwicklungsschritte im Buch stellen wir in separaten Repositorys zur Verfügung.
+Wenn man den Anleitungen im Buch folgt, sieht die eigene Codebasis im Idealfall genauso aus, wie unser Stand auf GitHub.
 
-Um die Übersichtlichkeit zur erhöhen, existieren zusätzlich eine Reihe von kleine BookMonkeys.
-Hier werden die Entwicklungsschritte in separaten Repositorys zur Verfügung gestellt.
-Wenn man den Anleitungen im Buch folgt, sieht die eigene Codebasis im Idealfall genauso aus, wie bei den kleinen Affen:
 
-**Alle Änderungen vom kleinen BookMonkey 4, von Angular 10 auf Angular 12...**  
+## Einen bestehenden BookMonkey updaten
+
+Wenn Sie unser Buch gleich nach der Veröffentlichung gekauft haben und alle Beispiele daraufhin nach Anleitung umgesetzt haben, dann haben Sie keinen großen Aufwand.
+Zum Zeitpunkt der Veröffentlichung war Angular 10 der neueste Stand, kurz danach folgte Angular 11.
+Wurde Ihr BookMonkey in dieser Zeit erstellt, dann sind in ihrem Projekt noch keinen strikten Einstellungen aktiv.
+Um auf den neuesten Stand von Angular zu gelangen, müssen Sie lediglich `ng update` in die Kommandozeilen eingeben und den Anweisungen auf dem Bildschirm folgen.
+
+Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angular:
+
+* [Angular 11 ist da!](/blog/2020-11-angular11)
+* [Angular 12 ist da!](/blog/2021-05-angular12)
+* [Angular 13 ist da!](/blog/2021-11-angular13)
+
+
+## Einen neuen BookMonkey erstellen
+
+
+
+
+
+
+
+## Zusammenfassung
+
+Hier sehen Sie noch einmal alle notwendigen Änderungen am Code als Differenzanzeige.
+
+<!-- * **[Alle Änderungen vom großen BookMonkey 4<br>von Angular 10 auf Angular 12](https://github.com/angular-buch/book-monkey4/commit/1c9fca396de63605494b1859f4492ef7bdf5b222)** -->
 
 * **[Iteration 1: Komponenten (Kapitel 6.1)](https://github.com/book-monkey4/iteration-1-components/commit/4c32571ef9ce2d2f746ec0c3939a0fa48ac5540b)**
 * **[Iteration 1: Property-Bindings (Kapitel 6.2)](https://github.com/book-monkey4/iteration-1-property-bindings/commit/02b1a286f03808f0094f0c85ea4825b4824a7c3b)**
@@ -50,17 +80,10 @@ Wenn man den Anleitungen im Buch folgt, sieht die eigene Codebasis im Idealfall 
 
 
 
-
-<!-- ## Strikte Einstellungen
-
-TODO: mehr
-
--->
-
-Wir wünschen Ihnen viel Spaß mit Angular 12!
+Wir wünschen Ihnen viel Spaß mit Angular!
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
 
 **Viel Spaß wünschen  
 Danny, Ferdinand und Johannes**
 
-<small>**Titelbild:** Antelope Island State Park, Utah, USA, April 2018</small>
+<small>**Titelbild:** XXX</small>
