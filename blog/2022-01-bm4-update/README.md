@@ -48,6 +48,44 @@ Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angul
 
 ## Einen neuen BookMonkey erstellen
 
+Wenn Sie heute wie im Buch beschrieben den BookMonkey mit `ng new` erzeugen, so wird das Projekt standardmäßig mit strikten Einstellungen erstellt.
+Dieser **"Strict Mode"** bewirkt eine Reihe an neuen Einstellungen, welche auf der [offiziellen Website von Angular](https://angular.io/guide/strict-mode) näher beschrieben sind.
+Zum einen sind die [Einstellungen von TypeScript](https://www.typescriptlang.org/tsconfig#strict) restriktiver gesetzt.
+Zum anderen kommen eine Reihe von Prüfungen vom Angular-Team hinzu.
+Diese sind auf der Seite zu den [Angular compiler options](https://angular.io/guide/angular-compiler-options) näher beschrieben.
+
+
+### Strikte Initialisierung von Properties
+
+Gleich in der ersten Iteration bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
+
+> Property 'books' has no initializer and is not definitely assigned in the constructor.
+
+Hier prüft der Type-Checker, dass jede in einer Klasse deklarierte Eigenschaft entweder
+
+* einen Typ hat, der `undefined` enthält,
+* einen expliziten Initialisierer hat oder
+* im Konstruktor zugewiesen wird.
+
+```ts
+// VORHER
+export class BookListComponent implements OnInit {
+  books: Book[];
+
+  ngOnInit(): void {
+    this.books = [/* ... */]
+  }
+}
+```
+
+Eine mögliche Lösung besteht darin, der Eigenschaft einen Typ zu geben, der `undefined` enthält:
+
+```ts
+  books: Book[] | undefined;
+```
+
+Allerdings würde dies weitere Änderungen am Template verlangen, was wir hier noch nicht 
+
 
 
 
