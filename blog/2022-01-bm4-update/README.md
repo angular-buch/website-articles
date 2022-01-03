@@ -85,12 +85,12 @@ dann halten Sie am Besten diese Anleitung gleich bereit.
 
 ### Strikte Initialisierung von Properties
 
-Gleich in der ersten Iteration bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
+Gleich in der ersten Iteration zum Thema Komponenten (Kapitel 6.1) bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
 
 > Property 'books' has no initializer and is not definitely assigned in the constructor.
 
 ```ts
-// VORHER
+// VORHER: book-list.component.ts
 export class BookListComponent implements OnInit {
   books: Book[];
 
@@ -140,8 +140,8 @@ Dadurch müssen wir den bestehenden Code kaum anpassen.
 Die konkreten Werte werden weiterhin in der Methode `ngOnInit()` zugewiesen:
 
 ```ts
-// NACHHER
-// 3. mögliche Lösung
+// NACHHER: book-list.component.ts
+// 3. mögliche Lösung 
 export class BookListComponent implements OnInit {
   books: Book[] = [];
 
@@ -151,15 +151,120 @@ export class BookListComponent implements OnInit {
 }
 ```
 
-
 <!--
 https://mariusschulz.com/blog/strict-property-initialization-in-typescript
 https://www.typescriptlang.org/tsconfig#strictPropertyInitialization
 -->
 
+### Properties mit `@Input()`-Decorator
 
+In der ersten Iteration erläutern wir im Kapitel 6.2 die Verwendung von Property-Bindings um Werte an eine Kind-Komponente zu übergeben.
+Damit die Kind-Komponente Werte empfangen kann, dekorieren wir das entsprechende Property mit einem `@Input()`-Decorator:
 
+```ts
+// VORHER: book-list-item.component.ts
+export class BookListItemComponent implements OnInit {
+  @Input() book: Book;
 
+  ngOnInit(): void {
+  }
+}
+```
+
+Erneut erhalten wir hier den Fehler, das das Property nicht korrekt initialisiert wurde.
+Wir wollen aber nicht die selbe Lösung wie im vorherigen Abschnitt verwenden.
+Denn in diesem Fall wäre es aber etwas unschön und auch umständlich, das Property mit einem Dummy-Ersatzbuch zu initalisieren.
+
+Schauen wir uns zunächst noch einmal die Verwendung an.
+Die `BookListItemComponent` wird zusammen mit einer `ngFor`-Schleife verwendet.
+Wir können uns daher theoretisch sicher sein, dass immer auch ein Buch über das Property-Binding zur Verfügung gestellt wird:
+
+```html
+<bm-book-list-item
+  *ngFor="let b of books"
+  [book]="b"></bm-book-list-item>
+```
+
+Das Input-Property wird aber erst **zur Laufzeit von Angular** durch das Property-Binding zugewiesen.
+Diesen Umstand berücksichtigt die strikte Prüfung **von TypeScript** nicht.
+Laut TypeScript muss bereits zum Zeitpunkt der Initialisierung der Klasse ein Wert bereit stehen. 
+
+Da der Wert des Properties aber erst zu einem späteren Zeitpunkt gesetzt wird,
+sollten wir dies auch folgerichtig im Code ausdrücken:
+
+```ts
+export class BookListItemComponent implements OnInit {
+  @Input() book: Book | undefined;
+
+  ngOnInit(): void {
+  }
+}
+```
+
+Statt dieser Schreibweise können wir auch einen äquivalenten Shortcut verwenden:
+
+```ts
+// NACHER: book-list-item.component.ts
+export class BookListItemComponent implements OnInit {
+  @Input() book?: Book;
+
+  ngOnInit(): void {
+  }
+}
+```
+
+Wenn Sie möchten, können Sie auch gerne die nicht verwendete `ngOnInit()` entfernen:
+
+```ts
+// NACHER: book-list-item.component.ts
+export class BookListItemComponent {
+  @Input() book?: Book;
+}
+```
+
+Man kann Property-Bindings in Angular leider nicht verpflichtend machen.
+Daher empfehlen wir bei Input-Properties grundsätzlich, den Wert `undefined` zu berücksichtigen.
+Da das Buch nun also `undefined` sein kann, greift eine weitere Prüfung von Angular:
+
+> optional (property) Book.thumbnails?: Thumbnail[] | undefined  
+> Object is possibly 'undefined'.
+> book-list-item.component.ts: Error occurs in the template of component BookListItemComponent.
+
+```html
+<!-- VORHER: book-list-item.component.html -->
+<img class="ui tiny image"
+     *ngIf="book.thumbnails && book.thumbnails[0] && book.thumbnails[0].url"
+     [src]="book.thumbnails[0].url">
+<div class="content">
+  <div class="header">{{ book.title }}</div>
+  <div *ngIf="book.subtitle" class="description">{{ book.subtitle }}</div>
+  <div class="metadata">
+    <span *ngFor="let author of book.authors; last as l">
+      {{ author }}<span *ngIf="!l">, </span>
+    </span>
+    <br>
+    ISBN {{ book.isbn }}
+  </div>
+</div>
+```
+
+Die Prüfung bemängelt zu Recht, dass das Property `book` den Wert `undefined` haben kann und dann auch der Zugriff auf `book.thumbnails` oder `book.isbn` den Wert `undefined` ergeben würde.
+Wir haben die Meldung durch eine weitere Prüfung behoben. 
+Das gesamte Template wird mit `ngIf` ausgeblendet, wenn kein Buch vorhanden ist:
+
+```html
+<!-- NACHER: book-list-item.component.html -->
+<ng-container *ngIf="book">
+  <!-- Vorheriger Code -->
+  <img class="ui tiny image" ...>
+  <div class="content" ...></div>
+</ng-container>
+
+```
+
+Der `<ng-container>` ist ein Hilfselement, das nicht als DOM-Element gerendert wird.
+Er sorgt für eine logische Gruppierung.
+Innerhalb des Containers ist `book` immer definiert.
 
 
 ## Zusammenfassung
