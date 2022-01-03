@@ -17,10 +17,10 @@ Das Release einer neuen Major-Version von Angular bedeutet keineswegs, dass alle
 Die Grundideen von Angular sind seit Version 2 konsistent und auf Beständigkeit über einen langen Zeitraum ausgelegt.
 Die in unserem Buch beschriebenen Konzepte behalten ihre Gültigkeit.
 
-Ein paar kleine Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe ergeben.
+Ein paar kleine Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe unseres Buchs ergeben.
 Diese wollen wir hier detailiert besprechen.
-Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellung für neue Projekte per Default aktiviert sind.
-Als wir das Buch im letzten Sommer 2020 veröffentlicht haben, war das noch nicht so.
+Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellung für neue Projekte standardmäßig aktiviert sind.
+Als wir das Buch im Oktober 2020 veröffentlicht haben, war das noch nicht so.
 Sind die strikten Einstellungen aktiv, brechen nun leider einige gedruckte Beispiele, die sich aber mit moderatem Aufwand beheben lassen.
 
 ## Der BookMonkey
@@ -35,9 +35,13 @@ Wenn man den Anleitungen im Buch folgt, sieht die eigene Codebasis im Idealfall 
 ## Einen bestehenden BookMonkey updaten
 
 Wenn Sie unser Buch gleich nach der Veröffentlichung gekauft haben und alle Beispiele daraufhin nach Anleitung umgesetzt haben, dann haben Sie keinen großen Aufwand.
-Zum Zeitpunkt der Veröffentlichung war Angular 10 der neueste Stand, kurz danach folgte Angular 11.
+Zum Zeitpunkt der Veröffentlichung war Angular 10 die neueste Version, kurz danach folgte Angular 11.
 Wurde Ihr BookMonkey in dieser Zeit erstellt, dann sind in ihrem Projekt noch keinen strikten Einstellungen aktiv.
-Um auf den neuesten Stand von Angular zu gelangen, müssen Sie lediglich `ng update` in die Kommandozeilen eingeben und den Anweisungen auf dem Bildschirm folgen.
+
+Sie können die verwendete Angular-Version in der Datei `package.json` ablesen.
+Der Befehl `ng version` liefert ebenfalls ausführliche Infos zur Angular-Version im jeweiligen Projekt.
+
+Um auf den neuesten Stand von Angular zu gelangen, benutzen Sie bitte den Befehl `ng update` in der Kommandozeile und folgen Sie den Anweisungen auf dem Bildschirm.
 
 Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angular:
 
@@ -51,13 +55,13 @@ Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angul
 Wenn Sie heute wie im Buch beschrieben den BookMonkey mit `ng new` erzeugen, so wird das Projekt standardmäßig mit strikten Einstellungen erstellt.
 Dieser **"Strict Mode"** bewirkt eine Reihe an neuen Einstellungen, welche auf der [offiziellen Website von Angular](https://angular.io/guide/strict-mode) näher beschrieben sind.
 Zum einen sind die [Einstellungen von TypeScript](https://www.typescriptlang.org/tsconfig#strict) restriktiver gesetzt.
-Zum anderen kommen eine Reihe von Prüfungen vom Angular-Team hinzu.
-Diese sind auf der Seite zu den [Angular compiler options](https://angular.io/guide/angular-compiler-options) näher beschrieben.
+Zum anderen kommt eine Reihe von Prüfungen im Angular-Compiler hinzu.
+Diese sind in der Doku zu den [Angular Compiler Options](https://angular.io/guide/angular-compiler-options) näher beschrieben.
 
 
 ## Walkthrough: Den BookMonkey "refactoren"
 
-Wir haben unseren "alten" BookMonkey (Stand Angular 10) per `ng update` aktualisiert und anschließend die strikten Einstellungen manuell aktiviert:
+Wir haben unseren "alten" BookMonkey (Stand Angular 10) mithilfe von `ng update` aktualisiert und anschließend die strikten Einstellungen manuell aktiviert:
 
 `tsconfig.json`
 ```ts
@@ -76,14 +80,14 @@ Wir haben unseren "alten" BookMonkey (Stand Angular 10) per `ng update` aktualis
 ```
 
 Sobald diese Einstellungen gewählt wurden, kompiliert das Projekt nicht mehr!
-Die selbe Situation ergibt sich, wenn Sie mit einem strikten Projekt beginnen und die Beispiele aus dem Angular-Buch eins zu eins übernehmen.
+Dieselbe Situation ergibt sich, wenn Sie mit einem strikten Projekt beginnen und die Beispiele aus dem Angular-Buch direkt übernehmen.
 In beiden Fällen müssen wir Alternativen für den gedruckten Code finden.
-Im Folgenden wollen wir nun die problematischen Codestellen aufzeigen und mögliche  Lösungen aufzeigen.
+Im Folgenden wollen wir nun die problematischen Codestellen kommentieren und mögliche Lösungen aufzeigen.
 Die Reihenfolge dieses Walkthroughs entspricht unseren Iterationen im Buch.
 Wenn Sie also den BookMonkey zum ersten Mal implementieren,
 dann halten Sie am Besten diese Anleitung gleich bereit.
 
-### Kapitel 6.1: Strikte Initialisierung von Properties
+### Kapitel 6.1: Strikte Initialisierung von Propertys
 
 Gleich in der ersten Iteration zum Thema Komponenten (Kapitel 6.1) bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
 
@@ -102,22 +106,24 @@ export class BookListComponent implements OnInit {
 
 Hier prüft der Type-Checker, dass jede in einer Klasse deklarierte Eigenschaft entweder...
 
-__1. mögliche Lösung:__ einen Typ hat, der `undefined` enthält,  
-__2. mögliche Lösung:__ im Konstruktor zugewiesen wird oder  
-__3. mögliche Lösung:__ einen expliziten Initialisierer hat.
+__1.__ einen Typ hat, der `undefined` enthält,  
+__2.__ im Konstruktor zugewiesen wird oder  
+__3.__ einen expliziten Initialisierer hat.
 
 
-
-Eine mögliche Lösung besteht darin, der Eigenschaft einen Typ zu geben, der `undefined` enthält:
+Eine mögliche Lösung ist also, der Eigenschaft einen Typ zu geben, der `undefined` enthält.
+Denselben Effekt erhalten wir, wenn wir das Property mit einem `?` auf optional setzen.
 
 ```ts
 // 1. mögliche Lösung
 export class BookListComponent {
   books: Book[] | undefined;
+  // ODER
+  books?: Book[];
 }
 ```
 
-Allerdings würde dies weitere Änderungen im Template und im Code zur Folge haben, da wir nun den Typ `undefined` berücksichtigen müssten.
+Allerdings würde dies weitere Änderungen im Template und im Code zur Folge haben, da wir nun den Typ `undefined` berücksichtigen müssten, sobald wir das Property verwenden.
 
 Wir könnten ebenso das Array mit allen Werten sofort im Konstruktor initialisieren.
 Dadurch müssen wir den bisheren Typ (Array aus `Book`) nicht ändern.
@@ -135,7 +141,7 @@ export class BookListComponent {
 ```
 
 Für unser Refactoring haben wir uns für die letzte Variante entschieden.
-Wir haben das Property explizit mit einem leeren Array inititalisiert.
+Wir haben das Property explizit mit einem leeren Array initialisiert.
 Dadurch müssen wir den bestehenden Code kaum anpassen.
 Die konkreten Werte werden weiterhin in der Methode `ngOnInit()` zugewiesen:
 
@@ -151,6 +157,9 @@ export class BookListComponent implements OnInit {
 }
 ```
 
+Beim Start der Komponente ist `books` also sofort mit einem leeren Array belegt.
+Sobald `ngOnInit()` ausgeführt wird (das geschieht etwas später), wird dieses leere Array überschrieben.
+
 <!--
 https://mariusschulz.com/blog/strict-property-initialization-in-typescript
 https://www.typescriptlang.org/tsconfig#strictPropertyInitialization
@@ -158,8 +167,8 @@ https://www.typescriptlang.org/tsconfig#strictPropertyInitialization
 
 ### Kapitel 6.2: Properties mit `@Input()`-Decorator
 
-In der ersten Iteration erläutern wir im Kapitel 6.2 die Verwendung von Property-Bindings um Werte an eine Kind-Komponente zu übergeben.
-Damit die Kind-Komponente Werte empfangen kann, dekorieren wir das entsprechende Property mit einem `@Input()`-Decorator:
+In der ersten Iteration erläutern wir im Kapitel 6.2 die Verwendung von Property Bindings, um Werte an eine Kindkomponente zu übergeben.
+Dazu dekorieren wir das entsprechende Property in der Kindkomponente mit einem `@Input()`-Decorator:
 
 ```ts
 // VORHER: book-list-item.component.ts
@@ -172,12 +181,12 @@ export class BookListItemComponent implements OnInit {
 ```
 
 Erneut erhalten wir hier den Fehler, das das Property nicht korrekt initialisiert wurde.
-Wir wollen aber nicht die selbe Lösung wie im vorherigen Abschnitt verwenden.
-Denn in diesem Fall wäre es aber etwas unschön und auch umständlich, das Property mit einem Dummy-Ersatzbuch zu initalisieren.
+Wir wollen aber nicht dieselbe Lösung wie im vorherigen Abschnitt verwenden.
+Es wäre sehr aufwendig und unschön, das Property mit einem Dummy-Ersatzbuch zu initalisieren.
 
-Schauen wir uns zunächst noch einmal die Verwendung an.
-Die `BookListItemComponent` wird zusammen mit einer `ngFor`-Schleife verwendet.
-Wir können uns daher theoretisch sicher sein, dass immer auch ein Buch über das Property-Binding zur Verfügung gestellt wird:
+Stattdessen schauen wir uns zunächst noch einmal die Verwendung an:
+Die `BookListItemComponent` wird zusammen mit `*ngFor` verwendet.
+Wir können uns daher theoretisch sicher sein, dass immer auch ein Buch über das Property Binding zur Verfügung gestellt wird:
 
 ```html
 <bm-book-list-item
@@ -185,12 +194,11 @@ Wir können uns daher theoretisch sicher sein, dass immer auch ein Buch über da
   [book]="b"></bm-book-list-item>
 ```
 
-Das Input-Property wird aber erst **zur Laufzeit von Angular** durch das Property-Binding zugewiesen.
+Das Input-Property wird aber erst **zur Laufzeit von Angular** durch das Property Binding zugewiesen.
 Diesen Umstand berücksichtigt die strikte Prüfung **von TypeScript** nicht.
-Laut TypeScript muss bereits zum Zeitpunkt der Initialisierung der Klasse ein Wert bereit stehen. 
+Laut TypeScript muss bereits zum Zeitpunkt der Initialisierung der Klasse ein Wert bereitstehen. 
 
-Da der Wert des Properties aber erst zu einem späteren Zeitpunkt gesetzt wird,
-sollten wir dies auch folgerichtig im Code ausdrücken:
+Da der Wert des Propertys aber erst zu einem späteren Zeitpunkt gesetzt wird, sollten wir dies auch folgerichtig im Code ausdrücken:
 
 ```ts
 export class BookListItemComponent implements OnInit {
@@ -201,7 +209,7 @@ export class BookListItemComponent implements OnInit {
 }
 ```
 
-Statt dieser Schreibweise können wir auch einen äquivalenten Shortcut verwenden:
+Statt dieser Schreibweise können wir auch einen äquivalenten Shortcut verwenden und das Property als optional markieren:
 
 ```ts
 // NACHER: book-list-item.component.ts
@@ -213,7 +221,7 @@ export class BookListItemComponent implements OnInit {
 }
 ```
 
-Wenn Sie möchten, können Sie auch gerne die nicht verwendete `ngOnInit()` entfernen:
+Wenn Sie möchten, können Sie auch gerne die nicht verwendete Methode `ngOnInit()` entfernen:
 
 ```ts
 // NACHER: book-list-item.component.ts
@@ -222,9 +230,10 @@ export class BookListItemComponent {
 }
 ```
 
-Man kann Property-Bindings in Angular leider nicht verpflichtend machen.
-Daher empfehlen wir bei Input-Properties grundsätzlich, den Wert `undefined` zu berücksichtigen.
-Da das Buch nun also `undefined` sein kann, greift eine weitere Prüfung von Angular:
+Man kann Property Bindings in Angular leider nicht verpflichtend machen.
+Daher empfehlen wir bei Input-Propertys grundsätzlich, den Wert `undefined` zu berücksichtigen.
+
+Da das Buch nun also `undefined` sein kann, greift eine weitere Typprüfung:
 
 > optional (property) Book.thumbnails?: Thumbnail[] | undefined  
 > Object is possibly 'undefined'.
@@ -249,8 +258,8 @@ Da das Buch nun also `undefined` sein kann, greift eine weitere Prüfung von Ang
 ```
 
 Die Prüfung bemängelt zu Recht, dass das Property `book` den Wert `undefined` haben kann und dann auch der Zugriff auf `book.thumbnails` oder `book.isbn` den Wert `undefined` ergeben würde.
-Wir haben die Meldung durch eine weitere Prüfung behoben. 
-Das gesamte Template wird mit `ngIf` ausgeblendet, wenn kein Buch vorhanden ist:
+Wir haben die Meldung wie folgt behoben:
+Das gesamte Template wird mit `*ngIf` nur dann eingeblendet, wenn ein Buch vorhanden ist:
 
 ```html
 <!-- NACHER: book-list-item.component.html -->
@@ -263,14 +272,14 @@ Das gesamte Template wird mit `ngIf` ausgeblendet, wenn kein Buch vorhanden ist:
 ```
 
 Der `<ng-container>` ist ein Hilfselement, das nicht als DOM-Element gerendert wird.
-Er sorgt für eine logische Gruppierung.
-Innerhalb des Containers ist `book` immer definiert.
+Er sorgt nur für eine logische Gruppierung.
+Innerhalb des Containers ist `book` durch die Verwendung von `*ngIf` immer definiert.
 
 ### Kapitel 6.3: Weitere Property-Prüfungen
 
-Im Kapitel zu den Event-Bindings übergeben wir ein Buch von der Kind-Komponente `BookListComponent` zur Eltern-Komponente `AppComponent` und zeigen damit eine Detailansicht an.
+Im Kapitel zu den Event Bindings übergeben wir ein Buch von der Kindkomponente `BookListComponent` zur Elternkomponente `AppComponent` und zeigen damit eine Detailansicht an.
 Das Buch speichern wir im Property `book`.
-Dieses Property sollten wir ebenso mit dem Fragezeichen als optional kennzeichnen:
+Dieses Property sollten wir ebenso mit dem Fragezeichen als optional kennzeichnen, denn es ist nicht immer mit einem Wert belegt:
 
 ```ts
 // VORHER: app.component.ts 
@@ -318,9 +327,9 @@ Diese Methode wird im Tempate verwendet:
 </div>
 ```
 
-Damit der Code wieder kompiliert, müssen wir sicher stellen, dass es keinen Fall geben kann bei dem das Rating `undefined` ist. 
+Damit der Code wieder kompiliert, müssen wir sicherstellen, dass es keinen Fall geben kann, bei dem das Rating `undefined` ist. 
 Nun kann sowohl das Buch an sich `undefined` sein, als auch dessen Property `rating`.
-Dies ergibt sich auch dem Interface `Book`:
+Dies ergibt sich auch dem Interface `Book`, wo das Rating als optional markiert ist:
 
 ```ts
 export interface Book {
@@ -329,8 +338,8 @@ export interface Book {
 }
 ```
 
-Wir haben das umschließende `<div>` für eine Prüfung verwendet.
-Das Div-Element und sein Inhalt werden nur anzeigen, wenn `book.rating` definiert ist:
+Auch hier haben wir wieder das umschließende `<div>` für eine Prüfung verwendet.
+Das Div-Element und sein Inhalt werden nur angezeigt, wenn `book.rating` definiert ist:
 
 
 ```html
@@ -344,11 +353,11 @@ Das Div-Element und sein Inhalt werden nur anzeigen, wenn `book.rating` definier
 
 ### Kapitel 8.2: Werte vom Router
 
-Im Kapitel 8.2 stellen wir alles auf Routing um und ändern im Zuge dessen die `BookDetailsComponent` ab.
-Statt eines Input-Properties verwenden wir nun die ISBN, welche wir aus der aktuellen Route ermitteln.
+Im Kapitel 8.2 stellen wir die Anwendung auf Routing um und ändern in diesem Zuge die `BookDetailsComponent`.
+Statt eines Input-Propertys verwenden wir nun die ISBN, die wir aus der aktuellen Route ermitteln.
 Diese ISBN verwenden wir, um das richtige Buch vom `BookStoreService` zu erhalten.
 
-Im gedruckten Buch finden Sie folgenden Code:
+Im gedruckten Buch finden Sie den folgenden Code:
 
 ```ts
 // VORHER: book-details.component.ts 
@@ -367,21 +376,21 @@ export class BookDetailsComponent implements OnInit {
 }
 ```
 
-Das Property können wir mittels des Fragezeichens wieder als optional markieren.
+Das Property `book` können wir mittels des Fragezeichens wieder als optional markieren.
 Eine neue Herausforderung bietet dann allerdings folgende Fehlermeldung:
 
 > const params: ParamMap  
 > Argument of type 'string | null' is not assignable to parameter of type 'string'.  
 > Type 'null' is not assignable to type 'string'.
 
-Die Methode `get` von der `ParamMap` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
-Vor den strikten Prüfungen von TypeScript war der gedruckte Code valide.
-Jetzt ist dies nicht mehr der Fall. 
+Die Methode `get()` von der `ParamMap` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
+Erst zur Laufzeit der Anwendung kann sicher ermittelt werden, ob ein bestimmter Routen-Parameter existiert, daher.
+Vor den strikten Prüfungen von TypeScript war der gedruckte Code valide, jetzt ist dies nicht mehr der Fall.
 
 Der Typ des Routen-Parameters ist `string | null`.
 Die Methode `getSingle()` erwartet allerdings `string`.
-Wir definieren deshalb einen leeren String als Fallback-Wert.
-So wird immer ein String übergeben:
+Wir können deshalb einen leeren String als Fallback-Wert definieren.
+Auf diese Weise wird immer ein String übergeben:
 
 ```ts
 // NACHHER: book-details.component.ts 
@@ -402,20 +411,21 @@ export class BookDetailsComponent implements OnInit {
 ```
 
 Es wird natürlich nie geschehen, dass wir diese Route ohne eine ISBN erreichen.
-Hätten wir ein anderes Routing konfiguriert (bei dem keine ISBN notwendig ist),
+Hätten wir das Routing anders konfiguriert (sodass keine ISBN notwendig ist),
 dann würden wir in diesem Fall einen leeren String an die Methode übergeben.
 
-Eine weitere Möglichkeit bestünde darin, die Typprüfung mittels des **"Non-Null Assertion Operator"** anzupassen.
-Mittels des Ausrufezeichens (`!`) teilen wir dem Compiler mit, dass der Wert niemals `null` sein wird.
+Eine weitere Möglichkeit besteht darin, die Typprüfung mittels des **"Non-Null Assertion Operator"** anzupassen.
+Mit einem Ausrufezeichen (`!`) teilen wir dem Compiler mit, dass der Wert niemals `null` sein wird.
 
 ```ts
 // alternative Möglichkeit
 this.book = this.bs.getSingle(params.get('isbn')!);
 ```
 
-Wir müssen uns dann aber auch wirklich sicher sein, das dieser Fall wirklich niemals auftreten wird.
+Wir müssen uns dann aber auch wirklich sicher sein, dass dieser Fall wirklich niemals auftreten wird.
+Verwenden Sie die Non-Null Assertion daher bitte mit Vorsicht.
 
-Auch den `BookStoreService` benötigt eine kleine Korrektur.
+Auch der `BookStoreService` benötigt eine kleine Korrektur.
 Zuvor hatten wir den Rückgabewert für die Methode `getSingle()` als `Book` angegeben.
 Das war nicht ganz korrekt, denn wenn es keinen Treffer gibt, dann ist der Rückgabewert `undefined`.
 Diese Nachlässigkeit führt jetzt zu einem Fehler, daher lautet die korrekte Signatur wie folgt:
