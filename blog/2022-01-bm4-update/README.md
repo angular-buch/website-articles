@@ -19,7 +19,7 @@ Die in unserem Buch beschriebenen Konzepte behalten ihre Gültigkeit.
 
 Ein paar kleine Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe unseres Buchs ergeben.
 Diese wollen wir hier detailiert besprechen.
-Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellung für neue Projekte standardmäßig aktiviert sind.
+Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellungen für neue Projekte standardmäßig aktiviert sind.
 Als wir das Buch im Oktober 2020 veröffentlicht haben, war das noch nicht so.
 Sind die strikten Einstellungen aktiv, brechen nun leider einige gedruckte Beispiele, die sich aber mit moderatem Aufwand beheben lassen.
 
