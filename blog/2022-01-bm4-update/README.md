@@ -127,7 +127,7 @@ Allerdings würde dies weitere Änderungen im Template und im Code zur Folge hab
 
 Wir könnten ebenso das Array mit allen Werten sofort im Konstruktor initialisieren.
 Dadurch müssen wir den bisherigen Typ (Array aus `Book`) nicht ändern.
-Auf die Methode `ngOnInit()` könnten wir dann ganz verzichten:
+Auf die Methode `ngOnInit()` können wir dann ganz verzichten:
 
 ```ts
 // 2. mögliche Lösung
