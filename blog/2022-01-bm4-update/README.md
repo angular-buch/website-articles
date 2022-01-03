@@ -55,17 +55,39 @@ Zum anderen kommen eine Reihe von Prüfungen vom Angular-Team hinzu.
 Diese sind auf der Seite zu den [Angular compiler options](https://angular.io/guide/angular-compiler-options) näher beschrieben.
 
 
+## Walkthrough: Den BookMonkey "refactoren"
+
+Wir haben unseren "alten" BookMonkey (Stand Angular 10) per `ng update` aktualisiert und anschließend die strikten Einstellungen manuell aktiviert:
+
+`tsconfig.json`
+```ts
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
+```
+
+Sobald diese Einstellungen gewählt wurden, kompiliert das Projekt nicht mehr!
+Die selbe Situation ergibt sich, wenn Sie mit einem strikten Projekt beginnen und die Beispiele aus dem Angular-Buch eins zu eins übernehmen.
+In beiden Fällen müssen wir Alternativen für den gedruckten Code finden.
+Im Folgenden wollen wir nun die problematischen Codestellen aufzeigen und mögliche  Lösungen aufzeigen.
+Die Reihenfolge dieses Walkthroughs entspricht unseren Iterationen im Buch.
+Wenn Sie also den BookMonkey zum ersten Mal implementieren,
+dann halten Sie am Besten diese Anleitung gleich bereit.
+
 ### Strikte Initialisierung von Properties
 
 Gleich in der ersten Iteration bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
 
 > Property 'books' has no initializer and is not definitely assigned in the constructor.
-
-Hier prüft der Type-Checker, dass jede in einer Klasse deklarierte Eigenschaft entweder
-
-* einen Typ hat, der `undefined` enthält,
-* einen expliziten Initialisierer hat oder
-* im Konstruktor zugewiesen wird.
 
 ```ts
 // VORHER
@@ -78,14 +100,62 @@ export class BookListComponent implements OnInit {
 }
 ```
 
+Hier prüft der Type-Checker, dass jede in einer Klasse deklarierte Eigenschaft entweder...
+
+__1. mögliche Lösung:__ einen Typ hat, der `undefined` enthält,  
+__2. mögliche Lösung:__ im Konstruktor zugewiesen wird oder  
+__3. mögliche Lösung:__ einen expliziten Initialisierer hat.
+
+
+
 Eine mögliche Lösung besteht darin, der Eigenschaft einen Typ zu geben, der `undefined` enthält:
 
 ```ts
+// 1. mögliche Lösung
+export class BookListComponent {
   books: Book[] | undefined;
+}
 ```
 
-Allerdings würde dies weitere Änderungen am Template verlangen, was wir hier noch nicht 
+Allerdings würde dies weitere Änderungen im Template und im Code zur Folge haben, da wir nun den Typ `undefined` berücksichtigen müssten.
 
+Wir könnten ebenso das Array mit allen Werten sofort im Konstruktor initialisieren.
+Dadurch müssen wir den bisheren Typ (Array aus `Book`) nicht ändern.
+Auf die Methode `ngOnInit()` könnten wir dann ganz verzichten:
+
+```ts
+// 2. mögliche Lösung
+export class BookListComponent {
+  books: Book[];
+
+  constructor() {
+    this.books = [/* ... */]
+  }
+}
+```
+
+Für unser Refactoring haben wir uns für die letzte Variante entschieden.
+Wir haben das Property explizit mit einem leeren Array inititalisiert.
+Dadurch müssen wir den bestehenden Code kaum anpassen.
+Die konkreten Werte werden weiterhin in der Methode `ngOnInit()` zugewiesen:
+
+```ts
+// NACHHER
+// 3. mögliche Lösung
+export class BookListComponent implements OnInit {
+  books: Book[] = [];
+
+  ngOnInit(): void {
+    this.books = [/* ... */]
+  }
+}
+```
+
+
+<!--
+https://mariusschulz.com/blog/strict-property-initialization-in-typescript
+https://www.typescriptlang.org/tsconfig#strictPropertyInitialization
+-->
 
 
 
