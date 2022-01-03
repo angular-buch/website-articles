@@ -342,6 +342,99 @@ Das Div-Element und sein Inhalt werden nur anzeigen, wenn `book.rating` definier
 </div>
 ```
 
+### Kapitel 8.2: Werte vom Router
+
+Im Kapitel 8.2 stellen wir alles auf Routing um und ändern im Zuge dessen die `BookDetailsComponent` ab.
+Statt eines Input-Properties verwenden wir nun die ISBN, welche wir aus der aktuellen Route ermitteln.
+Diese ISBN verwenden wir, um das richtige Buch vom `BookStoreService` zu erhalten.
+
+Im gedruckten Buch finden Sie folgenden Code:
+
+```ts
+// VORHER: book-details.component.ts 
+export class BookDetailsComponent implements OnInit {
+  book: Book;
+
+  constructor(
+    private bs: BookStoreService,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit(): void {
+    const params = this.route.snapshot.paramMap;
+    this.book = this.bs.getSingle(params.get('isbn'));
+  }
+}
+```
+
+Das Property können wir mittels des Fragezeichens wieder als optional markieren.
+Eine neue Herausforderung bietet dann allerdings folgende Fehlermeldung:
+
+> const params: ParamMap  
+> Argument of type 'string | null' is not assignable to parameter of type 'string'.  
+> Type 'null' is not assignable to type 'string'.
+
+Die Methode `get` von der `ParamMap` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
+Vor den strikten Prüfungen von TypeScript war der gedruckte Code valide.
+Jetzt ist dies nicht mehr der Fall. 
+
+Der Typ des Routen-Parameters ist `string | null`.
+Die Methode `getSingle()` erwartet allerdings `string`.
+Wir definieren deshalb einen leeren String als Fallback-Wert.
+So wird immer ein String übergeben:
+
+```ts
+// NACHHER: book-details.component.ts 
+export class BookDetailsComponent implements OnInit {
+  book?: Book;
+
+  constructor(
+    private bs: BookStoreService,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit(): void {
+    const params = this.route.snapshot.paramMap;
+    // verwendet den String ODER den leeren String falls der Ausdruck falsy ist
+    this.book = this.bs.getSingle(params.get('isbn') || '');
+  }
+}
+```
+
+Es wird natürlich nie geschehen, dass wir diese Route ohne eine ISBN erreichen.
+Hätten wir ein anderes Routing konfiguriert (bei dem keine ISBN notwendig ist),
+dann würden wir in diesem Fall einen leeren String an die Methode übergeben.
+
+Eine weitere Möglichkeit bestünde darin, die Typprüfung mittels des **"Non-Null Assertion Operator"** anzupassen.
+Mittels des Ausrufezeichens (`!`) teilen wir dem Compiler mit, dass der Wert niemals `null` sein wird.
+
+```ts
+// alternative Möglichkeit
+this.book = this.bs.getSingle(params.get('isbn')!);
+```
+
+Wir müssen uns dann aber auch wirklich sicher sein, das dieser Fall wirklich niemals auftreten wird.
+
+Auch den `BookStoreService` benötigt eine kleine Korrektur.
+Zuvor hatten wir den Rückgabewert für die Methode `getSingle()` als `Book` angegeben.
+Das war nicht ganz korrekt, denn wenn es keinen Treffer gibt, dann ist der Rückgabewert `undefined`.
+Diese Nachlässigkeit führt jetzt zu einem Fehler, daher lautet die korrekte Signatur wie folgt:
+
+```ts
+// NACHHER: book-store.service.ts
+export class BookStoreService {
+
+  getSingle(isbn: string): Book | undefined {
+    return this.books.find(book => book.isbn === isbn);
+  }
+}
+```
+
+
+
+## TODO
+
+morgen geht's hier weiter! 😅
 
 
 ## Zusammenfassung
