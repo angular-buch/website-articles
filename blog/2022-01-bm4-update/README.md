@@ -83,7 +83,7 @@ Die Reihenfolge dieses Walkthroughs entspricht unseren Iterationen im Buch.
 Wenn Sie also den BookMonkey zum ersten Mal implementieren,
 dann halten Sie am Besten diese Anleitung gleich bereit.
 
-### Strikte Initialisierung von Properties
+### Kapitel 6.1: Strikte Initialisierung von Properties
 
 Gleich in der ersten Iteration zum Thema Komponenten (Kapitel 6.1) bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
 
@@ -156,7 +156,7 @@ https://mariusschulz.com/blog/strict-property-initialization-in-typescript
 https://www.typescriptlang.org/tsconfig#strictPropertyInitialization
 -->
 
-### Properties mit `@Input()`-Decorator
+### Kapitel 6.2: Properties mit `@Input()`-Decorator
 
 In der ersten Iteration erläutern wir im Kapitel 6.2 die Verwendung von Property-Bindings um Werte an eine Kind-Komponente zu übergeben.
 Damit die Kind-Komponente Werte empfangen kann, dekorieren wir das entsprechende Property mit einem `@Input()`-Decorator:
@@ -265,6 +265,83 @@ Das gesamte Template wird mit `ngIf` ausgeblendet, wenn kein Buch vorhanden ist:
 Der `<ng-container>` ist ein Hilfselement, das nicht als DOM-Element gerendert wird.
 Er sorgt für eine logische Gruppierung.
 Innerhalb des Containers ist `book` immer definiert.
+
+### Kapitel 6.3: Weitere Property-Prüfungen
+
+Im Kapitel zu den Event-Bindings übergeben wir ein Buch von der Kind-Komponente `BookListComponent` zur Eltern-Komponente `AppComponent` und zeigen damit eine Detailansicht an.
+Das Buch speichern wir im Property `book`.
+Dieses Property sollten wir ebenso mit dem Fragezeichen als optional kennzeichnen:
+
+```ts
+// VORHER: app.component.ts 
+export class AppComponent {
+  book: Book;
+}
+```
+
+```ts
+// NACHHER: app.component.ts 
+export class AppComponent {
+  book?: Book;
+}
+```
+
+Das Template der `AppComponent` muss in diesem Fall nicht angepasst werden.
+
+Die Anzeige des Buchs geschieht in der `BookDetailsComponent`.
+Erneut müssen wir den Code aufgrund der strikten Prüfungen anpassen:
+
+```ts
+// VORHER: book-details.component.ts 
+export class BookDetailsComponent implements OnInit {
+  @Input() book: Book;
+}
+```
+
+```ts
+// NACHHER: book-details.component.ts 
+export class BookDetailsComponent implements OnInit {
+  @Input() book?: Book;
+}
+```
+
+
+Die `BookDetailsComponent` hat eine Methode `getRating()`, welche nur eine Zahl akzeptiert.
+Diese Methode wird im Tempate verwendet:
+
+```html
+<!-- VORHER: book-details.component.html -->
+<div class="four wide column">
+  <h4>Rating</h4>
+  <i class="yellow star icon"
+    *ngFor="let r of getRating(book.rating)"></i>
+</div>
+```
+
+Damit der Code wieder kompiliert, müssen wir sicher stellen, dass es keinen Fall geben kann bei dem das Rating `undefined` ist. 
+Nun kann sowohl das Buch an sich `undefined` sein, als auch dessen Property `rating`.
+Dies ergibt sich auch dem Interface `Book`:
+
+```ts
+export interface Book {
+  // [...]
+  rating?: number;
+}
+```
+
+Wir haben das umschließende `<div>` für eine Prüfung verwendet.
+Das Div-Element und sein Inhalt werden nur anzeigen, wenn `book.rating` definiert ist:
+
+
+```html
+<!--  NACHHER: book-details.component.html -->
+<div class="four wide column" *ngIf="book.rating">
+  <h4>Rating</h4>
+  <i class="yellow star icon"
+    *ngFor="let r of getRating(book.rating)"></i>
+</div>
+```
+
 
 
 ## Zusammenfassung
