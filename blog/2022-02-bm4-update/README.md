@@ -2,7 +2,7 @@
 title: 'Den Book-Monkey v4 updaten (3. Ausgabe)'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2022-01-01
+published: 2022-02-25
 keywords:
   - Angular
   - Angular 12
