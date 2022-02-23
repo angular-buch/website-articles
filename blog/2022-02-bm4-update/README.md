@@ -412,7 +412,10 @@ export class BookDetailsComponent implements OnInit {
 }
 ```
 
-Es wird natürlich nie geschehen, dass wir diese Route ohne eine ISBN erreichen.
+Das Template der `BookDetailsComponent` müssen wir in diesem Fall nicht anpassen.
+Bereits in der gedruckten Fassung haben wir den gesamten Block mit einem `<div *ngIf="book">` geschützt.
+
+Es wird natürlich nie geschehen, dass wir die Route ohne eine ISBN erreichen.
 Hätten wir das Routing anders konfiguriert (sodass keine ISBN notwendig ist),
 dann würden wir in diesem Fall einen leeren String an die Methode übergeben.
 
@@ -425,12 +428,23 @@ this.book = this.bs.getSingle(params.get('isbn')!);
 ```
 
 Wir müssen uns dann aber auch wirklich sicher sein, dass dieser Fall wirklich niemals auftreten wird.
-Verwenden Sie die Non-Null Assertion daher bitte mit Vorsicht.
+Verwenden Sie die Non-Null Assertion daher bitte mit Vorsicht!
 
 Auch der `BookStoreService` benötigt eine kleine Korrektur.
-Zuvor hatten wir den Rückgabewert für die Methode `getSingle()` als `Book` angegeben.
-Das war nicht ganz korrekt, denn wenn es keinen Treffer gibt, dann ist der Rückgabewert `undefined`.
-Diese Nachlässigkeit führt jetzt zu einem Fehler, daher lautet die korrekte Signatur wie folgt:
+Zuvor hatten wir den Rückgabewert für die Methode `getSingle()` als `Book` angegeben:
+
+```ts
+// NACHHER: book-store.service.ts
+export class BookStoreService {
+
+  getSingle(isbn: string): Book {
+    return this.books.find(book => book.isbn === isbn);
+  }
+}
+```
+
+Das war nicht ganz korrekt, denn wenn es bei der Suche mit `find()` keinen Treffer gibt, dann ist der Rückgabewert `undefined`.
+Diese Nachlässigkeit unsererseits führt jetzt zu einem Fehler, daher lautet die korrekte Signatur wie folgt:
 
 ```ts
 // NACHHER: book-store.service.ts
@@ -441,7 +455,6 @@ export class BookStoreService {
   }
 }
 ```
-
 
 
 ## TODO
