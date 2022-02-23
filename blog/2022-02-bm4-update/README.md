@@ -461,10 +461,47 @@ export class BookStoreService {
 }
 ```
 
+### Kapitel 10.1: Eine weitere Property-Prüfung
 
-## TODO
+Im Kapitel zum Thema HTTP tauschen wir vor allem die Datenquelle vom `BookStoreService` aus.
+Erfreulicherweise behalten alle gezeigten Codebeispiele in diesem Kapitel ihre Gültigkeit – bis auf eine kleine Ausnahme.
 
-morgen geht's hier weiter! 😅
+Die `BookDetailsComponent` hat nun eine Methode `removeBook()`, welcher in der gedruckten Fassung wie folgt ausschaut:
+
+```ts
+// VORHER: book-details.component.ts 
+export class BookDetailsComponent implements OnInit {
+  book: Book;
+
+  removeBook() {
+    if (confirm('Buch wirklich löschen?')) {
+      this.bs.remove(this.book.isbn)
+        .subscribe(res => this.router.navigate(['../'], { relativeTo: this.route }));
+    }
+  }
+}
+```
+
+Allerdings mussten wir bereits zuvor das Property `book` mit einem Fragezeichen als optional kennzeichnen.
+Nun würde die Gefahr bestehen, dass beim Zugriff auf die ISBN per `this.book.isbn` der Wert für das Buch `undefined` ist.
+Diesen Fall müssen wir ausschließen, damit TypeScript keine Beanstandungen mehr hat.
+Wir haben uns dazu entschieden gleich in der Fallunterscheidung zu prüfen, ob `this.book` einen `truthy` Wert hat:
+
+```ts
+// NACHHER: book-details.component.ts 
+export class BookDetailsComponent implements OnInit {
+  book?: Book;
+
+  removeBook() {
+    if (this.book && confirm('Buch wirklich löschen?')) {
+      this.bs.remove(this.book.isbn)
+        .subscribe(res => this.router.navigate(['../'], { relativeTo: this.route }));
+    }
+  }
+}
+```
+
+
 
 
 ## Zusammenfassung
