@@ -14,12 +14,12 @@ thumbnail: ./angular12.jpg
 
 Das Angular-Ökosystem wird kontinuierlich verbessert.
 Das Release einer neuen Major-Version von Angular bedeutet keineswegs, dass alle Ideen verworfen werden und Ihre Software nach einem Update nicht mehr funktioniert.
-Die Grundideen von Angular sind seit Version 2 konsistent und auf Beständigkeit über einen langen Zeitraum ausgelegt.
-Die in unserem Buch beschriebenen Konzepte behalten ihre Gültigkeit.
+Die Grundideen von Angular sind seit Version 2 konsistent und auf Beständigkeit über einen langen Zeitraum ausgelegt.
+Die in unserem Buch beschriebenen Konzepte behalten ihre Gültigkeit.
 
 Ein paar kleine Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe unseres Buchs ergeben.
-Diese wollen wir hier detailiert besprechen.
-Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellungen für neue Projekte standardmäßig aktiviert sind.
+Diese wollen wir hier detailliert besprechen.
+Es geht vor allem darum, dass seit **Angular 12** diverse strikte Einstellungen für neue Projekte standardmäßig aktiviert sind.
 Als wir das Buch im Oktober 2020 veröffentlicht haben, war das noch nicht so.
 Sind die strikten Einstellungen aktiv, brechen nun leider einige gedruckte Beispiele, die sich aber mit moderatem Aufwand beheben lassen.
 
@@ -87,7 +87,7 @@ Die Reihenfolge dieses Walkthroughs entspricht unseren Iterationen im Buch.
 Wenn Sie also den BookMonkey zum ersten Mal implementieren,
 dann halten Sie am Besten diese Anleitung gleich bereit.
 
-### Kapitel 6.1: Strikte Initialisierung von Propertys
+### Kapitel 6.1: Strikte Initialisierung von Properties
 
 Gleich in der ersten Iteration zum Thema Komponenten (Kapitel 6.1) bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
 
@@ -112,7 +112,7 @@ __3.__ einen expliziten Initialisierer hat.
 
 
 Eine mögliche Lösung ist also, der Eigenschaft einen Typ zu geben, der `undefined` enthält.
-Denselben Effekt erhalten wir, wenn wir das Property mit einem `?` auf optional setzen.
+Denselben Effekt erhalten wir, wenn wir das Property mit einem Fragezeichen (`?`) auf optional setzen.
 
 ```ts
 // 1. mögliche Lösung
@@ -182,7 +182,7 @@ export class BookListItemComponent implements OnInit {
 
 Erneut erhalten wir hier den Fehler, das das Property nicht korrekt initialisiert wurde.
 Wir wollen aber nicht dieselbe Lösung wie im vorherigen Abschnitt verwenden.
-Es wäre sehr aufwendig und unschön, das Property mit einem Dummy-Ersatzbuch zu initalisieren.
+Es wäre sehr aufwendig und unschön, das Property mit einem Dummy-Ersatzbuch zu initialisieren.
 
 Stattdessen schauen wir uns zunächst noch einmal die Verwendung an:
 Die `BookListItemComponent` wird zusammen mit `*ngFor` verwendet.
@@ -198,7 +198,7 @@ Das Input-Property wird aber erst **zur Laufzeit von Angular** durch das Propert
 Diesen Umstand berücksichtigt die strikte Prüfung **von TypeScript** nicht.
 Laut TypeScript muss bereits zum Zeitpunkt der Initialisierung der Klasse ein Wert bereitstehen. 
 
-Da der Wert des Propertys aber erst zu einem späteren Zeitpunkt gesetzt wird, sollten wir dies auch folgerichtig im Code ausdrücken:
+Da der Wert des Properties aber erst zu einem späteren Zeitpunkt gesetzt wird, sollten wir dies auch folgerichtig im Code ausdrücken:
 
 ```ts
 export class BookListItemComponent implements OnInit {
@@ -231,7 +231,7 @@ export class BookListItemComponent {
 ```
 
 Man kann Property Bindings in Angular leider nicht verpflichtend machen.
-Daher empfehlen wir bei Input-Propertys grundsätzlich, den Wert `undefined` zu berücksichtigen.
+Daher empfehlen wir bei Input-Properties grundsätzlich, den Wert `undefined` zu berücksichtigen.
 
 Da das Buch nun also `undefined` sein kann, greift eine weitere Typprüfung:
 
@@ -316,7 +316,7 @@ export class BookDetailsComponent implements OnInit {
 
 
 Die `BookDetailsComponent` hat eine Methode `getRating()`, welche nur eine Zahl akzeptiert.
-Diese Methode wird im Tempate verwendet:
+Diese Methode wird im Template verwendet:
 
 ```html
 <!-- VORHER: book-details.component.html -->
@@ -354,7 +354,7 @@ Das Div-Element und sein Inhalt werden nur angezeigt, wenn `book.rating` definie
 ### Kapitel 8.2: Werte vom Router
 
 Im Kapitel 8.2 stellen wir die Anwendung auf Routing um und ändern in diesem Zuge die `BookDetailsComponent`.
-Statt eines Input-Propertys verwenden wir nun die ISBN, die wir aus der aktuellen Route ermitteln.
+Statt eines Input-Properties verwenden wir nun die ISBN, die wir aus der aktuellen Route ermitteln.
 Diese ISBN verwenden wir, um das richtige Buch vom `BookStoreService` zu erhalten.
 
 Im gedruckten Buch finden Sie den folgenden Code:
@@ -384,11 +384,13 @@ Eine neue Herausforderung bietet dann allerdings folgende Fehlermeldung:
 > Type 'null' is not assignable to type 'string'.
 
 Die Methode `get()` von der `ParamMap` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
-Erst zur Laufzeit der Anwendung kann sicher ermittelt werden, ob ein bestimmter Routen-Parameter existiert, daher.
-Vor den strikten Prüfungen von TypeScript war der gedruckte Code valide, jetzt ist dies nicht mehr der Fall.
+Erst zur Laufzeit der Anwendung kann sicher ermittelt werden, ob ein bestimmter Routen-Parameter verfügbar ist.
+Um diesem Umstand gerecht zu werden, liefert `get()` einen Union-Type mit Null zurück.  
 
 Der Typ des Routen-Parameters ist `string | null`.
-Die Methode `getSingle()` erwartet allerdings `string`.
+Die Methode `getSingle()` erwartet allerdings nur `string`.
+Vor den strikten Prüfungen von TypeScript war der gedruckte Code mit der Diskrepanz zwischen den beiden Typen valide, jetzt ist dies nicht mehr der Fall.
+
 Wir können deshalb einen leeren String als Fallback-Wert definieren.
 Auf diese Weise wird immer ein String übergeben:
 
