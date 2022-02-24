@@ -359,7 +359,7 @@ Das Div-Element und sein Inhalt werden nur angezeigt, wenn `book.rating` definie
 ### Kapitel 8.2: Werte vom Router
 
 Im Kapitel 8.2 stellen wir die Anwendung auf Routing um und ändern in diesem Zuge die `BookDetailsComponent`.
-Statt eines Input-Properties verwenden wir nun die ISBN, die wir aus der aktuellen Route ermitteln.
+Statt eines Input-Propertys verwenden wir nun die ISBN, die wir aus der aktuellen Route ermitteln.
 Diese ISBN verwenden wir, um das richtige Buch vom `BookStoreService` zu erhalten.
 
 Im gedruckten Buch finden Sie den folgenden Code:
