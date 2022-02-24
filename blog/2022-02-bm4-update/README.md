@@ -198,7 +198,7 @@ Das Input-Property wird aber erst **zur Laufzeit von Angular** durch das Propert
 Diesen Umstand berücksichtigt die strikte Prüfung **von TypeScript** nicht.
 Laut TypeScript muss bereits zum Zeitpunkt der Initialisierung der Klasse ein Wert bereitstehen. 
 
-Da der Wert des Properties aber erst zu einem späteren Zeitpunkt gesetzt wird, sollten wir dies auch folgerichtig im Code ausdrücken:
+Da der Wert des Propertys aber erst zu einem späteren Zeitpunkt gesetzt wird, sollten wir dies auch folgerichtig im Code ausdrücken:
 
 ```ts
 export class BookListItemComponent implements OnInit {
