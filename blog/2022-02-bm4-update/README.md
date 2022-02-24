@@ -231,7 +231,7 @@ export class BookListItemComponent {
 ```
 
 Man kann Property Bindings in Angular leider nicht verpflichtend machen.
-Daher empfehlen wir bei Input-Properties grundsätzlich, den Wert `undefined` zu berücksichtigen.
+Daher empfehlen wir bei Input-Propertys grundsätzlich, den Wert `undefined` zu berücksichtigen.
 
 Da das Buch nun also `undefined` sein kann, greift eine weitere Typprüfung:
 
