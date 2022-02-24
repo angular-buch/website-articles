@@ -466,7 +466,7 @@ export class BookStoreService {
 Im Kapitel zum Thema HTTP tauschen wir vor allem die Datenquelle vom `BookStoreService` aus.
 Erfreulicherweise behalten alle gezeigten Codebeispiele in diesem Kapitel ihre Gültigkeit – bis auf eine kleine Ausnahme.
 
-Die `BookDetailsComponent` hat nun eine Methode `removeBook()`, welcher in der gedruckten Fassung wie folgt ausschaut:
+Die `BookDetailsComponent` hat nun eine Methode `removeBook()`, welcher in der gedruckten Fassung wie folgt aussieht:
 
 ```ts
 // VORHER: book-details.component.ts 
