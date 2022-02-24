@@ -390,7 +390,7 @@ Eine neue Herausforderung bietet dann allerdings folgende Fehlermeldung:
 
 Die Methode `get()` von der `ParamMap` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
 Erst zur Laufzeit der Anwendung kann sicher ermittelt werden, ob ein bestimmter Routen-Parameter verfügbar ist.
-Um diesem Umstand gerecht zu werden, liefert `get()` einen Union-Type mit Null zurück.  
+Um diesem Umstand gerecht zu werden, liefert `get()` einen Union-Type von `string | null` zurück.  
 
 Der Typ des Routen-Parameters ist `string | null`.
 Die Methode `getSingle()` erwartet allerdings nur `string`.
