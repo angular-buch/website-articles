@@ -261,7 +261,7 @@ Die Prüfung bemängelt zu Recht, dass das Property `book` den Wert `undefined` 
 Würden wir dies dennoch tun, dann käme es zur Laufzeit zu folgender Fehlermeldung: `TypeError: Cannot read property of undefined`.
 Dies ist einer der häufigsten Typfehler in JavaScript.
 Er tritt immer dann auf, wenn auf einer undefinierten Variable eine Eigenschaft gelesen oder eine Funktion aufgerufen wird.
-Gut das uns die strenge Typprüfung schon zur Kompilierzeit vor diesem Problem bewahrt.
+Es ist gut, dass uns die strenge Typprüfung schon zur Kompilierzeit vor diesem Problem bewahrt.
 
 Wir haben das Markup wie folgt verbessert:
 Das gesamte Template wird mit `*ngIf` nur dann eingeblendet, wenn ein Buch vorhanden ist:
