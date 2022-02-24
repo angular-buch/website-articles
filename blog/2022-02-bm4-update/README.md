@@ -87,7 +87,7 @@ Die Reihenfolge dieses Walkthroughs entspricht unseren Iterationen im Buch.
 Wenn Sie also den BookMonkey zum ersten Mal implementieren,
 dann halten Sie am Besten diese Anleitung gleich bereit.
 
-### Kapitel 6.1: Strikte Initialisierung von Properties
+### Kapitel 6.1: Strikte Initialisierung von Propertys
 
 Gleich in der ersten Iteration zum Thema Komponenten (Kapitel 6.1) bei der `BookListComponent` (`src/app/book-list/book-list.component.ts`) erhalten wir einen der häufigsten Fehler:
 
