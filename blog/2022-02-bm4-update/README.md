@@ -260,7 +260,7 @@ Da das Buch nun also `undefined` sein kann, greift eine weitere Typprüfung:
 Die Prüfung bemängelt zu Recht, dass das Property `book` den Wert `undefined` haben kann und dann auch der Zugriff auf `book.thumbnails` oder `book.isbn` fehlschlagen könnte.
 Würden wir dies dennoch tun, dann käme es zur Laufzeit zu folgender Fehlermeldung: `TypeError: Cannot read property of undefined`.
 Dies ist einer der häufigsten Typfehler in JavaScript.
-Er tritt immer dann auf, wenn für bei einer undefinierten Variable eine Eigenschaft gelesen oder eine Funktion aufgerufen wird.
+Er tritt immer dann auf, wenn auf einer undefinierten Variable eine Eigenschaft gelesen oder eine Funktion aufgerufen wird.
 Gut das uns die strenge Typprüfung schon zur Kompilierzeit vor diesem Problem bewahrt.
 
 Wir haben das Markup wie folgt verbessert:
