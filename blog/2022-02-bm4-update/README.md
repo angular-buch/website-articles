@@ -52,7 +52,7 @@ Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angul
 
 ## Einen neuen BookMonkey erstellen
 
-Wenn Sie wie im Buch beschrieben den BookMonkey mit `ng new` erzeugen, so wird das Projekt standardmäßig mit strikten Einstellungen erstellt.
+Wenn Sie nach Juni 2021 wie im Buch beschrieben den BookMonkey mit `ng new` erzeugen, so wird das Projekt standardmäßig mit strikten Einstellungen erstellt.
 Dieser **"Strict Mode"** bewirkt eine Reihe an neuen Einstellungen, welche auf der [offiziellen Website von Angular](https://angular.io/guide/strict-mode) näher beschrieben sind.
 Zum einen sind die [Einstellungen von TypeScript](https://www.typescriptlang.org/tsconfig#strict) restriktiver gesetzt.
 Zum anderen kommt eine Reihe von Prüfungen im Angular-Compiler hinzu.
