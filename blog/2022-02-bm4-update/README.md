@@ -110,8 +110,12 @@ __1.__ einen Typ hat, der `undefined` enthält,
 __2.__ im Konstruktor zugewiesen wird oder  
 __3.__ einen expliziten Initialisierer hat.
 
+Die Lifycycle-Methode `ngOnInit()` wird hingegen erst nach Konstruktor ausgeführt.
+Aus Sicht des TypeScript-Compilers ist `ngOnInit()` also eine normale Methode der Klasse.
+Die Zuweisung eines Propertys ist hier nur möglich, wenn es wie bereits definiert wurde.
 
-Eine mögliche Lösung ist also, der Eigenschaft einen Typ zu geben, der `undefined` enthält.
+
+Eine mögliche Lösung besteht darin, der Eigenschaft einen Typ zu geben, der `undefined` enthält.
 Denselben Effekt erhalten wir, wenn wir das Property mit einem Fragezeichen (`?`) auf optional setzen.
 
 ```ts
