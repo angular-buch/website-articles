@@ -485,7 +485,7 @@ export class BookDetailsComponent implements OnInit {
 Allerdings mussten wir bereits zuvor das Property `book` mit einem Fragezeichen als optional kennzeichnen.
 Nun würde die Gefahr bestehen, dass beim Zugriff auf die ISBN per `this.book.isbn` der Wert für das Buch `undefined` ist.
 Diesen Fall müssen wir ausschließen, damit TypeScript keine Beanstandungen mehr hat.
-Wir haben uns dazu entschieden gleich in der Fallunterscheidung zu prüfen, ob `this.book` einen `truthy` Wert hat:
+Wir haben uns dazu entschieden, gleich in der Fallunterscheidung zu prüfen, ob `this.book` einen *truthy* Wert hat:
 
 ```ts
 // NACHHER: book-details.component.ts 
