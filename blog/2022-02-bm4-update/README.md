@@ -28,7 +28,7 @@ Sind die strikten Einstellungen aktiv, brechen nun leider einige gedruckte Beisp
 Der "BookMonkey" ist das Demo-Projekt zum Buch.
 Anhand des Beispielprojekts führen wir Sie schrittweise an die Entwicklung mit Angular heran.
 
-Alle Entwicklungsschritte im Buch stellen wir in separaten Repositorys zur Verfügung.
+Alle Entwicklungsschritte im Buch stellen wir in [separaten Repositorys](https://github.com/angular-buch/book-monkey4) zur Verfügung.
 Wenn man den Anleitungen im Buch folgt, sieht die eigene Codebasis im Idealfall genauso aus, wie unser Stand auf GitHub.
 
 
