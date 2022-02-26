@@ -505,7 +505,37 @@ export class BookDetailsComponent implements OnInit {
 }
 ```
 
+### Kapitel 10.2: Typprüfung bei Events
 
+Im Kapitel 10.2 gehen wir auf das Framwork RxJS genauer ein und erstellen die `SearchComponent`.
+Für die Suche haben wir folgendes Markup verwendet
+
+
+```ts
+// VORHER: search.component.html
+
+<input type="text" class="prompt"
+  (keyup)="keyUp$.next($event.target.value)">
+```
+
+Bei jedem Tastendruck wird also zunächst der Wert vom Event ausgewertet und der Methode `next()` übergeben.
+Leider ist aber das Property `target` vom  Typ `EventTarget | null`.
+Der Zugriff auf `value` könnte demnach fehlschlagen.
+TypeScript moniert dies entsprechend:
+
+> Object is possibly 'null'.  
+> Property 'value' does not exist on type 'EventTarget'.
+
+Um das Problem zu umgehen, greifen wir daher nun mithilfe der Elementreferenz `#input` auf den Formularwert zu.
+
+```ts
+// NACHHER: search.component.html
+
+<input type="text" class="prompt" #input
+  (keyup)="keyUp$.next(input.value)">
+```
+
+Der die Referenzvariable `input` ist vom Typ `HTMLInputElement` und da diese immer vorhanden ist, können wir nun ohne Einschränkungen auf `value` zugreifen.
 
 
 ## Zusammenfassung
