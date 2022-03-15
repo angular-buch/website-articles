@@ -508,7 +508,7 @@ export class BookDetailsComponent implements OnInit {
 ### Kapitel 10.2: Typprüfung bei Events
 
 Im Kapitel 10.2 gehen wir auf das Framwork RxJS genauer ein und erstellen die `SearchComponent`.
-Für die Suche haben wir folgendes Markup verwendet
+Für die Suche haben wir folgendes Markup verwendet:
 
 
 ```ts
@@ -518,7 +518,7 @@ Für die Suche haben wir folgendes Markup verwendet
   (keyup)="keyUp$.next($event.target.value)">
 ```
 
-Bei jedem Tastendruck wird also zunächst der Wert vom Event ausgewertet und der Methode `next()` übergeben.
+Bei jedem Tastendruck wird zunächst der Wert vom Event ausgewertet. Dieser Wert wird dann an die Methode `next()` übergeben.
 Leider ist aber das Property `target` vom  Typ `EventTarget | null`.
 Der Zugriff auf `value` könnte demnach fehlschlagen.
 TypeScript moniert dies entsprechend:
@@ -535,7 +535,55 @@ Um das Problem zu umgehen, greifen wir daher nun mithilfe der Elementreferenz `#
   (keyup)="keyUp$.next(input.value)">
 ```
 
-Der die Referenzvariable `input` ist vom Typ `HTMLInputElement` und da diese immer vorhanden ist, können wir nun ohne Einschränkungen auf `value` zugreifen.
+Die Referenzvariable `input` ist vom Typ `HTMLInputElement` und da diese immer vorhanden ist, können wir nun ohne Einschränkungen auf `value` zugreifen.
+
+
+### Kapitel 12.2: Template-Driven Forms
+
+Im Kapitel zu den Template-Driven Forms zeigen wir, wie man ein Formular zum Erstellen von Büchern realisiert.
+Hierzu führen wir die Komponente `CreateBookComponent` und die Kindkomponente `BookFormComponent` ein.
+Zum Anzeigen von Fehlermeldungen verwenden wir die `FormMessagesComponent`.
+
+Zunächst möchten wir uns für eine Fehler im gedruckten Buch entschuldigen.
+Wir zeigen nämlich im Template der BookFormComponent, wie man über Referenzvariablen auf Formular-Controls zugreifen kann.
+Diese Stelle ist aber schon seit jeher fehlerhaft:
+
+```ts
+// VORHER (fehlerhaft!): book-form.component.html
+
+<input
+  name="title"
+  [(ngModel)]="book.title"
+  required
+  #titleInput="ngModel">
+
+<bm-form-messages
+  [control]="titleInput"
+  controlName="title">
+</bm-form-messages>
+```
+
+Die Referenz `titleInput` zeigt auf die Direktive `ngModel` – nicht auf ein Control!
+Den benötigten Zugriff auf das Control erhalten wir statt dessen über das Property `control` auf `ngModel`. 
+
+```ts
+// VORHER (fehlerhaft!): book-form.component.html
+
+<input
+  name="title"
+  [(ngModel)]="book.title"
+  required
+  #titleInput="ngModel">
+
+<bm-form-messages
+  [control]="titleInput.control"
+  controlName="title">
+</bm-form-messages>
+```
+
+Diese Änderung gilt auch für alle anderen Stellen in diesem Template.
+Das bedeutet, diese Korrektur muss auch für `isbnInput`, `dateInput` sowie `authorInput` durchgeführt werden.
+
 
 
 ## Zusammenfassung
