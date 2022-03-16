@@ -541,12 +541,12 @@ Die Referenzvariable `input` ist vom Typ `HTMLInputElement` und da diese immer v
 ### Kapitel 12.2: Template-Driven Forms
 
 Im Kapitel zu den Template-Driven Forms zeigen wir, wie man ein Formular zum Erstellen von Büchern realisiert.
-Hierzu führen wir die Komponente `CreateBookComponent` und die Kindkomponente `BookFormComponent` ein.
+Hierzu führen wir die Komponente `CreateBookComponent` und deren Kindkomponente `BookFormComponent` ein.
 Zum Anzeigen von Fehlermeldungen verwenden wir die `FormMessagesComponent`.
 
-Zunächst möchten wir uns für eine Fehler im gedruckten Buch entschuldigen.
+Zunächst möchten wir uns für einen Fehler im gedruckten Buch entschuldigen.
 Wir zeigen nämlich im Template der BookFormComponent, wie man über Referenzvariablen auf Formular-Controls zugreifen kann.
-Diese Stelle ist aber schon seit jeher fehlerhaft:
+Diese Stelle ist aber schon seit jeher fehlerhaft gewesen:
 
 ```ts
 // VORHER (fehlerhaft!): book-form.component.html
@@ -567,7 +567,7 @@ Die Referenz `titleInput` zeigt auf die Direktive `ngModel` – nicht auf ein Co
 Den benötigten Zugriff auf das Control erhalten wir statt dessen über das Property `control` auf `ngModel`. 
 
 ```ts
-// VORHER (fehlerhaft!): book-form.component.html
+// NACHHER: book-form.component.html
 
 <input
   name="title"
@@ -583,6 +583,38 @@ Den benötigten Zugriff auf das Control erhalten wir statt dessen über das Prop
 
 Diese Änderung gilt auch für alle anderen Stellen in diesem Template.
 Das bedeutet, diese Korrektur muss auch für `isbnInput`, `dateInput` sowie `authorInput` durchgeführt werden.
+
+Ein paar Zeilen später greifen wir im Template der `FormMessagesComponent` verwenden wir einen recht komplexen Austruck für das Two-Way Binding:
+
+```ts
+// VORHER: book-form.component.html
+<input
+  name="url"
+  [(ngModel)]="book.thumbnails[0].url"
+  placeholder="URL">
+```
+
+Laut dem Interface `Book` ist das Porperty Thumbnails optional.
+Das führt durch die strengeren Prüfungen natürlich nun zu einer Fehlermeldung:
+
+> optional (property) Book.thumbnails?: Thumbnail[] | undefined  
+> Object is possibly 'undefined'.
+
+Unter den heutigen Umständen hätten wir wohl einfach das Property nicht als optional deklariert.
+Da wir aber diese zentrale Stelle im Zuge des Refactorings nicht abändern wollen,
+haben wir uns an dieser Stelle für den "letzten Ausweg" entschieden.
+Mit `$any()` haben wir hier die Typprüfung deaktiviert!
+Das ist ausdrücklich ein Workaround!
+
+```ts
+// VORHER: book-form.component.html
+<input
+  name="url"
+  [(ngModel)]="$any(book).thumbnails[0].url"
+  placeholder="URL">
+```
+
+
 
 
 
