@@ -27,6 +27,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 13 ist da!](/blog/2021-11-angular13)
+> * [Angular 14 ist da!](/blog/2022-06-angular14)
 
 ## Update auf Angular 12
 
