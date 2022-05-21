@@ -67,11 +67,17 @@ TODO
 
 TODO
 
+## Autocompletion mit der Angular CLI
+
+TODO
+
 
 ## Sonstiges
 
 - **TypeScript-Unterstützung:** Angular unterstützt offiziell TypeScript in der Version 4.7, siehe [Commit](https://github.com/angular/angular/commit/29039fcdbcb8cab040d88dabe2dcb1abae34cb4e). Ältere Versionen als 4.6 werden hingegen nicht mehr supportet, siehe [Commit](https://github.com/angular/angular/commit/c9d566ce4b6e9097d9eceb7ac3964a0b25c404ad).
 - **Types für Router Events:** Die Events des Routers (über `Router.events`) besitzen jetzt ein neues Property `type`. Um bestimmte Events zu filtern, war es bisher immer notwendig, mithilfe von `instanceof` nach der Klasse zu filtern. Das neue Property vereinfacht den Umgang, siehe [Commit](https://github.com/angular/angular/commit/41e2a68e30c12e5ad3e26047c3a4032e9aa1a6e1).
+- **Schematics Default Collection:** In der `angular.json` konnte mit dem Property `defaultCollection` die Standard-Kollektion definiert werden, die für die Schematics (z. B. `ng generate`) genutzt wird. Bei der Installation von Drittbibliotheken wie `@ngrx/schematics` konnte diese Einstellung gesetzt werden. Dieses Property wurde nun ersetzt durch `schematicCollections`. Hier kann ein Array mit mehreren Collections definiert werden, die in der angegebenen Reihenfolge durchsucht werden. Damit entfällt bei wiederholten Befehlen die Notwendigkeit, die Collection manuell anzugeben. Siehe [Commit](https://github.com/angular/angular-cli/commit/366cabc66c3dd836e2fdfea8dad6c4c7c2096b1d).
+- **defaultProject:** Die Einstellung `defaultProject` in der `angular.json` ist deprecated. Stattdessen wird das aktuelle Projekt jetzt anhand des Arbeitsverzeichnisses ermittelt, siehe [Commit](https://github.com/angular/angular-cli/commit/036327e9ca838f9ef3f117fbd18949d9d357e68d).
 
 
 
