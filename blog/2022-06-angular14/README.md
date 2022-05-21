@@ -16,7 +16,7 @@ sticky: true
 ---
 
 Noch bevor die Sommer- und Urlaubszeit beginnt, wartet Angular mit tollen Neuigkeiten auf: Am TODO. Juni 2022 erschien die neue Major-Version **Angular 14**!
-Während die letzten Hauptreleases vor allem interne Verbesserungen für das Tooling mitbrachten, hat Angular 14 einige spannende neue FEatures mit an Bord.
+Während die letzten Hauptreleases vor allem interne Verbesserungen für das Tooling mitbrachten, hat Angular 14 einige spannende neue Features mit an Bord.
 
 In diesem Blogpost fassen wir wie immer die wichtigsten Neuigkeiten zusammen.
 Im englischsprachigen [Angular-Blog](TODO) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
