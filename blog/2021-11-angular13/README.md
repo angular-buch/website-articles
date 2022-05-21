@@ -10,7 +10,7 @@ keywords:
   - Ivy
 language: de
 thumbnail: ./angular13.jpg
-sticky: true
+sticky: false
 ---
 
 Noch vor dem Jahresende erschien Anfang November 2021 die neue Major-Version 13 von Angular.
