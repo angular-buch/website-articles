@@ -72,6 +72,65 @@ TODO
 TODO
 
 
+## Neue Funktion `inject()`
+
+Um Abhängigkeiten per Dependency Injection anzufordern, wird üblicherweise der Konstruktor von Komponenten und Services verwendet:
+
+```ts
+@Component({ /* ... */ })
+export class MyComponent {
+  constructor(private service: BookStoreService) {}
+}
+```
+
+Alternativ konnte auch bisher schon die Klasse `Injector` mit der Methode `get()` verwendet werden.
+Diese Klasse musste aber wiederum auch mittels Dependency Injection angefordert werden:
+
+```ts
+import { Injector } from '@angular/core';
+
+@Component({ /* ... */ })
+export class MyComponent {
+  constructor(private injector: Injector) {
+    const service = injector.get(BookStoreService);
+  }
+}
+```
+
+
+In Angular 14 kommt die neue Funktion `inject()` hinzu.
+Im Gegensatz zum `Injector` muss sie nicht erst über Dependency Injection angefordert werden, sondern kann komplett eigenständig verwendet werden.
+
+```ts
+import { inject } from '@angular/core';
+ 
+export function getService() {
+  return inject(BookStoreService);
+}
+
+@Component({ /* ... */ })
+export class MyComponent {
+  constructor() {
+    const service = getService();
+  }
+}
+```
+
+Eine Einschränkung ist hierbei zu beachten: Der Aufruf von `inject()` muss immer indirekt über den Konstruktor erfolgen, also aus einem sogenannten *Injection Context*. Tut man das nicht, wird der folgende Fehler geworfen:
+
+> `ERROR Error: NG0203: inject() must be called from an injection context`
+
+Durch die Unabhängigkeit von der Komponentenklasse ergeben sich viele spannende Möglichkeiten zur Komposition.
+
+
+> Für einige Ideen zur Funktion `inject()` möchten wir auf einen Blogartikel von Younes Jaaidi verweisen:<br>
+**[Angular Inject & Injection Functions - Patterns & Anti-Patterns](https://marmicode.io/blog/angular-inject-and-injection-functions
+)**
+
+Es gilt abzuwarten, wie sich die neuen Patterns etablieren werden.
+Wir empfehlen also, Abhängigkeiten weiterhin direkt über den Konstruktor anzufordern.
+
+
 ## Sonstiges
 
 - **TypeScript-Unterstützung:** Angular unterstützt offiziell TypeScript in der Version 4.7, siehe [Commit](https://github.com/angular/angular/commit/29039fcdbcb8cab040d88dabe2dcb1abae34cb4e). Ältere Versionen als 4.6 werden hingegen nicht mehr supportet, siehe [Commit](https://github.com/angular/angular/commit/c9d566ce4b6e9097d9eceb7ac3964a0b25c404ad).
