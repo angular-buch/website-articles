@@ -68,7 +68,79 @@ Alte Formulare können so zunächst unverändert bleiben, und die Migration zum 
 
 ## Seitentitel setzen mit dem Router
 
-TODO
+Um den Titel der Seite mit Angular zu setzen, existiert schon seit einiger Zeit der Service `Title`.
+Der Nachteil an dieser Strategie ist, dass man das tatsächliche Setzen des Titels selbst in der Anwendung implementieren muss.
+Dazu muss entweder jede geroutete Komponente die passende Funktionalität mitbringen, oder wir müssen in einem Service selbst eine zentrale Logik dafür platzieren.
+
+Mit Angular 14 bringt der Router eine passende Funktionalität mit, um den Titel der Seite automatisch zu setzen.
+Dazu können wir in den Routen das Property `title` definieren, und der Seitentitel wird beim Aktivieren der Route automatisch gesetzt:
+
+```ts
+const routes: Routes = [
+  {
+    path: 'admin/create',
+    component: BookCreateComponent,
+    title: 'Buch erstellen'
+  },
+  {
+    path: 'admin/edit/:isbn',
+    component: BookEditComponent,
+    title: 'Buch bearbeiten'
+  }
+];
+```
+
+Leider wird der Titel nur verändert, wenn eine Route einen Eintrag `title` hat.
+Betreten wir also eine Route ohne Titel, bleibt der zuletzt gesetzte Titel erhalten.
+
+Um komplexere Anwendungsfälle zu lösen, können wir die Logik des Routers überschreiben.
+Dafür müssen wir eine eigene `TitleStrategy` implementieren.
+Die folgende Klasse setzt zum Beispiel den Titel auf den in der Route definierten Wert – oder auf den Default `BookMonkey`, wenn kein Titel gegeben ist:
+
+```ts
+@Injectable()
+export class CustomTitleStrategy extends TitleStrategy {
+  constructor(private title: Title) {
+    super();
+  }
+
+  updateTitle(routerState: RouterStateSnapshot) {
+    const title = this.buildTitle(routerState) ?? 'BookMonkey';
+    this.title.setTitle(title);
+  }
+}
+```
+
+So können wir zum Beispiel den Titel auch nach einem bestimmten Muster zusammensetzen, sodass immer der Text `BookMonkey` erhalten ist:
+
+```ts
+updateTitle(routerState: RouterStateSnapshot) {
+  const title = this.buildTitle(routerState);
+  if (title) {
+    this.title.setTitle(`${title} | BookMonkey`);
+  } else {
+    this.title.setTitle('BookMonkey')
+  }
+}
+```
+
+Die selbst definierte `TitleStrategy` muss mithilfe eines Providers bekannt gemacht werden:
+
+```ts
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [
+    { provide: TitleStrategy, useClass: CustomTitleStrategy }
+  ]
+})
+export class AppRoutingModule { }
+```
+
+> Für eine ausführlichere Auseinandersetzung empfehlen wir den folgenden Blogartikel von Brandon Roberts:<br>
+**[Setting Page Titles Natively With The Angular Router](https://dev.to/brandontroberts/setting-page-titles-natively-with-the-angular-router-393j)**
+
+
 
 ## Autovervollständigung mit der Angular CLI
 
@@ -81,7 +153,6 @@ Tippen wir also z. B. in der Kommandozeile den Befehl `ng` und drücken die Tab-
 ```bash
 ➜  book-monkey git:(main) ng
 add           -- Adds support for an external library to your project.
-analytics     -- Configures the gathering of Angular CLI usage metrics. See https://angular.io/cli/usage-analytics-ga
 build         -- Compiles an Angular application or library into an output directory named dist/ at the given output
 cache         -- Configure persistent disk cache and retrieve cache statistics.
 completion    -- Set up Angular CLI autocompletion for your terminal.
