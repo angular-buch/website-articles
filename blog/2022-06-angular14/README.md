@@ -37,6 +37,11 @@ npx @angular/cli@14 update @angular/core@14 @angular/cli@14
 Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrationen im Code durchgeführt.
 Prüfen Sie danach am Besten mithilfe von Git die Änderungen.
 
+
+## Standalone Components
+
+TODO
+
 ## Strikt typisierte Formulare
 
 Reactive Forms sind ein mächtiger Ansatz, um komplexe Formulare mit Angular zu entwickeln.
@@ -58,18 +63,41 @@ Beim Update auf Angular 14 werden bestehende Formulare automatisch auf eine unty
 Alte Formulare können so zunächst unverändert bleiben, und die Migration zum neuen Ansatz kann schrittweise durchgeführt werden.
 
 
-## Standalone Components
 
-TODO
 
 
 ## Seitentitel setzen mit dem Router
 
 TODO
 
-## Autocompletion mit der Angular CLI
+## Autovervollständigung mit der Angular CLI
 
-TODO
+Die Angular CLI bietet ein praktisches neues Feature an: eine integrierte Auto Completion für die Shell.
+Zur Einrichtung muss einmal der Befehle `ng completion` ansgeführt werden.
+Er ergänzt die Konfiguration der Kommandozeile (z. B. `.bashrc` oder `.zshrc`), sodass für die Autovervollständigung automatisch im Hintergrund die Angular CLI aufgerufen wird.
+
+Tippen wir also z. B. in der Kommandozeile den Befehl `ng` und drücken die Tab-Taste, erhalten wir automatisch passende Vorschläge:
+
+```bash
+➜  book-monkey git:(main) ng
+add           -- Adds support for an external library to your project.
+analytics     -- Configures the gathering of Angular CLI usage metrics. See https://angular.io/cli/usage-analytics-ga
+build         -- Compiles an Angular application or library into an output directory named dist/ at the given output
+cache         -- Configure persistent disk cache and retrieve cache statistics.
+completion    -- Set up Angular CLI autocompletion for your terminal.
+config        -- Retrieves or sets Angular configuration values in the angular.json file for the workspace.
+deploy        -- Invokes the deploy builder for a specified project or for the default project in the workspace.
+doc           -- Opens the official Angular documentation (angular.io) in a browser, and searches for a given keyword
+e2e           -- Builds and serves an Angular application, then runs end-to-end tests.
+extract-i18n  -- Extracts i18n messages from source code.
+generate      -- Generates and/or modifies files based on a schematic.
+# ...
+```
+
+Dadurch, dass die Autovervollständigung stets die Angular CLI nutzt, bezieht sich die Vervollständigung auf den aktuellen Kontext.
+Zum Beispiel liefert die Vervollständigung für `ng generate` alle möglichen Schematics, die wir im Projekt installiert haben.
+Damit verbessert sich sich Developer Experience enorm.
+
 
 
 ## Neue Funktion `inject()`
@@ -121,14 +149,15 @@ Eine Einschränkung ist hierbei zu beachten: Der Aufruf von `inject()` muss imme
 > `ERROR Error: NG0203: inject() must be called from an injection context`
 
 Durch die Unabhängigkeit von der Komponentenklasse ergeben sich viele spannende Möglichkeiten zur Komposition.
+Es gilt jedoch abzuwarten, wie sich die neuen Patterns etablieren werden.
+Wir empfehlen also, Abhängigkeiten zunächst weiterhin direkt über den Konstruktor anzufordern.
 
 
 > Für einige Ideen zur Funktion `inject()` möchten wir auf einen Blogartikel von Younes Jaaidi verweisen:<br>
 **[Angular Inject & Injection Functions - Patterns & Anti-Patterns](https://marmicode.io/blog/angular-inject-and-injection-functions
 )**
 
-Es gilt abzuwarten, wie sich die neuen Patterns etablieren werden.
-Wir empfehlen also, Abhängigkeiten weiterhin direkt über den Konstruktor anzufordern.
+
 
 
 ## Sonstiges
