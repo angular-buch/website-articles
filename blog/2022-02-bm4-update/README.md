@@ -511,8 +511,8 @@ Im Kapitel 10.2 gehen wir auf das Framwork RxJS genauer ein und erstellen die `S
 Für die Suche haben wir folgendes Markup verwendet:
 
 
-```ts
-// VORHER: search.component.html
+```html
+<!-- VORHER: search.component.html -->
 
 <input type="text" class="prompt"
   (keyup)="keyUp$.next($event.target.value)">
@@ -528,8 +528,8 @@ TypeScript moniert dies entsprechend:
 
 Um das Problem zu umgehen, greifen wir daher nun mithilfe der Elementreferenz `#input` auf den Formularwert zu.
 
-```ts
-// NACHHER: search.component.html
+```html
+<!-- NACHHER: search.component.html -->
 
 <input type="text" class="prompt" #input
   (keyup)="keyUp$.next(input.value)">
@@ -548,8 +548,8 @@ Zunächst möchten wir uns für einen Fehler im gedruckten Buch entschuldigen.
 Wir zeigen nämlich im Template der BookFormComponent, wie man über Referenzvariablen auf Formular-Controls zugreifen kann.
 Diese Stelle ist aber schon seit jeher fehlerhaft gewesen:
 
-```ts
-// VORHER (fehlerhaft!): book-form.component.html
+```html
+<!-- VORHER (fehlerhaft!): book-form.component.html -->
 
 <input
   name="title"
@@ -566,8 +566,8 @@ Diese Stelle ist aber schon seit jeher fehlerhaft gewesen:
 Die Referenz `titleInput` zeigt auf die Direktive `ngModel` – nicht auf ein Control!
 Den benötigten Zugriff auf das Control erhalten wir statt dessen über das Property `control` auf `ngModel`. 
 
-```ts
-// NACHHER: book-form.component.html
+```html
+<!-- NACHHER: book-form.component.html -->
 
 <input
   name="title"
@@ -586,8 +586,8 @@ Das bedeutet, diese Korrektur muss auch für `isbnInput`, `dateInput` sowie `aut
 
 Ein paar Zeilen später greifen wir im Template der `FormMessagesComponent` verwenden wir einen recht komplexen Austruck für das Two-Way Binding:
 
-```ts
-// VORHER: book-form.component.html
+```html
+<!-- VORHER: book-form.component.html -->
 <input
   name="url"
   [(ngModel)]="book.thumbnails[0].url"
@@ -606,14 +606,115 @@ haben wir uns an dieser Stelle für den "letzten Ausweg" entschieden.
 Mit `$any()` haben wir hier die Typprüfung deaktiviert!
 Das ist ausdrücklich ein Workaround!
 
-```ts
-// VORHER: book-form.component.html
+```html
+<!-- NACHHER: book-form.component.html -->
 <input
   name="url"
   [(ngModel)]="$any(book).thumbnails[0].url"
   placeholder="URL">
 ```
 
+Auch die TypeScript-Teil der `BookFormComponent` benötigt eine Anpassung.
+Um das Formular resetten zu können, benötigen wir eine Referenz auf die NgForm-Instanz.
+Diese erhalten wir über den den Decorator `@ViewChild`:
+
+```ts
+// VORHER: book-form.component.ts
+@ViewChild('bookForm', { static: true }) bookForm: NgForm;
+```
+
+Da das Property nicht sofort zugewiesen werden kann, müssen wir dieses wie so häufig zuvor mit dem Fragezeichen (`?`) auf optional setzen:
+
+```ts
+// NACHHER: book-form.component.ts
+@ViewChild('bookForm', { static: true }) bookForm?: NgForm;
+```
+
+Uns ist im Zuge dessen aufgefallen, das der Name `bookForm` mit der Elementreferenz `#bookForm` im Template kollidiert.
+Wir haben daher das Property auch gleich noch sauber umbenannt:
+
+```ts
+// NACHHER, mit Umbennenung: book-form.component.ts
+@ViewChild('bookForm', { static: true }) form?: NgForm;
+```
+
+Folgerichtig müssen wir nun beim resetten zuvor eine Existenzprüfung durchführen:
+
+```ts
+// VORHER: book-form.component.ts
+submitForm() {
+  // [...]
+  this.bookForm.reset();
+}
+```
+
+```ts
+// NACHHER: book-form.component.ts
+submitForm() {
+  // [...]
+  this.form?.reset();
+}
+```
+
+Weitere Property-Prüfungen müssen wir dann noch in der `FormMessagesComponent` berücksichtigen:
+
+```ts
+// VORHER: form-messages.component.ts
+  @Input() control: AbstractControl;
+  @Input() controlName: string;
+```
+
+Auch hier markieren wir die Propertys als optional, sonst müssten sie direkt zugewiesen werden.
+Der Typ von `control` muss auf `AbstractControl | null` korrigiert werden, denn das ist der tatsächliche Rückgabetyp von `FormGroup.get()`.
+
+```ts
+// NACHHER: form-messages.component.ts
+  @Input() control?: AbstractControl | null;
+  @Input() controlName?: string;
+```
+
+Das Property mit den fest eingebauten Fehlermeldungen des Formulars war bislang nur implizit typisiert: 
+
+```ts
+// VORHER: form-messages.component.ts
+private allMessages = {
+  title: {
+    required: 'Ein Buchtitel muss angegeben werden.'
+  },
+  // [...]
+}
+```
+
+Damit wir das Objekt weiterhin in der Methode `errorsForControl()` verwenden können, müssen wir den Typ konkretisieren:
+
+```ts
+// NACHHER: form-messages.component.ts
+private allMessages: { [key: string]: { [key: string]: string } } = {
+  title: {
+    required: 'Ein Buchtitel muss angegeben werden.'
+  },
+  // [...]
+}
+```
+
+Die verbesserte und korrekte Typisierung dieser Methode sieht dann wie folgt aus:
+
+```ts
+// VORHER: form-messages.component.ts
+errorsForControl(): string[] {
+  const messages = this.allMessages[this.controlName];
+  // [...]
+}
+```
+
+```ts
+// NACHHER: form-messages.component.ts
+errorsForControl(): string[] {
+  type allMessagesKey = keyof FormMessagesComponent['allMessages'];
+  const messages = this.allMessages[this.controlName as keyof allMessagesKey];
+  // [...]
+}
+```
 
 
 
