@@ -41,7 +41,7 @@ Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderung
 ## Standalone Components
 
 Damit eine Komponente genutzt werden kann, musste sie bisher immer in einem NgModule deklariert werden.
-Insbesondere bei Wiederverwandbaren Komponenten führte das schnell zu Chaos.
+Insbesondere bei wiederverwendbaren Komponenten führte das leicht zu unübersichtlichem Code.
 Das Konzept der NgModules mit allen Details (insbesondere Imports, Exports, Providers) erschwert außerdem den Einstieg in das Framework Angular.
 
 Mit Angular 14 wurde dieses lang diskutierte Thema nun angegangen: Angular unterstützt nun *Standalone Components*.
