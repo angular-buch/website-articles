@@ -47,7 +47,7 @@ Das Konzept der NgModules mit allen Details (insbesondere Imports, Exports, Prov
 Mit Angular 14 wurde dieses lang diskutierte Thema nun angegangen: Angular unterstützt nun *Standalone Components*.
 
 Komponenten, Pipes und Direktiven müssen nun nicht mehr in einem Modul deklariert werden, sondern können alleinstehend verwendet werden.
-Damit eine Komponente genutzt werden kann, muss sie direkt am Ort der VErwendung importiert werden.
+Damit eine Komponente genutzt werden kann, muss sie direkt am Ort der Verwendung importiert werden.
 Im folgenden Codebeispiel möchte die `AppComponent` die andere Komponente `DashboardComponent` in ihrem Template nutzen: 
 
 ```ts
