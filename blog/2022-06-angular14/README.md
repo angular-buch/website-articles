@@ -172,7 +172,7 @@ export class AppRoutingModule { }
 
 ## Autovervollständigung mit der Angular CLI
 
-Die Angular CLI bietet ein praktisches neues Feature an: eine integrierte Auto Completion für die Shell.
+Die Angular CLI bietet ein praktisches neues Feature an: eine integrierte automatische Vervollständigung für die Kommandozeile.
 Zur Einrichtung muss einmal der Befehle `ng completion` ansgeführt werden.
 Er ergänzt die Konfiguration der Kommandozeile (z. B. `.bashrc` oder `.zshrc`), sodass für die Autovervollständigung automatisch im Hintergrund die Angular CLI aufgerufen wird.
 
