@@ -278,4 +278,4 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 **Viel Spaß wünschen
 Ferdinand, Danny und Johannes**
 
-<small>**Titelbild:** Blick vom Poon Hill, Nepal, 2018. Foto von Ferdinand Malcher</small>
+<small>**Titelbild:** Yosemite National Park, California, 2019. Foto von Ferdinand Malcher</small>
