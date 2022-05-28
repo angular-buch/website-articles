@@ -35,7 +35,7 @@ npx @angular/cli@14 update @angular/core@14 @angular/cli@14
 ```
 
 Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrationen im Code durchgeführt.
-Prüfen Sie danach am Besten mithilfe von Git die Änderungen.
+Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderungen.
 
 
 ## Standalone Components
