@@ -40,7 +40,35 @@ Prüfen Sie danach am Besten mithilfe von Git die Änderungen.
 
 ## Standalone Components
 
-TODO
+Damit eine Komponente genutzt werden kann, musste sie bisher immer in einem NgModule deklariert werden.
+Insbesondere bei Wiederverwandbaren Komponenten führte das schnell zu Chaos.
+Das Konzept der NgModules mit allen Details (insbesondere Imports, Exports, Providers) erschwert außerdem den Einstieg in das Framework Angular.
+
+Mit Angular 14 wurde dieses lang diskutierte Thema nun angegangen: Angular unterstützt nun *Standalone Components*.
+
+Komponenten, Pipes und Direktiven müssen nun nicht mehr in einem Modul deklariert werden, sondern können alleinstehend verwendet werden.
+Damit eine Komponente genutzt werden kann, muss sie direkt am Ort der VErwendung importiert werden.
+Im folgenden Codebeispiel möchte die `AppComponent` die andere Komponente `DashboardComponent` in ihrem Template nutzen: 
+
+```ts
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [DashboardComponent]
+  // ...
+})
+export class AppComponent {}
+```
+
+Dadurch vereinfacht sich die Struktur der Anwendung, denn die Gruppierung in NgModules entfällt.
+NgModules und Standalone Components sind kompatibel, können also auch in Kombination genutzt werden.
+
+Das neue Feature ist zunächst als *Developer Preview* verfügbar.
+Das bedeutet, dass die Schnittstelle vor dem finalen Release noch verändert werden kann.
+
+> Wir behandeln das Thema ausführlich in einem separaten Blogpost:<br>
+**[Standalone Components – neu ab Angular 14](https://angular.schule/blog/2022-05-standalone-components)**
+
 
 ## Strikt typisierte Formulare
 
