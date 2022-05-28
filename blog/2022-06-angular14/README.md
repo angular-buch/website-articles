@@ -270,7 +270,7 @@ Wir empfehlen also, Abhängigkeiten zunächst weiterhin direkt über den Konstru
 
 <hr>
 
-Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in der Dokumentation veröffentlicht: [https://angular.io/guide/roadmap](https://angular.io/guide/roadmap).-->
+Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in der Dokumentation veröffentlicht: [https://angular.io/guide/roadmap](https://angular.io/guide/roadmap).
 
 Wir wünschen Ihnen viel Spaß mit Angular 14!
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
