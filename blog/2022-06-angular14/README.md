@@ -44,10 +44,10 @@ Damit eine Komponente genutzt werden kann, musste sie bisher immer in einem NgMo
 Insbesondere bei wiederverwendbaren Komponenten führte das leicht zu unübersichtlichem Code.
 Das Konzept der NgModules mit allen Details (insbesondere Imports, Exports, Providers) erschwert außerdem den Einstieg in das Framework Angular.
 
-Mit Angular 14 wurde dieses lang diskutierte Thema nun angegangen: Angular unterstützt nun *Standalone Components*.
+Mit Angular 14 wurde dieses lang diskutierte Thema angegangen: Angular unterstützt nun *Standalone Components*.
 
-Komponenten, Pipes und Direktiven müssen nun nicht mehr in einem Modul deklariert werden, sondern können alleinstehend verwendet werden.
-Damit eine Komponente genutzt werden kann, muss sie direkt am Ort der Verwendung importiert werden.
+Komponenten, Pipes und Direktiven müssen damit nicht mehr in einem Modul deklariert werden, sondern können alleinstehend verwendet werden.
+Damit eine Komponente genutzt werden kann, wird sie direkt am Ort der Verwendung importiert.
 Im folgenden Codebeispiel möchte die `AppComponent` die andere Komponente `DashboardComponent` in ihrem Template nutzen: 
 
 ```ts
@@ -100,8 +100,8 @@ Um den Titel der Seite mit Angular zu setzen, existiert schon seit einiger Zeit 
 Der Nachteil an dieser Strategie ist, dass man das tatsächliche Setzen des Titels selbst in der Anwendung implementieren muss.
 Dazu muss entweder jede geroutete Komponente die passende Funktionalität mitbringen, oder wir müssen in einem Service selbst eine zentrale Logik dafür platzieren.
 
-Mit Angular 14 bringt der Router eine passende Funktionalität mit, um den Titel der Seite automatisch zu setzen.
-Dazu können wir in den Routen das Property `title` definieren, und der Seitentitel wird beim Aktivieren der Route automatisch gesetzt:
+Seit Angular 14 bringt der Router eine passende Funktionalität mit, um den Titel der Seite automatisch zu setzen.
+Dazu können wir in den Routen das Property `title` definieren, und der Seitentitel wird beim Aktivieren der Route automatisch angepasst:
 
 ```ts
 const routes: Routes = [
@@ -173,7 +173,7 @@ export class AppRoutingModule { }
 ## Autovervollständigung mit der Angular CLI
 
 Die Angular CLI bietet ein praktisches neues Feature an: eine integrierte automatische Vervollständigung für die Kommandozeile.
-Zur Einrichtung muss einmal der Befehle `ng completion` ansgeführt werden.
+Zur Einrichtung muss einmalig der Befehl `ng completion` ansgeführt werden.
 Er ergänzt die Konfiguration der Kommandozeile (z. B. `.bashrc` oder `.zshrc`), sodass für die Autovervollständigung automatisch im Hintergrund die Angular CLI aufgerufen wird.
 
 Tippen wir also z. B. in der Kommandozeile den Befehl `ng` und drücken die Tab-Taste, erhalten wir automatisch passende Vorschläge:
@@ -261,14 +261,16 @@ Wir empfehlen also, Abhängigkeiten zunächst weiterhin direkt über den Konstru
 
 ## Sonstiges
 
+Neben den großen neuen Features hat das neue Release viele kleine Verbesserungen und Bug Fixes an Bord.
+Eine Auswahl haben wir hier zusammengestellt:
+
 - **TypeScript-Unterstützung:** Angular unterstützt offiziell TypeScript in der Version 4.7, siehe [Commit](https://github.com/angular/angular/commit/29039fcdbcb8cab040d88dabe2dcb1abae34cb4e). Ältere Versionen als 4.6 werden hingegen nicht mehr supportet, siehe [Commit](https://github.com/angular/angular/commit/c9d566ce4b6e9097d9eceb7ac3964a0b25c404ad).
 - **Types für Router Events:** Die Events des Routers (über `Router.events`) besitzen jetzt ein neues Property `type`. Um bestimmte Events zu filtern, war es bisher immer notwendig, mithilfe von `instanceof` nach der Klasse zu filtern. Das neue Property vereinfacht den Umgang, siehe [Commit](https://github.com/angular/angular/commit/41e2a68e30c12e5ad3e26047c3a4032e9aa1a6e1).
 - **Schematics Default Collection:** In der `angular.json` konnte mit dem Property `defaultCollection` die Standard-Kollektion definiert werden, die für die Schematics (z. B. `ng generate`) genutzt wird. Bei der Installation von Drittbibliotheken wie `@ngrx/schematics` konnte diese Einstellung gesetzt werden. Dieses Property wurde nun ersetzt durch `schematicCollections`. Hier kann ein Array mit mehreren Collections definiert werden, die in der angegebenen Reihenfolge durchsucht werden. Damit entfällt bei wiederholten Befehlen die Notwendigkeit, die Collection manuell anzugeben. Siehe [Commit](https://github.com/angular/angular-cli/commit/366cabc66c3dd836e2fdfea8dad6c4c7c2096b1d).
 - **defaultProject:** Die Einstellung `defaultProject` in der `angular.json` ist deprecated. Stattdessen wird das aktuelle Projekt jetzt anhand des Arbeitsverzeichnisses ermittelt, siehe [Commit](https://github.com/angular/angular-cli/commit/036327e9ca838f9ef3f117fbd18949d9d357e68d).
 
-
-
-<hr>
+<br>
+<br>
 
 Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in der Dokumentation veröffentlicht: [https://angular.io/guide/roadmap](https://angular.io/guide/roadmap).
 
@@ -277,5 +279,7 @@ Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie un
 
 **Viel Spaß wünschen
 Ferdinand, Danny und Johannes**
+
+<hr>
 
 <small>**Titelbild:** Yosemite National Park, California, 2019. Foto von Ferdinand Malcher</small>
