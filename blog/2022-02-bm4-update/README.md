@@ -716,6 +716,11 @@ errorsForControl(): string[] {
 }
 ```
 
+### Kapitel 12.3: Reactive Forms
+
+Wer das Buch gelesen hat, der weiss es bereits.
+Nachdem wir das Formular mit dem Template-Driven Ansatz implementiert haben,
+stellen wir im nächsten Kapitel schon alles wieder auf den alternativen Reactive Forms Ansatz um.
 
 
 
