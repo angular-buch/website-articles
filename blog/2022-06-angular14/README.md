@@ -9,6 +9,7 @@ keywords:
   - Angular 14
   - Typed Forms
   - Standalone Components
+  - TitleStrategy
   - Update
 language: de
 thumbnail: ./angular14.jpg
@@ -19,7 +20,7 @@ Noch bevor die Sommer- und Urlaubszeit beginnt, wartet Angular mit tollen Neuigk
 Während die letzten Hauptreleases vor allem interne Verbesserungen für das Tooling mitbrachten, hat Angular 14 einige spannende neue Features mit an Bord.
 
 In diesem Blogpost fassen wir wie immer die wichtigsten Neuigkeiten zusammen.
-Im englischsprachigen [Angular-Blog](TODO) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
+Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v14-is-now-available-391a6db736af) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
 
 
@@ -31,7 +32,7 @@ Der Befehl `ng update` liefert außerdem Infos zu möglichen Updates direkt im P
 
 ```bash
 # Projekt auf Angular 14 aktualisieren
-npx @angular/cli@14 update @angular/core@14 @angular/cli@14
+ng update @angular/core@14 @angular/cli@14
 ```
 
 Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrationen im Code durchgeführt.
