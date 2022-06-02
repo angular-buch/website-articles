@@ -27,7 +27,7 @@ Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https:
 
 ## Projekt updaten
 
-Um ein existierendes Projekt zu aktualisieren, nutzen Sie bitte den [Angular Update Guide](https://update.angular.io)
+Um ein existierendes Projekt zu aktualisieren, nutzen Sie bitte den [Angular Update Guide](https://update.angular.io/?v=13.0-14.0)
 Der Befehl `ng update` liefert außerdem Infos zu möglichen Updates direkt im Projekt.
 
 ```bash
