@@ -469,7 +469,7 @@ export class BookStoreService {
 Im Kapitel zum Thema HTTP tauschen wir vor allem die Datenquelle vom `BookStoreService` aus.
 Erfreulicherweise behalten alle gezeigten Codebeispiele in diesem Kapitel ihre Gültigkeit – bis auf eine kleine Ausnahme.
 
-Die `BookDetailsComponent` hat nun eine Methode `removeBook()`, welcher in der gedruckten Fassung wie folgt aussieht:
+Die `BookDetailsComponent` hat nun eine Methode `removeBook()`, welche in der gedruckten Fassung wie folgt aussieht:
 
 ```ts
 // VORHER: book-details.component.ts 
@@ -486,7 +486,7 @@ export class BookDetailsComponent implements OnInit {
 ```
 
 Allerdings mussten wir bereits zuvor das Property `book` mit einem Fragezeichen als optional kennzeichnen.
-Nun würde die Gefahr bestehen, dass beim Zugriff auf die ISBN per `this.book.isbn` der Wert für das Buch `undefined` ist.
+Nun besteht die Gefahr, dass beim Zugriff auf die ISBN per `this.book.isbn` der Wert für das Buch `undefined` ist.
 Diesen Fall müssen wir ausschließen, damit TypeScript keine Beanstandungen mehr hat.
 Wir haben uns dazu entschieden, gleich in der Fallunterscheidung zu prüfen, ob `this.book` einen *truthy* Wert hat:
 
@@ -506,7 +506,7 @@ export class BookDetailsComponent implements OnInit {
 
 ### Kapitel 10.2: Typprüfung bei Events
 
-Im Kapitel 10.2 gehen wir auf das Framwork RxJS genauer ein und erstellen die `SearchComponent`.
+Im Kapitel 10.2 gehen wir auf die Bibliothek RxJS genauer ein und erstellen die `SearchComponent`.
 Für die Suche haben wir folgendes Markup verwendet:
 
 
@@ -517,10 +517,10 @@ Für die Suche haben wir folgendes Markup verwendet:
   (keyup)="keyUp$.next($event.target.value)">
 ```
 
-Bei jedem Tastendruck wird zunächst der Wert vom Event ausgewertet. Dieser Wert wird dann an die Methode `next()` übergeben.
-Leider ist aber das Property `target` vom  Typ `EventTarget | null`.
+Bei jedem Tastendruck wird zunächst der Wert des Events ausgewertet und an das Subject mit der Methode `next()` übergeben.
+Leider ist aber das Property `target` aber vom Typ `EventTarget | null`.
 Der Zugriff auf `value` könnte demnach fehlschlagen.
-TypeScript moniert dies entsprechend:
+TypeScript bemängelt dies entsprechend:
 
 > Object is possibly 'null'.  
 > Property 'value' does not exist on type 'EventTarget'.
@@ -534,17 +534,17 @@ Um das Problem zu umgehen, greifen wir daher nun mithilfe der Elementreferenz `#
   (keyup)="keyUp$.next(input.value)">
 ```
 
-Die Referenzvariable `input` ist vom Typ `HTMLInputElement` und da diese immer vorhanden ist, können wir nun ohne Einschränkungen auf `value` zugreifen.
+Die Referenzvariable `input` ist vom Typ `HTMLInputElement`, und da diese immer vorhanden ist, können wir nun ohne Einschränkungen auf `value` zugreifen.
 
 
 ### Kapitel 12.2: Template-Driven Forms
 
 Im Kapitel zu den Template-Driven Forms zeigen wir, wie man ein Formular zum Erstellen von Büchern realisiert.
 Hierzu führen wir die Komponente `CreateBookComponent` und deren Kindkomponente `BookFormComponent` ein.
-Zum Anzeigen von Fehlermeldungen verwenden wir die `FormMessagesComponent`.
+Zur Anzeige von Fehlermeldungen verwenden wir die `FormMessagesComponent`.
 
-Zunächst möchten wir uns für einen Fehler im gedruckten Buch entschuldigen.
-Wir zeigen nämlich im Template der BookFormComponent, wie man über Referenzvariablen auf Formular-Controls zugreifen kann.
+Zunächst möchten wir uns für einen Fehler im gedruckten Buch entschuldigen:
+Wir zeigen im Template der `BookFormComponent`, wie man über Referenzvariablen auf Formular-Controls zugreifen kann.
 Diese Stelle ist aber schon seit jeher fehlerhaft gewesen:
 
 ```html
@@ -563,7 +563,7 @@ Diese Stelle ist aber schon seit jeher fehlerhaft gewesen:
 ```
 
 Die Referenz `titleInput` zeigt auf die Direktive `ngModel` – nicht auf ein Control!
-Den benötigten Zugriff auf das Control erhalten wir statt dessen über das Property `control` auf `ngModel`. 
+Den benötigten Zugriff auf das Control erhalten wir stattdessen über das Property `control` auf `ngModel`. 
 
 ```html
 <!-- NACHHER: book-form.component.html -->
@@ -583,7 +583,7 @@ Den benötigten Zugriff auf das Control erhalten wir statt dessen über das Prop
 Diese Änderung gilt auch für alle anderen Stellen in diesem Template.
 Das bedeutet, diese Korrektur muss auch für `isbnInput`, `dateInput` sowie `authorInput` durchgeführt werden.
 
-Ein paar Zeilen später greifen wir im Template der `FormMessagesComponent` verwenden wir einen recht komplexen Austruck für das Two-Way Binding:
+Ein paar Zeilen später verwenden wir im Template der `FormMessagesComponent` einen recht komplexen Ausdruck für das Two-Way Binding:
 
 ```html
 <!-- VORHER: book-form.component.html -->
@@ -593,7 +593,7 @@ Ein paar Zeilen später greifen wir im Template der `FormMessagesComponent` verw
   placeholder="URL">
 ```
 
-Laut dem Interface `Book` ist das Porperty Thumbnails optional.
+Laut dem Interface `Book` ist das Property `thumbnails` optional.
 Das führt durch die strengeren Prüfungen natürlich nun zu einer Fehlermeldung:
 
 > optional (property) Book.thumbnails?: Thumbnail[] | undefined  
@@ -613,31 +613,31 @@ Das ist ausdrücklich ein Workaround!
   placeholder="URL">
 ```
 
-Auch die TypeScript-Teil der `BookFormComponent` benötigt eine Anpassung.
-Um das Formular resetten zu können, benötigen wir eine Referenz auf die NgForm-Instanz.
-Diese erhalten wir über den den Decorator `@ViewChild`:
+Auch der TypeScript-Teil der `BookFormComponent` benötigt eine Anpassung.
+Um das Formular resetten zu können, benötigen wir eine Referenz auf die Instanz von `NgForm`.
+Diese erhalten wir über den den Decorator `@ViewChild()`:
 
 ```ts
 // VORHER: book-form.component.ts
 @ViewChild('bookForm', { static: true }) bookForm: NgForm;
 ```
 
-Da das Property nicht sofort zugewiesen werden kann, müssen wir dieses wie so häufig zuvor mit dem Fragezeichen (`?`) auf optional setzen:
+Da das Property nicht sofort zugewiesen werden kann, müssen wir dieses ebenfalls mit dem Fragezeichen (`?`) auf optional setzen:
 
 ```ts
 // NACHHER: book-form.component.ts
 @ViewChild('bookForm', { static: true }) bookForm?: NgForm;
 ```
 
-Uns ist im Zuge dessen aufgefallen, das der Name `bookForm` mit der Elementreferenz `#bookForm` im Template kollidiert.
-Wir haben daher das Property auch gleich noch sauber umbenannt:
+Uns ist in diesem Zuge aufgefallen, dass der Name `bookForm` mit der Elementreferenz `#bookForm` im Template kollidiert.
+Wir haben daher das Property daher auch gleich noch sauber zu `form` umbenannt:
 
 ```ts
 // NACHHER, mit Umbennenung: book-form.component.ts
 @ViewChild('bookForm', { static: true }) form?: NgForm;
 ```
 
-Folgerichtig müssen wir nun beim resetten zuvor eine Existenzprüfung durchführen:
+Folgerichtig müssen wir nun beim Resetten zuvor eine Existenzprüfung durchführen:
 
 ```ts
 // VORHER: book-form.component.ts
@@ -714,6 +714,8 @@ errorsForControl(): string[] {
   // [...]
 }
 ```
+
+
 <!--
 ### Kapitel 12.3: Reactive Forms
 
