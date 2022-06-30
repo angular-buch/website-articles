@@ -25,6 +25,9 @@ Die neue Version bringt einige wenige Breaking Changes mit sich, die aber wie ü
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/angular-v12-is-now-available-32ed51fbfd49).
 
+Für alle Leser unseres Buchs haben wir einen **[ausführlichen Blogartikel zum Update auf Angular 12](/blog/2021-07-bm4-angular12)** geschrieben, in dem wir alle nötigen Änderungen am Beispielprojekt BookMonkey auflisten. 
+
+<!--
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 13 ist da!](/blog/2021-11-angular13)
 > * [Angular 14 ist da!](/blog/2022-06-angular14)
