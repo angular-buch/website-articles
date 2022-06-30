@@ -2,11 +2,7 @@
 title: 'Den Book-Monkey v4 updaten (3. Ausgabe)'
 author: Angular Buch Team
 mail: team@angular-buch.com
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
-published: 2022-02-25
-=======
 published: 2022-06-30
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
 keywords:
   - Angular
   - Angular 12
@@ -22,15 +18,9 @@ Das Release einer neuen Major-Version von Angular bedeutet keineswegs, dass alle
 Die Grundideen von Angular sind seit Version 2 konsistent und auf Beständigkeit über einen langen Zeitraum ausgelegt.
 Die in unserem Buch beschriebenen Konzepte behalten ihre Gültigkeit.
 
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
-Ein paar kleine Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe unseres Buchs ergeben.
-Diese wollen wir hier detailliert besprechen.
-Es geht vor allem darum, dass seit **Angular 12** diverse strikte Einstellungen für neue Projekte standardmäßig aktiviert sind.
-=======
 Ein paar Änderungen haben sich jedoch seit der Veröffentlichung der 3. Ausgabe unseres Buchs ergeben.
 Diese wollen wir hier detailiert besprechen.
-Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellung für neue Projekte standardmäßig aktiviert sind.
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
+Es geht vor allem daraum, dass seit **Angular 12** diverse strikte Einstellungen für neue Projekte standardmäßig aktiviert sind.
 Als wir das Buch im Oktober 2020 veröffentlicht haben, war das noch nicht so.
 Sind die strikten Einstellungen aktiv, brechen nun leider einige gedruckte Beispiele, die sich aber mit moderatem Aufwand beheben lassen.
 
@@ -120,19 +110,12 @@ export class BookListComponent implements OnInit {
 
 Hier prüft der Type-Checker, dass jede in einer Klasse deklarierte Eigenschaft entweder...
 
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
-__1.__ einen Typ hat, der `undefined` enthält,  
-__2.__ im Konstruktor zugewiesen wird oder  
-__3.__ einen expliziten Initialisierer hat.
-
-Die Lifycycle-Methode `ngOnInit()` wird hingegen erst nach Konstruktor ausgeführt.
-Aus Sicht des TypeScript-Compilers ist `ngOnInit()` also eine normale Methode der Klasse.
-Die Zuweisung eines Propertys ist hier nur möglich, wenn es wie bereits definiert wurde.
-=======
 __1.__ einen Typ hat, der `undefined` enthält oder  
 __2.__ explizit initialisiert wird bzw. im Konstruktor zugewiesen wird.
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
 
+Die Lifecycle-Methode `ngOnInit()` wird hingegen erst nach Konstruktor ausgeführt.
+Aus Sicht des TypeScript-Compilers ist `ngOnInit()` also eine normale Methode der Klasse.
+Die Zuweisung eines Propertys ist hier nur möglich, wenn es bereits definiert wurde.
 
 Eine mögliche Lösung besteht darin, der Eigenschaft einen Typ zu geben, der `undefined` enthält.
 Denselben Effekt erhalten wir, wenn wir das Property mit einem Fragezeichen (`?`) auf optional setzen.
@@ -148,13 +131,8 @@ export class BookListComponent {
 
 Allerdings würde dies weitere Änderungen im Template und im Code zur Folge haben, da wir nun den Typ `undefined` berücksichtigen müssen, sobald wir das Property verwenden.
 
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
 Wir könnten ebenso das Array mit allen Werten sofort im Konstruktor initialisieren.
 Dadurch müssen wir den bisherigen Typ (Array aus `Book`) nicht ändern.
-=======
-Wir können ebenso das Array mit allen Werten sofort im Konstruktor initialisieren.
-Dadurch müssen wir den bisheren Typ (Array aus `Book`) nicht ändern.
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
 Auf die Methode `ngOnInit()` können wir dann ganz verzichten:
 
 ```ts
@@ -208,14 +186,8 @@ export class BookListItemComponent implements OnInit {
 }
 ```
 
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
-Erneut erhalten wir hier den Fehler, das das Property nicht korrekt initialisiert wurde.
-Wir wollen aber nicht dieselbe Lösung wie im vorherigen Abschnitt verwenden.
-Es wäre sehr aufwendig und unschön, das Property mit einem Dummy-Ersatzbuch zu initialisieren.
-=======
 Erneut erhalten wir hier den Fehler, dass das Property nicht korrekt initialisiert wurde.
 Hier wäre es sehr aufwendig und unschön, das Property mit einem Dummy-Ersatzbuch zu initalisieren.
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
 
 Die `BookListItemComponent` wird zusammen mit `*ngFor` verwendet.
 Hier wird immer ein Buch über das Property Binding zur Verfügung gestellt:
@@ -289,7 +261,6 @@ Da das Buch nun also `undefined` sein kann, greift eine weitere Typprüfung:
 </div>
 ```
 
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
 Die Prüfung bemängelt zu Recht, dass das Property `book` den Wert `undefined` haben kann und dann auch der Zugriff auf `book.thumbnails` oder `book.isbn` fehlschlagen könnte.
 Würden wir dies dennoch tun, dann käme es zur Laufzeit zu folgender Fehlermeldung: `TypeError: Cannot read property of undefined`.
 Dies ist einer der häufigsten Typfehler in JavaScript.
@@ -297,12 +268,7 @@ Er tritt immer dann auf, wenn auf einer undefinierten Variable eine Eigenschaft 
 Es ist gut, dass uns die strenge Typprüfung schon zur Kompilierzeit vor diesem Problem bewahrt.
 
 Wir haben das Markup wie folgt verbessert:
-Das gesamte Template wird mit `*ngIf` nur dann eingeblendet, wenn ein Buch vorhanden ist:
-=======
-Die Prüfung bemängelt zu Recht, dass das Property `book` den Wert `undefined` haben kann und dann auch der Zugriff auf `book.thumbnails` oder `book.isbn` den Wert `undefined` ergeben würde.
-Wir haben die Meldung wie folgt behoben:
-Das gesamte Template wird mit einem `<ng-container>` und `*ngIf` nur dann eingeblendet, wenn ein Buch vorhanden ist:
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
+Das gesamte Template wird mit mit einem `<ng-container>` und `*ngIf` nur dann eingeblendet, wenn ein Buch vorhanden ist:
 
 ```html
 <!-- NACHER: book-list-item.component.html -->
@@ -426,17 +392,10 @@ Eine neue Herausforderung bietet dann allerdings folgende Fehlermeldung:
 > Argument of type 'string | null' is not assignable to parameter of type 'string'.  
 > Type 'null' is not assignable to type 'string'.
 
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
-Die Methode `get()` von der `ParamMap` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
+Die Methode `ParamMap.get()` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
 Erst zur Laufzeit der Anwendung kann sicher ermittelt werden, ob ein bestimmter Routen-Parameter verfügbar ist.
 Um diesem Umstand gerecht zu werden, liefert `get()` einen Union-Type von `string | null` zurück.  
-=======
-Die Methode `ParamMap.get()` liefert entweder einen String zurück (wenn der Parameter verfügbar ist) oder `null` (wenn der Parameter nicht in der Map vorhanden ist).
-Erst zur Laufzeit der Anwendung kann sicher ermittelt werden, ob ein bestimmter Routen-Parameter existiert, daher.
-Vor den strikten Prüfungen von TypeScript war der gedruckte Code valide, jetzt ist dies nicht mehr der Fall.
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
 
-Der Typ des Routen-Parameters ist `string | null`.
 Die Methode `getSingle()` erwartet allerdings nur `string`.
 Vor den strikten Prüfungen von TypeScript war der gedruckte Code mit der Diskrepanz zwischen den beiden Typen valide, jetzt ist dies nicht mehr der Fall.
 
@@ -755,22 +714,21 @@ errorsForControl(): string[] {
   // [...]
 }
 ```
-
-<<<<<<< HEAD:blog/2022-02-bm4-update/README.md
+<!--
 ### Kapitel 12.3: Reactive Forms
 
-Wer das Buch gelesen hat, der weiss es bereits.
-Nachdem wir das Formular mit dem Template-Driven Ansatz implementiert haben,
-stellen wir im nächsten Kapitel schon alles wieder auf den alternativen Reactive Forms Ansatz um.
+Wer das Buch gelesen hat, der weiß es bereits:
+Nachdem wir das Formular mit dem Template-Driven-Ansatz implementiert haben,
+stellen wir im nächsten Kapitel schon alles wieder auf den alternativen Ansatz der Reactive Forms um.
 
-=======
+-->
+
 ## Es geht weiter …
 
 Wir ergänzen diesen Blogartikel von Zeit zu Zeit.
 Alle notwendigen Änderungen haben wir auf GitHub direkt im Code kommentiert.
 
 Wenn Sie Fehler finden oder diesen Blogpost ergänzen möchten, freuen wir uns über eine E-Mail oder einen [Pull Request auf GitHub](https://github.com/angular-buch/website-articles/tree/gh-pages/blog/2022-06-bm4-update)!
->>>>>>> 6334fe4 (finish):blog/2022-06-bm4-update/README.md
 
 
 ## Alle Änderungen
