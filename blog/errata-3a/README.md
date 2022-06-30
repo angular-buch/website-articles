@@ -3,7 +3,7 @@ title: "Errata zur 3. Auflage"
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2021-01-25
-lastModified: 2021-11-08
+lastModified: 2022-06-30
 keywords:
   - Angular
   - Errata
@@ -27,7 +27,7 @@ Seit Angular 12 ist der Strict Mode beim Anlegen eines neuen Projekts standardm�
 Das BookMonkey-Projekt im Buch wurde jedoch ohne Strict Mode entwickelt.
 Es sind deshalb einige Änderungen im Code nötig, um die Anforderungen des Strict Mode zu erfüllen.
 Insbesondere die Meldungen `property has no initializer` oder `is possibly undefined` hängen mit dem Strict Mode zusammen.
-Wir informieren darüber demnächst in einem separaten Blogpost.
+Wir informieren darüber [in einem separaten Blogpost](/blog/2022-06-bm4-update).
 Den Code auf GitHub haben wir entsprechend aktualisiert und mit Kommentaren versehen.
 
 ### TSLint / ESLint

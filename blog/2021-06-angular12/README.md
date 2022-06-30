@@ -3,7 +3,7 @@ title: 'Angular 12 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2021-06-07
-lastModified: 2021-11-08
+lastModified: 2022-06-30
 keywords:
   - Angular
   - Angular 12
@@ -25,10 +25,10 @@ Die neue Version bringt einige wenige Breaking Changes mit sich, die aber wie ü
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/angular-v12-is-now-available-32ed51fbfd49).
 
-Für alle Leser unseres Buchs haben wir einen **[ausführlichen Blogartikel zum Update auf Angular 12](/blog/2021-07-bm4-angular12)** geschrieben, in dem wir alle nötigen Änderungen am Beispielprojekt BookMonkey auflisten. 
+Für alle Leser unseres Buchs haben wir einen **[ausführlichen Blogartikel zum Update auf Angular 12 und neuer](/blog/2022-06-bm4-update)** geschrieben, in dem wir alle nötigen Änderungen am Beispielprojekt BookMonkey auflisten. 
 
-<!--
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+
+> **Die allgemeinen Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 13 ist da!](/blog/2021-11-angular13)
 > * [Angular 14 ist da!](/blog/2022-06-angular14)
 
