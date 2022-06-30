@@ -29,7 +29,11 @@ Die offizielle Ankündigung zum neuen Release finden Sie im [Angular Blog](https
 > * [Angular 9 ist da!](/blog/2020-02-angular9)
 > * [Angular 10 ist da!](/blog/2020-06-angular10)
 > * [Angular 11 ist da!](/blog/2020-11-angular11)
-> * [Angular 12 ist da!](/blog/2021-05-angular12)
+> * [Angular 12 ist da!](/blog/2021-06-angular12)
+> * [Angular 13 ist da!](/blog/2021-11-angular13)
+> * [Angular 14 ist da!](/blog/2022-06-angular14)
+
+
 ## Update auf Angular 8
 Das Update zur neuen Angular-Version ist kinderleicht. Hierzu führen Sie einfach den folgenden Befehl in einem bestehenden Projekt aus:
 

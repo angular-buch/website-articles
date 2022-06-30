@@ -47,7 +47,7 @@ Um auf den neuesten Stand von Angular zu gelangen, benutzen Sie bitte den Befehl
 Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angular:
 
 * [Angular 11 ist da!](/blog/2020-11-angular11)
-* [Angular 12 ist da!](/blog/2021-05-angular12)
+* [Angular 12 ist da!](/blog/2021-06-angular12)
 * [Angular 13 ist da!](/blog/2021-11-angular13)
 * [Angular 14 ist da!](/blog/2022-06-angular14)
 
