@@ -77,6 +77,21 @@ Der `controlName` für das Autorenfeld muss `authors` lauten. Dieser Fehler tauc
   controlName="authors"></bm-form-messages>
 ```
 
+### 12.3.12 Reactive Forms: Validator für `published`
+
+Im Formularmodell für Reactive Forms haben wir versehentlich für das Feld `published` keinen Validator notiert.
+Im Datenmodell `Book` ist das Property `published` nicht als optional gesetzt, also sollte das Formular an dieser Stelle auch ein Pflichtfeld anbieten.
+Es sollte der Validator `required` ergänzt werden.
+Außerdem können wir als Startwert für das `FormControl` direkt das heutige Datum angeben:
+
+```ts
+this.bookForm = this.fb.group({
+  // ...
+  published: [new Date(), [Validators.required]]
+});
+```
+
+
 ### 14.1.4 HttpClientModule in Feature-Modulen
 
 Im Abschnitt 14.1.4 auf Seite 406 erklären wir, dass ein Feature-Modul alle benötigten weiteren Module importieren muss:
