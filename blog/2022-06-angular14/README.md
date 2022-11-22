@@ -23,7 +23,8 @@ In diesem Blogpost fassen wir wie immer die wichtigsten Neuigkeiten zusammen.
 Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v14-is-now-available-391a6db736af) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
 
-
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 15 ist da!](/blog/2022-11-angular15)
 
 ## Projekt updaten
 

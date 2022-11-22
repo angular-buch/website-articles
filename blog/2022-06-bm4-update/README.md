@@ -50,7 +50,7 @@ Lesen Sie dazu auch gerne unsere Blogposts mit den neuesten Änderungen zu Angul
 * [Angular 12 ist da!](/blog/2021-06-angular12)
 * [Angular 13 ist da!](/blog/2021-11-angular13)
 * [Angular 14 ist da!](/blog/2022-06-angular14)
-
+* [Angular 15 ist da!](/blog/2022-11-angular15)
 
 ## Einen neuen BookMonkey erstellen
 
