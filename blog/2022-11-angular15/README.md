@@ -45,10 +45,9 @@ Die von Angular unterstützten Node.js Versionen sind jetzt:
 
 ## TypeScript 4.8.2 und ES2022
 
-Weiterhin setzt Angular nun auf die TypeScript Version `4.8.2` und auf den ECMA Script Standard ES2022.
-Durch diese Aktualisierung wird beim Update über die Compiler-Option `useDefineForClassFields` mit dem Wert `false` gestezt.
+### ECMA Script 2022
 
-<!-- TODO: Text aus dem Buch hier rein -->
+Angular setzt nun auf die TypeScript Version `4.8.2` und auf den ECMA Script Standard ES2022.
 
 ```json
 {
@@ -58,13 +57,16 @@ Durch diese Aktualisierung wird beim Update über die Compiler-Option `useDefine
     "target": "ES2022",
     "module": "ES2022",
     "lib": ["ES2022", "dom"]
-  },
-  "angularCompilerOptions": {
-    // ...
-    "enableIvy": true
   }
 }
-``` 
+```
+
+### `useDefineForClassFields`
+
+Bei der Aktualisierung mit `ng update` wird in der TypeScript-Konfiguration standardmäßig die Compiler-Option `useDefineForClassFields` auf den Wert `false` gestezt.
+Somit wird der TypeScript Compiler angeweisen die properitäre Implementierung zur Verarbeitung von Klassen-Properties zu nutzen.
+
+<!-- TODO: mehr vom Buchtext hier rein -->
 
 ## Standalone Components
 
