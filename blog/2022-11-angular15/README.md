@@ -174,6 +174,7 @@ Die von Angular offiziell unterstützten Node.js-Versionen sind damit:
 - `16.13.x`
 - `18.10.x`
 
+Höhere Nebenversionsnummern wie die aktuelle Version 18.12.1 (LTS) funktionieren nach unserer Erfahrung ebenso einwandfrei. Node.js 19 wird jedoch nicht offiziell unterstützt.
 
 ## TypeScript 4.8 und ES2022
 
