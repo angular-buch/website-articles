@@ -315,7 +315,7 @@ Wir haben das Buch neu strukturiert und alle Beispiele neu entwickelt.
 Die neuen Features von Angular 15 werden ebenfalls ausführlich behandelt.
 
 <div style="text-align: center">
-<img src="https://angular-buch.com/assets/img/book-cover-v4.png" alt="Buchcover 4. Auflage" width="200">
+<img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="max-width:500px">
 </div>
 
 
