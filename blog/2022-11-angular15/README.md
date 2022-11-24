@@ -8,12 +8,16 @@ keywords:
   - Angular
   - Angular 15
   - Update
+  - Functional Guards
+  - Functional Resolvers
+  - Functional Interceptors
+  - Standalone Components
 language: de
 thumbnail: ./angular15.jpg
 sticky: true
 ---
 
-Am 16. November erschien die neue Major-Version von Angular: **Angular 15.0.0**!
+Am 16. November 2022 erschien die neue Major-Version von Angular: **Angular 15.0.0**!
 Im Fokus des neuen Releases standen vor allem diese drei Themen:
 
 - Standalone Components gelten nun als *stable*.
@@ -324,13 +328,26 @@ Eine Auswahl haben wir hier zusammengestellt:
 - **Optionen für Tree-Shakable Providers:** Das Property `providedIn` im Decorator `@Injectable()` trägt in den meisten Fällen den Wert `root`. Zwei mögliche andere Optionen wurden nun entfernt: Es ist *nicht* mehr möglich, dort den Wert `any` oder eine Modulklasse anzugeben.
 - **Import für Localize:** Das Paket `@angular/localize` muss nicht mehr unter Polyfills eingetragen werden, sondern wird nun über die `tsconfig.json` referenziert. Die Umstellung wird vom Migrationsskript automatisch vorgenommen.
 
-<br>
-<br>
-
 Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in der Dokumentation veröffentlicht: [https://angular.io/guide/roadmap](https://angular.io/guide/roadmap).
 
+
+## Neue Auflage des Angular-Buchs
+
+Wir haben in den letzten Monaten intensiv an einer Neuauflage des deutschsprachigen Angular-Buchs gearbeitet! Das neue Buch erscheint im Februar 2023 in allen Buchhandlungen und Onlineshops.
+
+Wir haben das Buch neu strukturiert und alle Beispiele neu entwickelt.
+Die neuen Features von Angular 15 werden ebenfalls ausführlich behandelt.
+
+<div style="text-align: center">
+<img src="https://angular-buch.com/assets/img/book-cover.png" alt="Buchcover 4. Auflage" width="200">
+</div>
+
+
+<hr>
+
+
 Wir wünschen Ihnen viel Spaß mit Angular 15!
-Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
+Haben Sie Fragen zur neuen Version zu Angular oder zu unserem Buch? Schreiben Sie uns!
 
 **Viel Spaß wünschen
 Ferdinand, Danny und Johannes**
