@@ -276,9 +276,9 @@ Wir empfehlen Ihnen also, Ihren Code jetzt schon möglichst robust zu entwickeln
 ## Directive Composition API
 
 In Angular können wir Direktiven implementieren, um Elemente in den Templates mit weiteren Funktionalitäten zu versehen.
-Dabei werden solche Direktiven aber stats von außen auf einem Element notiert, in der Regel als Attribut.
+Dabei werden solche Direktiven aber stets von außen auf einem Element notiert, in der Regel als Attribut.
 
-Mit der neuen *Directive Composition API* können wir Direktiven auch von innen heraus zu platzieren.
+Mit der neuen *Directive Composition API* können wir Direktiven auch von innen heraus anwenden:
 Eine Direktive oder Komponente kann damit selbst deklarativ entscheiden, welche weiteren Direktiven auf ihrem Host-Element erzeugt werden.
 Dadurch ist es möglich, einzelne Funktionalitäten in Direktiven auszulagern und diese dann in Komposition zu verwenden.
 
