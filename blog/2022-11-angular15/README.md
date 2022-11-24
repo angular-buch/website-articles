@@ -124,7 +124,7 @@ bootstrapApplication(AppComponent, {
 
 ### RouterLinkWithHref
 
-Mit Standalone Components müssen alls Abhängigkeiten einer Komponente direkt importiert werden.
+Mit Standalone Components müssen alle Abhängigkeiten einer Komponente direkt importiert werden.
 Dazu gehören auch die Direktiven des Routers.
 Bislang existierten zwei Implementierungen für den RouterLink: die Direktiven `RouterLink` und `RouterLinkWithHref`.
 Diese beiden Implementierungen wurden nun zusammengeführt, sodass wir stets nur noch `RouterLink` importieren müssen.
