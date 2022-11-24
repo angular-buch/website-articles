@@ -101,7 +101,7 @@ Im Blog der Angular.Schule haben wir dieses Thema ausführlich beleuchtet: [Stan
 
 In diesem Zuge wurde ein alternativer Weg eingeführt, um den `HttpClient` in der Anwendung bereitzustellen.
 Bisher mussten wir dazu das `HttpClientModule` importieren.
-Im zusammenhang mit Standalone Components können wir die neue Funktion `provideHttpClient()` nutzen.
+Im Zusammenhang mit Standalone Components können wir die neue Funktion `provideHttpClient()` nutzen.
 
 Als Argumente können wir sogenannte *Features* übergeben – zusätzliche Funktionen des HttpClients, die einzeln aktiviert werden können.
 
