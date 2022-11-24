@@ -194,56 +194,29 @@ In der Datei `tsconfig.json` finden wir dazu die folgenden Angaben:
 }
 ```
 
-### `useDefineForClassFields`: unterschiedliches Verhalten von Propertys
 
-In neuen Projekten wird in der TypeScript-Konfiguration automatisch die Compiler-Option `useDefineForClassFields` auf den Wert `false` gesetzt.
-Neue Projekte erhalten die gleiche Einstellung.
-Damit wird der TypeScript Compiler angewiesen, die properitäre Implementierung von TypeScript zur Verarbeitung von Klassen-Propertys zu nutzen und nicht das native Verhalten von JavaScript.
-Dazu möchten wir kurz die Hintergründe erläutern.
+Die Option `useDefineForClassFields` ist notwendig, weil sich das Verhalten von TypeScript und nativem JavaScript bei der Initialisierung von Klassen-Propertys unterscheidet.
+Angular setzt die Option vorsorglich auf `false`, um das gewohnte Verhalten zu aktivieren und bestehenden Code nicht zu brechen.
 
-In TypeScript können wir ein Klassen-Property direkt bei der Deklaration mit einem Wert initialisieren.
-Beim Design der Propertys von TypeScript ging man nach bestem Wissen und Gewissen davon aus, dass die gewählte Implementierung exakt das Verhalten einer zukünftigen Version von JavaScript nachahmen würde.
-Das hat leider nicht ganz funktioniert – die Standardisierung in ECMAScript ist über die Jahre einen anderen Weg gegangen.
+> Wir haben die Hintergründe dieser Option ausführlich in einem separaten Blogartikel erläutert: TODO
 
-Klassen-Propertys sind in TypeScript so implementiert, dass die Initialisierung mit Werten immer als erste Anweisung im Konstruktor durchgeführt wird.
-Die beiden folgenden Schreibweisen waren bislang im Ergebnis absolut identisch:
-
-```ts
-class User {
-  age = 25;
-}
-
-// ist in TypeScript exakt das gleiche wie:
-class User {
-  age: number;
-
-  constructor() {
-    this.age = 25;
-  }
-}
-```
-
-In JavaScript verhalten sich die nativen Klassen-Propertys leider etwas anders:
-Es ist möglich, zunächst die Propertys zu initialisieren und erst *danach* den Konstruktor auszuführen.
-Es handelt sich in JavaScript also um zwei voneinander unabhängige Schritte – bei der proprietären Implementierung von TypeScript geschieht die Initialisierung der Propertys hingegen immer zusammen mit dem Aufruf des Konstruktors.
-
-Die Diskrepanz zwischen den beiden Welten ist besonders interessant, wenn wir Argumente über den Konstruktor empfangen, z. B. wenn wir eine Abhängigkeit mittels Dependency Injection anfordern.
-Wollen wir einen injizierten Service für die direkte Initialisierung eines Propertys nutzen, funktioniert der Code in nativem JavaScript nicht.
-In TypeScript ist der folgende Code hingegen gültig.
-
+Derzeit sind an bestehenden Angular-Projekten keine Änderungen notwendig.
+Wir empfehlen Ihnen jedoch, schon jetzt den Code zukunftssicher zu implementieren.
+Abhängigkeiten, die über den Konstruktor mittels Dependency Injection angefordert werden, sollten nicht mehr bei der direkten Initialisierung eines Propertys verwendet werden:
 
 ```ts
 export class MyComponent {
+  // funktioniert NICHT in JavaScript!
   data$ = this.service.getData();
 
   constructor(private service: MyDataService) {}
 }
 ```
 
-Für dieses Dilemma gibt es zwei Lösungswege:
+Um das Problem zu lösen, gibt es zwei Ansätze:
 
-1. Setzen wir `useDefineForClassFields` auf `false`, wird das gewohnte proprietäre Verhalten von TypeScript aktiv. Diesen Weg hat Angular gewählt, um bestehenden Code nicht zu brechen.
-2. Wir verwenden injizierte Services nicht bei der direkten Initialisierung eines Propertys. Dafür funktionieren zwei Ansätze: a) wir nutzen den Konstruktor oder b) wir setzen die Funktion `inject()` ein.
+- a) wir nutzen den Konstruktor oder
+- b) wir setzen die Funktion `inject()` ein.
 
 Verschieben wir die Initialisierung vollständig in den Konstruktor, sind die Argumente bereits vorhanden, bevor wir das Property initialisieren.
 
@@ -270,6 +243,8 @@ export class MyComponent {
 Mit beiden Varianten ist der Code zukunftssicher und funktioniert sowohl in TypeScript als auch ES2022.
 Es ist davon auszugehen, dass in Angular irgendwann die Einstellung `useDefineForClassFields` auf den Standardwert `true` gesetzt wird.
 Wir empfehlen Ihnen also, Ihren Code jetzt schon möglichst robust zu entwickeln.
+
+> Mehr zur Option `useDefineForClassFields` finden Sie in unserem separaten Blogartikel: TODO
 
 
 
