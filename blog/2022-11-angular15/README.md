@@ -153,7 +153,7 @@ Wollen wir die Werte selbst anpassen, können wir die Dateien manuell anlegen �
 
 - `.browserslistrc` wird nicht automatisch von `ng new` generiert.
 - Die Karma-Konfiguration `karma.conf.js` und die Einstiegsdatei für die Testausführung `src/test.ts` werden nun nicht mehr mit angelegt.
-- Die bisher erzeugte Datei `polyfills.ts` wird nun nicht mehr mit angelegt.Stattdessen akzeptiert die Konfigurationsoption `polyfills` in der Datei `angular.json` nun alternativ ein Array von referenzierten Polifills.
+- Die bisher erzeugte Datei `polyfills.ts` wird nun nicht mehr mit angelegt. Stattdessen akzeptiert die Konfigurationsoption `polyfills` in der Datei `angular.json` nun alternativ ein Array von referenzierten Polyfills.
 - Die Umgebungsdateien `environment.ts` und `environment.prod.ts` werden in neuen Projekten nicht generiert. Der Mechanismus der `fileReplacements` in der Datei `angular.json`, der dafür sorgt, dass abhängig vom Build-Target eine andere Datei geladen werden kann, bleibt jedoch weiterhin erhalten. Bei Bedarf können Sie die Environment-Dateien also selbst anlegen und konfigurieren.
 
 Beim Update auf die neue Angular-Version werden die genannten Dateien nicht entfernt, sondern bleiben bestehen.
