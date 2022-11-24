@@ -47,13 +47,13 @@ Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderung
 Guards, Resolver und Interceptors sind zusätzliche Features von Angular, mit denen wir Router und HttpClient steuern können:
 
 - Ein Guard entscheidet, ob eine Navigation ausgeführt werden darf.
-- Ein Resolver löst (asynchrone) Daten aus, bevor eine Route geladen wird.
-- Ein Interceptor verarbeitet einen HTTP-Request oder -Response, z. B. um Headerfelder für die Authentifizierung hinzuzufügen.
+- Ein Resolver löst (asynchrone) Daten auf, bevor eine Route geladen wird.
+- Ein Interceptor verarbeitet einen HTTP-Request oder -Response, z. B. um Headerfelder für die Authentifizierung global hinzuzufügen.
 
 Alle drei Bausteine existieren seit vielen Jahren – sie wurden aber bislang stets in Form einer Klasse implementiert.
 Nun können Guards, Resolver und Interceptors auch als einfache Funktionen definiert werden.
 Der Code wird damit leichtgewichtiger und flexibler.
-Wollen wir Abhängigkeiten über die Dependency Injection anfordern, müssen wir die Funktion `inject()` nutzen.
+Wollen wir innerhalb der Funktion Abhängigkeiten über die Dependency Injection anfordern, müssen wir die Funktion `inject()` nutzen.
 
 ```ts
 export const authGuard: CanActivateFn = (route, state) => {
@@ -80,7 +80,7 @@ export const myInterceptor: HttpInterceptorFn = (
 }
 ```
 
-Guards und Resolver werden auf dieselbe Weise bereitgestellt wie die klassenbasierten Implementierungen.
+Funktionale Guards und Resolver werden auf dieselbe Weise bereitgestellt wie die klassenbasierten Implementierungen.
 Funktionale Interceptors können derzeit nur mit der neuen Funktion `provideHttpClient()` genutzt werden, siehe der nächste Abschnitt.
 
 Voraussichtlich mit Angular 15.1 werden klassenbasierte Guards und Resolver als *deprecated* markiert.
@@ -104,6 +104,7 @@ Bisher mussten wir dazu das `HttpClientModule` importieren.
 Im Zusammenhang mit Standalone Components können wir die neue Funktion `provideHttpClient()` nutzen.
 
 Als Argumente können wir sogenannte *Features* übergeben – zusätzliche Funktionen des HttpClients, die einzeln aktiviert werden können.
+Auf diese Weise können wir z. B. funktionale Interceptors registrieren.
 
 ```ts
 import {
@@ -269,38 +270,33 @@ Setzen wir die folgende `MyComponent` in der Anwendung ein, so werden auf ihrem 
 export class MyComponent {}
 ```
 
-Um mit den erzeugten Direktiven zu interagieren, können wir die Klassen mittels Dependency Injection anfordern, so wie wir es im vorhergehenden Abschnitt beschrieben haben.
+Um mit den erzeugten Direktiven zu interagieren, können wir die Klassen mittels Dependency Injection anfordern.
 Wir erhalten Zugriff auf die Instanzen und können dort die Propertys und Methoden direkt verwenden.
 
 Außerdem können wir die Inputs und Outputs der Host-Direktiven deklarativ verfügbar machen.
 Für alle Möglichkeiten der neuen Schnittstelle möchten wir Sie auf die [offizielle Angular-Dokumentation](https://angular.io/guide/directive-composition-api) verweisen.
 
 
-## Image Directive
+## Image Directive: optimierte Verwendung von Bildern
 
-Die Direktive `NgOptimizedImage` ist jetzt stabil und kann uneingeschränkt verwendet werden. 
-Sie wurde in Angular v14.2 eingeführt und ermöglicht es, das Laden von Bildern zu verbessern, indem sie verschiedene Best Practices durchsetzt.
-Bitte beachten Sie, dass es eine Änderung eine Änderung in der finalen API gibt: 
-Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`.
+Die neue Direktive `NgOptimizedImage` ist nun offiziell stabil und kann uneingeschränkt verwendet werden. 
+Sie wurde in Angular 14.2 eingeführt und ermöglicht es, das Laden von Bildern zu verbessern, indem sie verschiedene Best Practices durchsetzt.
+Bitte beachten Sie, dass es eine Änderung in der finalen API gibt: 
+Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`).
 
 Lesen Sie mehr zu der neuen Direktive in der [offiziellen Angular-Dokumentation](https://angular.io/api/common/NgOptimizedImage).
 
 
-## Neuerungen bei Styles
-
 ### CSS-Imports ohne Tilde
 
-Style-Imports aus den `node_modules` werden nicht mehr mit einer vorangestellten Tilde (~) notiert:
+Style-Imports aus dem Ordner `node_modules` wurden bisher mit eienr vorangestellten Tilde (`~`) notiert.
+Dieser Weg ist *deprecated*, und es ist nicht mehr notwendig, die Tilde anzugeben:
 
 ```diff
 -@import '~foo/styles.css';
 +@import 'foo/styles.css';
 ```
 
-### Stylus Support
-
-Angular unterstützt Style-Definitionen nicht nur in reinem CSS, sondern es können CSS-Präprozessoren genutzt werden: Sass/SCSS und LESS.
-Der weniger bekannte Präprozessor *Stylus* wird seit Angular 15 nicht mehr unterstützt.
 
 ## Sonstiges
 
@@ -310,6 +306,7 @@ Eine Auswahl haben wir hier zusammengestellt:
 - **Utility-Funktionen für Reactive Forms:** Das Paket `@angular/forms` exportiert nun die Hilfsfunktionen `isFormControl()`, `isFormGroup()` und `isFormArray()`. Diese Funktionen sind praktisch, wenn der Typ eines Controls im Code geprüft werden muss, z. B. in einem Validator.
 - **Optionen für Tree-Shakable Providers:** Das Property `providedIn` im Decorator `@Injectable()` trägt in den meisten Fällen den Wert `root`. Zwei mögliche andere Optionen wurden nun entfernt: Es ist *nicht* mehr möglich, dort den Wert `any` oder eine Modulklasse anzugeben.
 - **Import für Localize:** Das Paket `@angular/localize` muss nicht mehr unter Polyfills eingetragen werden, sondern wird nun über die `tsconfig.json` referenziert. Die Umstellung wird vom Migrationsskript automatisch vorgenommen.
+- **Stylus-Support eingestellt:** Angular unterstützt Style-Definitionen nicht nur in reinem CSS, sondern es können CSS-Präprozessoren genutzt werden: Sass/SCSS und LESS. Der weniger bekannte Präprozessor *Stylus* wird seit Angular 15 nicht mehr unterstützt.
 
 Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in der Dokumentation veröffentlicht: [https://angular.io/guide/roadmap](https://angular.io/guide/roadmap).
 
