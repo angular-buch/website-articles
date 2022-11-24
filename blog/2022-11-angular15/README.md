@@ -281,7 +281,7 @@ Für alle Möglichkeiten der neuen Schnittstelle möchten wir Sie auf die [offiz
 Die Direktive `NgOptimizedImage` ist jetzt stabil und kann uneingeschränkt verwendet werden. 
 Sie wurde in Angular v14.2 eingeführt und ermöglicht es, das Laden von Bildern zu verbessern, indem sie verschiedene Best Practices durchsetzt.
 Bitte beachten Sie, dass es eine Änderung eine Änderung in der finalen API gibt: 
-Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`).
+Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`.
 
 Lesen Sie mehr zu der neuen Direktive in der [offiziellen Angular-Dokumentation](https://angular.io/api/common/NgOptimizedImage).
 
