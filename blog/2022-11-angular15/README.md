@@ -99,7 +99,7 @@ Im Blog der Angular.Schule haben wir dieses Thema ausführlich beleuchtet: [Stan
 
 ### Neue Standalone APIs
 
-In diesem Zuge wurde ein alternative Weg eingeführt, um den `HttpClient` in der Anwendung bereitzustellen.
+In diesem Zuge wurde ein alternativer Weg eingeführt, um den `HttpClient` in der Anwendung bereitzustellen.
 Bisher mussten wir dazu das `HttpClientModule` importieren.
 Im zusammenhang mit Standalone Components können wir die neue Funktion `provideHttpClient()` nutzen.
 
