@@ -194,7 +194,7 @@ In der Datei `tsconfig.json` finden wir dazu die folgenden Angaben:
 }
 ```
 
-### `useDefineForClassFields`
+### `useDefineForClassFields`: unterschiedliches Verhalten von Propertys
 
 In neuen Projekten wird in der TypeScript-Konfiguration automatisch die Compiler-Option `useDefineForClassFields` auf den Wert `false` gesetzt.
 Neue Projekte erhalten die gleiche Einstellung.
