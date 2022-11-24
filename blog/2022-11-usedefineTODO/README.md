@@ -90,4 +90,4 @@ Wir empfehlen Ihnen also, Ihren Code jetzt schon möglichst robust zu entwickeln
 
 <hr>
 
-<small>**Titelbild:** TODO, 2022. Foto von Ferdinand Malcher</small>
+<small>**Titelbild:** Mols Bjerge Nationalpark, Dänemark, 2022. Foto von Ferdinand Malcher</small>
