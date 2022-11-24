@@ -354,4 +354,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<small>**Titelbild:** 20XX. Foto von Ferdinand Malcher</small>
+<small>**Titelbild:** Bornholm, Dänemark, 2022. Foto von Ferdinand Malcher</small>
