@@ -95,7 +95,7 @@ das Zusammenspiel von Functional Guard, `inject()`, `CanMatch` und `loadComponen
 ## Standalone Components
 
 Die mit Angular 14 eingeführten Standalone Components sind nun als *stable* eingestuft und können ohne Einschränkungen verwendet werden.
-Im Blog der Angular.Schule haben wir dieses thema ausdführlich beleuchtet: [Standalone Components – neu ab Angular 14 (von Ferdinand Malcher)](https://angular.schule/blog/2022-05-standalone-components).
+Im Blog der Angular.Schule haben wir dieses Thema ausführlich beleuchtet: [Standalone Components – neu ab Angular 14 (von Ferdinand Malcher)](https://angular.schule/blog/2022-05-standalone-components).
 
 ### Neue Standalone APIs
 
