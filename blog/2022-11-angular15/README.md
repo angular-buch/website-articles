@@ -336,7 +336,7 @@ Das Bild wird z. B. beim Scrollen erst dann geladen, wenn es kurz davor ist, im 
 In diesem Beispiel wird die Priorität gesetzt:
 
 ```html
-<img ngSrc="https://example.org/angular-buch.jpg" width="200" height="400" priority>
+<img ngSrc="https://example.org/angular-buch.jpg" width="800" height="1152" priority>
 ```
 
 Zusätzlich sollte man dann einen Preconnect-Link zum Header der Seite hinzufügen, wenn die Bilder von einer anderen Domain geladen werden.
