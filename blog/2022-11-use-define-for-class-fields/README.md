@@ -25,10 +25,10 @@ Wir zeigen Ihnen, was es damit auf sich hat und wie Sie Ihren Code schreiben mü
 
 ## Inhalt
 
-* [Propertys initialisieren mit TypeScript](/blog/`2022-11-use-define-for-class-fields#propertys-initialisieren-mit-typescript)
-* [Das proprietäre Verhalten von TypeScript](/blog/`2022-11-use-define-for-class-fields#dass-propriet-re-verhalten-von-typeScript)
-* [Propertys zukunftssicher initialisieren](/blog/`2022-11-use-define-for-class-fields#propertys-zukunftssicher-initialisieren)
-* [Auswirkungen auf bestehenden Angular-Code](/blog/`2022-11-use-define-for-class-fields#auswirkungen-auf-bestehenden-angular-code)
+* [Propertys initialisieren mit TypeScript](/blog/2022-11-use-define-for-class-fields#propertys-initialisieren-mit-typescript)
+* [Das proprietäre Verhalten von TypeScript](/blog/2022-11-use-define-for-class-fields#das-proprietäre-verhalten-von-typescript)
+* [Propertys zukunftssicher initialisieren](/blog/2022-11-use-define-for-class-fields#propertys-zukunftssicher-initialisieren)
+* [Auswirkungen auf bestehenden Angular-Code](/blog/2022-11-use-define-for-class-fields#auswirkungen-auf-bestehenden-angular-code)
 
 
 ## Propertys initialisieren mit TypeScript

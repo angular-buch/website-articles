@@ -132,16 +132,19 @@ Bislang existierten zwei Implementierungen für den RouterLink: die Direktiven `
 Diese beiden Implementierungen wurden nun zusammengeführt, sodass wir stets nur noch `RouterLink` importieren müssen.
 
 ```diff
- @Component({
-   template: `
-   <ul>
-     <li><a routerLink="/books/1">Book 1</a></li>
-     <li><button routerLink="/books/2">Book 2</button></li>
-   </ul>
-   `,
-   standalone: true,
--  imports: [RouterLinkWithHref, RouterLink],
-+  imports: [RouterLink],
+@Component({
+  template: `
+    <ul>
+      <li><a routerLink="/books/1">Book 1</a></li>
+      <li><button routerLink="/books/2">Book 2</button></li>
+     </ul>
+  `,
+  standalone: true,
+  // VORHER:
+  imports: [RouterLinkWithHref, RouterLink],
+
+  // NACHHER:
+  imports: [RouterLink],
  })
  class BookListComponent {}
 ```
@@ -312,7 +315,7 @@ Anschließend können wir im Template der Angular-Komponenten das `src`-Attribut
 <!-- VORHER: -->
 <img src="angular-buch.jpg" alt="">
 
-<!-- NEU: -->
+<!-- NACHHER: -->
 <img ngSrc="angular-buch.jpg" alt="">
 ```
 
@@ -382,8 +385,11 @@ Style-Imports aus dem Ordner `node_modules` wurden bisher mit einer vorangestell
 Dieser Weg ist *deprecated*, und es ist nicht mehr notwendig, die Tilde anzugeben:
 
 ```diff
--@import '~foo/styles.css';
-+@import 'foo/styles.css';
+/* VORHER: */
+@import '~foo/styles.css';
+
+/* NACHHER: */
+@import 'foo/styles.css';
 ```
 
 
