@@ -1,7 +1,7 @@
 ---
 title: 'TypeScript: useDefineForClassFields – zukünftige Breaking Changes vermeiden'
-author: Angular Buch Team
-mail: team@angular-buch.com
+author: Johannes Hoppe und Ferdinand Malcher
+mail: team@angular.schule
 published: 2022-11-25
 lastModified: 2022-11-25
 keywords:

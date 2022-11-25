@@ -15,6 +15,7 @@ keywords:
 language: de
 thumbnail: ./angular15.jpg
 sticky: true
+hidden: true
 ---
 
 Am 16. November 2022 erschien die neue Major-Version von Angular: **Angular 15.0.0**!
@@ -200,7 +201,7 @@ In der Datei `tsconfig.json` finden wir dazu die folgenden Angaben:
 Die Option `useDefineForClassFields` ist notwendig, weil sich das Verhalten von TypeScript und nativem JavaScript bei der Initialisierung von Klassen-Propertys unterscheidet.
 Angular setzt die Option vorsorglich auf `false`, um das gewohnte Verhalten zu aktivieren und bestehenden Code nicht zu brechen.
 
-> Wir haben die Hintergründe dieser Option ausführlich in einem separaten Blogartikel erläutert: TODO
+> Wir haben die Hintergründe dieser Option ausführlich in einem [separaten Blogartikel](/blog/2022-11-use-define-for-class-fields) erläutert.
 
 Derzeit sind an bestehenden Angular-Projekten keine Änderungen notwendig.
 Wir empfehlen Ihnen jedoch, schon jetzt den Code zukunftssicher zu implementieren.
@@ -246,7 +247,7 @@ Mit beiden Varianten ist der Code zukunftssicher und funktioniert sowohl in Type
 Es ist davon auszugehen, dass in Angular irgendwann einmal die Einstellung `useDefineForClassFields` auf den Standardwert `true` gesetzt wird.
 Wir empfehlen Ihnen also, Ihren Code schon heute möglichst robust zu entwickeln.
 
-> Mehr zur Option `useDefineForClassFields` finden Sie in unserem separaten [Blogartikel zu useDefineForClassFields](/blog/2022-11-useDefineForClassFields).
+> Mehr zur Option `useDefineForClassFields` finden Sie in unserem separaten Blogartikel: [TypeScript: useDefineForClassFields – zukünftige Breaking Changes vermeiden (von Johannes Hoppe und Ferdinand Malcher)](/blog/2022-11-use-define-for-class-fields).
 
 
 
