@@ -349,8 +349,6 @@ Auch hier gibt die Direktive im Debug-Modus eine Warnung aus, wenn man diese Opt
 </head>
 ```
 
-
-
 Diese Option weist den Browser an, das Bild möglichst schnell zu laden.
 Dies bietet sich zum Beispiel beim Headerbild eines Blogs an, das wichtig für den ersten Eindruck ist.
 
