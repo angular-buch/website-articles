@@ -194,7 +194,7 @@ export class MyComponent {
 
 Die gewählte Einstellung für `useDefineForClassFields` hat eine große Tragweite.
 Würde man den Schalter bei bestehenden Angular-Projekten in der Standardeinstellung belassen, so würde es mit sehr hoher Wahrscheinlichkeit an vielen Stellen zu Fehlern kommen.
-Daher hat das Angular-Team sowohl für bestehende als auch für neue Projekte die Einstellung mit Angular 15 explizit über die Datei `tsconfig.json` deaktiviert.
+Daher hat das Angular-Team sowohl für bestehende als auch für neue Projekte die Einstellung mit Angular 15 explizit deaktiviert.
 In der Datei `tsconfig.json` finden wir dazu die folgenden Angaben:
 
 ```json
@@ -217,7 +217,7 @@ Sollte in Zukunft die Standardeinstellung für geändert werden, so sind Sie dan
 ## Neue Auflage des Angular-Buchs
 
 Wir haben in den letzten Monaten intensiv an einer Neuauflage des deutschsprachigen Angular-Buchs gearbeitet!
-Natürlich haben vorsorglich alle Quelltexte im Angular-Buch so geschrieben, dass sie bereits zukunftssicher funktionieren. 
+Natürlich haben wir vorsorglich alle Quelltexte im Angular-Buch so geschrieben, dass sie bereits zukunftssicher funktionieren. 
 Die Inhalte dieses Blogposts haben wir aus unserem Buch übernommen.
 Wenn Sie diesen Text hilfreich fanden, dann sollten Sie unbedingt das neue [Angular-Buch vorbestellen](https://amzn.eu/d/8fgTIWL).
 
