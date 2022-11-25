@@ -340,7 +340,7 @@ In diesem Beispiel wird die Priorität gesetzt:
 ```
 
 Zusätzlich sollte man dann einen Preconnect-Link zum Header der Seite hinzufügen, wenn die Bilder von einer anderen Domain geladen werden.
-Dies weist den Browser an, frühzeitig eine Netzwerkverbindungen zum anderen Server aufzubauen.
+Dies weist den Browser an, frühzeitig eine Netzwerkverbindung zum anderen Server aufzubauen.
 Auch hier gibt die Direktive im Debug-Modus eine Warnung aus, wenn man diese Optimierung vergessen hat:
 
 ```html
