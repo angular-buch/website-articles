@@ -366,7 +366,7 @@ Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direk
 
 Probieren Sie die neue Direktive doch gleich einmal aus.
 Wir haben hierfür eine Stackblitz-Demo vorbereitet:  
-**[👉 Demo auf Stackblitz: NgOptimizedImage](https://angular-ivy-98yfkn.stackblitz.io)**
+**[👉 Demo auf Stackblitz: NgOptimizedImage](https://stackblitz.com/edit/angular-ivy-98yfkn?file=src%2Fapp%2Fapp.component.html)**
 
 
 ### CSS-Imports ohne Tilde
