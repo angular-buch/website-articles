@@ -281,52 +281,65 @@ Für alle Möglichkeiten der neuen Schnittstelle möchten wir Sie auf die [offiz
 
 Die neue Direktive `NgOptimizedImage` ist nun offiziell stabil und kann uneingeschränkt verwendet werden. 
 Sie wurde in Angular 14.2 eingeführt und ermöglicht es, das Laden von Bildern zu verbessern, indem sie verschiedene Best Practices durchsetzt.
-Bitte beachten Sie, dass es eine Änderung in der finalen API gibt: 
+Bitte beachten Sie, dass es mit Angular 15 eine Änderung in der finalen API gibt:
 Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`).
 
 
-Die Einbindung der neuen Direktive ist sehr einfach.
-Sie können diese über das `NgModule` importieren oder die Standalone-API verwenden:
+Die Einbindung der neuen Direktive ist sehr einfach:
+Wir können die Klasse entweder über ein NgModule oder in einer Standalone Component importieren:
 
-    import { NgOptimizedImage } from '@angular/common';
+```ts
+import { NgOptimizedImage } from '@angular/common';
     
-    // Einbindung bei einer Standalone Component
-    @Component({
-      standalone: true
-      imports: [NgOptimizedImage],
-    })
-    class MyStandaloneComponent {}
-    
-    // Einbindung per NgModule
-    @NgModule({
-      imports: [NgOptimizedImage],
-    })
-    class AppModule {}
+// einbinden in Standalone Component
+@Component({
+  standalone: true
+  imports: [NgOptimizedImage],
+})
+class MyStandaloneComponent {}
 
-Anschließend können Sie  im Template der Angular-Komponenten das `src`-Attribut der Bilder durch `ngSrc` ersetzen:
+// einbinden in NgModule
+@NgModule({
+  imports: [NgOptimizedImage],
+})
+class AppModule {}
+```
 
-`<img ngSrc="angular-buch.jpg">`
+Anschließend können wir im Template der Angular-Komponenten das `src`-Attribut der Bilder durch `ngSrc` ersetzen:
 
-Die `NgOptimizedImage`-Direktive hilft dabei, diverse Best-Practises für Bilder anzuwenden.
-Vergisst man etwa die Attribute `width` und `height` für das `img`-Element zu verwenden (wie oben gezeigt), so erscheint eine hilfreiche Fehlermeldung: 
+```html
+<img ngSrc="angular-buch.jpg" alt="">
+```
+
+Die Direktive `NgOptimizedImage` wird automatisch aktiv, sobald dieses Attribut eingesetzt wird.
+Sie hilft dabei, diverse Best Practices für Bilder anzuwenden.
+Vergisst man etwa, die Attribute `width` und `height` für das `img`-Element zu verwenden (wie oben gezeigt), so erscheint eine hilfreiche Fehlermeldung:
 
 <!-- Ich hoffe das stimmt noch, aber diese Test sagt das es so sein soll: https://github.com/angular/angular/blob/1d1e33e8d0b416c6be06b53e4fdbe673b30b1cc6/packages/common/test/directives/ng_optimized_image_spec.ts#L344 -->
 > NG02954: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="img.png"`) has detected that these required attributes are missing: "width". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
 
 Natürlich gibt die Direktive nicht nur Fehlermeldungen aus. 
-Eines der wichtigsten Features ist das "faule" (lazy) Laden von Bildern, so dass das  die Ladezeiten der einzelnen Routen deutlich verbessert werden können.
+Eines der wichtigsten Features ist das "faule" (lazy) Laden von Bildern, sodass die Ladezeiten der einzelnen Routen deutlich verbessert werden können.
 In diesem Beispiel wird keine Priorität angegeben:
 
-`<img ngSrc="angular-buch.jpg"  width="200" height="400">`
+```html
+<img ngSrc="angular-buch.jpg"  width="200" height="400">
+```
 
-Dadurch wird der Browser angewiesen, mit dem Laden des Bildes zu warten, bis der Browser schätzt, dass es unmittelbar benötigt wird. Das Bild wird z.B. beim Scrollen erst dann geladen, wenn es kurz davor ist im sichtbaren Bereich zu erscheinen.
+Dadurch wird der Browser angewiesen, mit dem Laden des Bilds zu warten, bis der Browser schätzt, dass es unmittelbar benötigt wird.
+Das Bild wird z. B. beim Scrollen erst dann geladen, wenn es kurz davor ist, im sichtbaren Bereich zu erscheinen.
 
 In diesem Beispiel wird die Priorität gesetzt:
-`<img ngSrc="angular-buch.jpg"  width="200" height="400" priority>`
 
-Dies weist den Browser an, das Bild möglichst rasch zu laden. Dies bietet sich zum Beispiel bei dem Header-Bild eines Blogs an, da dieses Bild wichtig für den ersten Eindruck ist. 
+```html
+<img ngSrc="angular-buch.jpg"  width="200" height="400" priority>
+```
 
-Moderne Browser akzeptieren mehrere Varianten für ein Bild (`srcset`), so das für die jeweilige Auflösung das optimale Bild geladen wird. Zusammen mit einem eigenen Loader oder einem vorkonfigurierten Loader kann mithilfe der Direktive dem Browser mitgeteilt werden, wo er das optimale Bild für die aktuelle Auflösung findet. Angular bringt bereits Unterstützung für folgende kommerzielle Anbieter mit:
+Diese Option weist den Browser an, das Bild möglichst schnell zu laden.
+Dies bietet sich zum Beispiel beim Headerbild eines Blogs an, das wichtig für den ersten Eindruck ist.
+
+Moderne Browser akzeptieren mehrere Varianten für ein Bild (`srcset`), sodass für die jeweilige Auflösung das optimale Bild geladen wird.
+Zusammen mit einem (vorkonfigurierten oder eigenen) Loader können wir dem Browser mitteilen, wo das optimale Bild für die aktuelle Auflösung zu finden ist. Angular bringt bereits Unterstützung für folgende kommerzielle Anbieter mit:
 
 * Cloudflare
 * Cloudinary
