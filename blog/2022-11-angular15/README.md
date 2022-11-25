@@ -343,6 +343,8 @@ In diesem Beispiel wird die Priorität gesetzt:
 Zusätzlich sollte man dann einen Preconnect-Link zum Header der Seite hinzufügen, wenn die Bilder von einer anderen Domain geladen werden.
 Dies weist den Browser an, frühzeitig eine Netzwerkverbindung zum anderen Server aufzubauen.
 Auch hier gibt die Direktive im Debug-Modus eine Warnung aus, wenn man diese Optimierung vergessen hat:
+> NG02956: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="https://example.org/angular-buch.jpg"`) has detected that there is no preconnect tag present for this image. Preconnecting to the origin(s) that serve priority images ensures that these images are delivered as soon as possible. To fix this, please add the following element into the <head> of the document:
+> <link rel="preconnect" href="https://angular-buch.com">
 
 ```html
 <head>
