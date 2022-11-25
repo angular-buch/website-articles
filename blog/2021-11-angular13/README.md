@@ -25,7 +25,7 @@ Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGE
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 14 ist da!](/blog/2022-06-angular14)
-
+> * [Angular 15 ist da!](/blog/2022-11-angular15)
 
 ## Projekt updaten
 
