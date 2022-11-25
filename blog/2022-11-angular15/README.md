@@ -310,51 +310,54 @@ Anschließend können wir im Template der Angular-Komponenten das `src`-Attribut
 
 ```html
 <!-- VORHER: -->
-<img src="angular-buch.jpg">
+<img src="angular-buch.jpg" alt="">
 
 <!-- NEU: -->
-<img ngSrc="angular-buch.jpg">
+<img ngSrc="angular-buch.jpg" alt="">
 ```
 
 Die Direktive `NgOptimizedImage` wird automatisch aktiv, sobald dieses Attribut eingesetzt wird.
 Sie hilft dabei, diverse Best Practices für Bilder anzuwenden.
 Vergisst man etwa, die Attribute `width` und `height` für das `img`-Element zu verwenden (wie oben gezeigt), so erscheint eine hilfreiche Fehlermeldung:
 
-> Error: NG02954: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="angular-buch.jpg"`) has detected that these required attributes are missing: "width", "height". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
+> Error: NG02954: The NgOptimizedImage directive (activated on an `<img>` element with the `ngSrc="angular-buch.jpg"`) has detected that these required attributes are missing: "width", "height". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
 
-Wir bekommen ebenso eine Warnung, wenn wir versehentlich eine falsche `width` und `height` eintragen.
-Natürlich gibt die Direktive nicht nur Fehlermeldungen aus. 
+Wir bekommen ebenso eine Warnung, wenn wir versehentlich eine falsche `width` und `height` eintragen. Natürlich gibt die Direktive nicht nur Fehlermeldungen aus. 
 Eines der wichtigsten Features ist das "faule" (lazy) Laden von Bildern, sodass die Ladezeiten der einzelnen Routen deutlich verbessert werden können.
 In diesem Beispiel wird keine Priorität angegeben:
 
 ```html
-<img ngSrc="angular-buch.jpg" width="800" height="1152">
+<img ngSrc="angular-buch.jpg"  alt="" width="800" height="1152">
 ```
 
 Dadurch wird der Browser angewiesen, mit dem Laden des Bilds zu warten, bis der Browser schätzt, dass es unmittelbar benötigt wird.
 Das Bild wird z. B. beim Scrollen erst dann geladen, wenn es kurz davor ist, im sichtbaren Bereich zu erscheinen.
 
-In diesem Beispiel wird die Priorität gesetzt:
+Im folgenden Beispiel wird die Priorität gesetzt.
+Diese Option weist den Browser an, das Bild möglichst schnell zu laden.
+Dies bietet sich zum Beispiel beim Headerbild eines Blogs an, das wichtig für den ersten Eindruck ist.
+
 
 ```html
-<img ngSrc="https://example.org/angular-buch.jpg" width="800" height="1152" priority>
+<img ngSrc="https://example.org/angular-buch.jpg" alt="" width="800" height="1152" priority>
 ```
 
-Zusätzlich sollte man dann einen Preconnect-Link zum Header der Seite hinzufügen, wenn die Bilder von einer anderen Domain geladen werden.
+Zusätzlich sollte man dann einen Preconnect-Link zum Header der Seite in der Datei `index.html` hinzufügen, wenn die Bilder von einer anderen Domain geladen werden.
 Dies weist den Browser an, frühzeitig eine Netzwerkverbindung zum anderen Server aufzubauen.
-Auch hier gibt die Direktive im Debug-Modus eine Warnung aus, wenn man diese Optimierung vergessen hat:
-> NG02956: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="https://example.org/angular-buch.jpg"`) has detected that there is no preconnect tag present for this image. Preconnecting to the origin(s) that serve priority images ensures that these images are delivered as soon as possible. To fix this, please add the following element into the <head> of the document:
-> <link rel="preconnect" href="https://angular-buch.com">
 
-Die folgende Zeile müssen wir daher in der Datei `index.html` hinzufügen:
 ```html
 <head>
   <link rel="preconnect" href="https://example.org">
 </head>
 ```
 
-Diese Option weist den Browser an, das Bild möglichst schnell zu laden.
-Dies bietet sich zum Beispiel beim Headerbild eines Blogs an, das wichtig für den ersten Eindruck ist.
+Auch hier gibt die Direktive im Debug-Modus eine Warnung aus, wenn man diese Optimierung vergessen hat:
+
+> NG02956: The NgOptimizedImage directive (activated on an `<img>` element with the `ngSrc="https://example.org/angular-buch.jpg"`) has detected that there is no preconnect tag present for this image. Preconnecting to the origin(s) that serve priority images ensures that these images are delivered as soon as possible. To fix this, please add the following element into the `<head>` of the document:
+> `<link rel="preconnect" href="https://angular-buch.com">`
+
+
+
 
 Moderne Browser akzeptieren mehrere Varianten für ein Bild (`srcset`), sodass für die jeweilige Auflösung das optimale Bild geladen wird.
 Zusammen mit einem (vorkonfigurierten oder eigenen) Loader können wir dem Browser mitteilen, wo das optimale Bild für die aktuelle Auflösung zu finden ist. Angular bringt bereits Unterstützung für folgende kommerzielle Anbieter mit:
