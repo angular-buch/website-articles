@@ -15,7 +15,6 @@ keywords:
 language: de
 thumbnail: ./angular15.jpg
 sticky: true
-hidden: true
 ---
 
 Am 16. November 2022 erschien die neue Major-Version von Angular: **Angular 15.0.0**!
