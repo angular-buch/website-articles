@@ -346,7 +346,9 @@ Zusammen mit einem (vorkonfigurierten oder eigenen) Loader können wir dem Brows
 * ImageKit
 * Imgix
 
-Diese Anbieter bereiten die bestehende Bilder passend auf, so das man nicht manuell dasselbe Bild in diversen Auflösungen abspeichern muss. In der [offiziellen Angular-Dokumentation](https://angular.io/api/common/NgOptimizedImage) wird detailliert beschrieben, wie Loader eingebunden werden können. Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direktive beschrieben.
+Diese Anbieter bereiten die bestehenden Bilder passend auf, sodass man dasselbe Bild nicht manuell in diversen Auflösungen abspeichern muss.
+In der offiziellen [Dokumentation zur Direktive](https://angular.io/guide/image-directive) und in der [dazugehörigen API-Dokumentation](https://angular.io/api/common/NgOptimizedImage) wird detailliert beschrieben, wie Loader eingebunden werden können.
+Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direktive beschrieben.
 
 
 ### CSS-Imports ohne Tilde
