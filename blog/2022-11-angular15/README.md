@@ -243,10 +243,10 @@ export class MyComponent {
 ```
 
 Mit beiden Varianten ist der Code zukunftssicher und funktioniert sowohl in TypeScript als auch ES2022.
-Es ist davon auszugehen, dass in Angular irgendwann die Einstellung `useDefineForClassFields` auf den Standardwert `true` gesetzt wird.
-Wir empfehlen Ihnen also, Ihren Code jetzt schon möglichst robust zu entwickeln.
+Es ist davon auszugehen, dass in Angular irgendwann einmal die Einstellung `useDefineForClassFields` auf den Standardwert `true` gesetzt wird.
+Wir empfehlen Ihnen also, Ihren Code schon heute möglichst robust zu entwickeln.
 
-> Mehr zur Option `useDefineForClassFields` finden Sie in unserem separaten Blogartikel: TODO
+> Mehr zur Option `useDefineForClassFields` finden Sie in unserem separaten [Blogartikel zu useDefineForClassFields](/blog/2022-11-useDefineForClassFields).
 
 
 
@@ -365,8 +365,8 @@ In der offiziellen [Dokumentation zur Direktive](https://angular.io/guide/image-
 Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direktive beschrieben.
 
 Probieren Sie die neue Direktive doch gleich einmal aus.
-Wir haben hierfür eine Stackblitz-Demo vorbereitet:
-https://angular-ivy-98yfkn.stackblitz.io
+Wir haben hierfür eine Stackblitz-Demo vorbereitet:  
+**[👉 Demo auf Stackblitz: NgOptimizedImage](https://angular-ivy-98yfkn.stackblitz.io)**
 
 
 ### CSS-Imports ohne Tilde
@@ -399,6 +399,7 @@ Wir haben in den letzten Monaten intensiv an einer Neuauflage des deutschsprachi
 
 Wir haben das Buch neu strukturiert und alle Beispiele neu entwickelt.
 Die neuen Features von Angular 15 werden ebenfalls ausführlich behandelt.
+Bestellen Sie das neue [Angular-Buch](https://amzn.eu/d/8fgTIWL) am besten gleich vor!
 
 <div style="text-align: center">
 <img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="max-width:500px">
