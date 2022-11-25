@@ -284,7 +284,56 @@ Sie wurde in Angular 14.2 eingeführt und ermöglicht es, das Laden von Bildern 
 Bitte beachten Sie, dass es eine Änderung in der finalen API gibt: 
 Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`).
 
-Lesen Sie mehr zu der neuen Direktive in der [offiziellen Angular-Dokumentation](https://angular.io/api/common/NgOptimizedImage).
+
+Die Einbindung der neuen Direktive ist sehr einfach.
+Sie können diese über das `NgModule` importieren oder die Standalone-API verwenden:
+
+    import { NgOptimizedImage } from '@angular/common';
+    
+    // Einbindung bei einer Standalone Component
+    @Component({
+      standalone: true
+      imports: [NgOptimizedImage],
+    })
+    class MyStandaloneComponent {}
+    
+    // Einbindung per NgModule
+    @NgModule({
+      imports: [NgOptimizedImage],
+    })
+    class AppModule {}
+
+Anschließend können Sie  im Template der Angular-Komponenten das `src`-Attribut der Bilder durch `ngSrc` ersetzen:
+
+`<img ngSrc="angular-buch.jpg">`
+
+Die `NgOptimizedImage`-Direktive hilft dabei, diverse Best-Practises für Bilder anzuwenden.
+Vergisst man etwa die Attribute `width` und `height` für das `img`-Element zu verwenden (wie oben gezeigt), so erscheint eine hilfreiche Fehlermeldung: 
+
+<!-- Ich hoffe das stimmt noch, aber diese Test sagt das es so sein soll: https://github.com/angular/angular/blob/1d1e33e8d0b416c6be06b53e4fdbe673b30b1cc6/packages/common/test/directives/ng_optimized_image_spec.ts#L344 -->
+> NG02954: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="img.png"`) has detected that these required attributes are missing: "width". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
+
+Natürlich gibt die Direktive nicht nur Fehlermeldungen aus. 
+Eines der wichtigsten Features ist das "faule" (lazy) Laden von Bildern, so dass das  die Ladezeiten der einzelnen Routen deutlich verbessert werden können.
+In diesem Beispiel wird keine Priorität angegeben:
+
+`<img ngSrc="angular-buch.jpg"  width="200" height="400">`
+
+Dadurch wird der Browser angewiesen, mit dem Laden des Bildes zu warten, bis der Browser schätzt, dass es unmittelbar benötigt wird. Das Bild wird z.B. beim Scrollen erst dann geladen, wenn es kurz davor ist im sichtbaren Bereich zu erscheinen.
+
+In diesem Beispiel wird die Priorität gesetzt:
+`<img ngSrc="angular-buch.jpg"  width="200" height="400" priority>`
+
+Dies weist den Browser an, das Bild möglichst rasch zu laden. Dies bietet sich zum Beispiel bei dem Header-Bild eines Blogs an, da dieses Bild wichtig für den ersten Eindruck ist. 
+
+Moderne Browser akzeptieren mehrere Varianten für ein Bild (`srcset`), so das für die jeweilige Auflösung das optimale Bild geladen wird. Zusammen mit einem eigenen Loader oder einem vorkonfigurierten Loader kann mithilfe der Direktive dem Browser mitgeteilt werden, wo er das optimale Bild für die aktuelle Auflösung findet. Angular bringt bereits Unterstützung für folgende kommerzielle Anbieter mit:
+
+* Cloudflare
+* Cloudinary
+* ImageKit
+* Imgix
+
+Diese Anbieter bereiten die bestehende Bilder passend auf, so das man nicht manuell dasselbe Bild in diversen Auflösungen abspeichern muss. In der [offiziellen Angular-Dokumentation](https://angular.io/api/common/NgOptimizedImage) wird detailliert beschrieben, wie Loader eingebunden werden können. Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direktive beschrieben.
 
 
 ### CSS-Imports ohne Tilde
