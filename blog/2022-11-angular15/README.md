@@ -308,22 +308,26 @@ class AppModule {}
 Anschließend können wir im Template der Angular-Komponenten das `src`-Attribut der Bilder durch `ngSrc` ersetzen:
 
 ```html
-<img ngSrc="angular-buch.jpg" alt="">
+<!-- VORHER: -->
+<img src="angular-buch.jpg">
+
+<!-- NEU: -->
+<img ngSrc="angular-buch.jpg">
 ```
 
 Die Direktive `NgOptimizedImage` wird automatisch aktiv, sobald dieses Attribut eingesetzt wird.
 Sie hilft dabei, diverse Best Practices für Bilder anzuwenden.
 Vergisst man etwa, die Attribute `width` und `height` für das `img`-Element zu verwenden (wie oben gezeigt), so erscheint eine hilfreiche Fehlermeldung:
 
-<!-- Ich hoffe das stimmt noch, aber diese Test sagt das es so sein soll: https://github.com/angular/angular/blob/1d1e33e8d0b416c6be06b53e4fdbe673b30b1cc6/packages/common/test/directives/ng_optimized_image_spec.ts#L344 -->
-> NG02954: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="img.png"`) has detected that these required attributes are missing: "width". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
+> Error: NG02954: The NgOptimizedImage directive (activated on an <img> element with the `ngSrc="angular-buch.jpg"`) has detected that these required attributes are missing: "width", "height". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
 
+Wir bekommen ebenso eine Warnung, wenn wir versehentlich eine falsche `width` und `height` eintragen.
 Natürlich gibt die Direktive nicht nur Fehlermeldungen aus. 
 Eines der wichtigsten Features ist das "faule" (lazy) Laden von Bildern, sodass die Ladezeiten der einzelnen Routen deutlich verbessert werden können.
 In diesem Beispiel wird keine Priorität angegeben:
 
 ```html
-<img ngSrc="angular-buch.jpg"  width="200" height="400">
+<img ngSrc="angular-buch.jpg" width="800" height="1152">
 ```
 
 Dadurch wird der Browser angewiesen, mit dem Laden des Bilds zu warten, bis der Browser schätzt, dass es unmittelbar benötigt wird.
@@ -332,8 +336,20 @@ Das Bild wird z. B. beim Scrollen erst dann geladen, wenn es kurz davor ist, im 
 In diesem Beispiel wird die Priorität gesetzt:
 
 ```html
-<img ngSrc="angular-buch.jpg"  width="200" height="400" priority>
+<img ngSrc="https://example.org/angular-buch.jpg" width="200" height="400" priority>
 ```
+
+Zusätzlich sollte man dann einen Preconnect-Link zum Header der Seite hinzufügen, wenn die Bilder von einer anderen Domain geladen werden.
+Dies weist den Browser an, frühzeitig eine Netzwerkverbindungen zum anderen Server aufzubauen.
+Auch hier gibt die Direktive im Debug-Modus eine Warnung aus, wenn man diese Optimierung vergessen hat:
+
+```html
+<head>
+  <link rel="preconnect" href="https://example.org">
+</head>
+```
+
+
 
 Diese Option weist den Browser an, das Bild möglichst schnell zu laden.
 Dies bietet sich zum Beispiel beim Headerbild eines Blogs an, das wichtig für den ersten Eindruck ist.
@@ -350,10 +366,14 @@ Diese Anbieter bereiten die bestehenden Bilder passend auf, sodass man dasselbe 
 In der offiziellen [Dokumentation zur Direktive](https://angular.io/guide/image-directive) und in der [dazugehörigen API-Dokumentation](https://angular.io/api/common/NgOptimizedImage) wird detailliert beschrieben, wie Loader eingebunden werden können.
 Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direktive beschrieben.
 
+Probieren Sie die neue Direktive doch gleich einmal aus.
+Wir haben hierfür eine Stackblitz-Demo vorbereitet:
+https://angular-ivy-98yfkn.stackblitz.io
+
 
 ### CSS-Imports ohne Tilde
 
-Style-Imports aus dem Ordner `node_modules` wurden bisher mit eienr vorangestellten Tilde (`~`) notiert.
+Style-Imports aus dem Ordner `node_modules` wurden bisher mit einer vorangestellten Tilde (`~`) notiert.
 Dieser Weg ist *deprecated*, und es ist nicht mehr notwendig, die Tilde anzugeben:
 
 ```diff
