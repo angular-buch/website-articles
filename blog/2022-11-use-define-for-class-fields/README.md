@@ -30,6 +30,8 @@ Wir zeigen Ihnen, was es damit auf sich hat und wie Sie Ihren Code schreiben mü
 * [Propertys zukunftssicher initialisieren](/blog/2022-11-use-define-for-class-fields#propertys-zukunftssicher-initialisieren)
 * [Auswirkungen auf bestehenden Angular-Code](/blog/2022-11-use-define-for-class-fields#auswirkungen-auf-bestehenden-angular-code)
 
+> **🇬🇧 Dieser Artikel ist auch in englischer Sprache verfügbar: [TypeScript: useDefineForClassFields – How to avoid future Breaking Changes](https://angular.schule/blog/2022-11-use-define-for-class-fields)**
+
 
 ## Propertys initialisieren mit TypeScript
 
