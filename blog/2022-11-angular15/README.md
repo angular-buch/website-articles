@@ -414,7 +414,7 @@ Die neuen Features von Angular 15 werden ebenfalls ausführlich behandelt.
 Bestellen Sie das neue [Angular-Buch](https://amzn.eu/d/8fgTIWL) am besten gleich vor!
 
 <div style="text-align: center">
-<img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="max-width:500px">
+<img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="width:500px">
 </div>
 
 

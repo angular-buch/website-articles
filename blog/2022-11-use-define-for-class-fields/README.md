@@ -224,7 +224,7 @@ Die Inhalte dieses Blogposts haben wir aus unserem Buch übernommen.
 Wenn Sie diesen Text hilfreich fanden, dann sollten Sie unbedingt das neue [Angular-Buch vorbestellen](https://amzn.eu/d/8fgTIWL).
 
 <div style="text-align: center">
-<img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="max-width:500px">
+<img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="width:500px">
 </div>
 
 
