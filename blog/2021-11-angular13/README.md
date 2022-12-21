@@ -9,7 +9,7 @@ keywords:
   - Angular 13
   - Ivy
 language: de
-thumbnail: ./angular13.jpg
+thumbnail: angular13.jpg
 sticky: false
 ---
 

@@ -13,7 +13,7 @@ keywords:
   - SSR
   - TypeScript
 language: de
-thumbnail: ./angular9.jpg
+thumbnail: angular9.jpg
 sticky: false
 ---
 

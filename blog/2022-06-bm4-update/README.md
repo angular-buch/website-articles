@@ -10,7 +10,7 @@ keywords:
   - Angular 14
   - Strict Mode
 language: de
-thumbnail: ./bm4update.jpg
+thumbnail: bm4update.jpg
 ---
 
 Das Angular-Ökosystem wird kontinuierlich verbessert.
