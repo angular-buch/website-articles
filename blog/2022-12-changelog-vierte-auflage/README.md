@@ -21,7 +21,7 @@ thumbnail: changelog4a.png
 sticky: false
 ---
 
-**Im Februar 2022 erscheint die vierte Auflage des deutschsprachigen Angular-Buchs! In diesem Artikel berichten wir über die Neuerungen im neuen Buch.**
+**Im Februar 2023 erscheint die vierte Auflage des deutschsprachigen Angular-Buchs! In diesem Artikel berichten wir über die Neuerungen im neuen Buch.**
 
 
 Die Webplattform bewegt sich schnell, und so muss auch ein Framework wie Angular stets an neue Gegebenheiten angepasst werden und mit den Anforderungen wachsen.
