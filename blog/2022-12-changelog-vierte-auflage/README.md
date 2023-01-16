@@ -42,7 +42,7 @@ Diesen "frischen Wind der Veränderung" haben wir auch auf dem Buchcover mit ein
 Wir möchten Ihnen einen kurzen Überblick über die wichtigsten Neuerungen und Aktualisierungen der vierten Auflage geben.
 Alle Inhalte haben wir auf die **Angular-Version 15** aktualisiert, sodass dieses Buch auch für die Arbeit mit den folgenden Versionen geeignet ist.
 
-<!--<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch.com_leseprobe_3.auflage.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>-->
+<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage4.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
 <a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.eu/d/8fgTIWL">4. Ausgabe jetzt vorbestellen</a>
 
 
@@ -124,5 +124,5 @@ Wir freuen uns sehr, dass so viele persönliche, interessante und humorvolle Wor
 
 
 
-<!--<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch.com_leseprobe_3.auflage.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>-->
+<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage4.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
 <a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.eu/d/8fgTIWL">4. Ausgabe jetzt vorbestellen</a>
