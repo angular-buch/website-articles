@@ -21,7 +21,7 @@ thumbnail: changelog4a.png
 sticky: false
 ---
 
-**Im Februar 2023 erscheint die vierte Auflage des deutschsprachigen Angular-Buchs! In diesem Artikel berichten wir über die Neuerungen im neuen Buch.**
+**Im Februar 2023 erschien die vierte Auflage des deutschsprachigen Angular-Buchs! In diesem Artikel berichten wir über die Neuerungen im neuen Buch.**
 
 
 Die Webplattform bewegt sich schnell, und so muss auch ein Framework wie Angular stets an neue Gegebenheiten angepasst werden und mit den Anforderungen wachsen.
@@ -43,7 +43,7 @@ Wir möchten Ihnen einen kurzen Überblick über die wichtigsten Neuerungen und 
 Alle Inhalte haben wir auf die **Angular-Version 15** aktualisiert, sodass dieses Buch auch für die Arbeit mit den folgenden Versionen geeignet ist.
 
 <a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage4.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
-<a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.eu/d/8fgTIWL">4. Ausgabe jetzt vorbestellen</a>
+<a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.eu/d/8fgTIWL">4. Ausgabe jetzt bestellen</a>
 
 
 ## Neu in dieser Auflage
@@ -125,4 +125,4 @@ Wir freuen uns sehr, dass so viele persönliche, interessante und humorvolle Wor
 
 
 <a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage4.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
-<a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.eu/d/8fgTIWL">4. Ausgabe jetzt vorbestellen</a>
+<a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="https://amzn.eu/d/8fgTIWL">4. Ausgabe jetzt bestellen</a>
