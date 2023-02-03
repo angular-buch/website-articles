@@ -17,7 +17,7 @@ In der 3. Auflage unseres Angular-Buchs haben wir alle Kapitel überarbeitet und
 Das war durch wertvolle Hinweise unserer Leserinnen und Leser möglich. Dennoch: Ein gedrucktes Buch ist niemals fehlerfrei, und natürlich hat sich auch in der 3. Auflage der Fehlerteufel eingeschlichen.
 
 **Haben Sie Fragen oder Hinweise, oder haben Sie einen Fehler im Buch gefunden?
-Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.com **
+Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.com**
 
 ------
 
