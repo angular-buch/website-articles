@@ -411,7 +411,7 @@ Wir haben in den letzten Monaten intensiv an einer Neuauflage des deutschsprachi
 
 Wir haben das Buch neu strukturiert und alle Beispiele neu entwickelt.
 Die neuen Features von Angular 15 werden ebenfalls ausführlich behandelt.
-Bestellen Sie das neue [Angular-Buch](https://amzn.eu/d/8fgTIWL) am besten gleich vor!
+[Bestellen Sie das neue Angular-Buch](/kaufen) am besten direkt!
 
 <div style="text-align: center">
 <img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="width:500px">
