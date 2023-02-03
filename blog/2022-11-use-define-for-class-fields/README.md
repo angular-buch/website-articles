@@ -221,7 +221,7 @@ Sollte in Zukunft die Standardeinstellung für geändert werden, so sind Sie dan
 Wir haben in den letzten Monaten intensiv an einer Neuauflage des deutschsprachigen Angular-Buchs gearbeitet!
 Natürlich haben wir vorsorglich alle Quelltexte im Angular-Buch so geschrieben, dass sie bereits zukunftssicher funktionieren. 
 Die Inhalte dieses Blogposts haben wir aus unserem Buch übernommen.
-Wenn Sie diesen Text hilfreich fanden, dann sollten Sie unbedingt das neue [Angular-Buch bestellen](https://amzn.eu/d/8fgTIWL).
+Wenn Sie diesen Text hilfreich fanden, dann sollten Sie unbedingt das neue [Angular-Buch bestellen](/kaufen).
 
 <div style="text-align: center">
 <img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="width:500px">
