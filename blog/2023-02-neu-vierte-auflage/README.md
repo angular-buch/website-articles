@@ -120,7 +120,7 @@ Wir konnten damit auch den neuen Ansatz der **Standalone Components** fundiert a
 Da Angular-Module weiterhin relevant für die Entwicklung sind, haben wir beide Welten kombiniert.
 Auch kleinere Neuerungen wie die Funktion `inject()` oder funktionale Guards und Interceptors werden ausführlich behandelt.
 
-Auch weiterhin werden wir in unseren Blogartikeln über neue Features in Angular informieren.
+Weiterhin werden wir in unseren Blogartikeln über neue Features in Angular informieren.
 Den Code zum Beispielprojekt aus dem Buch werden wir regelmäßig aktualisieren.
 Sollten Breaking Changes auftreten, finden Sie die wichtigsten Infos dazu immer in unserem Blog.
 
