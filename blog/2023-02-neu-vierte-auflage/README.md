@@ -113,7 +113,7 @@ Wir haben uns deshalb seit September 2021 mehr als ein Jahr Zeit genommen, um da
 Ganz bewusst wollten wir das Buch nicht nur aktualisieren, sondern auch Baustellen bearbeiten, für die wir in den letzten Auflagen keine Zeit gefunden hatten.
 
 Wir haben das Beispielprojekt von Grund auf neu entwickelt, haben die Inhalte und die Reihenfolge der Kapitel kritisch hinterfragt, haben ganze Kapitel neu verfasst und haben auch Texte entfernt, die nach unserer Einschätzung nicht mehr relevant waren.
-Durch unseren stetigen Austausch in [Angular-Schulungen](https://angular.schule), Kundenprojekten und mit der Community konnten wir die Schwerpunkte neu setzen und den diaktischen Aufbau des Buchs verfeinern.
+Durch unseren stetigen Austausch bei unseren [Angular-Schulungen](https://angular.schule), in Kundenprojekten und mit der Community konnten wir die Schwerpunkte neu setzen und den didaktischen Aufbau des Buchs verfeinern.
 
 Das Buch ist auf dem aktuellen Stand von Angular 15.
 Wir konnten damit auch den neuen Ansatz der **Standalone Components** fundiert abdecken.
