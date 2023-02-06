@@ -83,7 +83,7 @@ Auf der Website zum Buch werden außerdem regelmäßig Aktualisierungen und Neui
   * Standalone Components
   * Reactive Forms mit Typisierung
   * funktionale Guards und Resolver
-  * `inject()`
+  * Dependency Injection mit der neuen Funnktion `inject()`
 
 
 
