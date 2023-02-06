@@ -35,7 +35,7 @@ Damit ist das Buch auch für die kommenden Versionen des Angular-Frameworks geei
 Im [Changelog zur vierten Auflage](/blog/2022-12-changelog-vierte-auflage) erhalten Sie einen Überblick über die Änderungen und Erweiterungen.
 Durch die grundlegende Überarbeitung lohnt sich der Umstieg auf das neue Buch auch für Leserinnen und Leser der älteren Auflagen.
 
-Das Buch ist zum Preis von 42,90 EUR in jeder Buchhandlung und im Online-Handel erhältlich.
+Das Buch ist zum Preis von 42,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
 Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt
 
 <!--<div class="row">
