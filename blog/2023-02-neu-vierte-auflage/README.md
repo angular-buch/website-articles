@@ -15,7 +15,7 @@ keywords:
   - Functional Guards
   - Angular 15
 language: de
-thumbnail: ../x_shared/buchblogheader3.png
+thumbnail: ./header4a.png
 sticky: true
 hidden: true
 ---
