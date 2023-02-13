@@ -35,7 +35,7 @@ Im [Changelog zur vierten Auflage](/blog/2022-12-changelog-vierte-auflage) erhal
 Durch die grundlegende Überarbeitung lohnt sich der Umstieg auf das neue Buch auch für Leserinnen und Leser der älteren Auflagen.
 
 Das Buch ist zum Preis von 42,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
-Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt
+Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt.
 
 <div class="row">
   <div class="col-6">
@@ -132,14 +132,11 @@ Mit besten Grüßen –
 das Autorenteam<br>
 **Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe**
 
-<!--<div class="row">
-  <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7055.jpg" alt="">
+<div class="row">
+  <div class="col">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_7055.jpg" alt="">
   </div>
-  <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7053.jpg" alt="">
-  </div>
-</div>-->
+</div>
 
 
 
