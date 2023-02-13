@@ -132,9 +132,9 @@ Mit besten Grüßen –
 das Autorenteam<br>
 **Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe**
 
-<div class="row">
+<div class="row mb-5">
   <div class="col">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_7055.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_6007.jpg" alt="">
   </div>
 </div>
 
