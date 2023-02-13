@@ -37,14 +37,14 @@ Durch die grundlegende Überarbeitung lohnt sich der Umstieg auf das neue Buch a
 Das Buch ist zum Preis von 42,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
 Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt
 
-<!--<div class="row">
+<div class="row">
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7039.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5997.jpg" alt="">
   </div>
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7044.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_6009.jpg" alt="">
   </div>
-</div>-->
+</div>
 
 ## Das große Praxisbuch zu Angular!
 
@@ -87,17 +87,17 @@ Auf der Website zum Buch werden außerdem regelmäßig Aktualisierungen und Neui
 
 
 
-<!--<div class="row">
+<div class="row">
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7047.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5984.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7049.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5991.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7051.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5989.jpg" alt="">
   </div>
-</div>-->
+</div>
 
 ## Hintergrund
 
