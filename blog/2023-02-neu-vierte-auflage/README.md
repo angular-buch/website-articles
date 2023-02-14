@@ -37,6 +37,8 @@ Durch die grundlegende Überarbeitung lohnt sich der Umstieg auf das neue Buch a
 Das Buch ist zum Preis von 42,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
 Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt.
 
+> **Das Buch ist auch als E-Book erhältlich. Dafür bitten wir noch um einige Tage Geduld! Anschließend können Sie das E-Book oder ein Bundle (Print + E-Book) [direkt beim dpunkt.verlag](https://dpunkt.de/produkt/angular-6/) erwerben.**
+
 <div class="row">
   <div class="col-6">
     <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5997.jpg" alt="">
