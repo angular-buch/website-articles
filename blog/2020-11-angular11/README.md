@@ -32,6 +32,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 > * [Angular 13 ist da!](/blog/2021-11-angular13)
 > * [Angular 14 ist da!](/blog/2022-06-angular14)
 > * [Angular 15 ist da!](/blog/2022-11-angular15)
+> * [Angular 16 ist da!](/blog/2023-05-angular16)
 
 ## Update auf Angular 11
 

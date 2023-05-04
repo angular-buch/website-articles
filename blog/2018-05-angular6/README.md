@@ -31,6 +31,7 @@ In diesem Artikel stellen wir Ihnen kurz die Neuerungen vor und aktualisieren da
 > * [Angular 13 ist da!](/blog/2021-11-angular13)
 > * [Angular 14 ist da!](/blog/2022-06-angular14)
 > * [Angular 15 ist da!](/blog/2022-11-angular15)
+> * [Angular 16 ist da!](/blog/2023-05-angular16)
 
 ## Angular 6: Alles ist neu?
 

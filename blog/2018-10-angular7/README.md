@@ -27,6 +27,7 @@ Die offizielle Ankündigung des neuen Release finden Sie im [Angular Blog](https
 > * [Angular 13 ist da!](/blog/2021-11-angular13)
 > * [Angular 14 ist da!](/blog/2022-06-angular14)
 > * [Angular 15 ist da!](/blog/2022-11-angular15)
+> * [Angular 16 ist da!](/blog/2023-05-angular16)
 
 ## CLI Prompt
 
