@@ -21,7 +21,7 @@ Im Fokus des neuen Releases standen vor allem diese Themen:
 -
 
 In diesem Blogpost fassen wir wieder die wichtigsten Neuigkeiten zusammen.
-Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v16-is-here-4d7a28ec680d) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
+Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v16-is-here-4d7a28ec680d) finden Sie außerdem die offiziellen Informationen des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
 
 
@@ -102,9 +102,54 @@ export class MyComponent {
 Neben diesen Grundbausteinen soll es später auch möglich sein, Input-Propertys und die Kommunikation mit der Direktive `ngModel` mit Signals abzubilden.
 Außerdem bieten Signals sogenannte *Effects* an, mit denen wir auf die Aktualisierung der Werte reagieren können, um Seiteneffekte auszuführen.
 
-Bitte beachten Sie, dass die Implementierung noch nicht vollständig ist und mit Angular 16 nur die ersten Aspekte des Konzepts veröffentlicht wurden.
+Signals sind außerdem kompatibel mit den bereits etablierten Observables.
+Ganz bewusst hat das Angular-Team sich dagegen entschieden, das Framework RxJS fest in den Framework-Kern einzubauen.
+Signals und Observables können allerdings ineinander umgewandelt werden.
+mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt. Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
+
+```ts
+books = toSignal(inject(BookStoreService).getAllBooks());
+
+myCounter = signal(0);
+myCounter$ = toObservable(this.myCounter);
+
+// ...
+this.myCounter$.subscribe( /* ... */ );
+```
+
+
+Bitte beachten Sie, dass die Implementierung von Signals noch nicht vollständig ist und mit Angular 16 nur die ersten Aspekte des Konzepts veröffentlicht wurden.
 Die Schnittstellen und Ideen werden sich in den nächsten Monaten formen und entwickeln.
 Wir empfehlen Ihnen, die RFC-Dokumente ausführlich zu lesen, und sich so in das Thema aktiv einzuarbeiten.
+
+
+## Non-Destructive Hydration
+
+Angular bietet mit dem Paket *Angular Universal* die Möglichkeit, die Anwendung auf dem Server zu rendern.
+Dabei erzeugt ein Serverprozess das HTML der angefragten Seite und liefert es an den Browser aus.
+Die Seite wird also schon sichtbar, ohne dass Angular im Browser gestartet werden muss.
+
+Damit die Anwendung interaktiv wird, muss Angular die bereits angezeigte Seite anschließend "übernehmen".
+Bisher funktioniert dieser Prozess destruktiv, das bedeutet:
+Das HTML vom Server wird gerendert, danach erzeugt Angular im Client alle Elemente erneut!
+Dieser Ablauf führt zu einem Flackern (die Seite wird schließlich zweimal geladen) und ist vergleichsweise unperformant.
+
+Mit Angular 16 gibt es ein neues Konzept zur *Non-Desteructive Hydration*. Anstatt die Anwendung vollständig neu zu rendern, übernimmt Angular die bereits sichtbaren DOM-Elemente und fügt nur noch die nötige Interaktivität hinzu, z. B. Event Listener oder Bindings.
+Die servergerenderte Seite bleibt also bestehen und wird nach dem Start nur noch erweitert, ohne komplett neu erzeugt zu werden.
+
+Um die Hydration zu aktivieren, muss die passende Funktion in den Providers der Anwendung registriert werden:
+
+```ts
+// main.ts
+import { bootstrapApplication, provideClientHydration } from '@angular/platform-browser';
+
+bootstrapApplication(AppComponent, {
+  providers: [provideClientHydration()]
+});
+```
+
+
+
 
 
 
