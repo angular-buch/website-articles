@@ -148,10 +148,87 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
+### Standalone Components
+
+Bereits mit dem [letzten Major-Release von Angular 15](/blog/2022-11-angular15) sind die Standalone Components stabiler Bestandteil des Angular Frameworks.
+Das Angular-Team hat hier mit Angular 16 weitere Features geliefert, die den Umstieg und Einstieg in die Standalone API vereinfachen.
+
+### Schematics zur Migration
+
+Um auch bestehenden Projekten den Umstieg auf die Standalone Components zu ermöglichen und die Migration zu erleichtern,
+hat das Angular Team zu diesem Zweck ein Schematic bereitgestellt, welches die notwendigen Anpassungen am Quellcode vornimmt.
+Es markiert die entsprechenden Komponenten als `standalone`, entfernt unnötige `NgModule`'s und stellt das Bootstrapping auf die Standalone API um.
+
+```bash
+ng generate @angular/core:standalone
+```
+
+### Neue Projekte im Standalone-Flavor
+
+Weiterhin lassen sich neue Angular-Projekte direkt so erzeugen, dass sie die Standalone-APIs nutzen.
+Hierfür muss lediglich das `--standalone` flag gesetzt werden:
+
+```bash
+ng new <project> --standalone
+```
+
+## ESBuild und Vite
+
+Ein weiteres neues Feature, welches zunächst als _Developer Preview_ ausgeliefert wird, ist der Support von [ESBuild](https://esbuild.github.io/) als Bundler.
+ESBuild ist im Vergleich zu Webpack um ein vielfaches schneller, da es direkt vom Browser verarbeitet wird.
+Zur Auslieferung während der Entwicklung wird hier unter der Haube [Vite](https://vitejs.dev/) genutzt.
+
+Um den neuen Build auszuprobieren, muss dieser lediglich in der Datei `angular.json` aktiviert werden:
+
+```json
+{
+  // ...
+  "architect": {
+    "build": {
+      "builder": "@angular-devkit/build-angular:browser-esbuild",
+    }
+  }
+}
+```
+
+Eine bekannte Einschränkung ist zur Zeit noch der Support für Internationalisierung, dieser wird vom Angular Builder für ESBuild bisher noch nicht unterstützt.
+
+## Jest Test Runner
+
+Weiterhin hat das Angular-Team an die Integration des Jest Test-Runners gearbeitet.
+Bisher ist das Feature noch experimentell.
+Somit wird Jest künftig Out-of-the-Box unterstützt.
+
+Um Jest nutzen zu können, müssen wir lediglich die dependency mit `npm i -D jest` installieren und im Anschluss den Build für das Test-Target in der Datei `angular.json` konfigurieren:
+
+```json
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:jest",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "polyfills": ["zone.js", "zone.js/testing"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Required Inputs
 
 
+## Developer Experience Verbesserungen
 
+### Auto-Vervollständigungen für Imports (VSCode)
 
+Die neueste Version des Angular Language Service für Visual Studio Code ermöglicht es uns ebenfalls automatisch die notwendigen `imports` für Angular-Komponenten automatisch zu importieren, sobald wir diese im Komponenten-Template verwenden.
+
+### Self-Closing-Tags
 
 
 <!-- ## Neue Auflage des Angular-Buchs
