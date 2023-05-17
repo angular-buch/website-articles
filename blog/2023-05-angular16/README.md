@@ -221,6 +221,57 @@ Um Jest nutzen zu können, müssen wir lediglich die dependency mit `npm i -D je
 
 ## Required Inputs
 
+Bisher war es in Angular nicht möglich `Input` als verpflichtend zu kennzeichnen.
+Infolgedessen, mussten wir in einer Komponente stets prüfen, ob ein Input wirklich einen Wert hat oder wir mussten explizit TypeScript die Anweisung geben, dass wir uns sicher sind, dass ein Wert gesetzt ist.
+
+Dieses Verhalten hatte jedoch erhebliche Nachteile:
+Sind wir uns sicher, dass ein `Input` gesetzt sein muss und geben dem TypeScript-Compiler die Anweisung dies zu berücksichtigen (mit `!`), so bauen wir eine mögliche Fehlerquelle ein.
+Vergessen wir nämlich, dass `Input` bei der Nutzung der Komponente im Template zu setzen, kann es zu Laufzeitfehlern kommen.
+Müssen wir auf der anderen Seite stets überprüfen, ob ein `Input` gesetzt ist, erzeugen wir zusätzlichen, möglicherweise nicht relevanten Code zur Laufzeit der Anwendung.
+
+```ts
+@Component(...)
+export class BookComponent {
+  // Wir weisen TypeScript an, dass der Typ immer `Book` ist und ignorieren den Fall undefined
+  // Es besteht die Gefahr von Fehlern zur Laufzeit
+  @Input() book!: Book;
+
+  // ODER
+
+  // Der Typ kann Book oder undefined sein
+  // Wir müssen im weiteren Verlauf stets prüfen (Code zur Laufzeit), ob das `book` einen Wert hat
+  @Input() book: Book;
+
+  constructor() {
+    if (!this.book) {
+      console.error('Book Input is required!')
+    }
+  }
+}
+```
+
+```html
+<!-- Fehlermeldung zur Laufzeit, da `book` nicht gesetzt ist -->
+<BookComponent></BookComponent>
+```
+
+Mit den _Required Inputs_ haben wir jetzt die Möglichkeit eine Fehlermeldung zu Compile-Zeit zu erhalten, wenn ein verpflichtendes `Input` nicht beim Aufruf der Komponente gesetzt wurde.
+Somit erzeugen wir keinen unnötigen Code im Bundle zur Laufzeit und erhalten schnelles Feedback während der Entwicklung:
+
+
+```ts
+@Component(...)
+export class BookComponent {
+  // Wir teilen Angular mit, dass es sich um ein verpflichtendes Input handelt
+  // Vergessen wir dieses Input zu füllen, erhalten wir bereits einen Fehler zur Compile-Time
+  @Input({ required: true }) book!: Book;
+}
+```
+
+```html
+<!-- Fehlermeldung zur Compile-Time, da `book` nicht gesetzt ist -->
+<BookComponent></BookComponent>
+```
 
 ## Developer Experience Verbesserungen
 
