@@ -43,6 +43,14 @@ Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrat
 Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderungen.
 
 
+## Unterstützte Versionen von TypeScript und Node.js
+
+Um Angular 16 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js notwendig:
+
+- **TypeScript 4.9 oder 5.0**. Der Support fpr TypeScript 4.8 wurde eingestellt.
+- **Node.js 16 oder 18**. Node.js in Version 14 wird nicht mehr unterstützt.
+
+
 ## Reaktivität mit Signals
 
 Die Change Detection von Angular ist dafür verantwortlich, die angezeigten Daten in der View stets aktuell zu halten.
@@ -151,6 +159,12 @@ bootstrapApplication(AppComponent, {
   providers: [provideClientHydration()]
 });
 ```
+
+In diesem Zusammenhang möchten wir auf eine kleine Änderung gegenüber dem gedruckten Buchtext hinweisen:
+Für das `BrowserModule` ist es bei Server-Side Rendering nicht mehr notwendig, die Methode `withServerTransition()` separat aufzurufen.
+Das aktualisierte `AppModule` für den BookMonkey finden Sie [auf GitHub](https://github.com/book-monkey5/16f-ssr/blob/main/src/app/app.module.ts).
+
+
 
 ## Standalone Components
 
@@ -430,10 +444,6 @@ Anschließend konfigurieren wir in der Datei `angular.json` das Test-Target, sod
   }
 }
 ```
-
-
-
-
 
 
 
