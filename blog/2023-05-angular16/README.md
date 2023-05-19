@@ -148,37 +148,193 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-### Standalone Components
+## Standalone Components
 
-Bereits mit dem [letzten Major-Release von Angular 15](/blog/2022-11-angular15) sind die Standalone Components stabiler Bestandteil des Angular Frameworks.
-Das Angular-Team hat hier mit Angular 16 weitere Features geliefert, die den Umstieg und Einstieg in die Standalone API vereinfachen.
-
-### Schematics zur Migration
-
-Um auch bestehenden Projekten den Umstieg auf die Standalone Components zu ermöglichen und die Migration zu erleichtern,
-hat das Angular Team zu diesem Zweck ein Schematic bereitgestellt, welches die notwendigen Anpassungen am Quellcode vornimmt.
-Es markiert die entsprechenden Komponenten als `standalone`, entfernt unnötige `NgModule`'s und stellt das Bootstrapping auf die Standalone API um.
-
-```bash
-ng generate @angular/core:standalone
-```
-
-### Neue Projekte im Standalone-Flavor
-
-Weiterhin lassen sich neue Angular-Projekte direkt so erzeugen, dass sie die Standalone-APIs nutzen.
-Hierfür muss lediglich das `--standalone` flag gesetzt werden:
+Bereits mit dem [letzten Major-Release von Angular 15](/blog/2022-11-angular15) sind die Standalone Components ein stabiler Bestandteil von Angular.
+Seit Angular 16 können neue Projekte vollständig standalone generiert werden.
+Das Projekt besitzt dann kein `AppModule`, sondern in der Datei `main.ts` wird direkt die Root-Komponente `AppComponent` gebootstrappt.
 
 ```bash
 ng new <project> --standalone
 ```
 
+Wir empfehlen Ihnen, neue Anwendungen und neue Features bestehender Anwendungen mit Standalone Components zu entwickeln.
+
+
+
+### Schematics zur Migration
+
+Für eine vereinfachte Migration von modulbasierten Anwendungen zu Standalone Components bietet Angular ein Migrationsskript an.
+
+```bash
+ng generate @angular/core:standalone
+```
+
+Das Skript migriert die Komponenten im Projekt automatisch, indem alle notwendigen Abhängigkeiten aus dem Template importiert werden.
+Außerdem ist es möglich, unnötige Module automatisch zu entfernen und die gesamte Anwendung mithilfe der Standalone-APIs zu bootstrappen.
+
+
+### Auto-Vervollständigungen für Imports (VSCode)
+
+Verwenden wir Standalone Components, müssen wir alle Komponenten, Pipes und Direktiven einzeln importieren, die wir im Template verwenden möchten.
+Die neueste Version des *Angular Language Service* für Visual Studio Code unterstützt uns dabei: Sie importiert auf Wunsch automatisch die notwendigen Klassen, sobald wir sie im Komponenten-Template verwenden.
+
+
+
+## Required Inputs
+
+Inputs von Komponenten und Direktiven waren seit jeher optional:
+Setzt man eine Komponente im Template ein, war es niemals verpflichtend, Daten mittels Property Bindings zu übergeben.
+
+```html
+<app-book></app-book>
+<app-book [book]="myBook"></app-book>
+```
+
+Das führte dazu, dass wir die benötigten Daten stets in der Komponente zur Laufzeit überprüfen mussten.
+Es war niemals sicher, dass tatsächlich Daten übergeben wurden.
+Die Vereinbarung, welche Daten vorhanden sein müssen, konnte nur durch Konventionen, Dokumentation oder aufwendige Prüfungen getroffen werden.
+Eine solche Laufzeitprüfung kann beispielsweise so aussehen:
+
+```ts
+@Component({ /* ... */ })
+export class BookComponent {
+  @Input() book?: Book;
+  
+  constructor() {
+    if (!this.book) {
+      console.error('Book Input is required!')
+    }
+  }
+}
+```
+
+
+Mit Angular 16 wurde ein lang ersehntes Feature in Angular umgesetzt: Required Inputs.
+Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Propertya Binding gesetzt werden muss.
+
+```ts
+@Input({ required: true }) book?: Book;
+```
+
+Verwenden wir die Komponente nun, ohne das Property Binding zu benutzen, wird ein Compile-Fehler geworfen.
+Damit vermeiden wir unnötigen Code für Laufzeitprüfungen, und wir erhalten schnelles Feedback während der Entwicklung.
+
+```html
+<!-- Required input 'book' from component BookComponent must be specified -->
+<app-book></app-book>
+```
+
+Bitte beachten Sie, dass die Inputs weiterhin im Lifecycle der Komponente aufgelöst werden.
+Das bedeutet, dass die übergebenen Daten im Konstruktor noch nicht zur Verfügung stehen!
+Die Initialisierung der Inputs erfolgt erst nach dem Konstruktor.
+Wollen wir auf die Initialisierung und Änderung der Input-Propertys reagieren, hilft der Lifecycle-Hook `ngOnChanges()`.
+
+```ts
+@Component({ /* ... */ })
+export class BookComponent implements OnChanges {
+  @Input({ required: true }) book?: Book;
+
+  constructor() {
+    // ⚠️ Ergebnis: undefined
+    console.log(this.book);
+  }
+
+  ngOnChanges() {
+    // wird ausgeführt, wenn Input von initialisiert oder geändert wird
+  }
+}
+```
+
+Für die Behandlung von Klassen-Propertys gelten die gleichen Regeln wie bisher:
+Standardmäßig sollte jedes Property direkt mit einem Startwert initialisiert werden.
+
+```ts
+@Input({ required: true }) isActive = false;
+```
+
+Ist das nicht möglich oder sind die Daten tatsächlich optional, sollte das Property optional gesetzt werden. Damit wird auch `undefined` ein gültiger Wert für das Property.
+
+```ts
+@Input({ required: true }) book?: Book; // Book | undefined
+```
+
+Die Non-Null Assertion (`!`) sollten wir im Regelfall nicht verwenden!
+Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhanden sei. Da die Inputs aber erst nach dem Konstruktor initialisiert werden, entsteht hier eine potenzielle Fehlerquelle. Versuchen wir, die Daten im Konstruktor zu lesen, fällt der Fehler erst zur Laufzeit auf.
+
+```ts
+@Input() book!: Book; // Achtung: nicht verwenden!
+```
+
+## Routen-Paramater als Component Inputs
+
+TODO
+
+
+
+## Operator `takeUntilDestroyed`
+
+Bei der Arbeit mit Observables müssen wir stets darauf achten, die aufgebauten Subscriptions auch wieder sauber zu entfernen.
+Tun wir das nicht, können Memory Leaks entstehen.
+
+In der Regel verwenden wir in Angular die `AsyncPipe` direkt im Template: Sie kümmert sich automatisch um Aufräumarbeiten, sobald die Komponente zerstört wird.
+
+Erstellen wir die Susbcription hingegen direkt in der TypeScript-Klasse, müssen wir das Subscription Handling selbst implementieren.
+Dafür hat sich das folgende Pattern etabliert:
+Wir nutzen den Operator `takeUntil()`, um den Datenstrom zu beenden, wenn der übergebene *Notifier* uns dies signalisiert.
+Als Notifier erstellen wir ein Subject, das wir beim Beenden der Komponente (`ngOnDestroy()`) einmalig auslösen:
+
+```ts
+@Component({ /* ... */ })
+export class MyComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  constructor() {
+    myObservable$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(/* ... */);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+  }
+}
+```
+
+Der Aufwand ist hier vergleichsweise hoch.
+Angular bietet deshalb seit Angular 16 einen eigenen Operator `takeUntilDestroyed` an.
+Er beendet den gegebenen Datenstrom automatisch, sobald die Komponente zerstört wird.
+Das Beispiel kann also elegant verkürzt werden:
+
+```ts
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+@Component({ /* ... */ })
+export class MyComponent {
+
+  constructor() {
+    myObservable$.pipe(
+      takeUntilDestroyed()
+    ).subscribe(/* ... */);
+  }
+}
+```
+
+Bitte beachten Sie, dass der Operator nur in einem *Injection Context* funktioniert, also bei der Property-Initialisierung oder im Konstruktor.
+Es ist nicht möglich, den Operator in einer anderen Methode der Komponente zu nutzen.
+
+
+
 ## ESBuild und Vite
 
-Ein weiteres neues Feature, welches zunächst als _Developer Preview_ ausgeliefert wird, ist der Support von [ESBuild](https://esbuild.github.io/) als Bundler.
-ESBuild ist im Vergleich zu Webpack um ein vielfaches schneller, da es direkt vom Browser verarbeitet wird.
-Zur Auslieferung während der Entwicklung wird hier unter der Haube [Vite](https://vitejs.dev/) genutzt.
+Unter der Haube des Build-Prozesses von Angular wird seit vielen Jahren das Tool Webpack verwendet, um die kompilierte Anwendung zu bündeln.
+Die Landschaft der Bundling-Tools ist jedoch gewachsen, und so erforscht auch das Angular-Team, wie der Build mit alternativen Werkzeugen beschleunigt werden kann.
 
-Um den neuen Build auszuprobieren, muss dieser lediglich in der Datei `angular.json` aktiviert werden:
+Mit Angular 16 wurde ein experimenteller Builder für [ESBuild](https://esbuild.github.io/) bereitgestellt.
+Zur Auslieferung während der Entwicklung wird hier unter der Haube [Vite](https://vitejs.dev/) genutzt.
+ESBuild ist im Vergleich zu Webpack um ein Vielfaches schneller.
+
+Um den neuen Build auszuprobieren, können wir den neuen Builder in der Datei `angular.json` aktivieren:
 
 ```json
 {
@@ -191,15 +347,23 @@ Um den neuen Build auszuprobieren, muss dieser lediglich in der Datei `angular.j
 }
 ```
 
-Eine bekannte Einschränkung ist zur Zeit noch der Support für Internationalisierung, dieser wird vom Angular Builder für ESBuild bisher noch nicht unterstützt.
+Bitte beachten Sie, dass das Feature derzeit als *Developer Preview* veröffentlicht wird.
+Die Entwicklung ist also noch nicht ausgereift, und es werden nicht alle Features von Angular vollständig unterstützt.
+Beispielsweise wird das Tooling zur Internationalisierung bisher noch nicht unterstützt.
 
 ## Jest Test Runner
 
-Weiterhin hat das Angular-Team an die Integration des Jest Test-Runners gearbeitet.
-Bisher ist das Feature noch experimentell.
-Somit wird Jest künftig Out-of-the-Box unterstützt.
+Für Unit-Testing setzen neue Angular-Projekte standardmäßig auf den Test-Runner *Karma*.
+Eine sinnvolle Alternative ist das Framework *Jest*.
+Mit Angular 16 wird Jest erstmals nativ und out-of-the-box unterstützt.
 
-Um Jest nutzen zu können, müssen wir lediglich die dependency mit `npm i -D jest` installieren und im Anschluss den Build für das Test-Target in der Datei `angular.json` konfigurieren:
+Dazu müssen wir Jest zunächst im Projekt installieren:
+
+```
+npm i -D jest
+```
+
+Anschließend konfigurieren wir in der Datei `angular.json` das Test-Target, sodass der neue offizielle Builder für jest verwendet wird:
 
 ```json
 {
@@ -219,80 +383,10 @@ Um Jest nutzen zu können, müssen wir lediglich die dependency mit `npm i -D je
 }
 ```
 
-## Required Inputs
-
-Bisher war es in Angular nicht möglich `Input` als verpflichtend zu kennzeichnen.
-Infolgedessen, mussten wir in einer Komponente stets prüfen, ob ein Input wirklich einen Wert hat oder wir mussten explizit TypeScript die Anweisung geben, dass wir uns sicher sind, dass ein Wert gesetzt ist.
-
-Dieses Verhalten hatte jedoch erhebliche Nachteile:
-Sind wir uns sicher, dass ein `Input` gesetzt sein muss und geben dem TypeScript-Compiler die Anweisung dies zu berücksichtigen (mit `!`), so bauen wir eine mögliche Fehlerquelle ein.
-Vergessen wir nämlich, dass `Input` bei der Nutzung der Komponente im Template zu setzen, kann es zu Laufzeitfehlern kommen.
-Müssen wir auf der anderen Seite stets überprüfen, ob ein `Input` gesetzt ist, erzeugen wir zusätzlichen, möglicherweise nicht relevanten Code zur Laufzeit der Anwendung.
-
-```ts
-@Component(...)
-export class BookComponent {
-  // Wir weisen TypeScript an, dass der Typ immer `Book` ist und ignorieren den Fall undefined
-  // Es besteht die Gefahr von Fehlern zur Laufzeit
-  @Input() book!: Book;
-
-  // ODER
-
-  // Der Typ kann Book oder undefined sein
-  // Wir müssen im weiteren Verlauf stets prüfen (Code zur Laufzeit), ob das `book` einen Wert hat
-  @Input() book: Book;
-
-  constructor() {
-    if (!this.book) {
-      console.error('Book Input is required!')
-    }
-  }
-}
-```
-
-```html
-<!-- Fehlermeldung zur Laufzeit, da `book` nicht gesetzt ist -->
-<BookComponent></BookComponent>
-```
-
-Mit den _Required Inputs_ haben wir jetzt die Möglichkeit eine Fehlermeldung zu Compile-Zeit zu erhalten, wenn ein verpflichtendes `Input` nicht beim Aufruf der Komponente gesetzt wurde.
-Somit erzeugen wir keinen unnötigen Code im Bundle zur Laufzeit und erhalten schnelles Feedback während der Entwicklung:
 
 
-```ts
-@Component(...)
-export class BookComponent {
-  // Wir teilen Angular mit, dass es sich um ein verpflichtendes Input handelt
-  // Vergessen wir dieses Input zu füllen, erhalten wir bereits einen Fehler zur Compile-Time
-  @Input({ required: true }) book!: Book;
-}
-```
-
-```html
-<!-- Fehlermeldung zur Compile-Time, da `book` nicht gesetzt ist -->
-<BookComponent></BookComponent>
-```
-
-## Developer Experience Verbesserungen
-
-### Auto-Vervollständigungen für Imports (VSCode)
-
-Die neueste Version des Angular Language Service für Visual Studio Code ermöglicht es uns ebenfalls automatisch die notwendigen `imports` für Angular-Komponenten automatisch zu importieren, sobald wir diese im Komponenten-Template verwenden.
-
-### Self-Closing-Tags
 
 
-<!-- ## Neue Auflage des Angular-Buchs
-
-Wir haben in den letzten Monaten intensiv an einer Neuauflage des deutschsprachigen Angular-Buchs gearbeitet! Das neue Buch erscheint im Februar 2023 in allen Buchhandlungen und Onlineshops.
-
-Wir haben das Buch neu strukturiert und alle Beispiele neu entwickelt.
-Die neuen Features von Angular 15 werden ebenfalls ausführlich behandelt.
-[Bestellen Sie das neue Angular-Buch](/kaufen) am besten direkt!
-
-<div style="text-align: center">
-<img src="https://angular-buch.com/assets/img/book-cover-multiple-v4.png" alt="Buchcover 4. Auflage" style="width:500px">
-</div> -->
 
 
 <hr>
