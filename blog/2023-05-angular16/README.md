@@ -2,30 +2,34 @@
 title: 'Angular 16 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2023-05-05
-lastModified: 2023-05-05
+published: 2023-05-19
+lastModified: 2023-05-19
 keywords:
   - Angular
   - Angular 16
   - Update
+  - Signals
+  - Hydration
+  - Standalone Components
 language: de
 thumbnail: angular16.jpg
 sticky: true
 ---
 
 Am 4. Mai 2023 erschien die neue Major-Version von Angular: **Angular 16**!
-Im Fokus des neuen Releases standen vor allem diese Themen:
+Das Angular-Team hat einige neue Features und Konzepte in diesem Release verpackt.
+Die größte Neuigkeit sind die neuen *Signals*, die als erste Developer Preview in der neuen Version ausprobiert werden können.
 
--
--
--
-
-In diesem Blogpost fassen wir wieder die wichtigsten Neuigkeiten zusammen.
-Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v16-is-here-4d7a28ec680d) finden Sie außerdem die offiziellen Informationen des Angular-Teams.
+Wir fassen in diesem Blogpost die wichtigsten Neuigkeiten in Angular 16 zusammen.
+Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v16-is-here-4d7a28ec680d) finden Sie die offiziellen Informationen des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
 
 
 ## Projekt updaten
+
+Wenn Sie mit unserem Angular-Buch das Beispielprojekt *BookMonkey* entwickeln, haben wir gute Nachrichten für Sie:
+Es sind keine Anpassungen am Code notwendig. Die Inhalte des Buchs sind auch mit Angular 16 noch aktuell.
+
 
 Um ein existierendes Projekt zu aktualisieren, nutzen Sie bitte den [Angular Update Guide](https://update.angular.io/?v=15.0-16.0).
 Der Befehl `ng update` liefert außerdem Infos zu möglichen Updates direkt im Projekt.
