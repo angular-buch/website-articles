@@ -268,11 +268,52 @@ Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhand
 
 ## Routen-Paramater als Component Inputs
 
-TODO
+Um Parameter einer Route auszulesen, verwenden wir üblicherweise den Service `ActivatedRoute`. Besitzt die Route z. B. einen Parameter `isbn`, können wir den Wert in der Komponente wie folgt auslesen:
+
+```ts
+constructor(private route: ActivatedRoute) {
+  // Pull
+  const isbn = this.route.snapshot.paramMap.get('isbn');
+
+  // Push
+  this.route.paramMap.subscribe(params => {
+    const isbn = params.get('isbn');
+  })
+}
+```
+
+Um diesen Ablauf zu vereinfachen, wurde ein neues Router-Feature eingeführt:
+Der Router kann Parameter, Query-Parameter und Routen-Daten automatisch als Inputs an die Komponente übergeben.
+
+Dazu müssen wir in der gerouteten Komponente ein Input-Property definieren, das den gleichen Namen trägt wie der Parameter:
+
+```
+@Input() isbn?: string;
+```
+
+Der Route
+
+Dabei werden Path-Parameter, Query-Parameter und Routen-Daten gleichermaßen verarbeitet.
+Tragen die sie gleichen Namen, werden die Werte überschrieben.
+Sie können die Implementierung im [Quellcode von Angular](https://github.com/angular/angular/blob/16.0.2/packages/router/src/directives/router_outlet.ts#L414) nachvollziehen.
+
+Um das neue Component Input Binding zu nutzen, müssen wir das Feature im Router aktivieren.
+Dies funktioniert nur mit der neuen Funktion `provideRouter()`:
+
+```ts
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+
+bootstrapApplication(AppComponent,
+  {
+    providers: [
+      provideRouter(appRoutes, withComponentInputBinding())
+    ]
+  }
+);
+```
 
 
-
-## Operator `takeUntilDestroyed`
+## Subscriptions beenden mit `takeUntilDestroyed()`
 
 Bei der Arbeit mit Observables müssen wir stets darauf achten, die aufgebauten Subscriptions auch wieder sauber zu entfernen.
 Tun wir das nicht, können Memory Leaks entstehen.
@@ -302,7 +343,7 @@ export class MyComponent implements OnDestroy {
 ```
 
 Der Aufwand ist hier vergleichsweise hoch.
-Angular bietet deshalb seit Angular 16 einen eigenen Operator `takeUntilDestroyed` an.
+Angular bietet deshalb seit Angular 16 einen eigenen Operator [`takeUntilDestroyed`](https://angular.io/api/core/rxjs-interop/takeUntilDestroyed) an.
 Er beendet den gegebenen Datenstrom automatisch, sobald die Komponente zerstört wird.
 Das Beispiel kann also elegant verkürzt werden:
 
@@ -323,6 +364,9 @@ export class MyComponent {
 Bitte beachten Sie, dass der Operator nur in einem *Injection Context* funktioniert, also bei der Property-Initialisierung oder im Konstruktor.
 Es ist nicht möglich, den Operator in einer anderen Methode der Komponente zu nutzen.
 
+Unter der Haube des Operators wird die neue Klasse [`DestroyRef`](https://angular.io/api/core/DestroyRef) verwendet.
+Mit diesem Service können wir Funktionen registrieren, die beim Beenden des aktuellen Kontexts ausgeführt werden.
+Dieser Ansatz ermöglicht eine höhere Flexibilität als das altbekannte `ngOnDestroy()`.
 
 
 ## ESBuild und Vite
