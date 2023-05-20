@@ -117,7 +117,7 @@ Außerdem bieten Signals sogenannte *Effects* an, mit denen wir auf die Aktualis
 Signals sind außerdem kompatibel mit den bereits etablierten Observables.
 Ganz bewusst hat das Angular-Team sich dagegen entschieden, das Framework RxJS fest in den Framework-Kern einzubauen.
 Signals und Observables können allerdings ineinander umgewandelt werden.
-mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt. Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
+Mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt. Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
 
 ```ts
 books = toSignal(inject(BookStoreService).getAllBooks());
