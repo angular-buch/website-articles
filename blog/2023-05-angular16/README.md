@@ -18,7 +18,7 @@ sticky: true
 
 Am 4. Mai 2023 erschien die neue Major-Version von Angular: **Angular 16**!
 Das Angular-Team hat einige neue Features und Konzepte in diesem Release verpackt.
-Die größte Neuigkeit sind die neuen *Signals*, die als erste Developer Preview in der neuen Version ausprobiert werden können.
+Die größte Neuerung sind die neuen *Signals*, die als erste Developer Preview in der neuen Version ausprobiert werden können.
 
 Wir fassen in diesem Blogpost die wichtigsten Neuigkeiten in Angular 16 zusammen.
 Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v16-is-here-4d7a28ec680d) finden Sie die offiziellen Informationen des Angular-Teams.
@@ -32,7 +32,7 @@ Es sind keine Anpassungen am Code notwendig. Die Inhalte des Buchs sind auch mit
 
 
 Um ein existierendes Projekt zu aktualisieren, nutzen Sie bitte den [Angular Update Guide](https://update.angular.io/?v=15.0-16.0).
-Der Befehl `ng update` liefert außerdem Infos zu möglichen Updates direkt im Projekt.
+Der Befehl `ng update` liefert außerdem Informationen zu möglichen Updates direkt im Projekt.
 
 ```bash
 # Projekt auf Angular 16 aktualisieren
@@ -47,7 +47,7 @@ Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderung
 
 Um Angular 16 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js notwendig:
 
-- **TypeScript 4.9 oder 5.0**. Der Support fpr TypeScript 4.8 wurde eingestellt.
+- **TypeScript 4.9 oder 5.0**. Der Support für TypeScript 4.8 wurde eingestellt.
 - **Node.js 16 oder 18**. Node.js in Version 14 wird nicht mehr unterstützt.
 
 
@@ -79,7 +79,7 @@ export class MyComponent {
 ```
 
 Um den Wert im Template zu lesen, muss das Signal wie eine Funktion aufgerufen werden.
-Es gbt dann synchron den Wert zur Anzeige zurück:
+Es gibt dann synchron den Wert zur Anzeige zurück:
 
 ```html
 <div>Counter: {{ myCounter() }}</div>
@@ -115,7 +115,7 @@ Neben diesen Grundbausteinen soll es später auch möglich sein, Input-Propertys
 Außerdem bieten Signals sogenannte *Effects* an, mit denen wir auf die Aktualisierung der Werte reagieren können, um Seiteneffekte auszuführen.
 
 Signals sind außerdem kompatibel mit den bereits etablierten Observables.
-Ganz bewusst hat das Angular-Team sich dagegen entschieden, das Framework RxJS fest in den Framework-Kern einzubauen.
+Ganz bewusst hat das Angular-Team entschieden, das Framework RxJS nicht fest in den Framework-Kern einzubauen.
 Signals und Observables können allerdings ineinander umgewandelt werden.
 Mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt. Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
 
@@ -131,7 +131,7 @@ this.myCounter$.subscribe( /* ... */ );
 
 
 Bitte beachten Sie, dass die Implementierung von Signals noch nicht vollständig ist und mit Angular 16 nur die ersten Aspekte des Konzepts veröffentlicht wurden.
-Die Schnittstellen und Ideen werden sich in den nächsten Monaten formen und entwickeln.
+Die Schnittstellen und Ideen werden sich in den nächsten Monaten formen und weiterentwickeln.
 Wir empfehlen Ihnen, die RFC-Dokumente ausführlich zu lesen, und sich so in das Thema aktiv einzuarbeiten.
 
 
@@ -144,12 +144,12 @@ Die Seite wird also schon sichtbar, ohne dass Angular im Browser gestartet werde
 Damit die Anwendung interaktiv wird, muss Angular die bereits angezeigte Seite anschließend "übernehmen".
 Bisher funktioniert dieser Prozess destruktiv, das bedeutet:
 Das HTML vom Server wird gerendert, danach erzeugt Angular im Client alle Elemente erneut!
-Dieser Ablauf führt zu einem Flackern (die Seite wird schließlich zweimal geladen) und ist vergleichsweise unperformant.
+Dieser Ablauf führt zu einem Flackern (die Seite wird schließlich zweimal geladen) und ist vergleichsweise ineffizient.
 
 Mit Angular 16 gibt es ein neues Konzept zur *Non-Desteructive Hydration*. Anstatt die Anwendung vollständig neu zu rendern, übernimmt Angular die bereits sichtbaren DOM-Elemente und fügt nur noch die nötige Interaktivität hinzu, z. B. Event Listener oder Bindings.
 Die servergerenderte Seite bleibt also bestehen und wird nach dem Start nur noch erweitert, ohne komplett neu erzeugt zu werden.
 
-Um die Hydration zu aktivieren, muss die passende Funktion in den Providers der Anwendung registriert werden:
+Um die Hydration zu aktivieren, muss die passende Funktion bei den Providern der Anwendung registriert werden:
 
 ```ts
 // main.ts
@@ -188,11 +188,11 @@ Für eine vereinfachte Migration von modulbasierten Anwendungen zu Standalone Co
 ng generate @angular/core:standalone
 ```
 
-Das Skript migriert die Komponenten im Projekt automatisch, indem alle notwendigen Abhängigkeiten aus dem Template importiert werden.
+Das Skript migriert die Komponenten im Projekt automatisch und importiert dabei alle notwendigen Abhängigkeiten aus dem Template.
 Außerdem ist es möglich, unnötige Module automatisch zu entfernen und die gesamte Anwendung mithilfe der Standalone-APIs zu bootstrappen.
 
 
-### Auto-Vervollständigungen für Imports (VSCode)
+### Auto-Vervollständigungen für Imports (Visual Studio Code)
 
 Verwenden wir Standalone Components, müssen wir alle Komponenten, Pipes und Direktiven einzeln importieren, die wir im Template verwenden möchten.
 Die neueste Version des *Angular Language Service* für Visual Studio Code unterstützt uns dabei: Sie importiert auf Wunsch automatisch die notwendigen Klassen, sobald wir sie im Komponenten-Template verwenden.
@@ -229,7 +229,7 @@ export class BookComponent {
 
 
 Mit Angular 16 wurde ein lang ersehntes Feature in Angular umgesetzt: Required Inputs.
-Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Propertya Binding gesetzt werden muss.
+Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Property Binding gesetzt werden muss.
 
 ```ts
 @Input({ required: true }) book?: Book;
@@ -246,7 +246,7 @@ Damit vermeiden wir unnötigen Code für Laufzeitprüfungen, und wir erhalten sc
 Bitte beachten Sie, dass die Inputs weiterhin im Lifecycle der Komponente aufgelöst werden.
 Das bedeutet, dass die übergebenen Daten im Konstruktor noch nicht zur Verfügung stehen!
 Die Initialisierung der Inputs erfolgt erst nach dem Konstruktor.
-Wollen wir auf die Initialisierung und Änderung der Input-Propertys reagieren, hilft der Lifecycle-Hook `ngOnChanges()`.
+Wenn wir auf die Initialisierung und Änderung der Input-Properties reagieren wollen, hilft uns der Lifecycle-Hook `ngOnChanges()`.
 
 ```ts
 @Component({ /* ... */ })
@@ -265,7 +265,7 @@ export class BookComponent implements OnChanges {
 ```
 
 Für die Behandlung von Klassen-Propertys gelten die gleichen Regeln wie bisher:
-Standardmäßig sollte jedes Property direkt mit einem Startwert initialisiert werden.
+Jedes Property sollte standardmäßig direkt mit einem Startwert initialisiert werden.
 
 ```ts
 @Input({ required: true }) isActive = false;
@@ -278,7 +278,7 @@ Ist das nicht möglich oder sind die Daten tatsächlich optional, sollte das Pro
 ```
 
 Die Non-Null Assertion (`!`) sollten wir im Regelfall nicht verwenden!
-Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhanden sei. Da die Inputs aber erst nach dem Konstruktor initialisiert werden, entsteht hier eine potenzielle Fehlerquelle. Versuchen wir, die Daten im Konstruktor zu lesen, fällt der Fehler erst zur Laufzeit auf.
+Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhanden sei. Da die Inputs aber erst nach dem Konstruktor initialisiert werden, entsteht hier eine potenzielle Fehlerquelle. Wenn wir versuchen, die Daten im Konstruktor zu lesen, tritt der Fehler erst zur Laufzeit auf.
 
 ```ts
 @Input() book!: Book; // Achtung: nicht verwenden!
@@ -301,7 +301,7 @@ constructor(private route: ActivatedRoute) {
 ```
 
 Um diesen Ablauf zu vereinfachen, wurde ein neues Router-Feature eingeführt:
-Der Router kann Parameter, Query-Parameter und Routen-Daten automatisch als Inputs an die Komponente übergeben.
+Der Router kann Parameter, Query-Parameter und Routen-Daten automatisch als Inputs an eine Komponente übergeben.
 
 Dazu müssen wir in der gerouteten Komponente ein Input-Property definieren, das den gleichen Namen trägt wie der Parameter:
 
@@ -309,13 +309,11 @@ Dazu müssen wir in der gerouteten Komponente ein Input-Property definieren, das
 @Input() isbn?: string;
 ```
 
-Der Route
-
 Dabei werden Path-Parameter, Query-Parameter und Routen-Daten gleichermaßen verarbeitet.
-Tragen die sie gleichen Namen, werden die Werte überschrieben.
+Tragen die verschiedenen Paramter-Typen den gleichen Namen, so ist nur einer der Werte verfügbar.
 Sie können die Implementierung im [Quellcode von Angular](https://github.com/angular/angular/blob/16.0.2/packages/router/src/directives/router_outlet.ts#L414) nachvollziehen.
 
-Um das neue Component Input Binding zu nutzen, müssen wir das Feature im Router aktivieren.
+Um das neue Feature des Component Input Binding zu nutzen, müssen wir es im Router aktivieren.
 Dies funktioniert nur mit der neuen Funktion `provideRouter()`:
 
 ```ts
@@ -338,7 +336,7 @@ Tun wir das nicht, können Memory Leaks entstehen.
 
 In der Regel verwenden wir in Angular die `AsyncPipe` direkt im Template: Sie kümmert sich automatisch um Aufräumarbeiten, sobald die Komponente zerstört wird.
 
-Erstellen wir die Susbcription hingegen direkt in der TypeScript-Klasse, müssen wir das Subscription Handling selbst implementieren.
+Erstellen wir die Subscription hingegen direkt in der TypeScript-Klasse, müssen wir das Subscription Handling selbst implementieren.
 Dafür hat sich das folgende Pattern etabliert:
 Wir nutzen den Operator `takeUntil()`, um den Datenstrom zu beenden, wenn der übergebene *Notifier* uns dies signalisiert.
 Als Notifier erstellen wir ein Subject, das wir beim Beenden der Komponente (`ngOnDestroy()`) einmalig auslösen:
@@ -387,14 +385,11 @@ Mit diesem Service können wir Funktionen registrieren, die beim Beenden des akt
 Dieser Ansatz ermöglicht eine höhere Flexibilität als das altbekannte `ngOnDestroy()`.
 
 
-## ESBuild und Vite
+## ESBuild
 
-Unter der Haube des Build-Prozesses von Angular wird seit vielen Jahren das Tool Webpack verwendet, um die kompilierte Anwendung zu bündeln.
-Die Landschaft der Bundling-Tools ist jedoch gewachsen, und so erforscht auch das Angular-Team, wie der Build mit alternativen Werkzeugen beschleunigt werden kann.
-
-Mit Angular 16 wurde ein experimenteller Builder für [ESBuild](https://esbuild.github.io/) bereitgestellt.
-Zur Auslieferung während der Entwicklung wird hier unter der Haube [Vite](https://vitejs.dev/) genutzt.
-ESBuild ist im Vergleich zu Webpack um ein Vielfaches schneller.
+Mit Angular 16 wurde ein neues experimentelles Build-System auf Basis von [ESBuild](https://esbuild.github.io/) bereitgestellt.
+ESBuild soll deutlich schneller ausführen, als das alte System.
+Während der Entwicklung mit `ng serve` wird dabei der Webserver von [Vite](https://vitejs.dev/) genutzt.
 
 Um den neuen Build auszuprobieren, können wir den neuen Builder in der Datei `angular.json` aktivieren:
 
@@ -410,14 +405,14 @@ Um den neuen Build auszuprobieren, können wir den neuen Builder in der Datei `a
 ```
 
 Bitte beachten Sie, dass das Feature derzeit als *Developer Preview* veröffentlicht wird.
-Die Entwicklung ist also noch nicht ausgereift, und es werden nicht alle Features von Angular vollständig unterstützt.
+Die Entwicklung ist daher noch nicht ausgereift, und es werden nicht alle Features von Angular vollständig unterstützt.
 Beispielsweise wird das Tooling zur Internationalisierung bisher noch nicht unterstützt.
 
 ## Jest Test Runner
 
-Für Unit-Testing setzen neue Angular-Projekte standardmäßig auf den Test-Runner *Karma*.
-Eine sinnvolle Alternative ist das Framework *Jest*.
-Mit Angular 16 wird Jest erstmals nativ und out-of-the-box unterstützt.
+Für Unit-Tests setzt Angular standardmäßig auf den Test-Runner *Karma* und das Framework *Jasmine* .
+Eine in der Community beliebte Alternative ist *Jest*.
+Mit Angular 16 wird Jest erstmals direkt out-of-the-box unterstützt.
 
 Dazu müssen wir Jest zunächst im Projekt installieren:
 
@@ -425,7 +420,7 @@ Dazu müssen wir Jest zunächst im Projekt installieren:
 npm i -D jest
 ```
 
-Anschließend konfigurieren wir in der Datei `angular.json` das Test-Target, sodass der neue offizielle Builder für jest verwendet wird:
+Anschließend konfigurieren wir in der Datei `angular.json` das Test-Target, sodass der neue offizielle Builder für Jest verwendet wird:
 
 ```json
 {
