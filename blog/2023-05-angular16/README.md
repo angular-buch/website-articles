@@ -66,9 +66,9 @@ Im Gegensatz zu einer Variable informiert das Signal alle Interessierten darübe
 Auf diese Weise wird es möglich sein, eine gezielte Change Detection an den Stellen durchzuführen, an denen sich *tatsächlich* Daten geändert haben.
 
 Signals sind keine vollständig neue Erfindung von Angular, sondern sind in ähnlicher Form auch in anderen Frameworks wie Vue.js oder Solid.js zu finden.
-Das Design der neuen Signals in Angular wird durch [eine Reihe komplexer RFCs](https://github.com/angular/angular/discussions/49685) begleitet.
+Das Design der neuen Signals in Angular wird durch [eine Reihe anspruchsvoller RFCs](https://github.com/angular/angular/discussions/49685) begleitet.
 
-Um ein Signal zu erstellen, verwenden wir die Funktion `signal()`.
+Um ein Signal zu erstellen, können wir die Funktion `signal()` verwenden.
 Es muss immer ein Startwert übergeben werden:
 
 ```ts
@@ -94,7 +94,7 @@ this.myCounter.set(1); // 1
 this.myCounter.update(c => c + 1); // 2
 ```
 
-Eine Besonderheit dieses neuen Ansatzes sind sogenannte *Computed Properties*:
+Eine Besonderheit dieses neuen Ansatzes sind sogenannte *Computed Signals*:
 Damit können wir einen Zustand auf der Basis anderer Signals berechnen.
 Ändern sich die Eingabewerte, wird die Berechnung automatisch erneut angestoßen.
 Im folgenden Beispiel wird der Wet für `seconds` also nur neu berechnet, wenn das Signal `milliSeconds` seinen Wert ändert.
@@ -114,9 +114,8 @@ export class MyComponent {
 Neben diesen Grundbausteinen soll es später auch möglich sein, Input-Propertys und die Kommunikation mit der Direktive `ngModel` mit Signals abzubilden.
 Außerdem bieten Signals sogenannte *Effects* an, mit denen wir auf die Aktualisierung der Werte reagieren können, um Seiteneffekte auszuführen.
 
-Signals sind außerdem kompatibel mit den bereits etablierten Observables.
-Ganz bewusst hat das Angular-Team entschieden, das Framework RxJS nicht fest in den Framework-Kern einzubauen.
-Signals und Observables können allerdings ineinander umgewandelt werden.
+Signals sind außerdem kompatibel mit den bereits etablierten Observables von RxJS, die ebenso eine reaktive Programmierung ermögliche.
+Signals und Observables können dabei ineinander umgewandelt werden.
 Mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt. Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
 
 ```ts
@@ -125,10 +124,13 @@ books = toSignal(inject(BookStoreService).getAllBooks());
 myCounter = signal(0);
 myCounter$ = toObservable(this.myCounter);
 
-// ...
-this.myCounter$.subscribe( /* ... */ );
 ```
 
+Im Template können wir dann wie gewohnt die Werte binden:
+```
+{{ books() }}
+{{ myCounter$ | async }}
+```
 
 Bitte beachten Sie, dass die Implementierung von Signals noch nicht vollständig ist und mit Angular 16 nur die ersten Aspekte des Konzepts veröffentlicht wurden.
 Die Schnittstellen und Ideen werden sich in den nächsten Monaten formen und weiterentwickeln.
