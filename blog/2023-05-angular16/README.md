@@ -322,10 +322,10 @@ bootstrapApplication(AppComponent,
 Bei der Arbeit mit Observables müssen wir stets darauf achten, die aufgebauten Subscriptions auch wieder sauber zu entfernen.
 Tun wir das nicht, können Memory Leaks entstehen.
 
-In der Regel verwenden wir in Angular die `AsyncPipe` direkt im Template: Sie kümmert sich automatisch um Aufräumarbeiten, sobald die Komponente zerstört wird.
+In der Regel verwenden wir in Angular die `AsyncPipe` direkt im Template: Die `AsyncPipe` kümmert sich automatisch um Aufräumarbeiten, sobald die Komponente zerstört wird.
 
-Erstellen wir die Subscription hingegen direkt in der TypeScript-Klasse, müssen wir das Subscription Handling selbst implementieren.
-Dafür hat sich das folgende Pattern etabliert:
+Erstellen wir die Subscription hingegen direkt in der TypeScript-Klasse, mussten wir das Subscription Handling bislang selbst implementieren.
+Dafür haben sich eine Reihe von unterschiedlichen Patterns etabliert, unter anderem dieses:
 Wir nutzen den Operator `takeUntil()`, um den Datenstrom zu beenden, wenn der übergebene *Notifier* uns dies signalisiert.
 Als Notifier erstellen wir ein Subject, das wir beim Beenden der Komponente (`ngOnDestroy()`) einmalig auslösen:
 
@@ -346,7 +346,7 @@ export class MyComponent implements OnDestroy {
 }
 ```
 
-Der Aufwand ist hier vergleichsweise hoch.
+Dieses und weitere Muster funktionieren an sich problemlos, jedoch ist die Anzahl der Codezeilen erstaunlich hoch. Die Lesbarkeit des Quellcodes leidet darunter.
 Angular bietet deshalb seit Angular 16 einen eigenen Operator [`takeUntilDestroyed`](https://angular.io/api/core/rxjs-interop/takeUntilDestroyed) an.
 Er beendet den gegebenen Datenstrom automatisch, sobald die Komponente zerstört wird.
 Das Beispiel kann also elegant verkürzt werden:
