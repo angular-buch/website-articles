@@ -203,45 +203,29 @@ Die neueste Version des *Angular Language Service* für Visual Studio Code unter
 
 ## Required Inputs
 
-Inputs von Komponenten und Direktiven waren seit jeher optional:
-Setzt man eine Komponente im Template ein, war es niemals verpflichtend, Daten mittels Property Bindings zu übergeben.
+Inputs von Komponenten und Direktiven waren bislang in Angular immer optional:
+Setzte man eine Komponente im Template ein, war es niemals verpflichtend, Daten mittels Property Bindings auch tatsächlich zu übergeben.
 
 ```html
-<app-book></app-book>
+<!-- Vorgesehene Verwendung -->
 <app-book [book]="myBook"></app-book>
-```
 
-Das führte dazu, dass wir die benötigten Daten stets in der Komponente zur Laufzeit überprüfen mussten.
-Es war niemals sicher, dass tatsächlich Daten übergeben wurden.
-Die Vereinbarung, welche Daten vorhanden sein müssen, konnte nur durch Konventionen, Dokumentation oder aufwendige Prüfungen getroffen werden.
-Eine solche Laufzeitprüfung kann beispielsweise so aussehen:
-
-```ts
-@Component({ /* ... */ })
-export class BookComponent {
-  @Input() book?: Book;
-  
-  constructor() {
-    if (!this.book) {
-      console.error('Book Input is required!')
-    }
-  }
-}
+<!-- Property Binding "vergessen" -->
+<app-book></app-book>
 ```
 
 
 Mit Angular 16 wurde ein lang ersehntes Feature in Angular umgesetzt: Required Inputs.
-Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Property Binding gesetzt werden muss.
+Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Property Binding gesetzt werden muss. Es ist nicht mehr möglich, das Property versehentlich auszulassen.
 
 ```ts
 @Input({ required: true }) book?: Book;
 ```
 
-Verwenden wir die Komponente nun, ohne das Property Binding zu benutzen, wird ein Compile-Fehler geworfen.
-Damit vermeiden wir unnötigen Code für Laufzeitprüfungen, und wir erhalten schnelles Feedback während der Entwicklung.
+Verwenden wir die Komponente nun, ohne das Property Binding zu benutzen, wird ein eindeutiger Compile-Fehler ausgegeben:
 
 ```html
-<!-- Required input 'book' from component BookComponent must be specified -->
+<!-- Meldung: Required input 'book' from component BookComponent must be specified -->
 <app-book></app-book>
 ```
 
@@ -283,8 +267,10 @@ Die Non-Null Assertion (`!`) sollten wir im Regelfall nicht verwenden!
 Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhanden sei. Da die Inputs aber erst nach dem Konstruktor initialisiert werden, entsteht hier eine potenzielle Fehlerquelle. Wenn wir versuchen, die Daten im Konstruktor zu lesen, tritt der Fehler erst zur Laufzeit auf.
 
 ```ts
-@Input() book!: Book; // Achtung: nicht verwenden!
+@Input() book!: Book; // Achtung: nicht verwenden! (Schlechte Praxis)
 ```
+
+Dadurch, dass der Wert undefined weiterhin vorkommt, ändert sich in der Praxis also nicht viel. Wir können nun aber leichter sicherstellen, dass Pflichtwerte auch tatsächlich übergeben werden.
 
 ## Routen-Paramater als Component Inputs
 
