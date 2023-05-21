@@ -148,7 +148,7 @@ Bisher funktioniert dieser Prozess destruktiv, das bedeutet:
 Das HTML vom Server wird gerendert, danach erzeugt Angular im Client alle Elemente erneut!
 Dieser Ablauf führt zu einem Flackern (die Seite wird schließlich zweimal geladen) und ist vergleichsweise ineffizient.
 
-Mit Angular 16 gibt es ein neues Konzept zur *Non-Desteructive Hydration*. Anstatt die Anwendung vollständig neu zu rendern, übernimmt Angular die bereits sichtbaren DOM-Elemente und fügt nur noch die nötige Interaktivität hinzu, z. B. Event Listener oder Bindings.
+Mit Angular 16 gibt es ein neues Konzept zur *Non-Desteructive Hydration*. Anstatt die Anwendung vollständig neu zu rendern, übernimmt Angular die bereits sichtbaren DOM-Elemente und fügt nur noch die nötige Interaktivität hinzu, z. B. Event Listener und Bindings.
 Die servergerenderte Seite bleibt also bestehen und wird nach dem Start nur noch erweitert, ohne komplett neu erzeugt zu werden.
 
 Um die Hydration zu aktivieren, muss die passende Funktion bei den Providern der Anwendung registriert werden:
@@ -184,7 +184,7 @@ Wir empfehlen Ihnen, neue Anwendungen und neue Features bestehender Anwendungen 
 
 ### Schematics zur Migration
 
-Für eine vereinfachte Migration von modulbasierten Anwendungen zu Standalone Components bietet Angular ein Migrationsskript an.
+Für eine vereinfachte Migration von modulbasierten Anwendungen zu Standalone Components bietet Angular jetzt ein Migrationsskript an.
 
 ```bash
 ng generate @angular/core:standalone
@@ -197,7 +197,7 @@ Außerdem ist es möglich, unnötige Module automatisch zu entfernen und die ges
 ### Auto-Vervollständigungen für Imports (Visual Studio Code)
 
 Verwenden wir Standalone Components, müssen wir alle Komponenten, Pipes und Direktiven einzeln importieren, die wir im Template verwenden möchten.
-Die neueste Version des *Angular Language Service* für Visual Studio Code unterstützt uns dabei: Sie importiert auf Wunsch automatisch die notwendigen Klassen, sobald wir sie im Komponenten-Template verwenden.
+Die neueste Version des *Angular Language Service* für Visual Studio Code unterstützt uns dabei: Wenn wir eine Kindkomponente verwenden, die noch nicht im Imports-Array der Eltern-Komponente aufgeführt ist, wird uns angeboten, diese automatisch hinzuzufügen.
 
 
 
