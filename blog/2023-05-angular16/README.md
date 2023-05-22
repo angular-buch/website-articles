@@ -447,7 +447,7 @@ Im Angular-Buch (4. Auflage) geben wir in Kapitel 26.6 eine fundierte Einführun
 
 ## Sonstiges
 
-- Guards und Resolver werden nun standardmäßig als Funktionen generiert. Die klassenbasierten Guards und Resolver sind deprecated. Siehe [22fdd7da](22fdd7da97c832048410ca89622712d097490c5d). Im Angular-Buch setzen behandeln wir funktionale Guards bereits ausführlich.
+- Guards und Resolver werden nun standardmäßig als Funktionen generiert. Die klassenbasierten Guards und Resolver sind deprecated. Siehe [22fdd7da](22fdd7da97c832048410ca89622712d097490c5d). Im Angular-Buch behandeln wir funktionale Guards bereits ausführlich.
 - Der NGCC (Angular Compatibility Compiler) wurde entfernt. Dieses Tool war notwendig, um ältere Bibliotheken, die mit der veralteten View Engine kompiliert wurden, mit dem neuen Ivy-Compiler kompatibel zu machen. Da Ivy seit Angular 9.0.0 verfügbar ist, ist davon auszugehen, dass eine Abwärtskompatibilität nicht länger notwendig ist. Siehe [c8ac660d](https://github.com/angular/angular-cli/commit/c8ac660d8b13922be7ebcc92dfd5b18392602c40)
 
 
