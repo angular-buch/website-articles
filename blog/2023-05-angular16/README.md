@@ -2,8 +2,8 @@
 title: 'Angular 16 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2023-05-19
-lastModified: 2023-05-19
+published: 2023-05-22
+lastModified: 2023-05-22
 keywords:
   - Angular
   - Angular 16
@@ -18,11 +18,11 @@ sticky: true
 
 Am 4. Mai 2023 erschien die neue Major-Version von Angular: **Angular 16**!
 Das Angular-Team hat einige neue Features und Konzepte in diesem Release verpackt.
-Die größte Neuerung sind die neuen *Signals*, die als erste Developer Preview in der neuen Version ausprobiert werden können.
+Die größte Neuerung sind die *Signals*, die als erste Developer Preview in der neuen Version ausprobiert werden können.
 
 Wir fassen in diesem Blogpost die wichtigsten Neuigkeiten in Angular 16 zusammen.
 Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v16-is-here-4d7a28ec680d) finden Sie die offiziellen Informationen des Angular-Teams.
-Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
+Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
 
 
 ## Projekt updaten
@@ -55,17 +55,17 @@ Um Angular 16 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js
 
 Die Change Detection von Angular ist dafür verantwortlich, die angezeigten Daten in der View stets aktuell zu halten.
 Dieser Prozess ist aufwendig: Angular erfasst mithilfe der Bibliothek Zone.js alle Ereignisse, die im Browser stattfinden, z. B. DOM-Events, HTTP-Responses, Timer, usw.
-Bei jedem dieser Ereignisse werden alle Bindings in allen Komponenten neu evaluiert.
+Bei jedem dieser Ereignisse werden *alle* Bindings in *allen* Komponenten neu evaluiert.
 Angular kann nicht ermitteln, *welche* Daten sich geändert haben, sondern nur, *dass* etwas passiert ist.
 Die aktuelle Implementierung der Change Detection funktioniert gut, arbeitet aber nicht gezielt.
 
 Ab Angular 16 sind die sogenannten *Signals* als Developer Preview verfügbar!
-Ein Signal ist eine "reactive Primitive", also ein neuer Grundbaustein für Angular-Apps.
+Ein Signal ist eine "Reactive Primitive", also ein neuer Grundbaustein für Angular-Apps.
 Es ist ein Objekt, das einen Wert besitzt.
 Im Gegensatz zu einer Variable informiert das Signal alle Interessierten darüber, dass sich der Wert geändert hat.
 Auf diese Weise wird es möglich sein, eine gezielte Change Detection an den Stellen durchzuführen, an denen sich *tatsächlich* Daten geändert haben.
 
-Signals sind keine vollständig neue Erfindung von Angular, sondern sind in ähnlicher Form auch in anderen Frameworks wie Vue.js oder Solid.js zu finden.
+Signals sind keine vollständig neue Erfindung von Angular, sondern sind in ähnlicher Form auch in anderen Frameworks wie [Vue.js](https://vuejs.org/api/reactivity-core.html) oder [Solid.js](https://www.solidjs.com/guides/reactivity) zu finden.
 Das Design der neuen Signals in Angular wird durch [eine Reihe anspruchsvoller RFCs](https://github.com/angular/angular/discussions/49685) begleitet.
 
 Um ein Signal zu erstellen, können wir die Funktion `signal()` verwenden.
@@ -97,7 +97,7 @@ this.myCounter.update(c => c + 1); // 2
 Eine Besonderheit dieses neuen Ansatzes sind sogenannte *Computed Signals*:
 Damit können wir einen Zustand auf der Basis anderer Signals berechnen.
 Ändern sich die Eingabewerte, wird die Berechnung automatisch erneut angestoßen.
-Im folgenden Beispiel wird der Wet für `seconds` also nur neu berechnet, wenn das Signal `milliSeconds` seinen Wert ändert.
+Im folgenden Beispiel wird der Wert für `seconds` also nur neu berechnet, wenn das Signal `milliSeconds` seinen Wert ändert.
 
 
 ```ts
@@ -114,20 +114,21 @@ export class MyComponent {
 Neben diesen Grundbausteinen soll es später auch möglich sein, Input-Propertys und die Kommunikation mit der Direktive `ngModel` mit Signals abzubilden.
 Außerdem bieten Signals sogenannte *Effects* an, mit denen wir auf die Aktualisierung der Werte reagieren können, um Seiteneffekte auszuführen.
 
-Signals sind außerdem kompatibel mit den bereits etablierten Observables von RxJS, die ebenso eine reaktive Programmierung ermögliche.
+Signals sind außerdem kompatibel mit den bereits etablierten Observables von RxJS, die ebenso eine reaktive Programmierung ermöglichen.
 Signals und Observables können dabei ineinander umgewandelt werden.
-Mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt. Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
+Mithilfe von `toSignal()` werden also die emittierten Werte eines Observables in ein Signal verpackt.
+Mit `toObservable()` können wir die Wertänderungen eines Signals als Observable-Datenstrom ausgeben.
 
 ```ts
 books = toSignal(inject(BookStoreService).getAllBooks());
 
 myCounter = signal(0);
 myCounter$ = toObservable(this.myCounter);
-
 ```
 
-Im Template können wir dann wie gewohnt die Werte binden:
-```
+Im Template können wir die Werte dann wie gewohnt binden:
+
+```html
 {{ books() }}
 {{ myCounter$ | async }}
 ```
@@ -151,7 +152,7 @@ Dieser Ablauf führt zu einem Flackern (die Seite wird schließlich zweimal gela
 Mit Angular 16 gibt es ein neues Konzept zur *Non-Desteructive Hydration*. Anstatt die Anwendung vollständig neu zu rendern, übernimmt Angular die bereits sichtbaren DOM-Elemente und fügt nur noch die nötige Interaktivität hinzu, z. B. Event Listener und Bindings.
 Die servergerenderte Seite bleibt also bestehen und wird nach dem Start nur noch erweitert, ohne komplett neu erzeugt zu werden.
 
-Um die Hydration zu aktivieren, muss die passende Funktion bei den Providern der Anwendung registriert werden:
+Um die Hydration zu aktivieren, muss die passende Funktion bei den Providers der Anwendung registriert werden:
 
 ```ts
 // main.ts
@@ -163,14 +164,14 @@ bootstrapApplication(AppComponent, {
 ```
 
 In diesem Zusammenhang möchten wir auf eine kleine Änderung gegenüber dem gedruckten Buchtext hinweisen:
-Für das `BrowserModule` ist es bei Server-Side Rendering nicht mehr notwendig, die Methode `withServerTransition()` separat aufzurufen.
-Das aktualisierte `AppModule` für den BookMonkey finden Sie [auf GitHub](https://github.com/book-monkey5/16f-ssr/blob/main/src/app/app.module.ts).
+Für das `BrowserModule` ist es beim Server-Side Rendering nicht mehr notwendig, die Methode `withServerTransition()` separat aufzurufen.
+Im `AppModule` ist also keine Änderung mehr notwendig. Die aktualisierte Datei für den BookMonkey finden Sie [auf GitHub](https://github.com/book-monkey5/16f-ssr/blob/main/src/app/app.module.ts).
 
 
 
 ## Standalone Components
 
-Bereits mit dem [letzten Major-Release von Angular 15](/blog/2022-11-angular15) sind die Standalone Components ein stabiler Bestandteil von Angular.
+Bereits seit dem [letzten Major-Release von Angular 15](/blog/2022-11-angular15) sind die Standalone Components ein stabiler Bestandteil von Angular.
 Seit Angular 16 können neue Projekte vollständig standalone generiert werden.
 Das Projekt besitzt dann kein `AppModule`, sondern in der Datei `main.ts` wird direkt die Root-Komponente `AppComponent` gebootstrappt.
 
@@ -179,6 +180,7 @@ ng new <project> --standalone
 ```
 
 Wir empfehlen Ihnen, neue Anwendungen und neue Features bestehender Anwendungen mit Standalone Components zu entwickeln.
+Im Angular-Buch finden Sie in Kapitel 25 einen ausführlichen Einstieg in Standalone Components.
 
 
 
@@ -197,7 +199,7 @@ Außerdem ist es möglich, unnötige Module automatisch zu entfernen und die ges
 ### Auto-Vervollständigungen für Imports (Visual Studio Code)
 
 Verwenden wir Standalone Components, müssen wir alle Komponenten, Pipes und Direktiven einzeln importieren, die wir im Template verwenden möchten.
-Die neueste Version des *Angular Language Service* für Visual Studio Code unterstützt uns dabei: Wenn wir eine Kindkomponente verwenden, die noch nicht im Imports-Array der Eltern-Komponente aufgeführt ist, wird uns angeboten, diese automatisch hinzuzufügen.
+Die neueste Version des *Angular Language Service* für Visual Studio Code unterstützt uns dabei: Wenn wir eine Komponente, Pipe oder Direktive im Template einer Komponente verwenden, die noch nicht im Imports-Array aufgeführt ist, wird uns angeboten, diese automatisch hinzuzufügen.
 
 
 
@@ -216,7 +218,8 @@ Setzte man eine Komponente im Template ein, war es niemals verpflichtend, Daten 
 
 
 Mit Angular 16 wurde ein lang ersehntes Feature in Angular umgesetzt: Required Inputs.
-Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Property Binding gesetzt werden muss. Es ist nicht mehr möglich, das Property versehentlich auszulassen.
+Damit können wir angeben, dass ein Input beim Start der Komponente verpflichtend von außen durch ein Property Binding gesetzt werden muss.
+Es ist nicht mehr möglich, das Property versehentlich auszulassen.
 
 ```ts
 @Input({ required: true }) book?: Book;
@@ -232,7 +235,7 @@ Verwenden wir die Komponente nun, ohne das Property Binding zu benutzen, wird ei
 Bitte beachten Sie, dass die Inputs weiterhin im Lifecycle der Komponente aufgelöst werden.
 Das bedeutet, dass die übergebenen Daten im Konstruktor noch nicht zur Verfügung stehen!
 Die Initialisierung der Inputs erfolgt erst nach dem Konstruktor.
-Wenn wir auf die Initialisierung und Änderung der Input-Properties reagieren wollen, hilft uns der Lifecycle-Hook `ngOnChanges()`.
+Wenn wir auf die Initialisierung und Änderung der Input-Propertys reagieren wollen, hilft uns der Lifecycle-Hook `ngOnChanges()`.
 
 ```ts
 @Component({ /* ... */ })
@@ -245,7 +248,7 @@ export class BookComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    // wird ausgeführt, wenn Input von initialisiert oder geändert wird
+    // wird ausgeführt, wenn Input von außen initialisiert oder geändert wird
   }
 }
 ```
@@ -257,24 +260,29 @@ Jedes Property sollte standardmäßig direkt mit einem Startwert initialisiert w
 @Input({ required: true }) isActive = false;
 ```
 
-Ist das nicht möglich oder sind die Daten tatsächlich optional, sollte das Property optional gesetzt werden. Damit wird auch `undefined` ein gültiger Wert für das Property.
+Ist das nicht möglich oder sind die Daten tatsächlich optional, sollte das Property optional gesetzt werden.
+Damit wird auch `undefined` ein gültiger Wert für das Property.
 
 ```ts
 @Input({ required: true }) book?: Book; // Book | undefined
 ```
 
 Die Non-Null Assertion (`!`) sollten wir im Regelfall nicht verwenden!
-Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhanden sei. Da die Inputs aber erst nach dem Konstruktor initialisiert werden, entsteht hier eine potenzielle Fehlerquelle. Wenn wir versuchen, die Daten im Konstruktor zu lesen, tritt der Fehler erst zur Laufzeit auf.
+Das Problem: Der Compiler nimmt an, dass *immer* ein Wert vom Typ `Book` vorhanden sei. Da die Inputs aber erst nach dem Konstruktor initialisiert werden und vorher tatsächlich mit `undefined` belegt sind, entsteht hier eine potenzielle Fehlerquelle.
+Wenn wir versuchen, die Daten im Konstruktor zu lesen, tritt der Fehler erst zur Laufzeit auf.
 
 ```ts
-@Input() book!: Book; // Achtung: nicht verwenden! (Schlechte Praxis)
+@Input() book!: Book; // Achtung: nicht verwenden! (schlechte Praxis)
 ```
 
-Dadurch, dass der Wert undefined weiterhin vorkommt, ändert sich in der Praxis also nicht viel. Wir können nun aber leichter sicherstellen, dass Pflichtwerte auch tatsächlich übergeben werden.
+In der Praxis ändert sich also nicht viel an der Verwendung der Propertys.
+Wir können nun aber leichter sicherstellen, dass Pflichtwerte auch tatsächlich übergeben werden.
+
 
 ## Routen-Paramater als Component Inputs
 
-Um Parameter einer Route auszulesen, verwenden wir üblicherweise den Service `ActivatedRoute`. Besitzt die Route z. B. einen Parameter `isbn`, können wir den Wert in der Komponente wie folgt auslesen:
+Um Parameter einer Route auszulesen, verwenden wir üblicherweise den Service `ActivatedRoute`.
+Besitzt die Route z. B. einen Parameter `isbn`, können wir den Wert in der Komponente wie folgt auslesen:
 
 ```ts
 constructor(private route: ActivatedRoute) {
@@ -284,7 +292,7 @@ constructor(private route: ActivatedRoute) {
   // Push
   this.route.paramMap.subscribe(params => {
     const isbn = params.get('isbn');
-  })
+  });
 }
 ```
 
@@ -293,15 +301,15 @@ Der Router kann Parameter, Query-Parameter und Routen-Daten automatisch als Inpu
 
 Dazu müssen wir in der gerouteten Komponente ein Input-Property definieren, das den gleichen Namen trägt wie der Parameter:
 
-```
+```ts
 @Input() isbn?: string;
 ```
 
 Dabei werden Path-Parameter, Query-Parameter und Routen-Daten gleichermaßen verarbeitet.
-Tragen die verschiedenen Paramter-Typen den gleichen Namen, so ist nur einer der Werte verfügbar.
+Tragen die verschiedenen Parameter-Typen den gleichen Namen, so ist nur einer der Werte verfügbar.
 Sie können die Implementierung im [Quellcode von Angular](https://github.com/angular/angular/blob/16.0.2/packages/router/src/directives/router_outlet.ts#L414) nachvollziehen.
 
-Um das neue Feature des Component Input Binding zu nutzen, müssen wir es im Router aktivieren.
+Um das neue Feature des *Component Input Binding* zu nutzen, müssen wir es im Router aktivieren.
 Dies funktioniert nur mit der neuen Funktion `provideRouter()`:
 
 ```ts
@@ -310,7 +318,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 bootstrapApplication(AppComponent,
   {
     providers: [
-      provideRouter(appRoutes, withComponentInputBinding())
+      provideRouter(routes, withComponentInputBinding())
     ]
   }
 );
@@ -322,12 +330,12 @@ bootstrapApplication(AppComponent,
 Bei der Arbeit mit Observables müssen wir stets darauf achten, die aufgebauten Subscriptions auch wieder sauber zu entfernen.
 Tun wir das nicht, können Memory Leaks entstehen.
 
-In der Regel verwenden wir in Angular die `AsyncPipe` direkt im Template: Die `AsyncPipe` kümmert sich automatisch um Aufräumarbeiten, sobald die Komponente zerstört wird.
+In der Regel verwenden wir in Angular die `AsyncPipe` direkt im Template: Die Pipe kümmert sich automatisch um Aufräumarbeiten, sobald die Komponente zerstört wird.
 
 Erstellen wir die Subscription hingegen direkt in der TypeScript-Klasse, mussten wir das Subscription Handling bislang selbst implementieren.
-Dafür haben sich eine Reihe von unterschiedlichen Patterns etabliert, unter anderem dieses:
+Dafür haben sich eine Reihe unterschiedlicher Patterns etabliert, unter anderem dieses:
 Wir nutzen den Operator `takeUntil()`, um den Datenstrom zu beenden, wenn der übergebene *Notifier* uns dies signalisiert.
-Als Notifier erstellen wir ein Subject, das wir beim Beenden der Komponente (`ngOnDestroy()`) einmalig auslösen:
+Als Notifier erstellen wir ein Subject, das wir beim Beenden der Komponente (`ngOnDestroy()`) einmalig auslösen.
 
 ```ts
 @Component({ /* ... */ })
@@ -346,8 +354,11 @@ export class MyComponent implements OnDestroy {
 }
 ```
 
-Dieses und weitere Muster funktionieren an sich problemlos, jedoch ist die Anzahl der Codezeilen erstaunlich hoch. Die Lesbarkeit des Quellcodes leidet darunter.
-Angular bietet deshalb seit Angular 16 einen eigenen Operator [`takeUntilDestroyed`](https://angular.io/api/core/rxjs-interop/takeUntilDestroyed) an.
+Wir haben dieses Muster im Angular-Buch in Kapitel 15.9 ausführlich besprochen.
+Der Ansatz funktioniert zwar problemlos, jedoch ist die Anzahl der Codezeilen erstaunlich hoch.
+Die Lesbarkeit des Quellcodes leidet darunter.
+
+Angular bietet deshalb seit Version 16 einen eigenen Operator [`takeUntilDestroyed`](https://angular.io/api/core/rxjs-interop/takeUntilDestroyed) an.
 Er beendet den gegebenen Datenstrom automatisch, sobald die Komponente zerstört wird.
 Das Beispiel kann also elegant verkürzt werden:
 
@@ -376,10 +387,10 @@ Dieser Ansatz ermöglicht eine höhere Flexibilität als das altbekannte `ngOnDe
 ## ESBuild
 
 Mit Angular 16 wurde ein neues experimentelles Build-System auf Basis von [ESBuild](https://esbuild.github.io/) bereitgestellt.
-ESBuild soll deutlich schneller ausführen, als das alte System.
+ESBuild soll deutlich schneller ausführen als das alte System.
 Während der Entwicklung mit `ng serve` wird dabei der Webserver von [Vite](https://vitejs.dev/) genutzt.
 
-Um den neuen Build auszuprobieren, können wir den neuen Builder in der Datei `angular.json` aktivieren:
+Um den neuen Build auszuprobieren, können wir den passenden Builder in der Datei `angular.json` aktivieren:
 
 ```json
 {
@@ -393,18 +404,18 @@ Um den neuen Build auszuprobieren, können wir den neuen Builder in der Datei `a
 ```
 
 Bitte beachten Sie, dass das Feature derzeit als *Developer Preview* veröffentlicht wird.
-Die Entwicklung ist daher noch nicht ausgereift, und es werden nicht alle Features von Angular vollständig unterstützt.
+Die Entwicklung ist also noch nicht ausgereift, und es sind noch nicht alle Features von Angular vollständig umgesetzt.
 Beispielsweise wird das Tooling zur Internationalisierung bisher noch nicht unterstützt.
 
 ## Jest Test Runner
 
-Für Unit-Tests setzt Angular standardmäßig auf den Test-Runner *Karma* und das Framework *Jasmine* .
+Für Unit-Tests setzt Angular standardmäßig auf den Test-Runner *Karma* und das Framework *Jasmine*.
 Eine in der Community beliebte Alternative ist *Jest*.
 Mit Angular 16 wird Jest erstmals direkt out-of-the-box unterstützt.
 
 Dazu müssen wir Jest zunächst im Projekt installieren:
 
-```
+```bash
 npm i -D jest
 ```
 
@@ -427,6 +438,14 @@ Anschließend konfigurieren wir in der Datei `angular.json` das Test-Target, sod
   }
 }
 ```
+
+Im Angular-Buch (4. Auflage) geben wir in Kapitel 26.6 eine fundierte Einführung in das Framework Jest.
+
+
+## Sonstiges
+
+- Guards und Resolver werden nun standardmäßig als Funktionen generiert. Die klassenbasierten Guards und Resolver sind deprecated. Siehe [22fdd7da](22fdd7da97c832048410ca89622712d097490c5d). Im Angular-Buch setzen behandeln wir funktionale Guards bereits ausführlich.
+- Der NGCC (Angular Compatibility Compiler) wurde entfernt. Dieses Tool war notwendig, um ältere Bibliotheken, die mit der veralteten View Engine kompiliert wurden, mit dem neuen Ivy-Compiler kompatibel zu machen. Da Ivy seit Angular 9.0.0 verfügbar ist, ist davon auszugehen, dass eine Abwärtskompatibilität nicht länger notwendig ist. Siehe [c8ac660d](https://github.com/angular/angular-cli/commit/c8ac660d8b13922be7ebcc92dfd5b18392602c40)
 
 
 
