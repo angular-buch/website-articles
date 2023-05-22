@@ -75,6 +75,9 @@ Es muss immer ein Startwert übergeben werden:
 @Component({ /* ... */ })
 export class MyComponent {
   myCounter = signal(0);
+  
+  // Wir können auch den Datentyp als Generic explizit mit angeben (z. B. bei komplexeren Datentypen)
+  myBook = signal<Book>({ title: 'Angular', /* ... */ })
 }
 ```
 
