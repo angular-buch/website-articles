@@ -460,4 +460,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<!-- <small>**Titelbild:** XXX. Foto von Ferdinand Malcher</small> -->
+<small>**Titelbild:** Blick vom Zellerhorn auf die Burg Hohenzollern, Schwäbische Alb. Foto von Ferdinand Malcher</small> -->
