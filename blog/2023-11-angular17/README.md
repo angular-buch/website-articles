@@ -29,4 +29,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<small>**Titelbild:** TODO</small>
+<small>**Titelbild:** Raukenlandschaft, Fårö/Gotland, Schweden. Foto von Ferdinand Malcher</small>
