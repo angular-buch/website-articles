@@ -60,7 +60,26 @@ Wir empfehlen Ihnen, das `catchError` in der Methode `getAllSearch()` wieder zu 
 Dann verhält sich die Komponente so, wie wir es im Test beschrieben haben.
 
 
+### 32.3.5 NgRx: Feature anlegen
 
+Der im Buch abgedruckte Befehl, um ein Feature mithilfe der Schematics von NgRx anzulegen, erzeugt den folgenden Fehler:
+
+```
+Specified module path /src/app/books/store/books/books does not exist
+```
+
+Der Hintergrund: In den neueren Versionen der Feature-Schematics ist die Option `entity` per Default aktiviert.
+Das führt dazu, dass ein `EntityAdapter` für das Feature generiert wird, wie wir es weiter hinten im Buch in Abschnitt 32.5.3 beschrieben haben.
+In dieser Konstellation kann das Skript den verschachtelten Feature-Namen nicht korrekt auswerten.
+
+Um das Problem zu lösen, muss die Option `entity` expliziert deaktiviert werden.
+Das erzeugte Ergebnis entspricht dann dem Code, der im Buch abgedruckt ist.
+
+**Neuer Befehl:**
+
+```sh
+ng g feature books/store/book --module books/books --api --entity=false --defaults
+```
 
 
 
