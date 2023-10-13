@@ -22,6 +22,22 @@ Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.co
 
 ------
 
+
+### 5.2 Projekt anlegen
+
+Zum Beginn des Buchs legen wir gemeinsam das Beispielprojekt mithilfe des Befehls `ng new` an.
+Seit Angular 17 werden neue Anwendungen standardmäßig mit Standalone Components generiert.
+Das Beispielprojekt setzt jedoch zunächst auf NgModules und wird erst später auf Standalone Components migriert.
+
+Damit die Beispiele im Buch weiterhin mit dem generierten Code übereinstimmen, müssen Sie die Option `standalone` beim Erzeugen des Projekts explizit deaktivieren:
+
+```sh
+ng new book-monkey --routing --style=css --prefix=bm --standalone=false
+```
+
+Übrigens: Die Option `routing` ist seit Angular 17 per Default aktiviert, sie muss also nicht mehr manuell mit angegeben werden.
+
+
 ### 26.7 Fehlerhafte Cypress-Tests
 
 #### Test 1: `should not show the administration form when not logged in`
