@@ -129,6 +129,55 @@ Zur Migration können wir das vom Angular-Team bereitgestellte Schematic nutzen:
 
 ## View Transition API
 
+Ein brandneues Feature, dass mit Angular 17 kommt, ist der Support der [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) für den Angular Router.
+Diese (noch nicht in allen Browsern vollständig umgesetzte) API ermöglicht animierte Übergängen des DOM beim Wechsel zwischen Routen.
+
+Um die neue API zu nutzen, müssen wir zunächst den Router dazu befähigen:
+
+```ts
+import { provideRouter, withViewTransitions } from '@angular/router';
+
+// ...
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(
+      [/* ... */], // Routenkonfiguration
+      withViewTransitions() // Aktivieren der View Transitions
+    ),
+  ],
+})
+```
+
+Damit wir den entsprechenden Effekt auch sehen, benötigen wir allerdings noch eine passende Animation.
+Die Ausführung erwirken wir über die beiden CSS Pseudo-Elemente `::view-transition-old` bzw. `::view-transition-new`:
+
+```css
+@keyframes slide-right {
+  from {
+    transform: translateX(100px);
+  }
+}
+
+@keyframes slide-left {
+  to {
+    transform: translateX(-100px);
+  }
+}
+
+::view-transition-old(root) {
+  animation: 500ms linear both slide-left;
+}
+
+::view-transition-new(root) {
+  animation: 500ms linear both slide-right;
+}
+```
+
+Anstatt der Angabe `root`, können wir hier auch einen CSS Selektor angeben, auf dem die View Transition angewandt werden soll.
+Behalten wir `root` bei, erfolgt die Transition entsprechend auf dem gesamten Dokument.
+
+
 ## SSR
 
 Das Angular Team hat im neuesten Release stark an dem Support für Server-Side-Rendering (SSR) gearbeitet.
