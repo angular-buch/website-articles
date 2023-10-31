@@ -39,10 +39,6 @@ ng update @angular/core@16 @angular/cli@16
 Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrationen im Code durchgeführt.
 Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderungen.
 
-## Optionale Code-Migrationen
-
-TODO: Irgendwie konnte man sich optionale Migrations listen und dann auch ausführen lassen. Sollten wir hier ggf. mit aufnehmen
-
 
 ## Unterstützte Versionen von TypeScript und Node.js
 
@@ -122,7 +118,7 @@ Wir empfehlen jedoch die Migration zur neuen Control Flow Syntax, da die Verwend
 Zur Migration können wir das vom Angular-Team bereitgestellte Schematic nutzen:
 
 ```bash
-
+ng generate @angular/core:control-flow
 ```
 
 ### Deferrable Views
