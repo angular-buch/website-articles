@@ -127,8 +127,29 @@ Zur Migration können wir das vom Angular-Team bereitgestellte Schematic nutzen:
 
 ### Deferrable Views
 
+## View Transition API
+
 ## SSR
 
+Das Angular Team hat im neuesten Release stark an dem Support für Server-Side-Rendering (SSR) gearbeitet.
+Hierfür wurde das bisherige Projekt Angular Universal in den Core von Angular aufgenommen umgezogen und unter dem neuen Namen  `@angular/ssr` veröffentlicht.
+Die Verwendung von SSR in Angular sorgt für eine bessere Performance beim Laden der Anwendung.
+Dadurch können ebenso bessere Ergebnisse bei den Core Web Vitals sowie eine verbesserte Search Enginge Optimization (SEO) erzielt werden.
+Angular hat hier stark bei der sogenannten _Partial Hydration_ nachgebessert.
+Dabei wird nach erstmaliger Auslieferung der statischen Website nicht mehr die gesamte Angular Anwendung neu geladen und die statische Seite wird ersetzt,
+sondern es werden die relevanten (interaktiven) Teile der Anwendung erkannt, und nur diese werden mit dem dynamischen Code (aka. JavaScript) _hydriert_.
+
+Wenn Sie bereits Angular Universal verwendet haben, sorgen die Angular Schematics dafür, dass Sie automatisch bei einem `ng update` auf das neue package migrieren.
+
+```bash
+ng update @nguniversal/express-engine
+```
+
+Neu ist auch, dass wir erstmalig direkt beim Anlegen unseres Projekts das Thema SSR mit berücksichtigen können.
+
+```bash
+ng new book-monkey --ssr
+```
 
 <hr>
 
