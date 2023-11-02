@@ -19,7 +19,7 @@ hidden: true
 ---
 
 Es ist wieder ein halbes Jahr vorbei: Anfang November 2023 erschien die neue Major-Version **Angular 17**!
-Angular.Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
+Angular-Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
 
 Auch wir sind der Meinung: Die Community wurde nicht enttäuscht! Die wichtigsten Neuigkeiten zu Angular 17 fassen wir in diesem Blogpost zusammen.
 Im offiziellen [Angular-Blog]() finden Sie alle Informationen des Angular-Teams.
