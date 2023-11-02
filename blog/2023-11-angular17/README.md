@@ -76,7 +76,7 @@ Um diesen Ablauf gezielter und performanter durchzuführen, sind Signals ein wic
 
 Übrigens: Die Signal-Methode `mutate()` ist in diesem Release nicht mehr enthalten.
 Die Hintergründe sind im zugehörigen [Commit auf GitHub](https://github.com/angular/angular/commit/c7ff9dff2c14aba70e92b9e216a2d4d97d6ef71e) ausgeführt.
-Statt `mutate()` muss also die Methode `update()` verwendet werden. Dabei müssen Arrays und Objekt als *immutable* behandelt werden.
+Statt `mutate()` muss also die Methode `update()` verwendet werden. Dabei müssen Arrays und Objekte als *immutable* behandelt werden.
 
 
 
