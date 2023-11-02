@@ -201,7 +201,7 @@ Folgende Hilfsvariablen stehen in einem `@for`-Block zur Verfügung:
 
 | Variable | Bedeutung                                              |
 |----------|--------------------------------------------------------|
-| $index   | Index der aktuellen Zeile                          |
+| $index   | Index der aktuellen Zeile                              |
 | $first   | gibt an, ob die aktuelle Zeile die erste ist           |
 | $last    | gibt an, ob die aktuelle Zeile die letzte ist          |
 | $even    | gibt an, ob der Index der aktuellen Zeile gerade ist   |
