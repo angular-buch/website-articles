@@ -180,7 +180,16 @@ Eine weitere Vereinfachung besteht darin, dass die Hilfsvariablen nicht mehr ext
 }
 ```
 
-Folgenden Variablen stehen zur Verfügung:
+Falls das iterierte Array nur primitive Werte (z. B. Strings) beinhaltet, wird der Wert selbst als Identifikator verwendet:
+
+```html
+@for (name of nameList; track name) {
+  <li>{{ name }}</li>
+}
+```
+
+
+Folgende Hilfsvariablen stehen in einem `@for`-Block zur Verfügung:
 
 | Variable | Bedeutung                                              |
 |----------|--------------------------------------------------------|
@@ -234,7 +243,6 @@ Ebenso ist ein Mischbetrieb möglich, sodass z. B. neue Features mit dem neuen C
 
 Grundsätzlich empfehlen wir Ihnen jedoch, in den nächsten Monaten schrittweise zur neuen Control-Flow-Syntax zu migrieren.
 Es ist möglich, dass die Direktiven `NgIf`, `NgFor` und `NgSwitch` in einer zukünftigen Major-Version als *deprecated* markiert werden.
-<!-- In einigen Jahren werden diese Direktiven wahrscheinlich aus dem Framework entfernt. -->
 
 Angular stellt übrigens ein Skript bereit, um die Templates auf den neuen Control Flow zu migrieren:
 
@@ -253,18 +261,23 @@ In unseren ersten Experimenten war die Automigration hilfreich, hat aber nicht a
 
 Mit dem neuen Control Flow wird ein sehr nützliches neues Feature eingeführt: der `@defer`-Block.
 
-Die Hauptaufgabe des `@defer`-Blocks besteht darin, Inhalte verzögert zu laden. Egal ob es sich um eine Komponente, eine Direktive oder eine Pipe handelt, wenn sie in einem solchen Block platziert werden, lädt Angular sie nur unter bestimmten Bedingungen oder bei bestimmten Ereignissen. Das ist besonders nützlich, um die Leistung zu optimieren, insbesondere wenn bestimmte Komponenten nicht sofort benötigt werden oder für die anwendende Person noch nicht sichtbar sind.
+Mit diesem neuen Feature können wir Teile von HTML-Templates verzögert nachladen.
+Dabei ist es egal, ob es sich um reines HTML, eine Komponente, eine Direktive, eine Pipe oder ein komplexeres Template handelt – wenn HTML-Inhalte in einem solchen Block platziert werden, lädt Angular diese Inhalte nur unter bestimmten Bedingungen oder bei bestimmten Ereignissen zur Laufzeit nach.
+Das ist besonders nützlich, um die Leistung zu optimieren, insbesondere wenn bestimmte Komponenten nicht sofort benötigt werden oder für die anwendende Person noch nicht sichtbar sind.
+
+Grundsätzlich ermöglicht der Router mithilfe von Lazy Loading bereits, ganze Seiten zur Laufzeit nachzuladen. Mit Deferrable Views wird dieses Konzept jetzt noch differenzierter einsetzbar: Wir behandeln nicht nur ganze Seiten, sondern nach Bedarf auch kleinere Teile ihrer Templates.
+
 
 ```html
-<p>Dieser foglende Inhalt wird später geladen!</p>
+<p>Dieser folgende Teil des Templates wird später geladen!</p>
 
 @defer {
   <book-details [book]="myBook" />
 }
 @loading {
-  <span>Lade Abhängigkeiten …</span>
+  <span>Lade Inhalte …</span>
 } @placeholder {
-  <span>Inhalt Inhalt wird gerendert …</span>
+  <span>Inhalt wurde noch nicht geladen.</span>
 } @error {
   <span>Es kam zu einem Fehler!</span>
 }
@@ -272,23 +285,25 @@ Die Hauptaufgabe des `@defer`-Blocks besteht darin, Inhalte verzögert zu laden.
 
 Folgende Helfer stehen zur Verfügung
 
-* `@loading`: Zeigt den angegebenen Inhalt während des Ladens von Abhängigkeiten an.
-* `@placeholder`: Zeigt den bereitgestellten Inhalt als vorübergehende Anzeige, bis der eigentliche Inhalt vollständig gerendert ist. Der Platzhalter muss immer angegeben werden! 
-* `@error`: Zeigt den angegebenen Inhalt an, falls ein Problem beim Laden der Abhängigkeiten des Inhalts auftritt.
+* `@loading`: Zeigt den angegebenen Inhalt an, während die Abhängigkeiten geladen werden.
+* `@placeholder`: Zeigt den angegebenen Inhalt als Platzhalter, bis a) das Laden gestartet wurde, wenn es einen `@loading`-Block gibt bzw. b) der eigentliche Inhalt vollständig gerendert ist. Der Platzhalter muss in den meisten Fällen angegeben werden! 
+* `@error`: Zeigt den angegebenen Inhalt an, falls ein Problem beim Laden des Inhalts auftritt.
 
 
-Uns stehen jetzt eine Sammlung von Triggern zu Verfügung, die steuern, wann Angular den Inhalt laden und rendern soll:
+Standardmäßig wird der Inhalt eines `@defer`-Blocks sofort geladen, nachdem die Anwendung fertig gerendert wurde.
+Um das Verhalten genauer zu steuern, steht eine Sammlung von Triggern zu Verfügung.
+Sie steuern, wann Angular den Inhalt laden und rendern soll.
 
 ### Loading Trigger: `on viewport`
 
-Der Inhalt soll nachladen, wenn das Element sichtbar wird:
+Der Inhalt soll nachgeladen werden, wenn das Element sichtbar wird, also in den Viewport des Browsers rückt:
 
 ```html
 @defer (on viewport) {
   <p>Dieser Inhalt wird später geladen!</p>
 }
 @placeholder {
-  <p>Inhalt wird gerendert …</p>
+  <p>Inhalt wurde noch nicht geladen …</p>
 }
 ```
 
@@ -301,7 +316,7 @@ Der Inhalt soll nachladen, wenn ein Timer abgelaufen ist:
   <p>Dieser Inhalt wird erst nach 3 Sekunden geladen!</p>
 }
 @placeholder {
-  <p>Inhalt wird gerendert …</p>
+  <p>Inhalt wurde noch nicht geladen …</p>
 }
 ```
 
@@ -311,12 +326,13 @@ Der Inhalt soll nachladen, wenn Bedingung erfüllt ist:
 
 ```html
 @defer (when myDeferFlag) {
-  <p>Dieser Inhalt wird geladen, wenn `myDeferFlag` wahr ist!</p>
+  <p>Dieser Inhalt wird einmalig geladen, wenn `myDeferFlag` wahr ist!</p>
 }
 @placeholder {
-  <p>Inhalt wird gerendert …</p>
+  <p>Inhalt wurde noch nicht geladen …</p>
 }
 ```
+
 
 
 ## Routing mit View Transition API
