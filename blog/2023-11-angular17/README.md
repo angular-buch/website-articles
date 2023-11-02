@@ -9,6 +9,9 @@ keywords:
   - Angular 17
   - Signals
   - Control Flow
+  - Deferrable Views
+  - View Transition API
+  - ESBuild
 language: de
 thumbnail: angular17.jpg
 sticky: true
