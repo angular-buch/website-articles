@@ -330,7 +330,7 @@ Der Inhalt soll nachladen, wenn ein Timer abgelaufen ist:
 
 ### Loading Trigger: `when`
 
-Der Inhalt soll nachladen, wenn Bedingung erfüllt ist:
+Der Inhalt soll nachladen, wenn die Bedingung erfüllt ist:
 
 ```html
 @defer (when myDeferFlag) {
