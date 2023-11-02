@@ -41,7 +41,7 @@ Um ein existierendes Projekt zu aktualisieren, nutzen Sie bitte den [Angular Upd
 Der Befehl `ng update` liefert außerdem Informationen zu möglichen Updates direkt im Projekt.
 
 ```bash
-# Projekt auf Angular 16 aktualisieren
+# Projekt auf Angular 17 aktualisieren
 ng update @angular/core@17 @angular/cli@17
 ```
 
