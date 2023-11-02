@@ -85,59 +85,142 @@ Auf dem Weg zu "Zoneless Angular Apps" musste das Angular-Team das Konzept diese
 
 Mit Angular 17 ist nun der neue *Control Flow* für Templates verfügbar!
 Damit wird die Funktionalität der bekannten Direktiven direkt in die Template-Syntax integriert.
-Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syntax wird vom Compiler ausgewertet, und es ist nicht mehr notwendig, die Direktiven zu importieren, damit sie überhaupt in der Komponente genutzt werden können.
+Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syntax wird vom Compiler ausgewertet, und es ist nicht mehr notwendig, die Direktiven bei Standalone Components zu importieren, damit sie überhaupt in der Komponente genutzt werden können.
 
 Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert und mit einem `@`-Symbol eingeleitet.
 
 
-TODO ab hier weiter @johanneshoppe
+### Bedingungen mit dem `if` Block
 
-### NgIf
+Der "if"-Block dient dazu, bestimmte Teile der Benutzeroberfläche nur dann anzuzeigen, wenn eine Bedingung erfüllt ist. Er ersetzt die alte `*ngIf`-Direktive. Im "if"-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil der Benutzeroberfläche gezeigt.
+
+Ein "if"-Block kann auch "else"-Blöcke enthalten. Das sind alternative Blöcke, die angezeigt werden, wenn die Bedingung im "if"-Teil nicht erfüllt ist. Man kann einen einfachen "else"-Block haben, der immer dann zum Einsatz kommt, wenn die "if"-Bedingung nicht zutrifft, oder man kann zusätzliche "else"-Blöcke mit eigenen Bedingungen definieren:
 
 ```html
+<!-- VORHER -->
+<ng-container *ngIf="books?.length >= 1; else elseBlock">
+  
+  <ng-container *ngIf="books?.length === 1; else elseBlock2">
+    <book-details [book]="books[0]" />
+  </ng-container>
+  
+  <ng-template #elseBlock2>
+    <book-list [books]="books" />
+  </ng-template>
+
+</ng-container>
+
+<ng-template #elseBlock>
+  <p>Keine Bücher verfügbar!</p>
+</ng-template>
+```
+
+```html
+<!-- NACHHER -->
 @if (books?.length > 1) {
   <book-list [books]="books" />
 } @else if (books?.length === 1) {
   <book-details [book]="books[0]" />
 } @else {
-  <p>No book available</p>
+  <p>Keine Bücher verfügbar!</p>
 }
 ```
 
-TODO Hinweis darauf, dass ng-container und ng-template in den meisten Fällen nicht mehr notwendig ist. Die Gruppierung passiert jetzt über die Klammern
+Es fällt sofort auf, dass der "else"-Zweig deutlich einfacher zu definieren ist; der Einsatz von `<ng-template>` ist nicht mehr notwendig. Bislang war es häufig erforderlich, das spezielle Element `<ng-container>` einzusetzen, um mehrere Bedingungen anzuwenden. Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klammern geschieht.
 
-### NgFor
+
+### Wiederholungen mit `@for`
+
+Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten `*ngFor`-Direktive. Der neue Schleifenblock sieht so aus:
 
 ```html
+<!-- VORHER --> 
+<ul class="names">
+  <li *ngFor="book of books">
+    <book-list-item [book]="book" />
+  </li>
+  <p *ngIf="!books.length">Keine Bücher verfügbar!</p>
+</ul>
+```
+
+```html
+<!-- NACHHER --> 
 <ul class="names">
   @for (book of books; track book.isbn) {
     <li>
       <book-list-item [book]="book" />
     </li>
   } @empty {
-    <p>No book available</p>
+    <li>Keine Bücher verfügbar!</li>
   }
 </ul>
 ```
 
-### NgSwitch
+Es ist nun möglich, direkt einen `@empty`-Block anzugeben, der aktiv wird, wenn es keine Einträge gibt. Dies war zuvor nicht direkt möglich. Die gezeigte Einstellung track ersetzt das Konzept der `trackBy`-Funktion. Sie bestimmt den Schlüssel für jede Zeile, den der Schleifenblock benutzt, um Array-Elemente eindeutig zu identifizieren. Zuvor war es optional, das explizite Tracking zu verwenden, mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
+
+Eine weitere Vereinfachung besteht darin, das die Hilfvariablen nicht mehr extra deklariert werden müssen:
 
 ```html
-@switch (caseNo) {
+<!-- VORHER --> 
+<li *ngFor="book of books; index as i">
+  {{ i + 1 }}. Buch: <book-list-item [book]="book" />
+</li>
+```
+
+```html
+<!-- NACHHER --> 
+@for (book of books; track book.isbn) {
+  <li>
+    {{ $index + 1 }}. Buch: <book-list-item [book]="book" />
+  </li>
+}
+```
+
+Folgenden Variablen stehen zur Verfügung:
+
+| Variable | Bedeutung                                              |
+|----------|--------------------------------------------------------|
+| $index   | Der Index der aktuellen Zeile                          |
+| $first   | Gibt an, ob die aktuelle Zeile die erste ist           |
+| $last    | Gibt an, ob die aktuelle Zeile die letzte ist          |
+| $even    | Gibt an, ob der Index der aktuellen Zeile gerade ist   |
+| $odd     | Gibt an, ob der Index der aktuellen Zeile ungerade ist |
+
+
+### Fallunterscheidungen mit `@switch`
+
+Auch die Direktive `NgSwitch` erhält einen Nachfolger. Die Syntax mit `@switch` ist nun deutlich ähnlicher zum `switch`-Statement in JavaScript als zuvor:
+
+```html
+<!-- VORHER -->
+<ng-container [ngSwitch]="bedingung">
+  <span *ngSwitchCase="1">Ansicht für Fall 1</span>
+  <span *ngSwitchCase="2">Ansicht für Fall 2</span>
+  <span *ngSwitchCase="3">Ansicht für Fall 3</span>
+  <span *ngSwitchDefault>Standardansicht, wenn kein anderer Fall zutrifft</span>
+</ng-container>
+``````
+
+```html
+<!-- NACHHER -->
+@switch (bedingung) {
   @case (1) {
-    <span>Rendering case 1</span>
+    <span>Ansicht für Fall 1</span>
   }
   @case (2) {
-    <span>Rendering case 2</span>
+    <span>Ansicht für Fall 2</span>
   }
   @case (3) {
-    <span>Rendering case 3</span>
+    <span>Ansicht für Fall 3</span>
   }
   @default {
-    <span>Rendering default</span>
+    <span>Standardansicht, wenn kein anderer Fall zutrifft</span>
   }
 }
 ```
+
+Auch hier ist jetzt kein Container-Element mehr nötig. Ansonsten ändert sich nicht viel: `@switch` kennt weiterhin kein "Durchfallen" – eine `break`-Operation ist nicht notwendig.
+
 
 ### Was passiert mit den Direktiven?
 
@@ -146,8 +229,8 @@ Sie müssen Ihre Anwendungen also nicht sofort migrieren, sondern können auch w
 Ebenso ist ein Mischbetrieb möglich, sodass z. B. neue Features mit dem neuen Control Flow ausgestattet werden können.
 
 Grundsätzlich empfehlen wir Ihnen jedoch, in den nächsten Monaten schrittweise zur neuen Control-Flow-Syntax zu migrieren.
-Es ist wahrscheinlich, dass die Direktiven `NgIf`, `NgFor` und `NgSwitch` mit der nächsten Major-Version als *deprecated* markiert werden.
-In einigen Jahren werden diese Direktiven wahrscheinlich aus dem Framework entfernt.
+Es ist möglich, dass die Direktiven `NgIf`, `NgFor` und `NgSwitch` in einer zukünftigen Major-Version als *deprecated* markiert werden.
+<!-- In einigen Jahren werden diese Direktiven wahrscheinlich aus dem Framework entfernt. -->
 
 Angular stellt übrigens ein Skript bereit, um die Templates auf den neuen Control Flow zu migrieren:
 
