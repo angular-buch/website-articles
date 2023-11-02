@@ -2,8 +2,8 @@
 title: 'Angular 17 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2023-11-XX
-lastModified: 2023-11-XX
+published: 2023-11-07
+lastModified: 2023-11-07
 keywords:
   - Angular
   - Angular 17
