@@ -128,7 +128,7 @@ Man kann einen einfachen `@else`-Block haben, der immer dann zum Einsatz kommt, 
 }
 ```
 
-Es fällt sofort auf, dass der `else`-Zweig deutlich einfacher zu definieren ist als zuvor. Der Einsatz von `<ng-template>` ist nicht mehr notwendig. Bislang war es häufig erforderlich, das spezielle Element `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
+Es fällt sofort auf, dass der `@else`-Zweig deutlich einfacher zu definieren ist als zuvor. Der Einsatz von `<ng-template>` ist nicht mehr notwendig. Bislang war es häufig erforderlich, das spezielle Element `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
 Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klammern geschieht.
 
 
