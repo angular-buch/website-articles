@@ -150,7 +150,7 @@ Der Schleifenblock `@for` ersetzt `*ngFor` für Iterationen und unterscheidet si
   <li *ngFor="book of books">
     <book-list-item [book]="book" />
   </li>
-  <p *ngIf="!books.length">Keine Bücher verfügbar!</p>
+  <li *ngIf="!books.length">Keine Bücher verfügbar!</li>
 </ul>
 ```
 
