@@ -245,10 +245,74 @@ In unseren ersten Experimenten war die Automigration hilfreich, hat aber nicht a
 
 ## Deferrable Views mit `@defer`
 
-TODO
+<!-- siehe https://github.com/angular/angular/discussions/50716 -->
+
+Mit dem neuen Control Flow wird ein sehr nützliches neues Feature eingeführt: der `@defer`-Block.
+
+Die Hauptaufgabe des `@defer`-Blocks besteht darin, Inhalte verzögert zu laden. Egal ob es sich um eine Komponente, eine Direktive oder eine Pipe handelt, wenn sie in einem solchen Block platziert werden, lädt Angular sie nur unter bestimmten Bedingungen oder bei bestimmten Ereignissen. Das ist besonders nützlich, um die Leistung zu optimieren, insbesondere wenn bestimmte Komponenten nicht sofort benötigt werden oder für die anwendende Person noch nicht sichtbar sind.
+
+```html
+<p>Dieser foglende Inhalt wird später geladen!</p>
+
+@defer {
+  <book-details [book]="myBook" />
+}
+@loading {
+  <span>Lade Abhängigkeiten …</span>
+} @placeholder {
+  <span>Inhalt Inhalt wird gerendert …</span>
+} @error {
+  <span>Es kam zu einem Fehler!</span>
+}
+```
+
+Folgende Helfer stehen zur Verfügung
+
+* `@loading`: Zeigt den angegebenen Inhalt während des Ladens von Abhängigkeiten an.
+* `@placeholder`: Zeigt den bereitgestellten Inhalt als vorübergehende Anzeige, bis der eigentliche Inhalt vollständig gerendert ist. Der Platzhalter muss immer angegeben werden! 
+* `@error`: Zeigt den angegebenen Inhalt an, falls ein Problem beim Laden der Abhängigkeiten des Inhalts auftritt.
 
 
+Uns stehen jetzt eine Sammlung von Triggern zu Verfügung, die steuern, wann Angular den Inhalt laden und rendern soll:
 
+### Loading Trigger: `on viewport`
+
+Der Inhalt soll nachladen, wenn das Element sichtbar wird:
+
+```html
+@defer (on viewport) {
+  <p>Dieser Inhalt wird später geladen!</p>
+}
+@placeholder {
+  <p>Inhalt wird gerendert …</p>
+}
+```
+
+### Loading Trigger: `on timer`
+
+Der Inhalt soll nachladen, wenn ein Timer abgelaufen ist:
+
+```html
+@defer (on timer(3s)) {
+  <p>Dieser Inhalt wird erst nach 3 Sekunden geladen!</p>
+}
+@placeholder {
+  <p>Inhalt wird gerendert …</p>
+}
+```
+
+### Loading Trigger: `when`
+
+Der Inhalt soll nachladen, wenn Bedingung erfüllt ist:
+
+```html
+@defer (when myDeferFlag) {
+  <p>Dieser Inhalt wird geladen, wenn `myDeferFlag` wahr ist!</p>
+}
+@placeholder {
+  <p>Inhalt wird gerendert …</p>
+}
+```
 
 
 ## Routing mit View Transition API
