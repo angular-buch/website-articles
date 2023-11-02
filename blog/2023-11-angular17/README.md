@@ -88,7 +88,7 @@ Auf dem Weg zu "Zoneless Angular Apps" musste das Angular-Team das Konzept diese
 
 Mit Angular 17 ist nun der neue *Control Flow* für Templates verfügbar!
 Damit wird die Funktionalität der bekannten Direktiven direkt in die Template-Syntax integriert.
-Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syntax wird vom Compiler ausgewertet, und es ist nicht mehr notwendig, die Direktiven bei Standalone Components zu importieren, damit sie überhaupt in der Komponente genutzt werden können.
+Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syntax wird vom Compiler ausgewertet, und es ist nicht mehr notwendig, die Direktiven (oder das `CommonModule`) zu importieren, damit sie überhaupt in der Komponente genutzt werden können.
 
 Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert und mit einem `@`-Symbol eingeleitet.
 Um Konflikte mit den neuen Steuerzeichen der Template-Syntax zu vermeiden (`@` und geschweifte Klammern), müssen diese Zeichen manuell escapet werden, wenn sie anderweitig im HTML-Code genutzt werden.
