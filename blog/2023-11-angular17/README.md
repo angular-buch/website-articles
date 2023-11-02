@@ -134,7 +134,7 @@ Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klamm
 
 ### Wiederholungen mit `@for`
 
-Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten Direktive `*ngFor`-Direktive. Der neue Schleifenblock sieht so aus:
+Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten Direktive `*ngFor`. Der neue Schleifenblock sieht so aus:
 
 ```html
 <!-- VORHER --> 
