@@ -238,7 +238,6 @@ Auch die Direktive `NgSwitch` erhält einen Nachfolger. Die neue Syntax mit `@sw
 }
 ```
 
-Auch hier ist jetzt kein Container-Element mehr nötig. Ansonsten ändert sich nicht viel: `@switch` kennt weiterhin kein "Durchfallen" – eine `break`-Operation ist nicht notwendig.
 
 
 ### Was passiert mit den Direktiven?
