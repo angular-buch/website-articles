@@ -107,20 +107,18 @@ Man kann einen einfachen `@else`-Block definieren, der immer dann zum Einsatz ko
 
 ```html
 <!-- VORHER -->
-<ng-container *ngIf="books?.length >= 1; else elseBlock">
-  
-  <ng-container *ngIf="books?.length === 1; else elseBlock2">
-    <book-details [book]="books[0]" />
-  </ng-container>
-  
-  <ng-template #elseBlock2>
-    <book-list [books]="books" />
-  </ng-template>
-
+<ng-container *ngIf="books?.length > 1; else elseBlock">
+  <book-list [books]="books" />
 </ng-container>
 
 <ng-template #elseBlock>
-  <p>Keine Bücher verfügbar!</p>
+  <ng-container *ngIf="books?.length === 1; else elseBlock2">
+    <book-details [book]="books[0]" />
+  </ng-container>
+</ng-template>
+
+<ng-template #elseBlock2>
+  <p>Keine Bücher verfügbar!</p>    
 </ng-template>
 ```
 
