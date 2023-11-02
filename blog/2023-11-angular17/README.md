@@ -91,6 +91,8 @@ Damit wird die Funktionalität der bekannten Direktiven direkt in die Template-S
 Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syntax wird vom Compiler ausgewertet, und es ist nicht mehr notwendig, die Direktiven bei Standalone Components zu importieren, damit sie überhaupt in der Komponente genutzt werden können.
 
 Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert und mit einem `@`-Symbol eingeleitet.
+Um Konflikte mit den neuen Steuerzeichen der Template-Syntax zu vermeiden (`@` und geschweifte Klammern), müssen diese Zeichen manuell escapet werden, wenn sie anderweitig im HTML-Code genutzt werden.
+Beim automatischen Update auf Angular 17 wird dieser Schritt automatisch vorgenommen.
 
 
 ### Bedingungen mit dem `@if`-Block
