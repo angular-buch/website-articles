@@ -90,11 +90,13 @@ Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syn
 Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert und mit einem `@`-Symbol eingeleitet.
 
 
-### Bedingungen mit dem `if` Block
+### Bedingungen mit dem `@if`-Block
 
-Der "if"-Block dient dazu, bestimmte Teile der Benutzeroberfläche nur dann anzuzeigen, wenn eine Bedingung erfüllt ist. Er ersetzt die alte `*ngIf`-Direktive. Im "if"-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil der Benutzeroberfläche gezeigt.
+Der `@if`-Block dient dazu, bestimmte Teile der Benutzeroberfläche nur dann anzuzeigen, wenn eine Bedingung erfüllt ist. Er ersetzt die Direktive `*ngIf`.
+Im `@if`-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil der Benutzeroberfläche gezeigt.
 
-Ein "if"-Block kann auch "else"-Blöcke enthalten. Das sind alternative Blöcke, die angezeigt werden, wenn die Bedingung im "if"-Teil nicht erfüllt ist. Man kann einen einfachen "else"-Block haben, der immer dann zum Einsatz kommt, wenn die "if"-Bedingung nicht zutrifft, oder man kann zusätzliche "else"-Blöcke mit eigenen Bedingungen definieren:
+Ein `@if`-Block kann auch `@else`-Blöcke enthalten. Das sind alternative Blöcke, die angezeigt werden, wenn die Bedingung im `@if`-Teil nicht erfüllt ist.
+Man kann einen einfachen `@else`-Block haben, der immer dann zum Einsatz kommt, wenn die `@if`-Bedingung nicht zutrifft, oder man kann zusätzliche `@else`-Blöcke mit eigenen Bedingungen definieren:
 
 ```html
 <!-- VORHER -->
@@ -126,12 +128,13 @@ Ein "if"-Block kann auch "else"-Blöcke enthalten. Das sind alternative Blöcke,
 }
 ```
 
-Es fällt sofort auf, dass der "else"-Zweig deutlich einfacher zu definieren ist; der Einsatz von `<ng-template>` ist nicht mehr notwendig. Bislang war es häufig erforderlich, das spezielle Element `<ng-container>` einzusetzen, um mehrere Bedingungen anzuwenden. Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klammern geschieht.
+Es fällt sofort auf, dass der `else`-Zweig deutlich einfacher zu definieren ist als zuvor. Der Einsatz von `<ng-template>` ist nicht mehr notwendig. Bislang war es häufig erforderlich, das spezielle Element `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
+Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klammern geschieht.
 
 
 ### Wiederholungen mit `@for`
 
-Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten `*ngFor`-Direktive. Der neue Schleifenblock sieht so aus:
+Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten Direktive `*ngFor`-Direktive. Der neue Schleifenblock sieht so aus:
 
 ```html
 <!-- VORHER --> 
@@ -156,9 +159,10 @@ Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in e
 </ul>
 ```
 
-Es ist nun möglich, direkt einen `@empty`-Block anzugeben, der aktiv wird, wenn es keine Einträge gibt. Dies war zuvor nicht direkt möglich. Die gezeigte Einstellung track ersetzt das Konzept der `trackBy`-Funktion. Sie bestimmt den Schlüssel für jede Zeile, den der Schleifenblock benutzt, um Array-Elemente eindeutig zu identifizieren. Zuvor war es optional, das explizite Tracking zu verwenden, mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
+Es ist nun möglich, direkt einen `@empty`-Block anzugeben, der aktiv wird, wenn es keine Einträge gibt. Dies war zuvor nicht direkt möglich.
+Die gezeigte Einstellung `track` ersetzt das Konzept der `trackBy`-Funktion. Sie bestimmt den Schlüssel für jede Zeile, den der Schleifenblock benutzt, um Array-Elemente eindeutig zu identifizieren. Zuvor war es optional, das explizite Tracking zu verwenden, mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
 
-Eine weitere Vereinfachung besteht darin, das die Hilfvariablen nicht mehr extra deklariert werden müssen:
+Eine weitere Vereinfachung besteht darin, dass die Hilfsvariablen nicht mehr extra deklariert werden müssen:
 
 ```html
 <!-- VORHER --> 
@@ -180,11 +184,11 @@ Folgenden Variablen stehen zur Verfügung:
 
 | Variable | Bedeutung                                              |
 |----------|--------------------------------------------------------|
-| $index   | Der Index der aktuellen Zeile                          |
-| $first   | Gibt an, ob die aktuelle Zeile die erste ist           |
-| $last    | Gibt an, ob die aktuelle Zeile die letzte ist          |
-| $even    | Gibt an, ob der Index der aktuellen Zeile gerade ist   |
-| $odd     | Gibt an, ob der Index der aktuellen Zeile ungerade ist |
+| $index   | Index der aktuellen Zeile                          |
+| $first   | gibt an, ob die aktuelle Zeile die erste ist           |
+| $last    | gibt an, ob die aktuelle Zeile die letzte ist          |
+| $even    | gibt an, ob der Index der aktuellen Zeile gerade ist   |
+| $odd     | gibt an, ob der Index der aktuellen Zeile ungerade ist |
 
 
 ### Fallunterscheidungen mit `@switch`
