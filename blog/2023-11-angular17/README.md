@@ -339,6 +339,8 @@ Der Inhalt soll nachladen, wenn die Bedingung erfüllt ist:
 }
 ```
 
+Wenn Sie die neue Syntax verwenden wollen, stellen Sie bitte sicher, dass Sie den *Angular Laguage Service* in Visual Studio Code installiert haben. Diese Extension sorgt für korrektes Syntax Highlighting in den Templates.
+Die IDEs der Firma Jetbrains können auch bereits mit der Syntax umgehen.
 
 
 ## Routing mit View Transition API
