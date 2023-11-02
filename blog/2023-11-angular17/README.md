@@ -39,7 +39,7 @@ Der Befehl `ng update` liefert außerdem Informationen zu möglichen Updates dir
 
 ```bash
 # Projekt auf Angular 16 aktualisieren
-ng update @angular/core@16 @angular/cli@16
+ng update @angular/core@17 @angular/cli@17
 ```
 
 Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrationen im Code durchgeführt.
@@ -407,7 +407,7 @@ Einige interessante Punkte haben wir hier aufgeführt:
 
 - Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL angegeben wird, können wir dort nun auch einen einfachen String angeben: `styleUrls: './my.component.scss'`.
 - Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` nun standardmäßig aktiviert.
-- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss.
+- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss. Siehe [Commit](https://github.com/angular/angular/commit/e753278faae79a53e235e0d8e03f89555a712d80).
 
 <hr>
 
