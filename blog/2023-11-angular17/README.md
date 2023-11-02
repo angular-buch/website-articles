@@ -95,11 +95,13 @@ Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert un
 
 ### Bedingungen mit dem `@if`-Block
 
-Der `@if`-Block dient dazu, bestimmte Teile der Benutzeroberfläche nur dann anzuzeigen, wenn eine Bedingung erfüllt ist. Er ersetzt die Direktive `*ngIf`.
+Der `@if`-Block dient dazu, bestimmte Teile eines HTML-Templates nur dann anzuzeigen, wenn eine Bedingung erfüllt ist.
+Er ersetzt die Direktive `*ngIf`.
 Im `@if`-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil der Benutzeroberfläche gezeigt.
 
 Ein `@if`-Block kann auch `@else`-Blöcke enthalten. Das sind alternative Blöcke, die angezeigt werden, wenn die Bedingung im `@if`-Teil nicht erfüllt ist.
-Man kann einen einfachen `@else`-Block haben, der immer dann zum Einsatz kommt, wenn die `@if`-Bedingung nicht zutrifft, oder man kann zusätzliche `@else`-Blöcke mit eigenen Bedingungen definieren:
+Man kann einen einfachen `@else`-Block definieren, der immer dann zum Einsatz kommt, wenn die `@if`-Bedingung nicht zutrifft – oder man kann zusätzliche `@else`-Blöcke mit weiteren Bedingungen definieren:
+
 
 ```html
 <!-- VORHER -->
@@ -131,17 +133,18 @@ Man kann einen einfachen `@else`-Block haben, der immer dann zum Einsatz kommt, 
 }
 ```
 
-Es fällt sofort auf, dass der `@else`-Zweig deutlich einfacher zu definieren ist als zuvor. Der Einsatz von `<ng-template>` ist nicht mehr notwendig. Bislang war es häufig erforderlich, das spezielle Element `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
+Es fällt sofort auf, dass der `@else`-Zweig deutlich einfacher zu definieren ist als zuvor. Der Einsatz von `<ng-template>` ist nicht mehr notwendig!
+Außerdem war es bisland häufig erforderlich, das spezielle Tag `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
 Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klammern geschieht.
 
 
 ### Wiederholungen mit `@for`
 
-Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten Direktive `*ngFor`. Der neue Schleifenblock sieht so aus:
+Der Schleifenblock `@for` ersetzt `*ngFor` für Iterationen und unterscheidet sich in einigen Punkten von der bislang eingesetzten Direktive:
 
 ```html
 <!-- VORHER --> 
-<ul class="names">
+<ul>
   <li *ngFor="book of books">
     <book-list-item [book]="book" />
   </li>
@@ -151,7 +154,7 @@ Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in e
 
 ```html
 <!-- NACHHER --> 
-<ul class="names">
+<ul>
   @for (book of books; track book.isbn) {
     <li>
       <book-list-item [book]="book" />
@@ -163,7 +166,7 @@ Der Schleifenblock ersetzt `*ngFor` für Iterationen und unterscheidet sich in e
 ```
 
 Es ist nun möglich, direkt einen `@empty`-Block anzugeben, der aktiv wird, wenn es keine Einträge gibt. Dies war zuvor nicht direkt möglich.
-Die gezeigte Einstellung `track` ersetzt das Konzept der `trackBy`-Funktion. Sie bestimmt den Schlüssel für jede Zeile, den der Schleifenblock benutzt, um Array-Elemente eindeutig zu identifizieren. Zuvor war es optional, das explizite Tracking zu verwenden, mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
+Die gezeigte Einstellung `track` ersetzt das Konzept der `trackBy`-Funktion: Sie bestimmt den Schlüssel für jede Zeile, der intern verwendet wird, um Array-Elemente eindeutig zu identifizieren. Bei der Direktive `*ngFor` war es optional, das explizite Tracking zu verwenden. mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
 
 Eine weitere Vereinfachung besteht darin, dass die Hilfsvariablen nicht mehr extra deklariert werden müssen:
 
@@ -205,7 +208,7 @@ Folgende Hilfsvariablen stehen in einem `@for`-Block zur Verfügung:
 
 ### Fallunterscheidungen mit `@switch`
 
-Auch die Direktive `NgSwitch` erhält einen Nachfolger. Die Syntax mit `@switch` ist nun deutlich ähnlicher zum `switch`-Statement in JavaScript als zuvor:
+Auch die Direktive `NgSwitch` erhält einen Nachfolger. Die neue Syntax mit `@switch` ist nun deutlich ähnlicher zum `switch`-Statement in JavaScript als zuvor:
 
 ```html
 <!-- VORHER -->
@@ -278,7 +281,7 @@ Grundsätzlich ermöglicht der Router mithilfe von Lazy Loading bereits, ganze S
   <book-details [book]="myBook" />
 }
 @loading {
-  <span>Lade Inhalte …</span>
+  <span>Inhalte werden geladen …</span>
 } @placeholder {
   <span>Inhalt wurde noch nicht geladen.</span>
 } @error {
