@@ -65,7 +65,7 @@ Um Angular 17 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js
 
 ## Signals gelten als stable
 
-Mit Angular 16 wurde das Konzept der Signals in Angular eingeführt. 
+Mit Angular 16 wurde das Konzept der Signals eingeführt. 
 Im Blogpost *[Angular 16 ist da!](/blog/2023-05-angular16)* haben wir die Ideen dieser neuen *Reactive Primitive* genauer beschrieben.
 Die Signals-Bibliothek von Angular gilt nun als *stable*, sodass Signals auch in produktiven Anwendungen genutzt werden können.
 
