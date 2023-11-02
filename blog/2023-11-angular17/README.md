@@ -99,7 +99,7 @@ Beim automatischen Update auf Angular 17 wird dieser Schritt automatisch vorgeno
 
 Der `@if`-Block dient dazu, bestimmte Teile eines HTML-Templates nur dann anzuzeigen, wenn eine Bedingung erfüllt ist.
 Er ersetzt die Direktive `*ngIf`.
-Im `@if`-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil der Benutzeroberfläche gezeigt.
+Im `@if`-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil des Templates gezeigt.
 
 Ein `@if`-Block kann auch `@else`-Blöcke enthalten. Das sind alternative Blöcke, die angezeigt werden, wenn die Bedingung im `@if`-Teil nicht erfüllt ist.
 Man kann einen einfachen `@else`-Block definieren, der immer dann zum Einsatz kommt, wenn die `@if`-Bedingung nicht zutrifft – oder man kann zusätzliche `@else`-Blöcke mit weiteren Bedingungen definieren:
