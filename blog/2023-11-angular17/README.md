@@ -94,6 +94,9 @@ Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert un
 Um Konflikte mit den neuen Steuerzeichen der Template-Syntax zu vermeiden (`@` und geschweifte Klammern), müssen diese Zeichen manuell escapet werden, wenn sie anderweitig im HTML-Code genutzt werden.
 Beim automatischen Update auf Angular 17 wird dieser Schritt automatisch vorgenommen.
 
+Wenn Sie die neue Syntax verwenden wollen, stellen Sie bitte sicher, dass Sie den *Angular Laguage Service* in Visual Studio Code installiert haben. Diese Extension sorgt für korrektes Syntax Highlighting in den Templates.
+Die IDEs der Firma Jetbrains können auch bereits mit der Syntax umgehen.
+
 
 ### Bedingungen mit dem `@if`-Block
 
@@ -337,9 +340,6 @@ Der Inhalt soll nachladen, wenn die Bedingung erfüllt ist:
   <p>Inhalt wurde noch nicht geladen …</p>
 }
 ```
-
-Wenn Sie die neue Syntax verwenden wollen, stellen Sie bitte sicher, dass Sie den *Angular Laguage Service* in Visual Studio Code installiert haben. Diese Extension sorgt für korrektes Syntax Highlighting in den Templates.
-Die IDEs der Firma Jetbrains können auch bereits mit der Syntax umgehen.
 
 
 ## Routing mit View Transition API
