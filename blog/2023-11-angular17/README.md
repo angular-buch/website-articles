@@ -15,18 +15,24 @@ sticky: true
 hidden: true
 ---
 
-Am 6. November 2023 erschien die neue Major-Version von Angular: **Angular 17**!
-Mit diesem Release sind *Signals* sowie der neue Builder basierend auf *ESBuild* nun stable.
-Die wohl größten Neuerungen kommen im Bereich *Server-Side-Rendering*, sowie der Template Syntax mit dem neuen *Control Flow* und der *Deferrable Views* zu Tage.
+Es ist wieder ein halbes Jahr vorbei: Anfang November 2023 erschien die neue Major-Version **Angular 17**!
+Angular.Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
 
-Wir fassen in diesem Blogpost wieder die wichtigsten Neuigkeiten in Angular 17 zusammen.
+Auch wir sind der Meinung: Die Community wurde nicht enttäuscht! Die wichtigsten Neuigkeiten zu Angular 17 fassen wir in diesem Blogpost zusammen.
 Im offiziellen [Angular-Blog]() finden Sie alle Informationen des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
 
+
+
+## TOP SECRET
+
+TODO @fmalcher
+
+
 ## Projekt updaten
 
-Wenn Sie mit unserem Angular-Buch das Beispielprojekt *BookMonkey* entwickeln, sind keine notwendigen Anpassungen am Code notwendig.
-Die Inhalte des Buchs sind auch mit Angular 17 noch aktuell, wenngleich sie mit Angular 17 die Möglichkeit haben auf den neuen Control Flow zu wechseln.
+Wenn Sie mit unserem Angular-Buch das Beispielprojekt *BookMonkey* entwickeln, sind keine Anpassungen am Code notwendig.
+Die Inhalte des Buchs sind auch mit Angular 17 noch aktuell.
 
 Um ein existierendes Projekt zu aktualisieren, nutzen Sie bitte den [Angular Update Guide](https://update.angular.io/?v=16.0-17.0).
 Der Befehl `ng update` liefert außerdem Informationen zu möglichen Updates direkt im Projekt.
@@ -39,33 +45,54 @@ ng update @angular/core@16 @angular/cli@16
 Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrationen im Code durchgeführt.
 Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderungen.
 
+Unabhängig von den Inhalten unseres Buchs besteht grundsätzlich immer die Möglichkeit, die neuen Features von Angular auch im *BookMonkey* zu nutzen.
+Probieren Sie doch zum Beispiel einmal den neuen Control Flow aus!
+
 
 ## Unterstützte Versionen von TypeScript und Node.js
 
-Um Angular 16 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js notwendig:
+Um Angular 17 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js notwendig:
 
 - **TypeScript 5.2**. Der Support für TypeScript-Versionen kleiner als 5.2 wurde eingestellt.
 - **Node.js 18.13.0**. Node.js in Version 16 wird nicht mehr unterstützt.
 
 
-## Signals
-
-Das mit Angular 16 im Developer Preview neu eingeführten Signals sind sind nun stable.
-Im Blogpost *[Angular 16 ist da!](/blog/2023-11-angular17)* haben wir die Funktion der neuen Reactive Primitive detaillierter beschrieben.
-
-## Neuerungen der Template Syntax
-
-Mit Angular 17 wurde erstmal die Template-Syntax neu überdacht.
-Zu den Änderungen gehören der neue *Control Flow* sowie die Implementierung der *Deferrable Views*.
-
-### Control Flow
-
-Der neue Control Flow sorgt dafür, dass die Funktionalität der Direktiven `NgIf`, `NgFor` udn `NgSwitch` direkt zum Teil der Template Syntax wird.
-Wir müssen diese künftig bei Verwendung des Control Flows nicht mehr zuvor in einem Modul oder einer Komponente importieren.
-Die Syntax zur Verwendung wird mit einem `@`-Symbol eingeleitet.
 
 
-#### NgIf
+
+## Signals gelten als stable
+
+Mit Angular 16 wurde das Konzept der Signals in Angular eingeführt. 
+Im Blogpost *[Angular 16 ist da!](/blog/2023-05-angular16)* haben wir die Ideen dieser neuen *Reactive Primitive* genauer beschrieben.
+Die Signals-Bibliothek von Angular gilt nun als *stable*, sodass Signals auch in produktiven Anwendungen genutzt werden können.
+
+Die Reise mit Signals ist damit aber noch nicht vorbei: In den nächsten Monaten werden weitere Neuerungen kommen, vor allem im Blick auf vollständig signal-basierte Komponenten ([siehe RFC auf GitHub](https://github.com/angular/angular/discussions/49682)).
+Damit wird es möglich sein, Angular-Anwendungen "zoneless" zu betreiben, also ohne die Bibliothek zone.js.
+Dieses Hilfsmittel ist seit jeher notwendig, um die Change Detection von Angular zu triggern – der Prozess, der Änderungen an den Daten ermittelt und die Views der Anwendung automatisch aktualisiert.
+Um diesen Ablauf gezielter und performanter durchzuführen, sind Signals ein wichtiger Grundbaustein.
+
+Übrigens: Die Signal-Methode `mutate()` ist in diesem Release nicht mehr enthalten.
+Die Hintergründe sind im zugehörigen [Commit auf GitHub](https://github.com/angular/angular/commit/c7ff9dff2c14aba70e92b9e216a2d4d97d6ef71e) ausgeführt.
+Statt `mutate()` muss also die Methode `update()` verwendet werden. Dabei müssen Arrays und Objekt als *immutable* behandelt werden.
+
+
+
+
+## Neuer Control Flow: `@if`, `@for`, `@switch`
+
+Die bekannten Strukturdirektiven `NgIf`, `NgFor` und `NgSwitch` sind in ihrer Funktionsweise stark abhängig von zone.js.
+Auf dem Weg zu "Zoneless Angular Apps" musste das Angular-Team das Konzept dieser Direktiven überdenken.
+
+Mit Angular 17 ist nun der neue *Control Flow* für Templates verfügbar!
+Damit wird die Funktionalität der bekannten Direktiven direkt in die Template-Syntax integriert.
+Diese Neuerung hat auch bei der Entwicklung einen entscheidenen Vorteil: Die Syntax wird vom Compiler ausgewertet, und es ist nicht mehr notwendig, die Direktiven zu importieren, damit sie überhaupt in der Komponente genutzt werden können.
+
+Die Ausdrücke für den neuen Control Flow werden direkt im HTML-Code notiert und mit einem `@`-Symbol eingeleitet.
+
+
+TODO ab hier weiter @johanneshoppe
+
+### NgIf
 
 ```html
 @if (books?.length > 1) {
@@ -77,7 +104,9 @@ Die Syntax zur Verwendung wird mit einem `@`-Symbol eingeleitet.
 }
 ```
 
-#### NgFor
+TODO Hinweis darauf, dass ng-container und ng-template in den meisten Fällen nicht mehr notwendig ist. Die Gruppierung passiert jetzt über die Klammern
+
+### NgFor
 
 ```html
 <ul class="names">
@@ -91,7 +120,7 @@ Die Syntax zur Verwendung wird mit einem `@`-Symbol eingeleitet.
 </ul>
 ```
 
-#### NgSwitch
+### NgSwitch
 
 ```html
 @switch (caseNo) {
@@ -110,43 +139,60 @@ Die Syntax zur Verwendung wird mit einem `@`-Symbol eingeleitet.
 }
 ```
 
+### Was passiert mit den Direktiven?
 
+Die bisherigen Direktiven bleiben zunächst erhalten und können parallel zum Control Flow verwendet werden.
+Sie müssen Ihre Anwendungen also nicht sofort migrieren, sondern können auch weiterhin den gewohnten Ablauf mit den Direktiven nutzen.
+Ebenso ist ein Mischbetrieb möglich, sodass z. B. neue Features mit dem neuen Control Flow ausgestattet werden können.
 
-Die bisherigen Direktiven bleiben vorerst erhalten und können parallel zum Control Flow verwendet werden.
-Wir empfehlen jedoch die Migration zur neuen Control Flow Syntax, da die Verwendung der Direktiven vermutlich mit den nächsten Angular-Major-Releases deprecated werden wird.
+Grundsätzlich empfehlen wir Ihnen jedoch, in den nächsten Monaten schrittweise zur neuen Control-Flow-Syntax zu migrieren.
+Es ist wahrscheinlich, dass die Direktiven `NgIf`, `NgFor` und `NgSwitch` mit der nächsten Major-Version als *deprecated* markiert werden.
+In einigen Jahren werden diese Direktiven wahrscheinlich aus dem Framework entfernt.
 
-Zur Migration können wir das vom Angular-Team bereitgestellte Schematic nutzen:
+Angular stellt übrigens ein Skript bereit, um die Templates auf den neuen Control Flow zu migrieren:
 
 ```bash
 ng generate @angular/core:control-flow
 ```
 
-### Deferrable Views
+Bitte beachten Sie, dass die Migration nicht vollständig automatisch funktioniert.
+Die Ergebnisse müssen stets manuell geprüft und nachgebessert werden.
+In unseren ersten Experimenten war die Automigration hilfreich, hat aber nicht alle Fälle korrekt erfasst.
 
-## View Transition API
 
-Ein brandneues Feature, dass mit Angular 17 kommt, ist der Support der [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) für den Angular Router.
-Diese (noch nicht in allen Browsern vollständig umgesetzte) API ermöglicht animierte Übergängen des DOM beim Wechsel zwischen Routen.
+## Deferrable Views mit `@defer`
 
-Um die neue API zu nutzen, müssen wir zunächst den Router dazu befähigen:
+TODO
+
+
+
+
+
+## Routing mit View Transition API
+
+Der Router von Angular unterstützt nun die native [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
+Damit ist es möglich, animierte Übergänge im DOM beim Wechsel zwischen Routen zu implementieren.
+Bitte beachten Sie, dass die Schnittstelle noch nicht in allen Browsern unterstützt wird.
+
+Um das neue Feature zu nutzen, verwenden wir die Funktion `withViewTransitions()` in der Konfiguration des Routers:
 
 ```ts
+// app.config.ts
+
 import { provideRouter, withViewTransitions } from '@angular/router';
 
-// ...
-
-bootstrapApplication(AppComponent, {
+export const appConfiug: ApplicationConfig = {
   providers: [
     provideRouter(
-      [/* ... */], // Routenkonfiguration
-      withViewTransitions() // Aktivieren der View Transitions
+      [/* ... */], // Routen
+      withViewTransitions() // View Transitions aktivieren
     ),
   ],
-})
+});
 ```
 
-Damit wir den entsprechenden Effekt auch sehen, benötigen wir allerdings noch eine passende Animation.
-Die Ausführung erwirken wir über die beiden CSS Pseudo-Elemente `::view-transition-old` bzw. `::view-transition-new`:
+Damit der Effekt sichtbar wird, müssen wir außerdem eine passende Animation implementieren.
+Dafür werden die CSS-Pseudo-Selektoren `::view-transition-old` und `::view-transition-new` verwendet:
 
 ```css
 @keyframes slide-right {
@@ -170,31 +216,51 @@ Die Ausführung erwirken wir über die beiden CSS Pseudo-Elemente `::view-transi
 }
 ```
 
-Anstatt der Angabe `root`, können wir hier auch einen CSS Selektor angeben, auf dem die View Transition angewandt werden soll.
-Behalten wir `root` bei, erfolgt die Transition entsprechend auf dem gesamten Dokument.
+Anstatt der Angabe `root` können wir hier auch einen anderen CSS-Selektor angeben, auf dem die View Transition angewandt werden soll.
+Mit dem Wert `root` erfolgt die Transition auf dem gesamten Dokument.
 
 
-## SSR
+## Neuerungen bei Server-Side Rendering
 
-Das Angular Team hat im neuesten Release stark an dem Support für Server-Side-Rendering (SSR) gearbeitet.
-Hierfür wurde das bisherige Projekt Angular Universal in den Core von Angular aufgenommen umgezogen und unter dem neuen Namen  `@angular/ssr` veröffentlicht.
-Die Verwendung von SSR in Angular sorgt für eine bessere Performance beim Laden der Anwendung.
-Dadurch können ebenso bessere Ergebnisse bei den Core Web Vitals sowie eine verbesserte Search Enginge Optimization (SEO) erzielt werden.
-Angular hat hier stark bei der sogenannten _Partial Hydration_ nachgebessert.
-Dabei wird nach erstmaliger Auslieferung der statischen Website nicht mehr die gesamte Angular Anwendung neu geladen und die statische Seite wird ersetzt,
-sondern es werden die relevanten (interaktiven) Teile der Anwendung erkannt, und nur diese werden mit dem dynamischen Code (aka. JavaScript) _hydriert_.
+Das Angular-Team hat im neuesten Release stark an dem Support für Server-Side-Rendering (SSR) gearbeitet.
+Das bisherige Projekt *Angular Universal* wurde dafür direkt in den Core von Angular aufgenommen. Es wird ab sofort unter dem neuen Namen `@angular/ssr` veröffentlicht.
 
-Wenn Sie bereits Angular Universal verwendet haben, sorgen die Angular Schematics dafür, dass Sie automatisch bei einem `ng update` auf das neue package migrieren.
+Mithilfe von Server-Side Rendering kann die Angular-Anwendung bereits auf dem Server ausgeführt werden, sodass der Aufbau des DOM-Baums nicht mehr vollständig im Browser passieren muss.
+Das kann für eine bessere wahrgenommene Start-Performance sorgen, weil beim Laden der Seite bereits grundlegender Inhalt sichtbar ist.
+Richtig eingesetzt kann SSR bessere Ergebnisse bei den Core Web Vitals ermöglichen.
+Außerdem ist SSR ein elementarer Baustein für Suchmaschinenoptimierung.
+
+Angular hat hier bei der sogenannten _Partial Hydration_ nachgebessert:
+Nach der ersten Auslieferung der server-gerenderten Anwendung wird im Browser nicht mehr die gesamte Anwendung neu gerendert und ersetzt.
+Stattdessen werden nur die relevanten (interaktiven) Teile der Anwendung ermittelt, und nur diese werden mithilfe von JavaScript _hydriert_, also zum dynamischen Leben erweckt.
+Dieses Konzept wurde grundlegend bereits mit Angular 16 eingeführt.
+
+Wenn Sie bereits Angular Universal nutzen, können Sie Ihrer Anwendung mit dem folgenden Befehl auf das neue Package migrieren:
 
 ```bash
 ng update @nguniversal/express-engine
 ```
 
-Neu ist auch, dass wir erstmalig direkt beim Anlegen unseres Projekts das Thema SSR mit berücksichtigen können.
+Neu ist auch, dass wir beim Anlegen unseres Projekts mit `ng new` sofort den Support für SSR aktivieren können:
 
 ```bash
 ng new book-monkey --ssr
 ```
+
+
+## Application Builder auf Basis von ESBuild
+
+
+
+
+## Sonstiges
+
+Neben den großen Features hat Angular eine Menge von kleineren Neuerungen und Bugfixes an Bord.
+Einige interessante Punkte haben wir hier aufgeführt:
+
+- Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL angegeben wird, können wir dort nun auch einen einfachen String angeben: `styleUrls: './my.component.scss'`.
+- Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` nun standardmäßig aktiviert.
+- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss.
 
 <hr>
 
