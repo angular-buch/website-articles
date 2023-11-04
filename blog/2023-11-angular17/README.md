@@ -424,6 +424,102 @@ ng new book-monkey --ssr
 
 ## Application Builder auf Basis von ESBuild
 
+<!-- Quelle: https://github.com/angular/angular/pull/52407/files -->
+
+Mit Angular 16 wurde ein Build-System auf Basis von [ESBuild](https://esbuild.github.io/) als *Developer Preview* vorgestellt. ESBuild kann vor allem mit einer deutlich besseren Performance aufwarten als das alte System. Dank vieler Verbesserungen und positiver Rückmeldungen aus der Community fühlt sich das Angular-Team nun sicher genug, den Builder in Angular 17 als stabil zu erklären.
+
+### Für neue Projekte 
+
+Der ESBuild-basierte Build wird nun für alle Applikationen, die mit `ng new` bzw. `npm create` erstellt werden, automatisch aktiv sein. 
+Dafür ist ein Builder mit dem Namen `@angular-devkit/build-angular:application` voreingestellt.
+
+
+### Für bestehende Projekte
+
+Das bestehende Webpack-basierte Build-System gilt weiterhin als stabil und wird vollständig unterstützt. Bestehende Projekte können den bisherigen Builder weiterhin nutzen und werden bei einem Update nicht automatisch umgestellt.
+Um die Vorteile des neuen Build-Systems nutzen, können Sie die Datei `angular.json` wie folgt anpassen.
+
+```json
+{
+  // VORHER
+  "architect": {
+    "build": {
+      "builder": "@angular-devkit/build-angular:browser",
+    }
+  }
+}
+```
+
+```json
+{
+  // NACHHER
+  "architect": {
+    "build": {
+      "builder": "@angular-devkit/build-angular:browser-esbuild",
+    }
+  }
+}
+```
+
+Dieser Builder dient als direkte Alternative zum bestehenden `browser`-Builder.
+Um die Umstellung zu vereinfachen, wurde diese Kompatibilitätsoption eingeführt.
+Weitergehende Änderungen sind nicht notwendig, um das neue Build-System zu nutzen.
+
+Wenn Sie weitere Einstellungen und vor allem die Unterstützung von Server-Side-Rendering (SSR) benötigen, dann sollten Sie die folgende Einstellung in der Datei `angular.json` nutzen:
+
+```json
+{
+  // VORHER
+  "architect": {
+    "build": {
+      "builder": "@angular-devkit/build-angular:browser",
+      "options: {
+        // ...
+      }
+    }
+  }
+}
+```
+
+```json
+{
+  // NACHHER
+  "architect": {
+    "build": {
+      "builder": "@angular-devkit/build-angular:application",
+      "options: {
+        // TODO!
+      }
+    }
+  }
+}
+```
+
+Wenn Sie den Namen des Builders in Ihrer angular.json geändert haben, müssen Sie einige weitere Einstellungen bei den `options` aktualisieren.
+In der folgenden Auflistung sehen Sie, welche Optionen angepasst oder entfernt werden müssen:
+
+1. Die Option `main` sollten Sie in `browser` umbenennen.
+2. Bei `polyfills` sollten Sie den Wert in ein Array umwandeln, falls dies nicht bereits geschehen ist.
+3. Die Optionen `buildOptimizer`, `resourcesOutputPath`, `vendorChunk`, `commonChunk`, `deployUrl` und `ngswConfigPath` können Sie entfernen. 
+4. Den Wert von `ngswConfigPath` sollten Sie allerdings zu `serviceWorker` verschieben und dann die Option entfernen. `serviceWorker` ist jetzt entweder `false` oder ein Konfigurationspfad.
+
+Wenn Ihre Anwendung kein Server-Side-Rendering (SSR) verwendet, sind dies alle Änderungen, die Sie vornehmen müssen, damit `ng build` wieder funktioniert.
+Nachdem Sie den Build zum ersten Mal ausgeführt haben, könnten gegebenenfalls Warnungen oder Fehler auftreten. 
+Diese basieren oft auf Verhaltensunterschieden zum alten System oder auf Funktionen, die spezifisch für Webpack waren.
+Viele Warnungen werden Ihnen bereits Hinweise zur Behebung des Problems geben.
+Sollten Sie bei einer Warnung keine Lösung finden, empfiehlt das Angular-Team, einen [Issue auf GitHub](https://github.com/angular/angular-cli/issues) zu eröffnen.
+
+Für Anwendungen, die bereits SSR mit und ohne Prerendering verwenden, sind zusätzliche manuelle Anpassungen erforderlich.
+Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisherigen Builder:
+
+* `app-shell`
+* `prerender`
+* `server`
+* `ssr-dev-server`
+
+Es ist sehr zu begrüßen, das diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
+Allerdings bedeutet das auch eine Menge Arbeit, um die ganzen Anpassungen Schritt für Schritt umzusetzen.
+Bitte konsultieren Sie den [Angular SSR Guide](https://angular.io/guide/ssr), für eine ausführliche Beschreibung.
 
 
 
@@ -433,7 +529,8 @@ Neben den großen Features hat Angular eine Menge von kleineren Neuerungen und B
 Einige interessante Punkte haben wir hier aufgeführt:
 
 - Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL angegeben wird, können wir dort nun auch einen einfachen String angeben: `styleUrls: './my.component.scss'`.
-- Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` nun standardmäßig aktiviert.
+- Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert.
+- Die Option `--standalone` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert – es werden also keine Angular-Module (`@NgModule()`) mehr erzeugt. 
 - Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss. Siehe [Commit](https://github.com/angular/angular/commit/e753278faae79a53e235e0d8e03f89555a712d80).
 
 <hr>
