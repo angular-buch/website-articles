@@ -18,6 +18,8 @@ sticky: true
 hidden: true
 ---
 
+> **In diesem Post berichten wir über Angular Version 17. Die Veröffentlichung ist für Mittwoch, den 9. November 2023, angekündigt. Sie können bereits jetzt alle Neuigkeiten bei uns erfahren. Die gezeigten Befehle und Einstellungen werden jedoch erst mit der offiziellen Veröffentlichung funktionieren.**
+
 Es ist wieder ein halbes Jahr vorbei: Anfang November 2023 erschien die neue Major-Version **Angular 17**!
 Angular-Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
 
