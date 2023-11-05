@@ -429,6 +429,8 @@ Wollen wir in einem bestehenden Projekt nachträglich SSR aktivieren, können wi
 ng add @angular/ssr
 ```
 
+Dabei wird der neue Application Builder eingesetzt, den wir im nächsten Abschnitt vorstellen.
+
 
 ## Application Builder auf Basis von ESBuild
 
@@ -436,16 +438,19 @@ ng add @angular/ssr
 
 Mit Angular 16 wurde ein neues Build-System auf Basis von [ESBuild](https://esbuild.github.io/) als *Developer Preview* vorgestellt. ESBuild kann vor allem mit einer deutlich besseren Performance aufwarten als das alte System. Dank vieler Verbesserungen und positiver Rückmeldungen aus der Community fühlt sich das Angular-Team nun sicher genug, den Builder in Angular 17 als stabil zu erklären.
 
+> ℹ️ **Was ist ein Builder?** Jedes Mal, wenn wir einen Befehl wie `ng build`, `ng serve` oder `ng test` starten, wird im Hintergrund ein *Builder* ausgeführt. Es handelt sich also um das Skript, das den Build-Prozess durchführt. Der verwendete Builder wird in der Datei `angular.json` konfiguriert.
+
+
 ### Für neue Projekte 
 
 Der ESBuild-basierte Build wird nun für alle Applikationen, die mit `ng new` bzw. `npm create` erstellt werden, automatisch aktiv sein. 
 Dafür ist in der Datei `angular.json` der Builder mit dem Namen `@angular-devkit/build-angular:application` voreingestellt.
-
+ 
 
 ### Für bestehende Projekte
 
 Das bestehende Build-System auf Basis von Webpack gilt weiterhin als stabil und wird vollständig unterstützt. Bestehende Projekte können den bisherigen Builder weiterhin nutzen und werden bei einem Update nicht automatisch umgestellt.
-Um die Vorteile des neuen Build-Systems zu nutzen, können Sie die Datei `angular.json` wie folgt anpassen.
+Um die Vorteile des neuen Build-Systems zu nutzen, können Sie die Datei `angular.json` wie folgt anpassen:
 
 ```json
 {
@@ -463,17 +468,23 @@ Um die Vorteile des neuen Build-Systems zu nutzen, können Sie die Datei `angula
   // NACHHER
   "architect": {
     "build": {
-      "builder": "@angular-devkit/build-angular:application",
+      "builder": "@angular-devkit/build-angular:browser-esbuild",
     }
   }
 }
 ```
 
-Dieser Builder dient als direkte Alternative zum bestehenden `browser`-Builder.
-Um die Umstellung zu vereinfachen, wurde diese Kompatibilitätsoption eingeführt.
 Weitergehende Änderungen sind nicht notwendig, um das neue Build-System zu nutzen.
+Der neue Builder `browser-esbuild` dient als direkte Alternative ("drop-in replacement") zum bestehenden `browser`-Builder.
+Wollen Sie Server-Side Rendering nutzen, ist in dieser Konfiguration weiterhin der bestehende Builder für Angular Universal erforderlich.
 
-Wenn Sie weitere Einstellungen und vor allem die Unterstützung von Server-Side-Rendering (SSR) benötigen, dann sollten Sie die folgende Einstellung in der Datei `angular.json` nutzen:
+### Der neue `application`-Builder
+
+Um die Landschaft der verschiedenen Builder-Skripte zu vereinheitlichen, wurde mit Angular 17 ein neuer Builder `application` eingeführt.
+Für neue Projekte ist dieser Builder automatisch voreingestellt, sodass Sie nichts weiter tun müssen.
+Auch für bestehende Projekte empfehlen wir, auf den `application`-Builder zu wechseln.
+
+Der neue Builder vereint alle Aufgaben, die zuvor in verschiedenen Buildern untergebracht waren: Server-Side Rendering und Pre-Rendering stehen nun direkt zur Verfügung, ohne dass wir dafür separate Builder installieren müssen.
 
 ```json
 {
@@ -496,38 +507,31 @@ Wenn Sie weitere Einstellungen und vor allem die Unterstützung von Server-Side-
     "build": {
       "builder": "@angular-devkit/build-angular:application",
       "options: {
-        // TODO!
+        // TODO: Optionen müssen aktualisiert werden
       }
     }
   }
 }
 ```
 
-Wenn Sie den Namen des Builders in Ihrer angular.json geändert haben, müssen Sie einige weitere Einstellungen bei den `options` aktualisieren.
-In der folgenden Auflistung sehen Sie, welche Optionen angepasst oder entfernt werden müssen:
+Da es sich um einen vollständig neuen Builder handelt, müssen Sie einige Optionen in der Datei `angular.json` anpassen.
+Nachdem Sie den Namen des Builders auf `application` geändert haben, aktualisieren Sie bitte die folgenden Einträge unter `options`:
 
 1. Die Option `main` sollten Sie in `browser` umbenennen.
 2. Bei `polyfills` sollten Sie den Wert in ein Array umwandeln, falls dies nicht bereits geschehen ist.
 3. Die Optionen `buildOptimizer`, `resourcesOutputPath`, `vendorChunk`, `commonChunk`, `deployUrl` und `ngswConfigPath` können Sie entfernen. 
 4. Den Wert von `ngswConfigPath` sollten Sie allerdings zu `serviceWorker` verschieben und dann die Option entfernen. `serviceWorker` ist jetzt entweder `false` oder ein Konfigurationspfad.
 
-Wenn Ihre Anwendung kein Server-Side-Rendering (SSR) verwendet, sind dies alle Änderungen, die Sie vornehmen müssen, damit `ng build` wieder funktioniert.
-Nachdem Sie den Build zum ersten Mal ausgeführt haben, könnten Warnungen oder Fehler auftreten. 
-Diese basieren oft auf Verhaltensunterschieden zum alten System oder auf Funktionen, die spezifisch für Webpack waren.
-Viele Warnungen werden Ihnen bereits Hinweise zur Behebung des Problems geben.
-Sollten Sie bei einer Warnung keine Lösung finden, empfiehlt das Angular-Team, ein [Issue auf GitHub](https://github.com/angular/angular-cli/issues) zu eröffnen.
+Wenn Ihre Anwendung kein Server-Side-Rendering (SSR) verwendet, sind dies alle Änderungen, die Sie vornehmen müssen, damit `ng build` wie gewohnt funktioniert.
+Es ist möglich, dass dennoch Fehler oder Warnungen auftreten, wenn Ihre Anwendung spezifische Webpack-Features nutzt.
+Sollte es unerwartete Verhaltensunterschiede zwischen den Buildern geben, bittet das Angular-Team darum, ein [Issue auf GitHub](https://github.com/angular/angular-cli/issues) zu eröffnen.
 
-Für Anwendungen, die bereits SSR mit und ohne Prerendering verwenden, sind zusätzliche manuelle Anpassungen erforderlich.
-Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisherigen Builder:
+Für Anwendungen, die bereits SSR (mit und ohne Pre-Rendering) verwenden, sind zusätzliche manuelle Anpassungen erforderlich.
+Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisherigen Builder `prerender`, `server`, `ssr-dev-server` und `app-shell`.
+Die jeweiligen Optionen müssen deshalb gemeinsam an den `application`-Builder übergeben werden.
 
-* `app-shell`
-* `prerender`
-* `server`
-* `ssr-dev-server`
-
-Es ist sehr zu begrüßen, dass diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
-Bitte konsultieren Sie den [Angular SSR Guide](https://angular.io/guide/universal) für eine ausführliche Beschreibung der notwendigen Schritte.
-
+Wir begrüßen sehr, dass diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
+Bitte konsultieren Sie den [Angular SSR Guide](TODO) für eine ausführliche Beschreibung der notwendigen Schritte.
 
 
 ## Sonstiges
