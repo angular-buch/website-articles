@@ -518,8 +518,7 @@ Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisher
 * `ssr-dev-server`
 
 Es ist sehr zu begrüßen, das diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
-Allerdings bedeutet das auch eine Menge Arbeit, um die ganzen Anpassungen Schritt für Schritt umzusetzen.
-Bitte konsultieren Sie den [Angular SSR Guide](https://angular.io/guide/ssr), für eine ausführliche Beschreibung.
+Bitte konsultieren Sie den [Angular SSR Guide](https://angular.io/guide/ssr), für eine ausführliche Beschreibung der notwendigen Schritte.
 
 
 
