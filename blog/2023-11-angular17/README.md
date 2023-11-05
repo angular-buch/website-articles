@@ -411,13 +411,7 @@ Nach der ersten Auslieferung der server-gerenderten Anwendung wird im Browser ni
 Stattdessen werden nur die relevanten (interaktiven) Teile der Anwendung ermittelt, und nur diese werden mithilfe von JavaScript _hydriert_, also zum dynamischen Leben erweckt.
 Dieses Konzept wurde grundlegend bereits mit Angular 16 eingeführt.
 
-Wenn Sie bereits Angular Universal nutzen, können Sie Ihre Anwendung mit dem folgenden Befehl auf das neue Package migrieren:
-
-```bash
-ng update @nguniversal/express-engine
-```
-
-Neu ist auch, dass wir beim Anlegen unseres Projekts mit `ng new` sofort den Support für SSR aktivieren können:
+Die wichtigste Neuigkeit ist, dass wir beim Anlegen unseres Projekts mit `ng new` sofort den Support für SSR aktivieren können:
 
 ```bash
 ng new book-monkey --ssr
