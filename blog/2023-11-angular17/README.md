@@ -18,13 +18,14 @@ sticky: true
 hidden: true
 ---
 
-> **In diesem Post berichten wir über Angular Version 17. Die Veröffentlichung ist für Mittwoch, den 9. November 2023, angekündigt. Sie können bereits jetzt alle Neuigkeiten bei uns erfahren. Die gezeigten Befehle und Einstellungen werden jedoch erst mit der offiziellen Veröffentlichung funktionieren.**
+> **In diesem Artikel berichten wir über Angular in Version 17. Die finale Veröffentlichung auf NPM ist für Mittwoch, den 8. November 2023, angekündigt. Sie können bereits jetzt alle Neuigkeiten bei uns erfahren. Die gezeigten Befehle und Einstellungen werden jedoch erst mit der offiziellen Veröffentlichung funktionieren.**
+
 
 Es ist wieder ein halbes Jahr vorbei: Anfang November 2023 erschien die neue Major-Version **Angular 17**!
 Angular-Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
 
 Auch wir sind der Meinung: Die Community wurde nicht enttäuscht! Die wichtigsten Neuigkeiten zu Angular 17 fassen wir in diesem Blogpost zusammen.
-Im offiziellen [Angular-Blog]() finden Sie alle Informationen des Angular-Teams.
+Im offiziellen [Angular-Blog](TODO) finden Sie alle Informationen des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
 
 
@@ -51,7 +52,7 @@ Dadurch werden nicht nur die Pakete aktualisiert, sondern auch notwendige Migrat
 Prüfen Sie danach am Besten mithilfe der Differenzansicht von Git die Änderungen.
 
 Unabhängig von den Inhalten unseres Buchs besteht grundsätzlich immer die Möglichkeit, die neuen Features von Angular auch im *BookMonkey* zu nutzen.
-Probieren Sie doch zum Beispiel einmal den neuen Control Flow aus!
+Probieren Sie doch zum Beispiel einmal den neuen Control Flow aus – dazu gleich mehr!
 
 
 ## Unterstützte Versionen von TypeScript und Node.js
@@ -60,9 +61,6 @@ Um Angular 17 zu nutzen, sind die folgenden Versionen von TypeScript und Node.js
 
 - **TypeScript 5.2**. Der Support für TypeScript-Versionen kleiner als 5.2 wurde eingestellt.
 - **Node.js 18.13.0**. Node.js in Version 16 wird nicht mehr unterstützt.
-
-
-
 
 
 ## Signals gelten als stable
@@ -100,13 +98,13 @@ Wenn Sie die neue Syntax verwenden wollen, stellen Sie bitte sicher, dass Sie de
 Die IDEs der Firma Jetbrains können auch bereits mit der Syntax umgehen.
 
 
-### Bedingungen mit dem `@if`-Block
+### Bedingungen mit `@if`
 
 Der `@if`-Block dient dazu, bestimmte Teile eines HTML-Templates nur dann anzuzeigen, wenn eine Bedingung erfüllt ist.
 Er ersetzt die Direktive `*ngIf`.
 Im `@if`-Block steht eine Bedingung. Nur wenn diese Bedingung wahr ist, wird der Teil des Templates gezeigt.
 
-Ein `@if`-Block kann auch `@else`-Blöcke enthalten. Das sind alternative Blöcke, die angezeigt werden, wenn die Bedingung im `@if`-Teil nicht erfüllt ist.
+Ein `@if`-Block kann auch `@else`-Blöcke enthalten: Das sind alternative Zweige, die angezeigt werden, wenn die Bedingung im `@if`-Teil nicht erfüllt ist.
 Man kann einen einfachen `@else`-Block definieren, der immer dann zum Einsatz kommt, wenn die `@if`-Bedingung nicht zutrifft – oder man kann zusätzliche `@else`-Blöcke mit weiteren Bedingungen definieren:
 
 
@@ -139,7 +137,7 @@ Man kann einen einfachen `@else`-Block definieren, der immer dann zum Einsatz ko
 ```
 
 Es fällt sofort auf, dass der `@else`-Zweig deutlich einfacher zu definieren ist als zuvor. Der Einsatz von `<ng-template>` ist nicht mehr notwendig!
-Außerdem war es bisland häufig erforderlich, das spezielle Tag `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
+Außerdem war es bislang häufig erforderlich, das spezielle Tag `<ng-container>` einzusetzen, um mehrere Elemente zu gruppieren, ohne ein unnötiges DOM-Element zu erzeugen.
 Auch dies entfällt mit der neuen Syntax, da die Gruppierung nun über die Klammern geschieht.
 
 
@@ -170,10 +168,10 @@ Der Schleifenblock `@for` ersetzt `*ngFor` für Iterationen und unterscheidet si
 </ul>
 ```
 
-Es ist nun möglich, direkt einen `@empty`-Block anzugeben, der aktiv wird, wenn es keine Einträge gibt. Dies war zuvor nicht direkt möglich.
-Die gezeigte Einstellung `track` ersetzt das Konzept der `trackBy`-Funktion: Sie bestimmt den Schlüssel für jede Zeile, der intern verwendet wird, um Array-Elemente eindeutig zu identifizieren. Bei der Direktive `*ngFor` war es optional, das explizite Tracking zu verwenden. mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
+Es ist nun möglich, einen `@empty`-Block anzugeben, der aktiv wird, wenn es keine Einträge gibt. Dies war zuvor nicht direkt möglich.
+Die gezeigte Option `track` ersetzt das Konzept der `trackBy`-Funktion: Sie bestimmt für jede Zeile den Schlüssel, der intern verwendet wird, um Array-Elemente eindeutig zu identifizieren. Bei der Direktive `*ngFor` war es optional, das explizite Tracking zu verwenden. Mit der neuen Syntax ist `track` jedoch eine Pflichtangabe.
 
-Eine weitere Vereinfachung besteht darin, dass die Hilfsvariablen nicht mehr extra deklariert werden müssen:
+Eine weitere Vereinfachung besteht darin, dass die Hilfsvariablen nicht mehr extra deklariert werden müssen – sie sind nun direkt innerhalb des Blocks verfügbar.
 
 ```html
 <!-- VORHER --> 
@@ -191,7 +189,7 @@ Eine weitere Vereinfachung besteht darin, dass die Hilfsvariablen nicht mehr ext
 }
 ```
 
-Falls das iterierte Array nur primitive Werte (z. B. Strings) beinhaltet, wird der Wert selbst als Identifikator verwendet:
+Falls das iterierte Array nur primitive Werte (z. B. Strings) beinhaltet, wird für das Tracking übrigens der Wert selbst als Identifikator verwendet:
 
 ```html
 @for (name of nameList; track name) {
@@ -202,13 +200,13 @@ Falls das iterierte Array nur primitive Werte (z. B. Strings) beinhaltet, wird d
 
 Folgende Hilfsvariablen stehen in einem `@for`-Block zur Verfügung:
 
-| Variable | Bedeutung                                              |
-|----------|--------------------------------------------------------|
-| $index   | Index der aktuellen Zeile                              |
-| $first   | gibt an, ob die aktuelle Zeile die erste ist           |
-| $last    | gibt an, ob die aktuelle Zeile die letzte ist          |
-| $even    | gibt an, ob der Index der aktuellen Zeile gerade ist   |
-| $odd     | gibt an, ob der Index der aktuellen Zeile ungerade ist |
+| Variable   | Bedeutung                                              |
+|------------|--------------------------------------------------------|
+| `$index`   | Index der aktuellen Zeile                              |
+| `$first`   | gibt an, ob die aktuelle Zeile die erste ist           |
+| `$last`    | gibt an, ob die aktuelle Zeile die letzte ist          |
+| `$even`    | gibt an, ob der Index der aktuellen Zeile gerade ist   |
+| `$odd`     | gibt an, ob der Index der aktuellen Zeile ungerade ist |
 
 
 ### Fallunterscheidungen mit `@switch`
@@ -249,10 +247,10 @@ Auch die Direktive `NgSwitch` erhält einen Nachfolger. Die neue Syntax mit `@sw
 
 Die bisherigen Direktiven bleiben zunächst erhalten und können parallel zum Control Flow verwendet werden.
 Sie müssen Ihre Anwendungen also nicht sofort migrieren, sondern können auch weiterhin den gewohnten Ablauf mit den Direktiven nutzen.
-Ebenso ist ein Mischbetrieb möglich, sodass z. B. neue Features mit dem neuen Control Flow ausgestattet werden können.
+Ebenso ist ein Mischbetrieb möglich, sodass z. B. neue Features sofort mit dem neuen Control Flow ausgestattet werden können.
 
 Grundsätzlich empfehlen wir Ihnen jedoch, in den nächsten Monaten schrittweise zur neuen Control-Flow-Syntax zu migrieren.
-Es ist möglich, dass die Direktiven `NgIf`, `NgFor` und `NgSwitch` in einer zukünftigen Major-Version als *deprecated* markiert werden.
+Es ist abzusehen, dass die Direktiven `NgIf`, `NgFor` und `NgSwitch` in einer zukünftigen Major-Version als *deprecated* markiert werden.
 
 Angular stellt übrigens ein Skript bereit, um die Templates auf den neuen Control Flow zu migrieren:
 
@@ -270,10 +268,10 @@ In unseren ersten Experimenten war die Automigration hilfreich, hat aber nicht a
 <!-- siehe https://github.com/angular/angular/discussions/50716 -->
 
 Mit dem neuen Control Flow wird ein sehr nützliches neues Feature eingeführt: der `@defer`-Block.
+Wir können damit Teile von HTML-Templates verzögert nachladen.
 
-Mit diesem neuen Feature können wir Teile von HTML-Templates verzögert nachladen.
 Dabei ist es egal, ob es sich um reines HTML, eine Komponente, eine Direktive, eine Pipe oder ein komplexeres Template handelt – wenn HTML-Inhalte in einem solchen Block platziert werden, lädt Angular diese Inhalte nur unter bestimmten Bedingungen oder bei bestimmten Ereignissen zur Laufzeit nach.
-Das ist besonders nützlich, um die Leistung zu optimieren, insbesondere wenn bestimmte Komponenten nicht sofort benötigt werden oder für die anwendende Person noch nicht sichtbar sind.
+Das ist besonders nützlich, um die Leistung zu optimieren, insbesondere wenn bestimmte Komponenten nicht sofort benötigt werden oder für die anwendende Person noch gar nicht sichtbar sind.
 
 Grundsätzlich ermöglicht der Router mithilfe von Lazy Loading bereits, ganze Seiten zur Laufzeit nachzuladen. Mit Deferrable Views wird dieses Konzept jetzt noch differenzierter einsetzbar: Wir behandeln nicht nur ganze Seiten, sondern nach Bedarf auch kleinere Teile ihrer Templates.
 
@@ -293,12 +291,15 @@ Grundsätzlich ermöglicht der Router mithilfe von Lazy Loading bereits, ganze S
 }
 ```
 
-Folgende Helfer stehen zur Verfügung
+Folgende Hilfsblöcke stehen gemeinsam mit `@defer` zur Verfügung:
 
-* `@loading`: Zeigt den angegebenen Inhalt an, während die Abhängigkeiten geladen werden.
-* `@placeholder`: Zeigt den angegebenen Inhalt als Platzhalter, bis a) das Laden gestartet wurde, wenn es einen `@loading`-Block gibt bzw. b) der eigentliche Inhalt vollständig gerendert ist. Der Platzhalter muss in den meisten Fällen angegeben werden! 
+* `@placeholder`: Zeigt den angegebenen Inhalt als Platzhalter, bevor der eigentliche Inhalt geladen wurde. Der Platzhalter muss in den meisten Fällen angegeben werden! 
+* `@loading`: Zeigt den angegebenen Inhalt an, *während* die Abhängigkeiten geladen werden, also nachdem der Ladevorgang gestartet wurde. Die Inhalte von `@loading` ersetzen den Placeholder!
 * `@error`: Zeigt den angegebenen Inhalt an, falls ein Problem beim Laden des Inhalts auftritt.
 
+Statten wir also einen `@defer`-Block mit `@placeholder` und `@loading` aus, so ist zunächst der Placeholder zu sehen.
+Sobald das Laden der Inhalte durchgeführt wird, wird der `@loading`-Block angezeigt.
+Ist das Laden abgeschlossen, sind die Inhalte sichtbar.
 
 Standardmäßig wird der Inhalt eines `@defer`-Blocks sofort geladen, nachdem die Anwendung fertig gerendert wurde.
 Um das Verhalten genauer zu steuern, steht eine Sammlung von Triggern zu Verfügung.
@@ -306,7 +307,7 @@ Sie steuern, wann Angular den Inhalt laden und rendern soll.
 
 ### Loading Trigger: `on viewport`
 
-Der Inhalt soll nachgeladen werden, wenn das Element sichtbar wird, also in den Viewport des Browsers rückt:
+Der Inhalt wird nachgeladen, wenn der Placeholder sichtbar wird, also in den Viewport des Browsers rückt:
 
 ```html
 @defer (on viewport) {
@@ -319,7 +320,7 @@ Der Inhalt soll nachgeladen werden, wenn das Element sichtbar wird, also in den 
 
 ### Loading Trigger: `on timer`
 
-Der Inhalt soll nachladen, wenn ein Timer abgelaufen ist:
+Der Inhalt wird nachgeladen, wenn der angegebene Timer abgelaufen ist:
 
 ```html
 @defer (on timer(3s)) {
@@ -332,7 +333,7 @@ Der Inhalt soll nachladen, wenn ein Timer abgelaufen ist:
 
 ### Loading Trigger: `when`
 
-Der Inhalt soll nachladen, wenn die Bedingung erfüllt ist:
+Der Inhalt wird nachgeladen, wenn die angegebene Bedingung erfüllt ist:
 
 ```html
 @defer (when myDeferFlag) {
@@ -354,10 +355,9 @@ Um das neue Feature zu nutzen, verwenden wir die Funktion `withViewTransitions()
 
 ```ts
 // app.config.ts
-
 import { provideRouter, withViewTransitions } from '@angular/router';
 
-export const appConfiug: ApplicationConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
       [/* ... */], // Routen
@@ -392,7 +392,7 @@ Dafür werden die CSS-Pseudo-Selektoren `::view-transition-old` und `::view-tran
 }
 ```
 
-Anstatt der Angabe `root` können wir hier auch einen anderen CSS-Selektor angeben, auf dem die View Transition angewandt werden soll.
+Anstatt der Angabe `root` können wir hier auch einen anderen CSS-Selektor angeben, auf den die View Transition angewandt werden soll.
 Mit dem Wert `root` erfolgt die Transition auf dem gesamten Dokument.
 
 
@@ -402,7 +402,7 @@ Das Angular-Team hat im neuesten Release stark an dem Support für Server-Side-R
 Das bisherige Projekt *Angular Universal* wurde dafür direkt in den Core von Angular aufgenommen. Es wird ab sofort unter dem neuen Namen `@angular/ssr` veröffentlicht.
 
 Mithilfe von Server-Side Rendering kann die Angular-Anwendung bereits auf dem Server ausgeführt werden, sodass der Aufbau des DOM-Baums nicht mehr vollständig im Browser passieren muss.
-Das kann für eine bessere wahrgenommene Start-Performance sorgen, weil beim Laden der Seite bereits grundlegender Inhalt sichtbar ist.
+Das kann für eine bessere wahrgenommene Start-Performance sorgen, weil beim ersten Laden der Seite bereits grundlegender Inhalt sichtbar ist, auch bevor Angular die Seite gerendert hat.
 Richtig eingesetzt kann SSR bessere Ergebnisse bei den Core Web Vitals ermöglichen.
 Außerdem ist SSR ein elementarer Baustein für Suchmaschinenoptimierung.
 
@@ -411,7 +411,7 @@ Nach der ersten Auslieferung der server-gerenderten Anwendung wird im Browser ni
 Stattdessen werden nur die relevanten (interaktiven) Teile der Anwendung ermittelt, und nur diese werden mithilfe von JavaScript _hydriert_, also zum dynamischen Leben erweckt.
 Dieses Konzept wurde grundlegend bereits mit Angular 16 eingeführt.
 
-Wenn Sie bereits Angular Universal nutzen, können Sie Ihrer Anwendung mit dem folgenden Befehl auf das neue Package migrieren:
+Wenn Sie bereits Angular Universal nutzen, können Sie Ihre Anwendung mit dem folgenden Befehl auf das neue Package migrieren:
 
 ```bash
 ng update @nguniversal/express-engine
@@ -423,23 +423,29 @@ Neu ist auch, dass wir beim Anlegen unseres Projekts mit `ng new` sofort den Sup
 ng new book-monkey --ssr
 ```
 
+Wollen wir in einem bestehenden Projekt nachträglich SSR aktivieren, können wir den folgenden Befehl nutzen:
+
+```bash
+ng add @angular/ssr
+```
+
 
 ## Application Builder auf Basis von ESBuild
 
 <!-- Quelle: https://github.com/angular/angular/pull/52407/files -->
 
-Mit Angular 16 wurde ein Build-System auf Basis von [ESBuild](https://esbuild.github.io/) als *Developer Preview* vorgestellt. ESBuild kann vor allem mit einer deutlich besseren Performance aufwarten als das alte System. Dank vieler Verbesserungen und positiver Rückmeldungen aus der Community fühlt sich das Angular-Team nun sicher genug, den Builder in Angular 17 als stabil zu erklären.
+Mit Angular 16 wurde ein neues Build-System auf Basis von [ESBuild](https://esbuild.github.io/) als *Developer Preview* vorgestellt. ESBuild kann vor allem mit einer deutlich besseren Performance aufwarten als das alte System. Dank vieler Verbesserungen und positiver Rückmeldungen aus der Community fühlt sich das Angular-Team nun sicher genug, den Builder in Angular 17 als stabil zu erklären.
 
 ### Für neue Projekte 
 
 Der ESBuild-basierte Build wird nun für alle Applikationen, die mit `ng new` bzw. `npm create` erstellt werden, automatisch aktiv sein. 
-Dafür ist ein Builder mit dem Namen `@angular-devkit/build-angular:application` voreingestellt.
+Dafür ist in der Datei `angular.json` der Builder mit dem Namen `@angular-devkit/build-angular:application` voreingestellt.
 
 
 ### Für bestehende Projekte
 
-Das bestehende Webpack-basierte Build-System gilt weiterhin als stabil und wird vollständig unterstützt. Bestehende Projekte können den bisherigen Builder weiterhin nutzen und werden bei einem Update nicht automatisch umgestellt.
-Um die Vorteile des neuen Build-Systems nutzen, können Sie die Datei `angular.json` wie folgt anpassen.
+Das bestehende Build-System auf Basis von Webpack gilt weiterhin als stabil und wird vollständig unterstützt. Bestehende Projekte können den bisherigen Builder weiterhin nutzen und werden bei einem Update nicht automatisch umgestellt.
+Um die Vorteile des neuen Build-Systems zu nutzen, können Sie die Datei `angular.json` wie folgt anpassen.
 
 ```json
 {
@@ -457,7 +463,7 @@ Um die Vorteile des neuen Build-Systems nutzen, können Sie die Datei `angular.j
   // NACHHER
   "architect": {
     "build": {
-      "builder": "@angular-devkit/build-angular:browser-esbuild",
+      "builder": "@angular-devkit/build-angular:application",
     }
   }
 }
@@ -506,10 +512,10 @@ In der folgenden Auflistung sehen Sie, welche Optionen angepasst oder entfernt w
 4. Den Wert von `ngswConfigPath` sollten Sie allerdings zu `serviceWorker` verschieben und dann die Option entfernen. `serviceWorker` ist jetzt entweder `false` oder ein Konfigurationspfad.
 
 Wenn Ihre Anwendung kein Server-Side-Rendering (SSR) verwendet, sind dies alle Änderungen, die Sie vornehmen müssen, damit `ng build` wieder funktioniert.
-Nachdem Sie den Build zum ersten Mal ausgeführt haben, könnten gegebenenfalls Warnungen oder Fehler auftreten. 
+Nachdem Sie den Build zum ersten Mal ausgeführt haben, könnten Warnungen oder Fehler auftreten. 
 Diese basieren oft auf Verhaltensunterschieden zum alten System oder auf Funktionen, die spezifisch für Webpack waren.
 Viele Warnungen werden Ihnen bereits Hinweise zur Behebung des Problems geben.
-Sollten Sie bei einer Warnung keine Lösung finden, empfiehlt das Angular-Team, einen [Issue auf GitHub](https://github.com/angular/angular-cli/issues) zu eröffnen.
+Sollten Sie bei einer Warnung keine Lösung finden, empfiehlt das Angular-Team, ein [Issue auf GitHub](https://github.com/angular/angular-cli/issues) zu eröffnen.
 
 Für Anwendungen, die bereits SSR mit und ohne Prerendering verwenden, sind zusätzliche manuelle Anpassungen erforderlich.
 Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisherigen Builder:
@@ -519,8 +525,8 @@ Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisher
 * `server`
 * `ssr-dev-server`
 
-Es ist sehr zu begrüßen, das diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
-Bitte konsultieren Sie den [Angular SSR Guide](https://angular.io/guide/ssr), für eine ausführliche Beschreibung der notwendigen Schritte.
+Es ist sehr zu begrüßen, dass diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
+Bitte konsultieren Sie den [Angular SSR Guide](https://angular.io/guide/universal) für eine ausführliche Beschreibung der notwendigen Schritte.
 
 
 
@@ -532,7 +538,7 @@ Einige interessante Punkte haben wir hier aufgeführt:
 - Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL angegeben wird, können wir dort nun auch einen einfachen String angeben: `styleUrls: './my.component.scss'`.
 - Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert.
 - Die Option `--standalone` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert – es werden also keine Angular-Module (`@NgModule()`) mehr erzeugt. 
-- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss. Siehe [Commit](https://github.com/angular/angular/commit/e753278faae79a53e235e0d8e03f89555a712d80).
+- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss, siehe [Commit](https://github.com/angular/angular/commit/e753278faae79a53e235e0d8e03f89555a712d80).
 
 <hr>
 
