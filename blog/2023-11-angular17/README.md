@@ -559,9 +559,10 @@ Neben den großen Features hat Angular eine Menge von kleineren Neuerungen und B
 Einige interessante Punkte haben wir hier aufgeführt:
 
 - Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL angegeben wird, können wir dort nun auch einen einfachen String angeben: `styleUrls: './my.component.scss'`.
+- Inline Styles einer Komponente (`styles`) mussten bisher als Array angegeben werden. Hier kann jetzt auch ein einzelner String notiert werden.
 - Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert.
 - Die Option `--standalone` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert – es werden also keine Angular-Module (`@NgModule()`) mehr erzeugt. 
-- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss, siehe [Commit](https://github.com/angular/angular/commit/e753278faae79a53e235e0d8e03f89555a712d80).
+- Animationen mit `@angular/animations` können lazy geladen werden, sodass die Implementierung nicht mehr sofort zusammen mit der Hauptanwendung geladen werden muss, siehe [Commit](https://github.com/angular/angular/commit/e753278faae79a53e235e0d8e03f89555a712d80). Mehr Infos gibt es im [Blogpost von Matthieu Riegler](https://riegler.fr/blog/2023-10-04-animations-async) aus dem Angular-Team.
 
 <hr>
 
