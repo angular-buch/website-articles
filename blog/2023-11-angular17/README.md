@@ -36,7 +36,7 @@ Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https:
 Angular hat ein neues Logo! Seit 6. November erstrahlt das große A unseres Lieblingsframeworks mit einem modernen Farbverlauf.
 Die viel größere Neuigkeit verbirgt sich aber hinter der neuen Domain **[angular.dev](https://angular.dev)**: Hier finden Sie ab sofort die neue Landingpage und Dokumentation von Angular.
 Die Inhalte wurden vollständig überarbeitet, um vor allem den Einstieg in das Framework zu vereinfachen.
-Die Dokumentation setzt zum großen Teil auf die neuen Konzeprte wie Signals und den neuen Control Flow.
+Die Dokumentation setzt zum großen Teil auf die neuen Konzepte wie Signals und den neuen Control Flow mit der `@`-Syntax.
 
 Die offizielle Ankündigung des Angular-Teams finden Sie im [Angular-Blog](https://blog.angular.io/announcing-angular-dev-1e1205fa3039).
 
@@ -46,7 +46,7 @@ Das bisherige Angular-Logo ist weithin bekannt: Das weiße A auf einem roten Sch
 Gleichzeitig schaut das Logo auf eine lange Geschichte zurück: Die erste Version wurde ab 2012 mit dem Vorgänger-Framework "AngularJS" bekannt.
 Im September 2016 wurde das neue Framework "Angular" veröffentlicht, das eine vollständige Neuentwicklung war – Name und Logo blieben jedoch grundlegend erhalten.
 
-In den letzten Jahren hat Angular eine starke Entwicklung durchgemacht. Standalone Components, Signals, Control Flow, funktionale Guards/Interceptoren und Typed Reactive Forms sind nur eine Auswahl der neuen Strömungen.
+In den letzten Jahren hat Angular eine starke Entwicklung vollzogen. Standalone Components, Signals, Control Flow, die Funktion `inject()`, funktionale Guards/Interceptoren und Typed Reactive Forms sind nur eine Auswahl der neuen Strömungen.
 Gelegentlich hören wir das Feedback, Angular sei "tot" oder werde "nicht mehr weiterentwickelt".
 Doch das Gegenteil ist der Fall: Angular wird allein innerhalb des Konzerns Google in über 1.200 Anwendungen produktiv eingesetzt. Es ist eins der führenden Frameworks, um Webanwendungen für den Enterprise-Bereich zu entwickeln und kann auf einer Stufe mit anderen großen Frameworks wie Vue.js oder React stehen.
 
