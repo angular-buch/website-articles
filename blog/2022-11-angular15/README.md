@@ -30,6 +30,7 @@ Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https:
 
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 16 ist da!](/blog/2023-05-angular16)
+> * [Angular 17 ist da!](/blog/2023-11-angular17)
 
 
 ## Projekt updaten
