@@ -547,7 +547,7 @@ Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisher
 Die jeweiligen Optionen müssen deshalb gemeinsam an den `application`-Builder übergeben werden.
 
 Wir begrüßen sehr, dass diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
-Bitte konsultieren Sie den [Angular SSR Guide](TODO) für eine ausführliche Beschreibung der notwendigen Schritte.
+Bitte konsultieren Sie den [SSR Guide](https://angular.dev/guide/ssr) bzw. [Prerendering Guide](https://angular.dev/guide/prerendering) in der offiziellen Dokumentation für eine ausführliche Beschreibung der notwendigen Schritte.
 
 
 ## Sonstiges
