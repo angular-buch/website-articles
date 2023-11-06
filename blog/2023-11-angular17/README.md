@@ -2,8 +2,8 @@
 title: 'Angular 17 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2023-11-07
-lastModified: 2023-11-07
+published: 2023-11-06
+lastModified: 2023-11-06
 keywords:
   - Angular
   - Angular 17
@@ -12,10 +12,11 @@ keywords:
   - Deferrable Views
   - View Transition API
   - ESBuild
+  - Logo
+  - angular.dev
 language: de
 thumbnail: angular17.jpg
 sticky: true
-hidden: true
 ---
 
 > **In diesem Artikel berichten wir über Angular in Version 17. Die finale Veröffentlichung auf NPM ist für Mittwoch, den 8. November 2023, angekündigt. Sie können bereits jetzt alle Neuigkeiten bei uns erfahren. Die gezeigten Befehle und Einstellungen werden jedoch erst mit der offiziellen Veröffentlichung funktionieren.**
@@ -25,8 +26,8 @@ Es ist wieder ein halbes Jahr vorbei: Anfang November 2023 erschien die neue Maj
 Angular-Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
 
 Auch wir sind der Meinung: Die Community wurde nicht enttäuscht! Die wichtigsten Neuigkeiten zu Angular 17 fassen wir in diesem Blogpost zusammen.
-Im offiziellen [Angular-Blog](TODO) finden Sie alle Informationen des Angular-Teams.
-Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
+<!-- Im offiziellen [Angular-Blog](TODO) finden Sie alle Informationen des Angular-Teams.
+Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md). -->
 
 
 
