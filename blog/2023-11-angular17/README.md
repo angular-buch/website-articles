@@ -2,8 +2,8 @@
 title: 'Angular 17 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2023-11-07
-lastModified: 2023-11-07
+published: 2023-11-06
+lastModified: 2023-11-06
 keywords:
   - Angular
   - Angular 17
@@ -12,10 +12,11 @@ keywords:
   - Deferrable Views
   - View Transition API
   - ESBuild
+  - Logo
+  - angular.dev
 language: de
 thumbnail: angular17.jpg
 sticky: true
-hidden: true
 ---
 
 > **In diesem Artikel berichten wir über Angular in Version 17. Die finale Veröffentlichung auf NPM ist für Mittwoch, den 8. November 2023, angekündigt. Sie können bereits jetzt alle Neuigkeiten bei uns erfahren. Die gezeigten Befehle und Einstellungen werden jedoch erst mit der offiziellen Veröffentlichung funktionieren.**
@@ -25,14 +26,36 @@ Es ist wieder ein halbes Jahr vorbei: Anfang November 2023 erschien die neue Maj
 Angular-Teammitglied Minko Gechev hatte diese Version schon vor einigen Wochen als sein ["favorite Angular release … ever"](https://twitter.com/mgechev/status/1681375250335039488) beschrieben.
 
 Auch wir sind der Meinung: Die Community wurde nicht enttäuscht! Die wichtigsten Neuigkeiten zu Angular 17 fassen wir in diesem Blogpost zusammen.
-Im offiziellen [Angular-Blog](TODO) finden Sie alle Informationen des Angular-Teams.
+Im offiziellen [Angular-Blog](https://blog.angular.io/introducing-angular-v17-a03dada02150) finden Sie alle Informationen des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
 
 
 
-## TOP SECRET
+## angular.dev: Das neue Gesicht von Angular
 
-TODO @fmalcher
+Angular hat ein neues Logo! Seit 6. November erstrahlt das große A unseres Lieblingsframeworks mit einem modernen Farbverlauf.
+Die viel größere Neuigkeit verbirgt sich aber hinter der neuen Domain [angular.dev](https://angular.dev): Hier finden Sie ab sofort die neue Landingpage und Dokumentation von Angular.
+Die Inhalte wurden vollständig überarbeitet, um vor allem den Einstieg in das Framework zu vereinfachen.
+Die Dokumentation setzt zum großen Teil auf die neuen Konzeprte wie Signals und den neuen Control Flow.
+
+### Angular im Wandel der Zeit
+
+Das bisherige Angular-Logo ist weithin bekannt: Das weiße A auf einem roten Schild ist *das* Identifikationsmerkmal von Angular.
+Gleichzeitig schaut das Logo auf eine lange Geschichte zurück: Die erste Version wurde ab 2012 mit dem Vorgänger-Framework "AngularJS" bekannt.
+Im September 2016 wurde das neue Framework "Angular" veröffentlicht, das eine vollständige Neuentwicklung war – Name und Logo blieben jedoch grundlegend erhalten.
+
+In den letzten Jahren hat Angular eine starke Entwicklung durchgemacht. Standalone Components, Signals, Control Flow, funktionale Guards/Interceptoren und Typed Reactive Forms sind nur eine Auswahl der neuen Strömungen.
+Gelegentlich hören wir das Feedback, Angular sei "tot" oder werde "nicht mehr weiterentwickelt".
+Doch das Gegenteil ist der Fall: Angular wird allein innerhalb des Konzerns Google in über 1.200 Anwendungen produktiv eingesetzt. Es ist eins der führenden Frameworks, um Webanwendungen für den Enterprise-Bereich zu entwickeln und kann auf einer Stufe mit anderen großen Frameworks wie Vue.js oder React stehen.
+
+Um diesen frischen Wind nicht nur auf technischer Ebene sichtbar zu machen, präsentiert sich Angular seit Version 17 mit einem neuen Logo und einem neuen Portal für Entwicklerinnen und Entwickler.
+Seit Version 2.0 im September 2016 hat sich in Angular viel getan – und wir freuen uns, dass dieser "Renaissance" nun ein neues Gesicht verliehen wurde.
+
+<div style="margin: auto">
+  <img src="https://website-articles.angular-buch.com/blog/2023-11-angular17/logo-history.png" alt="Geschichte des Logos">
+  <p><small>Das Angular-Logo im Wandel der Zeiten: AngularJS (2012), Angular (2016), Angular (2023)</small></p>
+</div>
+
 
 
 ## Projekt updaten
@@ -525,7 +548,7 @@ Der neue `application`-Builder übernimmt nun die Funktionalitäten aller bisher
 Die jeweiligen Optionen müssen deshalb gemeinsam an den `application`-Builder übergeben werden.
 
 Wir begrüßen sehr, dass diese große Auwahl an Buildern für unterschiedliche Zwecke endlich vereinheitlicht wird.
-Bitte konsultieren Sie den [Angular SSR Guide](TODO) für eine ausführliche Beschreibung der notwendigen Schritte.
+Bitte konsultieren Sie den [SSR Guide](https://angular.dev/guide/ssr) bzw. [Prerendering Guide](https://angular.dev/guide/prerendering) in der offiziellen Dokumentation für eine ausführliche Beschreibung der notwendigen Schritte.
 
 
 ## Sonstiges
