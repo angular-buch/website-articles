@@ -330,7 +330,7 @@ Standardmäßig wird der Inhalt eines `@defer`-Blocks sofort geladen, nachdem di
 Um das Verhalten genauer zu steuern, steht eine Sammlung von Triggern zu Verfügung.
 Sie steuern, wann Angular den Inhalt laden und rendern soll.
 
-> **Hinweis:** Die neuen Deferrable Views sind Status __Developer Preview__. Sie können dieses neue Feature bereits ausprobieren, aber es können sich noch Details ändern, bevor es als stabil gekennzeichnet wird!
+> **Hinweis:** Die neuen Deferrable Views sind im Status __Developer Preview__. Sie können dieses neue Feature bereits ausprobieren, aber es können sich noch Details ändern, bevor es als stabil gekennzeichnet wird!
 
 ### Loading Trigger: `on viewport`
 
