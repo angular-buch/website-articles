@@ -120,6 +120,8 @@ Beim automatischen Update auf Angular 17 wird dieser Schritt automatisch vorgeno
 Wenn Sie die neue Syntax verwenden wollen, stellen Sie bitte sicher, dass Sie den *Angular Language Service* in Visual Studio Code installiert haben. Diese Extension sorgt für korrektes Syntax Highlighting in den Templates.
 Die IDEs der Firma Jetbrains können auch bereits mit der Syntax umgehen.
 
+> **Hinweis:** Der neue Control Flow ist im Status __Developer Preview__. Sie können dieses neue Feature bereits ausprobieren, aber es können sich noch Details ändern, bevor es als stabil gekennzeichnet wird!
+
 
 ### Bedingungen mit `@if`
 
@@ -327,6 +329,8 @@ Ist das Laden abgeschlossen, sind die Inhalte sichtbar.
 Standardmäßig wird der Inhalt eines `@defer`-Blocks sofort geladen, nachdem die Anwendung fertig gerendert wurde.
 Um das Verhalten genauer zu steuern, steht eine Sammlung von Triggern zu Verfügung.
 Sie steuern, wann Angular den Inhalt laden und rendern soll.
+
+> **Hinweis:** Die neuen Deferrable Views sind Status __Developer Preview__. Sie können dieses neue Feature bereits ausprobieren, aber es können sich noch Details ändern, bevor es als stabil gekennzeichnet wird!
 
 ### Loading Trigger: `on viewport`
 
