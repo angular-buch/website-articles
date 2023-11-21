@@ -126,6 +126,29 @@ Bisher hatten wir diese Liste in der `angular.json` definiert.
 - Die Datei `app.server.module.ts` wurde umbenannt zu `app.module.server.ts`. Der Inhalt ist weiterhin derselbe.
 
 
+## Bestehendes Projekt updaten
+
+Wenn Sie ein bestehendes Projekt auf Angular 17 aktualisieren, sorgen die Migrationsskripte hinter `ng update` dafür, dass automatisch das neue Paket `@angular/ssr` verwendet wird.
+Dabei wird allerdings nicht automatisch der neue Application Builder genutzt, sondern es werden die bisherigen Builder für SSR und Pre-Rendering genutzt, die in das Paket `@angular-devkit/build-angular` umgezogen wurden.
+
+```
+❯ Replace usages of '@nguniversal/builders' with '@angular-devkit/build-angular'.
+UPDATE angular.json (5182 bytes)
+UPDATE package.json (1903 bytes)
+  Migration completed (2 files modified).
+
+❯ Replace usages of '@nguniversal/' packages with '@angular/ssr'.
+RENAME server.ts => server.ts.bak
+CREATE server.ts (2206 bytes)
+UPDATE package.json (1887 bytes)
+✔ Packages installed successfully.
+  Migration completed (2 files modified).
+```
+
+Wenn Sie von hier aus den Application Builder nutzen möchten, ist eine manuelle Migration notwendig.
+Die grundlegenden Schritte haben wir im [Blogpost zu Angular 17](/blog/2023-11-angular17) beschrieben.
+
+
 ## Fazit
 
 Die Einrichtung und Konfiguration von SSR und Pre-Rendering funktioniert mit Angular 17 und dem neuen Application Builder anders als zuvor.
