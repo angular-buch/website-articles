@@ -16,7 +16,7 @@ keywords:
   - angular.dev
 language: de
 thumbnail: angular17.jpg
-sticky: true
+sticky: false
 ---
 
 

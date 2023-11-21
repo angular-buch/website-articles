@@ -16,7 +16,7 @@ keywords:
   - Angular 15
 language: de
 thumbnail: ./header4a.png
-sticky: true
+sticky: false
 ---
 
 **Das neue deutschsprachige Angular-Buch ist da!**
