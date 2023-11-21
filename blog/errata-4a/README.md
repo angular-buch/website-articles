@@ -99,3 +99,13 @@ ng g feature books/store/book --module books/books --api --entity=false --defaul
 
 
 
+### 33 Server-Side Rendering und Pre-Rendering mit Angular 17
+
+Mit Angular 17 wurde der Build-Prozess für Server-Side Rendering und Pre-Rendering angepasst.
+Ab sofort wird das neue Paket `@angular/ssr` verwendet, um SSR in der Anwendung einzurichten.
+Der Build für alle drei Aspekte (Browser, Server, Pre-Rendering) wird nun in einem Schritt vom neuen Application Builder ausgeführt.
+
+Die Unterschiede zum gedruckten Buch haben wir in einem separaten Blogartikel zusammengefasst:
+
+**[Book Monkey v5: Server-Side Rendering mit Angular 17](/blog/2023-11-ssr-bm)**
+
