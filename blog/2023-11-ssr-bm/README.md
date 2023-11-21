@@ -154,7 +154,7 @@ Die grundlegenden Schritte haben wir im [Blogpost zu Angular 17](/blog/2023-11-a
 Die Einrichtung und Konfiguration von SSR und Pre-Rendering funktioniert mit Angular 17 und dem neuen Application Builder anders als zuvor.
 Für bestehende Projekte ist damit zwar etwas Aufwand zur Migration nötig – wir begrüßen allerdings sehr, dass der Build-Prozess harmonisiert wird und das Thema SSR mehr in den Fokus rückt.
 
-Sie können weiterhin auch das bestehende Paket `@nguniversal/express-engine` nutzen.
+Sie können weiterhin auch die bestehenden Builder nutzen, die aus dem Paket `@nguniversal/express-engine` nach `@angular-devkit/build-angular` verschoben wurden.
 Dennoch empfehlen wir Ihnen den Umstieg auf den Application Builder, um alle Vorteile und Optimierungen sofort zu nutzen.
 
 An den konzeptionellen Grundlagen zu SSR, die wir im Buch ausführlich beschrieben haben, ändert sich darüber hinaus nichts.
