@@ -129,7 +129,7 @@ Bisher hatten wir diese Liste in der `angular.json` definiert.
 ## Bestehendes Projekt updaten
 
 Wenn Sie ein bestehendes Projekt auf Angular 17 aktualisieren, sorgen die Migrationsskripte hinter `ng update` dafür, dass automatisch das neue Paket `@angular/ssr` verwendet wird.
-Dabei wird allerdings nicht automatisch der neue Application Builder genutzt, sondern es werden die bisherigen Builder für SSR und Pre-Rendering genutzt, die in das Paket `@angular-devkit/build-angular` umgezogen wurden.
+Dabei wird allerdings nicht automatisch der neue Application Builder eingerichtet, sondern es werden weiterhin die bisherigen Builder für SSR und Pre-Rendering genutzt, die in das Paket `@angular-devkit/build-angular` umgezogen wurden.
 
 ```
 ❯ Replace usages of '@nguniversal/builders' with '@angular-devkit/build-angular'.
