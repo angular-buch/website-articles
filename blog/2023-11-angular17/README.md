@@ -560,7 +560,7 @@ Bitte konsultieren Sie den [SSR Guide](https://angular.dev/guide/ssr) bzw. [Prer
 Neben den großen Features hat Angular eine Menge von kleineren Neuerungen und Bugfixes an Bord.
 Einige interessante Punkte haben wir hier aufgeführt:
 
-- Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL angegeben wird, können wir dort nun auch einen einfachen String angeben: `styleUrls: './my.component.scss'`.
+- Die `styleUrls` in den Metadaten einer Komponente mussten seit jeher als Array notiert werden. Da häufig nur eine einzige Style-URL verwendet wird, können wir dort nun auch einen einfachen String angeben: `styleUrl: './my.component.scss'`.
 - Inline Styles einer Komponente (`styles`) mussten bisher als Array angegeben werden. Hier kann jetzt auch ein einzelner String notiert werden.
 - Die Option `--routing` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert.
 - Die Option `--standalone` ist beim Erzeugen eines neuen Workspace mit `ng new` bzw. `npm create` nun standardmäßig aktiviert – es werden also keine Angular-Module (`@NgModule()`) mehr erzeugt. 
