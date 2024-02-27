@@ -62,7 +62,7 @@ Die Schritte werden im folgenden einzeln beschrieben, sodass sie sich auch ideal
 
 ## `inject()` statt Konstruktor Injection
 
-Zunächst wollen wir uns einem Trendthema widmen:
+Wir wollen mit der konsistenten Umsetzung der Dependency Injection mit `inject()` starten.
 Seit Implementierung der `inject()` Funktion mit [Angular 14](/blog/2022-06-angular14) wird diese vermehrt von der Community verwendet.
 In einigen Situationen (zum Beispiel bei Verwendung von Functional Guards/Resolvers oder Interceptors) kommen wir um die Verwendung ohnehin nicht herum.
 
