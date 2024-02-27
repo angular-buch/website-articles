@@ -203,7 +203,8 @@ Jetzt haben wir noch drei Module in unserer Anwendung:
 In unserem Test ließen sich diese Module nicht automatisch mit der Code Migration auflösen und wir müssen hier manuell Hand anlegen.
 
 Wir starten mit dem `AppRoutingModule`.
-Aus diesem extrahieren wir die Konstante `routes` in eine separate Datei `app.routes.ts` und exportieren die Routen.
+Wir entfernen hier die Modulklasse und exportieren die Variable mit den Routen (`routes`).
+Im Anschluss benennen wir die Datei `app-routing.module.ts` in `app.routes.ts` um.
 
 ```ts
 import { Routes } from '@angular/router';
@@ -233,7 +234,7 @@ export const routes: Routes = [
 ];
 ```
 
-Im Anschluss passen wir die Datei `main.ts` an.
+Jetzt passen wir noch die Datei `main.ts` an.
 Hier nutzen wir nun die Funktion `provideRouter` des Angular Routers und übergeben ihr die Routenkonfiguration.
 Wir benötigen jetzt den Aufruf von `importProvidersFrom()` mit dem `BrowserModule` und dem `AppRoutingModule` nicht mehr.
 
@@ -251,9 +252,6 @@ bootstrapApplication(AppComponent, {
   ]
 }).catch(err => console.error(err));
 ```
-
-Das `AppRoutingModule` benötigen wir nun nicht mehr.
-Wir können entsprechend die Datei `app-routing.module.ts` löschen.
 
 Im nächsten Schritt kümmern wir uns um das `AdminModule` samt der Routing-Konfiguration.
 Hier können wir die Datei `admin-routing.module.ts` zu `admin.routes.ts` umbenennen.
