@@ -64,7 +64,7 @@ Die Schritte werden im folgenden einzeln beschrieben, sodass sie sich auch ideal
 ## `inject()` statt Konstruktor-Injection
 
 Zunächst wollen wir uns einem Trendthema widmen:
-Seit Implementierung der `inject()` Funktion mit [Angular 14](/blog/2022-06-angular14) wird diese vermehrt von der Community verwendet.
+Die Funktion `inject()` wurde mit [Angular 14](/blog/2022-06-angular14) eingeführt und wird mittlerweile breit von der Community verwendet.
 In einigen Situationen (zum Beispiel bei Verwendung von Functional Guards/Resolvers oder Interceptors) kommen wir um die Verwendung ohnehin nicht herum.
 
 Die Vorteile der Nutzung von `inject()` ggü. der Konstruktor Injection liegen auf der Hand:
