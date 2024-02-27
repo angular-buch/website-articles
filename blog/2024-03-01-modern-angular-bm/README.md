@@ -25,7 +25,7 @@ Unter der Haube wurde das Build-System mit dem neuen Application Builder auf ESB
 Standalone Features sind mittlerweile stark etabliert und Standard in jeder neuen Angular Anwendung.
 Module hingegen sind optional und werden früher oder später vermutlich ganz aus Angular verschwinden.
 Auch beim Thema Dependency Injection geht der Trend dazu, die Funktion `inject()` zu verwenden und nicht mehr die herkömmliche Konstruktor-Injection.
-Interceptoren, Guards und Resolver werden Stand heute vorzugsweise als simple Funktionen erstellt.
+Interceptoren, Guards und Resolver werden heute vorzugsweise als einfache Funktionen erstellt und nicht mhr in Form einer Klasse.
 Auch bei der Template Syntax wird der Control Flow künftig der präferierte Weg sein um Verzweigungen und Schleifen abzubilden.
 Signals werden in immer mehr APIs von Angular integriert und die Verwendung wird mehr und mehr adaptiert.
 Zu Guter letzt sind mit den letzten Major-Versionen auch Features wie die View Transition API als auch die `NgOptimizedImage` bereitgestellt worden.
