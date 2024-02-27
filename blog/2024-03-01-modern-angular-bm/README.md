@@ -394,8 +394,10 @@ ng generate @angular/core:control-flow
 Bitte prüfen Sie hier noch einmal alle Änderungen ausgiebig.
 
 Nach der Ausführung können wir noch zwei Punkte an den Komponenten `BookListComponent` und `SearchComponent` optimieren.
-Da wir über in diesen Komponenten jeweils über ein Array von Objekten iterieren, sollten wir idealerweise immer das Attribut eines jeden Objekts tracken, welches möglichst individuell ist.
-Im Fall unserer Bücher eignet sich hier die ISBN-Nummer am besten.
+Die Angabe von `track` im `@for` Block muss zwingend erfolgen.
+Hier müssen wir die Information hinterlegen, nach welchem Merkmal die Elemente der Liste identifiziert werden können.
+Dieses Property sollte eindeutig sein, z. B. die ID des Datensatzes.
+Da wir in den beiden Komponenten jeweils über ein Array von Buch-Objekten iterieren, eignet sich hier die ISBN-Nummer am besten.
 Weiterhin benötigen wir für die Anzeige leerer Resultate nicht zwingend ein gesondertes `@if()`.
 Hier können wir den `empty()` block der `@for()` Schleife nutzen.
 
