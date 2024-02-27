@@ -254,7 +254,7 @@ Eine Einschränkung ist hierbei zu beachten: Der Aufruf von `inject()` muss imme
 Durch die Unabhängigkeit von der Komponentenklasse ergeben sich viele spannende Möglichkeiten zur Komposition.
 ~~Es gilt jedoch abzuwarten, wie sich die neuen Patterns etablieren werden.
 Wir empfehlen also, Abhängigkeiten zunächst weiterhin direkt über den Konstruktor anzufordern.~~
-> Update 01.03.2024: Mittlerweile hat sich `inject()` etabliert und der Verwendung steht nichts im Wege.
+> Update März 2024: Mittlerweile hat sich `inject()` etabliert, und der Verwendung steht nichts im Wege.
 
 > Für einige Ideen zur Funktion `inject()` möchten wir auf einen Blogartikel von Younes Jaaidi verweisen:<br>
 **[Angular Inject & Injection Functions - Patterns & Anti-Patterns](https://marmicode.io/blog/angular-inject-and-injection-functions
