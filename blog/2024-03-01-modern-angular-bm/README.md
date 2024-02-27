@@ -168,7 +168,10 @@ Weiterhin wurden durch die Migration die Komponenten, Direktiven und Pipes aus d
 
 Als nächstes wählen wir die Option zu Migration des _Bootstrapings_ der Anwendung unter Verwendung der Standalone API.
 Hierbei wird bereits unser `AppModule` entfernt und in der `main.ts` wird die Funktion `bootstrapApplication` genutzt.
-
+Die Funktion `importProvidersFrom()` erlaubt es uns alle Provider aus den referenzierten Modulen extrahieren.
+Weiterhin fehlt uns nun das `HttpClientModule`.
+Stattdessen verwenden wir die Funktion `provideHttpClient()`.
+Damit der Interceptor, der per Provider bereitgestellt wird, weiterhin funktioniert, müssen wir hier noch die Funktion `withInterceptorsFromDi()` mit übergeben.
 
 ```ts
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -179,12 +182,12 @@ import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(BrowserModule, AppRoutingModule),
+    provideHttpClient(withInterceptorsFromDi())
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
     },
-    provideHttpClient(withInterceptorsFromDi())
   ]
 }).catch(err => console.error(err));
 ```
