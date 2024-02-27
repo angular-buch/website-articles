@@ -24,7 +24,7 @@ In diesem Blogpost wollen wir unser Beispielprojekt auf die neuesten Konzepte un
 Unter der Haube wurde das Build-System mit dem neuen Application Builder auf ESBuild mit Vite umgestellt und gleichzeitig mit dem Builder für SSR verschmolzen.
 Standalone Features sind mittlerweile stark etabliert und Standard in jeder neuen Angular Anwendung.
 Module hingegen sind optional und werden früher oder später vermutlich ganz aus Angular verschwinden.
-Auch beim Thema Dependency Injection geht der Trend vermehrt zur Nutzung der `inject()` Funktion statt der herkömmlichen Konstruktor-Injection.
+Auch beim Thema Dependency Injection geht der Trend dazu, die Funktion `inject()` zu verwenden und nicht mehr die herkömmliche Konstruktor-Injection.
 Interceptoren, Guards und Resolver werden Stand heute vorzugsweise als simple Funktionen erstellt.
 Auch bei der Template Syntax wird der Control Flow künftig der präferierte Weg sein um Verzweigungen und Schleifen abzubilden.
 Signals werden in immer mehr APIs von Angular integriert und die Verwendung wird mehr und mehr adaptiert.
