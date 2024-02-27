@@ -296,7 +296,7 @@ Wir haben nun erfolgreich auf die Standalone APIs migriert.
 
 ## Functional Interceptors
 
-Als nächstes Wollen wir uns den Interceptor zur Authentifizierung ansehen.
+Als Nächstes wollen wir uns den HTTP-Interceptor ansehen, der ein Token zur Authentifizierung in jeden Request einbaut.
 Dieser ist bisher als Klasse implementiert und sieht wie folgt aus:
 
 ```ts
