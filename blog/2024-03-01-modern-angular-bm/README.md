@@ -60,7 +60,7 @@ Die Schritte werden im folgenden einzeln beschrieben, sodass sie sich auch ideal
 
 > Die Schritte beziehen sich auf die Verwendung von Angular 17.2 oder höher
 
-## `inject()` statt Konstruktor Injection
+## `inject()` statt Konstruktor-Injection
 
 Zunächst wollen wir uns einem Trendthema widmen:
 Seit Implementierung der `inject()` Funktion mit [Angular 14](/blog/2022-06-angular14) wird diese vermehrt von der Community verwendet.
