@@ -24,8 +24,8 @@ In diesem Blogpost wollen wir unser Beispielprojekt auf die neuesten Konzepte un
 Unter der Haube wurde das Build-System mit dem neuen Application Builder auf ESBuild mit Vite umgestellt und gleichzeitig mit dem Builder für SSR verschmolzen.
 Standalone Features sind mittlerweile stark etabliert und Standard in jeder neuen Angular Anwendung.
 Module hingegen sind optional und werden früher oder später vermutlich ganz aus Angular verschwinden.
-Auch beim Thema Dependency Injection geht der Trend dazu, die Funktion `inject()` zu verwenden und nicht mehr die herkömmliche Konstruktor-Injection.
-Interceptoren, Guards und Resolver werden heute vorzugsweise als einfache Funktionen erstellt und nicht mhr in Form einer Klasse.
+Auch beim Thema Dependency Injection geht der Trend vermehrt zur Nutzung der `inject()` Funktion statt der herkömmlichen Konstruktor-Injection.
+Interceptoren, Guards und Resolver werden Stand heute vorzugsweise als simple Funktionen erstellt.
 Auch bei der Template Syntax wird der Control Flow künftig der präferierte Weg sein um Verzweigungen und Schleifen abzubilden.
 Signals werden in immer mehr APIs von Angular integriert und die Verwendung wird mehr und mehr adaptiert.
 Zu Guter letzt sind mit den letzten Major-Versionen auch Features wie die View Transition API als auch die `NgOptimizedImage` bereitgestellt worden.
@@ -49,25 +49,24 @@ Hier setzen wir auf dem Stand auf, bei dem bereits eines unserer Feature-Module 
 
 - [BookMonkey: 17-standalone](https://github.com/book-monkey5/17-standalone)
 
-Sollten Sie nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hier starten und sich den Quellcode aus dem oben aufgeführten Repository zum Start herunterladen:
+Sollten Sie nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hier starten und sich den Quellcode aus dem oben aufgeführten Repository zum Start herunterladen.:
 
 ```sh
 git clone git@github.com:book-monkey5/17-standalone.git
-cd 17-standalone
-npm install
+cd 17-standalone && npm i
 ```
 
 Die Schritte werden im folgenden einzeln beschrieben, sodass sie sich auch ideal auf andere Projekte abbilden lassen.
 
 > Die Schritte beziehen sich auf die Verwendung von Angular 17.2 oder höher
 
-## `inject()` statt Konstruktor-Injection
+## `inject()` statt Konstruktor Injection
 
 Zunächst wollen wir uns einem Trendthema widmen:
-Die Funktion `inject()` wurde mit [Angular 14](/blog/2022-06-angular14) eingeführt und wird mittlerweile breit von der Community verwendet.
+Seit Implementierung der `inject()` Funktion mit [Angular 14](/blog/2022-06-angular14) wird diese vermehrt von der Community verwendet.
 In einigen Situationen (zum Beispiel bei Verwendung von Functional Guards/Resolvers oder Interceptors) kommen wir um die Verwendung ohnehin nicht herum.
 
-Die Funktion `inject()` hat gegenüber der Konstruktor-Injection unter anderem folgende Vorteile:
+Die Vorteile der Nutzung von `inject()` ggü. der Konstruktor Injection liegen auf der Hand:
 
 - Vermeidung von Konflikten zwischen der TypeScript und JavaScript-Implementierung von Klassen (Stichwort: `useDefineForClassFields`, wir haben hierzu bereits einen [separaten Artikel verfasst](/blog/2022-11-use-define-for-class-fields))
 - Konsistenz: Nutzung eines einheitlichen Stils
@@ -113,7 +112,7 @@ export class LoggedinOnlyDirective implements OnDestroy {
 }
 ```
 
-Wenn der Konstruktor nach der Migration leer ist, können wir die Methode vollständig entfernen.
+Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr at, können wir diesen im Anschluss ersatzlos entfernen.
 
 ## Standalone Migration
 
@@ -278,14 +277,16 @@ export const ADMIN_ROUTES: Routes = [
 Zum Abschluss müssen wir in unserer Hauptkonfiguration der Routen (`app.routes.ts`) noch auf die neu exportierten Routen verweisen.
 Wir müssen hier lediglich den Import anpassen und auf die Konstante der Routen verweisen:
 
-```diff ts
+```ts
 // ...
 export const routes: Routes = [
   // ...
   {
     path: 'admin',
--    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-+    loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES),
+    /*
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    */
+    loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES),
     canActivate: [authGuard]
   }
 ];
@@ -297,7 +298,7 @@ Wir haben nun erfolgreich auf die Standalone APIs migriert.
 
 ## Functional Interceptors
 
-Als Nächstes wollen wir uns den HTTP-Interceptor ansehen, der ein Token zur Authentifizierung in jeden Request einbaut.
+Als nächstes Wollen wir uns den Interceptor zur Authentifizierung ansehen.
 Dieser ist bisher als Klasse implementiert und sieht wie folgt aus:
 
 ```ts
