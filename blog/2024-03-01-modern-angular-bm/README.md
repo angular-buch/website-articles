@@ -53,7 +53,8 @@ Sollten Sie nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hi
 
 ```sh
 git clone git@github.com:book-monkey5/17-standalone.git
-cd 17-standalone && npm i
+cd 17-standalone
+npm install
 ```
 
 Die Schritte werden im folgenden einzeln beschrieben, sodass sie sich auch ideal auf andere Projekte abbilden lassen.
@@ -101,7 +102,7 @@ import { /* ... */, inject } from '@angular/core';
 @Directive({ /* ... */ })
 export class LoggedinOnlyDirective implements OnDestroy {
   // ...
-  private template = inject(TemplateRef<unknown>);
+  private template = inject<TemplateRef<unknown>>(TemplateRef);
   private viewContainer = inject(ViewContainerRef);
   private authService = inject(AuthService);
 
