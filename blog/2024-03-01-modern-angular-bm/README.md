@@ -67,7 +67,7 @@ Zunächst wollen wir uns einem Trendthema widmen:
 Die Funktion `inject()` wurde mit [Angular 14](/blog/2022-06-angular14) eingeführt und wird mittlerweile breit von der Community verwendet.
 In einigen Situationen (zum Beispiel bei Verwendung von Functional Guards/Resolvers oder Interceptors) kommen wir um die Verwendung ohnehin nicht herum.
 
-Die Vorteile der Nutzung von `inject()` ggü. der Konstruktor Injection liegen auf der Hand:
+Die Funktion `inject()` hat gegenüber der Konstruktor-Injection unter anderem folgende Vorteile:
 
 - Vermeidung von Konflikten zwischen der TypeScript und JavaScript-Implementierung von Klassen (Stichwort: `useDefineForClassFields`, wir haben hierzu bereits einen [separaten Artikel verfasst](/blog/2022-11-use-define-for-class-fields))
 - Konsistenz: Nutzung eines einheitlichen Stils
