@@ -234,7 +234,8 @@ export const routes: Routes = [
 ```
 
 Im Anschluss passen wir die Datei `main.ts` an.
-Hier nutzen wir nun die Funktion `provideRouter` des Angular Routers und übergeben ihr die Routenkonfiguration:
+Hier nutzen wir nun die Funktion `provideRouter` des Angular Routers und übergeben ihr die Routenkonfiguration.
+Wir benötigen jetzt den Aufruf von `importProvidersFrom()` mit dem `BrowserModule` und dem `AppRoutingModule` nicht mehr.
 
 ```ts
 // ...
