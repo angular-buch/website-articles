@@ -385,7 +385,11 @@ ohne zuvor passende Direktiven dafür importieren zu müssen.
 Auch wenn der Control Flow mit Angular 17 noch im Developer Preview ist, empfehlen wir die Nutzung bereits jetzt.
 
 Um nicht alle Komponenten von Hand migrieren zu müssen, gibt uns Angular auch hier ein Migrationswerkzeug mit an die Hand.
-Der Aufruf von `ng generate @angular/core:control-flow` führt die Migration der Template Syntax durch und entfernt im Nachgang auch automatisch die unnötigen Importe der Direktiven `NgIf` und `NgForOf`.
+Es erfolgt eine Migration der Template Syntax und im Nachgang werden auch automatisch die unnötigen Importe der Direktiven `NgIf` und `NgFor` entfernt.
+
+```sh
+ng generate @angular/core:control-flow
+```
 
 Bitte prüfen Sie hier noch einmal alle Änderungen ausgiebig.
 
