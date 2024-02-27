@@ -49,7 +49,7 @@ Hier setzen wir auf dem Stand auf, bei dem bereits eines unserer Feature-Module 
 
 - [BookMonkey: 17-standalone](https://github.com/book-monkey5/17-standalone)
 
-Sollten Sie nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hier starten und sich den Quellcode aus dem oben aufgeführten Repository zum Start herunterladen.:
+Sollten Sie nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hier starten und sich den Quellcode aus dem oben aufgeführten Repository zum Start herunterladen:
 
 ```sh
 git clone git@github.com:book-monkey5/17-standalone.git
