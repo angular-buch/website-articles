@@ -113,7 +113,7 @@ export class LoggedinOnlyDirective implements OnDestroy {
 }
 ```
 
-Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr at, können wir diesen im Anschluss ersatzlos entfernen.
+Wenn der Konstruktor nach der Migration leer ist, können wir die Methode vollständig entfernen.
 
 ## Standalone Migration
 
