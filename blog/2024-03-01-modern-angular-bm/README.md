@@ -488,7 +488,7 @@ Der Angular Language Service informiert uns hier auch, sollten wir das einmal ve
 ### Observables in Signals konvertieren
 
 Im nächsten Schritt werfen wir einen Blick auf die `BookListComponent`.
-Hier nutzen wir bisher die Async-Pipe um die Daten aus dem Observable mit Büchern anzuzeigen.
+Hier nutzen wir bisher die AsyncPipe, um die Daten aus dem Observable mit Büchern anzuzeigen.
 
 ```ts
 @Component({
