@@ -529,7 +529,7 @@ Im Template rufen wir entsprechend das Signal auf:
 Jetzt wollen wir noch unseren `AuthService` umbauen.
 Dieser soll künftig den Status der Authentifizierung sowohl als Signal (`isAuthenticated`) als auch als Observable (`isAuthenticated$`) ausgeben.
 Wir können hier auf das bisher verwendete `BehaviorSubject` verzichten und nutzen Signals als Basis.
-Die Ausgabe als Observable können wir ganz einfach über die Hilfsfunktion (`toObservable`) aus `@angular/core/rxjs-interop` erwirken.
+Die Ausgabe als Observable können wir elegant über die Hilfsfunktion (`toObservable`) aus `@angular/core/rxjs-interop` erwirken.
 
 ```ts
 import { Injectable, signal } from '@angular/core';
