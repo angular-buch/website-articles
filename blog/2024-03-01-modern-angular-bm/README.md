@@ -582,7 +582,7 @@ export class LoggedinOnlyDirective {
 
 ### Signal Inputs
 
-Mit dem Minor-Release von Angular 17.2.0 wurde eine Alternative zum bisherigen `Input()`-Dekorator [aus Basis von Signals eingeführt](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
+Mit dem Minor-Release von Angular 17.2.0 wurde eine Alternative zum bisherigen `@Input()`-Dekorator [aus Basis von Signals eingeführt](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
 
 ```ts
 isbn = input() // InputSignal<unknown>
@@ -644,7 +644,37 @@ export class ConfirmDirective {
 
 ### Signal Outputs
 
-14.3
+Mit der Minor-Version Angular 14.3.0 sind Signals auch als Alternative zum bisherigen `@Output`-Dekorator verfügbar.
+
+```ts
+select = output() // OutputEmitterRef<void>
+isbnChange = output<string>() // OutputEmitterRef<string>
+
+// ...
+
+this.select.emit(); // OK
+this.isbnChange.emit(); // Error: Expected 1 arguments, but got 0.
+this.isbnChange.emit('3864909465'); // OK
+```
+
+Auch hier können wir die `ConfirmDirective` migrieren.
+Auch hier rufen wir auf dem Output Signal `emit()` auf.
+
+```ts
+import { /* ... */, output } from '@angular/core';
+
+@Directive({ /* ... */ })
+export class ConfirmDirective {
+  // ...
+  confirm = output();
+
+  @HostListener('click') onClick() {
+    if (window.confirm(this.confirmText())) {
+      this.confirm.emit();
+    }
+  }
+}
+```
 
 ## NgOptimizedImage
 
