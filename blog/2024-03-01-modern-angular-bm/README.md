@@ -502,7 +502,7 @@ Hier nutzen wir bisher die Async-Pipe um die Daten aus dem Observable mit Büche
   imports: [AsyncPipe, /* ... */],
 })
 export class BookListComponent {
-  books$: inject(BookStoreService).getAll();
+  books$ = inject(BookStoreService).getAll();
 }
 ```
 
