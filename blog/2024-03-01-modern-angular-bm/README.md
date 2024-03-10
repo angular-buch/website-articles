@@ -500,7 +500,7 @@ export class BookListComponent {
 }
 ```
 
-Mit der Hilfsfunktion `toSignal()` aus `@angular/core/rxjs-interop` können wir den Datenstrom in ein Signal umwandeln.
+Mit der Hilfsfunktion `toSignal()` aus `@angular/core/rxjs-interop` können wir das Observable in ein Signal umwandeln.
 Damit müssen wir weder die `AsyncPipe` importieren noch manuell auf das Observable subscriben.
 
 ```ts
