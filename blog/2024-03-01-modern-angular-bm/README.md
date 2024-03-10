@@ -445,13 +445,7 @@ export class SearchComponent {
   isLoading = false;
 
   constructor() {
-    this.results$ = this.input$.pipe(
-      // ...
-      tap(() => this.isLoading = true),
-      switchMap(term => this.service.getAllSearch(term)),
-      tap(() => this.isLoading = false)
-    );
-  }
+    this.results$ = // ...
 }
 ```
 
