@@ -428,6 +428,164 @@ ng update @angular/cli --name=use-application-builder
 
 ## Signals
 
+Im nächsten Schritt wollen wir uns dem Thema Signals annehmen.
+Signals sind eine neue reaktive Primitive und stellen eine Alternative zur Observables mit RxJS und dem bisherigen zu Grunde liegenden Modell der Change Detection basierend auf Zone.js dar.
+Künftig können wir somit komplett auf die Integration von Zone.js verzichten.
+
+Als Erstes werfen wir hierfür einen Blick auf die `SearchComponent`.
+Hier nutzen wir die `isLoading` um den Status der Suchanfrage festzuhalten und anzuzeigen.
+Bisher funktioniert die Anzeige des Zustands nur, weil die Change Detection von Angular über Zone.js informiert wird, dass es eine Änderung am Property `isLoading` gab.
+Würden wir Zone.js entfernen oder die Change Detection auf `OnPush` umstellen, müssten wir selbst dafür sorgen, Angular mitzuteilen, dass der entsprechende Teil des Templates neu gerendert werden soll.
+
+```ts
+// ...
+@Component({ /* ... */ })
+export class SearchComponent {
+  // ...
+  isLoading = false;
+
+  constructor() {
+    this.results$ = this.input$.pipe(
+      // ...
+      tap(() => this.isLoading = true),
+      switchMap(term => this.service.getAllSearch(term)),
+      tap(() => this.isLoading = false)
+    );
+  }
+}
+```
+
+Wir können hier Gebrauch von einem Signal machen, um Änderungen direkt sichtbar zu machen (Ohne Verwendung von Zone.js bzw. manuelles Triggern der Change Detection).
+Dafür setzen wir den Wert des Signals initial auf `false` und ändern ihn über `set(<value>)`.
+
+```ts
+// ...
+import { Component, inject, signal } from '@angular/core';
+
+@Component({ /* ... */ })
+export class SearchComponent {
+  // ...
+  isLoading = signal(false);
+
+  constructor() {
+    this.results$ = this.input$.pipe(
+      // ...
+      tap(() => this.isLoading.set(true)),
+      switchMap(term => this.service.getAllSearch(term)),
+      tap(() => this.isLoading.set(false))
+    );
+  }
+}
+```
+
+Da im Property `isLoading` nun ein Signal steckt, müssen wir noch unser Template anpassen.
+Hier müssen die Klammern (`()`) nach dem `isLoading` ergänzt werden.
+Der Angular Language Service informiert uns hier auch, sollten wir das einmal vergessen.
+
+```html
+<input type="search"
+  autocomplete="off"
+  aria-label="Search"
+  [class.loading]="isLoading()"
+  #searchInput
+  (input)="input$.next(searchInput.value)">
+```
+
+### Observables in Signals konvertieren
+
+Im nächsten Schritt werfen wir einen Blick auf die `BookListComponent`.
+Hier nutzen wir bisher die Async-Pipe um die Daten aus dem Observable mit Büchern anzuzeigen.
+
+```ts
+@Component({
+  /* ... */
+  imports: [AsyncPipe, /* ... */],
+})
+export class BookListComponent {
+  books$: inject(BookStoreService).getAll();
+}
+```
+
+Mit der Hilfsfunktion `toSignal()` aus `@angular/core/rxjs-interop` können wir den Datenstrom in ein Signal umwandeln.
+Damit müssen wir weder die `AsyncPipe` importieren noch manuell auf das Observable subscriben.
+
+```ts
+import { toSignal } from '@angular/core/rxjs-interop';
+// ...
+
+@Component({ /* ... */ })
+export class BookListComponent {
+  books = toSignal(inject(BookStoreService).getAll());
+}
+```
+
+Im Template rufen wir entsprechend das Signal auf:
+
+```html
+<h1>Books</h1>
+@if (books()) {
+<ul class="book-list">
+  <!-- ... -->
+</ul>
+}
+```
+
+### Signals in Observables konvertieren
+
+Jetzt wollen wir noch unseren `AuthService` umbauen.
+Dieser soll künftig den Status der Authentifizierung sowohl als Signal (`isAuthenticated$`) als auch als Observable (`isAuthenticated$`) ausgeben.
+Wir können hier auf das bisher verwendete `BehaviorSubject` verzichten und nutzen Signals als Basis.
+Die Ausgabe als Observable können wir ganz einfach über die Hilfsfunktion (`toObservable`) aus `@angular/core/rxjs-interop` erwirken.
+
+```ts
+import { Injectable, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+
+@Injectable({ /* ... */ })
+export class AuthService {
+  readonly isAuthenticated = signal(true);
+  readonly isAuthenticated$ = toObservable(this.isAuthenticated);
+
+  login() {
+    this.isAuthenticated.set(true);
+  }
+
+  logout() {
+    this.isAuthenticated.set(false);
+  }
+}
+```
+
+Die Aufrufe von `isAuthenticated` in den Dateien `app.component.html`, `auth.guard.ts` und `auth.interceptor.ts` müssen nun entsprechend auch um die Klammern erweitert werden (`isAuthenticated()`).
+Die Direktive `LoggedinOnlyDirective` können wir in diesem Zuge auch noch weiter vereinfachen.
+Hier können wir auf das Konstrukt aus Observable und `takeUntil(this.destroy$)` verzichten und stattdessen einen Effect nutzen, der auslöst, wenn sich der Wert des Signals `isAuthenticated` ändert.
+Auf den Lifecycle-Hook `OnDestroy` können wir somit auch komplett verzichten.
+
+```ts
+import { /* ... */, effect, inject } from '@angular/core';
+// ...
+
+@Directive({ /* ... */ })
+export class LoggedinOnlyDirective {
+  // ...
+  constructor() {
+    effect(() => {
+      if (this.authService.isAuthenticated()) {
+        this.viewContainer.createEmbeddedView(this.template);
+      } else {
+        this.viewContainer.clear();
+      }
+    });
+  }
+}
+```
+
+### Signal Inputs
+
+// TODO
+
+### Signal Outputs
+
 // TODO
 
 ## NgOptimizedImage
