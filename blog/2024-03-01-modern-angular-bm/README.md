@@ -582,11 +582,69 @@ export class LoggedinOnlyDirective {
 
 ### Signal Inputs
 
-// TODO
+Mit dem Minor-Release von Angular 17.2.0 wurde eine Alternative zum bisherigen `Input()`-Dekorator [aus Basis von Signals eingeführt](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
+
+```ts
+isbn = input() // InputSignal<unknown>
+isbn = input<string>() // InputSignal<string | undefined>
+isbn = input.required() // InputSignal<unknown>
+isbn = input.required<string>() // InputSignal<string>
+isbn = input('3864909465') // InputSignal<string>
+```
+
+Wir können in unserer Anwendung an einigen Stellen auf die neuen Signal-based Inputs umstellen.
+
+Als Beispiel wollen wir die `FormErrorsComponent` nutzen.
+Wir nutzen hier jeweils `input.required()`, da beide Informationen zwingend bei Verwendung der Komponente gesetzt werden müssen.
+
+```ts
+import { Component, inject, input } from '@angular/core';
+// ...
+
+@Component({ /* ... */ })
+export class FormErrorsComponent {
+  controlName = input.required<string>();
+  messages = input.required<{ [errorCode: string]: string }>();
+  // ...
+
+  get errors(): string[] {
+    const control = this.form.control.get(this.controlName());
+    // ...
+    return Object.keys(control.errors).map(errorCode => {
+      return this.messages()[errorCode];
+    });
+  }
+}
+```
+
+Nicht immer wollen wir, dass der Name des Input Signals in der Komponente dem Namen bei der Verwendung im Template entspricht.
+In diesem Fall können wir einen `alias` konfigurieren.
+Wir sehen uns das am Beispiel der `ConfirmDirective` an.
+Hier wollen wir innerhalb der Komponente mit dem Property `confirmText` arbeiten.
+Nach außen, wollen wir das Input-Signal jedoch gegen den Selector `bmConfirm` der Direktive selbst binden.
+Durch die Angabe des Alias wird uns dies ermöglicht.
+
+```ts
+import { /* ... */, input } from '@angular/core';
+
+@Directive({
+  selector: '[bmConfirm]',
+  standalone: true
+})
+export class ConfirmDirective {
+  confirmText = input.required<string>({ alias: 'bmConfirm' });
+  // ...
+  @HostListener('click') onClick() {
+    if (window.confirm(this.confirmText())) {
+      this.confirm.emit();
+    }
+  }
+}
+```
 
 ### Signal Outputs
 
-// TODO
+14.3
 
 ## NgOptimizedImage
 
