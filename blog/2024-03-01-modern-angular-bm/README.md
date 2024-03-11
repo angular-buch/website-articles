@@ -430,7 +430,7 @@ ng update @angular/cli --name=use-application-builder
 
 Im nächsten Schritt wollen wir uns dem Thema Signals annehmen.
 Signals sind eine neue reaktive Primitive und stellen eine Alternative zur Observables mit RxJS und dem bisherigen zu Grunde liegenden Modell der Change Detection basierend auf Zone.js dar.
-Künftig können wir somit komplett auf die Integration von Zone.js verzichten.
+Künftig können wir somit komplett auf die Integration von Zone.js verzichten (Siehe: [_Angular 16 ist da! Abschnitt "Reaktivität mit Signals"_](/blog/2023-05-angular16#reaktivität-mit-signals)).
 
 Als Erstes werfen wir hierfür einen Blick auf die `SearchComponent`.
 Hier nutzen wir die `isLoading` um den Status der Suchanfrage festzuhalten und anzuzeigen.
@@ -517,12 +517,17 @@ Im Template rufen wir entsprechend das Signal auf:
 
 ```html
 <h1>Books</h1>
-@if (books()) {
+@if (books(); as books) {
 <ul class="book-list">
   <!-- ... -->
 </ul>
 }
 ```
+
+Die Subscription auf dem Observable erfolgt einmalig und sofort, sobald wir die Funktion `toSignal()` benutzen.
+Wir können den Wert aus dem Signal beliebig oft lesen, ohne dass erneut ein HTTP-Request ausgeführt wird.
+Dieses Verhalten unterscheidet sich vom vorherigen Weg:
+Benutzen wir die `AsyncPipe` mehrfach, wird das Observable auch mehrfach subscribet.
 
 ### Signals in Observables konvertieren
 
@@ -553,6 +558,8 @@ export class AuthService {
 Die Aufrufe von `isAuthenticated` in den Dateien `app.component.html`, `auth.guard.ts` und `auth.interceptor.ts` müssen nun entsprechend auch um die Klammern erweitert werden (`isAuthenticated()`).
 Die Direktive `LoggedinOnlyDirective` können wir in diesem Zuge auch noch weiter vereinfachen.
 Hier können wir auf das Konstrukt aus Observable und `takeUntil(this.destroy$)` verzichten und stattdessen einen Effect nutzen, der auslöst, wenn sich der Wert des Signals `isAuthenticated` ändert.
+Ein Effekt reagiert auf Änderungen an den Signals, die wir in der Effekt-Funktion verwenden.
+Sobald sich einer der Eingabewerte ändert, wird die Berechnung erneut durchgeführt.
 Auf den Lifecycle-Hook `OnDestroy` können wir somit auch komplett verzichten.
 
 ```ts
