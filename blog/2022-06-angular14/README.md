@@ -52,7 +52,7 @@ Mit Angular 14 wurde dieses lang diskutierte Thema angegangen: Angular unterstü
 
 Komponenten, Pipes und Direktiven müssen damit nicht mehr in einem Modul deklariert werden, sondern können alleinstehend verwendet werden.
 Damit eine Komponente genutzt werden kann, wird sie direkt am Ort der Verwendung importiert.
-Im folgenden Codebeispiel möchte die `AppComponent` die andere Komponente `DashboardComponent` in ihrem Template nutzen: 
+Im folgenden Codebeispiel möchte die `AppComponent` die andere Komponente `DashboardComponent` in ihrem Template nutzen:
 
 ```ts
 @Component({
@@ -234,7 +234,7 @@ Im Gegensatz zum `Injector` muss sie nicht erst über Dependency Injection angef
 
 ```ts
 import { inject } from '@angular/core';
- 
+
 export function getService() {
   return inject(BookStoreService);
 }
@@ -252,9 +252,9 @@ Eine Einschränkung ist hierbei zu beachten: Der Aufruf von `inject()` muss imme
 > `ERROR Error: NG0203: inject() must be called from an injection context`
 
 Durch die Unabhängigkeit von der Komponentenklasse ergeben sich viele spannende Möglichkeiten zur Komposition.
-Es gilt jedoch abzuwarten, wie sich die neuen Patterns etablieren werden.
-Wir empfehlen also, Abhängigkeiten zunächst weiterhin direkt über den Konstruktor anzufordern.
-
+~~Es gilt jedoch abzuwarten, wie sich die neuen Patterns etablieren werden.
+Wir empfehlen also, Abhängigkeiten zunächst weiterhin direkt über den Konstruktor anzufordern.~~
+> Update März 2024: Mittlerweile hat sich `inject()` etabliert, und der Verwendung steht nichts im Wege.
 
 > Für einige Ideen zur Funktion `inject()` möchten wir auf einen Blogartikel von Younes Jaaidi verweisen:<br>
 **[Angular Inject & Injection Functions - Patterns & Anti-Patterns](https://marmicode.io/blog/angular-inject-and-injection-functions
