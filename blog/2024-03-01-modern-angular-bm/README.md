@@ -353,6 +353,7 @@ Jetzt, da wir keine Klasse mehr verwenden, die das DI Token `HTTP_INTERCEPTORS` 
 Hier nutzen wir nun `withInterceptors()` statt `withInterceptorsFromDi()` und übergeben den Interceptor im Array.
 Entsprechend können wir das Token-Konfigurationsobjekt mit dem Verweis auf die Klasse entfernen.
 Bei der Gelegenheit können wir auch `provideHttpClient()` zusätzlich die Funktion `withFetch()` mit übergeben, um Angular zur Nutzung der moderneren [Fetch-API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) zu bewegen.
+Damit wäre auch ein Deployment in einer Edge-Computing-Infrastruktur wie zum Beispiel CloudFlare Workers möglich, bei der nur die Fetch-API unterstützt wird.
 
 ```ts
 import {
