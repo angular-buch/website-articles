@@ -38,6 +38,26 @@ ng new book-monkey --routing --style=css --prefix=bm --standalone=false
 Übrigens: Die Option `routing` ist seit Angular 17 per Default aktiviert, sie muss also nicht mehr manuell mit angegeben werden.
 
 
+### 20.4 Asynchroner Validator und Methode `checkAvailable()`
+
+Im Abschnitt 20.4 entwickeln wir auf den Seiten 395 und 396 einen asynchronen Validator.
+Die Validatormethode haben wir im Listing 20-12 `usernameAvailable()` genannt.
+Bei der Verwendung im darauf folgenden Listing 20-13 auf Seite 396 haben wir aber fälschlicherweise den Namen `checkAvailable()` genutzt.
+
+Korrekt muss das Listing 20-13 also lauten:
+
+```ts
+form = new FormGroup({
+  username: new FormControl('', {
+    validators: [Validators.required],
+    asyncValidators: [
+      inject(UsernameValidatorService).usernameAvailable()
+    ]
+  })
+});
+```
+
+
 ### 26.7 Fehlerhafte Cypress-Tests
 
 #### Test 1: `should not show the administration form when not logged in`
