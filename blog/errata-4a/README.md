@@ -3,7 +3,7 @@ title: "Errata zur 4. Auflage"
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2023-04-27
-lastModified: 2023-04-27
+lastModified: 2024-03-22
 keywords:
   - Angular
   - Errata
