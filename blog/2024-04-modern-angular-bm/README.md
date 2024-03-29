@@ -645,9 +645,10 @@ export class ConfirmDirective {
 }
 ```
 
-### Signal Outputs
+### Functional Outputs
 
-Mit der Minor-Version Angular 14.3.0 sind Signals auch als Alternative zum bisherigen `@Output`-Dekorator verfügbar.
+Mit der Minor-Version Angular 14.3.0 steht und auch eine Alternative zum bisherigen `@Output`-Dekorator im Developer Preview bereit.
+Die neuen funktionsbasierten Outputs sind stark and die neuen Signal Inputs angelehnt und kommen mit einer verbesserten Typisierung ggü. der bisherigen API basierend auf Dekoratoren.
 
 ```ts
 select = output() // OutputEmitterRef<void>
@@ -661,7 +662,7 @@ this.isbnChange.emit('3864909465'); // OK
 ```
 
 Auch hier können wir die `ConfirmDirective` migrieren.
-Auch hier rufen wir auf dem Output Signal `emit()` auf.
+Auch hier rufen wir auf dem Output `emit()` auf.
 
 ```ts
 import { /* ... */, output } from '@angular/core';
