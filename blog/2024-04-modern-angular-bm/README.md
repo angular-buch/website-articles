@@ -1,9 +1,9 @@
 ---
 title: 'Book Monkey v5: Modern Angular'
 author: Danny Koppenhagen
-mail: mail@k9n.dev
-published: 2024-03-01
-lastModified: 2024-03-01
+mail: mail@k9n.de
+published: 2024-04-04
+lastModified: 2024-04-04
 keywords:
   - ESBuild
   - Application Builder
@@ -32,6 +32,7 @@ Zu Guter letzt sind mit den letzten Major-Versionen auch Features wie die View T
 
 Die einzelnen Features haben wir bereits separat in den jeweiligen Artikeln zu den Major-Releases vorgestellt:
 
+- [Angular 15 ist da!](/blog/2022-11-angular15)
 - [Angular 16 ist da!](/blog/2023-05-angular16)
 - [Angular 17 ist da!](/blog/2023-11-angular17)
 
@@ -678,6 +679,57 @@ export class ConfirmDirective {
 }
 ```
 
-## NgOptimizedImage
+## Verwendung der Direktive `NgOptimizedImage`
 
-// TODO
+Bereits mit Angular 14.2 hat uns das Angular Team eine Direktive zur optimierten Einbindung von Bildern bereitgestellt: `NgOptimizedImage`.
+Wir haben hierzu bereits im Blogpost [Angular 15 ist da!](/blog/2022-11-angular15#image-directive-optimierte-verwendung-von-bildern) berichtet.
+
+Wir wollen nun Gebrauch von der Direktive machen.
+
+Wir starten mit der `BookListItemComponent`.
+Hier importieren wir zunächst die Direktive, damit wir sie im Template nutzen können:
+
+```ts
+import { NgOptimizedImage } from '@angular/common';
+// ...
+
+@Component({
+  // ...
+  imports: [RouterLink, IsbnPipe, NgOptimizedImage]
+})
+// ...
+```
+
+Im Anschluss ersetzen wir auf dem `<img>` element das `src` Attribut mit `ngSrc`.
+Das Bild wird standardmäßig "lazy" geladen und blockiert somit nicht das Laden der gesamten Buchliste.
+Damit die Optimierung klappt und wir Layoutverschiebungen vermeinden, müssen wir noch die erwartete Größe des Bildes mit angeben.
+Somit kann bereits vorab der Platz zur Anzeige des zu ladenden Bildes reserviert werden.
+
+```html
+<!-- ... -->
+<img alt="Cover" [ngSrc]="thumbnail" width="120" height="175">
+<!-- ... -->
+```
+
+Bei der Detailansicht der Bücher in der BookDetailsComponent gehen wir ähnlich vor.
+Wir importieren dir Direktive und passen das Template an.
+Hier setzen wir jedoch zusätzlich das property `priority`, da wir das Buchcover hier mit hoher Priorität laden wollen.
+
+```html
+<!-- ... -->
+<img alt="Cover" [ngSrc]="book.thumbnailUrl" width="200" height="250" priority>
+<!-- ... -->
+```
+
+Werfen wir einen Blick in
+Damit das Property `priority` Wirkung zeigt, benötigen wir noch
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- ... -->
+  <link rel="preconnect" href="https://cdn.ng-buch.de">
+</head>
+<!-- ... -->
+```
