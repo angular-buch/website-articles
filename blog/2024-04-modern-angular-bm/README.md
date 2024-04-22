@@ -143,7 +143,7 @@ export const isbnExists = function (): AsyncValidatorFn {
 ```
 
 Wichtig ist, dass `isbnExists()` weiterhin eine Factory-Funktion ist, die den Validator erst beim Aufruf generiert.
-Nur so ist gewährleistet, dass inject() bei der Verwendung in einem Injection Context aufgerufen wird, nämlich bei Instanziierung der Komponentenklasse.
+Nur so ist gewährleistet, dass `inject()` bei der Verwendung in einem Injection Context aufgerufen wird, nämlich bei Instanziierung der Komponentenklasse.
 
 In der `BookFormComponent` fordern wir nun nicht mehr den `AsyncValidatorsService` an, sondern nutzen direkt die neu erstellte Funktion `isbnExists()`.
 
