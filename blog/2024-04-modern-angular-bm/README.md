@@ -791,6 +791,28 @@ Damit das Property `priority` Wirkung zeigt, benötigen wir noch
 <!-- ... -->
 ```
 
+## `styleUrls` -> `styleUrl`
+
+Zum Abschluss wollen wir noch eine eher kosmetische Änderung durchführen.
+Angular unterstützt neben der Referenzierung von Stylesheets unter `styleUrls` im Komponenten-Dekorator nun auch die Angabe einer einzelnen `styleUrl` asl String.
+Da wir lediglich ein Stylesheet referenzieren benötigen wir hier die bisherige Notation in Form eines Array nicht.
+
+```ts
+@Component({
+  // VORHER:
+  styleUrls: ['./book-list.component.css'],
+  // NACHHER:
+  styleUrl: './book-list.component.css',
+  // ...
+})
+// ...
+```
+
+Nutzen wir zum Beispiel Visual Studio Code als Editor, können wir die Migration ganz einfach über die Suche eines regulären Ausdrucks vollziehen:
+
+- Suche: `styleUrls: \[(.*)\]` (Die Option "regulärer Ausdruck" muss aktiviert sein)
+- Ersetzen: `styleUrl: $1`
+
 ## Demo & Repo
 
 Geschafft, wir haben jetzt den BookMonkey auf die neusten Konzepte und Features von Angular migriert.
