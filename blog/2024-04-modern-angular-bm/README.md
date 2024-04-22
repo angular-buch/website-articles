@@ -114,7 +114,63 @@ export class LoggedinOnlyDirective implements OnDestroy {
 }
 ```
 
-Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr at, können wir diesen im Anschluss ersatzlos entfernen.
+Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr hat, können wir diesen im Anschluss ersatzlos entfernen.
+
+## AsyncValidator als Funktion mit `inject()`
+
+Dank der neuen Funktion `inject()` können wir auf den `AsyncValidatorsService` verzichten.
+Dieser eigene Service für die asynchrone Formularvalidierung war ursprünglich nur notwendig, weil wir den Konstruktor brauchten, um den BookStoreService per Dependency Injection anzufordern.
+Wir können den Validator `isbnExists` jetzt ebenso als einfache Funktion definieren, wie wir es bei den synchronen Validatoren in der Datei `validators.ts` bereits getan haben.
+Den `BookStoreService` fordern wir mithilfe von `inject()` an und nutzen dafür die einfache Variable `service`.
+
+```ts
+import { inject } from '@angular/core';
+import { /* ... */, AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { map } from 'rxjs';
+
+import { BookStoreService } from '../../shared/book-store.service';
+
+// ...
+
+export const isbnExists = function (): AsyncValidatorFn {
+  const service = inject(BookStoreService);
+  return (control: AbstractControl) => {
+    return service
+      .check(control.value)
+      .pipe(map((exists) => (exists ? { isbnexists: true } : null)));
+  };
+};
+```
+
+Wichtig ist, dass `isbnExists()` weiterhin eine Factory-Funktion ist, die den Validator erst beim Aufruf generiert.
+Nur so ist gewährleistet, dass inject() bei der Verwendung in einem Injection Context aufgerufen wird, nämlich bei Instanziierung der Komponentenklasse.
+
+In der `BookFormComponent` fordern wir nun nicht mehr den `AsyncValidatorsService` an, sondern nutzen direkt die neu erstellte Funktion `isbnExists()`.
+
+```ts
+// ...
+import { atLeastOneValue, isbnExists, isbnFormat } from '../shared/validators';
+
+@Component({ /* ... */ })
+export class BookFormComponent {
+  // ...
+
+  form = new FormGroup({
+    // ...
+    isbn: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, isbnFormat],
+      asyncValidators: isbnExists(),
+    }),
+    // ...
+  });
+
+  // ...
+}
+```
+
+Die Datei `async-validators.service.ts` kann anschließend gelöscht werden.
+Der Code für den asychronen Validator hat sich damit drastisch vereinfacht, und der Overhead durch die Serviceklasse entfällt.
 
 ## Standalone Migration
 
