@@ -116,6 +116,8 @@ export class LoggedinOnlyDirective implements OnDestroy {
 
 Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr hat, können wir diesen im Anschluss ersatzlos entfernen.
 
+> Das Projekt _ngxtension_ stellt zur Migration auf `inject()` statt Konstruktor Injection auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/inject-migration/) bereit.
+
 ## AsyncValidator als Funktion mit `inject()`
 
 Dank der neuen Funktion `inject()` können wir auf den `AsyncValidatorsService` verzichten.
@@ -701,7 +703,9 @@ export class ConfirmDirective {
 }
 ```
 
-### Functional Outputs
+> Das Projekt _ngxtension_ stellt zur Migration auf Signal Inputs auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/signal-inputs-migration/) bereit.
+
+## Functional Outputs
 
 Mit der Minor-Version Angular 14.3.0 steht und auch eine Alternative zum bisherigen `@Output`-Dekorator im Developer Preview bereit.
 Die neuen funktionsbasierten Outputs sind stark and die neuen Signal Inputs angelehnt und kommen mit einer verbesserten Typisierung ggü. der bisherigen API basierend auf Dekoratoren.
@@ -735,6 +739,8 @@ export class ConfirmDirective {
   }
 }
 ```
+
+> Das Projekt _ngxtension_ stellt zur Migration auf Functional Outputs auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/new-outputs-migration/) bereit.
 
 ## Verwendung der Direktive `NgOptimizedImage`
 
