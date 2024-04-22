@@ -119,7 +119,7 @@ Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr h
 ## AsyncValidator als Funktion mit `inject()`
 
 Dank der neuen Funktion `inject()` können wir auf den `AsyncValidatorsService` verzichten.
-Dieser eigene Service für die asynchrone Formularvalidierung war ursprünglich nur notwendig, weil wir den Konstruktor brauchten, um den BookStoreService per Dependency Injection anzufordern.
+Dieser eigene Service für die asynchrone Formularvalidierung war ursprünglich nur notwendig, weil wir den Konstruktor brauchten, um den `BookStoreService` per Dependency Injection anzufordern.
 Wir können den Validator `isbnExists` jetzt ebenso als einfache Funktion definieren, wie wir es bei den synchronen Validatoren in der Datei `validators.ts` bereits getan haben.
 Den `BookStoreService` fordern wir mithilfe von `inject()` an und nutzen dafür die einfache Variable `service`.
 
