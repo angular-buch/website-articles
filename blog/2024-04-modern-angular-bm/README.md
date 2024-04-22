@@ -790,3 +790,15 @@ Damit das Property `priority` Wirkung zeigt, benötigen wir noch
 </head>
 <!-- ... -->
 ```
+
+## Demo & Repo
+
+Geschafft, wir haben jetzt den BookMonkey auf die neusten Konzepte und Features von Angular migriert.
+Wie wir sehen hat sich in den letzten Major-Versionen von Angular viel bewegt.
+
+Den Quellcode bzw. die Änderungen und die Demo findest du unter:
+
+- [BookMonkey Demo](https://18-modern-angular-bm5.angular-buch.com/)
+- [Repo: 17-standalone (Ausgangsbasis)](https://github.com/book-monkey5/17-standalone)
+- [Repo: 18-modern-angular (Migration)](https://github.com/book-monkey5/18-modern-angular)
+- [Differenzansicht (17-standalone -> 18-modern-angular)](https://book-monkey5.angular-buch.com/diffs/18-modern-angular.html)
