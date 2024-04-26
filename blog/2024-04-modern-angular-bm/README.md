@@ -498,32 +498,36 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Control Flow
+## Control Flow mit `@if` und `@for`
 
-Mit Angular 17 kam der neue Control Flow ins Spiel.
-Dieser erlaubt es uns Verzweigungen und Schleifen mit `@if()` und `@for()` direkt im Template von Angular Komponenten zu nutzen,
-ohne zuvor passende Direktiven dafür importieren zu müssen.
+Mit Angular 17 wurde die neue Ablaufsteuerung im Template vorgestellt:
+Anstatt die Direktiven `ngIf` und `ngFor` einzusetzen, nutzen wir für Verzweigungen und Schleifen die neuen Ausdrücke `@if` und `@for`.
+Das hat den Vorteil, dass wir die Direktiven nicht einzeln importieren müssen. Der Control Flow wird direkt vom Compiler ausgewertet.
 
-Auch wenn der Control Flow mit Angular 17 noch im Developer Preview ist, empfehlen wir die Nutzung bereits jetzt.
+Auch wenn der Control Flow mit Angular 17 noch im Status *Developer Preview* ist, empfehlen wir die Nutzung bereits jetzt.
 
 Um nicht alle Komponenten von Hand migrieren zu müssen, gibt uns Angular auch hier ein Migrationswerkzeug mit an die Hand.
-Es erfolgt eine Migration der Template Syntax und im Nachgang werden auch automatisch die unnötigen Importe der Direktiven `NgIf` und `NgFor` entfernt.
+Es erfolgt eine Migration der Template-Syntax, und im Nachgang werden auch automatisch die unnötigen Imports der Direktiven `NgIf` und `NgFor` entfernt:
 
 ```sh
 ng generate @angular/core:control-flow
 ```
 
-Bitte prüfen Sie hier noch einmal alle Änderungen ausgiebig.
+Bitte prüfen Sie anschließend noch einmal alle Änderungen gründlich. In komplexen Fällen kann die Migration unter Umständen nicht komplett automatisch durchgeführt werden.
 
 Nach der Ausführung können wir noch zwei Punkte an den Komponenten `BookListComponent` und `SearchComponent` optimieren.
-Die Angabe von `track` im `@for` Block muss zwingend erfolgen.
-Hier müssen wir die Information hinterlegen, nach welchem Merkmal die Elemente der Liste identifiziert werden können.
-Dieses Property sollte eindeutig sein, z. B. die ID des Datensatzes.
-Da wir in den beiden Komponenten jeweils über ein Array von Buch-Objekten iterieren, eignet sich hier die ISBN-Nummer am besten.
-Weiterhin benötigen wir für die Anzeige leerer Resultate nicht zwingend ein gesondertes `@if()`.
-Hier können wir den `empty()` block der `@for()` Schleife nutzen.
+
+Mit `@for` ist es verpflichtend, eine Tracking-Information mihilfe von `track` anzugeben.
+Angular verwendet dieses Merkmal, um die Elemente der iterierten Liste zu identifizieren.
+Wenn wir eine Liste von Entitäten anzeigen, die eine ID besitzen, verwenden wir diese ID als Unterscheidungsmerkmal
+Da wir in den beiden Komponenten über ein Array von Buch-Objekten iterieren, eignet sich hier die ISBN am besten, sodass wir `book.isbn` als Trackingmerkmal verwenden.
+Sollten die Elemente keine eindeutige ID besitzen, können Sie das Element selbst verwenden, oder – wenn die Liste sich zur Laufzeit nicht ändern wird – auch den Index (`$index`).
+
+Für die Anzeige leerer Resultate brauchen wir übrigens nicht zwingend ein gesondertes `@if`.
+Stattdessen bietet `@for` einen eigenen `@empty()`-Block an:
 
 ```html
+<!-- book-list.component.html -->
 <h1>Books</h1>
 @if (books$ | async; as books) {
   <ul class="book-list">
@@ -538,28 +542,43 @@ Hier können wir den `empty()` block der `@for()` Schleife nutzen.
 }
 ```
 
-Mit der `SearchComponent` gehen wir analog hierzu vor.
+Die `SearchComponent` wird auf dieselbe Weise umgebaut.
 
-## Application Builder
+
+## Application Builder verwenden
 
 Die aktuelle Version der Anwendung nutzt bereits den neuen Application Builder von Angular, der unter der Haube auf ESBuild und Vite zurückgreift.
-Sollte bei Ihnen noch ein älterer Builder genutzt werden (`@angular-devkit/build-angular:browser` oder `@angular-devkit/build-angular:browser-esbuild`), empfehlen wir die Migration.
-Auch hierfür hat das Angular-Team ein Schematic über die Angular CLI bereitgestellt:
+Sollte bei Ihnen noch ein älterer Builder genutzt werden (`@angular-devkit/build-angular:browser` oder `@angular-devkit/build-angular:browser-esbuild`), empfehlen wir Ihnen, auf den neuen Builder umzusteigen.
+Auch hierfür hat das Angular-Team ein Schematic bereitgestellt:
 
 ```sh
 ng update @angular/cli --name=use-application-builder
 ```
 
+
 ## Signals
 
-Im nächsten Schritt wollen wir uns dem Thema Signals annehmen.
-Signals sind eine neue reaktive Primitive und stellen eine Alternative zur Observables mit RxJS und dem bisherigen zu Grunde liegenden Modell der Change Detection basierend auf Zone.js dar.
-Künftig können wir somit komplett auf die Integration von Zone.js verzichten (Siehe: [_Angular 16 ist da! Abschnitt "Reaktivität mit Signals"_](/blog/2023-05-angular16#reaktivität-mit-signals)).
+Im nächsten Schritt wollen wir uns dem Thema Signals widmen.
+Wir haben das Thema im Blogpost zu Angular 16 bereits ausführlich behandelt, siehe: [_Angular 16 ist da! Abschnitt "Reaktivität mit Signals"_](/blog/2023-05-angular16#reaktivität-mit-signals)).
+
+Ein wichtiger Grund für die Einführung dieser neuen *Reactive Primitive* ist die Change Detection:
+Um festzustellen, ob sich Daten geändert haben, muss Angular derzeit vergleichsweise hohen Aufwand betreiben.
+Angular weiß niemals, *ob* und *welche* Daten sich tatsächlich ändern, sondern nur, dass es potenziell zu einer Datenänderung gekommen sein *könnte*.
+Dafür verwendet Angular verschiedene Trigger, die die Change Detection auslösen. Zur Überwachung der Browser-Schnittstellen wird seit jeher die Bibliothek zone.js verwendet.
+
+Mit Signals soll diese unspezifische Herangehensweise geändert werden: Ein Signal hält einen Wert und informiert die Anwendung, sobald sich dieser Wert ändert.
+Auf diese Weise kann Angular gezielt die Views aktualisieren, in denen sich tatsächlich Daten geändert haben.
+
+Viele Stellen, an denen wir bisher Observables und die AsyncPipe von Angular eingesetzt haben, können auch ohne RxJS mit Signals umgesetzt werden.
+
+## SearchComponent
 
 Als Erstes werfen wir hierfür einen Blick auf die `SearchComponent`.
-Hier nutzen wir die `isLoading` um den Status der Suchanfrage festzuhalten und anzuzeigen.
-Bisher funktioniert die Anzeige des Zustands nur, weil die Change Detection von Angular über Zone.js informiert wird, dass es eine Änderung am Property `isLoading` gab.
-Würden wir Zone.js entfernen oder die Change Detection auf `OnPush` umstellen, müssten wir selbst dafür sorgen, Angular mitzuteilen, dass der entsprechende Teil des Templates neu gerendert werden soll.
+Das Property `isLoading` wird verwendet, um den Status der Suchanfrage zu erfassen.
+
+Angular konnte die Änderungen an diesem Property nur erfassen, weil das Event Binding im Template und die eintreffende HTTP-Response jeweils die Change Detection mithilfe von zone.js ausgelöst haben.
+Würden wir zone.js aus der Anwendung entfernen, würde der Ladeindikator nicht mehr korrekt angezeigt werden.
+
 
 ```ts
 // ...
@@ -573,10 +592,12 @@ export class SearchComponent {
 }
 ```
 
-Wir können hier Gebrauch von einem Signal machen, um Änderungen direkt sichtbar zu machen (Ohne Verwendung von Zone.js bzw. manuelles Triggern der Change Detection).
-Dafür setzen wir den Wert des Signals initial auf `false` und ändern ihn über `set(<value>)`.
+Dieses Dilemma lässt sich mit einem Signal elegant lösen:
+Anstatt den Wert direkt im Property zu speichern, verpacken wir das Loading-Flag in einem Signal.
+Das Objekt wird mit `false` initialisiert, und der Wert kann später mit der Methode `.set()` überschrieben werden:
 
 ```ts
+// search.component.ts
 // ...
 import { Component, inject, signal } from '@angular/core';
 
@@ -596,11 +617,11 @@ export class SearchComponent {
 }
 ```
 
-Da im Property `isLoading` nun ein Signal steckt, müssen wir noch unser Template anpassen.
-Hier müssen die Klammern (`()`) nach dem `isLoading` ergänzt werden.
-Der Angular Language Service informiert uns hier auch, sollten wir das einmal vergessen.
+Um Daten aus einem Signal zu lesen, rufen wir das Signal wie eine Funktion auf.
+Wir müssen also das Template der `SearchComponent` anpassen.
 
 ```html
+<!-- search.component.html -->
 <input type="search"
   autocomplete="off"
   aria-label="Search"
@@ -609,12 +630,19 @@ Der Angular Language Service informiert uns hier auch, sollten wir das einmal ve
   (input)="input$.next(searchInput.value)">
 ```
 
+Sollten wir das einmal vergessen, informiert der Angular Language Service uns direkt im Editor mit einer Warnung.
+
+Nun kann der Ladezustand auch erfasst werden, ohne auf die Change Detection mittels zone.js angewiesen zu sein.
+Die Anwendung ist damit robuster für die Zukunft gewappnet.
+
+
 ### Observables in Signals konvertieren
 
 Im nächsten Schritt werfen wir einen Blick auf die `BookListComponent`.
 Hier nutzen wir bisher die AsyncPipe, um die Daten aus dem Observable mit Büchern anzuzeigen.
 
 ```ts
+// book-list.component.ts
 @Component({
   /* ... */
   imports: [AsyncPipe, /* ... */],
@@ -624,10 +652,13 @@ export class BookListComponent {
 }
 ```
 
-Mit der Hilfsfunktion `toSignal()` aus `@angular/core/rxjs-interop` können wir das Observable in ein Signal umwandeln.
-Damit müssen wir weder die `AsyncPipe` importieren noch manuell auf das Observable subscriben.
+Mit der Funktion `toSignal()` können wir ein Observable in ein Signal umwandeln.
+Sie kümmert sich automatisch darum, auf das Observable zu subscriben und die Daten im erzeugten Signal bereitzustellen.
+Auch das Beenden der Subscription wird automatisch erledigt.
+Damit müssen wir nicht die `AsyncPipe` importieren oder manuell auf das Observable subscriben.
 
 ```ts
+// book-list.component.ts
 import { toSignal } from '@angular/core/rxjs-interop';
 // ...
 
@@ -637,9 +668,10 @@ export class BookListComponent {
 }
 ```
 
-Im Template rufen wir entsprechend das Signal auf:
+Im Template rufen wir entsprechend das Signal auf, um die Buchliste zu lesen:
 
 ```html
+<!-- book-list.component.html -->
 <h1>Books</h1>
 @if (books(); as books) {
 <ul class="book-list">
@@ -653,12 +685,15 @@ Wir können den Wert aus dem Signal beliebig oft lesen, ohne dass erneut ein HTT
 Dieses Verhalten unterscheidet sich vom vorherigen Weg:
 Benutzen wir die `AsyncPipe` mehrfach, wird das Observable auch mehrfach subscribet.
 
+
 ### Signals in Observables konvertieren
 
-Jetzt wollen wir noch unseren `AuthService` umbauen.
-Dieser soll künftig den Status der Authentifizierung sowohl als Signal (`isAuthenticated`) als auch als Observable (`isAuthenticated$`) ausgeben.
-Wir können hier auf das bisher verwendete `BehaviorSubject` verzichten und nutzen Signals als Basis.
-Die Ausgabe als Observable können wir elegant über die Hilfsfunktion (`toObservable`) aus `@angular/core/rxjs-interop` erwirken.
+Jetzt wollen wir noch den `AuthService` umbauen.
+Anstatt das Zustandsflag `isAuthenticated` als einfaches Property zu erfassen, wollen wir dafür ein Signal verwenden.
+Der Wert soll weiterhin auch über ein Observable `isAuthenticated$` bereitgestellt werden, damit wir reaktiv mit der Information arbeiten können.
+
+Als Basis zur Erfassung des Zustands wollen wir ein Signal verwenden, sodass wir kein `BehaviorSubject` mehr benötigen.
+Die Ausgabe als Observable können wir elegant mit der Funktion `toObservable()` erledigen:
 
 ```ts
 import { Injectable, signal } from '@angular/core';
@@ -679,12 +714,13 @@ export class AuthService {
 }
 ```
 
-Die Aufrufe von `isAuthenticated` in den Dateien `app.component.html`, `auth.guard.ts` und `auth.interceptor.ts` müssen nun entsprechend auch um die Klammern erweitert werden (`isAuthenticated()`).
+Die Aufrufe von `isAuthenticated` in den Dateien `app.component.html`, `auth.guard.ts` und `auth.interceptor.ts` müssen nun auch um die Klammern erweitert werden, um den Wert zu lesen: `isAuthenticated()`.
+
 Die Direktive `LoggedinOnlyDirective` können wir in diesem Zuge auch noch weiter vereinfachen.
-Hier können wir auf das Konstrukt aus Observable und `takeUntil(this.destroy$)` verzichten und stattdessen einen Effect nutzen, der auslöst, wenn sich der Wert des Signals `isAuthenticated` ändert.
+Hier können wir auf das Konstrukt aus Observable und `takeUntil(this.destroy$)` verzichten und stattdessen einen Effect verwenden:
 Ein Effekt reagiert auf Änderungen an den Signals, die wir in der Effekt-Funktion verwenden.
 Sobald sich einer der Eingabewerte ändert, wird die Berechnung erneut durchgeführt.
-Auf den Lifecycle-Hook `OnDestroy` können wir somit auch komplett verzichten.
+Auf den Lifecycle-Hook `OnDestroy` können wir somit auch komplett verzichten, und der Code wird drastisch verkürzt:
 
 ```ts
 import { /* ... */, effect, inject } from '@angular/core';
@@ -707,7 +743,8 @@ export class LoggedinOnlyDirective {
 
 ### Signal Inputs
 
-Mit dem Minor-Release von Angular 17.2.0 wurde eine Alternative zum bisherigen `@Input()`-Dekorator [aus Basis von Signals eingeführt](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
+Mit dem Minor-Release von Angular 17.2.0 wurde eine Alternative zum bisherigen `@Input()`-Dekorator auf Basis von Signals eingeführt, siehe die [offizielle Information im Angular-Blog](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
+Der übergebene Wert eines Komponenten-Inputs wird damit direkt als Signal erfasst:
 
 ```ts
 isbn = input() // InputSignal<unknown>
@@ -717,10 +754,10 @@ isbn = input.required<string>() // InputSignal<string>
 isbn = input('3864909465') // InputSignal<string>
 ```
 
-Wir können in unserer Anwendung an einigen Stellen auf die neuen Signal-based Inputs umstellen.
-
-Als Beispiel wollen wir die `FormErrorsComponent` nutzen.
+Wir können einige Stellen unserer Anwendung auf die neuen *Signal-based Inputs* umbauen.
+Als erstes Beispiel wollen wir die `FormErrorsComponent` nutzen.
 Wir nutzen hier jeweils `input.required()`, da beide Informationen zwingend bei Verwendung der Komponente gesetzt werden müssen.
+Um das Signal zu lesen, dürfen wir im Getter `errors` die Funktionsklammern nicht vergessen.
 
 ```ts
 import { Component, inject, input } from '@angular/core';
@@ -742,12 +779,13 @@ export class FormErrorsComponent {
 }
 ```
 
-Nicht immer wollen wir, dass der Name des Input Signals in der Komponente dem Namen bei der Verwendung im Template entspricht.
-In diesem Fall können wir einen `alias` konfigurieren.
-Wir sehen uns das am Beispiel der `ConfirmDirective` an.
-Hier wollen wir innerhalb der Komponente mit dem Property `confirmText` arbeiten.
-Nach außen, wollen wir das Input-Signal jedoch gegen den Selector `bmConfirm` der Direktive selbst binden.
-Durch die Angabe des Alias wird uns dies ermöglicht.
+Nicht immer wollen wir, dass der Name des Propertys in der Komponente dem Namen entspricht, den wir beim Property Binding von außen verwenden.
+Diesen Fall haben wir bereits in der `ConfirmDirective` berücksichtigt.
+Auch mit Signal Inputs lässt sich ein `alias` konfigurieren.
+
+Wenn wir die `ConfirmDirective` verwenden, wollen wir den Text an das Property `bmConfirm` übergeben, das dem Attributnamen der Direktive entspricht.
+Innerhalb der Direktivenklasse soll dieses Property jedoch `confirmText` lauten.
+Ein Alias ermöglicht uns diese Verbindung:
 
 ```ts
 import { /* ... */, input } from '@angular/core';
@@ -769,24 +807,23 @@ export class ConfirmDirective {
 
 > Das Projekt _ngxtension_ stellt zur Migration auf Signal Inputs auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/signal-inputs-migration/) bereit.
 
+
 ## Functional Outputs
 
-Mit der Minor-Version Angular 14.3.0 steht und auch eine Alternative zum bisherigen `@Output`-Dekorator im Developer Preview bereit.
-Die neuen funktionsbasierten Outputs sind stark and die neuen Signal Inputs angelehnt und kommen mit einer verbesserten Typisierung ggü. der bisherigen API basierend auf Dekoratoren.
+Analog zur Funktion `input()` steht seit der Minor-Version Angular 17.3.0 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
+Dabei wurde auch die Typsicherheit verbessert, denn der übergebene Payload ist nun verpflichtend (bisher war er optional).
 
 ```ts
 select = output() // OutputEmitterRef<void>
 isbnChange = output<string>() // OutputEmitterRef<string>
 
 // ...
-
 this.select.emit(); // OK
 this.isbnChange.emit(); // Error: Expected 1 arguments, but got 0.
 this.isbnChange.emit('3864909465'); // OK
 ```
 
-Auch hier können wir die `ConfirmDirective` migrieren.
-Auch hier rufen wir auf dem Output `emit()` auf.
+Wir wollen die neuen Functional Outputs in der `ConfirmDirective` nutzen:
 
 ```ts
 import { /* ... */, output } from '@angular/core';
@@ -806,15 +843,13 @@ export class ConfirmDirective {
 
 > Das Projekt _ngxtension_ stellt zur Migration auf Functional Outputs auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/new-outputs-migration/) bereit.
 
-## Verwendung der Direktive `NgOptimizedImage`
+## Direktive `NgOptimizedImage` verwenden
 
-Bereits mit Angular 14.2 hat uns das Angular Team eine Direktive zur optimierten Einbindung von Bildern bereitgestellt: `NgOptimizedImage`.
-Wir haben hierzu bereits im Blogpost [Angular 15 ist da!](/blog/2022-11-angular15#image-directive-optimierte-verwendung-von-bildern) berichtet.
+Bereits seit Angular 14.2 stellt das Framework eine Direktive zur optimierten Einbindung von Bildern bereit: `NgOptimizedImage`.
+Wir haben hierzu im Blogpost [Angular 15 ist da!](/blog/2022-11-angular15#image-directive-optimierte-verwendung-von-bildern) berichtet.
 
-Wir wollen nun Gebrauch von der Direktive machen.
-
-Wir starten mit der `BookListItemComponent`.
-Hier importieren wir zunächst die Direktive, damit wir sie im Template nutzen können:
+Wir wollen die Direktive verwenden und starten mit der `BookListItemComponent`.
+Damit wir die Direktive im Template nutzen können, muss sie zuvor in der Komponente importiert werden:
 
 ```ts
 import { NgOptimizedImage } from '@angular/common';
@@ -827,10 +862,10 @@ import { NgOptimizedImage } from '@angular/common';
 // ...
 ```
 
-Im Anschluss ersetzen wir auf dem `<img>` element das `src` Attribut mit `ngSrc`.
+Im Anschluss ersetzen wir auf dem `<img>` element das Attribut `src` durch `ngSrc`.
 Das Bild wird standardmäßig "lazy" geladen und blockiert somit nicht das Laden der gesamten Buchliste.
-Damit die Optimierung klappt und wir Layoutverschiebungen vermeinden, müssen wir noch die erwartete Größe des Bildes mit angeben.
-Somit kann bereits vorab der Platz zur Anzeige des zu ladenden Bildes reserviert werden.
+Damit die Optimierung klappt und wir Layoutverschiebungen vermeiden, müssen wir noch die erwartete Größe des Bilds mit angeben.
+Somit kann bereits vorab der Platz zur Anzeige des Bilds reserviert werden.
 
 ```html
 <!-- ... -->
@@ -838,9 +873,8 @@ Somit kann bereits vorab der Platz zur Anzeige des zu ladenden Bildes reserviert
 <!-- ... -->
 ```
 
-Bei der Detailansicht der Bücher in der BookDetailsComponent gehen wir ähnlich vor.
-Wir importieren dir Direktive und passen das Template an.
-Hier setzen wir jedoch zusätzlich das property `priority`, da wir das Buchcover hier mit hoher Priorität laden wollen.
+Bei der Detailansicht der Bücher in der `BookDetailsComponent` gehen wir ähnlich vor:
+Hier setzen wir jedoch zusätzlich das Attribut `priority`, da wir das Buchcover hier mit hoher Priorität laden wollen.
 
 ```html
 <!-- ... -->
@@ -848,8 +882,7 @@ Hier setzen wir jedoch zusätzlich das property `priority`, da wir das Buchcover
 <!-- ... -->
 ```
 
-Werfen wir einen Blick in
-Damit das Property `priority` Wirkung zeigt, benötigen wir noch
+Damit das priorisierte Laden funktioniert, müssen wir in der Datei `index.html` ein Meta-Tag hinzufügen:
 
 ```html
 <!doctype html>
@@ -861,11 +894,12 @@ Damit das Property `priority` Wirkung zeigt, benötigen wir noch
 <!-- ... -->
 ```
 
-## `styleUrls` -> `styleUrl`
+## Komponenten-Stylesheets: `styleUrls` => `styleUrl`
 
-Zum Abschluss wollen wir noch eine eher kosmetische Änderung durchführen.
-Angular unterstützt neben der Referenzierung von Stylesheets unter `styleUrls` im Komponenten-Dekorator nun auch die Angabe einer einzelnen `styleUrl` asl String.
-Da wir lediglich ein Stylesheet referenzieren benötigen wir hier die bisherige Notation in Form eines Array nicht.
+Zum Abschluss wollen wir noch eine eher kosmetische Änderung im Code durchführen:
+Bisher wurden die Komponenten-Stylesheets standardmäßig als Array im Property `styleUrls` übergeben.
+Da es in den meisten Fällen aber nur genau eine Style-Datei gibt, können wir nun auch eine einzelne `styleUrl` als String angeben.
+Neue Komponenten werden bereits mit einer einzelnen `styleUrl` generiert.
 
 ```ts
 @Component({
@@ -878,17 +912,20 @@ Da wir lediglich ein Stylesheet referenzieren benötigen wir hier die bisherige 
 // ...
 ```
 
-Nutzen wir zum Beispiel Visual Studio Code als Editor, können wir die Migration ganz einfach über die Suche eines regulären Ausdrucks vollziehen:
+Nutzen wir zum Beispiel Visual Studio Code als Editor, können wir die Migration über die globale Suche mithilfe eines regulären Ausdrucks vollziehen:
 
-- Suche: `styleUrls: \[(.*)\]` (Die Option "regulärer Ausdruck" muss aktiviert sein)
+- Suche: `styleUrls: \[(.*)\]` (Die Option "Regulärer Ausdruck" muss aktiviert sein)
 - Ersetzen: `styleUrl: $1`
 
-## Demo & Repo
+## Demo und Code
 
-Geschafft, wir haben jetzt den BookMonkey auf die neusten Konzepte und Features von Angular migriert.
-Wie wir sehen hat sich in den letzten Major-Versionen von Angular viel bewegt.
+Damit haben wir den BookMonkey auf die neusten Konzepte und Features von Angular migriert.
+Wir freuen uns sehr über die vielen Neuigkeiten in Angular: Standalone Components sorgen für eine einfachere Struktur und weniger verzweigte Referenzen in der Anwendung.
+Zusammen mit der Funktion `inject()` werden asynchrone Validatoren und funktionale Interceptors/Guards stark verkürzt.
+Der entwickelte Code wird schlanker und ist einfacher zu überblicken.
+Nicht zuletzt ergeben sich durch Signals ganz neue Patterns und Herangehensweisen.
 
-Den Quellcode bzw. die Änderungen und die Demo findest du unter:
+**Quellcode, Änderungen und Demo:**
 
 - [BookMonkey Demo](https://18-modern-angular-bm5.angular-buch.com/)
 - [Repo: 17-standalone (Ausgangsbasis)](https://github.com/book-monkey5/17-standalone)
