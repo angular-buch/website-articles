@@ -409,8 +409,8 @@ Wir haben damit die Anwendung erfolgreich auf die Standalone APIs migriert.
 
 ## Functional Interceptors
 
-Als nächstes Wollen wir uns den Interceptor zur Authentifizierung ansehen.
-Dieser ist bisher als Klasse implementiert und sieht wie folgt aus:
+Als Nächstes wollen wir den Interceptor zur Authentifizierung in eine Funktion umwandeln.
+Die bisherige Implementierung als Klasse sieht so aus:
 
 ```ts
 // ...
@@ -434,17 +434,28 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 ```
 
-Bei Verwendung eines functional Interceptors legen wir eine Factory Funktion an, die den Request und eine `HttpHandlerFn` übergeben bekommt.
-Die `HttpHandlerFn` ist equivalent zum Aufruf von `.handle` vom zuvor verwendeten `HttpHandler`.
+Ein Functional Interceptor ist grundsätzlich ähnlich aufgebaut, er besteht aber nur aus der Funktion, die bisher als Methode `intercept()` in der Klasse existierte.
+Die Funktion vom Typ `HttpInterceptorFn` erhält als Argumente den eingehenden Request und eine `HttpHandlerFn`.
 
 ```ts
+export const authInterceptor: HttpInterceptorFn = (
+  next: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  // ...
+}
+```
+
+Durch den Typ `HttpInterceptorFn` ist die Signatur der Funktion allerdings schon vollständig beschrieben, sodass wir die Typen für die Argumente gar nicht explizit im Code notieren müssen.
+Der Auth-Interceptor kann also wie folgt eingekürzt werden.
+Anstelle von `next.handle()` rufen wir jetzt direkt die `HttpHandlerFn` mit `next()` auf.
+
+```ts
+// auth.interceptor.ts
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 // ...
 
-export function authInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> {
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService)
   const token = '1234567890';
 
@@ -457,13 +468,17 @@ export function authInterceptor(
 }
 ```
 
-Jetzt, da wir keine Klasse mehr verwenden, die das DI Token `HTTP_INTERCEPTORS` überlädt, müssen wir noch eine Anpassung in unserem `main.ts` vornehmen.
-Hier nutzen wir nun `withInterceptors()` statt `withInterceptorsFromDi()` und übergeben den Interceptor im Array.
-Entsprechend können wir das Token-Konfigurationsobjekt mit dem Verweis auf die Klasse entfernen.
-Bei der Gelegenheit können wir auch `provideHttpClient()` zusätzlich die Funktion `withFetch()` mit übergeben, um Angular zur Nutzung der moderneren [Fetch-API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) zu bewegen.
-Damit wäre auch ein Deployment in einer Edge-Computing-Infrastruktur wie zum Beispiel CloudFlare Workers möglich, bei der nur die Fetch-API unterstützt wird.
+Mit einem solchen Functional Interceptor ist auch die Registrierung in der Anwendung etwas einfacher:
+In der Datei `main.ts` entfernen wir den Provider für das DI-Token `HTTP_INTERCEPTORS`.
+Stattdessen nutzen wir im Aufruf von `provideHttpClient()` die Funktion `withInterceptors()` (statt `withInterceptorsFromDi()`) und übergeben den neuen Interceptor in einem Array.
+Der Interceptor wird damit direkt registriert.
+
+Übrigens können wir den HttpClient noch weiter konfigurieren:
+Mit der Funktion `withFetch()` verwendet Angular im Hintergrund die modernere [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+Damit wäre auch ein Deployment in einer Edge-Computing-Infrastruktur wie zum Beispiel CloudFlare Workers möglich, bei der nur die Fetch API unterstützt wird.
 
 ```ts
+// app.config.ts
 import {
   provideHttpClient,
   withInterceptors,
@@ -472,7 +487,7 @@ import {
 // ...
 import { authInterceptor } from './app/shared/auth.interceptor';
 
-bootstrapApplication(AppComponent, {
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     provideHttpClient(
@@ -480,7 +495,7 @@ bootstrapApplication(AppComponent, {
       withInterceptors([authInterceptor])
     ),
   ]
-}).catch(err => console.error(err));
+};
 ```
 
 ## Control Flow
