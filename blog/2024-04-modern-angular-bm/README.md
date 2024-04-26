@@ -314,76 +314,14 @@ bootstrapApplication(AppComponent, appConfig)
 
 ### Routen migrieren
 
-TODO
+Unser Feature-Modul `AdminModule` ist nun fast überflüssig.
+Damit die Klasse aber entfernt werden kann, müssen wir zuvor das zugehörige `AdminRoutingModule` auflösen.
 
-
-### NgModules entfernen
-
-Jetzt haben wir noch drei Module in unserer Anwendung:
-
-- `AppRoutingModule`
-- `AdminModule`
-- `AdminRoutingModule`
-
-In unserem Test ließen sich diese Module nicht automatisch mit der Code Migration auflösen und wir müssen hier manuell Hand anlegen.
-
-Wir starten mit dem `AppRoutingModule`.
-Wir entfernen hier die Modulklasse und exportieren die Variable mit den Routen (`routes`).
-Im Anschluss benennen wir die Datei `app-routing.module.ts` in `app.routes.ts` um.
+Dazu entfernen wir zunächst aus der Datei die Modulklasse und exportieren das Array mit Routen direkt.
+Die Datei nennen wir außerdem um zu `admin.routes.ts`:
 
 ```ts
-import { Routes } from '@angular/router';
-
-import { HomeComponent } from './home/home.component';
-import { authGuard } from './shared/auth.guard';
-
-export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-  },
-  {
-    path: 'books',
-    loadChildren: () => import('./books/books.routes').then(m => m.BOOKS_ROUTES)
-  },
-  {
-    path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canActivate: [authGuard]
-  }
-];
-```
-
-Jetzt passen wir noch die Datei `main.ts` an.
-Hier nutzen wir nun die Funktion `provideRouter` des Angular Routers und übergeben ihr die Routenkonfiguration.
-Wir benötigen jetzt den Aufruf von `importProvidersFrom()` mit dem `BrowserModule` und dem `AppRoutingModule` nicht mehr.
-
-```ts
-// ...
-import { provideRouter } from '@angular/router';
-// ...
-import { routes } from './app/app.routes';
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(routes),
-    importProvidersFrom(BrowserModule),
-    // ...
-  ]
-}).catch(err => console.error(err));
-```
-
-Im nächsten Schritt kümmern wir uns um das `AdminModule` samt der Routing-Konfiguration.
-Hier können wir die Datei `admin-routing.module.ts` zu `admin.routes.ts` umbenennen.
-In der Datei müssen wir lediglich die Routenkonstante exportieren.
-Der gesamte `NgModule`-Teil entfällt.
-
-```ts
+// admin.routes.ts
 // ...
 export const ADMIN_ROUTES: Routes = [
   {
@@ -402,27 +340,72 @@ export const ADMIN_ROUTES: Routes = [
 ];
 ```
 
-Zum Abschluss müssen wir in unserer Hauptkonfiguration der Routen (`app.routes.ts`) noch auf die neu exportierten Routen verweisen.
-Wir müssen hier lediglich den Import anpassen und auf die Konstante der Routen verweisen:
+In der Datei `admin.module.ts` können wir nun den Import für das `AdminRoutingModule` entfernen.
+
+Anschließend migrieren wir auf die gleiche Weise das `AppRoutingModule`:
+
+- Modulklasse entfernen
+- Array von Routen direkt exportieren
+- Datei umbenennen zu `app.routes.ts`
+
+Außerdem müssen wir die Route `admin` anpassen: Bisher wurde hier mittels Lazy Loading das `AdminRoutingModule` eingebunden.
+Diesen Pfad müssen wir ändern, sodass unsere direkt exportierten `ADMIN_ROUTES` geladen werden:
 
 ```ts
+// app.routes.ts
 // ...
 export const routes: Routes = [
-  // ...
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+  },
+  {
+    path: 'books',
+    loadChildren: () => import('./books/books.routes').then(m => m.BOOKS_ROUTES)
+  },
   {
     path: 'admin',
-    /*
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    */
     loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES),
     canActivate: [authGuard]
+    /* VORHER: loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), */
   }
 ];
 ```
 
-Die Datei `admin.module.ts` können wir jetzt entfernen.
 
-Wir haben nun erfolgreich auf die Standalone APIs migriert.
+Damit die App-Routen genutzt werden, müssen wir das Array an den Router übergeben.
+Dazu verwenden wir in der ApplicationConfig in `app.config.ts` die Funktion `provideRouter()`.
+Der Aufruf von `importProvidersFrom()` mit dem `AppRoutingModule` ist jetzt nicht mehr notwendig.
+
+```ts
+// app.config.ts
+// ...
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    importProvidersFrom(BrowserModule),
+    // ...
+  ]
+})
+```
+
+Entfernen Sie bitte auf dem Weg alle nicht mehr genutzten Imports aus den Köpfen der Dateien.
+
+
+### NgModules entfernen
+
+Das `AdminModule` ist nun nur noch eine leere Hülle, die mehrere Komponenten und Module importiert.
+Das Modul wird nirgendwo mehr genutzt, sodass wir die Datei `admin.module.ts` gefahrlos entfernen können.
+Wir haben damit die Anwendung erfolgreich auf die Standalone APIs migriert.
+
 
 ## Functional Interceptors
 
