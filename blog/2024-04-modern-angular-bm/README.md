@@ -18,17 +18,19 @@ language: de
 thumbnail: bm.jpg
 ---
 
-Mit den letzten Angular Versionen 15, 16 und 17 wurden viele neue Konzepte und Features eingeführt.
-In diesem Blogpost wollen wir unser Beispielprojekt auf die neuesten Konzepte und Features von Angular updaten und auf die praktische Umsetzung und der Verwendung automatischer Migrationen eingehen.
+Angular erlebt einen Aufschwung: Mit den letzten Major-Versionen des Frameworks wurden einige neue Konzepte und Features eingeführt.
+Wir berichten darüber regelmäßig in unseren Blogposts zu den Angular-Releases.
+In diesem Artikel wollen wir das Beispielprojekt "BookMonkey" aus dem Angular-Buch aktualisieren und die neuesten Konzepte von Angular praktisch einsetzen.
 
-Unter der Haube wurde das Build-System mit dem neuen Application Builder auf ESBuild mit Vite umgestellt und gleichzeitig mit dem Builder für SSR verschmolzen.
-Standalone Features sind mittlerweile stark etabliert und Standard in jeder neuen Angular Anwendung.
-Module hingegen sind optional und werden früher oder später vermutlich ganz aus Angular verschwinden.
-Auch beim Thema Dependency Injection geht der Trend vermehrt zur Nutzung der `inject()` Funktion statt der herkömmlichen Konstruktor-Injection.
-Interceptoren, Guards und Resolver werden Stand heute vorzugsweise als simple Funktionen erstellt.
-Auch bei der Template Syntax wird der Control Flow künftig der präferierte Weg sein um Verzweigungen und Schleifen abzubilden.
-Signals werden in immer mehr APIs von Angular integriert und die Verwendung wird mehr und mehr adaptiert.
-Zu Guter letzt sind mit den letzten Major-Versionen auch Features wie die View Transition API als auch die `NgOptimizedImage` bereitgestellt worden.
+Besonders interessant sind die folgenden Neuerungen in Angular:
+
+- Mit dem neuen **Application Builder** wurde das Build-System auf ESBuild mit Vite umgestellt. Gleichzeitig wurde Server-Side Rendering (SSR) direkt in diesen neuen Builder integriert.
+- Die **Standalone Features** sind inzwischen stark etabliert und Standard in jeder neuen Angular-Anwendung. **Module** sind dadurch optional geworden und werden früher oder später vermutlich ganz aus Angular verschwinden.
+- Für die Dependency Injection geht der Trend dazu, die **Funktion `inject()`** zu verwenden, anstatt Abhängigkeiten über den Konstruktor anzufordern.
+- **Interceptoren, Guards und Resolver** werden als einfache Funktionen implementiert, anstatt eine Klasse zu verwenden.
+- Der **Control Flow mit `@if` und `@for`** ist der empfohlene Weg, um Verzweigungen und Schleifen im Template abzubilden. Die Direktiven `ngIf` und `ngFor` werden vermutlich in einer späteren Version verschwinden.
+- **Signals** sind stable und werden immer mehr die Schnittstellen von Angular integriert. In der Community entstehen Patterns und Bibliotheken rund um Signals.
+- Kleinere Features sind die **View Transition API** und die Direktive `NgOptimizedImage`.
 
 Die einzelnen Features haben wir bereits separat in den jeweiligen Artikeln zu den Major-Releases vorgestellt:
 
@@ -36,7 +38,7 @@ Die einzelnen Features haben wir bereits separat in den jeweiligen Artikeln zu d
 - [Angular 16 ist da!](/blog/2023-05-angular16)
 - [Angular 17 ist da!](/blog/2023-11-angular17)
 
-Dem Thema SSR mit Angular 17 hatten wir bereits einen separaten Artikel gewidmet:
+Zum Thema Server-Side Rendering mit Angular 17 haben wir einen separaten Artikel veröffentlicht:
 
 - [Book Monkey v5: Server-Side Rendering mit Angular 17](/blog/2023-11-ssr-bm)
 <!--
@@ -45,39 +47,46 @@ Dem Thema SSR mit Angular 17 hatten wir bereits einen separaten Artikel gewidmet
 
 ## Die Ausgangsbasis
 
-Als Ausgangsbasis wollen wir das Projekt _BookMonkey_ nutzen, welches wir im Angular Buch entwickeln.
-Hier setzen wir auf dem Stand auf, bei dem bereits eines unserer Feature-Module auf Standalone Components migriert wurde:
+Als Ausgangsbasis verwenden wir das Projekt _BookMonkey_ aus unserem Angular-Buch der 4. Auflage.
+Im letzten Praxiskapitel haben wir das Projekt bereits teilweise auf Standalone Components migriert:
 
 - [BookMonkey: 17-standalone](https://github.com/book-monkey5/17-standalone)
 
-Sollten Sie nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hier starten und sich den Quellcode aus dem oben aufgeführten Repository zum Start herunterladen.:
+Sollten Sie bisher nicht mit dem Buch gearbeitet haben, können sie gern trotzdem ab hier starten und den Quellcode aus dem oben aufgeführten Repository zum Start herunterladen. Dazu können Sie das Repository [als ZIP herunterladen](https://github.com/book-monkey5/17-standalone/archive/refs/heads/main.zip) oder direkt Git verwenden:
 
 ```sh
-git clone git@github.com:book-monkey5/17-standalone.git
+git clone https://github.com/book-monkey5/17-standalone.git
 cd 17-standalone
+```
+
+Installieren Sie anschließend die Abhängigkeiten mithilfe von NPM:
+
+```sh
 npm install
 ```
 
-Die Schritte werden im folgenden einzeln beschrieben, sodass sie sich auch ideal auf andere Projekte abbilden lassen.
+Wir werden in den folgenden Abschnitten alle Schritte für die Migration beschreiben.
+Die Inhalte lassen sich also auch ideal auf andere Projekte abbilden.
 
-> Die Schritte beziehen sich auf die Verwendung von Angular 17.2 oder höher
+Für alle vorgestellten Features setzen wir auf **Angular in Version 17.3**.
 
-## `inject()` statt Konstruktor Injection
+## `inject()` statt Constructor Injection
 
-Wir wollen mit der konsistenten Umsetzung der Dependency Injection mit `inject()` starten.
-Seit Implementierung der `inject()` Funktion mit [Angular 14](/blog/2022-06-angular14) wird diese vermehrt von der Community verwendet.
-In einigen Situationen (zum Beispiel bei Verwendung von Functional Guards/Resolvers oder Interceptors) kommen wir um die Verwendung ohnehin nicht herum.
+Wir wollen damit starten, die Dependency Injection konsequent mit `inject()` umzusetzen.
+Die Funktion `inject()` wurde mit [Angular 14](/blog/2022-06-angular14) vorgestellt und erfreut sich seitdem großer Beliebtheit.
+Viele Komponenten kommen seitdem komplett ohne Konstruktor aus.
+In einigen Situationen, zum Beispiel bei Functional Guards, Resolvers oder Interceptors, kommen wir um die Verwendung ohnehin nicht herum.
 
-Die Vorteile der Nutzung von `inject()` ggü. der Konstruktor Injection liegen auf der Hand:
+Die Funktion `inject()` bringt gegenüber der klassischen Constructor Injection unter anderem die folgenden Vorteile:
 
-- Vermeidung von Konflikten zwischen der TypeScript und JavaScript-Implementierung von Klassen (Stichwort: `useDefineForClassFields`, wir haben hierzu bereits einen [separaten Artikel verfasst](/blog/2022-11-use-define-for-class-fields))
-- Konsistenz: Nutzung eines einheitlichen Stils
-- Nutzung auch innerhalb von Funktionen (im Injection Kontext) möglich
+- Vermeidung von Konflikten zwischen den unterschiedlichen Klassen-Implementierungen von TypeScript und JavaScript. Stichwort: `useDefineForClassFields`, wir haben hierzu bereits einen [separaten Artikel verfasst](/blog/2022-11-use-define-for-class-fields).
+- Konsistenz: Wir verwenden einen einheitlichen Stil
+- Nutzung auch innerhalb von Funktionen möglich, solange diese in einem Injection Context aufgerufen werden.
 
-Um alle Stellen zur Migration zu finden, suchen wir am besten im gesammten Projekt nach `constructor(`.
+Um alle Stellen für die Migration zu finden, können wir im gesamten Projekt nach `constructor(` suchen.
 
-Schauen wir uns das Ganze am Beispiel der `LoggedinOnlyDirective` an.
-Diese sieht vor der Migration wie folgt aus:
+Wir schauen uns zunächst die Klasse `LoggedinOnlyDirective` an.
+Vor der Migration sieht der Code wie folgt aus:
 
 ```ts
 // ...
@@ -95,15 +104,17 @@ export class LoggedinOnlyDirective implements OnDestroy {
 }
 ```
 
-Wir müssen nun `inject()` importieren und übergeben hierbei das ProviderToken, welches zuvor über den Konstruktor angefordert wurde.
+Die Argumente des Konstruktors werden entfernt.
+Stattdessen importieren wir die Funktion `inject()` und verwenden sie, um die Propertys direkt zu initialisieren.
 
 ```ts
+// loggedin-only.directive.ts
 import { /* ... */, inject } from '@angular/core';
 // ...
 @Directive({ /* ... */ })
 export class LoggedinOnlyDirective implements OnDestroy {
   // ...
-  private template = inject<TemplateRef<unknown>>(TemplateRef);
+  private template = inject(TemplateRef);
   private viewContainer = inject(ViewContainerRef);
   private authService = inject(AuthService);
 
@@ -114,27 +125,28 @@ export class LoggedinOnlyDirective implements OnDestroy {
 }
 ```
 
-Bei Komponenten, wo der Konstruktor nach die Migration keinerlei Funktion mehr hat, können wir diesen im Anschluss ersatzlos entfernen.
+Sollte der Konstruktor nach die Migration keinen Inhalt mehr besitzen, können wir die Methode vollständig entfernen.
 
-> Das Projekt _ngxtension_ stellt zur Migration auf `inject()` statt Konstruktor Injection auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/inject-migration/) bereit.
+> Übrigens: Das Projekt _ngxtension_ stellt zur Migration auf `inject()` ein Migrationsskript als [Schematic](https://ngxtension.netlify.app/utilities/migrations/inject-migration/) bereit.
+
 
 ## AsyncValidator als Funktion mit `inject()`
 
-Dank der neuen Funktion `inject()` können wir auf den `AsyncValidatorsService` verzichten.
-Dieser eigene Service für die asynchrone Formularvalidierung war ursprünglich nur notwendig, weil wir den Konstruktor brauchten, um den `BookStoreService` per Dependency Injection anzufordern.
+Dank `inject()` können wir den `AsyncValidatorsService` zu einer einfachen Funktion umbauen.
+Dieser Service für die asynchrone Formularvalidierung war ursprünglich nur notwendig, weil wir den Konstruktor brauchten, um den `BookStoreService` per Dependency Injection anzufordern.
 Wir können den Validator `isbnExists` jetzt ebenso als einfache Funktion definieren, wie wir es bei den synchronen Validatoren in der Datei `validators.ts` bereits getan haben.
-Den `BookStoreService` fordern wir mithilfe von `inject()` an und nutzen dafür die einfache Variable `service`.
+Den `BookStoreService` fordern wir mithilfe von `inject()` an und nutzen dafür die Variable `service`.
 
 ```ts
+// validators.ts
 import { inject } from '@angular/core';
-import { /* ... */, AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { /* ... */, AsyncValidatorFn } from '@angular/forms';
 import { map } from 'rxjs';
 
 import { BookStoreService } from '../../shared/book-store.service';
 
 // ...
-
-export const isbnExists = function (): AsyncValidatorFn {
+export function isbnExists(): AsyncValidatorFn {
   const service = inject(BookStoreService);
   return (control: AbstractControl) => {
     return service
@@ -150,8 +162,9 @@ Nur so ist gewährleistet, dass `inject()` bei der Verwendung in einem Injection
 In der `BookFormComponent` fordern wir nun nicht mehr den `AsyncValidatorsService` an, sondern nutzen direkt die neu erstellte Funktion `isbnExists()`.
 
 ```ts
+// book-form.component.ts
 // ...
-import { atLeastOneValue, isbnExists, isbnFormat } from '../shared/validators';
+import { atLeastOneValue, isbnFormat, isbnExists } from '../shared/validators';
 
 @Component({ /* ... */ })
 export class BookFormComponent {
@@ -174,39 +187,40 @@ export class BookFormComponent {
 Die Datei `async-validators.service.ts` kann anschließend gelöscht werden.
 Der Code für den asychronen Validator hat sich damit drastisch vereinfacht, und der Overhead durch die Serviceklasse entfällt.
 
-## Standalone Migration
+## Standalone Components
 
-Im nächsten Schritt wollen wir konsistent auf die Verwendung der Standalone APIs setzen.
-Hierzu müssen wir noch folgende Anpassungen durchführen:
+Im nächsten Schritt wollen wir die Anwendung konsistent mit Standalone APIs implementieren.
+Das Feature `books` haben wir im Praxiskapitel zu Standalone Components bereits migriert.
+Um das Projekt vollständig ohne Module umzusetzen, müssen wir noch folgende Anpassungen durchführen:
 
-1. Migration der restlichen Komponenten auf `standalone: true` (`SearchComponent`, `HomeComponent`, gesamtes `AdminModule` mit allen Komponenten)
-2. Bootstrapping der `AppComponent` (ohne `AppModule`)
-3. Entfernen aller nicht mehr benötigten Module
+1. Die restlichen Komponenten zu Standalone Components migrieren: `SearchComponent`, `HomeComponent`, gesamtes `AdminModule` mit allen Komponenten
+2. alle nicht mehr benötigten Module entfernen
+3. Anwendung direkt mit `AppComponent` bootstrappen, ohne `AppModule`
 
-Eine Ganze Menge Arbeit liegt hier vor uns, wenn wir diese Schritte manuell durchführen wollen.
-Die Gute Nachricht ist:
-Mittlerweile hat das Angular Team an einer automatischen Migration vieler dieser Schritte gearbeitet.
+Wenn wir diese Schritte manuell durchführen wollen, liegt eine ganze Menge Arbeit vor uns.
+Glücklicherweise bietet Angular ein Migrationsskript an, um einen Großteil der Aufgaben zu automatisieren.
 
 ```sh
 ng generate @angular/core:standalone
 ```
 
-Im Anschluss werden wir aufgefordert einen der drei Migrationsschritte auszuwählen.
+Führen wir diesen Befehl aus, können wir aus drei Migrationsschritten wählen:
 
-```txt
+```
 ? Choose the type of migration: (Use arrow keys)
 ❯ Convert all components, directives and pipes to standalone
   Remove unnecessary NgModule classes
   Bootstrap the application using standalone APIs
 ```
 
-### Komponenten, Direktiven und Pipes
+### Komponenten, Direktiven und Pipes migrieren
 
-Wir starten mit der ersten Option zur Migration aller Komponenten, Direktiven und Pipes.
+Wir starten mit der ersten Option, um alle Komponenten, Direktiven und Pipes zu migrieren.
+Dabei wird automatisch für alle diese Klassen das Flag `standalone` mit dem Wert `true` gesetzt.
+Außerdem wird das Template analysiert, und alle verwendeten Komponenten, Pipes und Direktiven werden automatisch unter `imports` im Kopf der Komponente eingetragen.
 
-Im Anschluss prüfen wir noch einmal alle durchgeführten Änderungen.
-Diese sollten nun das Flag `standalone: true` haben und die benötigten Abhängigkeiten importieren.
-Die `HomeComponent` sieht nach der Migration zum Beisiel wie folgt aus:
+Im Anschluss sollten wir alle durchgeführten Änderungen noch einmal überprüfen.
+Die `HomeComponent` sieht nach der Migration zum Beispiel wie folgt aus:
 
 ```ts
 import { Component } from '@angular/core';
@@ -220,27 +234,30 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeComponent {}
 ```
-
-Weiterhin wurden durch die Migration die Komponenten, Direktiven und Pipes aus den `declarations`-Abschnitten der noch vorhandenen Module entfernt und in die `imports` verschoben.
+Damit die Anwendung weiterhin funktioniert, wurden alle migrierten Komponenten, Direktiven und Pipes innerhalb der Module verschoben: Sie stehen nun nicht mehr unter `declarations`, sondern unter `imports`.
 
 ### Bootstrapping mit Standalone API
 
-Als nächstes wählen wir die Option zu Migration des _Bootstrapings_ der Anwendung unter Verwendung der Standalone API.
-Hierbei wird bereits unser `AppModule` entfernt und in der `main.ts` wird die Funktion `bootstrapApplication` genutzt.
-Die Funktion `importProvidersFrom()` erlaubt es uns alle Provider aus den referenzierten Modulen extrahieren.
-Weiterhin fehlt uns nun das `HttpClientModule`.
-Stattdessen verwenden wir die Funktion `provideHttpClient()`.
-Damit der Interceptor, der per Provider bereitgestellt wird, weiterhin funktioniert, müssen wir hier noch die Funktion `withInterceptorsFromDi()` mit übergeben.
+Wir führen den Migrationsbefehl erneut aus und wählen die dritte Option: die Anwendung bootstrappen mit Standalone APIs.
+Bei diesem Schritt wird das `AppModule` entfernt, und in der `main.ts` wird die Funktion `bootstrapApplication()` genutzt, um die Anwendung direkt mit der `AppComponent` zu bootstrappen.
+
+Alle Providers aus dem `AppModule` werden dabei in die Datei `main.ts` verschoben.
+Die Funktion `importProvidersFrom()` erlaubt es uns, die Providers aus den referenzierten Modulen extrahieren.
+Dabei können wir das `BrowserModule` aus der Liste entfernen: Es wird in einer reinen Standalone-Anwendung nicht mehr benötigt.
+
+Anstatt das `HttpClientModule` einzubinden, wird nach der Migration die Funktion `provideHttpClient()`.
+Damit der klassenbasierte Interceptor, der per Provider bereitgestellt wird, weiterhin funktioniert, wird die Funktion `withInterceptorsFromDi()` angegeben.
 
 ```ts
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+// main.ts
 import { importProvidersFrom } from '@angular/core';
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 // ...
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserModule, AppRoutingModule),
+    importProvidersFrom(AppRoutingModule),
     provideHttpClient(withInterceptorsFromDi())
     {
       provide: HTTP_INTERCEPTORS,
@@ -250,6 +267,55 @@ bootstrapApplication(AppComponent, {
   ]
 }).catch(err => console.error(err));
 ```
+
+In unserem Test blieb übrigens in der `main.ts` der Import für die Funktion `platformBrowserDynamic` übrig, der allerdings nicht benötigt wird.
+Sie können diese Zeile entfernen.
+
+### ApplicationConfig anlegen
+
+In neu angelegten Angular-Projekten werden die globalen Providers in einer separaten Datei abgelegt. Damit bleibt die Datei `main.ts` schlank und beinhaltet nur den reinen Aufruf für das Bootstrapping.
+
+Um die Struktur an neu angelegte Anwendungen anzugleichen, empfehlen wir Ihnen, selbst manuell die Datei `src/app/app.config.ts` anzulegen.
+Sie beinhaltet unsere `ApplicationConfig` mit den Providers:
+
+```ts
+// app.config.ts
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { AuthInterceptor } from './shared/auth.interceptor';
+import { AppRoutingModule } from './app-routing.module';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    importProvidersFrom(AppRoutingModule),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    provideHttpClient(withInterceptorsFromDi())
+  ]
+};
+```
+
+Die Datei `main.ts` importiert dann diese Variable:
+
+```ts
+// main.ts
+import { AppComponent } from './app/app.component';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error(err));
+```
+
+
+
+### Routen migrieren
+
+TODO
+
 
 ### NgModules entfernen
 
