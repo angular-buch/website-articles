@@ -245,7 +245,7 @@ Alle Providers aus dem `AppModule` werden dabei in die Datei `main.ts` verschobe
 Die Funktion `importProvidersFrom()` erlaubt es uns, die Providers aus den referenzierten Modulen extrahieren.
 Dabei können wir das `BrowserModule` aus der Liste entfernen: Es wird in einer reinen Standalone-Anwendung nicht mehr benötigt.
 
-Anstatt das `HttpClientModule` einzubinden, wird nach der Migration die Funktion `provideHttpClient()`.
+Anstatt das `HttpClientModule` einzubinden, wird nach der Migration die Funktion `provideHttpClient()` verwendet.
 Damit der klassenbasierte Interceptor, der per Provider bereitgestellt wird, weiterhin funktioniert, wird die Funktion `withInterceptorsFromDi()` angegeben.
 
 ```ts
@@ -270,6 +270,11 @@ bootstrapApplication(AppComponent, {
 
 In unserem Test blieb übrigens in der `main.ts` der Import für die Funktion `platformBrowserDynamic` übrig, der allerdings nicht benötigt wird.
 Sie können diese Zeile entfernen.
+
+Übrigens empfehlen wir, auch in einer modulbasierten Anwendung die neue Funktion `provideHttpClient()` zu nutzen und nicht mehr das alte `HttpClientModule`.
+Dieses Modul wird mit Angular 18 [als *deprecated* markiert](https://github.com/angular/angular/commit/f914f6a3628847c06cbdde9c90cd417fb2f4c61f).
+Für den Umstieg bietet das Framework beim Update auf Angular 18 eine automatische Migration an.
+
 
 ### ApplicationConfig anlegen
 
