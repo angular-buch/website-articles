@@ -1,7 +1,7 @@
 ---
-title: 'Book Monkey v5: Modern Angular'
-author: Danny Koppenhagen
-mail: mail@k9n.de
+title: 'Modern Angular: den BookMonkey migrieren'
+author: Danny Koppenhagen und Ferdinand Malcher
+mail: dannyferdi@schnell-mal.de # Gravatar
 published: 2024-04-04
 lastModified: 2024-04-04
 keywords:
@@ -9,9 +9,10 @@ keywords:
   - Application Builder
   - Standalone Components
   - inject
-  - functional interceptor
+  - Functional Interceptor
   - Control Flow
   - Signals
+  - Functional Outputs
   - NgOptimizedImage
   - BookMonkey
 language: de
@@ -576,7 +577,7 @@ Auf diese Weise kann Angular gezielt die Views aktualisieren, in denen sich tats
 
 Viele Stellen, an denen wir bisher Observables und die AsyncPipe von Angular eingesetzt haben, können auch ohne RxJS mit Signals umgesetzt werden.
 
-## SearchComponent
+### SearchComponent
 
 Als Erstes werfen wir hierfür einen Blick auf die `SearchComponent`.
 Das Property `isLoading` wird verwendet, um den Status der Suchanfrage zu erfassen.
