@@ -15,7 +15,7 @@ keywords:
   - NgOptimizedImage
   - BookMonkey
 language: de
-thumbnail: bm.jpg
+thumbnail: header-modernangular.jpg
 ---
 
 Angular erlebt einen Aufschwung: Mit den letzten Major-Versionen des Frameworks wurden einige neue Konzepte und Features eingeführt.
@@ -936,3 +936,7 @@ Nicht zuletzt ergeben sich durch Signals ganz neue Patterns und Herangehensweise
 - [Repo: 17-standalone (Ausgangsbasis)](https://github.com/book-monkey5/17-standalone)
 - [Repo: 18-modern-angular (Migration)](https://github.com/book-monkey5/18-modern-angular)
 - [Differenzansicht (17-standalone -> 18-modern-angular)](https://book-monkey5.angular-buch.com/diffs/18-modern-angular.html)
+
+<hr>
+
+<small>**Titelbild:** Black Diamond, Kopenhagen, Dänemark. Foto von Ferdinand Malcher</small>
