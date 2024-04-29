@@ -747,7 +747,7 @@ export class LoggedinOnlyDirective {
 }
 ```
 
-### Signal Inputs
+## Signal Inputs
 
 Mit dem Minor-Release von Angular 17.2.0 wurde eine Alternative zum bisherigen `@Input()`-Dekorator auf Basis von Signals eingeführt, siehe die [offizielle Information im Angular-Blog](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
 Der übergebene Wert eines Komponenten-Inputs wird damit direkt als Signal erfasst:
@@ -812,6 +812,82 @@ export class ConfirmDirective {
 ```
 
 > Das Projekt _ngxtension_ stellt zur Migration auf Signal Inputs auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/signal-inputs-migration/) bereit.
+
+
+## Router Input Bindings und RxJS: Buch laden
+
+Zum Abschluss dieses Abschnitts wollen wir ein neueres Feature des Routers verwenden: Component Input Bindings.
+Damit ist es möglich, Routenparameter per Input in einer Komponente zu empfangen.
+Anstatt also wie gewohnt den Service `ActivatedRoute` zu verwenden, erstellen in der Komponente ein Input, das den gleichen Namen trägt wie der Routenparameter:.
+
+```ts
+@Component({ /* ... */ })
+export class MyComponent {
+  @Input() myParam?: string;
+  myParam2 = input<string>();
+}
+```
+
+Der Router befüllt diese Propertys automatisch mit Werten – sofern die Parameter in der Route existieren.
+Dabei werden Path-Parameter, Query-Parameter und Routen-Daten gleichermaßen verarbeitet.
+Tragen die verschiedenen Parameter-Typen den gleichen Namen, so ist nur einer der Werte verfügbar. Sie können die Implementierung im [Quellcode von Angular](https://github.com/angular/angular/blob/17.3.6/packages/router/src/directives/router_outlet.ts#L459) nachvollziehen.
+
+
+### Component Input Binding aktivieren
+
+Damit diese Mechanik funktioniert, müssen wir das Feature zunächst im Router aktivieren.
+In der Datei `app.config.ts` fügen wir unter `provideRouter()` den Aufruf der Funktion `withComponentInputBinding()` hinzu:
+
+```ts
+// app.config.ts
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+// ...
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes, withComponentInputBinding()),
+    // ...
+  ]
+};
+```
+
+### Kombination mit Signal Inputs
+
+Zusammen mit Signal Inputs und den Möglichkeiten von RxJS ergibt sich ein elegantes neues Pattern, das wir in unseren Komponenten einsetzen wollen.
+In der `BookDetailsComponent` und `BookEditComponent` wird jeweils ein Buch anhand der ISBN geladen, die in der Route übergeben wird.
+
+Wir erzeugen zunächst ein passendes Input-Property mihilfe der Funktion `input()`:
+
+```ts
+@Component({ /* ... */ })
+export class BookDetailsComponent {
+  isbn = input.required<string>();
+}
+```
+
+Da es sich um ein Signal handelt, kann Angular bei Wertänderungen direkt reagieren.
+Wir wollen den Parameter aber weiterhin mit RxJS verarbeiten: Der HTTP-Call wird über ein Observable abgebildet, und auch die Charakteristik des Operators `switchMap` wollen wir weiterhin nutzen.
+
+Wir wandeln das Signal `isbn` also mit der Funktion `toObservable()` zunächst in ein Observable um.
+In der Pipeline starten wir den HTTP-Request und rufen das Buch ab.
+
+```ts
+@Component({ /* ... */ })
+export class BookDetailsComponent {
+  // ...
+  isbn = input.required<string>();
+  
+  book$ = toObservable(this.isbn).pipe(
+    switchMap(isbn => this.service.getSingle(isbn))
+  );
+  // ...
+}
+```
+
+Auf dieselbe Weise gehen wir in der `BookEditComponent` vor.
+Der Code in der Komponentenklasse wird elegant verkürzt: Anstatt `ActivatedRoute` zu verwenden, stammt der Parameter aus dem Signal Input.
+Der Konstruktor entfällt vollständig, wenn wir das Property `book$` direkt zuweisen.
+Anschließend können wir die nicht benötigten Imports aufräumen.
 
 
 ## Functional Outputs
