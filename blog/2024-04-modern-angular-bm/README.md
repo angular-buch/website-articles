@@ -1028,6 +1028,32 @@ Nutzen wir zum Beispiel Visual Studio Code als Editor, können wir die Migration
 - Suche: `styleUrls: \[(.*)\]` (Die Option "Regulärer Ausdruck" muss aktiviert sein)
 - Ersetzen: `styleUrl: $1`
 
+
+## Migrations-Schematics von ngxtension verwenden
+
+
+Wir haben in den vorherigen Abschnitten erwähnt, dass das Paket [ngxtension](https://ngxtension.netlify.app/) Schematics für die Migration auf einige neuere Angular-Features anbietet. Es handelt sich nicht um ein offizielles Projekt von Angular, sondern stammt aus der Community.
+
+Um die Migrationen zu verwenden, müssen wir das Paket zunächst im Projekt installieren:
+
+```bash
+npm i -D ngxtension
+```
+
+Anschließend können wir die Migration mithilfe von `ng generate` anstoßen:
+
+```bash
+# von @Input zu Signal Inputs
+ng g ngxtension:convert-signal-inputs
+
+# von @Output zu Functional Outputs
+ng g ngxtension:convert-outputs
+
+# von Constructor Injection zu inject()
+ng g ngxtension:convert-di-to-inject
+```
+
+
 ## Demo und Code
 
 Damit haben wir den BookMonkey auf die neusten Konzepte und Features von Angular migriert.
