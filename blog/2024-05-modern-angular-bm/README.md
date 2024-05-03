@@ -44,9 +44,6 @@ Die einzelnen Features haben wir bereits separat in den jeweiligen Artikeln zu d
 Zum Thema Server-Side Rendering mit Angular 17 haben wir einen separaten Artikel veröffentlicht:
 
 - [Book Monkey v5: Server-Side Rendering mit Angular 17](/blog/2023-11-ssr-bm)
-<!--
-- [Angular 18 ist da!](/blog/2024-06-angular18)
--->
 
 ## Die Ausgangsbasis
 
