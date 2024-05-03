@@ -1,9 +1,9 @@
 ---
 title: 'Modern Angular: den BookMonkey migrieren'
 author: Danny Koppenhagen und Ferdinand Malcher
-mail: dannyferdi@schnell-mal.de # Gravatar
-published: 2024-04-04
-lastModified: 2024-04-04
+mail: dannyferdigravatar@fmalcher.de # Gravatar
+published: 2024-05-03
+lastModified: 2024-05-03
 keywords:
   - ESBuild
   - Application Builder
@@ -17,6 +17,7 @@ keywords:
   - BookMonkey
 language: de
 thumbnail: header-modernangular.jpg
+hidden: true
 ---
 
 Angular erlebt einen Aufschwung: Mit den letzten Major-Versionen des Frameworks wurden einige wichtige neue Konzepte und Features eingeführt.
