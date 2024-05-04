@@ -2,8 +2,8 @@
 title: 'Modern Angular: den BookMonkey migrieren'
 author: Danny Koppenhagen und Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
-published: 2024-05-03
-lastModified: 2024-05-03
+published: 2024-05-05
+lastModified: 2024-05-05
 keywords:
   - ESBuild
   - Application Builder
@@ -12,6 +12,7 @@ keywords:
   - Functional Interceptor
   - Control Flow
   - Signals
+  - Router Input Binding
   - Functional Outputs
   - NgOptimizedImage
   - BookMonkey
@@ -44,6 +45,36 @@ Die einzelnen Features haben wir bereits separat in den jeweiligen Artikeln zu d
 Zum Thema Server-Side Rendering mit Angular 17 haben wir einen separaten Artikel veröffentlicht:
 
 - [Book Monkey v5: Server-Side Rendering mit Angular 17](/blog/2023-11-ssr-bm)
+
+
+**Inhaltsverzeichnis:**
+
+- [Die Ausgangsbasis](/blog/2024-05-modern-angular-bm#die-ausgangsbasis)
+- [`inject()` statt Constructor Injection](/blog/2024-05-modern-angular-bm#inject-statt-constructor-injection)
+- [AsyncValidator als Funktion mit `inject()`](/blog/2024-05-modern-angular-bm#asyncvalidator-als-funktion-mit-inject)
+- [Standalone Components](/blog/2024-05-modern-angular-bm#standalone-components)
+  - [Komponenten, Direktiven und Pipes migrieren](/blog/2024-05-modern-angular-bm#komponenten-direktiven-und-pipes-migrieren)
+  - [Bootstrapping mit Standalone API](/blog/2024-05-modern-angular-bm#bootstrapping-mit-standalone-api)
+  - [ApplicationConfig anlegen](/blog/2024-05-modern-angular-bm#applicationconfig-anlegen)
+  - [Routen migrieren](/blog/2024-05-modern-angular-bm#routen-migrieren)
+  - [NgModules entfernen](/blog/2024-05-modern-angular-bm#ngmodules-entfernen)
+- [Functional Interceptors](/blog/2024-05-modern-angular-bm#functional-interceptors)
+- [Control Flow mit `@if` und `@for`](/blog/2024-05-modern-angular-bm#control-flow-mit-if-und-for)
+- [Application Builder verwenden](/blog/2024-05-modern-angular-bm#application-builder-verwenden)
+- [Signals](/blog/2024-05-modern-angular-bm#signals)
+  - [Signals in Komponenten einsetzen](/blog/2024-05-modern-angular-bm#signals-in-komponenten-einsetzen)
+  - [Observables in Signals konvertieren](/blog/2024-05-modern-angular-bm#observables-in-signals-konvertieren)
+  - [Signals in Observables konvertieren](/blog/2024-05-modern-angular-bm#signals-in-observables-konvertieren)
+- [Signal-based Inputs](/blog/2024-05-modern-angular-bm#signal-based-inputs)
+- [Router Input Bindings, Signals und RxJS](/blog/2024-05-modern-angular-bm#Router-input-bindings-signals-und-rxjs)
+  - [Component Input Binding aktivieren](/blog/2024-05-modern-angular-bm#component-input-binding-aktivieren)
+  - [Kombination mit Signal Inputs](/blog/2024-05-modern-angular-bm#kombination-mit-signal-inputs)
+- [Functional Outputs](/blog/2024-05-modern-angular-bm#functional-outputs)
+- [Direktive `NgOptimizedImage` verwenden](/blog/2024-05-modern-angular-bm#direktive-ngoptimizedimage-verwenden)
+- [Komponenten-Stylesheets: `styleUrls` =\> `styleUrl`](/blog/2024-05-modern-angular-bm#komponenten-stylesheets-styleurls--styleurl)
+- [Migrations-Schematics von ngxtension verwenden](/blog/2024-05-modern-angular-bm#migrations-schematics-von-ngxtension-verwenden)
+- [Demo und Code](/blog/2024-05-modern-angular-bm#demo-und-code)
+
 
 ## Die Ausgangsbasis
 
@@ -599,7 +630,7 @@ Auf diese Weise kann Angular gezielt die Views aktualisieren, in denen sich tats
 
 Einige Stellen, an denen wir bisher Observables und die AsyncPipe von Angular eingesetzt haben, können auch ohne RxJS mit Signals umgesetzt werden.
 
-### SearchComponent
+### Signals in Komponenten einsetzen
 
 Als Erstes werfen wir einen Blick in die `SearchComponent`:
 Das Property `isLoading` wird verwendet, um den Ladestatus der Suchanfrage zu erfassen.
@@ -836,7 +867,7 @@ export class ConfirmDirective {
 > Das Projekt _ngxtension_ stellt zur Migration auf Signal Inputs auch ein [Schematic](https://ngxtension.netlify.app/utilities/migrations/signal-inputs-migration/) bereit.
 
 
-## Router Input Bindings und RxJS: Buch laden
+## Router Input Bindings, Signals und RxJS
 
 Zum Abschluss dieses Abschnitts wollen wir ein neueres Feature des Routers verwenden: Component Input Bindings.
 Damit ist es möglich, Routenparameter per Input in einer Komponente zu empfangen.
@@ -898,7 +929,7 @@ In der Pipeline starten wir den HTTP-Request und rufen das Buch ab.
 export class BookDetailsComponent {
   // ...
   isbn = input.required<string>();
-  
+
   book$ = toObservable(this.isbn).pipe(
     switchMap(isbn => this.service.getSingle(isbn))
   );
