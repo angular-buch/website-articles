@@ -126,7 +126,7 @@ export class LoggedinOnlyDirective implements OnDestroy {
 }
 ```
 
-Sollte der Konstruktor nach die Migration keinen Inhalt mehr besitzen, können wir die Methode vollständig entfernen.
+Sollte der Konstruktor nach der Migration keinen Inhalt mehr besitzen, können wir die Methode vollständig entfernen.
 
 > Übrigens: Das Projekt _ngxtension_ stellt zur Migration auf `inject()` ein Migrationsskript als [Schematic](https://ngxtension.netlify.app/utilities/migrations/inject-migration/) bereit.
 
@@ -915,7 +915,9 @@ Anschließend können wir die nicht benötigten Imports aufräumen.
 ## Functional Outputs
 
 Analog zur Funktion `input()` steht seit der Minor-Version Angular 17.3.0 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
-Dabei wurde auch die Typsicherheit verbessert, denn der übergebene Payload ist nun verpflichtend (bisher war er optional).
+Dabei wurde auch die Typsicherheit verbessert: Wenn wir den Output typisieren, z. B. `output<string>()`, dann ist übergebene Payload bei `emit()` verpflichtend.
+Beim bisherigen Weg mit `EventEmitter` war der Payload hingegen immer optional.
+Wollen wir keinen Payload übergeben, müssen wir den Output nicht typisieren, und es wird automatisch der Typ `void` für den Payload angenommen.
 
 ```ts
 select = output() // OutputEmitterRef<void>
