@@ -27,7 +27,6 @@ In diesem Artikel wollen wir das Beispielprojekt "BookMonkey" aus dem Angular-Bu
 Besonders interessant sind die folgenden Neuerungen:
 
 - Die **Standalone Features** sind inzwischen stark etabliert und Standard in jeder neuen Angular-Anwendung. **Module** sind dadurch optional geworden und werden früher oder später vermutlich ganz aus Angular verschwinden.
-implementiert, anstatt eine Klasse zu verwenden.
 - Der **Control Flow mit `@if` und `@for`** ist der empfohlene Weg, um Verzweigungen und Schleifen im Template abzubilden. Die Direktiven `ngIf` und `ngFor` werden vermutlich in einer späteren Version verschwinden.
 - **Signals** sind stable und werden immer mehr die Schnittstellen von Angular integriert. In der Community entstehen Patterns und Bibliotheken rund um Signals.
 - Für die Dependency Injection geht der Trend dazu, die **Funktion `inject()`** zu verwenden, anstatt Abhängigkeiten über den Konstruktor anzufordern.
