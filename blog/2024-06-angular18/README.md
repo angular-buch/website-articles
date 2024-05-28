@@ -198,6 +198,26 @@ Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechen
 
 ## Queries als Signal
 
+Es kann Situationen geben, in denen wir aus einer übergeordneten Komponenten auf eine Kind-Komponente oder ein DOM-Element zugreifen möchten.
+Seit jeher stehen uns hierfür eine Reihe von Dekoratoren zu Verfügung, um die entsprechenden Referenzen zu erhalten:
+
+```ts
+import { ViewChild, ElementRef} from '@angular/core';
+
+
+export class AppComponent {
+
+  @ViewChild(ChildComponent)
+  testComponent: ChildComponent;
+
+  // TODO
+
+}
+```
+
+Die Funktionen `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden in @angular/core hinzugefügt und geben uns moderne Signals zurück.
+
+TODO
 
 ## Model inputs
 
@@ -266,6 +286,9 @@ Auf das Ereignis können wir nun wie bisher per Event-Binding reagieren:
 <app-katzen (katzenGeraeusch)="handleEvent($event)" />
 ```
 
+Bitte beachten Sie, das die API aktuell noch im Status "Developer Preview" ist.
+Wir erwarten aber bei dieser bereits sehr ausgereiften API allerdings keine fundamentalen Änderungen mehr. 
+
 ### Outputs von Observables
 
 Zusätzlich zur neuen `output()`-Funktion bietet Angular die `outputFromObservable`-Funktion, welche einen nahtlos Übergang vom RxJS-Framework bereitstellt. Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
@@ -280,9 +303,20 @@ export class MyComp {
   onNameChange$ = new Observable<string>( … );
   onNameChange = outputFromObservable(this.onNameChange$);
 }
-
-
 ```
+
+Der umgekehrte Weg ist ebenso per `outputToObservable` möglich.
+Benötigt man etwa die Ereignisse einer Kind-Komponente als Obervable, so kann man auf ein Output wie folgt wieder zu einem RxJS-Datenstrom umwandeln.
+
+```ts
+import {outputToObservable} from '@angular/core/rxjs-interop';
+
+outputToObservable(this.myComp.instance.onNameChange)
+  .pipe(…)
+  .subscribe(…);
+```
+
+Dieser Befehl funktioniert sowohl mit den neue Output-API, als auch dem alten Output-Dekorator.
 
 <hr>
 
