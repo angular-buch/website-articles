@@ -30,6 +30,15 @@ Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weite
 
 
 
+## Neue Offizielle Website 
+
+Das Angular Team hat mit Angular 17 die neue Website [angular.dev](https://angular.dev/) veröffentlich und damit die "Angular Renaissance" aufgerufen.
+Die Website die jetzt die einzige offizielle Dokumentationswebsite für Angular ist und bietet eine intuitive, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiter entwickelt und leitet jetzt auf die neue Domain um.
+
+**TODO Screenshot**
+
+
+
 ## Zoneless Change Detection (experimentell)
 
 Seit dem Beginn von Angular ist die Bibliothek [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) für das Auslösen der Änderungsüberprüfung (Change Detection) in Angular verantwortlich.
@@ -94,7 +103,7 @@ export class App {
   `,
 })
 export class App {
-  protected name = signal('Angular');
+  name = signal('Angular');
 
   handleClick() {
     this.name.set('Zoneless Angular');
@@ -128,11 +137,103 @@ Dies verbessert das Debugging und verkleinert die Bundles.
 
 ### Zonenlose Unterstützung in bestehenden Komponenten
 
-Das Angular Team hat zonenlose Unterstützung in [Angular Material](https://material.angular.io/) and damit auch im [Angular CDK](https://material.angular.io/cdk/) aktiviert.
-Wenn Sie also auf die Bibliothek Angular Material setzen, können Sie prinzipiell direkt auf eine zonenlose App umsteigen.
+[Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
+Das Angular Team hat mit der neuen Version auch gleich die zonenlose Unterstützung aktiviert. Ebenso kann man nun auch das [Angular CDK](https://material.angular.io/cdk/) vollständig ohne zone.js verwenden.
+
+Wenn Sie also auf die Komponentensammlung Angular Material setzen, können Sie prinzipiell direkt auf eine zonenlose App umsteigen.
 Sollten Sie einen Bibliothek von einem anderen Hersteller bzw. von einem anderen Open-Source Projekt verwenden, so prüfen Sie am besten Vorab ob die Bibliothek bereits "zoneless Angular" unterstützt.
 Ist dem nicht so, werden sich nach einer Umstellung diverse Stellen in der Anwendung nicht mehr korrekt aktualisieren.
 
+
+
+# Neue Signal-APIs
+
+In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir die neuen Funktionen der Vollständigkeit halber noch einmal vor.
+
+
+## Inputs als Signal
+
+Mit dem Minor-Release von Angular 17.1 wurde eine Alternative zum bisherigen `@Input()`-Dekorator auf Basis von Signals eingeführt, siehe die [offizielle Information im Angular-Blog](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
+Nutzen wir die neue Funktion `input()`, wird der übergebene Wert eines Komponenten-Inputs direkt als Signal erfasst:
+
+```ts
+anzahl = input() // InputSignal<unknown>
+anzahl = input<number>() // InputSignal<number | undefined>
+anzahl = input.required() // InputSignal<unknown>
+anzahl = input.required<number>() // InputSignal<number>
+anzahl = input(5) // InputSignal<number>
+```
+
+Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktulisiert wird:
+
+```ts
+@Component({
+  ...
+  selector: 'app-katzen',
+  template: `
+    @if (anzahl()) {
+      <img src="{{ imageUrl() }}">
+    }
+  `
+})
+export class KatzenComponent {
+  anzahl = input<number>();
+  imageUrl = computed(() => `https://api.angular.schule/avatar/${this.anzahl()}`);
+}
+```
+
+
+Um das Beispiel vollständiger zu gestalten, sieht man hier auch gleich die Kombination mit einem Computed-Signal. 
+Mit Hilfe der neuen Inputs können wir nun mit folgender Syntax einen Wer an die Kind-Komponente übergeben:
+
+```html
+<app-book [anzahl]="5" />
+```
+
+Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechenden Anzahl an Katzen.
+
+
+## Queries als Signal
+
+
+## Model inputs
+
+TODO
+
+```
+@Component({
+  selector: 'custom-checkbox',
+  template: `
+    <div class="cool-checkbox-treatment">
+      <input type="checkbox" (click)="toggle()" [value]="checked()">
+    </div>
+  `
+})
+export class CustomCheckbox {
+  protected checked = model(false);
+
+  toggle() {
+    this.checked.set(!this.checked());
+  }
+}
+```
+
+## Outputs als Funktion
+
+Analog zur Funktion `input()` steht seit der Minor-Version Angular 17.3.0 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
+Dabei wurde auch die Typsicherheit verbessert: Wenn wir den Output typisieren, z. B. `output<string>()`, dann ist übergebene Payload bei `emit()` verpflichtend.
+Beim bisherigen Weg mit `EventEmitter` war der Payload hingegen immer optional.
+Wollen wir keinen Payload übergeben, müssen wir den Output nicht typisieren, und es wird automatisch der Typ `void` für den Payload angenommen.
+
+```ts
+select = output() // OutputEmitterRef<void>
+isbnChange = output<string>() // OutputEmitterRef<string>
+
+// ...
+this.select.emit(); // OK
+this.isbnChange.emit(); // Error: Expected 1 arguments, but got 0.
+this.isbnChange.emit('3864909465'); // OK
+```
 
 
 <hr>
