@@ -187,7 +187,7 @@ Um das Beispiel vollständiger zu gestalten, sieht man hier auch gleich die Komb
 Mit Hilfe der neuen Inputs können wir nun mit folgender Syntax einen Wer an die Kind-Komponente übergeben:
 
 ```html
-<app-book [anzahl]="5" />
+<app-katzen [anzahl]="5" />
 ```
 
 Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechenden Anzahl an Katzen.
@@ -222,19 +222,44 @@ export class CustomCheckbox {
 
 Analog zur Funktion `input()` steht seit der Minor-Version Angular 17.3.0 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
 Dabei wurde auch die Typsicherheit verbessert: Wenn wir den Output typisieren, z. B. `output<string>()`, dann ist übergebene Payload bei `emit()` verpflichtend.
-Beim bisherigen Weg mit `EventEmitter` war der Payload hingegen immer optional.
+Beim bisherigen Weg mit `EventEmitter.emit` war der Payload hingegen immer optional.
+(Lediglich die Methode `EventEmitter.next` hat einer strikte Typprüfung genügt.)
 Wollen wir keinen Payload übergeben, müssen wir den Output nicht typisieren, und es wird automatisch der Typ `void` für den Payload angenommen.
 
 ```ts
 select = output() // OutputEmitterRef<void>
-isbnChange = output<string>() // OutputEmitterRef<string>
+textChange = output<string>() // OutputEmitterRef<string>
 
 // ...
 this.select.emit(); // OK
-this.isbnChange.emit(); // Error: Expected 1 arguments, but got 0.
-this.isbnChange.emit('3864909465'); // OK
+this.textChange.emit(); // Error: Expected 1 arguments, but got 0.
+this.textChange.emit('Text'); // OK
 ```
 
+Hier ein vollständiges Beispiel:
+
+```ts
+@Component({
+  ...
+  selector: 'app-katzen',
+  template: `
+    <button (click)="wasMachenDieKatzen()">Klick mich</button>
+  `
+})
+export class KatzenComponent {
+  katzenGeraeusch = output<string>();
+
+  wasMachenDieKatzen() {
+    katzenGeraeusch.emit('Miau! 😸')
+  }
+}
+```
+
+Auf das Ereignis können wir nun wie bisher per Event-Binding reagieren:
+
+```html
+<app-katzen (katzenGeraeusch)="handleEvent($event)" />
+```
 
 <hr>
 
