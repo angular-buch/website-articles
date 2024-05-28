@@ -93,6 +93,7 @@ export class App {
 ```
 
 ... würden wir jetzt mit Signals folgendermaßen abbilden:
+
 ```ts
 // Neuer Stil mit Signals
 @Component({
@@ -167,6 +168,8 @@ anzahl = input(5) // InputSignal<number>
 Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktulisiert wird:
 
 ```ts
+import {input} from '@angular/core';
+
 @Component({
   ...
   selector: 'app-katzen',
@@ -239,6 +242,8 @@ this.textChange.emit('Text'); // OK
 Hier ein vollständiges Beispiel:
 
 ```ts
+import {output} from '@angular/core';
+
 @Component({
   ...
   selector: 'app-katzen',
@@ -259,6 +264,24 @@ Auf das Ereignis können wir nun wie bisher per Event-Binding reagieren:
 
 ```html
 <app-katzen (katzenGeraeusch)="handleEvent($event)" />
+```
+
+### Outputs von Observables
+
+Zusätzlich zur neuen `output()`-Funktion bietet Angular die `outputFromObservable`-Funktion, welche einen nahtlos Übergang vom RxJS-Framework bereitstellt. Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
+
+Wenn die Datenquelle eine Observable ist, kann man den Übergang zur neuen Output-API wie folgt durchführen:
+
+```ts
+import {outputFromObservable} from '@angular/core/rxjs-interop';
+
+@Component({…})
+export class MyComp {
+  onNameChange$ = new Observable<string>( … );
+  onNameChange = outputFromObservable(this.onNameChange$);
+}
+
+
 ```
 
 <hr>
