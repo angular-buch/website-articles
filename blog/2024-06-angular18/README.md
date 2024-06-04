@@ -33,7 +33,7 @@ Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weite
 ## Neue Offizielle Website 
 
 Das Angular Team hat mit Angular 17 die neue Website [angular.dev](https://angular.dev/) veröffentlich und damit die "Angular Renaissance" aufgerufen.
-Die Website die jetzt die einzige offizielle Dokumentationswebsite für Angular ist und bietet eine intuitive, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiter entwickelt und leitet jetzt auf die neue Domain um.
+Die Website die jetzt die einzige offizielle Dokumentationswebsite für Angular ist und bietet eine intuitive, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiterentwickelt und leitet jetzt auf die neue Domain um.
 
 ![Screenshot von angular.dev](angular_dev.gif)
 
@@ -43,11 +43,11 @@ Die Website die jetzt die einzige offizielle Dokumentationswebsite für Angular 
 
 Seit dem Beginn von Angular ist die Bibliothek [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) für das Auslösen der Änderungsüberprüfung (Change Detection) in Angular verantwortlich.
 Zone.js hat den Umgang mit Angular massiv geprägt:
-Änderungen an den anzuzeigenden Daten werden scheinbar wie durch Magie erkannt.
-Aber leider hat diese Magie auch Reihe von technischen einige Nachteile mit sich gebracht.
+Änderungen an den angezeigten Daten werden scheinbar wie durch Magie erkannt.
+Aber leider hat diese Magie auch Reihe von technischen Nachteilen mit sich gebracht.
 Vor allem die Performance und die Handhabung beim Debugging werden so schon lange kritisiert, wie es die Integration von zone.js gibt.
 
-Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem folgendes Statement zur Datei `main.ts` hinzu gefügt:
+Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem folgendes Statement zur Datei `main.ts` hinzugefügt:
 
 ```ts
 bootstrapApplication(App, {
@@ -61,7 +61,7 @@ Anschließend kann `zone.js` aus dem Polyfills-Eintrag in der Datei `angular.jso
 
 Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detection:
 
-* Verbesserte Komponierbarkeit für Micro-Frontends und Interoperabilität mit anderen Frameworks
+* Verbesserte Kombinierbarkeit für Micro-Frontends und Interoperabilität mit anderen Frameworks
 * Schnellere Initialisierung und Laufzeit der Angular-App
 * Kleinere Bundle-Größe und schnellere Seitenladezeiten
 * Lesbarere Stack-Traces
@@ -70,7 +70,7 @@ Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detectio
 Allerdings bekommen wir all diese Vorteile nicht einfach umsonst.
 Der "alte Angular-Stil", bei dem direkt Properties an den Komponenten abändert kann, ist mit dem zonenlosen Ansatz nicht direkt kompatibel.
 Im Kern geht es darum, auf die neuen _Signals_ umzusteigen, die seit [Angular 16](https://angular-buch.com/blog/2023-05-angular16#reaktivit%C3%A4t-mit-signals) verfügbar sind. 
-Wir haben über diesen modernen Ansatz in unserem letzten Blogpost bereichtet:
+Wir haben über diesen modernen Ansatz in unserem letzten Blogpost berichtet:
 [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm)
 
 Diese simple Komponente...
@@ -87,7 +87,7 @@ export class App {
   name = 'Angular';
 
   handleClick() {
-    this.name = 'Klassiches Angular';
+    this.name = 'Klassisches Angular';
   }
 }
 ```
@@ -112,14 +112,14 @@ export class App {
 }
 ```
 
-Im obigen Beispiel wird beim Klicken auf den Button das _Signal_ mit der Bezeichnung `name` aktualisiert und anchliepend die Oberfläche aktualisiert.
+Im obigen Beispiel wird beim Klicken auf den Button das _Signal_ mit der Bezeichnung `name` aktualisiert und anschließend die Oberfläche aktualisiert.
 Dies funktioniert genauso zuverlässig wie bei einer Anwendung mit zone.js, jedoch begrenzt Angular die internen Überprüfungen auf ganz wenige Auslöser - wie den Aktualisierungen der Signals.
 Die Performance ist hierbei deutlich höher.
 
 ### Auf "zoneless" updaten
 
 Angular entwickelt sich stetig weiter, und "zoneless" ist ein zentraler Bestandteil davon.
-Während das Framework weiterentwickelt wird, stellt das Angular Team selbverständlich sicher, dass der klassische Stil weiterhin wie erwartet funktioniert.
+Während das Framework weiterentwickelt wird, stellt das Angular Team selbstverständlich sicher, dass der klassische Stil weiterhin wie erwartet funktioniert.
 Der zukünftige Fokus des Angular-Teams ist allerdings eindeutig.
 Aber es ist an der Zeit, bei der Entwicklung auf Signals zu setzen!
 Wir empfehlen, neue Angular-Anwendungen definitiv mit den Signals umzusetzen.
@@ -141,7 +141,7 @@ Dies verbessert das Debugging und verkleinert die Bundles.
 Das Angular Team hat mit der neuen Version auch gleich die zonenlose Unterstützung aktiviert. Ebenso kann man nun auch das [Angular CDK](https://material.angular.io/cdk/) vollständig ohne zone.js verwenden.
 
 Wenn Sie also auf die Komponentensammlung Angular Material setzen, können Sie prinzipiell direkt auf eine zonenlose App umsteigen.
-Sollten Sie einen Bibliothek von einem anderen Hersteller bzw. von einem anderen Open-Source Projekt verwenden, so prüfen Sie am besten Vorab ob die Bibliothek bereits "zoneless Angular" unterstützt.
+Sollten Sie eine Bibliothek von einem anderen Hersteller bzw. von einem anderen Open-Source Projekt verwenden, so prüfen Sie am besten, ob die Bibliothek bereits "zoneless Angular" unterstützt.
 Ist dem nicht so, werden sich nach einer Umstellung diverse Stellen in der Anwendung nicht mehr korrekt aktualisieren.
 
 
@@ -168,7 +168,7 @@ anzahl = input(5);                 // InputSignal<number>
 ```
 
 Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktualisiert wird.
-Zunächst der klassiche Stil, bei dem wir den `@Input()` Dekorator einsetzen:
+Zunächst der klassische Stil, bei dem wir den `@Input()` Dekorator einsetzen:
 
 
 ```ts
@@ -193,7 +193,7 @@ export class KatzenComponent {
 }
 ```
 
-Um vollständig in der Signals-Welt zu bleiben, können statt dessen jetzt folgende Syntax verwenden:
+Um vollständig in der Signals-Welt zu bleiben, können stattdessen jetzt folgende Syntax verwenden:
 
 
 ```ts
@@ -218,7 +218,7 @@ export class KatzenComponent {
 
 Um das Beispiel vollständiger zu gestalten, sieht man hier auch gleich die Kombination mit einem Computed-Signal. 
 Dank des Inputs können wir nun mit folgender Syntax einen Wert an die Kind-Komponente übergeben.
-Am Einsatz von Property-Bindings ändert sicht nichts, daher funktioniert die Verwendung in beiden Beispielen gleich:
+Am Einsatz von Property-Bindings ändert sich nichts, daher funktioniert die Verwendung in beiden Beispielen gleich:
 
 ```html
 <app-katzen [anzahl]="5" />
@@ -229,7 +229,7 @@ Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechen
 
 ## Queries als Signal
 
-Es kann Situationen geben, in denen wir aus einer übergeordneten Komponenten auf eine Kind-Komponente/Kind-Direktive oder ein DOM-Element zugreifen möchten, bzw. auf den Inhalt von `<ng-content></ng-content>` zugreifen wollen.
+Es kann Situationen geben, in denen wir aus einer übergeordneten Komponente auf eine Kind-Komponente/Kind-Direktive oder ein DOM-Element zugreifen möchten, bzw. auf den Inhalt von `<ng-content></ng-content>` zugreifen wollen.
 Seit jeher stehen uns hierfür die Dekoratoren [`@ViewChild()`](https://v17.angular.io/api/core/ViewChild), [`@ViewChildren()`](https://v17.angular.io/api/core/ViewChildren), [`@ContentChild()`](https://v17.angular.io/api/core/ContentChild) sowie [`@ContentChildren()`](https://v17.angular.io/api/core/ContentChildren) zu Verfügung, um die entsprechenden Referenzen zu erhalten:
 
 ```ts
@@ -258,7 +258,7 @@ export class AppComponent {
 }
 ```
 
-Die equivalenten [Signal queries](https://angular.dev/guide/signals/queries) `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden mit Angular 17.2 hinzugefügt und geben uns moderne Signals zurück.
+Die äquivalenten [Signal queries](https://angular.dev/guide/signals/queries) `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden mit Angular 17.2 hinzugefügt und geben uns moderne Signals zurück.
 
 ```ts
 import { viewChild, viewChildren, ElementRef } from '@angular/core';
@@ -304,7 +304,6 @@ Mit diesen können wir dann Two-Way-Bindings realisieren:
 
 
 ```ts
-
 // Alter Stil mit Dekoratoren
 @Component({
   selector: 'app-pager',
@@ -325,7 +324,7 @@ export class PagerComponent {
 }
 ```
 
-Und hier der neue Stil, bei dem dem wir ein beschreibbares Signal verwenden.
+Und hier der neue Stil, bei dem wir ein beschreibbares Signal verwenden.
 Der Code wird deutlich kürzer und übersichtlicher:
 
 ```ts
@@ -444,7 +443,7 @@ Auf das Ereignis können wir wie bisher per Event-Binding reagieren:
 <app-katzen (katzenGeraeusch)="handleEvent($event)" />
 ```
 
-Bitte beachten Sie noch einmal, das die API aktuell noch im Status **Developer Preview** ist.
+Bitte beachten Sie noch einmal, dass die API aktuell noch im Status **Developer Preview** ist.
 Wir erwarten aber bei dieser bereits sehr ausgereiften API allerdings keine fundamentalen Änderungen mehr. 
 
 ### Outputs von Observables
