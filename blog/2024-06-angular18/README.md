@@ -77,7 +77,7 @@ Diese simple Komponente...
 ```ts
 // Alter Stil
 @Component({
-  ...
+  // ...
   template: `
     <h1>Hallo von {{ name }}!</h1>
     <button (click)="handleClick()">Mit zone.js</button>
@@ -97,7 +97,7 @@ export class App {
 ```ts
 // Neuer Stil mit Signals
 @Component({
-  ...
+  // ...
   template: `
     <h1>Hallo von {{ name() }}!</h1>
     <button (click)="handleClick()">Ohne zone.js</button>
@@ -149,11 +149,14 @@ Ist dem nicht so, werden sich nach einer Umstellung diverse Stellen in der Anwen
 # Neue Signal-APIs
 
 In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir die neuen Funktionen der Vollständigkeit halber noch einmal vor.
+Auch in Angular 18 sind diese APIs allesamt im Status  **Developer Preview** - sie könnten sich also noch bei der Verwendung oder im Verhalten ändern. 
 
 
 ## Inputs als Signal
 
-Mit dem Minor-Release von Angular 17.1 wurde eine Alternative zum bisherigen `@Input()`-Dekorator auf Basis von Signals eingeführt, siehe die [offizielle Information im Angular-Blog](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823).
+Mit dem Minor-Release von Angular 17.1 wurden [Signal inputs](https://angular.dev/guide/signals/inputs) eingeführt.
+Sie stellen eine Alternative zum bisherigen `@Input()`-Dekorator dar.
+Das Angular-Team misst diesen neuen Signals eine große Bedeutung bei, und hat diese in einem dedizierten [Blogpost](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823) vorgestellt.
 Nutzen wir die neue Funktion `input()`, wird der übergebene Wert eines Komponenten-Inputs direkt als Signal erfasst:
 
 ```ts
@@ -164,16 +167,16 @@ anzahl = input.required<number>(); // InputSignal<number>
 anzahl = input(5);                 // InputSignal<number>
 ```
 
-Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktulisiert wird.
+Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktualisiert wird.
 Zunächst der klassiche Stil, bei dem wir den `@Input()` Dekorator einsetzen:
 
 
 ```ts
-import {input} from '@angular/core';
+import { Input } from '@angular/core';
 
 // Alter Stil mit Dekorator
 @Component({
-  ...
+  // ...
   selector: 'app-katzen',
   template: `
     @if (anzahl) {
@@ -194,11 +197,11 @@ Um vollständig in der Signals-Welt zu bleiben, können statt dessen jetzt folge
 
 
 ```ts
-import {input} from '@angular/core';
+import { input } from '@angular/core';
 
 // Neuer Stil mit Signals
 @Component({
-  ...
+  // ...
   selector: 'app-katzen',
   template: `
     @if (anzahl()) {
@@ -230,11 +233,11 @@ Es kann Situationen geben, in denen wir aus einer übergeordneten Komponenten au
 Seit jeher stehen uns hierfür die Dekoratoren [`@ViewChild()`](https://v17.angular.io/api/core/ViewChild), [`@ViewChildren()`](https://v17.angular.io/api/core/ViewChildren), [`@ContentChild()`](https://v17.angular.io/api/core/ContentChild) sowie [`@ContentChildren()`](https://v17.angular.io/api/core/ContentChildren) zu Verfügung, um die entsprechenden Referenzen zu erhalten:
 
 ```ts
-import { ViewChild, ElementRef} from '@angular/core';
+import { ViewChild, ViewChildren, ElementRef } from '@angular/core';
 
 // Alter Stil mit Dekoratoren
 @Component({
-  ...
+  // ...
   template: `
     <div #el></div>
     <div #el></div>
@@ -258,11 +261,11 @@ export class AppComponent {
 Die equivalenten [Signal queries](https://angular.dev/guide/signals/queries) `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden mit Angular 17.2 hinzugefügt und geben uns moderne Signals zurück.
 
 ```ts
-import { ViewChild, ElementRef} from '@angular/core';
+import { viewChild, viewChildren, ElementRef } from '@angular/core';
 
 // Neuer Stil mit Signals
 @Component({
-  ...
+  // ...
   template: `
     <div #el></div>
     <div #el></div>
@@ -274,55 +277,113 @@ import { ViewChild, ElementRef} from '@angular/core';
 export class AppComponent {
 
    // liefert ein Kind (oder `undefined`, falls keines gefunden wurde)
-  element = viewChild<ElementRef>('el');   // Signal<ElementRef | undefined>
-  child   = viewChild(ChildComponent);     // Signal<ChildComponent|undefined>
+  element = viewChild<ElementRef>('el'); // Signal<ElementRef | undefined>
+  child   = viewChild(ChildComponent);   // Signal<ChildComponent|undefined>
 
    // liefert ein Kind (oder einen Runtime error, falls keines gefunden wurde)
-  elementRequired = viewChild.required<ElementRef>('el');  // Signal<ElementRef>
-  childRequired   = viewChild.required(ChildComponent);    // Signal<MyComponent>
+  elementRequired = viewChild.required<ElementRef>('el'); // Signal<ElementRef>
+  childRequired   = viewChild.required(ChildComponent);   // Signal<MyComponent>
 
   // liefert alle Kinder (oder eine leere Liste)
-  elements = viewChild<ElementRef>('el');   // Signal<ReadonlyArray<ElementRef>>
-  childs   = viewChild(ChildComponent);     // Signal<ReadonlyArray<ChildComponent>>
+  elements = viewChild<ElementRef>('el'); // Signal<ReadonlyArray<ElementRef>>
+  childs   = viewChild(ChildComponent);   // Signal<ReadonlyArray<ChildComponent>>
 }
 ```
 
 Neu hinzugekommen ist die Möglichkeit, das Vorhandensein eines einzelnen Kindes per [`viewChild.required`](https://angular.dev/guide/signals/queries#required-child-queries) typsicher zu erzwingen.
-Sollte das Element doch nicht im Template vorhanden sein – weil es zB. per `@if` versteckt wurde, so wirft Angular einen Laufzeitfehler ("Runtime error: result marked as required by not available!").
+Sollte das Element doch nicht im Template vorhanden sein – weil es z. B. per `@if` versteckt wurde, so wirft Angular einen Laufzeitfehler ("Runtime error: result marked as required by not available!").
 
 ## Model inputs
 
-TODO
+Die weiter oben vorgestellen Signal Inputs sind schreibgeschützt.
+Dies stellt sicher, das wir nicht versehentlich das Signal im Code setzen – was kein schöner Stil wäre.
 
-```
+Um einen gemeinsamen Zustand zwischen einer Eltern- und einer Kindkomponente elegant zu teilen,
+wären aber ggf. beschreibbare Signale sehr, und genau diese Lücke füllen die [Model inputs](https://angular.dev/guide/signals/model).
+Mit diesen können wir dann Two-Way-Bindings realisieren:
+
+
+```ts
+
+// Alter Stil mit Dekoratoren
 @Component({
-  selector: 'custom-checkbox',
+  selector: 'app-pager',
   template: `
-    <div class="cool-checkbox-treatment">
-      <input type="checkbox" (click)="toggle()" [value]="checked()">
-    </div>
+    Aktuelle Seite: {{ page }}
+    <button (click)="goToNextPage()">Nächste Seite</button>
   `
 })
-export class CustomCheckbox {
-  protected checked = model(false);
+export class PagerComponent {
 
-  toggle() {
-    this.checked.set(!this.checked());
+  @Input({ required: true }) page!: number;
+  @Output() pageChange = new EventEmitter<number>();
+
+  goToNextPage() {
+    this.page = this.page + 1;
+    this.pageChange.emit(this.page);
   }
+}
+```
+
+Und hier der neue Stil, bei dem dem wir ein beschreibbares Signal verwenden.
+Der Code wird deutlich kürzer und übersichtlicher:
+
+```ts
+// Neuer Stil mit Signal
+@Component({
+  selector: 'app-pager',
+  template: `
+    Aktuelle Seite: {{ page() }}
+    <button (click)="goToNextPage()">Nächste Seite</button>
+  `
+})
+export class PagerComponent {
+  page = model.required<number>();
+
+  goToNextPage() {
+    this.page.set(this.page() + 1);
+  }
+}
+```
+
+In beiden Fällen kann unsere Komponente nun mit einem Two-Way-Binding verwendet werden.
+Der Wert für das Two-Way-Binding kann wie gehabt [ein Property mit einem Wert](https://angular.dev/guide/signals/model#two-way-binding-with-plain-properties) sein:
+
+```ts
+@Component({
+  // ...
+  template: '<app-pager [(page)]="currentPage" />',
+})
+export class ParentComponent {
+  protected currentPage = 1;
+}
+```
+
+Allerdings wollen wir ja idealerweise in der gesamten Applikation auf Signals setzen.
+Daher ist ebenso möglich, [Signals mit einem Two-Way-Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
+
+```ts
+@Component({
+  // ...
+  template: '<app-pager [(page)]="currentPage" />',
+})
+export class ParentComponent {
+  protected currentPage = signal(1);
 }
 ```
 
 ## Outputs als Funktion
 
-Analog zur Funktion `input()` steht seit der Minor-Version Angular 17.3.0 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
-Dabei wurde auch die Typsicherheit verbessert: Wenn wir den Output typisieren, z. B. `output<string>()`, dann ist übergebene Payload bei `emit()` verpflichtend.
+Analog zur Funktion `input()` steht seit Angular 17.3 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
+Dabei wurde auch die Typsicherheit verbessert: 
+Wenn wir den Output typisieren, z. B. `output<string>()`, dann ist übergebene Payload bei `emit()` verpflichtend.
 Beim bisherigen Weg mit `EventEmitter.emit` war der Payload hingegen immer optional.
-(Lediglich die Methode `EventEmitter.next` hat einer strikte Typprüfung genügt.)
+(Lediglich die Methode `EventEmitter.next` hat einer strikten Typprüfung genügt.)
 Wollen wir keinen Payload übergeben, müssen wir den Output nicht typisieren, und es wird automatisch der Typ `void` für den Payload angenommen.
 
 ```ts
-select = output() // OutputEmitterRef<void>
-textChange = output<string>() // OutputEmitterRef<string>
+select = output(); // OutputEmitterRef<void>
+textChange = output<string>(); // OutputEmitterRef<string>
 
 // ...
 this.select.emit(); // OK
@@ -330,13 +391,39 @@ this.textChange.emit(); // Error: Expected 1 arguments, but got 0.
 this.textChange.emit('Text'); // OK
 ```
 
-Hier ein vollständiges Beispiel:
+Gerne zeigen wir auch hier ein vollständiges Beispiel.
+Zunächst erneut der klassische Stil.
 
 ```ts
-import {output} from '@angular/core';
+import { Output, EventEmitter } from '@angular/core';
 
+// Alter Stil mit Dekorator
 @Component({
-  ...
+  // ...
+  selector: 'app-katzen',
+  template: `
+    <button (click)="wasMachenDieKatzen()">Klick mich</button>
+  `
+})
+export class KatzenComponent {
+  @Output() katzenGeraeusch = new EventEmitter<string>();
+
+  wasMachenDieKatzen() {
+    katzenGeraeusch.emit('Miau! 😸');
+
+    // aber auch folgende Zeile kompiliert
+    katzenGeraeusch.emit(undefined);
+  }
+}
+```
+
+
+```ts
+import { output } from '@angular/core';
+
+// Neuer Stil mit Signal
+@Component({
+  // ...
   selector: 'app-katzen',
   template: `
     <button (click)="wasMachenDieKatzen()">Klick mich</button>
@@ -351,23 +438,23 @@ export class KatzenComponent {
 }
 ```
 
-Auf das Ereignis können wir nun wie bisher per Event-Binding reagieren:
+Auf das Ereignis können wir wie bisher per Event-Binding reagieren:
 
 ```html
 <app-katzen (katzenGeraeusch)="handleEvent($event)" />
 ```
 
-Bitte beachten Sie, das die API aktuell noch im Status "Developer Preview" ist.
+Bitte beachten Sie noch einmal, das die API aktuell noch im Status **Developer Preview** ist.
 Wir erwarten aber bei dieser bereits sehr ausgereiften API allerdings keine fundamentalen Änderungen mehr. 
 
 ### Outputs von Observables
 
-Zusätzlich zur neuen `output()`-Funktion bietet Angular die `outputFromObservable`-Funktion, welche einen nahtlos Übergang vom RxJS-Framework bereitstellt. Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
+Zusätzlich zur neuen `output()`-Funktion bietet Angular die [`outputFromObservable`](https://angular.dev/guide/signals/rxjs-interop#outputfromobservable)-Funktion, welche einen nahtlos Übergang vom RxJS-Framework bereitstellt. Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
 
 Wenn die Datenquelle eine Observable ist, kann man den Übergang zur neuen Output-API wie folgt durchführen:
 
 ```ts
-import {outputFromObservable} from '@angular/core/rxjs-interop';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 @Component({…})
 export class MyComp {
@@ -376,18 +463,18 @@ export class MyComp {
 }
 ```
 
-Der umgekehrte Weg ist ebenso per `outputToObservable` möglich.
+Der umgekehrte Weg ist ebenso per [`outputToObservable`](https://angular.dev/guide/signals/rxjs-interop#outputtoobservable) möglich.
 Benötigt man etwa die Ereignisse einer Kind-Komponente als Obervable, so kann man auf ein Output wie folgt wieder zu einem RxJS-Datenstrom umwandeln.
 
 ```ts
-import {outputToObservable} from '@angular/core/rxjs-interop';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 
 outputToObservable(this.myComp.instance.onNameChange)
   .pipe(…)
   .subscribe(…);
 ```
 
-Dieser Befehl funktioniert sowohl mit den neue Output-API, als auch dem alten Output-Dekorator.
+Der Befehl `outputToObservable` funktioniert übrigen nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
 
 <hr>
 
