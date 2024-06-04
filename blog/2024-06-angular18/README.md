@@ -355,7 +355,7 @@ Der Wert für das Two-Way-Binding kann wie gehabt [ein Property mit einem Wert](
   template: '<app-pager [(page)]="currentPage" />',
 })
 export class ParentComponent {
-  protected currentPage = 1;
+  currentPage = 1;
 }
 ```
 
@@ -368,7 +368,7 @@ Daher ist ebenso möglich, [Signals mit einem Two-Way-Binding](https://angular.d
   template: '<app-pager [(page)]="currentPage" />',
 })
 export class ParentComponent {
-  protected currentPage = signal(1);
+  currentPage = signal(1);
 }
 ```
 
