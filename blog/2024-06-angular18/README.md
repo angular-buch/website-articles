@@ -299,7 +299,8 @@ Die weiter oben vorgestellen Signal Inputs sind schreibgeschützt.
 Dies stellt sicher, das wir nicht versehentlich das Signal im Code setzen – was kein schöner Stil wäre.
 
 Um einen gemeinsamen Zustand zwischen einer Eltern- und einer Kindkomponente elegant zu teilen,
-wären aber ggf. beschreibbare Signale sehr, und genau diese Lücke füllen die [Model inputs](https://angular.dev/guide/signals/model).
+sind aber beschreibbare Signale sehr praktisch.
+Genau diese Lücke füllen die [Model inputs](https://angular.dev/guide/signals/model).
 Mit diesen können wir dann Two-Way-Bindings realisieren:
 
 
