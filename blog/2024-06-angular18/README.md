@@ -35,7 +35,7 @@ Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weite
 Das Angular Team hat mit Angular 17 die neue Website [angular.dev](https://angular.dev/) veröffentlich und damit die "Angular Renaissance" aufgerufen.
 Die Website die jetzt die einzige offizielle Dokumentationswebsite für Angular ist und bietet eine intuitive, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiter entwickelt und leitet jetzt auf die neue Domain um.
 
-**TODO Screenshot**
+![Screenshot von angular.dev](angular_dev.gif)
 
 
 
@@ -92,7 +92,7 @@ export class App {
 }
 ```
 
-... würden wir jetzt mit Signals folgendermaßen abbilden:
+... würden wir jetzt mit Signals folgendermaßen umsetzen:
 
 ```ts
 // Neuer Stil mit Signals
@@ -124,7 +124,6 @@ Der zukünftige Fokus des Angular-Teams ist allerdings eindeutig.
 Aber es ist an der Zeit, bei der Entwicklung auf Signals zu setzen!
 Wir empfehlen, neue Angular-Anwendungen definitiv mit den Signals umzusetzen.
 Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine neuen Innovationen mehr geben.
-<!-- TODO: oder irgendeinen anderen überzeugenden Grund nennen. Wer will denn schon freiwillig alles updaten??? -->
 
 ### Natives `async/await` für zonenlose Apps:
 
@@ -158,18 +157,46 @@ Mit dem Minor-Release von Angular 17.1 wurde eine Alternative zum bisherigen `@I
 Nutzen wir die neue Funktion `input()`, wird der übergebene Wert eines Komponenten-Inputs direkt als Signal erfasst:
 
 ```ts
-anzahl = input() // InputSignal<unknown>
-anzahl = input<number>() // InputSignal<number | undefined>
-anzahl = input.required() // InputSignal<unknown>
-anzahl = input.required<number>() // InputSignal<number>
-anzahl = input(5) // InputSignal<number>
+anzahl = input();                  // InputSignal<unknown>
+anzahl = input<number>();          // InputSignal<number | undefined>
+anzahl = input.required();         // InputSignal<unknown>
+anzahl = input.required<number>(); // InputSignal<number>
+anzahl = input(5);                 // InputSignal<number>
 ```
 
-Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktulisiert wird:
+Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktulisiert wird.
+Zunächst der klassiche Stil, bei dem wir den `@Input()` Dekorator einsetzen:
+
 
 ```ts
 import {input} from '@angular/core';
 
+// Alter Stil mit Dekorator
+@Component({
+  ...
+  selector: 'app-katzen',
+  template: `
+    @if (anzahl) {
+      <img src="{{ imageUrl() }}">
+    }
+  `
+})
+export class KatzenComponent {
+  @Input() anzahl?: number;
+
+  imageUrl() {
+    return `https://api.angular.schule/avatar/${this.anzahl}`;
+  }
+}
+```
+
+Um vollständig in der Signals-Welt zu bleiben, können statt dessen jetzt folgende Syntax verwenden:
+
+
+```ts
+import {input} from '@angular/core';
+
+// Neuer Stil mit Signals
 @Component({
   ...
   selector: 'app-katzen',
@@ -187,7 +214,8 @@ export class KatzenComponent {
 
 
 Um das Beispiel vollständiger zu gestalten, sieht man hier auch gleich die Kombination mit einem Computed-Signal. 
-Mit Hilfe der neuen Inputs können wir nun mit folgender Syntax einen Wer an die Kind-Komponente übergeben:
+Dank des Inputs können wir nun mit folgender Syntax einen Wert an die Kind-Komponente übergeben.
+Am Einsatz von Property-Bindings ändert sicht nichts, daher funktioniert die Verwendung in beiden Beispielen gleich:
 
 ```html
 <app-katzen [anzahl]="5" />
@@ -198,26 +226,69 @@ Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechen
 
 ## Queries als Signal
 
-Es kann Situationen geben, in denen wir aus einer übergeordneten Komponenten auf eine Kind-Komponente oder ein DOM-Element zugreifen möchten.
-Seit jeher stehen uns hierfür eine Reihe von Dekoratoren zu Verfügung, um die entsprechenden Referenzen zu erhalten:
+Es kann Situationen geben, in denen wir aus einer übergeordneten Komponenten auf eine Kind-Komponente/Kind-Direktive oder ein DOM-Element zugreifen möchten, bzw. auf den Inhalt von `<ng-content></ng-content>` zugreifen wollen.
+Seit jeher stehen uns hierfür die Dekoratoren [`@ViewChild()`](https://v17.angular.io/api/core/ViewChild), [`@ViewChildren()`](https://v17.angular.io/api/core/ViewChildren), [`@ContentChild()`](https://v17.angular.io/api/core/ContentChild) sowie [`@ContentChildren()`](https://v17.angular.io/api/core/ContentChildren) zu Verfügung, um die entsprechenden Referenzen zu erhalten:
 
 ```ts
 import { ViewChild, ElementRef} from '@angular/core';
 
+// Alter Stil mit Dekoratoren
+@Component({
+  ...
+  template: `
+    <div #el></div>
+    <div #el></div>
 
+    <app-child />
+    <app-child />
+  `
+})
 export class AppComponent {
 
-  @ViewChild(ChildComponent)
-  testComponent: ChildComponent;
+  // liefert ein Kind
+  @ViewChild('el') element!: ElementRef;
+  @ViewChild(ChildComponent) child!: ChildComponent;
 
-  // TODO
-
+  // liefert alle Kinder
+  @ViewChildren('el') elements!: QueryList<ElementRef>;
+  @ViewChildren(ChildComponent) children!: QueryList<ChildComponent>;
 }
 ```
 
-Die Funktionen `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden in @angular/core hinzugefügt und geben uns moderne Signals zurück.
+Die equivalenten [Signal queries](https://angular.dev/guide/signals/queries) `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden mit Angular 17.2 hinzugefügt und geben uns moderne Signals zurück.
 
-TODO
+```ts
+import { ViewChild, ElementRef} from '@angular/core';
+
+// Neuer Stil mit Signals
+@Component({
+  ...
+  template: `
+    <div #el></div>
+    <div #el></div>
+
+    <app-child />
+    <app-child />
+  `
+})
+export class AppComponent {
+
+   // liefert ein Kind (oder `undefined`, falls keines gefunden wurde)
+  element = viewChild<ElementRef>('el');   // Signal<ElementRef | undefined>
+  child   = viewChild(ChildComponent);     // Signal<ChildComponent|undefined>
+
+   // liefert ein Kind (oder einen Runtime error, falls keines gefunden wurde)
+  elementRequired = viewChild.required<ElementRef>('el');  // Signal<ElementRef>
+  childRequired   = viewChild.required(ChildComponent);    // Signal<MyComponent>
+
+  // liefert alle Kinder (oder eine leere Liste)
+  elements = viewChild<ElementRef>('el');   // Signal<ReadonlyArray<ElementRef>>
+  childs   = viewChild(ChildComponent);     // Signal<ReadonlyArray<ChildComponent>>
+}
+```
+
+Neu hinzugekommen ist die Möglichkeit, das Vorhandensein eines einzelnen Kindes per [`viewChild.required`](https://angular.dev/guide/signals/queries#required-child-queries) typsicher zu erzwingen.
+Sollte das Element doch nicht im Template vorhanden sein – weil es zB. per `@if` versteckt wurde, so wirft Angular einen Laufzeitfehler ("Runtime error: result marked as required by not available!").
 
 ## Model inputs
 
