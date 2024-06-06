@@ -474,7 +474,7 @@ outputToObservable(this.myComp.instance.onNameChange)
   .subscribe(…);
 ```
 
-Der Befehl `outputToObservable` funktioniert übrigen nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
+Der Befehl `outputToObservable` funktioniert im übrigen nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
 
 <hr>
 
