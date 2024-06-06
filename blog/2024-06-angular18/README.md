@@ -45,7 +45,7 @@ Seit dem Beginn von Angular ist die Bibliothek [zone.js](https://github.com/angu
 Zone.js hat den Umgang mit Angular massiv geprägt:
 Änderungen an den angezeigten Daten werden scheinbar wie durch Magie erkannt.
 Aber leider hat diese Magie auch eine Reihe von technischen Nachteilen mit sich gebracht.
-Vor allem die Performance und die Handhabung beim Debugging werden so schon lange kritisiert, wie es die Integration von zone.js gibt.
+Vor allem die Performance und die Handhabung beim Debugging werden schon seit der Integration von zone.js kritisiert.
 
 Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem folgendes Statement zur Datei `main.ts` hinzugefügt:
 
