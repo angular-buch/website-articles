@@ -47,7 +47,7 @@ Zone.js hat den Umgang mit Angular massiv geprägt:
 Aber leider hat diese Magie auch eine Reihe von technischen Nachteilen mit sich gebracht.
 Vor allem die Performance und die Handhabung beim Debugging werden schon seit der Integration von zone.js kritisiert.
 
-Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem folgendes Statement zur Datei `main.ts` hinzugefügt:
+Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem wir folgendes Statement zur Datei `main.ts` hinzufügen:
 
 ```ts
 bootstrapApplication(App, {
