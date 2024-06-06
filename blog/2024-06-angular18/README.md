@@ -33,7 +33,7 @@ Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weite
 ## Neue Offizielle Website 
 
 Das Angular Team hat mit Angular 17 die neue Website [angular.dev](https://angular.dev/) veröffentlich und damit die "Angular Renaissance" aufgerufen.
-Die Website die jetzt die einzige offizielle Dokumentationswebsite für Angular ist und bietet eine intuitive, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiterentwickelt und leitet jetzt auf die neue Domain um.
+Die Website ist die neue offizielle Dokumentationsseite für Angular ist und bietet einen intuitiven, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiterentwickelt und leitet jetzt auf die neue Domain um.
 
 ![Screenshot von angular.dev](angular_dev.gif)
 
