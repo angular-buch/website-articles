@@ -127,7 +127,7 @@ Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine 
 
 ### Natives `async/await` für zonenlose Apps:
 
-Zone.js fängt viele APIs im Browseraufrufe ab, um die bisherige Change Detection von Angular zu realisieren.
+Zone.js fängt viele APIs im Browser ab, um die bisherige Change Detection von Angular zu realisieren.
 Leider gehört `async/await` zu den APIs, die zone.js nicht patchen kann. 
 Als Workaround wird bisher von der Angular CLI jede Verwendung der beiden Schlüsselwörter auf Promises heruntergestuft – denn Promises kann zone.js patchen. 
 Das ist suboptimal, da alle modernen Browser `async/await` unterstützen und optimieren können.
