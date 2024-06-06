@@ -44,7 +44,7 @@ Die Website ist die neue offizielle Dokumentationsseite für Angular ist und bie
 Seit dem Beginn von Angular ist die Bibliothek [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) für das Auslösen der Änderungsüberprüfung (Change Detection) in Angular verantwortlich.
 Zone.js hat den Umgang mit Angular massiv geprägt:
 Änderungen an den angezeigten Daten werden scheinbar wie durch Magie erkannt.
-Aber leider hat diese Magie auch Reihe von technischen Nachteilen mit sich gebracht.
+Aber leider hat diese Magie auch eine Reihe von technischen Nachteilen mit sich gebracht.
 Vor allem die Performance und die Handhabung beim Debugging werden so schon lange kritisiert, wie es die Integration von zone.js gibt.
 
 Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem folgendes Statement zur Datei `main.ts` hinzugefügt:
