@@ -57,7 +57,17 @@ bootstrapApplication(App, {
 });
 ```
 
-Anschließend kann `zone.js` aus dem Polyfills-Eintrag in der Datei `angular.json` entfernt werden.
+Anschließend kann `zone.js` aus dem Polyfills-Eintrag in der Datei `angular.json` entfernt werden:
+
+```json
+// vorher
+"polyfills": [
+  "zone.js"
+],
+
+// nachher
+"polyfills": [],
+```
 
 Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detection:
 
@@ -204,13 +214,11 @@ import { input } from '@angular/core';
   // ...
   selector: 'app-katzen',
   template: `
-    @if (anzahl()) {
-      <img src="{{ imageUrl() }}">
-    }
+    <img src="{{ imageUrl() }}">
   `
 })
 export class KatzenComponent {
-  anzahl = input<number>();
+  anzahl = input.reqired<number>();
   imageUrl = computed(() => `https://api.angular.schule/avatar/${this.anzahl()}`);
 }
 ```
