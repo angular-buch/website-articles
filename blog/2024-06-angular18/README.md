@@ -510,6 +510,22 @@ ng update @angular/cli --name use-application-builder
 ```
 
 
+## Fazit
+
+Mit Angular 18 steht uns eine solide neue Version zur Verfügung, 
+die sich auf die Stabilisierung zuvor eingeführter APIs, 
+zahlreiche Detailverbesserungen und Bugfixes sowie eine Reihe äußerst hilfreicher APIs für den Umgang mit Signals konzentriert.
+
+Das Angular Team hat wieder einmal gezeigt, 
+wie kontinuierliche Innovation und die Berücksichtigung des Feedbacks aus der Community zu einem leistungsstarken und nutzungsfreundlichen Framework führen.
+
+Wir freuen uns darauf, diese neuen Features in unseren Projekten zu nutzen. 
+Ob Sie auf die verbesserte Zoneless Change Detection, 
+die stabilen APIs für Material 3, 
+die Deferrable Views oder den neuen Built-in Control Flow zugreifen – Angular 18 bietet zahlreiche Werkzeuge, 
+um moderne und elegante Anwendungen zu erstellen.
+
+
 <hr>
 
 
