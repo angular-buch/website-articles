@@ -47,17 +47,72 @@ Zone.js hat den Umgang mit Angular massiv geprägt:
 Aber leider hat diese Magie auch eine Reihe von technischen Nachteilen mit sich gebracht.
 Vor allem die Performance und die Handhabung beim Debugging werden schon seit der Integration von zone.js kritisiert.
 
-Das Angular Team hat nun mehrere Jahre daran gearbeitet, eine Möglichkeit zu finden, Angular ohne zone.js zu verwenden. Endlich ist es soweit und wir können mit dieser neuen API experimentieren, indem wir folgendes Statement zur Datei `main.ts` hinzufügen:
+Angular v18 führt eine neue Methode zur Auslösung der Änderungsüberprüfung ein. 
+Anstatt sich auf ausschließlich auf zone.js zu verlassen, 
+um zu erkennen, wann sich etwas möglicherweise geändert hat, 
+kann Angular jetzt selbst eine Änderungsüberprüfung planen.
+
+### Die Standardeinstellung: beide Scheduler sind aktiv
+
+Dazu wurde dem Framework ein neuer Scheduler hinzugefügt (genannt `ChangeDetectionScheduler`), 
+und dieser Scheduler wird intern verwendet, um die Änderungsüberprüfung auszulösen. 
+Langfristiges Ziel ist es, sich schrittweise von zone.js zu entfernen und ausschließlich den neuen Scheduler einzusetzen.
+
+Dieser neue Scheduler ist in v18 standardmäßig aktiviert, auch wenn Sie zone.js verwenden.
+So sieht die Datei `app.config.ts` aus, wenn mit der Angular CLI v18 eine neue Anwendung generiert wird.
+Beide Scheduler sind hier aktiv:
 
 ```ts
-bootstrapApplication(App, {
+export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection()
-  ]
-});
+    // beide Scheduler sind aktiv
+    provideZoneChangeDetection({ eventCoalescing: true }),
+};
 ```
 
-Anschließend kann `zone.js` aus dem Polyfills-Eintrag in der Datei `angular.json` entfernt werden:
+Die Option `eventCoalescing` ist ebenso neu hinzu gekommen.
+Diese verhindert, das in bestimmten Fällen mehrfach unnötig eine Change Detection durchgeführt wird.
+Das genaue Verhalten ist [hier](https://angular.dev/api/core/NgZoneOptions#eventCoalescing) beschrieben. 
+
+### Abmeldung vom neuen Scheduler
+
+Der neue Scheduler ist somit in v18 standardmäßig aktiviert. 
+Das bedeutet, dass Angular potenzielle Änderungen sowohl von zone.js (wie bisher) als auch vom neuen Scheduler (wenn ein Signal gesetzt wird, eine async-Pipe einen neuen Wert erhält usw.) benachrichtigt wird. 
+Diese Änderung sollte Ihre Anwendung nicht negativ beeinflussen, 
+da Angular die Change Detection nur einmal durchführt, 
+auch wenn es von mehreren Quellen eine Benachrichtigung gibt.
+
+Wenn Sie sich dennoch vom neuen Scheduler abmelden möchten, 
+können Sie hierzu bei der Option`provideZoneChangeDetection()` den Wert von `ignoreChangesOutsideZone` auf `true` setzen:
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // dies stellt das Verhalten von Angular vor v18 wieder her
+    // und ignoriert die Benachrichtigungen des neuen Schedulers
+    provideZoneChangeDetection({ ignoreChangesOutsideZone: true }),
+};
+```
+Die Option `eventCoalescing` haben wir hier nicht erneut aufgeführt, da diese Einstellung ist unabhängig von `ignoreChangesOutsideZone` ist.
+
+### Experimentelle zonenlose Änderungsüberprüfung
+
+Sie können auch versuchen, sich nur auf den neuen Scheduler zu verlassen und nicht mehr auf zone.js, um die Änderungsüberprüfung auszulösen.
+Dies ist eine experimentelle Funktion, die Sie aktivieren können, indem Sie die Provider-Funktion provideExperimentalZonelessChangeDetection() in Ihrer Anwendung verwenden:
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ausschließlich der neue Scheduler ist aktiv
+    provideExperimentalZonelessChangeDetection()
+};
+```
+
+Wenn Sie dies tun, wird sich Angular nicht mehr auf zone.js verlassen, 
+um die Änderungsüberprüfung auszulösen. 
+Sie können nun  `zone.js` aus Ihrer Anwendung entfernen um die größe des Bundles zu ignorieren 
+– sofern keine Abhängigkeiten davon abhängen.
+Hierzu muss der Polyfills-Eintrag in der Datei `angular.json` entfernt werden:
 
 ```json
 // vorher
@@ -69,6 +124,11 @@ Anschließend kann `zone.js` aus dem Polyfills-Eintrag in der Datei `angular.jso
 "polyfills": [],
 ```
 
+Die Anwendung sollte weiterhin funktionieren,
+wenn alle Ihre Komponenten bereits mit der `OnPush`-Strategie kompatibel sind und/oder überall Signals eingesetzt werden! 
+
+### Vorteile durch die zonenlose Änderungsüberprüfung
+
 Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detection:
 
 * Verbesserte Kombinierbarkeit für Micro-Frontends und Interoperabilität mit anderen Frameworks
@@ -78,8 +138,8 @@ Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detectio
 * Einfacheres Debugging
 
 Allerdings bekommen wir all diese Vorteile nicht einfach umsonst.
-Der "alte Angular-Stil", bei dem direkt Properties an den Komponenten abändert kann, ist mit dem zonenlosen Ansatz nicht direkt kompatibel.
-Im Kern geht es darum, auf die neuen _Signals_ umzusteigen, die seit [Angular 16](https://angular-buch.com/blog/2023-05-angular16#reaktivit%C3%A4t-mit-signals) verfügbar sind. 
+Der "alte Angular-Stil" mit der Default Change Detection, bei dem prinzipiell alle Objekte direkt verändert (mutiert) werden können, ist mit dem zonenlosen Ansatz nicht direkt kompatibel.
+Im Kern geht es darum, nach Möglichkeit auf die neuen _Signals_ umzusteigen, die seit [Angular 16](https://angular-buch.com/blog/2023-05-angular16#reaktivit%C3%A4t-mit-signals) verfügbar sind. 
 Wir haben über diesen modernen Ansatz in unserem letzten Blogpost berichtet:
 [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm)
 
@@ -312,7 +372,7 @@ Die weiter oben vorgestellen Signal Inputs sind schreibgeschützt.
 Dies stellt sicher, das wir nicht versehentlich das Signal im Code setzen – was kein schöner Stil wäre.
 
 Um einen gemeinsamen Zustand zwischen einer Eltern- und einer Kindkomponente elegant zu teilen,
-sind aber beschreibbare Signale sehr praktisch.
+sind aber beschreibbare Signals sehr praktisch.
 Genau diese Lücke füllen die [Model inputs](https://angular.dev/guide/signals/model).
 Mit diesen können wir dann Two-Way-Bindings realisieren:
 
