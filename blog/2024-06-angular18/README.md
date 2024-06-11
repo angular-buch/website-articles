@@ -570,6 +570,79 @@ ng update @angular/cli --name use-application-builder
 ```
 
 
+## Neuer `public` Ordner statt `assets`
+
+Wenn Sie eine neue Anwendung mit `ng new` generieren, so werden Sie bemerken, dass der Ordner `assets` nicht mehr vorhanden ist.
+Dieser wurde mit dem zugunsten des neuen `public`-Ordner ersetzt.
+
+Vor Angular 18 wurde standardmäßig ein leerer der Assets-Ordner bereitgestellt.
+Die `favicon.ico` befand sich an einem anderen Ort:
+* `name-der-app/src/assets`
+* `name-der-app/src/favicon.ico`
+
+Es wird also der gesamte Ordner `assets` berücksichtig, sowie die einzelne Datei `favicon.ico`.
+Die bisherige Konfiguration in der `angular.json` sieht hierbei so aus:
+
+```json
+{
+  "projects": {
+    "name-der-app": {
+      "architect": {
+        "build": {
+          "assets": [
+            "src/favicon.ico",
+            "src/assets"
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+Speichern wir bei dieser Konfiguration ein Bild in den `assets`-Order, so lässt sich das Bild so einbinden:
+
+```html
+<img src="/assets/bild.png">
+```
+
+Mit Angular 18 finden wir nur noch folgende Datei
+* `name-der-app/public/favicon.ico`
+
+Die neue Konfiguration in der `angular.json` sieht hierbei so aus:
+
+```json
+{
+  "projects": {
+    "name-der-app": {
+      "architect": {
+        "build": {
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "public"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+Legen wir bei dieser Konfiguration ein Bild in den `public`-Order, so lässt sich das Bild so einbinden:
+
+```html
+<img src="/bild.png">
+```
+
+Wollen wir weiterhin das Bild per `<img src="/assets/bild.png">` einbinden, so muss die vollständige Ordnerstruktur so aussehen:
+
+* `name-der-app/public/assets/bild.png`
+
+
+Für bestehende Anwendungen ändert sich nichts, die geänderte Ordnerstruktur wird nur bei neuen Apps erzeugt.
+
 ## Fazit
 
 Mit Angular 18 steht uns eine solide neue Version zur Verfügung, 
