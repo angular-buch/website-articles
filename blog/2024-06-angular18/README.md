@@ -156,13 +156,13 @@ Ist dem nicht so, werden sich nach einer Umstellung diverse Stellen in der Anwen
 
 
 
-# Neue Signal-APIs
+## Neue Signal-APIs
 
-In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir die neuen Funktionen der Vollständigkeit halber noch einmal vor.
+In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir gerne noch einmal im Detail vor.
 Auch in Angular 18 sind diese APIs allesamt im Status  **Developer Preview** - sie könnten sich also noch bei der Verwendung oder im Verhalten ändern. 
 
 
-## Inputs als Signal
+### Inputs als Signal
 
 Mit dem Minor-Release von Angular 17.1 wurden [Signal inputs](https://angular.dev/guide/signals/inputs) eingeführt.
 Sie stellen eine Alternative zum bisherigen `@Input()`-Dekorator dar.
@@ -203,7 +203,12 @@ export class KatzenComponent {
 }
 ```
 
-Um vollständig in der Signals-Welt zu bleiben, können stattdessen jetzt folgende Syntax verwenden:
+Um vollständig in der Signals-Welt zu bleiben, können stattdessen jetzt folgende Syntax verwenden.
+Eine massive Erleichterung stellt `input.reqired` dar.
+Beim alten Stil musste man immer auch `undefined` als möglichen Wert berücksichtigen.
+Dies ist nun nicht mehr notwendig, das `input.reqired` hat entweder einen gesetzten Wert - oder wirft eine Ausnahme wenn es keinen Wert gibt.
+Die bisherige leidige Prüfung auf `undefined` entfällt damit endlich.
+Allein hierfür lohnt sich bereits der Umstieg auf Signals:
 
 
 ```ts
@@ -235,7 +240,7 @@ Am Einsatz von Property-Bindings ändert sich nichts, daher funktioniert die Ver
 Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechenden Anzahl an Katzen.
 
 
-## Queries als Signal
+### Queries als Signal
 
 Es kann Situationen geben, in denen wir aus einer übergeordneten Komponente auf eine Kind-Komponente/Kind-Direktive oder ein DOM-Element zugreifen möchten, bzw. auf den Inhalt von `<ng-content></ng-content>` zugreifen wollen.
 Seit jeher stehen uns hierfür die Dekoratoren [`@ViewChild()`](https://v17.angular.io/api/core/ViewChild), [`@ViewChildren()`](https://v17.angular.io/api/core/ViewChildren), [`@ContentChild()`](https://v17.angular.io/api/core/ContentChild) sowie [`@ContentChildren()`](https://v17.angular.io/api/core/ContentChildren) zu Verfügung, um die entsprechenden Referenzen zu erhalten:
@@ -301,7 +306,7 @@ export class AppComponent {
 Neu hinzugekommen ist die Möglichkeit, das Vorhandensein eines einzelnen Kindes per [`viewChild.required`](https://angular.dev/guide/signals/queries#required-child-queries) typsicher zu erzwingen.
 Sollte das Element doch nicht im Template vorhanden sein – weil es z. B. per `@if` versteckt wurde, so wirft Angular einen Laufzeitfehler ("Runtime error: result marked as required by not available!").
 
-## Model inputs
+### Model inputs
 
 Die weiter oben vorgestellen Signal Inputs sind schreibgeschützt.
 Dies stellt sicher, das wir nicht versehentlich das Signal im Code setzen – was kein schöner Stil wäre.
@@ -380,13 +385,12 @@ export class ParentComponent {
 }
 ```
 
-## Outputs als Funktion
+### Outputs als Funktion
 
 Analog zur Funktion `input()` steht seit Angular 17.3 eine Alternative zum `@Output()`-Dekorator bereit: die Funktion `output()`.
 Dabei wurde auch die Typsicherheit verbessert: 
 Wenn wir den Output typisieren, z. B. `output<string>()`, dann ist übergebene Payload bei `emit()` verpflichtend.
 Beim bisherigen Weg mit `EventEmitter.emit` war der Payload hingegen immer optional.
-(Lediglich die Methode `EventEmitter.next` hat einer strikten Typprüfung genügt.)
 Wollen wir keinen Payload übergeben, müssen wir den Output nicht typisieren, und es wird automatisch der Typ `void` für den Payload angenommen.
 
 ```ts
@@ -425,6 +429,7 @@ export class KatzenComponent {
 }
 ```
 
+Der Umstieg auf Signals geht hier schnell vorran - wir müssen nur eine Zeile austauchen und den Import aktualisieren:
 
 ```ts
 import { output } from '@angular/core';
@@ -452,7 +457,7 @@ Auf das Ereignis können wir wie bisher per Event-Binding reagieren:
 <app-katzen (katzenGeraeusch)="handleEvent($event)" />
 ```
 
-Bitte beachten Sie noch einmal, dass die API aktuell noch im Status **Developer Preview** ist.
+Bitte beachten Sie noch einmal, dass alle drei neuen Signal-APIs aktuell noch im Status **Developer Preview** sind.
 Wir erwarten aber bei dieser bereits sehr ausgereiften API allerdings keine fundamentalen Änderungen mehr. 
 
 ### Outputs von Observables
@@ -483,6 +488,27 @@ outputToObservable(this.myComp.instance.onNameChange)
 ```
 
 Der Befehl `outputToObservable` funktioniert im übrigen nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
+
+
+## Stabile APIs
+
+Mit dem aktuellen Realease sind viele Developer Previews als stabil markiert wurden:
+
+* Das Frameworl [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
+* Die [Deferrable views](https://angular-buch.com/blog/2023-11-angular17#deferrable-views-mit-defer) (`@defer`) sind jetzt stabil
+* der [Built-in control flow](https://angular-buch.com/blog/2023-11-angular17#neuer-control-flow-if-for-switch) (`@if`, `@for` und `@switch`) ist ebenso als stabil markiert worden
+
+
+## Automatische Migration auf den neuen `application`-Builder
+
+Im Blogpost zu Angular 17 haben wir bereits den neuen [Application Builder auf Basis von ESBuild](https://angular-buch.com/blog/2023-11-angular17) vorgestellt.
+Zu dem Zeitpunkt mussten man die Umstellung noch manuell durchführen.
+Dies ist nun nicht mehr notwendig, da folgender Befehl die Anwendung automatisch umstellt:
+
+```sh
+ng update @angular/cli --name use-application-builder
+```
+
 
 <hr>
 
