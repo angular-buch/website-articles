@@ -139,7 +139,7 @@ Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detectio
 
 Allerdings bekommen wir all diese Vorteile nicht einfach umsonst.
 Der "alte Angular-Stil" mit der Default Change Detection, bei dem prinzipiell alle Objekte direkt verändert (mutiert) werden können, ist mit dem zonenlosen Ansatz nicht direkt kompatibel.
-Im Kern geht es darum, nach Möglichkeit auf die neuen _Signals_ umzusteigen, die seit [Angular 16](https://angular-buch.com/blog/2023-05-angular16#reaktivit%C3%A4t-mit-signals) verfügbar sind. 
+Im Kern geht es darum, nach Möglichkeit auf die neuen Signals umzusteigen, die seit [Angular 16](https://angular-buch.com/blog/2023-05-angular16#reaktivit%C3%A4t-mit-signals) verfügbar sind. 
 Wir haben über diesen modernen Ansatz in unserem letzten Blogpost berichtet:
 [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm)
 
@@ -195,15 +195,16 @@ Aber es ist an der Zeit, bei der Entwicklung auf Signals zu setzen!
 Wir empfehlen, neue Angular-Anwendungen definitiv mit den Signals umzusetzen.
 Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine neuen Innovationen mehr geben.
 
-### Natives `async/await` für zonenlose Apps:
+### Natives `async/await` für zonenlose Apps
 
 Zone.js fängt viele APIs im Browser ab, um die bisherige Change Detection von Angular zu realisieren.
 Leider gehört `async/await` zu den APIs, die zone.js nicht patchen kann. 
 Als Workaround wird bisher von der Angular CLI jede Verwendung der beiden Schlüsselwörter auf Promises heruntergestuft – denn Promises kann zone.js patchen. 
 Das ist suboptimal, da alle modernen Browser `async/await` unterstützen und optimieren können.
 
-Wird die die experimentelle zonenlose Change Detction genutzt, wird das native `async/await` verwendet. 
+Wenn zone.js nicht in den Polyfills der Anwendung enthalten ist, dann findet die Entfernung von `async/await` nicht mehr statt.
 Dies verbessert das Debugging und verkleinert die Bundles.
+
 
 ### Zonenlose Unterstützung in bestehenden Komponenten
 
@@ -218,7 +219,7 @@ Ist dem nicht so, werden sich nach einer Umstellung diverse Stellen in der Anwen
 
 ## Neue Signal-APIs
 
-In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir gerne noch einmal im Detail vor.
+In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir diese hier gerne noch einmal im Detail vor.
 Auch in Angular 18 sind diese APIs allesamt im Status  **Developer Preview** - sie könnten sich also noch bei der Verwendung oder im Verhalten ändern. 
 
 
@@ -433,7 +434,7 @@ export class ParentComponent {
 ```
 
 Allerdings wollen wir ja idealerweise in der gesamten Applikation auf Signals setzen.
-Daher ist ebenso möglich, [Signals mit einem Two-Way-Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
+Daher ist ebenso möglich, [schreibare Signals mit einem Two-Way-Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
 
 ```ts
 @Component({
@@ -463,7 +464,7 @@ this.textChange.emit(); // Error: Expected 1 arguments, but got 0.
 this.textChange.emit('Text'); // OK
 ```
 
-Gerne zeigen wir auch hier ein vollständiges Beispiel.
+Gerne zeigen wir auch hier ein vollständiges Beispiel.  
 Zunächst erneut der klassische Stil.
 
 ```ts
@@ -554,10 +555,9 @@ Der Befehl `outputToObservable` funktioniert im übrigen nicht nur mit den neue 
 
 Mit dem aktuellen Realease sind viele Developer Previews als stabil markiert wurden:
 
-* Das Frameworl [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
+* Das Framework [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
 * Die [Deferrable views](https://angular-buch.com/blog/2023-11-angular17#deferrable-views-mit-defer) (`@defer`) sind jetzt stabil
 * der [Built-in control flow](https://angular-buch.com/blog/2023-11-angular17#neuer-control-flow-if-for-switch) (`@if`, `@for` und `@switch`) ist ebenso als stabil markiert worden
-
 
 ## Automatische Migration auf den neuen `application`-Builder
 
