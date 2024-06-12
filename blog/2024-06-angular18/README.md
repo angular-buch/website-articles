@@ -1,5 +1,5 @@
 ---
-title: 'Angular 18 ist da!'
+title: 'Angular 18 ist da: Signals, Signals, Signals!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2024-06-13
