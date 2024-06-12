@@ -32,8 +32,8 @@ Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weite
 
 ## Neue Offizielle Website 
 
-Das Angular Team hat mit Angular 17 die neue Website [angular.dev](https://angular.dev/) veröffentlich und damit die "Angular Renaissance" aufgerufen.
-Die Website ist die neue offizielle Dokumentationsseite für Angular ist und bietet einen intuitiven, praxisorientierte Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiterentwickelt und leitet jetzt auf die neue Domain um.
+Das Angular Team hat mit Angular 17 die neue Website [angular.dev](https://angular.dev/) veröffentlicht und damit die "Angular Renaissance" aufgerufen.
+Die Website ist die neue offizielle Dokumentationsseite für Angular und bietet einen intuitiven, praxisorientierten Einstieg sowie viele hervorragende Artikel. Die alte Website [angular.io](https://angular.io/) wird nicht mehr weiterentwickelt und leitet jetzt auf die neue Domain um.
 
 ![Screenshot von angular.dev](angular_dev.gif)
 
@@ -70,7 +70,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Die Option `eventCoalescing` ist ebenso neu hinzu gekommen.
+Die Option `eventCoalescing` ist ebenso neu hinzugekommen.
 Diese verhindert, das in bestimmten Fällen mehrfach unnötig eine Change Detection durchgeführt wird.
 Das genaue Verhalten ist [hier](https://angular.dev/api/core/NgZoneOptions#eventCoalescing) beschrieben. 
 
@@ -93,7 +93,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ ignoreChangesOutsideZone: true }),
 };
 ```
-Die Option `eventCoalescing` haben wir hier nicht erneut aufgeführt, da diese Einstellung ist unabhängig von `ignoreChangesOutsideZone` ist.
+Die Option `eventCoalescing` haben wir hier nicht erneut aufgeführt, da diese Einstellung unabhängig von `ignoreChangesOutsideZone` ist.
 
 ### Experimentelle zonenlose Änderungsüberprüfung
 
@@ -110,8 +110,7 @@ export const appConfig: ApplicationConfig = {
 
 Wenn Sie dies tun, wird sich Angular nicht mehr auf zone.js verlassen, 
 um die Änderungsüberprüfung auszulösen. 
-Sie können nun  `zone.js` aus Ihrer Anwendung entfernen um die größe des Bundles zu ignorieren 
-– sofern keine Abhängigkeiten davon abhängen.
+Sie können nun  `zone.js` aus Ihrer Anwendung entfernen um die Größe des Bundles zu verringern – sofern keine Abhängigkeiten davon abhängen.
 Hierzu muss der Polyfills-Eintrag in der Datei `angular.json` entfernt werden:
 
 ```json
@@ -267,7 +266,7 @@ export class KatzenComponent {
 Um vollständig in der Signals-Welt zu bleiben, können stattdessen jetzt folgende Syntax verwenden.
 Eine massive Erleichterung stellt `input.reqired` dar.
 Beim alten Stil musste man immer auch `undefined` als möglichen Wert berücksichtigen.
-Dies ist nun nicht mehr notwendig, das `input.reqired` hat entweder einen gesetzten Wert - oder wirft eine Ausnahme wenn es keinen Wert gibt.
+Dies ist nun nicht mehr notwendig, da `input.reqired` entweder einen gesetzten Wert hat oder eine Ausnahme wirft, wenn es keinen Wert gibt.
 Die bisherige leidige Prüfung auf `undefined` entfällt damit endlich.
 Allein hierfür lohnt sich bereits der Umstieg auf Signals:
 
@@ -369,7 +368,7 @@ Sollte das Element doch nicht im Template vorhanden sein – weil es z. B. per `
 
 ### Model inputs
 
-Die weiter oben vorgestellen Signal Inputs sind schreibgeschützt.
+Die weiter oben vorgestellten Signal Inputs sind schreibgeschützt.
 Dies stellt sicher, das wir nicht versehentlich das Signal im Code setzen – was kein schöner Stil wäre.
 
 Um einen gemeinsamen Zustand zwischen einer Eltern- und einer Kindkomponente elegant zu teilen,
@@ -434,7 +433,7 @@ export class ParentComponent {
 ```
 
 Allerdings wollen wir ja idealerweise in der gesamten Applikation auf Signals setzen.
-Daher ist ebenso möglich, [schreibare Signals mit einem Two-Way-Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
+Daher ist es ebenso möglich, [schreibbare Signals mit einem Two-Way-Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
 
 ```ts
 @Component({
@@ -490,7 +489,7 @@ export class KatzenComponent {
 }
 ```
 
-Der Umstieg auf Signals geht hier schnell vorran - wir müssen nur eine Zeile austauchen und den Import aktualisieren:
+Der Umstieg auf Signals geht hier schnell voran - wir müssen nur eine Zeile austauschen und den Import aktualisieren:
 
 ```ts
 import { output } from '@angular/core';
@@ -523,7 +522,8 @@ Wir erwarten aber bei dieser bereits sehr ausgereiften API allerdings keine fund
 
 ### Outputs von Observables
 
-Zusätzlich zur neuen `output()`-Funktion bietet Angular die [`outputFromObservable`](https://angular.dev/guide/signals/rxjs-interop#outputfromobservable)-Funktion, welche einen nahtlos Übergang vom RxJS-Framework bereitstellt. Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
+Zusätzlich zur neuen `output()`-Funktion bietet Angular die [`outputFromObservable`](https://angular.dev/guide/signals/rxjs-interop#outputfromobservable)-Funktion, welche einen nahtlosen Übergang vom RxJS-Framework bereitstellt.
+Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
 
 Wenn die Datenquelle eine Observable ist, kann man den Übergang zur neuen Output-API wie folgt durchführen:
 
@@ -538,7 +538,7 @@ export class MyComp {
 ```
 
 Der umgekehrte Weg ist ebenso per [`outputToObservable`](https://angular.dev/guide/signals/rxjs-interop#outputtoobservable) möglich.
-Benötigt man etwa die Ereignisse einer Kind-Komponente als Obervable, so kann man auf ein Output wie folgt wieder zu einem RxJS-Datenstrom umwandeln.
+Benötigt man etwa die Ereignisse einer Kind-Komponente als Observable, so kann man auf ein Output wie folgt wieder zu einem RxJS-Datenstrom umwandeln.
 
 ```ts
 import { outputToObservable } from '@angular/core/rxjs-interop';
@@ -548,21 +548,21 @@ outputToObservable(this.myComp.instance.onNameChange)
   .subscribe(…);
 ```
 
-Der Befehl `outputToObservable` funktioniert im übrigen nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
+Der Befehl `outputToObservable` funktioniert übrigens nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
 
 
 ## Stabile APIs
 
-Mit dem aktuellen Realease sind viele Developer Previews als stabil markiert wurden:
+Mit dem aktuellen Realease sind viele Developer Previews als stabil markiert worden:
 
 * Das Framework [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
 * Die [Deferrable views](https://angular-buch.com/blog/2023-11-angular17#deferrable-views-mit-defer) (`@defer`) sind jetzt stabil
-* der [Built-in control flow](https://angular-buch.com/blog/2023-11-angular17#neuer-control-flow-if-for-switch) (`@if`, `@for` und `@switch`) ist ebenso als stabil markiert worden
+* Der [Built-in control flow](https://angular-buch.com/blog/2023-11-angular17#neuer-control-flow-if-for-switch) (`@if`, `@for` und `@switch`) ist ebenso als stabil markiert worden
 
 ## Automatische Migration auf den neuen `application`-Builder
 
 Im Blogpost zu Angular 17 haben wir bereits den neuen [Application Builder auf Basis von ESBuild](https://angular-buch.com/blog/2023-11-angular17) vorgestellt.
-Zu dem Zeitpunkt mussten man die Umstellung noch manuell durchführen.
+Zu dem Zeitpunkt musste mussten man die Umstellung noch manuell durchführen.
 Dies ist nun nicht mehr notwendig, da folgender Befehl die Anwendung automatisch umstellt:
 
 ```sh
@@ -572,7 +572,7 @@ ng update @angular/cli --name use-application-builder
 
 ## Neuer `public` Ordner statt `assets`
 
-Wenn Sie eine neue Anwendung mit `ng new` generieren, so werden Sie bemerken, dass der Ordner `assets` nicht mehr vorhanden ist.
+Wenn Sie eine neue Anwendung mit `ng new` generieren, werden Sie bemerken, dass der Ordner `assets` nicht mehr vorhanden ist.
 Dieser wurde zugunsten des neuen `public`-Ordners ersetzt.
 
 Vor Angular 18 wurde standardmäßig ein leerer der Assets-Ordner bereitgestellt.
@@ -580,7 +580,7 @@ Die `favicon.ico` befand sich an einem anderen Ort:
 * `name-der-app/src/assets`
 * `name-der-app/src/favicon.ico`
 
-Es wird also der gesamte Ordner `assets` berücksichtig sowie die einzelne Datei `favicon.ico`.
+Es wird also der gesamte Ordner `assets` berücksichtigt sowie die einzelne Datei `favicon.ico`.
 Die bisherige Konfiguration in der `angular.json` sieht so aus:
 
 ```json
@@ -600,7 +600,7 @@ Die bisherige Konfiguration in der `angular.json` sieht so aus:
 }
 ```
 
-Speichern wir bei dieser Konfiguration ein Bild in den `assets`-Order, so lässt sich das Bild so einbinden:
+Speichern wir bei dieser Konfiguration ein Bild in den `assets`-Ordner, so lässt sich das Bild so einbinden:
 
 ```html
 <img src="/assets/bild.png">
@@ -630,7 +630,7 @@ Die neue Konfiguration in der `angular.json` sieht hierbei so aus:
 }
 ```
 
-Legen wir bei dieser Konfiguration ein Bild in den `public`-Order ab, so lässt sich das Bild so einbinden:
+Legen wir bei dieser Konfiguration ein Bild in den `public`-Ordner ab, so lässt sich das Bild so einbinden:
 
 ```html
 <img src="/bild.png">
@@ -641,7 +641,7 @@ Wollen wir weiterhin das Bild per `<img src="/assets/bild.png">` einbinden, so m
 * `name-der-app/public/assets/bild.png`
 
 
-Für bestehende Anwendungen ändert sich nichts, die geänderte Ordnerstruktur wird nur bei neuen Apps erzeugt
+Für bestehende Anwendungen ändert sich nichts, die geänderte Ordnerstruktur wird nur bei neuen Apps erzeugt.
 
 ## Fazit
 
