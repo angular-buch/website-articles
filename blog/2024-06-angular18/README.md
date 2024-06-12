@@ -299,6 +299,42 @@ Am Einsatz von Property-Bindings ändert sich nichts, daher funktioniert die Ver
 
 Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechenden Anzahl an Katzen.
 
+**Hinweis:** Wenn wir einen Test für die `KatzenComponent` schreiben wollen, dann können wir nicht mehr wie früher das Input-Property überschreiben:
+
+```ts
+beforeEach(async () => {
+  await TestBed.configureTestingModule({
+    imports: [KatzenComponent]
+  })
+  .compileComponents();
+
+  fixture = TestBed.createComponent(KatzenComponent);
+  component = fixture.componentInstance;
+
+  // Fehler: Type 'number' is not assignable to type 'InputSignal<number>'
+  component.anzahl = 5;
+  fixture.detectChanges();
+});
+
+```
+
+Statt dessen steht uns die Funktion `setInput` zur Verfügung:
+
+```ts
+beforeEach(async () => {
+  await TestBed.configureTestingModule({
+    imports: [KatzenComponent]
+  })
+  .compileComponents();
+
+  fixture = TestBed.createComponent(KatzenComponent);
+  component = fixture.componentInstance;
+
+  // kein Fehler
+  fixture.componentRef.setInput('anzahl', 1);
+  fixture.detectChanges();
+});
+```
 
 ### Queries als Signal
 
