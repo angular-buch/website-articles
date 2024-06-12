@@ -2,8 +2,8 @@
 title: 'Angular 18 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2024-05-29
-lastModified: 2024-05-29
+published: 2024-06-13
+lastModified: 2024-06-13
 keywords:
   - Angular
   - Angular 18
