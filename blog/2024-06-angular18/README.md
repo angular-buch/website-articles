@@ -199,7 +199,7 @@ Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine 
 Zone.js fängt viele APIs im Browser ab, um die bisherige Change Detection von Angular zu realisieren.
 Leider gehört `async` / `await` zu den APIs, die zone.js nicht patchen kann. 
 Als Workaround wird bisher von der Angular CLI jede Verwendung der beiden Schlüsselwörter auf Promises heruntergestuft – denn Promises kann zone.js patchen. 
-Das ist suboptimal, da alle modernen Browser `async/await` unterstützen und optimieren können.
+Das ist suboptimal, da alle modernen Browser `async` / `await` unterstützen und optimieren können.
 
 Wenn zone.js nicht in den Polyfills der Anwendung enthalten ist, dann findet die Entfernung von `async` / `await` nicht mehr statt.
 Dies verbessert das Debugging und verkleinert die Bundles.
