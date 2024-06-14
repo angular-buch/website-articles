@@ -43,7 +43,7 @@ Die Website ist die neue offizielle Dokumentationsseite für Angular und bietet 
 ## Zoneless Change Detection (experimentell)
 
 Seit dem Beginn von Angular ist die Bibliothek [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js) für das Auslösen der Änderungsüberprüfung (Change Detection) in Angular verantwortlich.
-Zone.js hat den Umgang mit Angular massiv geprägt:
+zone.js hat den Umgang mit Angular massiv geprägt:
 Änderungen an den angezeigten Daten werden scheinbar wie durch Magie erkannt.
 Aber leider hat diese Magie auch eine Reihe von technischen Nachteilen mit sich gebracht.
 Vor allem die Performance und die Handhabung beim Debugging werden schon seit der Integration von zone.js kritisiert.
@@ -73,18 +73,18 @@ export const appConfig: ApplicationConfig = {
 
 Die Option `eventCoalescing` ist ebenso neu hinzugekommen.
 Diese verhindert, das in bestimmten Fällen mehrfach unnötig eine Change Detection durchgeführt wird.
-Das genaue Verhalten ist [hier](https://angular.dev/api/core/NgZoneOptions#eventCoalescing) beschrieben. 
+Das genaue Verhalten ist [in der Dokumentation](https://angular.dev/api/core/NgZoneOptions#eventCoalescing) beschrieben. 
 
 ### Abmeldung vom neuen Scheduler
 
 Der neue Scheduler ist somit in v18 standardmäßig aktiviert. 
-Das bedeutet, dass Angular potenzielle Änderungen sowohl von zone.js (wie bisher) als auch vom neuen Scheduler (wenn ein Signal gesetzt wird, eine async-Pipe einen neuen Wert erhält usw.) benachrichtigt wird. 
-Diese Änderung sollte Ihre Anwendung nicht negativ beeinflussen, 
-da Angular die Change Detection nur einmal durchführt, 
+Das bedeutet, dass Angular potenzielle Änderungen sowohl von zone.js (wie bisher) als auch vom neuen Scheduler (wenn ein Signal gesetzt wird, eine AsyncPipe einen neuen Wert erhält usw.) benachrichtigt wird. 
+Diese Änderung sollte Ihre Anwendung nicht negativ beeinflussen: 
+Angular führt die Change Detection nur einmal durch, 
 auch wenn es von mehreren Quellen eine Benachrichtigung gibt.
 
 Wenn Sie sich dennoch vom neuen Scheduler abmelden möchten, 
-können Sie hierzu bei der Option`provideZoneChangeDetection()` den Wert von `ignoreChangesOutsideZone` auf `true` setzen:
+können Sie hierzu bei der Funktion `provideZoneChangeDetection()` den Wert von `ignoreChangesOutsideZone` auf `true` setzen:
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -111,7 +111,7 @@ export const appConfig: ApplicationConfig = {
 
 Wenn Sie dies tun, wird sich Angular nicht mehr auf zone.js verlassen, 
 um die Änderungsüberprüfung auszulösen. 
-Sie können nun  `zone.js` aus Ihrer Anwendung entfernen um die Größe des Bundles zu verringern – sofern keine Abhängigkeiten davon abhängen.
+Sie können nun zone.js aus Ihrer Anwendung entfernen, um die Größe des Bundles zu verringern – sofern keine Abhängigkeiten davon abhängen.
 Hierzu muss der Polyfills-Eintrag in der Datei `angular.json` entfernt werden:
 
 ```json
@@ -125,17 +125,17 @@ Hierzu muss der Polyfills-Eintrag in der Datei `angular.json` entfernt werden:
 ```
 
 Die Anwendung sollte weiterhin funktionieren,
-wenn alle Ihre Komponenten bereits mit der `OnPush`-Strategie kompatibel sind und/oder überall Signals eingesetzt werden! 
+wenn alle Ihre Komponenten bereits mit der `OnPush`-Strategie kompatibel sind und/oder überall Signals eingesetzt werden!
 
 ### Vorteile durch die zonenlose Änderungsüberprüfung
 
 Das Angular-Team verspricht folgende Vorteile durch die Zoneless Change Detection:
 
-* Verbesserte Kombinierbarkeit für Micro-Frontends und Interoperabilität mit anderen Frameworks
-* Schnellere Initialisierung und Laufzeit der Angular-App
-* Kleinere Bundle-Größe und schnellere Seitenladezeiten
-* Lesbarere Stack-Traces
-* Einfacheres Debugging
+* verbesserte Kombinierbarkeit für Micro Frontends und Interoperabilität mit anderen Frameworks
+* schnellere Initialisierung und Laufzeit der Angular-App
+* kleinere Bundle-Größe und schnellere Seitenladezeiten
+* lesbarere Stack-Traces
+* einfacheres Debugging
 
 Allerdings bekommen wir all diese Vorteile nicht einfach umsonst.
 Der "alte Angular-Stil" mit der Default Change Detection, bei dem prinzipiell alle Objekte direkt verändert (mutiert) werden können, ist mit dem zonenlosen Ansatz nicht direkt kompatibel.
@@ -143,7 +143,8 @@ Im Kern geht es darum, nach Möglichkeit auf die neuen Signals umzusteigen, die 
 Wir haben über diesen modernen Ansatz in unserem letzten Blogpost berichtet:
 [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm)
 
-Diese simple Komponente...
+Diese simple Komponente …
+
 ```ts
 // Alter Stil
 @Component({
@@ -162,7 +163,7 @@ export class App {
 }
 ```
 
-... würden wir jetzt mit Signals folgendermaßen umsetzen:
+… würden wir jetzt mit Signals folgendermaßen umsetzen:
 
 ```ts
 // Neuer Stil mit Signals
@@ -183,8 +184,8 @@ export class App {
 ```
 
 Im obigen Beispiel wird beim Klicken auf den Button das _Signal_ mit der Bezeichnung `name` aktualisiert und anschließend die Oberfläche aktualisiert.
-Dies funktioniert genauso zuverlässig wie bei einer Anwendung mit zone.js, jedoch begrenzt Angular die internen Überprüfungen auf ganz wenige Auslöser - wie den Aktualisierungen der Signals.
-Die Performance ist hierbei deutlich höher.
+Dies funktioniert genauso zuverlässig wie bei einer Anwendung mit zone.js, jedoch begrenzt Angular die internen Überprüfungen auf ganz wenige Auslöser – wie den Aktualisierungen der Signals.
+Die Performance ist hierbei deutlich höher, wenn viele Komponenten gleichzeitig angezeigt werden.
 
 ### Auf "zoneless" updaten
 
@@ -194,14 +195,14 @@ Der zukünftige Fokus des Angular-Teams ist allerdings eindeutig.
 Wir empfehlen, neue Angular-Anwendungen definitiv mit den Signals umzusetzen.
 Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine neuen Innovationen mehr geben.
 
-### Natives `async` / `await` für zonenlose Apps
+### Natives `async`/`await` für zonenlose Apps
 
-Zone.js fängt viele APIs im Browser ab, um die bisherige Change Detection von Angular zu realisieren.
-Leider gehört `async` / `await` zu den APIs, die zone.js nicht patchen kann. 
-Als Workaround wird bisher von der Angular CLI jede Verwendung der beiden Schlüsselwörter auf Promises heruntergestuft – denn Promises kann zone.js patchen. 
-Das ist suboptimal, da alle modernen Browser `async` / `await` unterstützen und optimieren können.
+zone.js fängt viele APIs im Browser ab, um die bisherige Change Detection von Angular zu realisieren.
+Leider gehört `async`/`await` zu den Schnittstellen, die zone.js nicht patchen kann. 
+Als Workaround wird bisher von der Angular CLI jede Verwendung der beiden Schlüsselwörter auf Promises heruntergestuft – denn Promises können von zone.js gepatcht werden. 
+Das ist suboptimal, da alle modernen Browser `async`/`await` unterstützen und optimieren können.
 
-Wenn zone.js nicht in den Polyfills der Anwendung enthalten ist, dann findet die Entfernung von `async` / `await` nicht mehr statt.
+Wenn zone.js nicht in den Polyfills der Anwendung enthalten ist, dann findet die Entfernung von `async`/`await` nicht mehr statt.
 Dies verbessert das Debugging und verkleinert die Bundles.
 
 
@@ -210,23 +211,23 @@ Dies verbessert das Debugging und verkleinert die Bundles.
 [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
 Das Angular Team hat mit der neuen Version auch gleich die zonenlose Unterstützung aktiviert. Ebenso kann man nun auch das [Angular CDK](https://material.angular.io/cdk/) vollständig ohne zone.js verwenden.
 
-Wenn Sie also auf die Komponentensammlung Angular Material setzen, können Sie prinzipiell direkt auf eine zonenlose App umsteigen.
-Sollten Sie eine Bibliothek von einem anderen Hersteller bzw. von einem anderen Open-Source Projekt verwenden, so prüfen Sie am besten, ob die Bibliothek bereits "zoneless Angular" unterstützt.
-Ist dem nicht so, werden sich nach einer Umstellung diverse Stellen in der Anwendung nicht mehr korrekt aktualisieren.
+Wenn Sie also auf die Komponentenbibliothek Angular Material setzen, können Sie prinzipiell direkt auf eine zonenlose App umsteigen.
+Sollten Sie eine Bibliothek von einem anderen Hersteller bzw. von einem anderen Open-Source-Projekt verwenden, so prüfen Sie am besten, ob die Bibliothek bereits "Zoneless Angular" unterstützt.
+Ist das nicht der Fall, werden sich nach einer Umstellung diverse Stellen in der Anwendung nicht mehr korrekt aktualisieren.
 
 
 
 ## Neue Signal-APIs
 
-In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost [Modern Angular: den BookMonkey migrieren](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir diese hier gerne noch einmal im Detail vor.
-Auch in Angular 18 sind diese APIs allesamt im Status  **Developer Preview** - sie könnten sich also noch bei der Verwendung oder im Verhalten ändern. 
+In den letzten Monaten wurden mit Angular 17.1, 17.2 und 17.3 bereits eine Reihe von spannenden APIs rund um die Signals als **Developer Preview** veröffentlicht. Wir haben diese in unserem Blogpost ["Modern Angular: den BookMonkey migrieren"](/blog/2024-05-modern-angular-bm) bereits vorgestellt. Da Angular 18 die erste größere Version ist, die die APIs enthält, stellen wir diese hier gerne noch einmal im Detail vor.
+Auch in Angular 18 sind diese APIs allesamt im Status  **Developer Preview** – sie könnten sich also noch bei der Verwendung oder im Verhalten ändern. 
 
 
 ### Inputs als Signal
 
-Mit dem Minor-Release von Angular 17.1 wurden [Signal inputs](https://angular.dev/guide/signals/inputs) eingeführt.
-Sie stellen eine Alternative zum bisherigen `@Input()`-Dekorator dar.
-Das Angular-Team misst diesen neuen Signals eine große Bedeutung bei, und hat diese in einem dedizierten [Blogpost](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823) vorgestellt.
+Mit dem Minor-Release von Angular 17.1 wurden [Signal Inputs](https://angular.dev/guide/signals/inputs) eingeführt.
+Sie sind eine Alternative zum bisherigen `@Input()`-Dekorator.
+Das Angular-Team misst diesen neuen Signals eine große Bedeutung bei, und hat das Thema in einem dedizierten [Blogpost](https://blog.angular.io/signal-inputs-available-in-developer-preview-6a7ff1941823) vorgestellt.
 Nutzen wir die neue Funktion `input()`, wird der übergebene Wert eines Komponenten-Inputs direkt als Signal erfasst:
 
 ```ts
@@ -237,8 +238,8 @@ anzahl = input.required<number>(); // InputSignal<number>
 anzahl = input(5);                 // InputSignal<number>
 ```
 
-Hier ein Beispiel, bei dem eine Kind-Komponente über ein Input aktualisiert wird.
-Zunächst der klassische Stil, bei dem wir den `@Input()` Dekorator einsetzen:
+Nachfolgend finden Sie ein Beispiel, bei dem eine Kind-Komponente über ein Input aktualisiert wird.
+Zunächst der klassische Stil, bei dem wir den `@Input()`-Dekorator einsetzen:
 
 
 ```ts
@@ -263,10 +264,10 @@ export class KatzenComponent {
 }
 ```
 
-Um vollständig in der Signals-Welt zu bleiben, können stattdessen jetzt folgende Syntax verwenden.
-Eine massive Erleichterung stellt `input.reqired` dar.
+Um vollständig in der Welt von Signals zu bleiben, können wir stattdessen jetzt folgende Syntax verwenden.
+Eine massive Erleichterung ist die Funktion `input.reqired()`:
 Beim alten Stil musste man immer auch `undefined` als möglichen Wert berücksichtigen.
-Dies ist nun nicht mehr notwendig, da `input.reqired` entweder einen gesetzten Wert hat oder eine Ausnahme wirft, wenn es keinen Wert gibt.
+Dies ist nun nicht mehr notwendig, da `input.reqired()` entweder einen gesetzten Wert hat oder eine Exception wirft, wenn es keinen Wert gibt.
 Die bisherige leidige Prüfung auf `undefined` entfällt damit endlich.
 Allein hierfür lohnt sich bereits der Umstieg auf Signals:
 
@@ -291,7 +292,7 @@ export class KatzenComponent {
 
 Um das Beispiel vollständiger zu gestalten, sieht man hier auch gleich die Kombination mit einem Computed-Signal. 
 Dank des Inputs können wir nun mit folgender Syntax einen Wert an die Kind-Komponente übergeben.
-Am Einsatz von Property-Bindings ändert sich nichts, daher funktioniert die Verwendung in beiden Beispielen gleich:
+Am Einsatz von Property Bindings ändert sich nichts, daher funktioniert die Verwendung in beiden Beispielen gleich:
 
 ```html
 <app-katzen [anzahl]="5" />
@@ -299,7 +300,7 @@ Am Einsatz von Property-Bindings ändert sich nichts, daher funktioniert die Ver
 
 Je nach übergebener Zahl sieht man nun ein anderes Bild – mit der entsprechenden Anzahl an Katzen.
 
-**Hinweis:** Wenn wir einen Test für die `KatzenComponent` schreiben wollen, dann können wir nicht mehr wie früher das Input-Property überschreiben:
+**Hinweis:** Wenn wir einen Test für die `KatzenComponent` schreiben wollen, dann können wir nicht mehr wie früher das Input-Property direkt überschreiben:
 
 ```ts
 beforeEach(async () => {
@@ -318,7 +319,7 @@ beforeEach(async () => {
 
 ```
 
-Statt dessen steht uns die Funktion `setInput` zur Verfügung:
+Stattdessen steht uns die Methode `setInput()` zur Verfügung, um den Wert des Input Signals zu setzen:
 
 ```ts
 beforeEach(async () => {
@@ -331,14 +332,14 @@ beforeEach(async () => {
   component = fixture.componentInstance;
 
   // kein Fehler
-  fixture.componentRef.setInput('anzahl', 1);
+  fixture.componentRef.setInput('anzahl', 5);
   fixture.detectChanges();
 });
 ```
 
-### Queries als Signal
+### Querys als Signal
 
-Es kann Situationen geben, in denen wir aus einer übergeordneten Komponente auf eine Kind-Komponente/Kind-Direktive oder ein DOM-Element zugreifen möchten, bzw. auf den Inhalt von `<ng-content></ng-content>` zugreifen wollen.
+Es kann Situationen geben, in denen wir aus einer übergeordneten Komponente auf eine Kind-Komponente/Kind-Direktive oder ein DOM-Element zugreifen möchten, bzw. auf den Inhalt von `<ng-content></ng-content>`.
 Seit jeher stehen uns hierfür die Dekoratoren [`@ViewChild()`](https://v17.angular.io/api/core/ViewChild), [`@ViewChildren()`](https://v17.angular.io/api/core/ViewChildren), [`@ContentChild()`](https://v17.angular.io/api/core/ContentChild) sowie [`@ContentChildren()`](https://v17.angular.io/api/core/ContentChildren) zu Verfügung, um die entsprechenden Referenzen zu erhalten:
 
 ```ts
@@ -367,7 +368,7 @@ export class AppComponent {
 }
 ```
 
-Die äquivalenten [Signal queries](https://angular.dev/guide/signals/queries) `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden mit Angular 17.2 hinzugefügt und geben uns moderne Signals zurück.
+Die äquivalenten [Signal Queries](https://angular.dev/guide/signals/queries) `viewChild()`, `viewChildren()`, `contentChild()` und `contentChildren()` wurden mit Angular 17.2 hinzugefügt und geben uns moderne Signals zurück.
 
 ```ts
 import { viewChild, viewChildren, ElementRef } from '@angular/core';
@@ -399,18 +400,18 @@ export class AppComponent {
 }
 ```
 
-Neu hinzugekommen ist die Möglichkeit, das Vorhandensein eines einzelnen Kindes per [`viewChild.required`](https://angular.dev/guide/signals/queries#required-child-queries) typsicher zu erzwingen.
-Sollte das Element doch nicht im Template vorhanden sein – weil es z. B. per `@if` versteckt wurde, so wirft Angular einen Laufzeitfehler ("Runtime error: result marked as required by not available!").
+Neu hinzugekommen ist die Möglichkeit, das Vorhandensein eines einzelnen Kinds per [`viewChild.required`](https://angular.dev/guide/signals/queries#required-child-queries) typsicher zu erzwingen.
+Sollte das Element doch nicht im Template vorhanden sein – weil es z. B. per `@if` versteckt wurde – so wirft Angular einen Laufzeitfehler: `Runtime error: result marked as required by not available!`.
 
-### Model inputs
+### Model Inputs
 
 Die weiter oben vorgestellten Signal Inputs sind schreibgeschützt.
 Dies stellt sicher, das wir nicht versehentlich das Signal im Code setzen – was kein schöner Stil wäre.
 
 Um einen gemeinsamen Zustand zwischen einer Eltern- und einer Kindkomponente elegant zu teilen,
 sind aber beschreibbare Signals sehr praktisch.
-Genau diese Lücke füllen die [Model inputs](https://angular.dev/guide/signals/model).
-Mit diesen können wir dann Two-Way-Bindings realisieren:
+Genau diese Lücke füllen die [Model Inputs](https://angular.dev/guide/signals/model).
+Mit diesen können wir dann Two-Way Bindings realisieren:
 
 
 ```ts
@@ -469,7 +470,7 @@ export class ParentComponent {
 ```
 
 Allerdings wollen wir ja idealerweise in der gesamten Applikation auf Signals setzen.
-Daher ist es ebenso möglich, [schreibbare Signals mit einem Two-Way-Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
+Daher ist es ebenso möglich, [schreibbare Signals mit einem Two-Way Binding](https://angular.dev/guide/signals/model#two-way-binding-with-signals) zu kombinieren:
 
 ```ts
 @Component({
@@ -500,7 +501,7 @@ this.textChange.emit('Text'); // OK
 ```
 
 Gerne zeigen wir auch hier ein vollständiges Beispiel.  
-Zunächst erneut der klassische Stil.
+Zunächst erneut der klassische Stil:
 
 ```ts
 import { Output, EventEmitter } from '@angular/core';
@@ -525,7 +526,7 @@ export class KatzenComponent {
 }
 ```
 
-Der Umstieg auf Signals geht hier schnell voran - wir müssen nur eine Zeile austauschen und den Import aktualisieren:
+Der Umstieg auf Signals geht hier schnell voran – wir müssen nur eine Zeile austauschen und den Import aktualisieren:
 
 ```ts
 import { output } from '@angular/core';
@@ -542,12 +543,15 @@ export class KatzenComponent {
   katzenGeraeusch = output<string>();
 
   wasMachenDieKatzen() {
-    katzenGeraeusch.emit('Miau! 😸')
+    katzenGeraeusch.emit('Miau! 😸');
+
+    // funktioniert nicht
+    katzenGeraeusch.emit(undefined);
   }
 }
 ```
 
-Auf das Ereignis können wir wie bisher per Event-Binding reagieren:
+Auf das Ereignis können wir wie bisher per Event Binding reagieren:
 
 ```html
 <app-katzen (katzenGeraeusch)="handleEvent($event)" />
@@ -558,22 +562,22 @@ Wir erwarten aber bei dieser bereits sehr ausgereiften API keine fundamentalen �
 
 ### Outputs von Observables
 
-Zusätzlich zur neuen `output()`-Funktion bietet Angular die [`outputFromObservable`](https://angular.dev/guide/signals/rxjs-interop#outputfromobservable)-Funktion, welche einen nahtlosen Übergang vom RxJS-Framework bereitstellt.
-Die neue Methode wurde vom Angular Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
+Zusätzlich zur neuen Funktion `output()` bietet Angular die Funktion [`outputFromObservable()`](https://angular.dev/guide/signals/rxjs-interop#outputfromobservable), welche einen nahtlosen Übergang vom Framework RxJS bereitstellt.
+Die neue Funktion wurde vom Angular-Team in einem [separaten Blogpost vorgestellt](https://blog.angular.dev/meet-angulars-new-output-api-253a41ffa13c). 
 
-Wenn die Datenquelle eine Observable ist, kann man den Übergang zur neuen Output-API wie folgt durchführen:
+Wenn die Datenquelle ein Observable ist, kann man den Übergang zur neuen Output-API wie folgt durchführen:
 
 ```ts
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 @Component({…})
 export class MyComp {
-  onNameChange$ = new Observable<string>( … );
-  onNameChange = outputFromObservable(this.onNameChange$);
+  nameChange$ = new Observable<string>( … );
+  nameChange = outputFromObservable(this.nameChange$);
 }
 ```
 
-Der umgekehrte Weg ist ebenso per [`outputToObservable`](https://angular.dev/guide/signals/rxjs-interop#outputtoobservable) möglich.
+Der umgekehrte Weg ist ebenso mit [`outputToObservable()`](https://angular.dev/guide/signals/rxjs-interop#outputtoobservable) möglich.
 Benötigt man etwa die Ereignisse einer Kind-Komponente als Observable, so kann man auf ein Output wie folgt wieder zu einem RxJS-Datenstrom umwandeln.
 
 ```ts
@@ -584,18 +588,18 @@ outputToObservable(this.myComp.instance.onNameChange)
   .subscribe(…);
 ```
 
-Der Befehl `outputToObservable` funktioniert übrigens nicht nur mit den neue Output-API, sondern auch dem alten Output-Dekorator.
+Die Funktion `outputToObservable()` funktioniert übrigens nicht nur mit der neuen Output-API, sondern auch mit dem alten Output-Dekorator.
 
 
 ## Stabile APIs
 
-Mit dem aktuellen Realease sind viele Developer Previews als stabil markiert worden:
+Mit dem aktuellen Realease sind einige Developer Previews als stabil markiert worden:
 
 * Das Framework [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
-* Die [Deferrable views](https://angular-buch.com/blog/2023-11-angular17#deferrable-views-mit-defer) (`@defer`) sind jetzt stabil
-* Der [Built-in control flow](https://angular-buch.com/blog/2023-11-angular17#neuer-control-flow-if-for-switch) (`@if`, `@for` und `@switch`) ist ebenso als stabil markiert worden
+* Die [Deferrable Views](https://angular-buch.com/blog/2023-11-angular17#deferrable-views-mit-defer) (`@defer`) sind jetzt stabil
+* Der [Built-in Control Flow](https://angular-buch.com/blog/2023-11-angular17#neuer-control-flow-if-for-switch) (`@if`, `@for` und `@switch`) ist ebenso als stabil markiert worden.
 
-## Automatische Migration auf den neuen `application`-Builder
+## Automatische Migration auf den neuen Application Builder
 
 Im Blogpost zu Angular 17 haben wir bereits den neuen [Application Builder auf Basis von ESBuild](https://angular-buch.com/blog/2023-11-angular17) vorgestellt.
 Zu dem Zeitpunkt musste mussten man die Umstellung noch manuell durchführen.
@@ -606,17 +610,18 @@ ng update @angular/cli --name use-application-builder
 ```
 
 
-## Neuer `public` Ordner statt `assets`
+## Neuer Ordner `public` statt `assets`
 
 Wenn Sie eine neue Anwendung mit `ng new` generieren, werden Sie bemerken, dass der Ordner `assets` nicht mehr vorhanden ist.
-Dieser wurde zugunsten des neuen `public`-Ordners ersetzt.
+Dieser wurde durch des neuen `public`-Ordner abgelöst.
 
 Vor Angular 18 wurde standardmäßig ein leerer Assets-Ordner bereitgestellt.
-Die `favicon.ico` befand sich an einem anderen Ort:
+Die Datei `favicon.ico` befand sich an einem anderen Ort:
+
 * `name-der-app/src/assets`
 * `name-der-app/src/favicon.ico`
 
-Es wird also der gesamte Ordner `assets` berücksichtigt sowie die einzelne Datei `favicon.ico`.
+Dabei wird der gesamte Ordner `assets` berücksichtigt sowie die einzelne Datei `favicon.ico`.
 Die bisherige Konfiguration in der `angular.json` sieht so aus:
 
 ```json
@@ -636,13 +641,14 @@ Die bisherige Konfiguration in der `angular.json` sieht so aus:
 }
 ```
 
-Speichern wir bei dieser Konfiguration ein Bild in den `assets`-Ordner, so lässt sich das Bild so einbinden:
+Speichern wir bei dieser Konfiguration ein Bild in den Ordner `assets`, so lässt sich das Bild so einbinden:
 
 ```html
-<img src="/assets/bild.png">
+<img src="/assets/bild.png" alt="">
 ```
 
 Mit Angular 18 finden wir nur noch folgende Datei:
+
 * `name-der-app/public/favicon.ico`
 
 Die neue Konfiguration in der `angular.json` sieht hierbei so aus:
@@ -666,13 +672,13 @@ Die neue Konfiguration in der `angular.json` sieht hierbei so aus:
 }
 ```
 
-Legen wir bei dieser Konfiguration ein Bild in den `public`-Ordner ab, so lässt sich das Bild so einbinden:
+Legen wir bei dieser Konfiguration ein Bild in den `public`-Ordner ab, so lässt sich das Bild wie folgt einbinden:
 
 ```html
-<img src="/bild.png">
+<img src="/bild.png" alt="">
 ```
 
-Wollen wir weiterhin das Bild per `<img src="/assets/bild.png">` einbinden, so muss die vollständige Ordnerstruktur so aussehen:
+Wollen wir weiterhin das Bild per `<img src="/assets/bild.png">` einbinden, so muss die vollständige Ordnerstruktur so aussehen. Der Ordner `assets` muss also in `public` platziert werden:
 
 * `name-der-app/public/assets/bild.png`
 
@@ -702,7 +708,7 @@ Wir wünschen Ihnen viel Spaß mit Angular 18!
 Haben Sie Fragen zur neuen Version zu Angular oder zu unserem Buch? Schreiben Sie uns!
 
 **Viel Spaß wünschen
-Ferdinand, Danny und Johannes**
+Johannes, Danny und Ferdinand**
 
 <hr>
 
