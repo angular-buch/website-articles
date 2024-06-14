@@ -194,7 +194,7 @@ Der zukünftige Fokus des Angular-Teams ist allerdings eindeutig.
 Wir empfehlen, neue Angular-Anwendungen definitiv mit den Signals umzusetzen.
 Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine neuen Innovationen mehr geben.
 
-### Natives `async/await` für zonenlose Apps
+### Natives `async` / `await` für zonenlose Apps
 
 Zone.js fängt viele APIs im Browser ab, um die bisherige Change Detection von Angular zu realisieren.
 Leider gehört `async` / `await` zu den APIs, die zone.js nicht patchen kann. 
