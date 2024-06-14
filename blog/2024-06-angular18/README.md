@@ -205,7 +205,7 @@ Wenn zone.js nicht in den Polyfills der Anwendung enthalten ist, dann findet die
 Dies verbessert das Debugging und verkleinert die Bundles.
 
 
-### Zonenlose Unterstützung in bestehenden Komponenten
+### Zonenlose Unterstützung in Angular Material & CDK
 
 [Angular Material](https://material.angular.io/) 3 ist jetzt stabil.
 Das Angular Team hat mit der neuen Version auch gleich die zonenlose Unterstützung aktiviert. Ebenso kann man nun auch das [Angular CDK](https://material.angular.io/cdk/) vollständig ohne zone.js verwenden.
