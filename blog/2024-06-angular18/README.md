@@ -9,6 +9,7 @@ keywords:
   - Angular 18
   - Zoneless
   - Zoneless Change Detection
+  - Signals
 language: de
 thumbnail: angular18.jpg
 sticky: false
