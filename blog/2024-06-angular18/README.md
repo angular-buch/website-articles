@@ -611,7 +611,7 @@ ng update @angular/cli --name use-application-builder
 Wenn Sie eine neue Anwendung mit `ng new` generieren, werden Sie bemerken, dass der Ordner `assets` nicht mehr vorhanden ist.
 Dieser wurde zugunsten des neuen `public`-Ordners ersetzt.
 
-Vor Angular 18 wurde standardmäßig ein leerer der Assets-Ordner bereitgestellt.
+Vor Angular 18 wurde standardmäßig ein leerer Assets-Ordner bereitgestellt.
 Die `favicon.ico` befand sich an einem anderen Ort:
 * `name-der-app/src/assets`
 * `name-der-app/src/favicon.ico`
