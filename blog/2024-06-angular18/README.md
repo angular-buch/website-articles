@@ -99,7 +99,7 @@ Die Option `eventCoalescing` haben wir hier nicht erneut aufgeführt, da diese E
 ### Experimentelle zonenlose Änderungsüberprüfung
 
 Sie können auch versuchen, sich nur auf den neuen Scheduler zu verlassen und nicht mehr auf zone.js, um die Änderungsüberprüfung auszulösen.
-Dies ist eine experimentelle Funktion, die Sie aktivieren können, indem Sie die Provider-Funktion provideExperimentalZonelessChangeDetection() in Ihrer Anwendung verwenden:
+Dies ist eine experimentelle Funktion, die Sie aktivieren können, indem Sie die Provider-Funktion `provideExperimentalZonelessChangeDetection()` in Ihrer Anwendung verwenden:
 
 ```ts
 export const appConfig: ApplicationConfig = {
