@@ -554,7 +554,7 @@ Auf das Ereignis können wir wie bisher per Event-Binding reagieren:
 ```
 
 Bitte beachten Sie noch einmal, dass alle drei neuen Signal-APIs aktuell noch im Status **Developer Preview** sind.
-Wir erwarten aber bei dieser bereits sehr ausgereiften API allerdings keine fundamentalen Änderungen mehr. 
+Wir erwarten aber bei dieser bereits sehr ausgereiften API keine fundamentalen Änderungen mehr. 
 
 ### Outputs von Observables
 
