@@ -13,8 +13,7 @@ keywords:
   - Material 3
 language: de
 thumbnail: angular18.jpg
-sticky: false
-hidden: true
+sticky: true
 ---
 
 Und schon wieder ist ein halbes Jahr vergangen:
