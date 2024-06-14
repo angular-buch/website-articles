@@ -191,7 +191,6 @@ Die Performance ist hierbei deutlich höher.
 Angular entwickelt sich stetig weiter, und "zoneless" ist ein zentraler Bestandteil davon.
 Während das Framework weiterentwickelt wird, stellt das Angular Team selbstverständlich sicher, dass der klassische Stil weiterhin wie erwartet funktioniert.
 Der zukünftige Fokus des Angular-Teams ist allerdings eindeutig.
-Aber es ist an der Zeit, bei der Entwicklung auf Signals zu setzen!
 Wir empfehlen, neue Angular-Anwendungen definitiv mit den Signals umzusetzen.
 Der klassische Stil wird weiterhin unterstützt werden, aber hier wird es keine neuen Innovationen mehr geben.
 
