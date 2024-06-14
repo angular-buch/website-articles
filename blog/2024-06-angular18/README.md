@@ -2,17 +2,19 @@
 title: 'Angular 18 ist da: Signals, Signals, Signals!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2024-06-13
-lastModified: 2024-06-13
+published: 2024-06-14
+lastModified: 2024-06-14
 keywords:
   - Angular
   - Angular 18
   - Zoneless
   - Zoneless Change Detection
   - Signals
+  - Material 3
 language: de
 thumbnail: angular18.jpg
 sticky: false
+hidden: true
 ---
 
 Und schon wieder ist ein halbes Jahr vergangen:
