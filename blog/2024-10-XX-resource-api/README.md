@@ -16,7 +16,7 @@ In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
 
 > Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wurde. Syntax und Semantik können sich noch ändern
 
-Eine Resource verkörpert einen Datensatz, der asynchron geladen wird. In der Regel verwenden wir dazu im Browser das HTTP-Protokoll. Im Gegensatz zu einem einfachen HTTP_Request (z. B. mit dem HttpClient von Angular) geht die Resource aber einen Schritt weiter: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource Informationen zum Ladestatus an. Alle Informationen werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
+Eine Resource verkörpert einen Datensatz, der asynchron geladen wird. In der Regel verwenden wir dazu im Browser das HTTP-Protokoll. Im Gegensatz zu einem einfachen HTTP-Request (z. B. mit dem `HttpClient` von Angular) geht die Resource aber einen Schritt weiter: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource Informationen zum Ladestatus an. Alle Informationen werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
 ## Ohne Resource
 
@@ -130,10 +130,68 @@ isLoading = computed(() => this.booksResource.status() === ResourceStatus.Loadin
 
 ## Wert lokal überschreiben
 
+```ts
+sortBookListLocally() {
+  const currentBookList = this.booksResource.value();
+
+  if (currentBookList) {
+    const sortedList = [...currentBookList].sort((a, b) => b.rating - a.rating);
+    this.booksResource.value.set(sortedList);
+  }
+}
+```
+
 
 
 
 ## Resource mit Request verwenden
+
+
+```ts
+export class BookDetailsComponent {
+  isbn = input.required<string>();
+
+  bookResource = resource({
+    loader: () => this.bs.getSingle(this.isbn())
+  });
+}
+```
+
+Funktioniert, aber nur einmalig, weil loader untracked ist.
+Aber: Resource kann den Laoder automatisch neu ausführen. Dafür Request.
+Immer wenn Signal aus Request seinen Wert ändert, wird Loader neu ausgeführt.
+
+
+```ts
+export class BookDetailsComponent {
+  isbn = input.required<string>();
+
+  bookResource = resource({
+    request: this.isbn,
+    loader: () => this.bs.getSingle(this.isbn())
+  });
+}
+```
+
+Übrigens kann Rückgabewwrt von Request in Loader direkt evrarbeitet werden. Dafür Argument vom Typ `ResourceLoaderParams` mit Property `request`. Enthält hier die ISBN, die vom Request zurückgegeben wird
+
+
+
+```ts
+export class BookDetailsComponent {
+  isbn = input.required<string>();
+  bookResource = resource({
+    request: this.id,
+    loader: ({ request }) => this.service.getDataById(request)
+  });
+}
+```
+
+
+
+
+
+
 
 
 ## `rxResource`: Resource mit Observables
