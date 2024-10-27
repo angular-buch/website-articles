@@ -11,21 +11,23 @@ sticky: false
 hidden: true
 ---
 
-Eine der größeren Neuerungen mit Angular 19 ist die Resource API.
+Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Sie eignet sich, um intuitiv Daten zu laden und in Komponenten zu verarbeiten.
 In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
 
-> Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wurde. Die Syntax und Semantik der API können sich noch ändern.
+> ⚠️ Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wurde. Die Syntax und Semantik der API können sich noch ändern.
 
-Eine Resource verkörpert einen Datensatz, der asynchron geladen wird. Dabei geht es in der Regel (aber nicht ausschließlich) um HTTP-Requests, die Daten von einem Server beschaffen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource Informationen zum Ladestatus an. Alle Informationen werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
+Eine Resource verkörpert einen Datensatz, der (asynchron) geladen wird. Dabei geht es in der Regel (aber nicht ausschließlich) um HTTP-Requests, die Daten von einem Server beschaffen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
-## Ohne Resource
+## Beispiel: ohne Resource
 
 Zur Einführung betrachten wir ein Szenario, das ganz klassisch und ohne die neue Resource API implementiert wird.
+
 Eine Komponente soll eine Liste von Büchern anzeigen, die per HTTP von einem Server geladen wird.
-Der dazu passende `BookStoreService` mit der Methode `getAll()` existiert bereits und wird per Dependency Injection angefordert.
-In der Komponente benötigen wir außerdem ein Property `books`, das die Daten zwischenspeichert, um sie im Template anzuzeigen.
+Der dazu passende `BookStoreService` existiert bereits und wird per Dependency Injection angefordert. Die Methode `getAll()` nutzt den `HttpClient` von Angular und gibt ein Observable zurück.
+
+In der Komponente benötigen wir ein Property `books`, das die Daten zwischenspeichert, um sie im Template anzuzeigen.
 Das Property wird ganz zeitgemäß mit einem Signal initialisiert.
-Im Konstruktor subscriben wir auf das Observable, das von `getAll()` erzeugt wird. Sobald die Buchliste vom Server eingetroffen ist, schreiben wir die Buchliste in das Signal `books`.
+Im Konstruktor subscriben wir auf das Observable, das von `getAll()` erzeugt wird. Sobald die Buchliste vom Server eingetroffen ist, schreiben wir die Daten in das Signal `books`.
 
 ```ts
 @Component({ /* ... */ })
@@ -34,7 +36,7 @@ export class BookListComponent {
   books = signal<Book[]>([]);
 
   constructor() {
-    this.bs.getAll().subscribe((receivedBooks) => {
+    this.bs.getAll().subscribe(receivedBooks => {
       this.books.set(receivedBooks);
     });
   }
@@ -119,8 +121,9 @@ booksResource = resource({
 });
 ```
 
-## Daten lesen
 
+
+## Daten lesen
 
 Der Loader mit dem HTTP-Request wird sofort ausgeführt. Die Resource verarbeitet die Antwort und bietet folgende Signals an, um mit den Daten zu arbeiten:
 
@@ -191,9 +194,8 @@ export class BookListComponent {
 }
 ```
 
-Übrigens kümmert sich die Resource automatisch darum, dass immer nur ein einziger Request gleichzeitig ausgeführt wird.
-Starten wir das Neuladen, während noch ein Request läuft, wird der laufende Request abgebrochen.
-In RxJS können wir dieses Verhalten mit dem Operator `switchMap` erreichen.
+Freundlicherweise kümmert sich die Resource automatisch darum, dass immer nur ein einziger Request gleichzeitig ausgeführt wird.
+Das Neuladen ist erst möglich, wenn das vorherige Laden abgeschlossen ist.
 
 
 ## Wert lokal überschreiben
@@ -285,6 +287,8 @@ export class BookDetailsComponent {
 }
 ```
 
+> **Routenparameter mit Component Input Binding:** Damit das Input Property `isbn` automatisch mit der aktuellen ISBN aus dem Routenparameter befüllt wird, können wir die Funktionalität [*Component Input Binding*](https://netbasal.com/binding-router-information-to-routed-component-inputs-in-angular-78ee92f63e64) des Routers nutzen.
+
 
 ## `rxResource`: Resource mit Observables
 
@@ -312,6 +316,38 @@ booksResource = rxResource({
   loader: () => this.bs.getAll()
 });
 ```
+
+## Laufende Requests abbrechen
+
+Die Resource bietet die Möglichkeit, einen laufenden Request abzubrechen, sobald ein neuer gestartet wird.
+Besonders bei Loadern mit Parameter (in unserem Beispiel die ISBN auf der Detailseite) ist es wichtig, dass nur der zuletzt angefragte Datensatz verarbeitet wird.
+
+Freundlicherweise kümmert sich die `rxResource` komplett eigenständig um diese Mechanik, denn ein Observable bietet eine direkte Schnittstelle, um den Request wieder zu beenden.
+
+Für einen Loader auf Basis von Promises ist das Beenden etwas komplizierter.
+Der Loader erhält in seinem Parameter-Objekt auch ein sogenanntes `AbortSignal`.
+Das ist ein natives Objekt des Browsers, das Auskunft gibt, wann der Request beendet werden soll.
+
+Zusammen mit der nativen Fetch API lässt sich dieses Objekt direkt verwenden.
+Liegt in `this.isbn` eine neue ISBN vor, während der Loader noch lädt, wird der laufende Fetch Request abgebrochen.
+
+```ts
+@Component({ /* ... */ })
+export class BookDetailsComponent {
+  isbn = input.required<string>();
+
+  bookResource = resource({
+    request: this.isbn,
+    loader: ({ abortSignal }) => fetch(
+      detailsUrl + '/' + this.isbn(),
+      signal: abortSignal
+    )
+  });
+}
+```
+
+Nutzen wir den `HttpClient` von Angular und die Funktion `firstValueFrom`, ist das Beenden etwas komplizierter. In diesem Fall empfehlen wir unbedingt, die `rxResource` zu verwenden.
+
 
 
 ## Fazit
