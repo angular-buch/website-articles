@@ -65,8 +65,13 @@ Die neue Resource API soll diese Lücke schließen!
 
 Eine Resource repräsentiert einen Datensatz, der mithilfe eines Loaders geladen wird.
 Zur Initialisierung verwenden wir die Funktion `resource()`.
-Der hier übergebene Loader ist eine Funktion, die das (asynchrone) Laden der Daten durchführt.
+Der hier übergebene Loader ist eine Funktion, die das asynchrone Laden der Daten durchführt.
 Dieser Loader wird übrigens sofort ausgeführt, sobald die Resource initialisiert wird.
+
+In der Dokumentation wird die Resource wie folgt beschrieben:
+
+> A Resource is an asynchronous dependency (for example, the results of an API call) that is managed and delivered through signals.
+> [It] projects a reactive request to an asynchronous operation defined by a loader function, which exposes the result of the loading operation via signals.
 
 ```ts
 import { resource } from '@angular/core';
@@ -154,7 +159,7 @@ Die geladenen Bücher können wir also wir folgt im Template anzeigen:
 
 ## Status der Resource
 
-Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z. B. um einen Ladeindikator anzuzeigen. Alle Werte von `status` sind Felder aus dem Enum `ResourceStatus`:
+Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z. B. um einen Ladeindikator anzuzeigen. Alle Werte von `status` sind Felder aus dem [Enum `ResourceStatus`](https://next.angular.dev/api/core/ResourceStatus):
 
 | Status aus `ResourceStatus` | Beschreibung                                                                         |
 | --------------------------- | ------------------------------------------------------------------------------------ |
