@@ -20,7 +20,7 @@ hidden: true
 Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.
 In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
 
-> ⚠️ Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wurde. Die Syntax und Semantik der API können sich noch ändern.
+> ⚠️ Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wird. Die Syntax und Semantik der API können sich noch ändern.
 
 Eine Resource verkörpert einen Datensatz, der (asynchron) geladen wird. Dabei geht es in der Regel um HTTP-Requests, die Daten von einem Server beschaffen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen und Daten werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
@@ -373,7 +373,7 @@ Bisher war dafür viel manueller Aufwand nötig.
 
 Damit macht Angular einen weiteren Schritt, um Signals im Framework zu etablieren. Die Notwendigkeit, RxJS und Observables für einfache Aufgaben zu verwenden, wird weiter reduziert.
 
-Die Resource API ist mit Angular 19 ein experimenteller Baustein! Die Schnittstelle und das Verhalten können sich noch ändern, und es können Bugs auftreten.
+Die Resource API ist in Angular 19 ein experimenteller Baustein! Die Schnittstelle und das Verhalten können sich noch ändern, und es können Bugs auftreten.
 Probieren Sie das neue Tool bitte trotzdem aus! Das Feedback aus der Community ist wichtig, um die Schnittstelle vor dem finalen Release noch weiter zu verbessern.
 
 Fraglich ist, welche Rolle der `HttpClient` von Angular in Zukunft spielen wird. Mit dem Einsatz von Promises ermutigt Angular, für HTTP-Kommunikation auf die native Fetch API zu setzen. Wünschenswert wäre, dass der `HttpClient` und die neue Resource nahtlos miteinander arbeiten. Denkbar wäre beispielsweise, dass der `HttpClient` direkt eine Resource zurückgibt, ohne den sichtbaren Umweg über ein Observable oder eine Promise zu gehen.
