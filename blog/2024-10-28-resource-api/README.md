@@ -1,12 +1,18 @@
 ---
-title: WIP Resource API
+title: Die neue Resource API von Angular
 author: Ferdinand Malcher
 mail: ferdinand@malcher.media
-published: 2024-10-XX
-lastModified: 2024-10-XX
-keywords: []
+published: 2024-10-28
+lastModified: 2024-10-28
+keywords:
+  - Resource API
+  - Promise
+  - Observable
+  - resource
+  - rxResource
+  - Fetch API
 language: de
-thumbnail:
+thumbnail: header-resource-api.jpg
 sticky: false
 hidden: true
 ---
@@ -371,4 +377,5 @@ Die neue Schnittstelle ist aber aus unserer Sicht eine gute Basis – und wir si
 
 <hr>
 
-<small>**Titelbild:** XXX. Foto von Ferdinand Malcher</small>
+<small>**Titelbild:** Foto von <a href="https://unsplash.com/de/@thepaintedsquarejessica">Jessica Lewis 🦋 thepaintedsquare</a> auf <a href="https://unsplash.com/de/fotos/geschnittene-erdbeeren-auf-blaugrunem-keramikteller-15nvaBz_doc">Unsplash</a> (bearbeitet)
+  </small>
