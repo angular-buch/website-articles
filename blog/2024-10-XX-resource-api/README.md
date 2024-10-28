@@ -11,19 +11,19 @@ sticky: false
 hidden: true
 ---
 
-Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Sie eignet sich, um intuitiv Daten zu laden und in Komponenten zu verarbeiten.
+Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.
 In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
 
 > ⚠️ Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wurde. Die Syntax und Semantik der API können sich noch ändern.
 
-Eine Resource verkörpert einen Datensatz, der (asynchron) geladen wird. Dabei geht es in der Regel (aber nicht ausschließlich) um HTTP-Requests, die Daten von einem Server beschaffen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
+Eine Resource verkörpert einen Datensatz, der (asynchron) geladen wird. Dabei geht es in der Regel um HTTP-Requests, die Daten von einem Server beschaffen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen und Daten werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
-## Beispiel: ohne Resource
+## Was bisher geschah: Beispiel ohne Resource
 
 Zur Einführung betrachten wir ein Szenario, das ganz klassisch und ohne die neue Resource API implementiert wird.
 
-Eine Komponente soll eine Liste von Büchern anzeigen, die per HTTP von einem Server geladen wird.
-Der dazu passende `BookStoreService` existiert bereits und wird per Dependency Injection angefordert. Die Methode `getAll()` nutzt den `HttpClient` von Angular und gibt ein Observable zurück.
+Wir wollen in einer Komponente eine Liste von Büchern anzeigen, die per HTTP von einem Server geladen wird.
+Der dazu passende `BookStoreService` existiert bereits und wird per Dependency Injection angefordert. Die Methode `getAll()` im Service nutzt den `HttpClient` von Angular und gibt ein Observable zurück.
 
 In der Komponente benötigen wir ein Property `books`, das die Daten zwischenspeichert, um sie im Template anzuzeigen.
 Das Property wird ganz zeitgemäß mit einem Signal initialisiert.
@@ -45,7 +45,7 @@ export class BookListComponent {
 
 In der Regel wird es aber nicht bei diesem einfachen Szenario bleiben, sondern weitere Anforderungen kommen hinzu:
 
-- **Auf Knopfdruck soll die Buchliste neu geladen werden.** Dazu müssen wir in einer neuen Methode (z. B. `reloadList()`) den HTTP-Request erneut starten und somit den Code aus dem Konstruktor duplizieren.
+- **Auf Knopfdruck soll die Buchliste neu geladen werden.** Dazu müssen wir in einer neuen Methode (z. B. `reloadList()`) den HTTP-Request erneut starten, subscriben, usw. – und somit den Code aus dem Konstruktor duplizieren.
 - **Es sollen keine parallelen Requests ausgeführt werden.** Wenn die Daten neu geladen werden sollen, während noch ein vorheriger Request läuft, soll dieser abgebrochen werden.
 - **Es soll ein Ladeindikator angezeigt werden.** Dafür müssen wir ein Property `loading` einführen, das wir an den richtigen Stellen im Code auf `true` oder `false` setzen, um den Zustand zu erfassen.
 - **Die Daten sollen lokal verändert/überschrieben werden.** Dazu können wir zwar das Signal mit einem neuen Wert setzen – wir wissen aber anschließend nicht mehr, ob der aktuelle Wert lokal gesetzt oder vom Server geladen wurde.
@@ -55,10 +55,10 @@ Anstatt auf imperativen Stil zu setzen, wie in unserem Beispiel, können wir auc
 
 Die neue Resource API soll diese Lücke schließen!
 
-## Resource API
+## Die neue Resource API
 
 Eine Resource repräsentiert einen Datensatz, der mithilfe eines Loaders geladen wird.
-Zur Initialisierung verwenden wir die Funktion `resource()` mit einem Konfigurationsobjekt.
+Zur Initialisierung verwenden wir die Funktion `resource()`.
 Der hier übergebene Loader ist eine Funktion, die das (asynchrone) Laden der Daten durchführt.
 Dieser Loader wird übrigens sofort ausgeführt, sobald die Resource initialisiert wird.
 
@@ -72,7 +72,7 @@ myResource = resource({
 ```
 
 Überraschenderweise muss der Loader immer eine Promise zurückgeben! Grundsätzlich spricht zwar nichts dagegen, dieses native Modell des Browsers zu verwenden. In der Vergangenheit hat Angular aber stets auf Observables gesetzt, um asynchrone Operationen durchzuführen.
-Angular bricht hier also alte Prinzipien und setzt auf das native Konstrukt des Browsers.
+Angular bricht hier also bewährte Prinzipien und setzt stattdessen auf das native Konstrukt des Browsers.
 
 Um mit der Resource also einen HTTP-Request durchzuführen, gibt es drei Möglichkeiten:
 
@@ -81,27 +81,10 @@ Um mit der Resource also einen HTTP-Request durchzuführen, gibt es drei Möglic
 - 3.) Wir verwenden eine `rxResource`, die ein Observable als Loader verwendet. Dazu gleich mehr!
 
 
-### Variante 1: Angulars `HttpClient` und Observables
 
-```ts
-@Injectable({ /* ... */ })
-export class BookStoreService {
-  // ...
-  getAll(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl + '/books');
-  }
-}
-```
+### Variante 1: Fetch API und Promise
 
-```ts
-// Komponente
-booksResource = resource({
-  loader: () => firstValueFrom(this.bs.getAll())
-});
-```
-
-
-### Variante 2: die native Fetch API und Promises
+Im `BookStoreService` verwenden wir die native Fetch API, sodass die Methode `getAll()` eine Promise zurückgibt. Im Loader können wir diese Promise direkt verwenden.
 
 ```ts
 @Injectable({ /* ... */ })
@@ -122,13 +105,35 @@ booksResource = resource({
 ```
 
 
+### Variante 2: Angulars `HttpClient` und Observable
+
+Wir verwenden wir üblich den `HttpClient` von Angular, sodass die Methode `getAll()` ein Observable zurückgibt.
+Um den Loader zu definieren, müssen wir das Observable mithilfe von `firstValueFrom()` in eine Promise umwandeln.
+
+```ts
+@Injectable({ /* ... */ })
+export class BookStoreService {
+  // ...
+  getAll(): Observable<Book[]> {
+    return this.http.get<Book[]>(this.apiUrl + '/books');
+  }
+}
+```
+
+```ts
+// Komponente
+booksResource = resource({
+  loader: () => firstValueFrom(this.bs.getAll())
+});
+```
+
 
 ## Daten lesen
 
-Der Loader mit dem HTTP-Request wird sofort ausgeführt. Die Resource verarbeitet die Antwort und bietet folgende Signals an, um mit den Daten zu arbeiten:
+Der Loader wird sofort ausgeführt, sobald das Resource-Objekt initialisiert wird. Die Resource verarbeitet die Antwort und bietet folgende Signals an, um mit den Daten zu arbeiten:
 
 - `value`: geladene Daten, hier `Book[]`
-- `status`: Zustand der Resource vom Typ `ResourceStatus`, z. B. "Resolved" oder "Idle"
+- `status`: Zustand der Resource vom Typ `ResourceStatus`, z. B. *Resolved* oder *Idle*, siehe nächster Abschnitt
 - `error`: Fehler
 
 Die geladenen Bücher können wir also wir folgt im Template anzeigen:
@@ -143,7 +148,7 @@ Die geladenen Bücher können wir also wir folgt im Template anzeigen:
 
 ## Status der Resource
 
-Mithilfe von `status` können wir den Zustand der Resource auswerten, z. B. um einen Ladeindikator anzuzeigen. Alle Werte aus `status` sind Felder aus dem Enum `ResourceStatus`:
+Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z. B. um einen Ladeindikator anzuzeigen. Alle Werte von `status` sind Felder aus dem Enum `ResourceStatus`:
 
 | Status aus `ResourceStatus` | Beschreibung                                                                         |
 | --------------------------- | ------------------------------------------------------------------------------------ |
@@ -154,7 +159,7 @@ Mithilfe von `status` können wir den Zustand der Resource auswerten, z. B. um e
 | `Resolved`                  | Das Laden ist abgeschlossen.                                                         |
 | `Local`                     | Der Wert wurde lokal überschrieben.                                                  |
 
-Für einen Ladeindikator können wir z. B. so vorgehen und ein Computed Signal verwenden:
+Für einen Ladeindikator können wir z. B. so vorgehen und ein Computed Signal verwenden, das den Zustand auswertet und ein Boolean bereitstellt:
 
 ```ts
 import { resource, computed, ResourceStatus } from '@angular/core';
@@ -179,7 +184,6 @@ Beim Aufruf wird intern die Loader-Funktion erneut ausgeführt und die Daten neu
 Das Ergebnis steht nach erfolgreichem Neuladen automatisch im Signal `value` zur Verfügung.
 
 ```html
-<!-- book-list.component.html -->
 <button (click)="reloadList()">Reload book list</button>
 ```
 
@@ -225,7 +229,7 @@ export class BookListComponent {
 
 Wir möchten auf zwei Besonderheiten in diesem Code hinweisen:
 
-- Das Signal `value` hat den Typ `T | undefined` (in unserem Fall also `Book[] | undefined`). Solange die Daten noch nicht geladen wurden, liefert das Signal also den Wert `undefined`. Deshalb ist hier eine Prüfung nötig, ob `currentBookList` überhaupt existiert. Es wäre wünschenswert, wenn man der Resource einen Startwert übergeben kann, sodass `undefined` entfällt.
+- Das Signal `value` liefert den Typ `T | undefined`, in unserem Fall also `Book[] | undefined`. Solange die Daten noch nicht geladen wurden, ist der Wert also `undefined`. Deshalb ist hier eine Prüfung nötig, ob `currentBookList` überhaupt existiert. Es wäre wünschenswert, wenn man der Resource einen Startwert übergeben kann, sodass `undefined` entfällt.
 - Die Methode `Array.sort()` mutiert das Array! Um die Immutability zu wahren, nutzen wir zunächst den Spread Operator, um eine Kopie des Arrays zu erzeugen, die wir anschließend gefahrlos sortieren können.
 
 
@@ -238,7 +242,7 @@ Beim Wechsel auf eine andere Detailseite soll das Laden erneut angestoßen werde
 Der Loader muss also mit Parametern arbeiten können.
 Dazu gehen wir davon aus, dass die Komponente ein Input Property `isbn` besitzt, über das die aktuelle ISBN stets verfügbar ist.
 
-Nun könnten wir im Loader das Signal `this.isbn` verwenden, um die ISBN an den Service zu übergeben:
+Im Loader könnten wir nun das Signal `this.isbn` verwenden, um die ISBN an den Service zu übergeben:
 
 ```ts
 @Component({ /* ... */ })
@@ -251,10 +255,11 @@ export class BookDetailsComponent {
 }
 ```
 
-Dieser Code funktioniert grundlegend – aber nur ein einziges Mal! Die Loader-Funktion ist *untracked*. Das bedeutet, dass die Funktion bei einer Änderung der darin verwendeten Signals nicht erneut ausgeführt wird.
+Dieser Code funktioniert grundlegend – aber nur ein einziges Mal! Die Loader-Funktion ist *untracked*. Das bedeutet, dass der Loader bei einer Änderung der darin verwendeten Signals nicht erneut ausgeführt wird (wie es bei `effect()` oder `computed()` der Fall wäre).
 
-Um dieses Dilemma zu lösen, können wir das Property `request` verwenden. Hier übergeben wir ein Signal. Immer wenn dieses Signal seinen Wert ändert, wird der Loader automatisch neu ausgeführt.
+Um dieses Dilemma zu lösen, können wir das Property `request` verwenden: Hier übergeben wir ein Signal. Immer wenn dieses Signal seinen Wert ändert, wird der Loader automatisch neu ausgeführt.
 
+Der Request stellt also die Parameter bereit, mit denen der Laoder ausgeführt wird.
 
 ```ts
 @Component({ /* ... */ })
@@ -268,12 +273,11 @@ export class BookDetailsComponent {
 }
 ```
 
-Um den Loader nun etwas generischer und wiederverwendbarer zu gestalten, können wir auf die direkte Verwendung von `this.isbn()` übrigens verzichten.
+Um den Loader nun etwas generischer und wiederverwendbarer zu gestalten, können wir auf die direkte Verwendung von `this.isbn()` verzichten.
 Der Rückgabewert von `request` wird praktischerweise als Argument an die Loader-Funktion übergeben.
-Auf diese Weise könnte man den Loader auch in anderen Resources erneut einsetzen.
+Auf diese Weise könnte man den Loader auch in eine separate Funktion auslagern und in anderen Resources erneut einsetzen.
 
 Der Loader erhält automatisch ein Argument vom Typ `ResourceLoaderParams`, das ein Property `request` besitzt. Darin befindet sich in unserem Beispiel die ISBN, die vom Request zurückgegeben wird.
-
 
 ```ts
 @Component({ /* ... */ })
@@ -292,7 +296,7 @@ export class BookDetailsComponent {
 
 ## `rxResource`: Resource mit Observables
 
-In allen bisherigen Beispielen haben wir die Loader-Funktion mithilfe von Promises implementiert. Die Fetch API des Browsers gibt eine Promise zurück, und die Funktion `firstValueFrom()` aus der Bibliothek RxJS hat uns geholfen, eine Promise aus dem Observable zu erstellen, das der `HttpClient` von Angular zurückgegeben hat.
+In allen bisherigen Beispielen haben wir die Loader-Funktion mithilfe von Promises implementiert. Die Fetch API des Browsers gibt eine Promise zurück, und die Funktion `firstValueFrom()` aus der Bibliothek RxJS hat uns geholfen, eine Promise aus dem Observable zu erstellen, das der `HttpClient` von Angular erzeugt.
 
 Auch wenn Angular an vielen Stellen nicht mehr direkt auf RxJS und Observables setzt, haben die Möglichkeiten der funktional-reaktiven Programmierung für viele Szenarien ihre Berechtigung!
 Angular bietet deshalb die Funktion `rxResource` an. Sie funktioniert genauso wie `resource`, die Loader-Funktion gibt allerdings ein Observable zurück.
@@ -322,7 +326,7 @@ booksResource = rxResource({
 Die Resource bietet die Möglichkeit, einen laufenden Request abzubrechen, sobald ein neuer gestartet wird.
 Besonders bei Loadern mit Parameter (in unserem Beispiel die ISBN auf der Detailseite) ist es wichtig, dass nur der zuletzt angefragte Datensatz verarbeitet wird.
 
-Freundlicherweise kümmert sich die `rxResource` komplett eigenständig um diese Mechanik, denn ein Observable bietet eine direkte Schnittstelle, um den Request wieder zu beenden.
+Die `rxResource` kümmert sich freundlicherweise komplett eigenständig um diese Mechanik, denn ein Observable bietet eine direkte Schnittstelle, um den Request wieder zu beenden.
 
 Für einen Loader auf Basis von Promises ist das Beenden etwas komplizierter.
 Der Loader erhält in seinem Parameter-Objekt auch ein sogenanntes `AbortSignal`.
@@ -346,14 +350,14 @@ export class BookDetailsComponent {
 }
 ```
 
-Nutzen wir den `HttpClient` von Angular und die Funktion `firstValueFrom`, ist das Beenden etwas komplizierter. In diesem Fall empfehlen wir unbedingt, die `rxResource` zu verwenden.
+Nutzen wir den `HttpClient` von Angular und die Funktion `firstValueFrom`, ist das Beenden sehr umständlich – wir müssten das `AbortSignal` in ein Observable umwandeln, um den Operator `takeUntil` zum Beenden des Datenstroms einzusetzen. In diesem Fall empfehlen wir unbedingt, die `rxResource` zu verwenden.
 
 
 
 ## Fazit
 
 Mit der neuen Resource API bietet Angular eine intuitive und gut integrierte Schnittstelle an, um Daten vom Server zu laden.
-Anwendungsfälle, die über einen einfachen HTTP-Request hinausgehen, insbesondere wiederholtes Laden, können mit der Resource schnell umgesetzt werden.
+Anwendungsfälle, die über einen einfachen HTTP-Request hinausgehen, insbesondere wiederholtes Laden und Anzeige eines Ladeindikators, können mit der Resource schnell umgesetzt werden.
 Bisher war dafür viel manueller Aufwand nötig.
 
 Damit macht Angular einen weiteren Schritt, um Signals im Framework zu etablieren. Die Notwendigkeit, RxJS und Observables für einfache Aufgaben zu verwenden, wird weiter reduziert.
@@ -361,7 +365,7 @@ Damit macht Angular einen weiteren Schritt, um Signals im Framework zu etabliere
 Die Resource API ist mit Angular 19 ein experimenteller Baustein! Die Schnittstelle und das Verhalten können sich noch ändern, und es können Bugs auftreten.
 Probieren Sie das neue Tool bitte trotzdem aus! Das Feedback aus der Community ist wichtig, um die Schnittstelle vor dem finalen Release noch weiter zu verbessern.
 
-Fraglich ist, welche Rolle der `HttpClient` von Angular in Zukunft spielen wird. Mit dem Einsatz von Promises ermutigt Angular, für HTTP-Kommunikation auf die native Fetch API zu setzen. Wünschenswert wäre, wenn der `HttpClient` und die neue Resource nahtlos miteinander arbeiten können. Denkbar wäre beispielsweise, dass der `HttpCLient` direkt eine Resource zurückgibt, ohne den sichtbaren Umweg über ein Observable oder eine Promise zu gehen.
+Fraglich ist, welche Rolle der `HttpClient` von Angular in Zukunft spielen wird. Mit dem Einsatz von Promises ermutigt Angular, für HTTP-Kommunikation auf die native Fetch API zu setzen. Wünschenswert wäre, dass der `HttpClient` und die neue Resource nahtlos miteinander arbeiten. Denkbar wäre beispielsweise, dass der `HttpClient` direkt eine Resource zurückgibt, ohne den sichtbaren Umweg über ein Observable oder eine Promise zu gehen.
 Die neue Schnittstelle ist aber aus unserer Sicht eine gute Basis – und wir sind gespannt, was in Zukunft folgt!
 
 
