@@ -89,7 +89,7 @@ Um mit der Resource also einen HTTP-Request durchzuführen, gibt es drei Möglic
 
 - 1.) Wir verwenden einen HTTP-Client, der Promises zurückgibt, z. B. das native `fetch()` oder die Bibliothek `axios`.
 - 2.) Wir verwenden die Funktion `firstValueFrom()` aus der Bibliothek RxJS. Sie wandelt ein Observable in eine Promise um, die das erste Element des Datenstroms ausgibt.
-- 3.) Wir verwenden eine `rxResource`, die ein Observable als Loader verwendet. Dazu gleich mehr!
+- 3.) Wir verwenden eine `rxResource`, die ein Observable als Loader verwendet. Dazu später mehr!
 
 
 
