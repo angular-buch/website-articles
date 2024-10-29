@@ -38,6 +38,33 @@ ng new book-monkey --routing --style=css --prefix=bm --standalone=false
 Übrigens: Die Option `routing` ist seit Angular 17 per Default aktiviert, sie muss also nicht mehr manuell mit angegeben werden.
 
 
+### 5.3 Statische Assets einbinden
+
+Im Abschnitt 5.3 auf Seite 64 erläutern wir, dass statische Assets aus dem Ordner `src/assets` automatisch eingebunden werden.
+In neu angelegten Projekten existiert dieser Ordner nicht mehr. Stattdessen werden statische Dateien, die beim Build mit ausgeliefert werden sollen, im neuen Ordner `public` abgelegt.
+Wenn wir diese Dateien einbinden, muss der Ordnerpfad **nicht** mehr angegeben werden. Legen wir die Datei `icon.png` in den Ordner `public`, wird sie aus der Anwendung heraus wie folgt eingebunden:
+
+```html
+<img src="icon.png" alt="Icon">
+```
+
+### 5.5 `@import` in SCSS ist deprecated
+
+In Abschnitt 5.5 binden wir das Paket `book-monkey5-styles` ein, um die globalen Stylesheets zu nutzen.
+Dafür verwenden wir das Statement `@import` in der Datei `styles.css`.
+
+Wir haben im BookMonkey zwar reines CSS eingesetzt, für die Praxis empfehlen wir aber eher, auf den Präprozessor SCSS zu setzen.
+Dort funktioniert `@import` grundlegend auch – das Statement wurde allerdings als *deprecated* markiert. `@import` verweist in SCSS nur noch auf reine CSS-Imports.
+Arbeiten wir mit SCSS, wird `@use` empfohlen, um andere Dateien einzubinden.
+
+```scss
+// styles.scss (!)
+@use 'book-monkey5-styles/index.css';
+```
+
+Nutzen wir nur reines CSS für das Styling der Anwendung, ist `@import` weiterhin möglich – Sie müssen für die Arbeit mit dem Buch hier also zunächst nichts ändern.
+
+
 ### 20.4 Asynchroner Validator und Methode `checkAvailable()`
 
 Im Abschnitt 20.4 entwickeln wir auf den Seiten 395 und 396 einen asynchronen Validator.
