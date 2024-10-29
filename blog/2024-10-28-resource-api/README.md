@@ -209,7 +209,7 @@ export class BookListComponent {
 }
 ```
 
-Freundlicherweise kümmert sich die Resource automatisch darum, dass immer nur ein einziger Request gleichzeitig ausgeführt wird.
+Die Resource stellt sicher, dass stets nur ein einziger Request gleichzeitig ausgeführt wird.
 Das Neuladen ist erst möglich, wenn das vorherige Laden abgeschlossen ist.
 
 
