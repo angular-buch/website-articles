@@ -199,8 +199,8 @@ Mit dem mitgelieferten Property `isLoading` ist das schnell gelöst: Dieses Sign
 ## Resource neu laden
 
 Eine Resource besitzt die Methode `reload()`.
-Beim Aufruf wird intern die Loader-Funktion erneut ausgeführt und die Daten neu geladen.
-Das Ergebnis steht nach erfolgreichem Neuladen automatisch im Signal `value` zur Verfügung.
+Beim Aufruf wird intern die Loader-Funktion erneut ausgeführt, und die Daten werden neu geladen.
+Das Ergebnis steht anschließend automatisch im Signal `value` zur Verfügung.
 
 ```html
 <button (click)="reloadList()">Reload book list</button>
@@ -239,7 +239,7 @@ export class BookListComponent {
     const currentBookList = this.booksResource.value();
 
     if (currentBookList) {
-      const sortedList = [...currentBookList].sort((a, b) => b.rating - a.rating);
+      const sortedList = currentBookList.toSorted((a, b) => b.rating - a.rating);
       this.booksResource.value.set(sortedList);
     }
   }
@@ -249,7 +249,7 @@ export class BookListComponent {
 Wir möchten auf zwei Besonderheiten in diesem Code hinweisen:
 
 - Das Signal `value` liefert den Typ `T | undefined`, in unserem Fall also `Book[] | undefined`. Solange die Daten noch nicht geladen wurden, ist der Wert also `undefined`. Deshalb ist hier eine Prüfung nötig, ob `currentBookList` überhaupt existiert. Es wäre wünschenswert, wenn man der Resource einen Startwert übergeben kann, sodass `undefined` entfällt.
-- Die Methode `Array.sort()` mutiert das Array! Um die Immutability zu wahren, nutzen wir zunächst den Spread Operator, um eine Kopie des Arrays zu erzeugen, die wir anschließend gefahrlos sortieren können.
+- Anstelle von `Array.sort()` verwenden wir die neue Methode `Array.toSorted()`, die das Array unverändert lässt und eine sortierte Kopie zurückgibt. So bleibt die Immutability gewahrt. `toSorted()` kann nur verwendet werden, wenn die Option `lib` in der `tsconfig.json` mindestens den Eintrag `ES2023` enthält – aktuell ist das in neuen Angular-Projekten noch nicht der Fall.
 
 
 ## `request`: Loader mit Parameter
