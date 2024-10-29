@@ -177,8 +177,8 @@ import { resource, computed, ResourceStatus } from '@angular/core';
 // ...
 
 isLoading = computed(() => {
-  return this.booksResource.status() === ResourceStatus.Loading ||
-    this.booksResource.status() === ResourceStatus.Reloading;
+  return [ResourceStatus.Loading, ResourceStatus.Reloading]
+    .includes(this.booksResource.status())
   });
 ```
 
