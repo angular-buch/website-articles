@@ -379,6 +379,8 @@ Mit der neuen Resource API bietet Angular eine intuitive und gut integrierte Sch
 Anwendungsfälle, die über einen einfachen HTTP-Request hinausgehen, insbesondere wiederholtes Laden und Anzeige eines Ladeindikators, können mit der Resource schnell umgesetzt werden.
 Bisher war dafür viel manueller Aufwand nötig.
 
+Wir begrüßen, dass Angular hier ein häufiges Alltagsproblem adressiert. Die Lösung deckt die meisten Anwendungsfälle zuverlässig ab und sorgt für eine standardisierte Herangehensweise – nur bei Anforderungen, die über die gegebenen Funktionen hinausgehen, wird künftig eine eigene Implementierung notwendig sein.
+
 Damit macht Angular einen weiteren Schritt, um Signals im Framework zu etablieren. Die Notwendigkeit, RxJS und Observables für einfache Aufgaben zu verwenden, wird weiter reduziert.
 
 Die Resource API ist in Angular 19 ein experimenteller Baustein! Die Schnittstelle und das Verhalten können sich noch ändern, und es können Bugs auftreten.
