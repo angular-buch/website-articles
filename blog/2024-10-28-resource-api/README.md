@@ -394,6 +394,7 @@ Die neue Schnittstelle ist aber aus unserer Sicht eine gute Basis – und wir si
 
 
 <hr>
+<small>Vielen Dank an Johannes Hoppe und Danny Koppenhagen für Review und Feedback.</small>
 
 <small>**Titelbild:** Foto von <a href="https://unsplash.com/de/@thepaintedsquarejessica">Jessica Lewis 🦋 thepaintedsquare</a> auf <a href="https://unsplash.com/de/fotos/geschnittene-erdbeeren-auf-blaugrunem-keramikteller-15nvaBz_doc">Unsplash</a> (bearbeitet)
   </small>
