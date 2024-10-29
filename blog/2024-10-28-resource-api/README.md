@@ -93,7 +93,7 @@ Um mit der Resource also einen HTTP-Request durchzuführen, gibt es drei Möglic
 
 
 
-### Variante 1: Fetch API und Promise
+### Variante 1: Promises und die native Fetch API
 
 Im `BookStoreService` verwenden wir die native Fetch API, sodass die Methode `getAll()` eine Promise zurückgibt. Im Loader können wir diese Promise direkt verwenden.
 
@@ -102,8 +102,7 @@ Im `BookStoreService` verwenden wir die native Fetch API, sodass die Methode `ge
 export class BookStoreService {
   // ...
   getAll(): Promise<Book[]> {
-    return fetch(this.apiUrl + '/books')
-      .then(res => res.json()) as Promise<Book[]>
+    return fetch(this.apiUrl + '/books').then(res => res.json());
   }
 }
 ```
@@ -116,7 +115,7 @@ booksResource = resource({
 ```
 
 
-### Variante 2: Angulars `HttpClient` und Observable
+### Variante 2: Observables und der `HttpClient` von Angular
 
 Wir verwenden wir üblich den `HttpClient` von Angular, sodass die Methode `getAll()` ein Observable zurückgibt.
 Um den Loader zu definieren, müssen wir das Observable mithilfe von `firstValueFrom()` in eine Promise umwandeln.
@@ -188,7 +187,7 @@ isLoading = computed(() => {
 }
 ```
 
-## Resource neuladen
+## Resource neu laden
 
 Eine Resource besitzt die Methode `reload()`.
 Beim Aufruf wird intern die Loader-Funktion erneut ausgeführt und die Daten neu geladen.
@@ -210,7 +209,7 @@ export class BookListComponent {
 ```
 
 Die Resource stellt sicher, dass stets nur ein einziger Request gleichzeitig ausgeführt wird.
-Das Neuladen ist erst möglich, wenn das vorherige Laden abgeschlossen ist.
+Das Neuladen ist erst möglich, wenn der vorherige Ladevorgang abgeschlossen ist.
 
 
 ## Wert lokal überschreiben
