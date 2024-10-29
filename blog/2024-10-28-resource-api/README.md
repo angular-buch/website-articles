@@ -2,8 +2,8 @@
 title: Die neue Resource API von Angular
 author: Ferdinand Malcher
 mail: ferdinand@malcher.media
-published: 2024-10-28
-lastModified: 2024-10-28
+published: 2024-10-29
+lastModified: 2024-10-29
 keywords:
   - Resource API
   - Promise
