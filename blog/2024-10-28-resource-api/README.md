@@ -169,16 +169,14 @@ Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z.
 | `Resolved`                  | Das Laden ist abgeschlossen.                                                         |
 | `Local`                     | Der Wert wurde lokal überschrieben.                                                  |
 
-Für einen Ladeindikator können wir z. B. so vorgehen und ein Computed Signal verwenden, das den Zustand auswertet und ein Boolean bereitstellt:
+
+Für einen Ladeindikator könnten wir den Zustand z. B. in einem Computed Signal verarbeiten und ein Boolean zurückgeben, wenn die Resource gerade lädt:
 
 ```ts
 import { resource, computed, ResourceStatus } from '@angular/core';
 // ...
 
-isLoading = computed(() => {
-  return [ResourceStatus.Loading, ResourceStatus.Reloading]
-    .includes(this.booksResource.status())
-  });
+isLoading = computed(() => this.booksResource.status() === ResourceStatus.Loading);
 ```
 
 ```html
@@ -186,6 +184,17 @@ isLoading = computed(() => {
   <div>LOADING</div>
 }
 ```
+
+Damit alle Fälle erfasst werden, müssen wir hier aber auch den Zustand `Reloading` berücksichtigen.
+Mit dem mitgelieferten Property `isLoading` ist das schnell gelöst: Dieses Signal gibt `true` aus, wenn sich die Resource im Zustand `Loading` oder `Reloading` befindet:
+
+```html
+@if (booksResource.isLoading()) {
+  <div>LOADING</div>
+}
+```
+
+
 
 ## Resource neu laden
 
