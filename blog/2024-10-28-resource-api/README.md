@@ -33,7 +33,7 @@ Der dazu passende `BookStoreService` existiert bereits und wird per Dependency I
 
 In der Komponente benötigen wir ein Property `books`, das die Daten zwischenspeichert, um sie im Template anzuzeigen.
 Das Property wird ganz zeitgemäß mit einem Signal initialisiert.
-Im Konstruktor subscriben wir auf das Observable, das von `getAll()` erzeugt wird. Sobald die Buchliste vom Server eingetroffen ist, schreiben wir die Daten in das Signal `books`.
+Im Konstruktor subscriben wir auf das von `getAll()` erzeugte Observable. Sobald die Buchliste vom Server eingetroffen ist, schreiben wir die Daten in das Signal `books`.
 
 ```ts
 @Component({ /* ... */ })
