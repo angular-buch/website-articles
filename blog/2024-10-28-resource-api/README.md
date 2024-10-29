@@ -270,7 +270,7 @@ Dieser Code funktioniert grundlegend – aber nur ein einziges Mal! Die Loader-F
 
 Um dieses Dilemma zu lösen, können wir das Property `request` verwenden: Hier übergeben wir ein Signal. Immer wenn dieses Signal seinen Wert ändert, wird der Loader automatisch neu ausgeführt.
 
-Der Request stellt also die Parameter bereit, mit denen der Laoder ausgeführt wird.
+Der Request stellt also die Parameter bereit, mit denen der Loader ausgeführt wird.
 
 ```ts
 @Component({ /* ... */ })
