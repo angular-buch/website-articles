@@ -268,7 +268,7 @@ export class BookDetailsComponent {
 
 Dieser Code funktioniert grundlegend – aber nur ein einziges Mal! Die Loader-Funktion ist *untracked*. Das bedeutet, dass der Loader bei einer Änderung der darin verwendeten Signals nicht erneut ausgeführt wird (wie es bei `effect()` oder `computed()` der Fall wäre).
 
-Um dieses Dilemma zu lösen, können wir das Property `request` verwenden: Hier übergeben wir ein Signal. Immer wenn dieses Signal seinen Wert ändert, wird der Loader automatisch neu ausgeführt.
+Um dieses Problem zu lösen, können wir das Property `request` verwenden: Hier übergeben wir ein Signal. Immer wenn dieses Signal seinen Wert ändert, wird der Loader automatisch neu ausgeführt.
 
 Der Request stellt also die Parameter bereit, mit denen der Loader ausgeführt wird.
 
