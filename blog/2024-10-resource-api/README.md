@@ -13,8 +13,6 @@ keywords:
   - Fetch API
 language: de
 thumbnail: header-resource-api.jpg
-sticky: false
-hidden: true
 ---
 
 Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.
