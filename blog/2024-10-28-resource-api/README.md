@@ -52,7 +52,7 @@ export class BookListComponent {
 In der Regel wird es aber nicht bei diesem einfachen Szenario bleiben, sondern weitere Anforderungen kommen hinzu:
 
 - **Auf Knopfdruck soll die Buchliste neu geladen werden.** Dazu müssen wir in einer neuen Methode (z. B. `reloadList()`) den HTTP-Request erneut starten, subscriben, usw. – und somit den Code aus dem Konstruktor duplizieren.
-- **Es sollen keine parallelen Requests ausgeführt werden.** Wenn die Daten neu geladen werden sollen, während noch ein vorheriger Request läuft, soll dieser abgebrochen werden.
+- **Es sollen keine parallelen Requests ausgeführt werden.** Wenn die Daten neu geladen werden sollen, während noch ein vorheriger Request läuft, soll dieser entweder abgebrochen werden oder der neue Request soll ignoriert werden.
 - **Es soll ein Ladeindikator angezeigt werden.** Dafür könnten wir ein Property `loading` einführen, das wir an den richtigen Stellen im Code auf `true` oder `false` setzen, um den Zustand zu erfassen.
 - **Die Daten sollen lokal verändert/überschrieben werden.** Dazu können wir zwar das Signal mit einem neuen Wert setzen – wir wissen aber anschließend nicht mehr, ob der aktuelle Wert lokal gesetzt oder vom Server geladen wurde.
 - **Die Subscription soll beendet werden, wenn die Komponente zerstört wird.** Dafür können wir z. B. den Operator [`takeUntilDestroyed()`](https://angular.dev/api/core/rxjs-interop/takeUntilDestroyed) verwenden oder auf eine andere Lösung mithilfe von RxJS zurückgreifen.
@@ -118,7 +118,7 @@ booksResource = resource({
 
 ### Variante 2: Observables und der `HttpClient` von Angular
 
-Wir verwenden wir üblich den `HttpClient` von Angular, sodass die Methode `getAll()` ein Observable zurückgibt.
+Wir verwenden wie üblich den `HttpClient` von Angular, sodass die Methode `getAll()` ein Observable zurückgibt.
 Um den Loader zu definieren, müssen wir das Observable mithilfe von `firstValueFrom()` in eine Promise umwandeln.
 
 ```ts
@@ -144,7 +144,7 @@ booksResource = resource({
 Der Loader wird sofort ausgeführt, sobald das Resource-Objekt initialisiert wird. Die Resource verarbeitet die Antwort und bietet folgende Signals an, um mit den Daten zu arbeiten:
 
 - `value`: geladene Daten, hier `Book[]`
-- `status`: Zustand der Resource vom Typ `ResourceStatus`, z. B. *Resolved* oder *Idle*, siehe nächster Abschnitt
+- `status`: Zustand der Resource vom Typ `ResourceStatus`, z. B. *Resolved* oder *Loading*, siehe nächster Abschnitt
 - `error`: Fehler
 
 Die geladenen Bücher können wir also wir folgt im Template anzeigen:
@@ -166,7 +166,7 @@ Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z.
 | `Idle`                      | Es ist kein Request definiert und es wird nichts geladen. `value()` ist `undefined`. |
 | `Error`                     | Das Laden ist fehlgeschlagen. `value()` ist `undefined`.                             |
 | `Loading`                   | Die Resource lädt gerade.                                                            |
-| `Reloading`                 | Die Resource lädt gerade neu, nachdem das Neuladen angefordert wurde.                |
+| `Reloading`                 | Die Resource lädt gerade neu, nachdem das Neuladen mit `reload()` angefordert wurde.                |
 | `Resolved`                  | Das Laden ist abgeschlossen.                                                         |
 | `Local`                     | Der Wert wurde lokal überschrieben.                                                  |
 
@@ -201,7 +201,7 @@ Mit dem mitgelieferten Property `isLoading` ist das schnell gelöst: Dieses Sign
 
 Eine Resource besitzt die Methode `reload()`.
 Beim Aufruf wird intern die Loader-Funktion erneut ausgeführt, und die Daten werden neu geladen.
-Das Ergebnis steht anschließend automatisch im Signal `value` zur Verfügung.
+Das Ergebnis steht anschließend wieder im Signal `value` zur Verfügung.
 
 ```html
 <button (click)="reloadList()">Reload book list</button>
@@ -260,7 +260,7 @@ Für den HTTP-Request muss also die Information übergeben werden, welches Buch 
 Beim Wechsel auf eine andere Detailseite soll das Laden erneut angestoßen werden – aber für ein anderes Buch.
 
 Der Loader muss also mit Parametern arbeiten können.
-Dazu gehen wir davon aus, dass die Komponente ein Input Property `isbn` besitzt, über das die aktuelle ISBN stets verfügbar ist.
+Dazu gehen wir davon aus, dass die Komponente ein Input-Property `isbn` besitzt, über das die aktuelle ISBN stets verfügbar ist.
 
 Im Loader könnten wir nun das Signal `this.isbn` verwenden, um die ISBN an den Service zu übergeben:
 
@@ -270,6 +270,7 @@ export class BookDetailsComponent {
   isbn = input.required<string>();
 
   bookResource = resource({
+    // ACHTUNG: Wird nur einmalig ausgeführt!
     loader: () => this.bs.getSingle(this.isbn())
   });
 }
@@ -311,7 +312,7 @@ export class BookDetailsComponent {
 }
 ```
 
-> **Routenparameter mit Component Input Binding:** Damit das Input Property `isbn` automatisch mit der aktuellen ISBN aus dem Routenparameter befüllt wird, können wir die Funktionalität [*Component Input Binding*](https://netbasal.com/binding-router-information-to-routed-component-inputs-in-angular-78ee92f63e64) des Routers nutzen.
+> **Routenparameter mit Component Input Binding:** Damit das Input-Property `isbn` automatisch mit der aktuellen ISBN aus dem Routenparameter befüllt wird, können wir die Funktionalität [*Component Input Binding*](https://netbasal.com/binding-router-information-to-routed-component-inputs-in-angular-78ee92f63e64) des Routers nutzen.
 
 
 ## `rxResource`: Resource mit Observables
@@ -346,7 +347,7 @@ booksResource = rxResource({
 Die Resource bietet die Möglichkeit, einen laufenden Request abzubrechen, sobald ein neuer gestartet wird.
 Besonders bei Loadern mit Parameter (in unserem Beispiel die ISBN auf der Detailseite) ist es wichtig, dass nur der zuletzt angefragte Datensatz verarbeitet wird.
 
-Die `rxResource` verwaltet diese Mechanik vollständig eigenständig, denn ein Observable stellt eine direkte Schnittstelle zum Abbrechen des Requests bereit.
+Die `rxResource` verwaltet diese Mechanik ganz eigenständig, denn ein Observable stellt eine direkte Schnittstelle zum Abbrechen des Requests bereit.
 
 Für einen Loader auf Basis von Promises ist das Beenden etwas komplizierter.
 Der Loader erhält in seinem Parameter-Objekt auch ein sogenanntes `AbortSignal`.
