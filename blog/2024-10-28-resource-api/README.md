@@ -220,6 +220,7 @@ export class BookListComponent {
 
 Die Resource stellt sicher, dass stets nur ein einziger Request gleichzeitig ausgeführt wird.
 Das Neuladen ist erst möglich, wenn der vorherige Ladevorgang abgeschlossen ist.
+Dieses Verhalten kann man im [Quellcode von Angular](https://github.com/angular/angular/blob/19.0.0-next.11/packages/core/src/resource/resource.ts#L170-L176) gut nachvollziehen.
 
 
 ## Wert lokal überschreiben
