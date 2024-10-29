@@ -345,7 +345,7 @@ booksResource = rxResource({
 Die Resource bietet die Möglichkeit, einen laufenden Request abzubrechen, sobald ein neuer gestartet wird.
 Besonders bei Loadern mit Parameter (in unserem Beispiel die ISBN auf der Detailseite) ist es wichtig, dass nur der zuletzt angefragte Datensatz verarbeitet wird.
 
-Die `rxResource` kümmert sich freundlicherweise komplett eigenständig um diese Mechanik, denn ein Observable bietet eine direkte Schnittstelle, um den Request wieder zu beenden.
+Die `rxResource` verwaltet diese Mechanik vollständig eigenständig, denn ein Observable stellt eine direkte Schnittstelle zum Abbrechen des Requests bereit.
 
 Für einen Loader auf Basis von Promises ist das Beenden etwas komplizierter.
 Der Loader erhält in seinem Parameter-Objekt auch ein sogenanntes `AbortSignal`.
