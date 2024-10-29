@@ -139,7 +139,7 @@ booksResource = resource({
 ```
 
 
-## Daten lesen
+## Auf die Daten zugreifen
 
 Der Loader wird sofort ausgeführt, sobald das Resource-Objekt initialisiert wird. Die Resource verarbeitet die Antwort und bietet folgende Signals an, um mit den Daten zu arbeiten:
 
