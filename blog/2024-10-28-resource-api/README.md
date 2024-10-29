@@ -384,7 +384,7 @@ Wir begrüßen, dass Angular hier ein häufiges Alltagsproblem adressiert. Die L
 Damit macht Angular einen weiteren Schritt, um Signals im Framework zu etablieren. Die Notwendigkeit, RxJS und Observables für einfache Aufgaben zu verwenden, wird weiter reduziert.
 
 Die Resource API ist in Angular 19 ein experimenteller Baustein! Die Schnittstelle und das Verhalten können sich noch ändern, und es können Bugs auftreten.
-Probieren Sie das neue Tool bitte trotzdem aus! Das Feedback aus der Community ist wichtig, um die Schnittstelle vor dem finalen Release noch weiter zu verbessern.
+Bitte probieren Sie das neue Tool trotzdem schon einmal aus! Das Feedback aus der Community ist wichtig, um die Schnittstelle vor dem finalen Release noch weiter zu verbessern.
 
 Fraglich ist, welche Rolle der `HttpClient` von Angular in Zukunft spielen wird. Mit dem Einsatz von Promises ermutigt Angular, für HTTP-Kommunikation auf die native Fetch API zu setzen. Wünschenswert wäre, dass der `HttpClient` und die neue Resource nahtlos miteinander arbeiten. Denkbar wäre beispielsweise, dass der `HttpClient` direkt eine Resource zurückgibt, ohne den sichtbaren Umweg über ein Observable oder eine Promise zu gehen.
 Die neue Schnittstelle ist aber aus unserer Sicht eine gute Basis – und wir sind gespannt, was in Zukunft folgt!
