@@ -55,6 +55,7 @@ In der Regel wird es aber nicht bei diesem einfachen Szenario bleiben, sondern w
 - **Es sollen keine parallelen Requests ausgeführt werden.** Wenn die Daten neu geladen werden sollen, während noch ein vorheriger Request läuft, soll dieser abgebrochen werden.
 - **Es soll ein Ladeindikator angezeigt werden.** Dafür könnten wir ein Property `loading` einführen, das wir an den richtigen Stellen im Code auf `true` oder `false` setzen, um den Zustand zu erfassen.
 - **Die Daten sollen lokal verändert/überschrieben werden.** Dazu können wir zwar das Signal mit einem neuen Wert setzen – wir wissen aber anschließend nicht mehr, ob der aktuelle Wert lokal gesetzt oder vom Server geladen wurde.
+- **Die Subscription soll beendet werden, wenn die Komponente zerstört wird.** Dafür können wir z. B. den Operator [`takeUntilDestroyed()`](https://angular.dev/api/core/rxjs-interop/takeUntilDestroyed) verwenden oder auf eine andere Lösung mithilfe von RxJS zurückgreifen.
 
 All diese Aspekte lassen sich selbstverständlich mit moderatem Aufwand implementieren – aber wir müssen immer wieder ähnliche Schritte unternehmen, um zum Ziel zu kommen.
 Anstatt auf imperativen Stil zu setzen, wie in unserem Beispiel, können wir auch die Möglichkeiten der Bibliothek RxJS nutzen. Der Kern des Problems bleibt aber erhalten: Es ist vergleichsweise viel Aufwand nötig, um wiederkehrende alltägliche Aufgaben umzusetzen.
@@ -371,7 +372,7 @@ export class BookDetailsComponent {
 
 Nutzen wir den `HttpClient` von Angular und die Funktion `firstValueFrom`, ist das Beenden sehr umständlich – wir müssten das `AbortSignal` in ein Observable umwandeln, um den Operator `takeUntil` zum Beenden des Datenstroms einzusetzen. In diesem Fall empfehlen wir unbedingt, die `rxResource` zu verwenden.
 
-
+Übrigens sorgt die Resource auch dafür, dass beim Beenden der Komponente der laufende Request gestoppt wird.
 
 ## Fazit
 
