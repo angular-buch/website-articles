@@ -22,7 +22,7 @@ In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
 
 > ⚠️ Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wird. Die Syntax und Semantik der API können sich noch ändern.
 
-Eine Resource verkörpert einen Datensatz, der (asynchron) geladen wird. Dabei geht es in der Regel um HTTP-Requests, die Daten von einem Server beschaffen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen und Daten werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
+Eine Resource repräsentiert einen Datensatz, der asynchron geladen wird. Dabei geht es in der Regel um HTTP-Requests, die Daten von einem Server abrufen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen und Daten werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
 ## Was bisher geschah: Beispiel ohne Resource
 
