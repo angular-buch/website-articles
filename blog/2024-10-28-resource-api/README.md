@@ -216,7 +216,7 @@ Das Neuladen ist erst möglich, wenn das vorherige Laden abgeschlossen ist.
 ## Wert lokal überschreiben
 
 Die Resource bietet die Möglichkeit, den Wert lokal zu überschreiben.
-Das Signal `value` ist ein `WritableSignal` und bietet wie üblich die Methoden `set()` und `update()` an.
+Das Signal `value` ist ein `WritableSignal` und bietet die bekannten Methoden `set()` und `update()` an.
 
 Wir wollen die Buchliste lokal sortieren, z. B. auf Knopfdruck mit Sortierung nach dem Rating der Bücher.
 In der Methode können wir nach erfolgter Sortierung den Wert des Signals `value` direkt überschreiben.
