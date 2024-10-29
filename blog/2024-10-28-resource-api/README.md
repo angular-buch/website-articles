@@ -53,7 +53,7 @@ In der Regel wird es aber nicht bei diesem einfachen Szenario bleiben, sondern w
 
 - **Auf Knopfdruck soll die Buchliste neu geladen werden.** Dazu müssen wir in einer neuen Methode (z. B. `reloadList()`) den HTTP-Request erneut starten, subscriben, usw. – und somit den Code aus dem Konstruktor duplizieren.
 - **Es sollen keine parallelen Requests ausgeführt werden.** Wenn die Daten neu geladen werden sollen, während noch ein vorheriger Request läuft, soll dieser abgebrochen werden.
-- **Es soll ein Ladeindikator angezeigt werden.** Dafür müssen wir ein Property `loading` einführen, das wir an den richtigen Stellen im Code auf `true` oder `false` setzen, um den Zustand zu erfassen.
+- **Es soll ein Ladeindikator angezeigt werden.** Dafür könnten wir ein Property `loading` einführen, das wir an den richtigen Stellen im Code auf `true` oder `false` setzen, um den Zustand zu erfassen.
 - **Die Daten sollen lokal verändert/überschrieben werden.** Dazu können wir zwar das Signal mit einem neuen Wert setzen – wir wissen aber anschließend nicht mehr, ob der aktuelle Wert lokal gesetzt oder vom Server geladen wurde.
 
 All diese Aspekte lassen sich selbstverständlich mit moderatem Aufwand implementieren – aber wir müssen immer wieder ähnliche Schritte unternehmen, um zum Ziel zu kommen.
