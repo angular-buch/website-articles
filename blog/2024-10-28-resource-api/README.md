@@ -309,7 +309,7 @@ export class BookDetailsComponent {
 
 In allen bisherigen Beispielen haben wir die Loader-Funktion mithilfe von Promises implementiert. Die Fetch API des Browsers gibt eine Promise zurück, und die Funktion `firstValueFrom()` aus der Bibliothek RxJS hat uns geholfen, eine Promise aus dem Observable zu erstellen, das der `HttpClient` von Angular erzeugt.
 
-Auch wenn Angular an vielen Stellen nicht mehr direkt auf RxJS und Observables setzt, haben die Möglichkeiten der funktional-reaktiven Programmierung für viele Szenarien ihre Berechtigung!
+Auch wenn Angular durch die Einführung von Signals an vielen Stellen nicht mehr direkt auf Observables setzt, haben die Möglichkeiten der reaktiven Programmierung mit RxJS für viele Szenarien weiterhin ihre Berechtigung.
 Angular bietet deshalb die Funktion `rxResource` an. Sie funktioniert genauso wie `resource`, die Loader-Funktion gibt allerdings ein Observable zurück.
 Wir können die Observables aus dem `HttpClient` auf diese Weise also direkt verwenden.
 
