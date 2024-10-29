@@ -82,7 +82,7 @@ myResource = resource({
 });
 ```
 
-Überraschenderweise muss der Loader immer eine Promise zurückgeben! Grundsätzlich spricht zwar nichts dagegen, dieses native Modell des Browsers zu verwenden. In der Vergangenheit hat Angular aber stets auf Observables gesetzt, um asynchrone Operationen durchzuführen.
+Interessanterweise erwartet der Loader zwingend eine Promise als Rückgabewert. Grundsätzlich spricht zwar nichts dagegen, dieses native Modell des Browsers zu verwenden. Bisher wurden jedoch in Angular bei asynchronen Operationen üblicherweise Observables und die Bibliothek RxJS eingesetzt.
 Angular bricht hier also bewährte Prinzipien und setzt stattdessen auf das native Konstrukt des Browsers.
 
 Um mit der Resource also einen HTTP-Request durchzuführen, gibt es drei Möglichkeiten:
