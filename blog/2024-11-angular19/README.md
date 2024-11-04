@@ -184,7 +184,7 @@ const timestampSecondsLinked = linkedSignal({
 Ein Linked Signal ist besonders nützlich, wenn lokaler State mit dynamisch geladenen Daten synchronisiert werden soll.
 Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input oder ein HTTP-Request, die Komponente kann das Signal aber weiterhin selbst mit Werten überschreiben.
 
-> Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktsiche Anwendungsfälle für `linkedSignal()`:
+> Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktische Anwendungsfälle für `linkedSignal()`:
 > **[Angular 19: Introducing Linked Signal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
 
 
