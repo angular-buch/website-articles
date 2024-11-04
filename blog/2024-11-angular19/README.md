@@ -143,6 +143,50 @@ Bitte beachten Sie, dass die Resource API experimentell ist und sich die Schnitt
 
 
 
+## Linked Signals
+
+Ein weiteres *experimentelles* Feature von Angular 19 ist das Linked Signal.
+Es handelt sich um ein Signal, das seinen Wert automatisch auf Basis anderer Signals berechnet – ähnlich wie ein Computed Signal mit `computed()`.
+Der Unterschied: Der Wert eines Linked Signals kann jederzeit mit den Methoden `set()` und `update()` von außen überschrieben werden, so wie wir es von `signal()` kennen.
+Ein Linked Signal vereint also das Beste aus beiden Welten, wie der folgende Vergleich zeigt:
+
+```ts
+import { linkedSignal } from '@angular/core';
+
+timestampMs = signal(Date.now());
+
+// Wert des Signals kann überschrieben werden
+timestampMs.set(Date.now());
+timestampMs.update(ms => ms + 1000);
+
+// computed(): Signal (nicht schreibbar)
+const timestampSeconds = computed(() => timestampMs() / 1000);
+timestampSeconds.set(0); // ❌ Compilation Error
+
+// linkedSignal(): WritableSignal (schreibbar)
+const timestampSecondsLinked = linkedSignal(() => timestampMs() / 1000);
+timestampSecondsLinked.set(0); // ✅ funktioniert
+```
+
+Wir können alternativ eine ausführlichere Schreibweise wählen: In einem Optionsobjekt übergeben wir dazu `source` und `computation`.
+Der aktuelle Wert des Signals in `source` wird als Argument an die Computation Function übergeben.
+Welche Schreibweise zu wählen ist, hängt vom Anwendungsfall und Geschmack ab, beide Implementierungen von `timestampSecondsLinked` führen zum gleichen Ergebnis.
+
+```ts
+const timestampMs = signal(Date.now());
+
+const timestampSecondsLinked = linkedSignal({
+  source: timestampMs,
+  computation: ms => ms / 1000
+});
+```
+
+Ein Linked Signal ist besonders nützlich, wenn lokaler State mit dynamisch geladenen Daten synchronisiert werden soll.
+Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input oder ein HTTP-Request, die Komponente kann das Signal aber weiterhin selbst mit Werten überschreiben.
+
+> Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktsiche Anwendungsfälle für `linkedSignal()`:
+> **[Angular 19: Introducing Linked Signal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
+
 
 
 <hr>
