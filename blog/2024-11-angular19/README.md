@@ -257,10 +257,14 @@ Damit können wir Code ausführen, sobald veränderte Daten vorliegen.
 
 ```ts
 counter = signal(0);
+counter100 = signal(0);
 
 constructor() {
   effect(() => {
     console.log('Aktueller Counter-Wert:', this.counter());
+
+    // funktioniert(e) nur mit `allowSignalWrites: true`
+    this.counter100.set(this.counter() * 100);
   });
 }
 ```
@@ -270,8 +274,12 @@ Sollte das doch möglich sein, musste dafür die Option `allowSignalWrites` gese
 
 Mit Angular 19 entfällt diese Option. In Effects können wir nun ohne zusätzliche Konfiguration die Werte von Signals ändern.
 
-Bitte verwenden Sie Effects grundsätzlich sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel.
+Bitte verwenden Sie Effects grundsätzlich sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel:
 
+```ts
+counter = signal(0);
+counter100 = computed(() => this.counter() * 100);
+```
 
 
 ## Sonstiges
