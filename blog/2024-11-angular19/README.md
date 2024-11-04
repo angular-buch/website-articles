@@ -14,6 +14,39 @@ hidden: true
 ---
 
 
+## Standalone Components: gekommen um zu bleiben
+
+Standalone Components wurden mit Angular 15 eingeführt und haben sich seitdem zum Standard bei der Komponentenentwicklung mit Angular etabliert.
+NgModules werden damit vollständig optional.
+Ab Angular 19 ist es nicht mehr notwendig, eine Standalone Component explizit als solche zu markieren. Das Flag `standalone: true` in den Metadaten der Komponente entfällt, denn der neue Standardwert ist `true`:
+
+```ts
+// vor Angular 19
+@Component({
+  selector: 'app-my',
+  templateUrl: './my.component.html',
+  standalone: true,
+  imports: []
+})
+export class MyComponent {}
+```
+
+```ts
+// ab Angular 19
+@Component({
+  selector: 'app-my',
+  templateUrl: './my.component.html',
+  imports: []
+})
+export class MyComponent {}
+```
+
+Modulbasierte Komponenten müssen nun explizit mit `standalone: false` markiert werden.
+Eine automatische Migration beim Update mit `ng update` sorgt dafür, dass das Feld `standalone` korrekt gesetzt wird.
+
+Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgModules nur noch in Ausnahmefällen zu verwenden, wenn es für die Kompatibilität nötig ist.
+
+
 
 ## Resource API
 
@@ -188,6 +221,64 @@ Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input ode
 > **[Angular 19: Introducing Linked Signal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
 
 
+## Migrationen für Signal-based APIs
+
+Angular hat in den vergangenen Versionen viele Komponenten-Schnittstellen auf Signals und moderne Schnittstellen umgestellt:
+
+- Component Inputs mit der Funktion `input()` liefern die Daten als Signal.
+- Querys für ViewChildren und ContentChildren können mit den Funktionen `viewChild`/`viewChildren` und `contentChild`/`contentChildren` als Signals erfasst werden. Die früheren Dekoratoren sind dafür nicht mehr notwendig.
+- Component Outputs können mit der Funktion `output()` definiert werden. Das Ergebnis ist zwar kein Signal, aber die Schnittstelle steht in einer Reihe mit dem neuen `input()`.
+
+Angular bietet Migrationsskripte an, um die Propertys in den Komponenten korrekt auf die neuen Schnittstellen zu migrieren:
+
+```bash
+# Updates `@Input` declarations to signal inputs
+ng generate @angular/core:signal-input-migration
+
+# Updates query declarations to signal queries
+ng generate @angular/core:signal-queries-migration
+
+# Updates @output declarations to the functional equivalent
+ng generate @angular/core:output-migration
+```
+
+Für Inputs und Querys (ViewChildren und ContentChildren) gibt es eine kombinierte Migration:
+
+```bash
+# Combines all signals-related migrations into a single migration
+ng generate @angular/core:signals
+```
+
+
+## Signals schreiben in Effects
+
+Ein Effect ist eine Funktion, die automatisch ausgeführt wird, wenn eins der darin verwendeten Signals seinen Wert ändert.
+Damit können wir Code ausführen, sobald veränderte Daten vorliegen.
+
+```ts
+counter = signal(0);
+
+constructor() {
+  effect(() => {
+    console.log('Aktueller Counter-Wert:', this.counter());
+  });
+}
+```
+
+Dabei galt bisher die Empfehlung, in Effects keine Werte von Signals zu setzen.
+Sollte das doch möglich sein, musste dafür die Option `allowSignalWrites` gesetzt werden – dann konnte der Effects auch in Signals schreiben.
+
+Mit Angular 19 entfällt diese Option. In Effects können wir nun ohne zusätzliche Konfiguration die Werte von Signals ändern.
+
+Bitte verwenden Sie Effects grundsätzlich sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel.
+
+
+
+## Sonstiges
+
+- **Zoneless Application generieren:** Mit der Funktion `provideExperimentalZonelessChangeDetection()` können wir den älteren Mechanismus für die Change Detection auf Basis von Zone.js deaktivieren. Die Change Detection funktioniert dann vollständig mit Signals. Ab Angular 19 können wir diesen Modus schon beim Erzeugen eines Projekts wählen: `ng new --experimental-zoneless`. (siehe [Commit](https://github.com/angular/angular-cli/commit/755f3a07f5fe485c1ed8c0c6060d6d5c799c085c))
+- **Default Export für Komponenten:** Komponenten werden standardmäßig als Named Export generiert: `export class FooComponent {}`. In manchen Fällen kann es sinnvoll sein, stattdessen einen *Default Export* zu verwenden (`export default class FooComponent {}`), z. B. für eine verkürzte Schreibweise beim Lazy Loading von Komponenten. Beim Anlegen einer Komponente mit der Angular CLI können wir nun auch einen Default Export generieren lassen: `ng g c foo --export-default`. (siehe [Commit](https://github.com/angular/angular-cli/commit/a381a3db187f7b20e5ec8d1e1a1f1bd860426fcd))
+- **typeof im Template:** In Template Expressions wird jetzt auch das Schlüsselwort `typeof` unterstützt. Damit kann der Typ einer Variable direkt geprüft werden, ohne den Umweg über eine Methode der Komponente zu gehen: `@if (typeof foo === 'string') {}`. (siehe [Commit](https://github.com/angular/angular/commit/0c9d721ac157662b2602cf0278ba4b79325f6882))
 
 <hr>
 
