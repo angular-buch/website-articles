@@ -46,6 +46,66 @@ Eine automatische Migration beim Update mit `ng update` sorgt dafür, dass das F
 
 Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgModules nur noch in Ausnahmefällen zu verwenden, wenn es für die Kompatibilität nötig ist.
 
+Übrigens: Mit Angular 19 wurde eine neue Compiler-Option eingeführt, die Standalone Components erzwingt. Setzen wir `strictStandalone` in der `tsconfig.json`, müssen alle Komponenten standalone sein.
+
+```json
+{
+  "compilerOptions": { /* ... */ },
+  "angularCompilerOptions": {
+    "strictStandalone": true,
+    // ...
+  }
+}
+```
+
+## Lokale Variablen mit `@let`
+
+Mit dem neuen Schlüsselwort `@let` können wir lokale Variablen direkt im Template definieren.
+Diese Syntax funktioniert schon seit Angular 18.1, wird mit Angular 19 aber als *stable* markiert.
+
+```html
+@let name = expression;
+```
+
+Die Variablen können im Template flexibel eingesetzt werden, aber:
+Geschäftslogik sollte grundsätzlich in der TypeScript-Klasse untergebracht werden und *nicht* im Template (Trennung von Logik und Darstellung).
+Die `@let`-Syntax sollte deshalb sparsam eingesetzt werden.
+
+```html
+@for (book of books(); track book.isbn) {
+  @let preisBrutto = book.price * 1.19;
+  <h2>{{ book.title }} – {{ preisBrutto | currency }}</h2>
+}
+```
+
+Um Daten aus Observables aufzulösen, können wir im Template die AsyncPipe verwenden.
+Mithilfe von `@let` können wir das Ergebnis der AsyncPipe elegant in eine Variable schreiben und anschließend einsetzen:
+
+```html
+@let book = book$ | async;
+<h2>{{ book.title }}</h2>
+<p>{{ book.description }}</p>
+```
+
+Der Conditional Control Flow (`@if`) und die Direktive `*ngIf` bieten seit jeher die Möglichkeit, das Ergebnis der Bedingung in eine lokale Variable zu schreiben:
+
+```html
+@if (book$ | async; as book) {
+  <h2>{{ book.title }}</h2>
+}
+
+<ng-container *ngIf="book$ | async as book">
+  <h2>{{ book.title }}</h2>
+</ng-container>
+```
+
+Falls die Daten aus dem Observable `book$` zeitverzögert eintreffen oder als optional typisiert sind (`Book | undefined`), ist die Kombination mit `@if` der richtige Weg: Das Template soll nur angezeigt werden, wenn tatsächlich Daten vorliegen.
+Häufig wird dieses Muster aber nur eingesetzt, um die Daten in eine Variable zu schreiben, ohne dass die if-Bedingung tatsächlich benötigt wird.
+In diesem Fall sollte `@let` verwendet werden.
+
+- `@if` + `as`: wenn Bedingung geprüft werden muss, bevor die Variable verwendet wird
+- `@let`: wenn nur eine Variable benötigt wird
+
 
 
 ## Resource API
@@ -280,6 +340,8 @@ Bitte verwenden Sie Effects grundsätzlich sparsam! Häufig ist ein Computed Sig
 counter = signal(0);
 counter100 = computed(() => this.counter() * 100);
 ```
+
+
 
 
 ## Sonstiges
