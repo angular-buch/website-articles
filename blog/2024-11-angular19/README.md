@@ -15,6 +15,136 @@ hidden: true
 
 
 
+## Resource API
+
+Mit Angular 19 wurde die *experimentelle* Resource API vorgestellt.
+Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.
+Eine Resource repräsentiert einen Datensatz, der asynchron geladen wird, in der Regel per HTTP.
+Die Resource bietet eine Schnittstelle an, um die Daten zu verarbeiten, neuzuladen und sogar manuell zu überschreiben.
+
+> Wir erläutern die Resource API ausführlich in einem separaten Blogpost:
+> **[Die neue Resource API von Angular](/blog/2024-10-resource-api/)**
+
+Eine Resource wird mit der Funktion `resource` und einer Loader-Funktion initialisiert.
+Dieser Loader ist dafür verantwortlich, die Daten asynchron zu laden. Die Funktion muss immer eine Promise zurückgeben, weshalb wir hier zunächst die native Fetch API verwenden und nicht den `HttpClient` von Angular:
+
+```ts
+import { resource } from '@angular/core';
+// ...
+
+booksResource = resource({
+  loader: () => fetch(this.apiUrl + '/books').then(res => res.json()) as Promise<Book[]>
+});
+```
+
+Alternativ können wir auch wie üblich den `HttpClient` einsetzen und das Observable mithilfe der Funktion `firstValueFrom` in eine Promise umwandeln:
+
+```ts
+@Injectable({ /* ... */ })
+export class BookStoreService {
+  // ...
+  getAll(): Observable<Book[]> {
+    return this.http.get<Book[]>(this.apiUrl + '/books');
+  }
+}
+```
+
+```ts
+// Komponente
+import { firstValueFrom } from 'rxjs';
+// ...
+
+booksResource = resource({
+  loader: () => firstValueFrom(this.bs.getAll())
+});
+```
+
+Der Loader wird automatisch ausgeführt, sobald die Resource initialisiert wird.
+Um mit den Daten zu arbeiten, bietet die Resource drei Signals an: `value` enthält stets die Daten, `status` gibt Auskunft zum Zustand der Resource, und `error` enthält Fehler.
+Mithilfe von `booksResource.value()` können wir die Daten also in der Komponente anzeigen:
+
+```html
+{{ booksResource.value() | json }}
+
+@for(book of booksResource.value(); track book.isbn) {
+  <p>{{ book.title }}</p>
+}
+```
+
+Gegenüber einem einfachen HTTP-Request bietet die Resource einige besondere Features.
+Der Zustand der Resource erlaubt es uns, einen Ladeindikator anzuzeigen.
+Dafür bietet das Objekt sogar ein eigenes Signal `isLoading()` an:
+
+```html
+@if (booksResource.isLoading()) {
+  <div>LOADING</div>
+}
+```
+
+Eine Resource kann jederzeit neugeladen werden. Der Loader wird beim Aufruf der Methode `reload()` erneut ausgeführt, und die geladenen Daten stehen anschließend in `value` zur Verfügung:
+
+```ts
+@Component({ /* ... */ })
+export class BookListComponent {
+  booksResource = resource({ /* ... */ });
+
+  reloadList() {
+    this.booksResource.reload();
+  }
+}
+```
+
+Außerdem kann der Wert einer Resource jederzeit manuell überschrieben werden.
+Dafür bietet das Signal `value` die bekannten Methoden `set()` und `update()` an.
+Mit einem Observable oder einem Signal, das durch `toSignal()` aus einem Observable erstellt wurde, wäre das nicht so einfach möglich.
+
+```ts
+clearBookList() {
+  this.booksResource.value.set([]);
+}
+```
+
+Die Loader-Funktion kann Parameter verarbeiten. Das ist sinnvoll, wenn der HTTP-Request weitere Informationen benötigt, z. B. die ID des zu ladenden Datensatzes.
+Dafür können wir in der Resource optional einen `request` definieren: Dieses Signal dient als Trigger für die Loader-Funktion.
+Immer wenn sich der Wert ändert, wird der Loader neu ausgeführt.
+Der Wert des `request`-Signals steht dann als Argument in der Loader-Funktion zur Verfügung.
+
+Im folgenden Beispiel erhält die Komponente eine ISBN per Input-Property.
+Immer wenn sich die ISBN ändert, wird der HTTP-Request für das dazugehörige Buch neu ausgeführt.
+
+```ts
+@Component({ /* ... */ })
+export class BookDetailsComponent {
+  private bs = inject(BookStoreService);
+  isbn = input.required<string>();
+
+  bookResource = resource({
+    request: this.isbn,
+    loader: ({ request }) => this.bs.getSingle(request)
+  });
+}
+```
+
+Für die Kompatibilität mit Observables aus der Bibliothek RxJS bietet Angular die sogenannte `rxResource` an.
+Sie funktioniert wie `resource`, aber die Loader-Funktion gibt ein Observable zurück.
+Auf diese Weise können wir Observables aus dem `HttpClient` direkt verwenden, ohne Umweg über eine Promise:
+
+```ts
+import { rxResource } from '@angular/core/rxjs-interop';
+// ...
+
+booksResource = rxResource({
+  loader: () => this.bs.getAll()
+});
+```
+
+
+Bitte beachten Sie, dass die Resource API experimentell ist und sich die Schnittstelle vor dem finalen Release noch ändern könnte.
+
+
+
+
+
 <hr>
 
 
