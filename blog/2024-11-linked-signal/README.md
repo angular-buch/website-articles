@@ -353,6 +353,6 @@ Probieren Sie `linkedSignal()` in Ihrem Angular-Projekt aus, um herauszufinden, 
 ** ⚠️ Bitte bedenken Sie, dass diese API noch experimentell ist und sich Details aufgrund des Feedbacks der Community drastisch verändern können.**
 <hr>
 
-<small>Vielen Dank an Danny Koppenhagen für das Review und das wortfolle Feedback!</small>
+<small>Vielen Dank an Danny Koppenhagen für das Review und das wertvolle Feedback!</small>
 
 <small>**Titelbild:** Mit Adobe Firefly generiert</small>
