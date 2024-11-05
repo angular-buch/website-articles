@@ -186,7 +186,6 @@ Aus diesem Grund haben wir `source` und `computation` getrennt und nicht die Kur
 ## Fortgeschrittene Szenarien für Linked Signals
 
 ### Nested State Management
-<!-- ich bekomme das nicht in Deutsche übersetzt, ohne Schmerzen! :D -->
 
 Angenommen, wir haben verschachtelte Daten wie Bucheigenschaften (`title` und `rating`), und diese Felder sollen zurückgesetzt werden, wenn ein anderes Buch über ein Input-Signal ausgewählt wird.
 So könnte man dies mit einem Linked Signal umsetzen:
