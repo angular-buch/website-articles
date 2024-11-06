@@ -98,7 +98,7 @@ In komplexeren Fällen kann eine separate Berechnungsfunktion den Code jedoch le
 ## Grundlegende Nutzung von Linked Signal
 
 Schauen wir uns ein weiteres konkretes Beispiel an, um zu veranschaulichen, wie das neue Signal funktioniert. 
-Unsere Komponente mit dem Namen `BookListComponent` hält eine Liste von Büchern im `books`-Signal.  
+Unsere Komponente mit dem Namen `BookListComponent` hält eine Liste von Büchern im Signal `books`.  
 Anschließend verwenden wir ein Linked Signal, um das *erste Buch* in der Liste zu ermitteln.
 Wir haben uns entschieden, die ausführliche Notation mit dem Optionsobjekt zu verwenden. 
 Die separate Berechnung macht den Code lesbarer im Vergleich zu einer einzeiligen Funktion.
