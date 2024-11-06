@@ -103,7 +103,7 @@ Anschließend verwenden wir ein Linked Signal, um das *erste Buch* in der Liste 
 Wir haben uns entschieden, die ausführliche Notation mit dem Optionsobjekt zu verwenden. 
 Die separate Berechnung macht den Code lesbarer im Vergleich zu einer einzeiligen Funktion.
 
-Wann immer sich die Liste der Bücher ändert (z. B. durch die `changeBookList()`-Methode), berechnet das `firstBook`-Signal seinen Wert automatisch neu und zeigt das erste Buch in der aktualisierten Liste an.
+Wann immer sich die Liste der Bücher ändert (dies geschieht in unserem Beispiel durch die `changeBookList()`-Methode), berechnet das `firstBook`-Signal seinen Wert automatisch neu und zeigt das neu ermittelte erste Buch an.
 Bis zu diesem Punkt könnte die vorgestellte Funktionalität auch mit einem Computed Signal umgesetzt werden.
 Jedoch ermöglicht es das Linked Signal, den Wert in der `overrideFirstBook()`-Methode manuell zu überschreiben.
 
