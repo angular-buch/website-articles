@@ -152,7 +152,7 @@ Das Signal enthält immer den neuesten Wert - entweder wird er manuell durch `se
 
 Ein häufiger Anwendungsfall für ein Linked Signal ist eine Komponente, die sich basierend auf einem Input-Signal zurücksetzt.  
 Ein Beispiel dafür wäre eine Warenkorb-Komponente (hier: `ShoppingCartComponent`), bei der das Eingebefeld für die Menge zurückgesetzt werden soll, wenn sich das ausgewählte Produkt ändert.  
-Zwar könnten wir solch ein Ergebnis auch mit `computed` erzielen, jedoch möchten wir die Menge zusätzlich durch Änderung der Formularwerte festlegen können.
+Zwar könnten wir solch ein Ergebnis auch mit `computed` erzielen, jedoch wollen wir die Menge zusätzlich durch Änderung der Formularwerte festlegen können.
 
 ```typescript
 import { Component, input, linkedSignal } from '@angular/core';
