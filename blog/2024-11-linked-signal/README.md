@@ -316,7 +316,7 @@ Hier ein schneller Vergleich mit anderen Arten von Signals:
 
 - **`signal()`**: Erzeugt ein Basis-Signal, das beschreibbar ist und seinen Wert unabhängig von anderen Signalen beibehält. Es hat einen Startwert, welcher mit `set()` und `update()` überschrieben werden kann.
 - **`computed()`**: Erzeugt ein schreibgeschütztes Signal, das von anderen Signalen abgeleitet ist und automatisch neu berechnet wird, aber keine manuellen Änderungen zulässt.
-- **`linkedSignal()`**: Kombiniert die Reaktivität von `computed()` mit der Veränderbarkeit von `signal()`, so dass man den Wert manuell aktualisieren kann, während er weiterhin mit einem Quell-Signal gekoppelt bleibt.
+- **`linkedSignal()`**: Kombiniert die Reaktivität von `computed()` mit der Veränderbarkeit von `signal()`, so dass man den Wert manuell aktualisieren kann, während er weiterhin mit einem Quellsignal gekoppelt bleibt.
 
 Wir empfehlen, `linkedSignal()` nur für Zustände zu verwenden, die aufgrund von konkreter Abhängigkeiten zurückgesetzt werden sollen.
 Nutzen Sie weiterhin `computed()` für abgeleitete Daten, die nicht überschrieben werden müssen.
