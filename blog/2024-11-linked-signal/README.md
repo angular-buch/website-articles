@@ -46,7 +46,7 @@ Ein Linked Signal kann über die [`linkedSignal()`-Factory-Funktion](https://nex
 Ein Linked Signal hat die folgenden Eigenschaften:
 
 - **Schreibbar und reaktiv**: Wie ein [`Signal`](https://angular.dev/guide/signals#writable-signals) kann der Wert eines Linked Signals manuell aktualisiert werden, aber es reagiert auch auf Änderungen von seiner Quelle.
-- **Eine Kombination aus Signal und Computed**: Es ist wie [`computed`](https://angular.dev/guide/signals#computed-signals), weil es seinen Wert von anderen Signalen ableitet, aber es bleibt beschreibbar, so dass wir es bei Bedarf überschreiben können.
+- **Eine Kombination aus Signal und Computed**: Es ist wie ein Signal das mit [`computed`](https://angular.dev/guide/signals#computed-signals) erstellt wurde , weil es seinen Wert von anderen Signalen ableitet. Es bleibt aber beschreibbar, so dass wir es bei Bedarf den Wert manuell neu setzen können.
 
 Durch die Kombination dieser Eigenschaften bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signalen anpassen, aber bei Bedarf auch direkt gesteuert werden können.
 Um die Flexibilität zu verstehen, betrachten wir das folgende Beispiel, in dem ``linkedSignal` und `computed`` miteinander verglichen werden:
