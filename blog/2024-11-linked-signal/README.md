@@ -232,7 +232,7 @@ Sowohl `title` als auch `rating` berechnen ihre Werte neu, wenn sich `book` änd
 Dies hilft, die Daten in Fällen zu synchronisieren, in denen die Struktur des Zustands hierarchisch ist oder von bestimmten Identifikatoren abhängt.
 Während das Linked Signal sicherstellt, dass die Daten bei Bedarf zurückgesetzt werden, können wir unseren lokalen Zustand dennoch direkt aktualisieren.
 In diesem Beispiel aktualisieren wir die Bewertung lokal und übermitteln die Änderung an die übergeordnete Komponente über das `ratingChange`-Event zurück.
-Da wir title innerhalb der Komponente nicht ändern müssen, reicht hier ein „Computed Signal“ aus.
+Da wir `title` innerhalb der Komponente nicht ändern müssen, reicht hier ein „Computed Signal“ aus.
 
 Wir haben uns für die Kurzschreibweise des Linked Signal entschieden, weil die Berechnung sehr einfach ist.
 Außerdem sehen die Zeilen mit dem `computed()` und dem `linkedSignal()` sehr ähnlich aus, was die Lesbarkeit erhöht.
