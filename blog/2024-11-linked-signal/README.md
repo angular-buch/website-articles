@@ -293,7 +293,7 @@ In diesem Beispiel enthält `books` die Serverdaten.
 Normalerweise würden wir `toSignal()` verwenden, um das RxJS-Observable in ein Signal umzuwandeln.  
 Mit `toSignal()` allein könnten wir die abgerufenen Daten jedoch nicht direkt bearbeiten – außer durch das Senden eines neuen Elements aus dem Observable.
 
-Durch die Verwendung eines Linked Signals können wir die Daten trotzdem lokal ändern, und bei einem größeren Zurücksetzen (z. B. einem Neuladen der Daten vom Server) können die Originaldaten wiederhergestellt werden.
+Durch die Verwendung eines Linked Signals können wir die Daten trotzdem lokal ändern, und bei einem Zurücksetzen der Quelle (z. B. einem Neuladen der Daten vom Server) können die Originaldaten wiederhergestellt werden.
 
 Wir haben hier die Kurzschreibweise für `linkedSignal()` verwendet und das Signal von `toSignal()` direkt übergeben, da wir lediglich die Quelle in ein Linked Signal umwandeln möchten. 
 Die lange Schreibweise mit der dedizierten Funktion zur Berechnung ist nicht erforderlich.
