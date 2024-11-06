@@ -242,7 +242,7 @@ Je nach Geschmack ist aber auch die Langschreibweise möglich.
 ### Daten vom Server auf der Client-Seite bearbeiten
 
 Ein verknüpftes Signal ist auch bei der Arbeit mit Daten vom Server hilfreich, die lokal bearbeitet werden sollen.
-In dem folgenden Beispiel werden Daten von unserer HTTP-API verwendet, die über einen einfachen `HttpClient`-Wrapper namens `BookStoreService` abgerufen werden. Obwohl die Daten aus einem Observable stammen. Als zusätzliche Anforderung benötigen wir die Option, die Daten ohne Umwege direkt lokal editieren zu können. Hierfür bietet sich das Linked Signal an:
+In dem folgenden Beispiel werden Daten von unserer HTTP-API verwendet, die über einen einfachen `HttpClient`-Wrapper namens `BookStoreService` abgerufen werden. Die Quelle der Daten ist somit ein Observable, welches nicht direkt editierbar ist. Als zusätzliche Anforderung haben wir aber genau diesen Wunsch, nämlich die Daten ohne Umwege direkt lokal editieren zu können. Hierfür bietet sich das Linked Signal an:
 
 ```typescript
 import { Component, inject, linkedSignal } from '@angular/core';
