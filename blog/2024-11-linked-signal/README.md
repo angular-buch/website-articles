@@ -336,7 +336,7 @@ Hier sind einige Tipps für die optimale Nutzung von Linked Signals:
 
 Um Linked Signals direkt in Aktion zu sehen, haben wir eine Demo-Anwendung auf GitHub erstellt, die alle in diesem Artikel besprochenen Beispiele zeigt.
 Der erste Link führt zum Quellcode auf GitHub, den Sie herunterladen können.
-Der zweite Link öffnet eine deployte Demo der Anwendung, die Sie direkt ausprobieren können.
+Der zweite Link öffnet eine publizierte Demo der Anwendung, die Sie direkt ausprobieren können.
 Und schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der Sie den Quellcode bearbeiten und die Ergebnisse in Echtzeit sehen können.
 
 > **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**  
