@@ -18,8 +18,8 @@ sticky: false
 ---
 
 
-Mit Angular 19 gibt es ein [neues experimentelles Feature](https://github.com/angular/angular/commit/8311f00faaf282d1a5b1ddca29247a2fba94a692) namens **Linked Signal**, das die Verwaltung von lokalem Zustand in Verbindung mit anderen Signals erleichtert. Das Linked Signal ist ein beschreibbare Signals, das sich automatisch zurücksetzt, wenn sich andere Signals ändern. Dies ist besonders nützlich, wenn wir lokale Zustände mit dynamischen Daten im Einklang halten müssen.  
-Schauen wir uns an, was ein Linked Signal ist, wie es funktioniert und in welchen Anwendungsfällen es sinnvoll eingesetzt werden kann.
+Mit Angular 19 wurde ein [neues experimentelles Feature](https://github.com/angular/angular/commit/8311f00faaf282d1a5b1ddca29247a2fba94a692) vorgestellt: Das **Linked Signal** erleichtert die Verwaltung von lokalem Zustand in Verbindung mit anderen Signals. Es handelt sich um ein beschreibbares Signal, das automatisch zurückgesetzt wird, wenn sich andere Signals ändern. Dies ist besonders nützlich, wenn wir lokale Zustände mit dynamischen Daten synchronisieren wollen.
+In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktioniert und in welchen Anwendungsfällen es sinnvoll eingesetzt werden kann.
 
 
 ## Inhalt
@@ -38,18 +38,19 @@ Schauen wir uns an, was ein Linked Signal ist, wie es funktioniert und in welche
 
 ## Was ist ein Linked Signal?
 
-Ein Linked Signal ist ein experimentelles Feature von Angular 19, um die Verwaltung von Zuständen zu erleichtern, die automatisch mit anderen Signals synchronisiert werden.
-Kurz gesagt: wir erhalten ein beschreibbares Signal, das sich selbst zurücksetzt, wenn sich der Wert seines Quellsignals ändert.
-Ein Linked Signal kann über die [`linkedSignal()`-Factory-Funktion](https://next.angular.dev/api/core/linkedSignal) erstellt werden.
+Das Linked Signal wurden als neues experimentelles Feature von Angular 19 vorgestellt.
+Es soll die Arbeit mit Zuständen erleichtern, die automatisch mit anderen Signals synchronisiert werden müssen.
+Kurz gesagt: Wir erhalten ein beschreibbares Signal, dessen Wert automatisch neu berechnet wird, sobald sich der Wert seines Quellsignals ändert.
+Ein Linked Signal kann mit der Factory-Funktion [`linkedSignal()`](https://next.angular.dev/api/core/linkedSignal) erzeugt werden.
 
 
 Ein Linked Signal hat die folgenden Eigenschaften:
 
-- **Schreibbar und reaktiv**: Wie ein [`Signal`](https://angular.dev/guide/signals#writable-signals) kann der Wert eines Linked Signals manuell aktualisiert werden, aber es reagiert auch auf Änderungen von seiner Quelle.
-- **Eine Kombination aus Signal und Computed**: Es ist wie ein Signal das mit [`computed`](https://angular.dev/guide/signals#computed-signals) erstellt wurde , weil es seinen Wert von anderen Signalen ableitet. Es bleibt aber beschreibbar, so dass wir es bei Bedarf den Wert manuell neu setzen können.
+- **Schreibbar und reaktiv**: Der Wert kann manuell aktualisiert werden (wie mit der Funktion [`signal`](https://angular.dev/guide/signals#writable-signals)). Das Linked Signal reagiert aber auch auf Änderungen in der Quelle.
+- **Eine Kombination aus Signal und Computed**: Es funktioniert wie ein Signal, das mit [`computed`](https://angular.dev/guide/signals#computed-signals) erstellt wurde, denn der Wert wird von anderen Signals abgeleitet. Dabei bleibt es aber beschreibbar, sodass wir den Wert bei Bedarf manuell neu setzen können.
 
-Durch die Kombination dieser Eigenschaften bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signalen anpassen, aber bei Bedarf auch direkt gesteuert werden können.
-Um die Flexibilität zu verstehen, betrachten wir das folgende Beispiel, in dem ``linkedSignal` und `computed`` miteinander verglichen werden:
+Dadurch bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signalen anpassen – aber bei Bedarf auch direkt gesteuert werden können.
+Um das Linked Signal besser kennenzulernen, betrachten wir das folgende Beispiel, in dem `linkedSignal` und `computed` miteinander verglichen werden:
 
 ```ts
 import { computed, linkedSignal } from '@angular/core';
@@ -65,21 +66,16 @@ const timestampSecondsLinked = linkedSignal(() => timestampMs() / 1000);
 timestampSecondsLinked.set(0); // ✅ funktioniert
 ```
 
-Hier ist die genaue Übersetzung des angegebenen Abschnitts:
-
----
-
-Die Signatur und Nutzung von `computed()` und `linkedSignal()` sehen sehr ähnlich aus: 
-
-Beide akzeptieren eine Berechnungsfunktion, die den Ergebniswert des Signals aktualisiert, wenn sich eines der gebundenen Signals (hier: `timestampMs`) ändert. 
-Der Unterschied liegt in ihren Rückgabewerten:
-Während `computed()` ein schreibgeschütztes `Signal` zurückgibt, erzeugt die neue Funktion `linkedSignal()` ein `WritableSignal`.
+Die beiden Funktionen `computed()` und `linkedSignal()` sehen auf den ersten Blick sehr ähnlich aus: 
+Beide erhalten eine *Computation Function*, die das Ergebnis des Signals neu berechnet, wenn sich eines der gebundenen Signals (hier: `timestampMs`) ändert.
+Der wesentliche Unterschied ist der Rückgabewert:
+Während `computed()` ein reines `Signal` zurückgibt, das nur lesbar ist, erzeugt die neue Funktion `linkedSignal()` ein `WritableSignal`.
 
 Das bedeutet, dass wir den Wert bei Bedarf mit `set()` und `update()` überschreiben können.
-Ein mit `computed()` erstelltes Signal erlaubt es nicht, den Wert manuell zu ändern.
+Ein Signal, das mit `computed()` erstellt wurde, bietet diese Schnittstelle nicht an.
 
 Im ersten Beispiel haben wir die **Kurzschreibweise** für das Linked Signal verwendet. Es ist aber auch möglich, die Berechnung in eine separate Funktion auszulagern. 
-Der Wert der Quelle wird automatisch an die Berechnungsfunktion übergeben.
+Der Wert des Signals aus `source` wird dann automatisch an die Berechnungsfunktion `computation` übergeben.
 
 ```ts
 const timestampMs = signal(Date.now());
@@ -91,21 +87,21 @@ const timestampSecondsLinked = linkedSignal({
 ```
 
 Ob das ausführlichere Options-Objekt mit `source` und `computation` oder die Kurzschreibweise verwendet werden sollte, hängt vom Anwendungsfall und persönlichen Geschmack ab. 
-Beide gezeigten Beispiele für `timestampSecondsLinked` haben genau das selbe Verhalten. 
+Beide gezeigten Beispiele für `timestampSecondsLinked` haben genau das gleiche Verhalten. 
 In komplexeren Fällen kann eine separate Berechnungsfunktion den Code jedoch leichter verständlich und lesbarer machen.
 
 
 ## Grundlegende Nutzung von Linked Signal
 
-Schauen wir uns ein weiteres konkretes Beispiel an, um zu veranschaulichen, wie das neue Signal funktioniert. 
-Unsere Komponente mit dem Namen `BookListComponent` hält eine Liste von Büchern im Signal `books`.  
+Wir schauen uns ein umfangreicheres Beispiel an:
+Unsere Komponente `BookListComponent` hält eine Liste von Büchern im Signal `books`.
 Anschließend verwenden wir ein Linked Signal, um das *erste Buch* in der Liste zu ermitteln.
-Wir haben uns entschieden, die ausführliche Notation mit dem Optionsobjekt zu verwenden. 
-Die separate Berechnung macht den Code lesbarer im Vergleich zu einer einzeiligen Funktion.
+Wir haben uns entschieden, die ausführliche Notation mit einem Optionsobjekt zu verwenden. 
+Die separate *Computation Function* macht den Code lesbarer im Vergleich zu einer einzeiligen Funktion, die Quelle und Berechnung vereint.
 
-Wann immer sich die Liste der Bücher ändert (dies geschieht in unserem Beispiel durch die `changeBookList()`-Methode), berechnet das `firstBook`-Signal seinen Wert automatisch neu und zeigt das neu ermittelte erste Buch an.
-Bis zu diesem Punkt könnte die vorgestellte Funktionalität auch mit einem Computed Signal umgesetzt werden.
-Jedoch ermöglicht es das Linked Signal, den Wert in der `overrideFirstBook()`-Methode manuell zu überschreiben.
+Immer wenn sich die Liste der Bücher ändert (dies geschieht in unserem Beispiel durch die Methode `changeBookList()`), berechnet das Signal `firstBook` seinen Wert automatisch neu, und das neu ermittelte erste Buch wird angezeigt.
+Bis hierhin hätten wir dafür auch ein Computed Signal verwenden können.
+Das Linked Signal macht es aber nun möglich, den Wert in der Methode `overrideFirstBook()` manuell zu überschreiben.
 
 ```typescript
 import { Component, linkedSignal, signal } from '@angular/core';
@@ -124,17 +120,17 @@ export class BookListComponent {
     computation: books => books[0]
   });
 
-  // dies funktioniert auch (Kurzschreibweise)
+  // Alternativ: Kurzschreibweise
   // firstBook = linkedSignal(() => this.books()[0]);
 
   overrideFirstBook() {
-    // Manuelles update von `firstBook`, gibt jetzt 'jQuery' zurück
+    // Manuelles Update von `firstBook`, gibt jetzt 'jQuery' zurück
     this.firstBook.set('jQuery');
   }
 
   changeBookList() {
-    // Änderungen an `books` bewirken das `firstBook` zurück gesetzt wird
-    // der Rückgabewert ist dann wieder 'Next.js'
+    // Änderungen an `books` bewirken, dass `firstBook` zurückgesetzt wird.
+    // Der Rückgabewert ist dann wieder 'Next.js'
     this.books.set(['Next.js', 'Svelte', 'Nuxt']);
   }
 }
@@ -142,17 +138,18 @@ export class BookListComponent {
 
 In diesem Beispiel geschieht Folgendes:
 - Das Linked Signal `firstBook` zeigt zunächst auf das erste Buch in der Liste der `books`.
-- Wir können den Wert jederzeit manuell überschreiben, wie bei dem „jQuery“-Buch gezeigt.
+- Wir können den Wert jederzeit manuell überschreiben, wie bei dem Buch „jQuery“ zu erkennen ist.
 - Wenn sich `books` ändert, wird `firstBook` neu berechnet, um den ersten Eintrag in der aktualisierten Liste wiederzugeben.
 
-Das Signal enthält immer den neuesten Wert - entweder wird er manuell durch `set()`/`update()` gesetzt oder von der Berechnungsfunktion ermittelt, wenn sich das gebundene Signal ändert.
+Das Signal enthält immer den neuesten Wert: Entweder wird er manuell durch `set()`/`update()` gesetzt oder von der Berechnungsfunktion ermittelt, wenn sich das gebundene Signal ändert.
 
 
 ### Anwendungsfall mit Input-Signals
 
 Ein häufiger Anwendungsfall für ein Linked Signal ist eine Komponente, die sich basierend auf einem Input-Signal zurücksetzt.  
-Ein Beispiel dafür wäre eine Warenkorb-Komponente (hier: `ShoppingCartComponent`), bei der das Eingebefeld für die Menge zurückgesetzt werden soll, wenn sich das ausgewählte Produkt ändert.  
-Zwar könnten wir solch ein Ergebnis auch mit `computed` erzielen, jedoch wollen wir die Menge zusätzlich durch Änderung der Formularwerte festlegen können.
+Ein gutes Beispiel dafür ist eine Warenkorb-Komponente (hier: `ShoppingCartComponent`).
+Sie besitzt ein Eingabefeld für die Menge, das zurückgesetzt werden soll, wenn sich das ausgewählte Produkt ändert.
+Wir könnten ein solches Ergebnis zwar auch mit `computed()` erzielen, allerdings wollen wir die Menge zusätzlich durch das Formular verändern können.
 
 ```typescript
 import { Component, input, linkedSignal } from '@angular/core';
@@ -168,15 +165,15 @@ export class ShoppingCartComponent {
   selectedBook = input.required<Book>();
   amount = linkedSignal({
     source: this.selectedBook,
-     // Auf 1 zurück setzen, wenn sich selectedBook ändert
+     // Auf 1 zurücksetzen, wenn sich selectedBook ändert
     computation: () => 1
   });
 }
 ```
 
-In diesem Fall wird der Wert von `amount` jedes Mal auf 1 zurückgesetzt, wenn sich `selectedBook` ändert.  
+In diesem Fall wird der Wert von `amount` stets auf `1` zurückgesetzt, wenn sich `selectedBook` ändert.  
 Das `<input>`-Feld im Template spiegelt diese Änderung wider und setzt sich ebenfalls auf 1 zurück.  
-Dieses Muster ist nützlich in Formularen, in denen Felder in ihren Ausgangszustand zurückgesetzt werden sollen, sobald bestimmte Signals geändert werden.
+Dieses Muster ist nützlich für Formulare, die in ihren Ausgangszustand zurückgesetzt werden sollen, sobald bestimmte Signals geändert werden.
 
 Für diesen Anwendungsfall ist die **Langschreibweise** mit `source` und `computation` der eleganteste Weg:
 Wir sind nicht am tatsächlichen Wert von `selectedBook` interessiert.
@@ -187,7 +184,8 @@ Aus diesem Grund haben wir `source` und `computation` getrennt und nicht die Kur
 
 ### Nested State Management
 
-Angenommen, wir haben verschachtelte Daten wie Bucheigenschaften (`title` und `rating`), und diese Felder sollen zurückgesetzt werden, wenn ein anderes Buch über ein Input-Signal ausgewählt wird.
+In einer anderen Komponente arbeiten wir mit Eigenschaften unseres Datenmodells `Book`: `title` und `rating`.
+Diese Felder sollen zurückgesetzt und neu berechnet werden, wenn ein anderes Buch über ein Input-Signal ausgewählt wird.
 So könnte man dies mit einem Linked Signal umsetzen:
 
 ```typescript
@@ -209,7 +207,7 @@ export class BookComponent  {
   title = computed(() => this.book().title);
   rating = linkedSignal(() => this.book().rating);
 
-  // dies funktioniert auch (Langschreibweise)
+  // Alternativ: Langschreibweise
   /*rating = linkedSignal({
     source: this.book,
     computation: book => book.rating,
@@ -227,22 +225,24 @@ export class BookComponent  {
 }
 ```
 
-Die Eigenschaften `title` und `rating` werden von der Quelle `book` abgeleitet.
-Sowohl `title` als auch `rating` berechnen ihre Werte neu, wenn sich `book` ändert.
-Dies hilft, die Daten in Fällen zu synchronisieren, in denen die Struktur des Zustands hierarchisch ist oder von bestimmten Identifikatoren abhängt.
-Während das Linked Signal sicherstellt, dass die Daten bei Bedarf zurückgesetzt werden, können wir unseren lokalen Zustand dennoch direkt aktualisieren.
-In diesem Beispiel aktualisieren wir die Bewertung lokal und übermitteln die Änderung an die übergeordnete Komponente über das `ratingChange`-Event zurück.
-Da wir `title` innerhalb der Komponente nicht ändern müssen, reicht hier ein „Computed Signal“ aus.
+Die Eigenschaften `title` und `rating` werden aus dem Quellsignal `book` abgeleitet.
+`title` und `rating` berechnen ihre Werte automatisch neu, wenn sich `book` ändert.
+<!--Dies hilft, die Daten in Fällen zu synchronisieren, in denen die Struktur des Zustands hierarchisch ist oder von bestimmten Identifikatoren abhängt.-->
+Während das Linked Signal sicherstellt, dass die Daten bei Bedarf zurückgesetzt werden, können wir den lokalen Zustand weiterhin direkt aktualisieren.
+In diesem Beispiel verändern wir die Bewertung lokal. Anschließend übermitteln wir die Änderung an die übergeordnete Komponente, indem das Event `ratingChange` ausgelöst wird.
+Da wir `title` in dieser Komponente nicht ändern müssen, reicht hier ein Computed Signal aus.
 
-Wir haben uns für die Kurzschreibweise des Linked Signal entschieden, weil die Berechnung sehr einfach ist.
+Wir haben uns für die Kurzschreibweise für das Linked Signal entschieden, weil die Berechnung sehr einfach ist.
 Außerdem sehen die Zeilen mit dem `computed()` und dem `linkedSignal()` sehr ähnlich aus, was die Lesbarkeit erhöht.
 Je nach Geschmack ist aber auch die Langschreibweise möglich.
 
 
 ### Daten vom Server auf der Client-Seite bearbeiten
 
-Ein verknüpftes Signal ist auch bei der Arbeit mit Daten vom Server hilfreich, die lokal bearbeitet werden sollen.
-In dem folgenden Beispiel werden Daten von unserer HTTP-API verwendet, die über einen einfachen `HttpClient`-Wrapper namens `BookStoreService` abgerufen werden. Die Quelle der Daten ist somit ein Observable, welches nicht direkt editierbar ist. Als zusätzliche Anforderung haben wir aber genau diesen Wunsch, nämlich die Daten ohne Umwege direkt lokal editieren zu können. Hierfür bietet sich das Linked Signal an:
+Ein Linked Signal ist auch bei der Arbeit mit Daten vom Server hilfreich, die lokal bearbeitet werden sollen.
+In dem folgenden Beispiel wollen wir Daten von einer HTTP-API laden.
+Der `BookStoreService` nutzt dafür den `HttpClient` von Angular.
+Die Quelle der Daten ist somit ein Observable, das nicht direkt editierbar ist. Als zusätzliche Anforderung haben wir aber genau diesen Wunsch: Wir wollen die Daten ohne Umwege direkt lokal editieren. Hierfür bietet sich das Linked Signal an:
 
 ```typescript
 import { Component, inject, linkedSignal } from '@angular/core';
@@ -289,21 +289,22 @@ export class DashboardComponent {
 }
 ```
 
-In diesem Beispiel enthält `books` die Serverdaten.  
-Normalerweise würden wir `toSignal()` verwenden, um das RxJS-Observable in ein Signal umzuwandeln.  
-Mit `toSignal()` allein könnten wir die abgerufenen Daten jedoch nicht direkt bearbeiten – außer durch das Senden eines neuen Elements aus dem Observable.
+In diesem Beispiel enthält `books` die Daten, die vom Server geladen wurden.  
+Normalerweise würden wir `toSignal()` verwenden, um das Observable in ein Signal umzuwandeln.
+Mit `toSignal()` allein könnten wir die abgerufenen Daten jedoch nicht nachträglich bearbeiten – dazu müssten wir das Observable dazu bringen, ein neues Element auszugeben.
 
-Durch die Verwendung eines Linked Signals können wir die Daten trotzdem lokal ändern, und bei einem Zurücksetzen der Quelle (z. B. einem Neuladen der Daten vom Server) können die Originaldaten wiederhergestellt werden.
+Da wir aber ein Linked Signals verwendet haben, können wir die Daten trotzdem lokal überschreiben.
+Wird die Quelle zurückgesetzt (z. B. einem Neuladen der Daten vom Server) werden die neu geladenen Daten verwendet.
 
-Wir haben hier die Kurzschreibweise für `linkedSignal()` verwendet und das Signal von `toSignal()` direkt übergeben, da wir lediglich die Quelle in ein Linked Signal umwandeln möchten. 
-Die lange Schreibweise mit der dedizierten Funktion zur Berechnung ist nicht erforderlich.
+Wir haben hier die Kurzschreibweise für `linkedSignal()` verwendet und das Signal von `toSignal()` direkt übergeben, denn wir möchten lediglich die Quelle in ein Linked Signal umwandeln. 
+Die lange Schreibweise mit einer separaten Funktion zur Berechnung ist nicht erforderlich.
 
-Kommen wir nun zu zwei zusätzlichen Anforderungen, die die Komplexität dieses Beispiels ein wenig erhöhen sollen.
+Zusätzlich haben wir in diesem Beispiel zwei Anforderungen verpackt, die die Komplexität ein wenig erhöhen:
 Wenn die Methode `changeOrder()` aufgerufen wird, ändern wir die Reihenfolge der Bücherliste.
-Zusätzlich behandeln wir das `ratingChange`-Event aus dem vorherigen Beispiel.  
-Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das veraltete Buchobjekt durch eine aktualisierte Kopie.  
+Zusätzlich behandeln wir das Event `ratingChange` aus dem vorherigen Beispiel.  
+Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das alte Buchobjekt durch eine aktualisierte Kopie.  
 
-Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualisierten Zustand an den Server zurücksenden. Aber diese Aufgabe überlassen wir unseren Lesern. 😉
+Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualisierten Zustand an den Server zurücksenden – aber diese Aufgabe überlassen wir unseren Leserinnen und Lesern. 😉
 
 
 > ℹ️ **Wussten Sie schon?** In Version 19 von Angular wird zusätzlich die neue experimentelle **Resource API** eingeführt. Sie ermöglicht das asynchrone Laden von Daten und das Auslesen des Ladestatus, wobei auch dieses Signal beschreibbar bleibt.  
@@ -312,23 +313,23 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 
 ## Linked Signal und andere Signals
 
-Hier ein schneller Vergleich mit anderen Arten von Signals:
+Ein schneller Vergleich mit anderen Arten von Signals:
 
-- **`signal()`**: Erzeugt ein Basis-Signal, das beschreibbar ist und seinen Wert unabhängig von anderen Signalen beibehält. Es hat einen Startwert, welcher mit `set()` und `update()` überschrieben werden kann.
-- **`computed()`**: Erzeugt ein schreibgeschütztes Signal, das von anderen Signalen abgeleitet ist und automatisch neu berechnet wird, aber keine manuellen Änderungen zulässt.
-- **`linkedSignal()`**: Kombiniert die Reaktivität von `computed()` mit der Veränderbarkeit von `signal()`, so dass man den Wert manuell aktualisieren kann, während er weiterhin mit einem Quellsignal gekoppelt bleibt.
+- **`signal()`**: Erzeugt ein Signal, das beschreibbar ist und seinen Wert unabhängig von anderen Signals beibehält. Es hat einen Startwert, welcher mit `set()` und `update()` überschrieben werden kann.
+- **`computed()`**: Erzeugt ein schreibgeschütztes Signal, das seinen Wert von anderen Signalen ableitet und automatisch neu berechnet. Es lässt aber keine manuellen Änderungen zu.
+- **`linkedSignal()`**: Kombiniert die Reaktivität von `computed()` mit der Veränderbarkeit von `signal()`. Der Wert kann manuell aktualisiert werden, während er weiterhin mit einem Quellsignal gekoppelt bleibt.
 
 Wir empfehlen, `linkedSignal()` nur für Zustände zu verwenden, die aufgrund von konkreter Abhängigkeiten zurückgesetzt werden sollen.
 Nutzen Sie weiterhin `computed()` für abgeleitete Daten, die nicht überschrieben werden müssen.
 
-## Best Practices für die Nutzung von Linked Signal
+## Best Practices für die Nutzung von Linked Signals
 
 Hier sind einige Tipps für die optimale Nutzung von Linked Signals:
 
-- **Berechnungsfunktionen einfach halten**: Vermeiden Sie komplexe Berechnungen in der `computation`-Funktion, um zyklische Abhängigkeiten zu vermeiden und den Code besser verständlich zu halten.  
+- **Berechnungsfunktionen einfach halten**: Vermeiden Sie komplexe Berechnungen in der Computation Function, um zyklische Abhängigkeiten zu vermeiden und den Code besser verständlich zu halten.  
   Führt eine Berechnung zu einem zyklischen Zugriff auf sich selbst, stoppt Angular die Ausführung mit dieser Fehlermeldung: ["Detected cycle in computations."](https://github.com/angular/angular/blob/7d0ba0cac85220cbbe4044667a51e5b95512f5d6/packages/core/primitives/signals/src/computed.ts#L114)
-- **Nutzung für das Zurücksetzen**: `linkedSignal()` ist ideal für Fälle, in denen ein Zustand basierend auf einem bestimmten Signal zurückgesetzt werden soll, wie Beispielsweise das Leeren eines Formularfeldes, wenn ein neues Element ausgewählt wird.  
-  Wenn keine Reset-Funktionalität benötigt wird, ist wahrscheinlich `computed()` die bessere Wahl.
+- **Nutzung für das Zurücksetzen**: `linkedSignal()` ist ideal für Fälle, in denen ein Zustand basierend auf einem bestimmten Signal zurückgesetzt werden soll, z. B. das Leeren eines Formularfelds, wenn ein neues Element ausgewählt wird.  
+  Wenn keine Reset-Funktionalität benötigt wird, ist `computed()` vermutlich die bessere Wahl.
 - **Effects für komplexe Szenarien in Betracht ziehen**: Wenn mehrere Signals auf eine einzige Änderung reagieren sollen, kann die Nutzung von `effect()` übersichtlicher und effizienter sein, als mehrere Signals mit `linkedSignal()` zu erstellen.
 
 
@@ -336,8 +337,8 @@ Hier sind einige Tipps für die optimale Nutzung von Linked Signals:
 
 Um Linked Signals direkt in Aktion zu sehen, haben wir eine Demo-Anwendung auf GitHub erstellt, die alle in diesem Artikel besprochenen Beispiele zeigt.
 Der erste Link führt zum Quellcode auf GitHub, den Sie herunterladen können.
-Der zweite Link öffnet eine publizierte Demo der Anwendung, die Sie direkt ausprobieren können.
-Und schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der Sie den Quellcode bearbeiten und die Ergebnisse in Echtzeit sehen können.
+Der zweite Link öffnet eine Online-Demo der Anwendung, die Sie direkt ausprobieren können.
+Schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der Sie den Quellcode bearbeiten und die Ergebnisse in Echtzeit sehen können.
 
 > **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**  
 > **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**  
@@ -346,12 +347,12 @@ Und schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in
 
 ## Fazit
 
-Das Linked Signal von Angular 19 bietet eine praktische Lösung zur Verwaltung von lokalem State, der mit anderen Signalen synchronisiert werden sollen. 
-Dieses neue Feature schließt die Lücke zwischen `signal()` und `computed()` und bietet eine neue Möglichkeit, komplexe reaktive Frontends zu gestalten, bei denen die Synchronisierung von komplexen Zuständen notwendig ist.
-Probieren Sie `linkedSignal()` in Ihrem Angular-Projekt aus, um herauszufinden, ob es Ihre Datenverwaltung vereinfachen kann. 
-** ⚠️ Bitte bedenken Sie, dass diese API noch experimentell ist und sich Details aufgrund des Feedbacks der Community drastisch verändern können.**
+Das Linked Signal von Angular 19 bietet eine praktische Lösung zur Verwaltung von lokalem State, der mit anderen Signalen synchronisiert werden soll. 
+Dieses neue Feature schließt die Lücke zwischen `signal()` und `computed()` und bietet eine neue Möglichkeit, komplexe reaktive Frontends zu gestalten.
+Probieren Sie doch `linkedSignal()` einmal in Ihrem Angular-Projekt aus!
+**⚠️ Bitte bedenken Sie, dass diese API noch experimentell ist und sich Details durch Feedback aus der Community drastisch verändern können.**
 <hr>
 
 <small>Vielen Dank an Danny Koppenhagen für das Review und das wertvolle Feedback!</small>
 
-<small>**Titelbild:** Mit Adobe Firefly generiert</small>
+<small>**Titelbild:** generiert mit Adobe Firefly</small>
