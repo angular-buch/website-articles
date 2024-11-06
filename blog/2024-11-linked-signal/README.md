@@ -242,7 +242,7 @@ Je nach Geschmack ist aber auch die Langschreibweise möglich.
 ### Synchronizing Server-Data for Client-Side Edits
 
 Ein verknüpftes Signal ist auch bei der Arbeit mit Daten vom Server hilfreich, die lokal bearbeitet werden sollen.
-In diesem folgenden werden Daten von unserer HTTP-API verwendet, die über einen einfachen `HttpClient`-Wrapper namens `BookStoreService` abgerufen werden. Obwohl die Daten aus einem Observable stammen, wollen wir die Einträge ohne Umwege lokal editieren können:
+In dem folgenden Beispiel werden Daten von unserer HTTP-API verwendet, die über einen einfachen `HttpClient`-Wrapper namens `BookStoreService` abgerufen werden. Obwohl die Daten aus einem Observable stammen, wollen wir die Einträge ohne Umwege lokal editieren können:
 
 ```typescript
 import { Component, inject, linkedSignal } from '@angular/core';
