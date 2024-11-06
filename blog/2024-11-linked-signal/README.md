@@ -312,7 +312,7 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 
 ## Linked Signal und andere Signals
 
-Hier ein schneller Vergleich mit anderen Arten von Signals von Angular:
+Hier ein schneller Vergleich mit anderen Arten von Signals:
 
 - **`signal()`**: Erzeugt ein Basis-Signal, das beschreibbar ist und seinen Wert unabhängig von anderen Signalen beibehält. Es hat einen Startwert, welcher mit `set()` und `update()` überschrieben werden kann.
 - **`computed()`**: Erzeugt ein schreibgeschütztes Signal, das von anderen Signalen abgeleitet ist und automatisch neu berechnet wird, aber keine manuellen Änderungen zulässt.
