@@ -116,7 +116,7 @@ Eine Resource repräsentiert einen Datensatz, der asynchron geladen wird, in der
 Die Resource bietet eine Schnittstelle an, um die Daten zu verarbeiten, neuzuladen und sogar manuell zu überschreiben.
 
 > Wir erläutern die Resource API ausführlich in einem separaten Blogpost:
-> **[Die neue Resource API von Angular](/blog/2024-10-resource-api/)**
+> **[Neu in Angular 19: Daten laden mit der Resource API](/blog/2024-10-resource-api/)**
 
 Eine Resource wird mit der Funktion `resource` und einer Loader-Funktion initialisiert.
 Dieser Loader ist dafür verantwortlich, die Daten asynchron zu laden. Die Funktion muss immer eine Promise zurückgeben, weshalb wir hier zunächst die native Fetch API verwenden und nicht den `HttpClient` von Angular:
@@ -278,7 +278,7 @@ Ein Linked Signal ist besonders nützlich, wenn lokaler State mit dynamisch gela
 Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input oder ein HTTP-Request, die Komponente kann das Signal aber weiterhin selbst mit Werten überschreiben.
 
 > Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktische Anwendungsfälle für `linkedSignal()`:
-> **[Angular 19: Introducing Linked Signal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
+> **[Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](/blog/2024-11-linked-signal/)**
 
 
 ## Migrationen für Signal-based APIs
