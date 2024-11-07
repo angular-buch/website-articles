@@ -293,7 +293,7 @@ Normalerweise würden wir `toSignal()` verwenden, um das Observable in ein Signa
 Mit `toSignal()` allein könnten wir die abgerufenen Daten jedoch nicht nachträglich bearbeiten – dazu müssten wir das Observable dazu bringen, ein neues Element auszugeben.
 
 Da wir aber ein Linked Signals verwendet haben, können wir die Daten trotzdem lokal überschreiben.
-Wird die Quelle zurückgesetzt (z. B. einem Neuladen der Daten vom Server) werden die neu geladenen Daten verwendet.
+Wird die Quelle zurückgesetzt (z. B. bei einem Neuladen der Daten vom Server) werden die neu geladenen Daten verwendet.
 
 Wir haben hier die Kurzschreibweise für `linkedSignal()` verwendet und das Signal von `toSignal()` direkt übergeben, denn wir möchten lediglich die Quelle in ein Linked Signal umwandeln. 
 Die lange Schreibweise mit einer separaten Funktion zur Berechnung ist nicht erforderlich.
