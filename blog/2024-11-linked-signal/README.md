@@ -227,7 +227,6 @@ export class BookComponent  {
 
 Die Eigenschaften `title` und `rating` werden aus dem Quellsignal `book` abgeleitet.
 `title` und `rating` berechnen ihre Werte automatisch neu, wenn sich `book` ändert.
-<!--Dies hilft, die Daten in Fällen zu synchronisieren, in denen die Struktur des Zustands hierarchisch ist oder von bestimmten Identifikatoren abhängt.-->
 Während das Linked Signal sicherstellt, dass die Daten bei Bedarf zurückgesetzt werden, können wir den lokalen Zustand weiterhin direkt aktualisieren.
 In diesem Beispiel verändern wir die Bewertung lokal. Anschließend übermitteln wir die Änderung an die übergeordnete Komponente, indem das Event `ratingChange` ausgelöst wird.
 Da wir `title` in dieser Komponente nicht ändern müssen, reicht hier ein Computed Signal aus.
