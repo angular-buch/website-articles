@@ -1,9 +1,9 @@
 ---
-title: 'Angular 19: Einführung von LinkedSignal für eine lokale reaktive Zustandsverwaltung'
+title: 'Angular 19: LinkedSignal für eine lokale reaktive Zustandsverwaltung'
 author: Johannes Hoppe and Ferdinand Malcher
 mail: team@angular.schule
-published: 2024-11-04
-lastModified: 2024-11-04
+published: 2024-11-07
+lastModified: 2024-11-07
 keywords:
   - Angular
   - JavaScript
