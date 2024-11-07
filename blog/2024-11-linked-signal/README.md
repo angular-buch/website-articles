@@ -229,7 +229,7 @@ Die Eigenschaften `title` und `rating` werden aus dem Quellsignal `book` abgelei
 `title` und `rating` berechnen ihre Werte automatisch neu, wenn sich `book` ändert.
 Während das Linked Signal sicherstellt, dass die Daten bei Bedarf zurückgesetzt werden, können wir den lokalen Zustand weiterhin direkt aktualisieren.
 In diesem Beispiel verändern wir die Bewertung lokal. Anschließend übermitteln wir die Änderung an die übergeordnete Komponente, indem das Event `ratingChange` ausgelöst wird.
-Da wir `title` in dieser Komponente nicht ändern müssen, reicht hier ein Computed Signal aus.
+Da wir `title` in dieser Komponente nicht manuell ändern müssen, reicht hier ein Computed Signal aus.
 
 Wir haben uns für die Kurzschreibweise für das Linked Signal entschieden, weil die Berechnung sehr einfach ist.
 Außerdem sehen die Zeilen mit dem `computed()` und dem `linkedSignal()` sehr ähnlich aus, was die Lesbarkeit erhöht.
