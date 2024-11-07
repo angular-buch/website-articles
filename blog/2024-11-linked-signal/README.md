@@ -298,7 +298,7 @@ Wird die Quelle zurückgesetzt (z. B. bei einem Neuladen der Daten vom Server) w
 Wir haben hier die Kurzschreibweise für `linkedSignal()` verwendet und das Signal von `toSignal()` direkt übergeben, denn wir möchten lediglich die Quelle in ein Linked Signal umwandeln. 
 Die lange Schreibweise mit einer separaten Funktion zur Berechnung ist nicht erforderlich.
 
-Zusätzlich haben wir in diesem Beispiel zwei Anforderungen verpackt, die die Komplexität ein wenig erhöhen:
+Zusätzlich haben wir in diesem Beispiel zwei weitere Anforderungen aufgenommen, die die Komplexität ein wenig erhöhen sollen:
 Wenn die Methode `changeOrder()` aufgerufen wird, ändern wir die Reihenfolge der Bücherliste.
 Zusätzlich behandeln wir das Event `ratingChange` aus dem vorherigen Beispiel.  
 Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das alte Buchobjekt durch eine aktualisierte Kopie.  
