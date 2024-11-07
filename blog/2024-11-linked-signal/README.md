@@ -184,7 +184,7 @@ Aus diesem Grund haben wir `source` und `computation` getrennt und nicht die Kur
 
 ### Nested State Management
 
-In einer anderen Komponente arbeiten wir mit Eigenschaften unseres Datenmodells `Book`: `title` und `rating`.
+Wir wollen ein weiteres Beispiel betrachten, in dem wieder die Buch-Entität verwendet wird. In dieser Komponente arbeiten wir mit zwei Eigenschaften des Buchs: `title` und `rating`.
 Diese Felder sollen zurückgesetzt und neu berechnet werden, wenn ein anderes Buch über ein Input-Signal ausgewählt wird.
 So könnte man dies mit einem Linked Signal umsetzen:
 
