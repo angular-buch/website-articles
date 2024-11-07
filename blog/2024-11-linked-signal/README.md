@@ -306,7 +306,7 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 
 
 > ℹ️ **Wussten Sie schon?** In Version 19 von Angular wurde zusätzlich die neue experimentelle **Resource API** eingeführt. Sie ermöglicht das asynchrone Laden von Daten und das Auslesen des Ladestatus, wobei das Signal für die Daten lokal beschreibbar bleibt.  
-> Wir haben die Resource API in einem separaten Blogbeitrag vorgestellt: **[Die neue Resource API von Angular](https://angular-buch.com/blog/2024-10-resource-api)**
+> Wir haben die Resource API in einem separaten Blogbeitrag vorgestellt: **[Neu in Angular 19: Daten laden mit der Resource API](https://angular-buch.com/blog/2024-10-resource-api)**
 
 
 ## Linked Signal und andere Signals
