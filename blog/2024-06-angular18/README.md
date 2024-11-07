@@ -266,9 +266,9 @@ export class KatzenComponent {
 ```
 
 Um vollständig in der Welt von Signals zu bleiben, können wir stattdessen jetzt folgende Syntax verwenden.
-Eine massive Erleichterung ist die Funktion `input.reqired()`:
+Eine massive Erleichterung ist die Funktion `input.required()`:
 Beim alten Stil musste man immer auch `undefined` als möglichen Wert berücksichtigen.
-Dies ist nun nicht mehr notwendig, da `input.reqired()` entweder einen gesetzten Wert hat oder eine Exception wirft, wenn es keinen Wert gibt.
+Dies ist nun nicht mehr notwendig, da `input.required()` entweder einen gesetzten Wert hat oder eine Exception wirft, wenn es keinen Wert gibt.
 Die bisherige leidige Prüfung auf `undefined` entfällt damit endlich.
 Allein hierfür lohnt sich bereits der Umstieg auf Signals:
 
@@ -285,7 +285,7 @@ import { input } from '@angular/core';
   `
 })
 export class KatzenComponent {
-  anzahl = input.reqired<number>();
+  anzahl = input.required<number>();
   imageUrl = computed(() => `https://api.angular.schule/avatar/${this.anzahl()}`);
 }
 ```
@@ -603,7 +603,7 @@ Mit dem aktuellen Realease sind einige Developer Previews als stabil markiert wo
 ## Automatische Migration auf den neuen Application Builder
 
 Im Blogpost zu Angular 17 haben wir bereits den neuen [Application Builder auf Basis von ESBuild](https://angular-buch.com/blog/2023-11-angular17) vorgestellt.
-Zu dem Zeitpunkt musste mussten man die Umstellung noch manuell durchführen.
+Zu dem Zeitpunkt musste man die Umstellung noch manuell durchführen.
 Dies ist nun nicht mehr notwendig, da folgender Befehl die Anwendung automatisch umstellt:
 
 ```sh

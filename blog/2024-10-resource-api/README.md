@@ -1,9 +1,9 @@
 ---
-title: Die neue Resource API von Angular
+title: 'Neu in Angular 19: Daten laden mit der Resource API'
 author: Ferdinand Malcher
 mail: ferdinand@malcher.media
 published: 2024-10-29
-lastModified: 2024-10-29
+lastModified: 2024-11-07
 keywords:
   - Resource API
   - Promise
