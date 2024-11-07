@@ -312,7 +312,7 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 
 ## Linked Signal und andere Signals
 
-Ein schneller Vergleich mit anderen Arten von Signals:
+Abschließend noch ein kurzer Vergleich mit anderen Arten von Signals:
 
 - **`signal()`**: Erzeugt ein Signal, das beschreibbar ist und seinen Wert unabhängig von anderen Signals beibehält. Es hat einen Startwert, welcher mit `set()` und `update()` überschrieben werden kann.
 - **`computed()`**: Erzeugt ein schreibgeschütztes Signal, das seinen Wert von anderen Signalen ableitet und automatisch neu berechnet. Es lässt aber keine manuellen Änderungen zu.
