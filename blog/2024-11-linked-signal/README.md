@@ -57,7 +57,7 @@ import { computed, linkedSignal } from '@angular/core';
 
 const timestampMs = signal(Date.now());
 
-// computed(): Signal (not writable)
+// computed(): Signal (nicht überschreibbar)
 const timestampSeconds = computed(() => timestampMs() / 1000);
 timestampSeconds.set(0); // ❌ Fehler
 
