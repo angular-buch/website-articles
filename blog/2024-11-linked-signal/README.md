@@ -141,7 +141,7 @@ In diesem Beispiel geschieht Folgendes:
 - Wir können den Wert jederzeit manuell überschreiben, wie bei dem Buch „jQuery“ zu erkennen ist.
 - Wenn sich `books` ändert, wird `firstBook` neu berechnet, um den ersten Eintrag in der aktualisierten Liste wiederzugeben.
 
-Das Signal enthält immer den neuesten Wert: Entweder wird er manuell durch `set()`/`update()` gesetzt oder von der Berechnungsfunktion ermittelt, wenn sich das gebundene Signal ändert.
+Das Signal enthält immer den neuesten Wert: Entweder wird er manuell durch `set()`/`update()` gesetzt oder wird von der Berechnungsfunktion ermittelt, wenn sich das gebundene Signal ändert.
 
 
 ### Anwendungsfall mit Input-Signals
