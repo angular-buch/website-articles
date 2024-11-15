@@ -27,7 +27,7 @@ In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktionie
 * [Was ist ein Linked Signal?](/blog/2024-11-linked-signal#was-ist-ein-linked-signal)
 * [Grundlegende Nutzung von Linked Signal](/blog/2024-11-linked-signal#grundlegende-nutzung-von-linked-signal)
 * [Fortgeschrittene Szenarien für Linked Signals](/blog/2024-11-linked-signal#fortgeschrittene-szenarien-fuer-linked-signals)
-* [Linked Signal und andere Signals](/blog/2024-11-linked-signal#linked-signal-vs-andere-signals)
+* [Linked Signal und andere Signals](/blog/2024-11-linked-signal#linked-signal-und-andere-signals)
 * [Best Practices für die Nutzung von Linked Signals](/blog/2024-11-linked-signal#best-practices-für-die-nutzung-von-linked-signals)
 * [Demo-Anwendung](/blog/2024-11-linked-signal#demo-anwendung)
 * [Fazit](/blog/2024-11-linked-signal#fazit)
