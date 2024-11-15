@@ -31,13 +31,13 @@ Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im
 
 <div class="row">
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9862.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2019-06-das-neue-buch/buch700/IMG_9862.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9855.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2019-06-das-neue-buch/buch700/IMG_9855.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9867.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2019-06-das-neue-buch/buch700/IMG_9867.jpg" alt="">
   </div>
 </div>
 
@@ -95,13 +95,13 @@ das Autorenteam<br>
 
 <div class="row">
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9853.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2019-06-das-neue-buch/buch700/IMG_9853.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9868.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2019-06-das-neue-buch/buch700/IMG_9868.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2019-06-das-neue-buch/buch700/IMG_9864.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2019-06-das-neue-buch/buch700/IMG_9864.jpg" alt="">
   </div>
 </div>
 

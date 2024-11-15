@@ -31,10 +31,10 @@ Das Buch ist zum Preis von 36,90 EUR in jeder gut sortierten Buchhandlung und im
 
 <div class="row">
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7039.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7039.jpg" alt="">
   </div>
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7044.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7044.jpg" alt="">
   </div>
 </div>
 
@@ -68,13 +68,13 @@ Wer nicht mit TypeScript vertraut ist, findet hier eine kompakte Einführung.
 
 <div class="row">
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7047.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7047.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7049.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7049.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7051.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7051.jpg" alt="">
   </div>
 </div>
 
@@ -104,10 +104,10 @@ das Autorenteam<br>
 
 <div class="row">
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7055.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7055.jpg" alt="">
   </div>
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2020-10-neu-dritte-auflage/buch700/IMG_7053.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2020-10-neu-dritte-auflage/buch700/IMG_7053.jpg" alt="">
   </div>
 </div>
 
