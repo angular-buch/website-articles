@@ -120,8 +120,8 @@ Lesen Sie mehr hierzu in der offiziellen [Angular Dokumentation auf angular.io](
 
 **Die Angular Dev Tools sind als [Google Chrome Extension](https://chrome.google.com/webstore/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh) verfügbar.**
 
-![Angular DevTools – Komponentenansicht](./adt1.png)
-![Angular DevTools – Profiler](./adt2.png)
+![Angular DevTools – Komponentenansicht](adt1.png)
+![Angular DevTools – Profiler](adt2.png)
 
 
 ## Inline Critical CSS / Fonts CSS Inlining

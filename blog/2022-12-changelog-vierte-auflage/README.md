@@ -120,7 +120,7 @@ Zu guter Letzt haben wir über vielen Kapiteln **Zitate** von Persönlichkeiten 
 Die meisten dieser Stimmen haben wir direkt für dieses Buch erbeten.
 Wir freuen uns sehr, dass so viele persönliche, interessante und humorvolle Worte diesem Buch eine einmalige Note geben.
 
-![Buchcover der ersten bis vierten Auflage](./alle-cover.png)
+![Buchcover der ersten bis vierten Auflage](alle-cover.png)
 
 
 

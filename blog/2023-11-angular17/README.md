@@ -52,7 +52,7 @@ Um diesen frischen Wind nicht nur auf technischer Ebene sichtbar zu machen, prä
 Seit Version 2.0 im September 2016 hat sich in Angular viel getan – und wir freuen uns, dass dieser "Renaissance" nun ein neues Gesicht verliehen wurde.
 
 <div style="margin: auto">
-  <img src="https://website-articles.angular-buch.com/blog/2023-11-angular17/logo-history.png" alt="Geschichte des Logos">
+  <img src="https://website-articles.angular-buch.com/2023-11-angular17/logo-history.png" alt="Geschichte des Logos">
   <p><small>Das Angular-Logo im Wandel der Zeiten: AngularJS (2012), Angular (2016), Angular (2023)</small></p>
 </div>
 
