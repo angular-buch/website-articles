@@ -15,7 +15,7 @@ keywords:
   - Functional Guards
   - Angular 15
 language: de
-thumbnail: ./header4a.png
+thumbnail: header4a.png
 sticky: false
 ---
 
@@ -41,10 +41,10 @@ Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt.
 
 <div class="row">
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5997.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2023-02-neu-vierte-auflage/buch700/IMG_5997.jpg" alt="">
   </div>
   <div class="col-6">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_6009.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2023-02-neu-vierte-auflage/buch700/IMG_6009.jpg" alt="">
   </div>
 </div>
 
@@ -91,13 +91,13 @@ Auf der Website zum Buch werden außerdem regelmäßig Aktualisierungen und Neui
 
 <div class="row">
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5984.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2023-02-neu-vierte-auflage/buch700/IMG_5984.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5991.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2023-02-neu-vierte-auflage/buch700/IMG_5991.jpg" alt="">
   </div>
   <div class="col-4">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_5989.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2023-02-neu-vierte-auflage/buch700/IMG_5989.jpg" alt="">
   </div>
 </div>
 
@@ -136,7 +136,7 @@ das Autorenteam<br>
 
 <div class="row mb-5">
   <div class="col">
-    <img src="https://website-articles.angular-buch.com/blog/2023-02-neu-vierte-auflage/buch700/IMG_6007.jpg" alt="">
+    <img src="https://website-articles.angular-buch.com/2023-02-neu-vierte-auflage/buch700/IMG_6007.jpg" alt="">
   </div>
 </div>
 
