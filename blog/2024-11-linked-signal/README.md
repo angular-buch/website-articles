@@ -330,7 +330,7 @@ export function signalFromControl<T>(control: AbstractControl<T>) {
 In diesem Beispiel wird die Funktion `effect()` verwendet, um einen Effekt zu erzeugen, der automatisch auf Änderungen von Signalen reagiert. 
 Auf diese Weise stellen wir sicher, dass bei jeder Änderung des `controlSignal`-Signals auch der Wert des Formular-Elements über `setValue()` aktualisiert wird.  
 Dadurch entsteht eine **bidirektionale Synchronisierung** zwischen dem Signal und dem Formular-Control.  
-Wenn Sie mehr über die Möglichkeiten von `effect()` erfahren möchten, lesen Sie unseren Artikel: **[Angular 19: Mastering effect and afterRenderEffect](/blog/2024-11-effect-afterrendereffect)**.
+Wenn Sie mehr über die Möglichkeiten von `effect()` erfahren möchten, lesen Sie unseren Artikel: **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**.
 
 Der Helfer kann wie folgt verwendet werden:
 
