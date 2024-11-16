@@ -146,7 +146,7 @@ Das Signal enthält immer den neuesten Wert: Entweder wird er manuell durch `set
 
 ### Anwendungsfall mit Input-Signals
 
-Ein häufiger Anwendungsfall für ein Linked Signal ist eine Komponente, die sich basierend auf einem Input-Signal zurücksetzt.  
+Ein häufiger Anwendungsfall für ein Linked Signal ist eine Komponente, die sich basierend auf einem Input-Signal zurücksetzt.
 Ein gutes Beispiel dafür ist eine Warenkorb-Komponente (hier: `ShoppingCartComponent`).
 Sie besitzt ein Eingabefeld für die Menge, das zurückgesetzt werden soll, wenn sich das ausgewählte Produkt ändert.
 Wir könnten ein solches Ergebnis zwar auch mit `computed()` erzielen, allerdings wollen wir die Menge zusätzlich durch das Formular verändern können.
@@ -171,8 +171,8 @@ export class ShoppingCartComponent {
 }
 ```
 
-In diesem Fall wird der Wert von `amount` stets auf `1` zurückgesetzt, wenn sich `selectedBook` ändert.  
-Das `<input>`-Feld im Template spiegelt diese Änderung wider und setzt sich ebenfalls auf 1 zurück.  
+In diesem Fall wird der Wert von `amount` stets auf `1` zurückgesetzt, wenn sich `selectedBook` ändert.
+Das `<input>`-Feld im Template spiegelt diese Änderung wider und setzt sich ebenfalls auf 1 zurück.
 Dieses Muster ist nützlich für Formulare, die in ihren Ausgangszustand zurückgesetzt werden sollen, sobald bestimmte Signals geändert werden.
 
 Für diesen Anwendungsfall ist die **Langschreibweise** mit `source` und `computation` der eleganteste Weg:
@@ -200,7 +200,7 @@ import { Component, computed, input, linkedSignal } from '@angular/core';
     <button (click)="doRateUp()">Rate up</button>
   `,
 })
-export class BookComponent  {
+export class BookComponent {
   book = input.required<Book>();
   ratingChange = output<{ isbn: string, newRating: number }>();
 
@@ -287,7 +287,7 @@ export class DashboardComponent {
 }
 ```
 
-In diesem Beispiel enthält `books` die Daten, die vom Server geladen wurden.  
+In diesem Beispiel enthält `books` die Daten, die vom Server geladen wurden.
 Normalerweise würden wir `toSignal()` verwenden, um das Observable in ein Signal umzuwandeln.
 Mit `toSignal()` allein könnten wir die abgerufenen Daten jedoch nicht nachträglich bearbeiten – dazu müssten wir das Observable dazu bringen, ein neues Element auszugeben.
 
@@ -299,21 +299,21 @@ Die lange Schreibweise mit einer separaten Funktion zur Berechnung ist nicht erf
 
 Zusätzlich haben wir in diesem Beispiel zwei weitere Anforderungen aufgenommen, die die Komplexität ein wenig erhöhen sollen:
 Wenn die Methode `changeOrder()` aufgerufen wird, ändern wir die Reihenfolge der Bücherliste.
-Zusätzlich behandeln wir das Event `ratingChange` aus dem vorherigen Beispiel.  
-Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das alte Buchobjekt durch eine aktualisierte Kopie.  
+Zusätzlich behandeln wir das Event `ratingChange` aus dem vorherigen Beispiel.
+Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das alte Buchobjekt durch eine aktualisierte Kopie.
 
 Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualisierten Zustand an den Server zurücksenden – aber diese Aufgabe überlassen wir unseren Leserinnen und Lesern. 😉
 
 
-> ℹ️ **Wussten Sie schon?** In Version 19 von Angular wurde zusätzlich die neue experimentelle **Resource API** eingeführt. Sie ermöglicht das asynchrone Laden von Daten und das Auslesen des Ladestatus, wobei das Signal für die Daten lokal beschreibbar bleibt.  
+> ℹ️ **Wussten Sie schon?** In Version 19 von Angular wurde zusätzlich die neue experimentelle **Resource API** eingeführt. Sie ermöglicht das asynchrone Laden von Daten und das Auslesen des Ladestatus, wobei das Signal für die Daten lokal beschreibbar bleibt.
 > Wir haben die Resource API in einem separaten Blogbeitrag vorgestellt: **[Neu in Angular 19: Daten laden mit der Resource API](https://angular-buch.com/blog/2024-10-resource-api)**
 
 
 ### Reactive Forms mit Signals kombinieren
 
 Mit Linked Signals können wir Hilfsfunktionen erstellen, um die traditionelle, nicht-signal-basierte Welt mit der Welt von Signals zu verbinden.
-Die folgende Wrapper-Funktion synchronisiert ein `FormControl` (oder ein anderes Control) mit einem Signal.  
-Die Daten werden bidirektional ausgetauscht: Wenn sich der Formularwert ändert (`valueChanges`), wird auch der Wert des Signals aktualisiert.  
+Die folgende Wrapper-Funktion synchronisiert ein `FormControl` (oder ein anderes Control) mit einem Signal.
+Die Daten werden bidirektional ausgetauscht: Wenn sich der Formularwert ändert (`valueChanges`), wird auch der Wert des Signals aktualisiert.
 Die Funktion gibt ein schreibbares Signal zurück. Wenn wir den Wert des Signals ändern, wird auch der Formularwert aktualisiert (`setValue()`).
 
 ```ts
@@ -326,9 +326,9 @@ export function signalFromControl<T>(control: AbstractControl<T>) {
 }
 ```
 
-Wir verwenden hier die Funktion `effect()`, um einen Effekt zu erzeugen, der automatisch auf Änderungen von Signals reagiert. 
+Wir verwenden hier die Funktion `effect()`, um einen Effekt zu erzeugen, der automatisch auf Änderungen von Signals reagiert.
 So stellen wir sicher, dass bei jeder Änderung im Signal `controlSignal` auch der Wert des Formular-Controls über `setValue()` aktualisiert wird.
-Dadurch entsteht eine **bidirektionale Synchronisierung** zwischen dem Signal und dem Formular-Control.  
+Dadurch entsteht eine **bidirektionale Synchronisierung** zwischen dem Signal und dem Formular-Control.
 Wenn Sie mehr über die Möglichkeiten von `effect()` erfahren möchten, lesen Sie unseren Artikel: **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**.
 
 Der Helfer kann wie folgt verwendet werden:
@@ -365,9 +365,9 @@ Nutzen Sie weiterhin `computed()` für abgeleitete Daten, die nicht überschrieb
 
 Hier sind einige Tipps für die optimale Nutzung von Linked Signals:
 
-- **Berechnungsfunktionen einfach halten**: Vermeiden Sie komplexe Berechnungen in der Computation Function, um zyklische Abhängigkeiten zu vermeiden und den Code besser verständlich zu halten.  
+- **Berechnungsfunktionen einfach halten**: Vermeiden Sie komplexe Berechnungen in der Computation Function, um zyklische Abhängigkeiten zu vermeiden und den Code besser verständlich zu halten.
   Führt eine Berechnung zu einem zyklischen Zugriff auf sich selbst, stoppt Angular die Ausführung mit dieser Fehlermeldung: ["Detected cycle in computations."](https://github.com/angular/angular/blob/7d0ba0cac85220cbbe4044667a51e5b95512f5d6/packages/core/primitives/signals/src/computed.ts#L114)
-- **Nutzung zum Zurücksetzen**: `linkedSignal()` ist ideal für Fälle, in denen ein Zustand basierend auf einem bestimmten Signal zurückgesetzt werden soll, z. B. das Leeren eines Formularfelds, wenn ein neues Element ausgewählt wird.  
+- **Nutzung zum Zurücksetzen**: `linkedSignal()` ist ideal für Fälle, in denen ein Zustand basierend auf einem bestimmten Signal zurückgesetzt werden soll, z. B. das Leeren eines Formularfelds, wenn ein neues Element ausgewählt wird.
   Wenn der Wert nicht durch ein Formular verändert werden soll, ist `computed()` die bessere Wahl.
 - **Effects für komplexe Szenarien in Betracht ziehen**: Wenn mehrere Signals auf eine einzige Änderung reagieren sollen, kann die Nutzung von `effect()` übersichtlicher und effizienter sein, als mehrere Signals mit `linkedSignal()` zu erstellen.
 
@@ -379,9 +379,9 @@ Der erste Link führt zum Quellcode auf GitHub.
 Der zweite Link öffnet eine Online-Demo der Anwendung, die Sie direkt ausprobieren können.
 Schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der Sie den Quellcode bearbeiten und die Ergebnisse in Echtzeit sehen können.
 
-> **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**  
-> **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**  
-> **[3️⃣ StackBlitz Demo](https://stackblitz.com/github/angular-schule/demo-linked-signal?file=src%2Fapp%2Fbooks%2Fdashboard%2Fdashboard.component.ts)**  
+> **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**
+> **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**
+> **[3️⃣ StackBlitz Demo](https://stackblitz.com/github/angular-schule/demo-linked-signal?file=src%2Fapp%2Fbooks%2Fdashboard%2Fdashboard.component.ts)**
 
 
 ## Fazit
