@@ -18,7 +18,7 @@ sticky: false
 ---
 
 
-Mit Angular 19 wurde ein [neues experimentelles Feature](https://github.com/angular/angular/commit/8311f00faaf282d1a5b1ddca29247a2fba94a692) vorgestellt: das **Linked Signal**. Es erleichtert die Verwaltung von lokalem Zustand in Verbindung mit anderen Signals. Bei dem Linked Signal handelt sich um ein beschreibbares Signal, das automatisch zurückgesetzt wird, wenn sich andere Signals ändern. Dies ist besonders nützlich, wenn wir lokale Zustände mit dynamischen Daten synchronisieren wollen.
+Mit Angular 19 wurde ein [neues Feature](https://github.com/angular/angular/commit/8311f00faaf282d1a5b1ddca29247a2fba94a692) vorgestellt: das **Linked Signal**. Es erleichtert die Verwaltung von lokalem Zustand in Verbindung mit anderen Signals. Bei dem Linked Signal handelt sich um ein beschreibbares Signal, das automatisch zurückgesetzt wird, wenn sich andere Signals ändern. Dies ist besonders nützlich, wenn wir lokale Zustände mit dynamischen Daten synchronisieren wollen.
 In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktioniert und in welchen Anwendungsfällen es sinnvoll eingesetzt werden kann.
 
 
@@ -348,7 +348,7 @@ Schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der
 Das Linked Signal von Angular 19 bietet eine praktische Lösung zur Verwaltung von lokalem State, der mit anderen Signals synchronisiert werden soll. 
 Dieses neue Feature schließt die Lücke zwischen `signal()` und `computed()` und bietet eine neue Möglichkeit, komplexe reaktive Frontends zu gestalten.
 Probieren Sie doch `linkedSignal()` einmal in Ihrem Angular-Projekt aus!
-**⚠️ Bitte bedenken Sie, dass diese API noch experimentell ist und sich Details durch Feedback aus der Community drastisch verändern können.**
+**⚠️ Bitte beachten Sie, dass die API sich noch im Status "Developer Preview" befindet und Änderungen unterliegen kann.**
 <hr>
 
 <small>Vielen Dank an Danny Koppenhagen für das Review und das wertvolle Feedback!</small>
