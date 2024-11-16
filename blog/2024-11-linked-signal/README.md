@@ -309,6 +309,48 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 > Wir haben die Resource API in einem separaten Blogbeitrag vorgestellt: **[Neu in Angular 19: Daten laden mit der Resource API](https://angular-buch.com/blog/2024-10-resource-api)**
 
 
+### Reactive Forms mit Signalen kombinieren
+
+Wir können Linked Signals nutzen, um Helfer zu erstellen, die die traditionelle, nicht-signal-basierte Welt mit der Signal-Welt verbinden.
+Zum Beispiel synchronisiert diese Wrapper-Funktion ein `FormControl` (oder ein anderes Control) mit einem Signal.  
+Die Daten werden bidirektional synchronisiert: Wenn sich der Formularwert ändert (`valueChanges`), wird auch der Signalwert aktualisiert.  
+Die Funktion gibt ein schreibbares Signal zurück. 
+Das bedeutet, wenn wir den Wert des Signals ändern, wird auch der Formularwert aktualisiert (`setValue()`).
+
+```ts
+export function signalFromControl<T>(control: AbstractControl<T>) {
+  const controlSignal = linkedSignal(
+    toSignal(control.valueChanges, { initialValue: control.value })
+  );
+  effect(() => control.setValue(controlSignal()));
+  return controlSignal;
+}
+```
+
+In diesem Beispiel wird die Funktion `effect()` verwendet, um einen Effekt zu erzeugen, der automatisch auf Änderungen von Signalen reagiert. 
+Auf diese Weise stellen wir sicher, dass bei jeder Änderung des `controlSignal`-Signals auch der Wert des Formular-Elements über `setValue()` aktualisiert wird.  
+Dadurch entsteht eine **bidirektionale Synchronisierung** zwischen dem Signal und dem Formular-Control.  
+Wenn Sie mehr über die Möglichkeiten von `effect()` erfahren möchten, lesen Sie unseren Artikel: **[Angular 19: Mastering effect and afterRenderEffect](/blog/2024-11-effect-afterrendereffect)**.
+
+Der Helfer kann wie folgt verwendet werden:
+
+```ts
+bookForm = new FormGroup({
+  isbn: new FormControl('', { nonNullable: true }),
+  title: new FormControl('', { nonNullable: true }),
+});
+
+title = signalFromControl(this.bookForm.controls.title);
+
+// ...
+// Der Formularwert wird auf 'Angular' aktualisiert
+this.title.set('Angular');
+
+// Der Signalwert wird auf 'Signals' aktualisiert
+this.bookForm.setValue({ isbn: '123', title: 'Signals' });
+```
+
+
 ## Linked Signal und andere Signals
 
 Abschließend noch ein kurzer Vergleich mit anderen Arten von Signals:
