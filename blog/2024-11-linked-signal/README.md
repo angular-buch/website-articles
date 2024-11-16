@@ -3,7 +3,7 @@ title: 'Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung'
 author: Johannes Hoppe and Ferdinand Malcher
 mail: team@angular.schule
 published: 2024-11-07
-lastModified: 2024-11-07
+lastModified: 2024-11-16
 keywords:
   - Angular
   - JavaScript
@@ -49,7 +49,7 @@ Ein Linked Signal hat die folgenden Eigenschaften:
 - **Schreibbar und reaktiv**: Der Wert kann manuell aktualisiert werden (wie mit der Funktion [`signal`](https://angular.dev/guide/signals#writable-signals)). Das Linked Signal reagiert aber auch auf Änderungen von der Quelle.
 - **Eine Kombination aus Signal und Computed**: Es funktioniert wie ein Signal, das mit [`computed`](https://angular.dev/guide/signals#computed-signals) erstellt wurde, denn der Wert wird von anderen Signals abgeleitet. Dabei bleibt es aber beschreibbar, sodass wir den Wert bei Bedarf manuell neu setzen können.
 
-Dadurch bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signalen anpassen – aber bei Bedarf auch direkt gesteuert werden können.
+Dadurch bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signals anpassen – aber bei Bedarf auch direkt gesteuert werden können.
 Um das Linked Signal besser kennenzulernen, betrachten wir das folgende Beispiel, in dem `linkedSignal` und `computed` miteinander verglichen werden:
 
 ```ts
@@ -309,7 +309,7 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 > Wir haben die Resource API in einem separaten Blogbeitrag vorgestellt: **[Neu in Angular 19: Daten laden mit der Resource API](https://angular-buch.com/blog/2024-10-resource-api)**
 
 
-### Reactive Forms mit Signalen kombinieren
+### Reactive Forms mit Signals kombinieren
 
 Mit Linked Signals können wir Hilfsfunktionen erstellen, um die traditionelle, nicht-signal-basierte Welt mit der Welt von Signals zu verbinden.
 Die folgende Wrapper-Funktion synchronisiert ein `FormControl` (oder ein anderes Control) mit einem Signal.  
