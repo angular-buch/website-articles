@@ -311,11 +311,10 @@ Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualis
 
 ### Reactive Forms mit Signalen kombinieren
 
-Wir können Linked Signals nutzen, um Helfer zu erstellen, die die traditionelle, nicht-signal-basierte Welt mit der Signal-Welt verbinden.
-Zum Beispiel synchronisiert diese Wrapper-Funktion ein `FormControl` (oder ein anderes Control) mit einem Signal.  
-Die Daten werden bidirektional synchronisiert: Wenn sich der Formularwert ändert (`valueChanges`), wird auch der Signalwert aktualisiert.  
-Die Funktion gibt ein schreibbares Signal zurück. 
-Das bedeutet, wenn wir den Wert des Signals ändern, wird auch der Formularwert aktualisiert (`setValue()`).
+Mit Linked Signals können wir Hilfsfunktionen erstellen, um die traditionelle, nicht-signal-basierte Welt mit der Welt von Signals zu verbinden.
+Die folgende Wrapper-Funktion synchronisiert ein `FormControl` (oder ein anderes Control) mit einem Signal.  
+Die Daten werden bidirektional ausgetauscht: Wenn sich der Formularwert ändert (`valueChanges`), wird auch der Wert des Signals aktualisiert.  
+Die Funktion gibt ein schreibbares Signal zurück. Wenn wir den Wert des Signals ändern, wird auch der Formularwert aktualisiert (`setValue()`).
 
 ```ts
 export function signalFromControl<T>(control: AbstractControl<T>) {
