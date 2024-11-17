@@ -379,8 +379,8 @@ Der erste Link führt zum Quellcode auf GitHub.
 Der zweite Link öffnet eine Online-Demo der Anwendung, die Sie direkt ausprobieren können.
 Schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der Sie den Quellcode bearbeiten und die Ergebnisse in Echtzeit sehen können.
 
-> **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**
-> **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**
+> **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**<br>
+> **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**<br>
 > **[3️⃣ StackBlitz Demo](https://stackblitz.com/github/angular-schule/demo-linked-signal?file=src%2Fapp%2Fbooks%2Fdashboard%2Fdashboard.component.ts)**
 
 
