@@ -12,7 +12,7 @@ keywords:
   - rxResource
   - Fetch API
 language: de
-thumbnail: header-resource-api.jpg
+header: header-resource-api.jpg
 ---
 
 Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.

@@ -17,7 +17,7 @@ keywords:
   - NgOptimizedImage
   - BookMonkey
 language: de
-thumbnail: header-modernangular.jpg
+header: header-modernangular.jpg
 ---
 
 Angular erlebt einen Aufschwung: Mit den letzten Major-Versionen des Frameworks wurden einige wichtige neue Konzepte und Features eingeführt.

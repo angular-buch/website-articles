@@ -15,7 +15,7 @@ keywords:
   - Logo
   - angular.dev
 language: de
-thumbnail: angular17.jpg
+header: angular17.jpg
 sticky: false
 ---
 

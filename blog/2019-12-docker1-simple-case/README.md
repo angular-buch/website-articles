@@ -10,7 +10,7 @@ keywords:
   - Build
   - docker-compose
 language: de
-thumbnail: header1.jpg
+header: header1.jpg
 ---
 
 **First Steps:

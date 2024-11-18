@@ -12,7 +12,7 @@ keywords:
   - Signals
   - Material 3
 language: de
-thumbnail: angular18.jpg
+header: angular18.jpg
 sticky: false
 ---
 

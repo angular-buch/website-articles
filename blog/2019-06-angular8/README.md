@@ -11,7 +11,7 @@ keywords:
   - Lazy Loading
   - Ivy
 language: de
-thumbnail: angular8.jpg
+header: angular8.jpg
 sticky: false
 hidden: false
 ---

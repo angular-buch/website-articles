@@ -12,7 +12,7 @@ keywords:
   - Hydration
   - Standalone Components
 language: de
-thumbnail: angular16.jpg
+header: angular16.jpg
 sticky: false
 ---
 

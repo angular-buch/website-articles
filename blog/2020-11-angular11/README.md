@@ -12,7 +12,7 @@ keywords:
   - ESLint
   - Hot Module Reloading
 language: de
-thumbnail: angular11.jpg
+header: angular11.jpg
 sticky: false
 ---
 

@@ -10,7 +10,7 @@ keywords:
   - Angular
   - APP_INITIALIZER
 language: de
-thumbnail: header2.jpg
+header: header2.jpg
 ---
 
 **Build Once, Run Anywhere:

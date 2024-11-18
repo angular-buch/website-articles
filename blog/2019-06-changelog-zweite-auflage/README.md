@@ -10,7 +10,7 @@ keywords:
   - Changelog
   - Zweite Auflage
 language: de
-thumbnail: buchblogheader2.png
+header: buchblogheader2.png
 sticky: false
 ---
 

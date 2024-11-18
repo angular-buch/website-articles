@@ -12,7 +12,7 @@ keywords:
   - TitleStrategy
   - Update
 language: de
-thumbnail: angular14.jpg
+header: angular14.jpg
 sticky: false
 ---
 

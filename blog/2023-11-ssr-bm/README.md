@@ -11,7 +11,7 @@ keywords:
   - Application Builder
   - BookMonkey
 language: de
-thumbnail: bm.jpg
+header: bm.jpg
 ---
 
 Mit Angular 17 wurde der Build-Prozess für Server-Side Rendering (SSR) und Pre-Rendering grundlegend überarbeitet.

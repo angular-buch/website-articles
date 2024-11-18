@@ -8,7 +8,7 @@ keywords:
   - Angular
   - Angular 7
 language: de
-thumbnail: angular7.png
+header: angular7.png
 sticky: false
 ---
 

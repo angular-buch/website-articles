@@ -13,7 +13,7 @@ keywords:
   - SSR
   - TypeScript
 language: de
-thumbnail: angular9.jpg
+header: angular9.jpg
 sticky: false
 ---
 
@@ -367,7 +367,7 @@ Wollen wir beispielsweise die Thumbnail-URL eines Buchs ermitteln, müssen wir s
 ```ts
 const book = {
   title: '',
-  thumbnail: { url: '', title: '' },
+  header: { url: '', title: '' },
 };
 
 const url = book.thumbnail && book.thumbnail.url;

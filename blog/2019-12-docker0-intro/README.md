@@ -8,7 +8,7 @@ keywords:
   - Docker
   - Deployment
 language: de
-thumbnail: header0.jpg
+header: header0.jpg
 ---
 
 **Warum Sie Docker nutzen sollten, um neue Versionen Ihrer Angular-App jederzeit problemlos bauen, deployen und auch in mehreren Versionen parallel zueinander betreiben zu können.

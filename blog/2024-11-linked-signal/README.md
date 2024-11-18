@@ -13,7 +13,7 @@ keywords:
   - Angular 19
   - Computed Signals 
 language: de
-thumbnail: linkedsignal.jpg
+header: linkedsignal.jpg
 sticky: false
 ---
 
