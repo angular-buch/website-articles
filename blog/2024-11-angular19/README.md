@@ -22,10 +22,10 @@ Für die Migration auf Angular 19 empfehlen wir, den Befehl `ng update` zu nutze
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
 
 
-## Standalone Components: gekommen um zu bleiben
+## Standalone Components: Der neue Standard
 
 Standalone Components wurden mit Angular 15 eingeführt und haben sich seitdem zum Standard bei der Komponentenentwicklung mit Angular etabliert.
-NgModules werden damit vollständig optional.
+NgModules sind damit vollständig optional.
 Ab Angular 19 ist es nicht mehr notwendig, eine Standalone Component explizit als solche zu markieren. Das Flag `standalone: true` in den Metadaten der Komponente entfällt, denn der neue Standardwert ist `true`:
 
 ```ts
@@ -54,7 +54,7 @@ Eine automatische Migration beim Update mit `ng update` sorgt dafür, dass das F
 
 Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgModules nur noch in Ausnahmefällen zu verwenden, wenn es für die Kompatibilität nötig ist.
 
-Übrigens: Mit Angular 19 wurde eine neue Compiler-Option eingeführt, die Standalone Components erzwingt. Setzen wir `strictStandalone` in der `tsconfig.json`, müssen alle Komponenten standalone sein.
+Übrigens: Mit Angular 19 wurde eine neue Compiler-Option eingeführt, die Standalone Components erzwingt. Setzen wir `strictStandalone` in der Datei `tsconfig.json`, müssen alle Komponenten standalone sein.
 
 ```json
 {
@@ -134,7 +134,7 @@ booksResource = resource({
   loader: () => fetch(this.apiUrl + '/books').then(res => res.json()) as Promise<Book[]>
 });
 
-// bs.getAll() returnt Observable<Book[]>
+// bs.getAll() gibt ein Observable<Book[]> zurück
 booksResource = resource({
   loader: () => firstValueFrom(this.bs.getAll())
 });
@@ -153,7 +153,7 @@ Um mit den Daten zu arbeiten, bietet die Resource drei Signals an: `value` enth�
 ```
 
 Gegenüber einem einfachen HTTP-Request bietet die Resource einige besondere Features.
-Der Zustand der Resource erlaubt es uns, einen Ladeindikator anzuzeigen.
+Die Resource bietet uns die Möglichkeit, ohne großen Aufwand einen Ladeindikator anzuzeigen.
 Dafür bietet das Objekt sogar ein eigenes Signal `isLoading()` an:
 
 ```html
@@ -338,7 +338,7 @@ counter100 = computed(() => this.counter() * 100);
 Angular hat bereits vor einiger Zeit die neuen Lifecycle-Funktionen [`afterRender`](https://next.angular.dev/api/core/afterRender) und [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) vorgestellt.
 Mit Angular 19 kommt nun das signalbasierte Pendant [`afterRenderEffect`](https://next.angular.dev/api/core/afterRenderEffect) hinzu.  
 Das Besondere an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht.  
-Die Phasen werden nur erneut ausgeführt, wenn sich gebundenen Signale geändert haben.  
+Die Phasen werden nur erneut ausgeführt, wenn sich gebundene Signale geändert haben.  
 DOM-Manipulationen werden so auf das nötige Minimum reduziert.
 
 Alle drei Hilfsmittel sind dafür gedacht, sicher mit dem DOM einer Komponente zu interagieren.
@@ -350,13 +350,13 @@ In der Regel ist das für normale Geschäftslogik nicht notwendig, weshalb die d
 
 ## Sonstiges
 
-Wir empfehlen, regelmmäßig einen Blick in den Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md) zu werfen.
+Wir empfehlen, regelmäßig einen Blick in den Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md) zu werfen.
 Neben den großen neuen Features gibt es auch einige kleinere interessante Neuerungen:
 
-- **Zoneless Application generieren:** Mit der Funktion `provideExperimentalZonelessChangeDetection()` können wir den älteren Mechanismus für die Change Detection auf Basis von Zone.js deaktivieren. Die Change Detection funktioniert dann vollständig mit Signals. Ab Angular 19 können wir diesen Modus schon beim Erzeugen eines Projekts wählen: `ng new --experimental-zoneless`. (siehe [Commit](https://github.com/angular/angular-cli/commit/755f3a07f5fe485c1ed8c0c6060d6d5c799c085c))
+- **Zoneless Application generieren:** Mit der Funktion `provideExperimentalZonelessChangeDetection()` können wir den älteren Mechanismus für die Change Detection auf Basis von Zone.js deaktivieren. Die Change Detection funktioniert dann vollständig mit Signals. Ab Angular 19 können wir diesen Modus bereits bei der Erstellung eines Projekts wählen: `ng new --experimental-zoneless`. (siehe [Commit](https://github.com/angular/angular-cli/commit/755f3a07f5fe485c1ed8c0c6060d6d5c799c085c))
 - **Default Export für Komponenten:** Komponenten werden standardmäßig als Named Export generiert: `export class FooComponent {}`. In manchen Fällen kann es sinnvoll sein, stattdessen einen *Default Export* zu verwenden (`export default class FooComponent {}`), z. B. für eine verkürzte Schreibweise beim Lazy Loading von Komponenten. Beim Anlegen einer Komponente mit der Angular CLI können wir nun auch einen Default Export generieren lassen: `ng g c foo --export-default`. (siehe [Commit](https://github.com/angular/angular-cli/commit/a381a3db187f7b20e5ec8d1e1a1f1bd860426fcd))
 - **typeof im Template:** In Template Expressions wird jetzt auch das Schlüsselwort `typeof` unterstützt. Damit kann der Typ einer Variable direkt geprüft werden, ohne den Umweg über eine Methode der Komponente zu gehen: `@if (typeof foo === 'string') {}`. (siehe [Commit](https://github.com/angular/angular/commit/0c9d721ac157662b2602cf0278ba4b79325f6882))
-- **Ungenutzte Standalone Imports:** Der Angular Language Service (in Visual Studio Code) erkennt ungenutzte Imports in Komponenten. Es wird ein Hinweis ausgegeben, wenn eine Komponente/Pipe/Direktive importiert wurde, aber nicht im Template genutzt wird.
+- **Ungenutzte Standalone Imports:** Der Angular Language Service (in Visual Studio Code) erkennt ungenutzte Imports in Komponenten. Ein Hinweis erscheint, wenn eine Komponente/Pipe/Direktive importiert, aber nicht im Template genutzt wird.
 
 <hr>
 
