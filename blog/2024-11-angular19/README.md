@@ -323,28 +323,29 @@ Dabei galt bisher die Empfehlung, in Effects keine Werte von Signals zu setzen.
 Sollte das doch möglich sein, musste dafür die Option `allowSignalWrites` gesetzt werden – dann konnte der Effects auch in Signals schreiben.
 
 Mit Angular 19 entfällt diese Option. In Effects können wir nun ohne zusätzliche Konfiguration die Werte von Signals ändern.
+Diese Richtungsänderung hat das Angular-Team in einem eigenen [Blogpost](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd) vorgestellt.  
+Es gilt nun nicht mehr als schlechte Praxis, mit Effekten weitere Signale zu setzen oder andere Seiteneffekte auszulösen.
 
-Bitte verwenden Sie Effects grundsätzlich sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel:
+Bitte verwenden Sie Effects grundsätzlich dennoch sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel:
 
 ```ts
 counter = signal(0);
 counter100 = computed(() => this.counter() * 100);
 ```
 
+## `afterRenderEffect`: Effekte für DOM-Interaktionen
 
-## `afterRenderEffect`: Effect für DOM-Interaktion
-
-Angular hat bereits vor einiger Zeit die neue Lifecycle-Funktionen `afterRender` und `afterNextRender` vorgestellt.
-Mit Angular 19 kommt nun der neue `afterRenderEffect` hinzu.
+Angular hat bereits vor einiger Zeit die neuen Lifecycle-Funktionen [`afterRender`](https://next.angular.dev/api/core/afterRender) und [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) vorgestellt.
+Mit Angular 19 kommt nun das signalbasierte Pendant [`afterRenderEffect`](https://next.angular.dev/api/core/afterRenderEffect) hinzu.  
+Das Besondere an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht.  
+Die Phasen werden nur erneut ausgeführt, wenn sich gebundenen Signale geändert haben.  
+DOM-Manipulationen werden so auf das nötige Minimum reduziert.
 
 Alle drei Hilfsmittel sind dafür gedacht, sicher mit dem DOM einer Komponente zu interagieren.
-In der Regel ist das nicht notwendig, und so sind die drei Funktionen eher für Spezialfälle gedacht.
-Die Besonderheit an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht. Die Phasen werden nur erneut ausgeführt, wenn sich sich gebundenen Signals geändert haben. DOM-Manipulationen werden so auf das nötige Minimum reduziert.
+In der Regel ist das für normale Geschäftslogik nicht notwendig, weshalb die drei Funktionen eher für Spezialfälle gedacht sind.
 
-> 📝 Wir stellen den neuen `afterRenderEffect` ausführlich in einem separaten Blogpost vor:
+> 📝 Wenn Sie mehr über das geänderte Verhalten von `effect()` und die neuen Effekte von `afterRenderEffect()` erfahren möchten, empfehlen wir unseren ausführlichen Blogpost dazu:  
 > **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**
-
-
 
 
 ## Sonstiges
