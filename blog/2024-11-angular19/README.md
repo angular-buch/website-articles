@@ -66,6 +66,11 @@ Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgM
 }
 ```
 
+In einem ausführlichen [Blogpost](https://blog.angular.dev/the-future-is-standalone-475d7edbc706) erklärt Alex Rickabaugh vom Angular-Team die Zukunft von NgModules.  
+Auch wenn "die Zukunft standalone ist", bleiben NgModules weiterhin erhalten und werden nicht deprecated.  
+Projekte können modulbasierte Komponenten weiterhin verwenden, ein Zwang zum Update besteht nicht.
+
+
 ## Lokale Variablen mit `@let`
 
 Mit dem neuen Schlüsselwort `@let` können wir lokale Variablen direkt im Template definieren.
