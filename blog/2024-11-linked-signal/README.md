@@ -3,7 +3,7 @@ title: 'Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung'
 author: Johannes Hoppe and Ferdinand Malcher
 mail: team@angular.schule
 published: 2024-11-07
-lastModified: 2024-11-07
+lastModified: 2024-11-16
 keywords:
   - Angular
   - JavaScript
@@ -13,12 +13,12 @@ keywords:
   - Angular 19
   - Computed Signals 
 language: de
-thumbnail: linkedsignal.jpg
+header: linkedsignal.jpg
 sticky: false
 ---
 
 
-Mit Angular 19 wurde ein [neues experimentelles Feature](https://github.com/angular/angular/commit/8311f00faaf282d1a5b1ddca29247a2fba94a692) vorgestellt: das **Linked Signal**. Es erleichtert die Verwaltung von lokalem Zustand in Verbindung mit anderen Signals. Bei dem Linked Signal handelt sich um ein beschreibbares Signal, das automatisch zurückgesetzt wird, wenn sich andere Signals ändern. Dies ist besonders nützlich, wenn wir lokale Zustände mit dynamischen Daten synchronisieren wollen.
+Mit Angular 19 wurde ein [neues Feature](https://github.com/angular/angular/commit/8311f00faaf282d1a5b1ddca29247a2fba94a692) vorgestellt: das **Linked Signal**. Es erleichtert die Verwaltung von lokalem Zustand in Verbindung mit anderen Signals. Bei dem Linked Signal handelt sich um ein beschreibbares Signal, das automatisch zurückgesetzt wird, wenn sich andere Signals ändern. Dies ist besonders nützlich, wenn wir lokale Zustände mit dynamischen Daten synchronisieren wollen.
 In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktioniert und in welchen Anwendungsfällen es sinnvoll eingesetzt werden kann.
 
 
@@ -49,7 +49,7 @@ Ein Linked Signal hat die folgenden Eigenschaften:
 - **Schreibbar und reaktiv**: Der Wert kann manuell aktualisiert werden (wie mit der Funktion [`signal`](https://angular.dev/guide/signals#writable-signals)). Das Linked Signal reagiert aber auch auf Änderungen von der Quelle.
 - **Eine Kombination aus Signal und Computed**: Es funktioniert wie ein Signal, das mit [`computed`](https://angular.dev/guide/signals#computed-signals) erstellt wurde, denn der Wert wird von anderen Signals abgeleitet. Dabei bleibt es aber beschreibbar, sodass wir den Wert bei Bedarf manuell neu setzen können.
 
-Dadurch bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signalen anpassen – aber bei Bedarf auch direkt gesteuert werden können.
+Dadurch bieten Linked Signals eine flexible Möglichkeit zur Verwaltung von Zuständen, die sich an Änderungen in zugehörigen Signals anpassen – aber bei Bedarf auch direkt gesteuert werden können.
 Um das Linked Signal besser kennenzulernen, betrachten wir das folgende Beispiel, in dem `linkedSignal` und `computed` miteinander verglichen werden:
 
 ```ts
@@ -146,7 +146,7 @@ Das Signal enthält immer den neuesten Wert: Entweder wird er manuell durch `set
 
 ### Anwendungsfall mit Input-Signals
 
-Ein häufiger Anwendungsfall für ein Linked Signal ist eine Komponente, die sich basierend auf einem Input-Signal zurücksetzt.  
+Ein häufiger Anwendungsfall für ein Linked Signal ist eine Komponente, die sich basierend auf einem Input-Signal zurücksetzt.
 Ein gutes Beispiel dafür ist eine Warenkorb-Komponente (hier: `ShoppingCartComponent`).
 Sie besitzt ein Eingabefeld für die Menge, das zurückgesetzt werden soll, wenn sich das ausgewählte Produkt ändert.
 Wir könnten ein solches Ergebnis zwar auch mit `computed()` erzielen, allerdings wollen wir die Menge zusätzlich durch das Formular verändern können.
@@ -171,8 +171,8 @@ export class ShoppingCartComponent {
 }
 ```
 
-In diesem Fall wird der Wert von `amount` stets auf `1` zurückgesetzt, wenn sich `selectedBook` ändert.  
-Das `<input>`-Feld im Template spiegelt diese Änderung wider und setzt sich ebenfalls auf 1 zurück.  
+In diesem Fall wird der Wert von `amount` stets auf `1` zurückgesetzt, wenn sich `selectedBook` ändert.
+Das `<input>`-Feld im Template spiegelt diese Änderung wider und setzt sich ebenfalls auf 1 zurück.
 Dieses Muster ist nützlich für Formulare, die in ihren Ausgangszustand zurückgesetzt werden sollen, sobald bestimmte Signals geändert werden.
 
 Für diesen Anwendungsfall ist die **Langschreibweise** mit `source` und `computation` der eleganteste Weg:
@@ -200,7 +200,7 @@ import { Component, computed, input, linkedSignal } from '@angular/core';
     <button (click)="doRateUp()">Rate up</button>
   `,
 })
-export class BookComponent  {
+export class BookComponent {
   book = input.required<Book>();
   ratingChange = output<{ isbn: string, newRating: number }>();
 
@@ -287,7 +287,7 @@ export class DashboardComponent {
 }
 ```
 
-In diesem Beispiel enthält `books` die Daten, die vom Server geladen wurden.  
+In diesem Beispiel enthält `books` die Daten, die vom Server geladen wurden.
 Normalerweise würden wir `toSignal()` verwenden, um das Observable in ein Signal umzuwandeln.
 Mit `toSignal()` allein könnten wir die abgerufenen Daten jedoch nicht nachträglich bearbeiten – dazu müssten wir das Observable dazu bringen, ein neues Element auszugeben.
 
@@ -299,14 +299,55 @@ Die lange Schreibweise mit einer separaten Funktion zur Berechnung ist nicht erf
 
 Zusätzlich haben wir in diesem Beispiel zwei weitere Anforderungen aufgenommen, die die Komplexität ein wenig erhöhen sollen:
 Wenn die Methode `changeOrder()` aufgerufen wird, ändern wir die Reihenfolge der Bücherliste.
-Zusätzlich behandeln wir das Event `ratingChange` aus dem vorherigen Beispiel.  
-Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das alte Buchobjekt durch eine aktualisierte Kopie.  
+Zusätzlich behandeln wir das Event `ratingChange` aus dem vorherigen Beispiel.
+Die zugehörige Methode `handleRatingChange()` nimmt den Identifikator `isbn` und das neue Rating entgegen und ersetzt das alte Buchobjekt durch eine aktualisierte Kopie.
 
 Um das Ganze abzurunden, könnte man auch die Buchdaten ändern und den aktualisierten Zustand an den Server zurücksenden – aber diese Aufgabe überlassen wir unseren Leserinnen und Lesern. 😉
 
 
-> ℹ️ **Wussten Sie schon?** In Version 19 von Angular wurde zusätzlich die neue experimentelle **Resource API** eingeführt. Sie ermöglicht das asynchrone Laden von Daten und das Auslesen des Ladestatus, wobei das Signal für die Daten lokal beschreibbar bleibt.  
+> ℹ️ **Wussten Sie schon?** In Version 19 von Angular wurde zusätzlich die neue experimentelle **Resource API** eingeführt. Sie ermöglicht das asynchrone Laden von Daten und das Auslesen des Ladestatus, wobei das Signal für die Daten lokal beschreibbar bleibt.
 > Wir haben die Resource API in einem separaten Blogbeitrag vorgestellt: **[Neu in Angular 19: Daten laden mit der Resource API](https://angular-buch.com/blog/2024-10-resource-api)**
+
+
+### Reactive Forms mit Signals kombinieren
+
+Mit Linked Signals können wir Hilfsfunktionen erstellen, um die traditionelle, nicht-signal-basierte Welt mit der Welt von Signals zu verbinden.
+Die folgende Wrapper-Funktion synchronisiert ein `FormControl` (oder ein anderes Control) mit einem Signal.
+Die Daten werden bidirektional ausgetauscht: Wenn sich der Formularwert ändert (`valueChanges`), wird auch der Wert des Signals aktualisiert.
+Die Funktion gibt ein schreibbares Signal zurück. Wenn wir den Wert des Signals ändern, wird auch der Formularwert aktualisiert (`setValue()`).
+
+```ts
+export function signalFromControl<T>(control: AbstractControl<T>) {
+  const controlSignal = linkedSignal(
+    toSignal(control.valueChanges, { initialValue: control.value })
+  );
+  effect(() => control.setValue(controlSignal()));
+  return controlSignal;
+}
+```
+
+Wir verwenden hier die Funktion `effect()`, um einen Effekt zu erzeugen, der automatisch auf Änderungen von Signals reagiert.
+So stellen wir sicher, dass bei jeder Änderung im Signal `controlSignal` auch der Wert des Formular-Controls über `setValue()` aktualisiert wird.
+Dadurch entsteht eine **bidirektionale Synchronisierung** zwischen dem Signal und dem Formular-Control.
+Wenn Sie mehr über die Möglichkeiten von `effect()` erfahren möchten, lesen Sie unseren Artikel: **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**.
+
+Der Helfer kann wie folgt verwendet werden:
+
+```ts
+bookForm = new FormGroup({
+  isbn: new FormControl('', { nonNullable: true }),
+  title: new FormControl('', { nonNullable: true }),
+});
+
+title = signalFromControl(this.bookForm.controls.title);
+
+// ...
+// Der Formularwert wird auf 'Angular' aktualisiert
+this.title.set('Angular');
+
+// Der Signalwert wird auf 'Signals' aktualisiert
+this.bookForm.setValue({ isbn: '123', title: 'Signals' });
+```
 
 
 ## Linked Signal und andere Signals
@@ -324,9 +365,9 @@ Nutzen Sie weiterhin `computed()` für abgeleitete Daten, die nicht überschrieb
 
 Hier sind einige Tipps für die optimale Nutzung von Linked Signals:
 
-- **Berechnungsfunktionen einfach halten**: Vermeiden Sie komplexe Berechnungen in der Computation Function, um zyklische Abhängigkeiten zu vermeiden und den Code besser verständlich zu halten.  
+- **Berechnungsfunktionen einfach halten**: Vermeiden Sie komplexe Berechnungen in der Computation Function, um zyklische Abhängigkeiten zu vermeiden und den Code besser verständlich zu halten.
   Führt eine Berechnung zu einem zyklischen Zugriff auf sich selbst, stoppt Angular die Ausführung mit dieser Fehlermeldung: ["Detected cycle in computations."](https://github.com/angular/angular/blob/7d0ba0cac85220cbbe4044667a51e5b95512f5d6/packages/core/primitives/signals/src/computed.ts#L114)
-- **Nutzung zum Zurücksetzen**: `linkedSignal()` ist ideal für Fälle, in denen ein Zustand basierend auf einem bestimmten Signal zurückgesetzt werden soll, z. B. das Leeren eines Formularfelds, wenn ein neues Element ausgewählt wird.  
+- **Nutzung zum Zurücksetzen**: `linkedSignal()` ist ideal für Fälle, in denen ein Zustand basierend auf einem bestimmten Signal zurückgesetzt werden soll, z. B. das Leeren eines Formularfelds, wenn ein neues Element ausgewählt wird.
   Wenn der Wert nicht durch ein Formular verändert werden soll, ist `computed()` die bessere Wahl.
 - **Effects für komplexe Szenarien in Betracht ziehen**: Wenn mehrere Signals auf eine einzige Änderung reagieren sollen, kann die Nutzung von `effect()` übersichtlicher und effizienter sein, als mehrere Signals mit `linkedSignal()` zu erstellen.
 
@@ -338,9 +379,9 @@ Der erste Link führt zum Quellcode auf GitHub.
 Der zweite Link öffnet eine Online-Demo der Anwendung, die Sie direkt ausprobieren können.
 Schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der Sie den Quellcode bearbeiten und die Ergebnisse in Echtzeit sehen können.
 
-> **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**  
-> **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**  
-> **[3️⃣ StackBlitz Demo](https://stackblitz.com/github/angular-schule/demo-linked-signal?file=src%2Fapp%2Fbooks%2Fdashboard%2Fdashboard.component.ts)**  
+> **[1️⃣ Quelltext auf GitHub: demo-linked-signal](https://github.com/angular-schule/demo-linked-signal)**<br>
+> **[2️⃣ Demo der Anwendung](https://angular-schule.github.io/demo-linked-signal/)**<br>
+> **[3️⃣ StackBlitz Demo](https://stackblitz.com/github/angular-schule/demo-linked-signal?file=src%2Fapp%2Fbooks%2Fdashboard%2Fdashboard.component.ts)**
 
 
 ## Fazit
@@ -348,7 +389,7 @@ Schließlich bietet der dritte Link eine interaktive Demo auf StackBlitz, in der
 Das Linked Signal von Angular 19 bietet eine praktische Lösung zur Verwaltung von lokalem State, der mit anderen Signals synchronisiert werden soll. 
 Dieses neue Feature schließt die Lücke zwischen `signal()` und `computed()` und bietet eine neue Möglichkeit, komplexe reaktive Frontends zu gestalten.
 Probieren Sie doch `linkedSignal()` einmal in Ihrem Angular-Projekt aus!
-**⚠️ Bitte bedenken Sie, dass diese API noch experimentell ist und sich Details durch Feedback aus der Community drastisch verändern können.**
+**⚠️ Bitte beachten Sie, dass die API sich noch im Status "Developer Preview" befindet und Änderungen unterliegen kann.**
 <hr>
 
 <small>Vielen Dank an Danny Koppenhagen für das Review und das wertvolle Feedback!</small>

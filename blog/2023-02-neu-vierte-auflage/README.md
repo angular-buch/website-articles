@@ -15,7 +15,7 @@ keywords:
   - Functional Guards
   - Angular 15
 language: de
-thumbnail: header4a.png
+header: header4a.png
 sticky: false
 ---
 

@@ -13,7 +13,7 @@ keywords:
   - tsconfig
   - CommonJS
 language: de
-thumbnail: angular10.jpg
+header: angular10.jpg
 sticky: false
 ---
 

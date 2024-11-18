@@ -11,7 +11,7 @@ keywords:
   - Buchhandel
   - Dritte Auflage
 language: de
-thumbnail: ../x_shared/buchblogheader3.png
+header: buchblogheader3.png
 sticky: false
 ---
 

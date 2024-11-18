@@ -17,7 +17,7 @@ keywords:
   - Angular CLI
   - Monorepo
 language: de
-thumbnail: ../x_shared/buchblogheader3-preorder.png
+header: buchblogheader3-preorder.png
 sticky: false
 ---
 

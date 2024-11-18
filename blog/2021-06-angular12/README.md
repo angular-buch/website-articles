@@ -14,7 +14,7 @@ keywords:
   - Strict Mode
   - ESLint
 language: de
-thumbnail: angular12.jpg
+header: angular12.jpg
 sticky: false
 ---
 

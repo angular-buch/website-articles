@@ -11,7 +11,7 @@ keywords:
   - Tree-Shakable Providers
   - Angular CLI
 language: de
-thumbnail: angular6.png
+header: angular6.png
 sticky: false
 ---
 

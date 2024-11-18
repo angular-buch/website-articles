@@ -13,7 +13,7 @@ keywords:
   - Caching
   - Push Notification
 language: de
-thumbnail: pwaheader.jpg
+header: pwaheader.jpg
 sticky: false
 ---
 

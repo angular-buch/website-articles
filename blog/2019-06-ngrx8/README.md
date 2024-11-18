@@ -10,7 +10,7 @@ keywords:
   - Angular
   - State Management
 language: de
-thumbnail: ngrx8.jpg
+header: ngrx8.jpg
 sticky: false
 hidden: false
 ---

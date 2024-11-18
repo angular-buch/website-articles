@@ -8,7 +8,7 @@ keywords:
   - Docker
   - Multi-Stage Builds
 language: de
-thumbnail: header3.jpg
+header: header3.jpg
 ---
 
 **Multi-Stage Builds für Angular:

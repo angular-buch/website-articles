@@ -17,7 +17,7 @@ keywords:
   - RxJS
   - Barrierefreiheit (a11y)
 language: de
-thumbnail: changelog4a.png
+header: changelog4a.png
 sticky: false
 ---
 

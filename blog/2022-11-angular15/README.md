@@ -13,7 +13,7 @@ keywords:
   - Functional Interceptors
   - Standalone Components
 language: de
-thumbnail: angular15.jpg
+header: angular15.jpg
 sticky: false
 ---
 

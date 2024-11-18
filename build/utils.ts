@@ -14,13 +14,11 @@ export function extractFirstBigParagraph(html: string): string {
     return '';
   }
 
-  for (const match of matches) {
-    if (match && match.length > 100) {
-      return match;
-    }
-  }
+  const paragraph = matches.find(m => m && m.length > 100) || '';
+  // strip anchor tags but retain link text
+  const result = paragraph.replace(/<a\s.*?>(.*?)<\/a>/g, '$1');
 
-  return '';
+  return result;
 }
 
 export function makeLightBlogList(fullList: BlogEntry[]): BlogEntryLight[] {
@@ -35,7 +33,7 @@ export function makeLightBlogList(fullList: BlogEntry[]): BlogEntryLight[] {
           author: entry.meta.author,
           mail: entry.meta.mail,
           published: entry.meta.published,
-          thumbnail: entry.meta.thumbnail,
+          header: entry.meta.header,
         },
       };
 
