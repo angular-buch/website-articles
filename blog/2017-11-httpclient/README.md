@@ -10,7 +10,7 @@ keywords:
   - HttpClient
   - HTTP
 language: de
-thumbnail: ../x_shared/angular5.png
+thumbnail: angular5.png
 ---
 
 ## Abstract

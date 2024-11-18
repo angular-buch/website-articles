@@ -11,7 +11,7 @@ keywords:
   - Pipes
   - Locale
 language: de
-thumbnail: ../x_shared/angular5.png
+thumbnail: angular5.png
 ---
 
 
