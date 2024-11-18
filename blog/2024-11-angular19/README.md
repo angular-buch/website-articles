@@ -52,7 +52,7 @@ export class MyComponent {}
 Modulbasierte Komponenten müssen nun explizit mit `standalone: false` markiert werden.
 Eine automatische Migration beim Update mit `ng update` sorgt dafür, dass das Feld `standalone` korrekt gesetzt wird.
 
-Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgModules nur noch in Ausnahmefällen zu verwenden, wenn es für die Kompatibilität nötig ist.
+Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgModules nur noch in Ausnahmefällen zu verwenden, wenn es für die Kompatibilität notwendig ist.
 
 Übrigens: Mit Angular 19 wurde eine neue Compiler-Option eingeführt, die Standalone Components erzwingt. Setzen wir `strictStandalone` in der Datei `tsconfig.json`, müssen alle Komponenten standalone sein.
 
