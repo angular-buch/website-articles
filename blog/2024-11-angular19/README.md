@@ -8,10 +8,18 @@ keywords:
   - Angular
   - Angular 19
 language: de
-thumbnail: angular19.jpg
+header: angular19.jpg
 sticky: true
-hidden: true
 ---
+
+Neben grauen Herbsttagen hat der November in Sachen Angular einiges zu bieten: Am 19. November wurde die neue **Major-Version Angular 19* releaset!
+Angular bringt mit der Resource API und dem Linked Signal einige neue Features mit. Standalone Components müssen außerdem nicht mehr explizit als solche markiert werden.
+Wir stellen in diesem Blogpost alle wichtigen Neuerungen vor.
+
+Im offiziellen [Angular-Blog](TODO) finden Sie alle offiziellen Informationen direkt vom Angular-Team.
+
+Für die Migration auf Angular 19 empfehlen wir, den Befehl `ng update` zu nutzen.
+Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
 
 
 ## Standalone Components: gekommen um zu bleiben
@@ -115,11 +123,8 @@ Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.
 Eine Resource repräsentiert einen Datensatz, der asynchron geladen wird, in der Regel per HTTP.
 Die Resource bietet eine Schnittstelle an, um die Daten zu verarbeiten, neuzuladen und sogar manuell zu überschreiben.
 
-> Wir erläutern die Resource API ausführlich in einem separaten Blogpost:
-> **[Neu in Angular 19: Daten laden mit der Resource API](/blog/2024-10-resource-api/)**
-
 Eine Resource wird mit der Funktion `resource` und einer Loader-Funktion initialisiert.
-Dieser Loader ist dafür verantwortlich, die Daten asynchron zu laden. Die Funktion muss immer eine Promise zurückgeben, weshalb wir hier zunächst die native Fetch API verwenden und nicht den `HttpClient` von Angular:
+Dieser Loader ist dafür verantwortlich, die Daten asynchron zu laden. Die Funktion muss immer eine Promise zurückgeben: Wir können hier also entweder direkt die native Fetch API verwenden, oder wir wandeln das Observable aus dem `HttpClient` von Angular mithilfe von `firstValueFrom()` in eine Promise um:
 
 ```ts
 import { resource } from '@angular/core';
@@ -128,33 +133,16 @@ import { resource } from '@angular/core';
 booksResource = resource({
   loader: () => fetch(this.apiUrl + '/books').then(res => res.json()) as Promise<Book[]>
 });
-```
 
-Alternativ können wir auch wie üblich den `HttpClient` einsetzen und das Observable mithilfe der Funktion `firstValueFrom` in eine Promise umwandeln:
-
-```ts
-@Injectable({ /* ... */ })
-export class BookStoreService {
-  // ...
-  getAll(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl + '/books');
-  }
-}
-```
-
-```ts
-// Komponente
-import { firstValueFrom } from 'rxjs';
-// ...
-
+// bs.getAll() returnt Observable<Book[]>
 booksResource = resource({
   loader: () => firstValueFrom(this.bs.getAll())
 });
 ```
 
+
 Der Loader wird automatisch ausgeführt, sobald die Resource initialisiert wird.
-Um mit den Daten zu arbeiten, bietet die Resource drei Signals an: `value` enthält stets die Daten, `status` gibt Auskunft zum Zustand der Resource, und `error` enthält Fehler.
-Mithilfe von `booksResource.value()` können wir die Daten also in der Komponente anzeigen:
+Um mit den Daten zu arbeiten, bietet die Resource drei Signals an: `value` enthält die Daten, `status` gibt Auskunft zum Zustand der Resource, und `error` enthält Fehler:
 
 ```html
 {{ booksResource.value() | json }}
@@ -234,11 +222,13 @@ booksResource = rxResource({
 
 Bitte beachten Sie, dass die Resource API experimentell ist und sich die Schnittstelle vor dem finalen Release noch ändern könnte.
 
+> 📝 Wir erläutern die Resource API ausführlich in einem separaten Blogpost:
+> **[Neu in Angular 19: Daten laden mit der Resource API](/blog/2024-10-resource-api/)**
 
 
 ## Linked Signals
 
-Ein weiteres *experimentelles* Feature von Angular 19 ist das Linked Signal.
+Das Linked Signal wurde mit Angular 19 als *Developer Preview* vorgestellt.
 Es handelt sich um ein Signal, das seinen Wert automatisch auf Basis anderer Signals berechnet – ähnlich wie ein Computed Signal mit `computed()`.
 Der Unterschied: Der Wert eines Linked Signals kann jederzeit mit den Methoden `set()` und `update()` von außen überschrieben werden, so wie wir es von `signal()` kennen.
 Ein Linked Signal vereint also das Beste aus beiden Welten, wie der folgende Vergleich zeigt:
@@ -277,7 +267,7 @@ const timestampSecondsLinked = linkedSignal({
 Ein Linked Signal ist besonders nützlich, wenn lokaler State mit dynamisch geladenen Daten synchronisiert werden soll.
 Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input oder ein HTTP-Request, die Komponente kann das Signal aber weiterhin selbst mit Werten überschreiben.
 
-> Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktische Anwendungsfälle für `linkedSignal()`:
+> 📝 Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktische Anwendungsfälle für `linkedSignal()`:
 > **[Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](/blog/2024-11-linked-signal/)**
 
 
@@ -342,9 +332,25 @@ counter100 = computed(() => this.counter() * 100);
 ```
 
 
+## `afterRenderEffect`: Effect für DOM-Interaktion
+
+Angular hat bereits vor einiger Zeit die neue Lifecycle-Funktionen `afterRender` und `afterNextRender` vorgestellt.
+Mit Angular 19 kommt nun der neue `afterRenderEffect` hinzu.
+
+Alle drei Hilfsmittel sind dafür gedacht, sicher mit dem DOM einer Komponente zu interagieren.
+In der Regel ist das nicht notwendig, und so sind die drei Funktionen eher für Spezialfälle gedacht.
+Die Besonderheit an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht. Die Phasen werden nur erneut ausgeführt, wenn sich sich gebundenen Signals geändert haben. DOM-Manipulationen werden so auf das nötige Minimum reduziert.
+
+> 📝 Wir stellen den neuen `afterRenderEffect` ausführlich in einem separaten Blogpost vor:
+> **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**
+
+
 
 
 ## Sonstiges
+
+Wir empfehlen, regelmmäßig einen Blick in den Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md) zu werfen.
+Neben den großen neuen Features gibt es auch einige kleinere interessante Neuerungen:
 
 - **Zoneless Application generieren:** Mit der Funktion `provideExperimentalZonelessChangeDetection()` können wir den älteren Mechanismus für die Change Detection auf Basis von Zone.js deaktivieren. Die Change Detection funktioniert dann vollständig mit Signals. Ab Angular 19 können wir diesen Modus schon beim Erzeugen eines Projekts wählen: `ng new --experimental-zoneless`. (siehe [Commit](https://github.com/angular/angular-cli/commit/755f3a07f5fe485c1ed8c0c6060d6d5c799c085c))
 - **Default Export für Komponenten:** Komponenten werden standardmäßig als Named Export generiert: `export class FooComponent {}`. In manchen Fällen kann es sinnvoll sein, stattdessen einen *Default Export* zu verwenden (`export default class FooComponent {}`), z. B. für eine verkürzte Schreibweise beim Lazy Loading von Komponenten. Beim Anlegen einer Komponente mit der Angular CLI können wir nun auch einen Default Export generieren lassen: `ng g c foo --export-default`. (siehe [Commit](https://github.com/angular/angular-cli/commit/a381a3db187f7b20e5ec8d1e1a1f1bd860426fcd))
