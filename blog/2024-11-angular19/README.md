@@ -14,9 +14,9 @@ sticky: true
 
 Neben grauen Herbsttagen hat der November in Sachen Angular einiges zu bieten: Am 19. November wurde die neue **Major-Version Angular 19** releaset!
 Angular bringt mit der Resource API und dem Linked Signal einige neue Features mit. Standalone Components müssen außerdem nicht mehr explizit als solche markiert werden.
-Wir stellen in diesem Blogpost alle wichtigen Neuerungen vor.
+Wir stellen in diesem Blogpost alle wichtigen Neuerungen vor!
 
-Im offiziellen [Angular-Blog](TODO) finden Sie alle offiziellen Informationen direkt vom Angular-Team.
+<!-- Im offiziellen [Angular-Blog](TODO) finden Sie alle offiziellen Informationen direkt vom Angular-Team. -->
 
 Für die Migration auf Angular 19 empfehlen wir, den Befehl `ng update` zu nutzen.
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
@@ -40,7 +40,7 @@ export class MyComponent {}
 ```
 
 ```ts
-// ab Angular 19
+// ⭐️ ab Angular 19
 @Component({
   selector: 'app-my',
   templateUrl: './my.component.html',
@@ -54,7 +54,7 @@ Eine automatische Migration beim Update mit `ng update` sorgt dafür, dass das F
 
 Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgModules nur noch in Ausnahmefällen zu verwenden, wenn es für die Kompatibilität notwendig ist.
 
-Übrigens: Mit Angular 19 wurde eine neue Compiler-Option eingeführt, die Standalone Components erzwingt. Setzen wir `strictStandalone` in der Datei `tsconfig.json`, müssen alle Komponenten standalone sein.
+Übrigens: Mit Angular 19 wurde eine neue Compiler-Option eingeführt, die Standalone Components erzwingt. Setzen wir `strictStandalone` in der Datei `tsconfig.json`, müssen alle Komponenten im Projekt standalone sein.
 
 ```json
 {
@@ -66,8 +66,8 @@ Wir empfehlen unbedingt, durchgehend auf Standalone Components zu setzen und NgM
 }
 ```
 
-In einem ausführlichen [Blogpost](https://blog.angular.dev/the-future-is-standalone-475d7edbc706) erklärt Alex Rickabaugh vom Angular-Team die Zukunft von NgModules.  
-Auch wenn "die Zukunft standalone ist", bleiben NgModules weiterhin erhalten und werden nicht deprecated.  
+In einem ausführlichen [Blogpost](https://blog.angular.dev/the-future-is-standalone-475d7edbc706) erklärt Alex Rickabaugh vom Angular-Team die Zukunft von NgModules.
+Auch wenn "die Zukunft standalone ist", bleiben NgModules weiterhin erhalten und werden nicht deprecated.
 Projekte können modulbasierte Komponenten weiterhin verwenden, ein Zwang zum Update besteht nicht.
 
 
@@ -157,9 +157,8 @@ Um mit den Daten zu arbeiten, stehen in der Resource drei Signals zur Verfügung
 }
 ```
 
-Im Vergleich zu einem einfachen HTTP-Request hat die Resource einige besondere Features.
 Die Resource bietet uns die Möglichkeit, ohne großen Aufwand einen Ladeindikator anzuzeigen.
-Dafür bietet das Objekt sogar ein eigenes Signal `isLoading()` an:
+Dafür besitzt das Objekt sogar ein eigenes Signal `isLoading()`:
 
 ```html
 @if (booksResource.isLoading()) {
@@ -181,7 +180,7 @@ export class BookListComponent {
 ```
 
 Außerdem kann der Wert einer Resource jederzeit manuell überschrieben werden.
-Dafür bietet das Signal `value` die bekannten Methoden `set()` und `update()` an.
+Dafür besitzt das Signal `value` die bekannten Methoden `set()` und `update()`.
 Mit einem Observable oder einem Signal, das durch `toSignal()` aus einem Observable erstellt wurde, wäre das nicht so einfach möglich.
 
 ```ts
@@ -191,12 +190,11 @@ clearBookList() {
 ```
 
 Die Loader-Funktion kann Parameter verarbeiten. Das ist sinnvoll, wenn der HTTP-Request weitere Informationen benötigt, z. B. die ID des zu ladenden Datensatzes.
-Dafür können wir in der Resource optional einen `request` definieren: Dieses Signal dient als Trigger für die Loader-Funktion.
+Dafür können wir optional einen `request` definieren: Dieses Signal dient als Trigger für die Loader-Funktion.
 Immer wenn sich der Wert ändert, wird der Loader neu ausgeführt.
-Der Wert des `request`-Signals steht dann als Argument in der Loader-Funktion zur Verfügung.
+Der Wert des `request`-Signals steht dann als Argument für den Loader zur Verfügung.
 
-Im folgenden Beispiel erhält die Komponente eine ISBN per Input-Property.
-Immer wenn sich die ISBN ändert, wird der HTTP-Request für das dazugehörige Buch neu ausgeführt.
+Immer wenn sich im folgenden Beispiel die ISBN ändert, wird der HTTP-Request für das dazugehörige Buch neu ausgeführt.
 
 ```ts
 @Component({ /* ... */ })
@@ -236,7 +234,7 @@ Bitte beachten Sie, dass die Resource API experimentell ist und sich die Schnitt
 Das Linked Signal wurde mit Angular 19 als *Developer Preview* vorgestellt.
 Es handelt sich um ein Signal, das seinen Wert automatisch auf Basis anderer Signals berechnet – ähnlich wie ein Computed Signal mit `computed()`.
 Der Unterschied: Der Wert eines Linked Signals kann jederzeit mit den Methoden `set()` und `update()` von außen überschrieben werden, so wie wir es von `signal()` kennen.
-Ein Linked Signal vereint also das Beste aus beiden Welten, wie der folgende Vergleich zeigt:
+Ein Linked Signal vereint also das Beste aus beiden Welten, wie der folgende Vergleich zeigt.
 
 ```ts
 import { linkedSignal } from '@angular/core';
@@ -278,11 +276,13 @@ Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input ode
 
 ## Migrationen für Signal-based APIs
 
-Angular hat in den vergangenen Versionen viele Komponenten-Schnittstellen auf Signals und moderne Schnittstellen umgestellt:
+Angular hat in den vergangenen Versionen mehrere Komponenten-Schnittstellen auf funktionale Varianten umgestellt.
 
 - Component Inputs mit der Funktion `input()` liefern die Daten als Signal.
-- Querys für ViewChildren und ContentChildren können mit den Funktionen `viewChild`/`viewChildren` und `contentChild`/`contentChildren` als Signals erfasst werden. Die früheren Dekoratoren sind dafür nicht mehr notwendig.
+- Querys für ViewChildren und ContentChildren können mit den Funktionen `viewChild`/`viewChildren` und `contentChild`/`contentChildren` als Signals erfasst werden.
 - Component Outputs können mit der Funktion `output()` definiert werden. Das Ergebnis ist zwar kein Signal, aber die Schnittstelle steht in einer Reihe mit dem neuen `input()`.
+
+Bisher wurden dafür Dekoratoren verwendet (z. B. `@Input()`), die nun nicht mehr notwendig sind.
 
 Angular bietet Migrationsskripte an, um die Propertys in den Komponenten korrekt auf die neuen Schnittstellen zu migrieren:
 
@@ -318,17 +318,17 @@ constructor() {
   effect(() => {
     console.log('Aktueller Counter-Wert:', this.counter());
 
-    // funktioniert(e) nur mit `allowSignalWrites: true`
+    // funktionierte bisher nur mit `allowSignalWrites: true`
     this.counter100.set(this.counter() * 100);
   });
 }
 ```
 
-Dabei galt bisher die Empfehlung, in Effects keine Werte von Signals zu setzen.
+Dabei galt bisher die Empfehlung, in Effects keine Werte von Signals zu verändern.
 Sollte das doch möglich sein, musste dafür die Option `allowSignalWrites` gesetzt werden – dann konnte der Effects auch in Signals schreiben.
 
 Mit Angular 19 entfällt diese Option. In Effects können wir nun ohne zusätzliche Konfiguration die Werte von Signals ändern.
-Diese Richtungsänderung hat das Angular-Team in einem eigenen [Blogpost](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd) vorgestellt.  
+Diese Richtungsänderung hat das Angular-Team in einem eigenen [Blogpost](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd) vorgestellt.
 Es gilt nun nicht mehr als schlechte Praxis, mit Effects weitere Signals zu setzen oder andere Seiteneffekte auszulösen.
 
 Bitte verwenden Sie Effects grundsätzlich dennoch sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel:
@@ -341,15 +341,15 @@ counter100 = computed(() => this.counter() * 100);
 ## `afterRenderEffect`: Effects für DOM-Interaktionen
 
 Angular hat bereits vor einiger Zeit die neuen Lifecycle-Funktionen [`afterRender`](https://next.angular.dev/api/core/afterRender) und [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) vorgestellt.
-Mit Angular 19 kommt nun das signalbasierte Pendant [`afterRenderEffect`](https://next.angular.dev/api/core/afterRenderEffect) hinzu.  
-Das Besondere an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht.  
-Die Phasen werden nur erneut ausgeführt, wenn sich gebundene Signals geändert haben.  
+Mit Angular 19 kommt nun das signalbasierte Pendant [`afterRenderEffect`](https://next.angular.dev/api/core/afterRenderEffect) hinzu.
+Das Besondere an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht.
+Die Phasen werden nur erneut ausgeführt, wenn sich gebundene Signals geändert haben.
 DOM-Manipulationen werden so auf das nötige Minimum reduziert.
 
 Alle drei Hilfsmittel sind dafür gedacht, sicher mit dem DOM einer Komponente zu interagieren.
 In der Regel ist das für normale Geschäftslogik nicht notwendig, weshalb die drei Funktionen eher für Spezialfälle gedacht sind.
 
-> 📝 Wenn Sie mehr über das geänderte Verhalten von `effect()` und die neuen Effects von `afterRenderEffect()` erfahren möchten, empfehlen wir unseren ausführlichen Blogpost dazu:  
+> 📝 Wenn Sie mehr über das geänderte Verhalten von `effect()` und die neuen Effects von `afterRenderEffect()` erfahren möchten, empfehlen wir unseren ausführlichen Blogpost dazu:
 > **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**
 
 
@@ -361,7 +361,7 @@ Neben den großen neuen Features gibt es auch einige kleinere interessante Neuer
 - **Zoneless Application generieren:** Mit der Funktion `provideExperimentalZonelessChangeDetection()` können wir den älteren Mechanismus für die Change Detection auf Basis von Zone.js deaktivieren. Die Change Detection funktioniert dann vollständig mit Signals. Ab Angular 19 können wir diesen Modus bereits bei der Erstellung eines Projekts wählen: `ng new --experimental-zoneless`. (siehe [Commit](https://github.com/angular/angular-cli/commit/755f3a07f5fe485c1ed8c0c6060d6d5c799c085c))
 - **Default Export für Komponenten:** Komponenten werden standardmäßig als Named Export generiert: `export class FooComponent {}`. In manchen Fällen kann es sinnvoll sein, stattdessen einen *Default Export* zu verwenden (`export default class FooComponent {}`), z. B. für eine verkürzte Schreibweise beim Lazy Loading von Komponenten. Beim Anlegen einer Komponente mit der Angular CLI können wir nun auch einen Default Export generieren lassen: `ng g c foo --export-default`. (siehe [Commit](https://github.com/angular/angular-cli/commit/a381a3db187f7b20e5ec8d1e1a1f1bd860426fcd))
 - **typeof im Template:** In Template Expressions wird jetzt auch das Schlüsselwort `typeof` unterstützt. Damit kann der Typ einer Variable direkt geprüft werden, ohne den Umweg über eine Methode der Komponente zu gehen: `@if (typeof foo === 'string') {}`. (siehe [Commit](https://github.com/angular/angular/commit/0c9d721ac157662b2602cf0278ba4b79325f6882))
-- **Ungenutzte Standalone Imports:** Der Angular Language Service (in Visual Studio Code) erkennt ungenutzte Imports in Komponenten. Ein Hinweis erscheint, wenn eine Komponente/Pipe/Direktive importiert, aber nicht im Template genutzt wird.
+- **Ungenutzte Standalone Imports:** Der Angular Language Service (in Visual Studio Code) erkennt ungenutzte Imports in Komponenten. Ein Hinweis erscheint, wenn eine Komponente/Pipe/Direktive importiert wird, aber nicht im Template genutzt wird.
 
 <hr>
 
