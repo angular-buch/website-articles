@@ -329,7 +329,7 @@ Sollte das doch möglich sein, musste dafür die Option `allowSignalWrites` gese
 
 Mit Angular 19 entfällt diese Option. In Effects können wir nun ohne zusätzliche Konfiguration die Werte von Signals ändern.
 Diese Richtungsänderung hat das Angular-Team in einem eigenen [Blogpost](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd) vorgestellt.  
-Es gilt nun nicht mehr als schlechte Praxis, mit Effekten weitere Signale zu setzen oder andere Seiteneffekte auszulösen.
+Es gilt nun nicht mehr als schlechte Praxis, mit Effekten weitere Signals zu setzen oder andere Seiteneffekte auszulösen.
 
 Bitte verwenden Sie Effects grundsätzlich dennoch sparsam! Häufig ist ein Computed Signal oder Linked Signal das bessere Mittel:
 
