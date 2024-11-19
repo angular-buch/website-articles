@@ -22,7 +22,7 @@ Für die Migration auf Angular 19 empfehlen wir, den Befehl `ng update` zu nutze
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
 
 
-## Standalone Components: Der neue Standard
+## Standalone Components: der neue Standard
 
 Standalone Components wurden mit Angular 15 eingeführt und haben sich seitdem zum Standard bei der Komponentenentwicklung mit Angular etabliert.
 NgModules sind damit vollständig optional.
