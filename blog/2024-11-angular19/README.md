@@ -343,7 +343,7 @@ counter100 = computed(() => this.counter() * 100);
 Angular hat bereits vor einiger Zeit die neuen Lifecycle-Funktionen [`afterRender`](https://next.angular.dev/api/core/afterRender) und [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) vorgestellt.
 Mit Angular 19 kommt nun das signalbasierte Pendant [`afterRenderEffect`](https://next.angular.dev/api/core/afterRenderEffect) hinzu.  
 Das Besondere an `afterRenderEffect`: Die Daten zwischen den Render-Phasen werden als Signals ausgetauscht.  
-Die Phasen werden nur erneut ausgeführt, wenn sich gebundene Signale geändert haben.  
+Die Phasen werden nur erneut ausgeführt, wenn sich gebundene Signals geändert haben.  
 DOM-Manipulationen werden so auf das nötige Minimum reduziert.
 
 Alle drei Hilfsmittel sind dafür gedacht, sicher mit dem DOM einer Komponente zu interagieren.
