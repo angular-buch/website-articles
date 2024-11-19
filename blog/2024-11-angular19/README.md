@@ -157,7 +157,7 @@ Um mit den Daten zu arbeiten, stehen in der Resource drei Signals zur Verfügung
 }
 ```
 
-Gegenüber einem einfachen HTTP-Request bietet die Resource einige besondere Features.
+Im Vergleich zu einem einfachen HTTP-Request hat die Resource einige besondere Features.
 Die Resource bietet uns die Möglichkeit, ohne großen Aufwand einen Ladeindikator anzuzeigen.
 Dafür bietet das Objekt sogar ein eigenes Signal `isLoading()` an:
 
