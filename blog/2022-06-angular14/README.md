@@ -3,7 +3,7 @@ title: 'Angular 14 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2022-06-02
-lastModified: 2022-06-02
+lastModified: 2024-11-19
 keywords:
   - Angular
   - Angular 14
@@ -27,6 +27,8 @@ Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https:
 > * [Angular 15 ist da!](/blog/2022-11-angular15)
 > * [Angular 16 ist da!](/blog/2023-05-angular16)
 > * [Angular 17 ist da!](/blog/2023-11-angular17)
+> * [Angular 18 ist da!](/blog/2024-06-angular18)
+> * [Angular 19 ist da!](/blog/2024-11-angular19)
 
 ## Projekt updaten
 

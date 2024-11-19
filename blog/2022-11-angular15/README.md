@@ -3,7 +3,7 @@ title: 'Angular 15 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2022-11-25
-lastModified: 2022-11-25
+lastModified: 2024-11-19
 keywords:
   - Angular
   - Angular 15
@@ -31,6 +31,8 @@ Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https:
 > **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
 > * [Angular 16 ist da!](/blog/2023-05-angular16)
 > * [Angular 17 ist da!](/blog/2023-11-angular17)
+> * [Angular 18 ist da!](/blog/2024-06-angular18)
+> * [Angular 19 ist da!](/blog/2024-11-angular19)
 
 
 ## Projekt updaten

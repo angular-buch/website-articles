@@ -31,6 +31,9 @@ Wenn Sie sich einen kurzweiligen Gesamtüberblick verschaffen wollen, so lohnt e
 Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weiter. 🙂
 
 
+> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
+> * [Angular 19 ist da!](/blog/2024-11-angular19)
+
 
 ## Neue Offizielle Website 
 
