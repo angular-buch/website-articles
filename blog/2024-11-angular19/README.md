@@ -2,11 +2,15 @@
 title: 'Angular 19 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2024-11-XX
-lastModified: 2024-11-XX
+published: 2024-11-19
+lastModified: 2024-11-19
 keywords:
   - Angular
   - Angular 19
+  - Linked Signal
+  - Resource API
+  - Standalone Components
+  - Effects
 language: de
 header: angular19.jpg
 sticky: true
