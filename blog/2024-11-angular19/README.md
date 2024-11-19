@@ -338,7 +338,7 @@ counter = signal(0);
 counter100 = computed(() => this.counter() * 100);
 ```
 
-## `afterRenderEffect`: Effekte für DOM-Interaktionen
+## `afterRenderEffect`: Effects für DOM-Interaktionen
 
 Angular hat bereits vor einiger Zeit die neuen Lifecycle-Funktionen [`afterRender`](https://next.angular.dev/api/core/afterRender) und [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) vorgestellt.
 Mit Angular 19 kommt nun das signalbasierte Pendant [`afterRenderEffect`](https://next.angular.dev/api/core/afterRenderEffect) hinzu.  
