@@ -12,7 +12,7 @@ header: angular19.jpg
 sticky: true
 ---
 
-Neben grauen Herbsttagen hat der November in Sachen Angular einiges zu bieten: Am 19. November wurde die neue **Major-Version Angular 19* releaset!
+Neben grauen Herbsttagen hat der November in Sachen Angular einiges zu bieten: Am 19. November wurde die neue **Major-Version Angular 19** releaset!
 Angular bringt mit der Resource API und dem Linked Signal einige neue Features mit. Standalone Components müssen außerdem nicht mehr explizit als solche markiert werden.
 Wir stellen in diesem Blogpost alle wichtigen Neuerungen vor.
 
