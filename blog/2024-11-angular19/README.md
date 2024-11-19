@@ -229,7 +229,7 @@ booksResource = rxResource({
 
 Bitte beachten Sie, dass die Resource API experimentell ist und sich die Schnittstelle vor dem finalen Release noch ändern könnte.
 
-> 📝 Wir erläutern die Resource API ausführlich in einem separaten Blogpost:
+> 📝 Wir erläutern die Resource API ausführlich in einem separaten Blogpost:<br>
 > **[Neu in Angular 19: Daten laden mit der Resource API](/blog/2024-10-resource-api/)**
 
 
@@ -274,7 +274,7 @@ const timestampSecondsLinked = linkedSignal({
 Ein Linked Signal ist besonders nützlich, wenn lokaler State mit dynamisch geladenen Daten synchronisiert werden soll.
 Das Signal berechnet seinen Wert aus einer Quelle, z. B. ein Component Input oder ein HTTP-Request, die Komponente kann das Signal aber weiterhin selbst mit Werten überschreiben.
 
-> 📝 Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktische Anwendungsfälle für `linkedSignal()`:
+> 📝 Wir stellen das Linked Signal ausführlich in einem separaten Blogpost vor. Dort finden Sie mehrere praktische Anwendungsfälle für `linkedSignal()`:<br>
 > **[Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](/blog/2024-11-linked-signal/)**
 
 
@@ -353,7 +353,7 @@ DOM-Manipulationen werden so auf das nötige Minimum reduziert.
 Alle drei Hilfsmittel sind dafür gedacht, sicher mit dem DOM einer Komponente zu interagieren.
 In der Regel ist das für normale Geschäftslogik nicht notwendig, weshalb die drei Funktionen eher für Spezialfälle gedacht sind.
 
-> 📝 Wenn Sie mehr über das geänderte Verhalten von `effect()` und die neuen Effects von `afterRenderEffect()` erfahren möchten, empfehlen wir unseren ausführlichen Blogpost dazu:
+> 📝 Wenn Sie mehr über das geänderte Verhalten von `effect()` und die neuen Effects von `afterRenderEffect()` erfahren möchten, empfehlen wir unseren ausführlichen Blogpost dazu:<br>
 > **[Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)**
 
 
