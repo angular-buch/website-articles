@@ -147,7 +147,7 @@ booksResource = resource({
 
 
 Der Loader wird automatisch ausgeführt, sobald die Resource initialisiert wird.
-Um mit den Daten zu arbeiten, bietet die Resource drei Signals an: `value` enthält die Daten, `status` gibt Auskunft zum Zustand der Resource, und `error` enthält Fehler:
+Um mit den Daten zu arbeiten, stehen in der Resource drei Signals zur Verfügung: `value` enthält die Daten, `status` informiert über den Zustand der Resource, und `error` liefert ein Fehler-Objekt:
 
 ```html
 {{ booksResource.value() | json }}
