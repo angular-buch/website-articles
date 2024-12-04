@@ -3,7 +3,7 @@ title: 'Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung'
 author: Johannes Hoppe and Ferdinand Malcher
 mail: team@angular.schule
 published: 2024-11-07
-lastModified: 2024-11-16
+lastModified: 2024-12-04
 keywords:
   - Angular
   - JavaScript
@@ -38,7 +38,7 @@ In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktionie
 
 ## Was ist ein Linked Signal?
 
-Das Linked Signal wurde als neues experimentelles Feature von Angular 19 vorgestellt.
+Das Linked Signal wurde als neues Feature von Angular 19 vorgestellt.
 Es soll die Arbeit mit Zuständen erleichtern, die mit anderen Signals synchronisiert werden müssen.
 Kurz gesagt: Wir erhalten ein beschreibbares Signal, dessen Wert automatisch neu berechnet wird, sobald sich der Wert seines Quellsignals ändert.
 Ein Linked Signal kann mit der Factory-Funktion [`linkedSignal()`](https://next.angular.dev/api/core/linkedSignal) erzeugt werden.
