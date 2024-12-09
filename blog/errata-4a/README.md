@@ -98,6 +98,31 @@ Stattdessen muss für modulbasierte Komponenten die Einstellung `standalone` im 
 **Alle Komponenten im BookMonkey tragen seit Angular 19 automatisch das Flag `standalone: false`, das nicht im Buch abgedruckt ist.**
 
 
+### 14.1 `HttpClientModule` ist deprecated
+
+Wir verwenden das `HttpClientModule`, um den `HttpClient` von Angular anschließend injecten zu können.
+Dieses Modul ist deprecated und sollte nicht mehr verwendet werden.
+Stattdessen nutzen wir die neue Funktion `provideHttpClient()` unter `providers`:
+
+```ts
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
+// ...
+
+@NgModule({
+  // ...
+  imports: [
+    // ...
+    // HttpClientModule // WEG!
+  ],
+  providers: [
+    // NEU
+    provideHttpClient(withInterceptorsFromDi())
+  ]
+})
+export class AppModule { }
+```
+
+
 
 ### 20.4 Asynchroner Validator und Methode `checkAvailable()`
 
