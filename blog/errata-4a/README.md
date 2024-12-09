@@ -179,6 +179,24 @@ ng g feature books/store/book --module books/books --api --entity=false --defaul
 ```
 
 
+### 32.3.11 NgRx Effects mit `inject()`
+
+In der Effects-Klasse in NgRx nutzen wir die Constructor Injection, um die Services `Actions` und `BookStoreService` anzufordern.
+Beide Objekte werden dann im Effect verwendet, der direkt im Property initialisiert wird.
+
+Wir müssen deshalb die Funktion `inject()` verwenden, um die Services anzufordern:
+
+```ts
+@Injectable()
+export class BookEffects {
+
+  private actions$ = inject(Actions);
+  private service = inject(BookStoreService);
+
+  loadBooks$ = /* ... */
+}
+```
+
 
 ### 33 Server-Side Rendering und Pre-Rendering mit Angular 17
 
