@@ -35,6 +35,7 @@ Damit die Beispiele im Buch weiterhin mit dem generierten Code übereinstimmen, 
 ng new book-monkey --routing --style=css --prefix=bm --standalone=false
 ```
 
+Die interaktive Abfrage für Server-Side Rendering können Sie mit dem Default `N` (No) beantworten – wir benötigen SSR zunächst nicht.
 Übrigens: Die Option `routing` ist seit Angular 17 per Default aktiviert, sie muss also nicht mehr manuell mit angegeben werden.
 
 
@@ -63,6 +64,39 @@ Arbeiten wir mit SCSS, wird `@use` empfohlen, um andere Dateien einzubinden.
 ```
 
 Nutzen wir nur reines CSS für das Styling der Anwendung, ist `@import` weiterhin möglich – Sie müssen für die Arbeit mit dem Buch hier also zunächst nichts ändern.
+
+
+### 5.6 Warnungen von ESLint
+
+Bei der Ausführung von ESLint mit dem Befehl `ng lint` erhalten wir die folgende Warnung:
+
+```
+error  Components, Directives and Pipes should not opt out of standalone  @angular-eslint/prefer-standalone
+```
+
+Eine ausführliche Erklärung dafür finden Sie im nächsten Abschnitt (**6 Komponenten mit Flag `standalone: false`**).
+Wir arbeiten in diesem Buch mit modulbasierten Komponenten. Deshalb empfehlen wir, die ESLint-Regel zu deaktivieren:
+
+
+```js
+// eslint.config.js
+rules: {
+  "@angular-eslint/prefer-standalone": "off",
+  // ...
+}
+```
+
+### 6 Komponenten mit Flag `standalone: false`
+
+Wir arbeiten im Buch mit modulbasierten Komponenten. Seit Angular 17 generiert Angular automatisch Standalone Components, die ohne Module funktionieren.
+Wir haben dieses Thema in Kapitel 25 ausführlich behandelt.
+Damit das Buch auch mit neueren Versionen von Angular kompatibel ist, haben wir beim Anlegen des Projekts die Option `--standalone` auf `false` gesetzt – so erhalten wir eine modulbasierte Anwendung.
+
+Seit Angular 19 sind Komponenten per Default standalone, und es ist nicht mehr notwendig, Standalone Components explizit als solche zu markieren.
+Stattdessen muss für modulbasierte Komponenten die Einstellung `standalone` im Kopf der Komponenten explizit auf `false` gesetzt werden.
+
+**Alle Komponenten im BookMonkey tragen seit Angular 19 automatisch das Flag `standalone: false`, das nicht im Buch abgedruckt ist.**
+
 
 
 ### 20.4 Asynchroner Validator und Methode `checkAvailable()`
