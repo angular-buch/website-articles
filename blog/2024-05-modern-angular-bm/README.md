@@ -3,7 +3,7 @@ title: 'Modern Angular: den BookMonkey migrieren'
 author: Danny Koppenhagen und Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2024-05-05
-lastModified: 2024-05-05
+lastModified: 2025-01-28
 keywords:
   - ESBuild
   - Application Builder
@@ -616,7 +616,7 @@ Alle Änderungen am Code können Sie in der Differenzansicht nachvollziehen:
 ## Signals
 
 Im nächsten Schritt wollen wir uns dem Thema Signals widmen.
-Wir haben darüber im Blogpost zu Angular 16 bereits ausführlich berichtet, siehe: [_Angular 16 ist da! Abschnitt "Reaktivität mit Signals"_](/blog/2023-05-angular16#reaktivität-mit-signals)).
+Wir haben darüber im Blogpost zu Angular 16 bereits ausführlich berichtet, siehe: [_Angular 16 ist da! Abschnitt "Reaktivität mit Signals"_](/blog/2023-05-angular16#reaktivität-mit-signals).
 
 Ein wichtiger Grund für die Einführung dieser neuen *Reactive Primitive* ist die Change Detection:
 Um festzustellen, ob sich Daten geändert haben, muss Angular derzeit vergleichsweise hohen Aufwand betreiben.
