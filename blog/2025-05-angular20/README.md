@@ -22,6 +22,7 @@ Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://a
 
 # TODO
 
+- ngIf/ngFor/ngSwitch deprecated
 - neuer Styleguide und .ng.html
 - min. TS 5.8
 - "Node.js v18 is no longer supported with Angular.", "Node.js version must be at least 20.11.1. For the full list of supported Node.js versions, see https://angular.dev/reference/versions."
