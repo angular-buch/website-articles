@@ -36,6 +36,10 @@ Der Support für Node.js Version 18 wurde entfernt. In der [Angular-Dokumentatio
 
 # Suffix für Komponenten und Services
 
+https://angular.dev/style-guide
+
+bis zum Release für uns: https://next.angular.dev/style-guide
+
 TODO
 
 
