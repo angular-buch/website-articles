@@ -20,6 +20,10 @@ Für die Migration auf Angular 20 empfehlen wir, den Befehl `ng update` zu nutze
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
 
 
+
+
+
+
 # Versionen von TypeScript und Node.js
 
 Für Angular 20 sind *mindestens* die folgenden Versionen von TypeScript und Node.js erfoderlich:
@@ -28,6 +32,12 @@ Für Angular 20 sind *mindestens* die folgenden Versionen von TypeScript und Nod
 - Node.js: 20.11.1
 
 Der Support für Node.js Version 18 wurde entfernt. In der [Angular-Dokumentation](https://angular.dev/reference/versions) finden Sie ausführliche Infos zu den unterstützten Versionen.
+
+
+# Suffix für Komponenten und Services
+
+TODO
+
 
 
 # Zoneless Developer Preview
@@ -91,11 +101,10 @@ ng generate @angular/core:control-flow
 ```
 
 
-# TODO
+# Experimenteller Test-Builder für vitest
 
-- neuer Styleguide und kein Component-/Swervice-Suffix mehr
-- min. TS 5.8
-- "Node.js v18 is no longer supported with Angular.", "Node.js version must be at least 20.11.1. For the full list of supported Node.js versions, see https://angular.dev/reference/versions."
+TODO
+
 
 ## Sonstiges
 
