@@ -29,7 +29,7 @@ Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://a
 Für Angular 20 sind *mindestens* die folgenden Versionen von TypeScript und Node.js erforderlich:
 
 - TypeScript: 5.8
-- Node.js: 20.11.1
+- Node.js: 20.19.x oder höher, 22.12.x oder höher, oder 24.0.x oder höher
 
 Der Support für Node.js Version 18 wurde entfernt. In der [Angular-Dokumentation](https://angular.dev/reference/versions) finden Sie ausführliche Infos zu den unterstützten Versionen.
 
