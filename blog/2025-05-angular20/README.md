@@ -99,7 +99,7 @@ Die Direktiven können also direkt durch die eingebauten Ausdrücke von Angular 
 ```
 
 In unserem [Blogpost zum Release von Angular 17](/blog/2023-11-angular17#neuer-control-flow-if-for-switch) haben wir die Syntax zum Control Flow ausführlich behandelt.
-Die Angular CLI bietet außerdem ein Migrationsskript an, sodass der Umstieg auf die neue Syntax nicht aufwendiug sein sollte:
+Die Angular CLI bietet außerdem ein Migrationsskript an, sodass der Umstieg auf die neue Syntax nicht aufwendig sein sollte:
 
 ```bash
 ng generate @angular/core:control-flow
