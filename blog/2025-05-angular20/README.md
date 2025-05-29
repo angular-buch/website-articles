@@ -14,7 +14,7 @@ hidden: true
 ---
 
 Alles neu macht der Mai – oder zumindest eine neue Major-Version von Angular:
-Am **XX. Mai 2025** wurde **Angular 20** veröffentlicht! Im offiziellen [Angular-Blog](TODO) finden Sie die Release-Informatioen direkt vom Angular-Team.
+Am **29. Mai 2025** wurde **Angular 20** veröffentlicht! Im offiziellen [Angular-Blog](https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301?gi=e634e5e11bfd) finden Sie die Release-Informationen direkt vom Angular-Team.
 
 Für die Migration auf Angular 20 empfehlen wir, den Befehl `ng update` zu nutzen.
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
