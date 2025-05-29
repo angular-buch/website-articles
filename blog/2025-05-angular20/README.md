@@ -40,7 +40,7 @@ Angular hat sich in den letzten Jahren stark weiterentwickelt und viele neue Kon
 Bisher war die Angular Dokumentation hier etwas hinterher und der bisherige Coding Style Guide war nicht an den Status Quo angepasst.
 Mit Angular 20 hat sich das geändert.
 Der neue [Styleguide](https://angular.dev/style-guide) wurde stark überarbeitet und verschlankt.
-Er bildet nun wieder den aktuellen Stand der Entwicklung von Angular-Anwendungen mit Angular 20 ab und die neusten Konzepte ab.
+Er bildet nun wieder den aktuellen Stand der Entwicklung von Angular-Anwendungen mit Angular 20 ab und die neuesten Konzepte.
 
 TODO: Component Suffix
 
