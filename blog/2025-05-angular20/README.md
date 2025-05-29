@@ -107,8 +107,46 @@ ng generate @angular/core:control-flow
 
 # Experimenteller Test-Builder für vitest
 
-TODO
+Mit der Entscheidung den bisherigen Test Runner Karma nicht weiterzuentwickeln, arbeitet das Angular-Team an der Integration alternativen Test-Builder für die Angular CLI.
+Bereits in der Vergangenheit wurden hier die beiden experimentellen Builder von [Jest und dem Web Test Runner veröffentlicht](
+https://blog.angular.dev/moving-angular-cli-to-jest-and-web-test-runner-ef85ef69ceca).
+Mit Angular 20 kommt ein weiterer für [Vitest](https://vitest.dev) zum Einsatz.
+Vitest ist bereits bei vielen anderen Web-Frameworks basierend auf dem Bundler [Vite](https://vite.dev) zum festen Bestandteil des Ökosystems geworden.
+Mit dem schrittweisen Switch des Unterbaus der Angular CLI von Webpack auf [ESBuild mit Vite in Angular seit Version 16](/blog/2023-05-angular16#esbuild) können wir nun auch auf Vitest für die Ausführung unserer Integrations- und Unit-Tests zurückgreifen.
 
+Um Vitest mit der Angular CLI zu nutzen, müssen wir zunächst die benötigten Dependencies hinzufügen:
+
+```sh
+npm i vitest jsdom --save-dev
+```
+
+Im Anschluss müssen wir noch die Testing-Konfiguration der Datei `angular.json` anpassen:
+
+```json
+"test": {
+    "builder": "@angular/build:unit-test",
+    "options": {
+        "tsConfig": "tsconfig.spec.json",
+        "buildTarget": "::development",
+        "runner": "vitest"
+    }
+}
+```
+
+Jetzt müssen wir in den Test-Files selbst auch auf Vitest zurückgreifen und noch die benötigten Imports hinzufügen (Falls sie zuvor noch mit Karma gearbeitet haben) bzw. anpassen:
+
+```ts
+import { describe, beforeEach, it, expect } from 'vitest';
+// ...
+```
+
+Die Ausführung erfolgt im Anschluss wie gewohnt mit `ng test`.
+
+Vitest ist zu einem großteil mit allen APIs von [Jest](https://jestjs.io/) und auch mit Karma kompatibel, es lohnt sich auf jeden Fall einmal den Umstieg auszuprobieren.
+Im Idealfall müssen sie innerhalb ihrer Tests nur wenige Anpassungen vornehmen.
+
+In Zukunft wird sich vermutlich einer der drei experimentellen Build (Jest, Web Test Runner, Vitest) als der neue Standard etablieren.
+Wir begrüßen diesen Schritt, hier künftig auf etablierte Standard zu setzen, die sich auch außerhalb der Angular-Welt durchgesetzt haben und den eigens entwickelten Test-Runner Karma abzuschaffen und halten Sie hierzu weiterhin auf dem Laufenden.
 
 ## Sonstiges
 
