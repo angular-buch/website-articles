@@ -121,7 +121,7 @@ Um Vitest mit der Angular CLI zu nutzen, müssen wir zunächst die benötigten D
 npm i vitest jsdom --save-dev
 ```
 
-Im Anschluss müssen wir noch die Testing-Konfiguration der Datei `angular.json` anpassen:
+Anschließend müssen wir noch die Testing-Konfiguration in der Datei `angular.json` anpassen:
 
 ```json
 "test": {
