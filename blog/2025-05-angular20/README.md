@@ -147,7 +147,7 @@ Vitest ist zu einem Großteil mit allen APIs von [Jest](https://jestjs.io/) und 
 Im Idealfall müssen sie innerhalb ihrer Tests nur wenige Anpassungen vornehmen.
 
 In Zukunft wird sich vermutlich einer der drei experimentellen Build (Jest, Web Test Runner, Vitest) als der neue Standard etablieren.
-Wir begrüßen diesen Schritt, hier künftig auf etablierte Standard zu setzen, die sich auch außerhalb der Angular-Welt durchgesetzt haben und den eigens entwickelten Test-Runner Karma abzuschaffen und halten Sie hierzu weiterhin auf dem Laufenden.
+Wir begrüßen den Schritt, künftig auf etablierte Standards außerhalb der Angular-Welt zu setzen und den eigens entwickelten Test-Runner Karma abzuschaffen. Wir halten Sie hierzu weiterhin auf dem Laufenden.
 
 ## Sonstiges
 
