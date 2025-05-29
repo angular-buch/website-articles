@@ -149,6 +149,19 @@ Im Idealfall müssen sie innerhalb ihrer Tests nur wenige Anpassungen vornehmen.
 In Zukunft wird sich vermutlich einer der drei experimentellen Build (Jest, Web Test Runner, Vitest) als der neue Standard etablieren.
 Wir begrüßen den Schritt, künftig auf etablierte Standards außerhalb der Angular-Welt zu setzen und den eigens entwickelten Test-Runner Karma abzuschaffen. Wir halten Sie hierzu weiterhin auf dem Laufenden.
 
+# Stabile Signal-APIs: `effect`, `linkedSignal` und `toSignal`
+
+Seit Angular 16 stehen mit Signals die Weichen auf ein neues, reaktives Angular. In Angular 20 wurden nun weitere APIs aus dem Signals-Ökosystem als stabil freigegeben: `effect`, `linkedSignal` und `toSignal`.
+
+Diese Funktionen waren bisher experimentell und sind nun offiziell als Teil des stabilen API-Sets nutzbar:
+
+* `effect()` reagiert automatisch auf Signal-Änderungen und führt dabei definierte Seiteneffekte aus – ganz ohne Lifecycle-Hooks.
+* `linkedSignal()` erlaubt die bidirektionale Kopplung zwischen einem Signal und einer externen Quelle – etwa einer Komponente oder einem FormControl.
+* `toSignal()` konvertiert Observable-Daten in ein lesbares Signal – ideal zur Integration bestehender Streams.
+
+Weitere Details und Beispiele findet ihr in unserer Signals-Reihe:
+* [Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](https://angular-buch.com/blog/2024-11-linked-signal)
+* [Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)
 ## Sonstiges
 
 Alle Details zu den Neuerungen finden Sie immer im Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
