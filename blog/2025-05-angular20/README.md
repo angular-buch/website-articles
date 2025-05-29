@@ -112,7 +112,7 @@ Mit der Entscheidung den bisherigen Test Runner Karma nicht weiterzuentwickeln, 
 Bereits in der Vergangenheit wurden hier die beiden experimentellen Builder von [Jest und dem Web Test Runner veröffentlicht](
 https://blog.angular.dev/moving-angular-cli-to-jest-and-web-test-runner-ef85ef69ceca).
 Mit Angular 20 kommt ein weiterer für [Vitest](https://vitest.dev) zum Einsatz.
-Vitest ist bereits bei vielen anderen Web-Frameworks basierend auf dem Bundler [Vite](https://vite.dev) zum festen Bestandteil des Ökosystems geworden.
+Vitest hat sich bereits bei vielen anderen Web-Frameworks basierend auf dem Bundler [Vite](https://vite.dev) als fester Bestandteil etabliert.
 Mit dem schrittweisen Switch des Unterbaus der Angular CLI von Webpack auf [ESBuild mit Vite in Angular seit Version 16](/blog/2023-05-angular16#esbuild) können wir nun auch auf Vitest für die Ausführung unserer Integrations- und Unit-Tests zurückgreifen.
 
 Um Vitest mit der Angular CLI zu nutzen, müssen wir zunächst die benötigten Dependencies hinzufügen:
