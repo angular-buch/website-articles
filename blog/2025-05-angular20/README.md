@@ -134,7 +134,7 @@ Im Anschluss müssen wir noch die Testing-Konfiguration der Datei `angular.json`
 }
 ```
 
-Jetzt müssen wir in den Test-Files selbst auch auf Vitest zurückgreifen und noch die benötigten Imports hinzufügen (Falls sie zuvor noch mit Karma gearbeitet haben) bzw. anpassen:
+Jetzt müssen wir in den Testdateien selbst auch auf Vitest zurückgreifen und noch die benötigten Imports hinzufügen (Falls sie zuvor noch mit Karma gearbeitet haben) bzw. anpassen:
 
 ```ts
 import { describe, beforeEach, it, expect } from 'vitest';
