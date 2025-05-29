@@ -42,7 +42,7 @@ Mit Angular 20 hat sich das geändert.
 Der neue [Styleguide](https://angular.dev/style-guide) wurde stark überarbeitet und verschlankt.
 Er bildet nun wieder den aktuellen Stand der Entwicklung von Angular-Anwendungen mit Angular 20 ab und die neuesten Konzepte.
 
-TODO: Component Suffix
+TODO: Component Suffix --- im Anschluss an den Merge dieser Änderungen! 🙂
 
 
 # Zoneless Developer Preview
