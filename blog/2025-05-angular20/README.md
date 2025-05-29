@@ -34,14 +34,13 @@ Für Angular 20 sind *mindestens* die folgenden Versionen von TypeScript und Nod
 Der Support für Node.js Version 18 wurde entfernt. In der [Angular-Dokumentation](https://angular.dev/reference/versions) finden Sie ausführliche Infos zu den unterstützten Versionen.
 
 
-# Suffix für Komponenten und Services
+# Update des Angular Coding Style Guides
 
-https://angular.dev/style-guide
-
-bis zum Release für uns: https://next.angular.dev/style-guide
-
-TODO
-
+Angular hat sich in den letzten Jahren stark weiterentwickelt und viele neue Konzepte wurden im Framework umgesetzt.
+Bisher war die Angular Dokumentation hier etwas hinterher und der bisherige Coding Style Guide war nicht an den Status Quo a angepasst.
+Mit Angular 20 hat sich das geändert.
+Der neue [Styleguide](https://angular.dev/style-guide) wurde stark überarbeitet und verschlankt.
+Er bildet nun wieder den aktuellen Stand der Entwicklung von Angular-Anwendungen mit Angular 20 ab und die neusten Konzepte ab.
 
 
 # Zoneless Developer Preview
