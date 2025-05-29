@@ -143,7 +143,7 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 Die Ausführung erfolgt im Anschluss wie gewohnt mit `ng test`.
 
-Vitest ist zu einem großteil mit allen APIs von [Jest](https://jestjs.io/) und auch mit Karma kompatibel, es lohnt sich auf jeden Fall einmal den Umstieg auszuprobieren.
+Vitest ist zu einem Großteil mit allen APIs von [Jest](https://jestjs.io/) und auch mit Karma kompatibel, es lohnt sich auf jeden Fall einmal den Umstieg auszuprobieren.
 Im Idealfall müssen sie innerhalb ihrer Tests nur wenige Anpassungen vornehmen.
 
 In Zukunft wird sich vermutlich einer der drei experimentellen Build (Jest, Web Test Runner, Vitest) als der neue Standard etablieren.
