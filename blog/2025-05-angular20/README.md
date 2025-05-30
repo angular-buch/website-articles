@@ -2,8 +2,8 @@
 title: 'Angular 20 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2025-05-XX
-lastModified: 2025-05-XX
+published: 2025-05-30
+lastModified: 2025-05-30
 keywords:
   - Angular
   - Angular 20
@@ -13,7 +13,6 @@ keywords:
 language: de
 header: angular20.jpg
 sticky: true
-hidden: true
 ---
 
 Alles neu macht der Mai – oder zumindest eine neue Major-Version von Angular:
