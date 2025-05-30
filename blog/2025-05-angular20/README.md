@@ -74,10 +74,10 @@ export class BookCardComponent {}
 ```
 src/app
   book-card
-    book-cardts
-    book-cardhtml
-    book-cardscss
-    book-cardspec.ts
+    book-card.ts
+    book-card.html
+    book-card.scss
+    book-card.spec.ts
 ```
 
 ```ts
@@ -165,7 +165,7 @@ ng generate @angular/core:control-flow
 
 # Experimenteller Test-Builder für Vitest
 
-Der Test-Runner Karma, der immer noch Standard für Unit- und Integrastionstests in Angular ist, wird nicht mehr weiterentwickelt.
+Der Test-Runner Karma, der immer noch Standard für Unit- und Integrationstests in Angular ist, wird nicht mehr weiterentwickelt.
 Seit dieser Entscheidung arbeitet das Angular-Team daran, einen alternativen Test-Runner in die Angular CLI zu integrieren.
 Schon vor zwei Jahren wurden experimentelle Builder für [Jest und Web Test Runner veröffentlicht](
 https://blog.angular.dev/moving-angular-cli-to-jest-and-web-test-runner-ef85ef69ceca).
@@ -231,7 +231,7 @@ Weitere Details und Beispiele finden Sie in unserer Signals-Reihe:
 
 Im Oktober 2024 wurde bereits die neue experimentelle Resource API vorgestellt. Wir haben darüber ausführlich [in einem Blogpost](https://angular-buch.com/blog/2024-10-resource-api) berichtet.
 Sie verbindet die synchrone Welt von Signals mit asynchron abrufbaren Daten, z. B. mittels HTTP.
-Die Daten werden mithilfe eines Loaders asynchron geladen und übr Signals bereitgestellt.
+Die Daten werden mithilfe eines Loaders asynchron geladen und über Signals bereitgestellt.
 
 Vor einigen Wochen wurde eine weitere Variante der Resource vorgestellt: `httpResource`.
 Sie nutzt unter der Haube den `HttpClient` von Angular, um direkt einen HTTP-Request zu stellen.
@@ -247,7 +247,7 @@ console.log(booksResource.value())
 ```
 
 Der Request muss mithilfe einer Funktion generiert werden.
-Hintergrund ist, dass es sich dabei um eien *Reactive Context* handelt: Verwenden wir darin Signals, wird der Request automatisch neu ausgeführt, sobald eins der Signals seinen Wert ändert.
+Hintergrund ist, dass es sich dabei um einen *Reactive Context* handelt: Verwenden wir darin Signals, wird der Request automatisch neu ausgeführt, sobald eins der Signals seinen Wert ändert.
 Weitere Details für den Request können in einem Optionsobjekt übergeben werden.
 
 ```ts
@@ -272,7 +272,7 @@ Alle Details zu den Neuerungen finden Sie immer im Changelog von [Angular](https
 Einige interessante Aspekte haben wir hier zusammengetragen:
 
 - **`provideServerRouting()` deprecated:** Die Funktion `provideServerRouting()` ist deprecated. Stattdessen wird die bestehende Funktion `provideServerRendering()` mit dem Feature `withRoutes()` verwendet. (siehe [Commit](https://github.com/angular/angular-cli/commit/33b9de3eb1fa596a4d5a975d05275739f2f7b8ae))
-- **Chrome Dev Tools:** Die Integration von Angular in die Chrome Developer Tools wurde deutlich verbessert. Im *Performance*-Tab können die Change Detection und andere Prformance-Parameter von Angular untersucht werden.
+- **Chrome DevTools:** Die Integration von Angular in die Chrome Developer Tools wurde deutlich verbessert. Im *Performance*-Tab können die Change Detection und andere Performance-Parameter von Angular untersucht werden.
 - **Offizielles Maskottchen:** Das Angular-Team möchte ein offizielles Maskottchen für das Framework einführen – und hier ist die Community gefragt! Nutzen Sie die Chance, im [RFC auf GitHub](https://github.com/angular/angular/discussions/61733) für Ihren Favoriten abzustimmen oder Ihre ehrliche Meinung zu äußern.
 
 <hr>
