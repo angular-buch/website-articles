@@ -24,7 +24,7 @@ Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://a
 
 
 
-# Versionen von TypeScript und Node.js
+## Versionen von TypeScript und Node.js
 
 Für Angular 20 sind *mindestens* die folgenden Versionen von TypeScript und Node.js erforderlich:
 
@@ -34,7 +34,7 @@ Für Angular 20 sind *mindestens* die folgenden Versionen von TypeScript und Nod
 Der Support für Node.js Version 18 wurde entfernt. In der [Angular-Dokumentation](https://angular.dev/reference/versions) finden Sie ausführliche Infos zu den unterstützten Versionen.
 
 
-# Der neue Coding Style Guide
+## Der neue Coding Style Guide
 
 Angular hat sich in den letzten Jahren stark weiterentwickelt und viele neue Konzepte wurden in das Framework integriert.
 Die Angular-Dokumentation war teilweise nicht auf dem aktuellsten Stand: Insbesondere der Coding Style Guide hatte noch keine Empfehlungen für den aktuellen Status Quo parat.
@@ -42,7 +42,7 @@ Mit Angular 20 hat sich das geändert:
 Der neue [Style Guide](https://angular.dev/style-guide) wurde stark überarbeitet und verschlankt.
 Er beinhaltet aktuelle Empfehlungen und Best Practices und gilt als Leitlinie für die Entwicklung mit den aktuellen Versionen von Angular.
 
-## Keine Suffixes mehr: bewusstere Benennung und neue Patterns
+### Keine Suffixes mehr: bewusstere Benennung und neue Patterns
 
 Eine wichtige Änderung, die nicht unerwähnt bleiben sollte, betrifft die Suffixe in Datei- und Klassennamen:
 Der neue Style Guide empfiehlt *nicht* mehr, Komponenten, Services und Direktiven mit einem Suffix zu versehen.
@@ -99,7 +99,7 @@ ng generate component book-card --type=component
 ```
 
 
-# Zoneless Developer Preview
+## Zoneless Developer Preview
 
 Das Angular-Team arbeitet seit mehreren Jahren daran, die *Synchronization* (auch *Change Detection*) im Framework zu optimieren.
 Ein Meilenstein auf diesem Weg war die Einführung von Signals, die eine gezielte Erkennung von Änderungen ermöglichen.
@@ -138,7 +138,7 @@ ng new my-app --nozoneless
 ```
 
 
-# Strukturdirektiven `ngIf`, `ngFor`, `ngSwitch`
+## Strukturdirektiven `ngIf`, `ngFor`, `ngSwitch`
 
 Mit Angular 20 werden die alten Direktiven `ngIf`, `ngFor` und `ngSwitch` als *deprecated* markiert.
 Voraussichtlich mit Angular 22 (in einem Jahr) werden diese Direktiven dann vollständig aus dem Framework entfernt.
@@ -162,7 +162,7 @@ ng generate @angular/core:control-flow
 ```
 
 
-# Experimenteller Test-Builder für Vitest
+## Experimenteller Test-Builder für Vitest
 
 Der Test-Runner Karma, der immer noch Standard für Unit- und Integrationstests in Angular ist, wird nicht mehr weiterentwickelt.
 Seit dieser Entscheidung arbeitet das Angular-Team daran, einen alternativen Test-Runner in die Angular CLI zu integrieren.
@@ -211,7 +211,7 @@ In Zukunft wird sich vermutlich einer der drei experimentellen Build (Jest, Web 
 Wir begrüßen den Schritt, künftig auf etablierte Standards außerhalb der Angular-Welt zu setzen und den eigens entwickelten Test-Runner Karma abzuschaffen. Wir halten Sie hierzu weiterhin auf dem Laufenden.
 
 
-# Stabile Signal-APIs: `effect`, `linkedSignal` und `toSignal`
+## Stabile Signal-APIs: `effect`, `linkedSignal` und `toSignal`
 
 Seit Angular 16 stehen mit Signals die Weichen auf ein neues, reaktives Angular. In Angular 20 wurden nun weitere APIs aus dem Signals-Ökosystem als stabil freigegeben: `effect`, `linkedSignal` und `toSignal`.
 
@@ -226,7 +226,7 @@ Weitere Details und Beispiele finden Sie in unserer Signals-Reihe:
 * [Angular 19: Mastering effect and afterRenderEffect](https://angular.schule/blog/2024-11-effect-afterrendereffect)
 
 
-# httpResource: Daten laden mit Signals
+## httpResource: Daten laden mit Signals
 
 Im Oktober 2024 wurde bereits die neue experimentelle Resource API vorgestellt. Wir haben darüber ausführlich [in einem Blogpost](https://angular-buch.com/blog/2024-10-resource-api) berichtet.
 Sie verbindet die synchrone Welt von Signals mit asynchron abrufbaren Daten, z. B. mittels HTTP.
