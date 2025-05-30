@@ -16,7 +16,7 @@ sticky: true
 ---
 
 Alles neu macht der Mai – oder zumindest eine neue Major-Version von Angular:
-Am **29. Mai 2025** wurde **Angular 20** veröffentlicht! Im offiziellen [Angular-Blog](https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301) finden Sie die Release-Informationen direkt vom Angular-Team.
+Am **28. Mai 2025** wurde **Angular 20** veröffentlicht! Im offiziellen [Angular-Blog](https://blog.angular.dev/announcing-angular-v20-b5c9c06cf301) finden Sie die Release-Informationen direkt vom Angular-Team.
 
 Für die Migration auf Angular 20 empfehlen wir, den Befehl `ng update` zu nutzen.
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
@@ -73,10 +73,10 @@ export class BookCardComponent {}
 ```
 src/app
   book-card
-    book-cardts
-    book-cardhtml
-    book-cardscss
-    book-cardspec.ts
+    book-card.ts
+    book-card.html
+    book-card.scss
+    book-card.spec.ts
 ```
 
 ```ts
@@ -285,4 +285,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<small>**Titelbild:** TODO. Foto von XXX</small>
+<small>**Titelbild:** Morgenstimmung im Anklamer Stadtbruch. Foto von Ferdinand Malcher</small>
