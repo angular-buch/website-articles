@@ -42,7 +42,15 @@ Mit Angular 20 hat sich das geändert.
 Der neue [Styleguide](https://angular.dev/style-guide) wurde stark überarbeitet und verschlankt.
 Er bildet nun wieder den aktuellen Stand der Entwicklung von Angular-Anwendungen mit Angular 20 ab und die neuesten Konzepte.
 
-TODO: Component Suffix --- im Anschluss an den Merge dieser Änderungen! 🙂
+## Keine Suffixes mehr: bewusstere Benennung und neue Patterns
+
+Ein Teil der Änderungen, der nicht unerwähnt bleiben sollte, betrifft die Suffixe in Datei- und Klassennamen: Ab Angular 20 generiert die CLI standardmäßig keine Suffixes wie `.component.ts` oder `.service.ts` mehr. Diese neue Einstellung greift natürlich nur bei neu angelegten Projekten.
+
+Das Ziel dahinter ist klar: Angular-Anwendungen sollen weniger Boilerplate enthalten, und wir sollen uns bewusster mit der Benennung der Abstraktionen auseinandersetzen. Statt automatisch generierter Konstrukte wie `product-detail.component.ts`, ist nun mehr eigenes Nachdenken gefragt: Wie heißt diese Datei? Was macht sie? Und wie viel sagt der Name allein aus? Wir begrüßen diese Entwicklung, denn sie führt zu kürzeren Dateinamen, die gezielter gewählt werden.
+
+Ein Beispiel aus der Praxis: Bei gerouteten Komponenten bevorzugen wir inzwischen den Zusatz `page`, etwa `checkout.page.ts` (Klassenname `CheckoutPage`), weil er den Einsatzzweck klar macht - ohne sich auf technische Details wie `Component` zu beziehen. Eine Komponente, die nur Inhalte anzeigt und keine Logik enthält, könnten wir dann zum Beispiel `CheckoutView` nennen.
+
+Wer das bisherige Verhalten beibehalten möchte, kann in der Datei `angular.json` weiterhin Suffixes aktivieren.
 
 
 # Zoneless Developer Preview
