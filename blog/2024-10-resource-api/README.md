@@ -20,6 +20,9 @@ In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
 
 Eine Resource repräsentiert einen Datensatz, der asynchron geladen wird. Dabei geht es in der Regel um HTTP-Requests, die Daten von einem Server abrufen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen und Daten werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
+> **🇬🇧 This article is available in English language here: [Reactive Angular: Loading Data with the Resource API](https://angular.schule/blog/2025-05-resource-api)**
+
+
 ## Was bisher geschah: Beispiel ohne Resource
 
 Zur Einführung betrachten wir ein Szenario, das ganz klassisch und ohne die neue Resource API implementiert wird.
