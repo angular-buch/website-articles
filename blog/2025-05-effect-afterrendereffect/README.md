@@ -471,15 +471,15 @@ Im alltäglichen Anwendungscode werden `effect()` und andere signalbasierte APIs
 Kurz gesagt, greifen Sie nur dann zu `afterRenderEffect()`, wenn Standardansätze Ihren speziellen Anforderungen nicht mehr gerecht werden – und wirklich erst dann!
 
 
-## Best Practices for Using `effect()` and `afterRenderEffect()`
+## Best Practices für die Verwendung von `effect()` und `afterRenderEffect()`
 
-To make the most of these new APIs, here are a few best practices:
+Hier sind einige bewährte Praxisempfehlungen, um das Optimum aus den neuen Singnal-APIs herauszuholen:
 
-1. **Use `computed()` for simple dependencies:** Reserve `effect()` for more complex or state-dependent operations.
-2. **Choose phases carefully in `afterRenderEffect()`:** Stick to the specific phases and avoid `mixedReadWrite` when possible.
-3. **Use `onCleanup()` to manage resources:** Always use `onCleanup()` within effects for any resource that needs disposal, especially with animations or intervals.
-4. **Direct DOM Manipulations only when necessary:** Remember, Angular's reactive approach minimizes the need for manual DOM manipulations. 
-  Use `afterRenderEffect()` only when Angular's templating isn't enough.
+1. **Verwenden Sie `computed()` für einfache Abhängigkeiten:** Nutzen Sie `effect()` hingegen für komplexere oder zustandsabhängige Operationen.
+2. **Wählen Sie die Phasen in `afterRenderEffect()` sorgfältig aus:** Halten Sie sich an die spezifischen Phasen und vermeiden Sie `mixedReadWrite` wenn möglich.
+3. **Verwenden Sie `onCleanup()` zur Verwaltung von langlebigen Ressourcen:** Verwenden Sie immer `onCleanup()` innerhalb von Effekten für jede Ressource, die entsorgt werden muss, insbesondere bei Animationen oder Intervallen.
+4. **Direkte DOM-Manipulationen nur wenn nötig:** Denken Sie daran, dass der reaktive Ansatz von Angular die Notwendigkeit manueller DOM-Manipulationen minimiert. 
+  Verwenden Sie `afterRenderEffect()` nur, wenn Angulars Templating nicht mehr ausreicht.
 
 
 ## Demo Application
