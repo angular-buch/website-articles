@@ -192,19 +192,19 @@ Es ist nicht einfach, hier eine Entscheidung zu treffen, und wir vermuten, dass 
 Vielleicht müssen wir akzeptieren, dass in manchen Situationen beide Optionen absolut gültig sind 🙂 .
 
 
-## Introducing `afterRenderEffect()`
+## Vorstellung von `afterRenderEffect()`
 
-While `effect()` is intended for general reactive state management and will see daily use, `afterRenderEffect()` is more specialized and is generally reserved for advanced cases. 
-It's designed specifically for scenarios requiring precise timing after Angular completes a rendering cycle. 
-This is useful for complex DOM manipulations that cannot be achieved purely with Angular's reactivity and are often tied to low-level updates,
-like measuring element dimensions, directly managing animations, or orchestrating third-party libraries.
+Während `effect()` für die generelle reaktive Zustandsverwaltung gedacht ist und täglich zum Einsatz kommen wird, ist `afterRenderEffect()` spezieller und im Allgemeinen für fortgeschrittene Fälle reserviert. 
+Die API wurde speziell für Szenarien entwickelt, die ein präzises Timing erfordern, nachdem Angular einen Rendering-Zyklus abgeschlossen hat. 
+Dies ist nützlich für komplexe DOM-Manipulationen, die nicht allein mit Angulars Reaktivität erreicht werden können und oft an Low-Level-Updates gebunden sind,
+wie das Messen von Elementgrößen, die direkte Verwaltung von Animationen oder die Orchestrierung von Drittanbieter-Bibliotheken.
 
-The new `afterRenderEffect()` function allows us to control when specific tasks are executed during the DOM update process.
-The API itself mirrors the functionality of 
-* [`afterRender`](https://next.angular.dev/api/core/afterRender) *(registers a callback to be invoked each time the application finishes rendering)* and 
-* [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) *(registers callbacks to be invoked the next time the application finishes rendering, during the specified phases.)* 
+Mit der neuen Funktion `afterRenderEffect()` können wir steuern, wann bestimmte Aufgaben während des DOM-Aktualisierungsprozesses ausgeführt werden.
+Die API selbst spiegelt die Funktionalität von 
+* [`afterRender`](https://next.angular.dev/api/core/afterRender) *(registriert einen Callback, der jedes Mal aufgerufen wird, wenn die Anwendung das Rendern beendet)* und 
+* [`afterNextRender`](https://next.angular.dev/api/core/afterNextRender) *(registriert Callbacks, die das nächste Mal aufgerufen werden, wenn die Anwendung das Rendering beendet, während der angegebenen Phasen)* 
 
-which are both in **Developer Preview**!
+die sich beide im **Developer Preview** befinden!
 
 The Angular documentation recommends avoiding `afterRender` when possible and suggest specifying explicit phases with `afterNextRender` to avoid significant performance degradation. 
 You'll see a similar recommendation for `afterRenderEffect()`. There is one signature that is intended for use and another that exists but is not recommended.
