@@ -364,7 +364,7 @@ export class BookDetailsComponent {
     request: this.isbn,
     loader: ({ abortSignal }) => fetch(
       detailsUrl + '/' + this.isbn(),
-      signal: abortSignal
+      { signal: abortSignal }
     )
   });
 }
