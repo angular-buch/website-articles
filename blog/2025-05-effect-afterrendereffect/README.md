@@ -138,14 +138,14 @@ Hier ist unser Beispiel für ein Formular, das ein neues Buch erstellen und ein 
       <label for="isbn">ISBN</label>
       <input id="isbn" [formControl]="c.isbn" />
 
-      <label for="title">Title</label>
-      <input id="title" [formControl]="c.title" />
+      <label for="Titel">Titel</label>
+      <input id="Titel" [formControl]="c.Titel" />
 
-      <label for="description">Description</label>
+      <label for="description">Beschreibung</label>
       <textarea id="description" [formControl]="c.description"></textarea>
 
       <button type="submit" aria-label="Submit Form">
-        {{ isEditMode() ? 'Edit Book' : 'Create Book' }}
+        {{ isEditMode() ? 'Buch bearbeiten' : ‚Buch erstellen‘ }}
       </button>
     </form>
   `,
@@ -174,10 +174,10 @@ export class BookFormComponent {
         this.isEditMode.set(false);
       }
     });
-  }
+ }
 
   submitForm() {
-    // ...handle form submission logic
+    / ...Logik für die Formularübermittlung
   }
 }
 ```
