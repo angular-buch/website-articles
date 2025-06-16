@@ -327,33 +327,33 @@ export class ResizableComponent {
 
     const effect = afterRenderEffect({
 
-      // earlyRead: Captures the current height of the textarea from the DOM.
+      // earlyRead: Erfasst die aktuelle Höhe der Textarea aus dem DOM.
       earlyRead: (onCleanup) => {
 
         console.warn(`earlyRead executes`);
 
-        // Make `extraHeight` a dependency of `earlyRead`
-        // Now this code it will run again whenever `extraHeight` changes
-        // Hint: remove this statement, and `earlyRead` will execute only once!
+        // Macht `extraHeight` zu einer Abhängigkeit von `earlyRead`
+        // Jetzt wird dieser Code immer wieder ausgeführt, wenn sich `extraHeight` ändert
+        // Tipp: Entfernen Sie diese Anweisung, und `earlyRead` wird nur einmal ausgeführt!
         console.log('earlyRead: extra height:', this.extraHeight());
 
         const currentHeight: number = this.myElement()?.nativeElement.offsetHeight;
         console.log('earlyRead: offset height:', currentHeight);
 
-        // Pass the height to the next effect
+        // Übergabe der Höhe an den nächsten Effekt
         return currentHeight;
       },
 
-      // write: Sets the new height by adding `extraHeight` to the captured DOM height.
+      // write: Setzt die neue Höhe, indem `extraHeight` zur erfassten DOM-Höhe addiert wird.
       write: (currentHeight, onCleanup) => {
 
         console.warn(`write executes`);
 
-        // Make `extraHeight` a dependency of `write`
-        // Hint: change this code to `const newHeight = currentHeight();`, 
-        // so that we have no dependency to a signal that is changed, and `write` will be executed only once
-        // Hint 2: if `currentHeight` changes in `earlyRead`, `write` will re-run, too. 
-        // resize the textarea manually to achieve this
+        // Macht `extraHeight` zu einer Abhängigkeit von `write`
+        // Tipp: Ändern Sie diesen Code in `const newHeight = currentHeight();`, 
+        // damit wir keine Abhängigkeit zu einem Signal haben, das geändert wird, und `write` nur einmal ausgeführt wird
+        // Tipp 2: wenn sich `currentHeight` in `earlyRead` ändert, wird auch `write` neu ausgeführt. 
+        // Ändern Sie die Größe der Textarea manuell, um dies zu erreichen
         const newHeight = currentHeight() + this.extraHeight();
 
         this.myElement().nativeElement.style.height = `${newHeight}px`;
@@ -363,28 +363,28 @@ export class ResizableComponent {
           console.log('write: cleanup is called', newHeight);
         });
 
-        // Pass the height to the next effect
-        // Hint: pass the same value to `read`, e.g. `return 100`, to see how `read` is skipped
+        // Übergeben Sie die Höhe an den nächsten Effekt
+        // Tipp: übergeben Sie den gleichen Wert an `read`, z.B. `return 100`, um zu sehen, wie `read` übersprungen wird
         return newHeight;
       },
 
-      // The read effect logs the updated height
+      // Der `read`-Effekt protokolliert die aktualisierte Höhe
       read: (newHeight, onCleanup) => {
         console.warn('read executes');
         console.log('read: new height:', newHeight());
       }
     });
 
-    // Trigger a new run every 4 seconds by setting the signal `extraHeight`
+    // Triggert alle 4 Sekunden einen neuen Durchlauf, indem das Signal `extraHeight` gesetzt wird
     setInterval(() => {
-      console.warn('---- new round ----');
+      console.warn('---- neue Runde ----');
       this.extraHeight.update(x => ++x)
     }, 4_000);
 
-    // Try this, if the signal value stays the same, nothing will happen
+    // Probieren Sie diese Zeile aus, wenn der Signalwert gleich bleibt, passiert nichts
     // setInterval(() => this.extraHeight.update(x => x), 4_000);
 
-    // cleanup callbacks are also executed when we destroy the hook
+    // Die `onCleanup`-Callbacks werden ausgeführt, wenn wir den Hook zerstören, hierzu folgende Zeile einkommentieren
     // setTimeout(() => effect.destroy(), 20_000);
   }
 }
