@@ -171,25 +171,25 @@ Wir haben ein Signal namens `isEditMode` definiert, das entsprechend aktualisier
 In der Vergangenheit wäre hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wen Input geändert wurden.
 
 
-### When to choose `effect()` over `computed()`
+### Wann sollte man `effect()` anstatt `computed()` verwenden?
 
-The previous constraints on `effect()` have been removed, so it is now more challenging to decide when to use `computed()` or `effect()`.
-In our opinion, it depends on the use case:
-- **Use `computed()`** for deriving a value based on other signals, especially when you need a pure, read-only reactive value. Inside a computed signal, it is strictly not allowed to set other signals.
-  We covered `computed()` and `linkedSignal()` in this article: **[Angular 19: Introducing LinkedSignal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
-- **Use `effect()`** if the operation is more complex, involves setting multiple signals or requires side effects to be performed outside the world of signals, such as synchronising reactive form states or logging events.
+Die früheren Einschränkungen für `effect()` wurden entfernt, so dass es jetzt schwieriger ist, zu entscheiden, wann `computed()` oder `effect()` verwendet werden soll.
+Unserer Meinung nach hängt es vom Anwendungsfall ab:
+- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signalen basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines berechneten Signals ist es grundsätzlich nicht erlaubt, andere Signale zu setzen.
+  Wir haben `computed()` und `linkedSignal()` in diesem Artikel behandelt: **[Angular 19: Einführung von LinkedSignal für Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
+- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signale beinhaltet oder Seiteneffekte außerhalb der Welt der Signale erfordert, wie z.B. das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
 
-For patching forms, there is currently no better approach than using effects. 
-This approach can also be easily migrated to what would have been done in the past with `ngOnChanges` – which is great.
-However, it remains questionable whether a computed signal would have been a better fit for `isEditMode`.
-The following is also possible:
+Für das Patchen von Formularen gibt es derzeit keinen besseren Ansatz als die Verwendung von Effekten. 
+Der Einsatz von Effekten kann auch gut für die Migration von bestehendem Code verwendet werden, der zuvor auf `ngOnChanges` gesetzt hat.
+Es bleibt übrigens fraglich, ob ein Computed-Signal nicht besser für den `isEditMode` geeignet gewesen wäre.
+Folgendes ist nämlich ebenso möglich:
 
 ```ts
 isEditMode = computed(() => !!this.currentBook());
 ```
 
-It is not easy to make a decision here, and we suspect that it highly depends on personal taste.
-Perhaps we have to accept that in some situations both options are absolutely valid. 🙂
+Es ist nicht einfach, hier eine Entscheidung zu treffen, und wir vermuten, dass es stark vom persönlichen Geschmack abhängt.
+Vielleicht müssen wir akzeptieren, dass in manchen Situationen beide Optionen absolut gültig sind 🙂 .
 
 
 ## Introducing `afterRenderEffect()`
