@@ -223,35 +223,35 @@ Bevor wir beginnen, hier einige wichtige Fakten über die Effekte, die durch `af
 **Keine SSR:** Diese Effekte werden nur in Browserumgebungen ausgeführt, nicht auf dem Server.
 
 
-### Understanding the Phases
+### Die Effekt-Phasen verstehen
 
-Phased execution helps to avoid unnecessary layout recalculations.
-We can register effects for each phase by specifying a callback function:
+Die phasenweise Ausführung hilft, unnötige Neuberechnungen zu vermeiden.
+Wir können Effekte für jede Phase registrieren, indem wir eine Callback-Funktion angeben:
 
 ```ts
 afterRenderEffect({
 
-  // Read DOM properties before writes.
+  // DOM-Eigenschaften vor dem Schreiben lesen.
   earlyRead: (onCleanup: EffectCleanupRegisterFn) => E,
 
-  // Execute DOM write operations.
+  // Ausführen von DOM-Schreiboperationen.
   write: (signal1: firstAvailableSignal<[E]>, onCleanup: EffectCleanupRegisterFn) => W,
 
-  // Allows for combined reads and writes but should be used sparingly!
+  // Ermöglicht kombinierte Lese- und Schreibvorgänge, sollte aber sparsam eingesetzt werden!
   mixedReadWrite: (signal2: firstAvailableSignal<[W, E]>, onCleanup: EffectCleanupRegisterFn) => M,
 
-  // Execute DOM reads after writes are completed.
+  // Führt DOM-Lesevorgänge aus, nachdem Schreibvorgänge abgeschlossen sind.
   read: (signal3: firstAvailableSignal<[M, W, E]>, onCleanup: EffectCleanupRegisterFn) => void
 }): AfterRenderRef;
 ```
 
-This is a simplified version of the [real `afterRenderEffect()` signature](https://github.com/angular/angular/blob/f3d931627523843281efb6f4207008ebbbbbb668/packages/core/src/render3/reactivity/after_render_effect.ts#L331).
-The first callback receives no parameters.
-Each subsequent phase callback will receive the return value of the previous phase **as a signal**.
-So, if the `earlyRead` effect returns a value of type `E`, and the next registered effect is `write`, then `write` will receive a signal of `E`.
-However, if the next registered effect is `mixedReadWrite`, this effect will receive a signal of `E`, and so on.
-The `read` effect has no return value.
-The passing of values between phases can be used to coordinate work across multiple phases.
+Dies ist eine vereinfachte Version der [echten `afterRenderEffect()` Signatur](https://github.com/angular/angular/blob/f3d931627523843281efb6f4207008ebbbbbb668/packages/core/src/render3/reactivity/after_render_effect.ts#L331).
+Der erste Callback erhält keine Parameter.
+Jeder nachfolgenden Callbacks empfängt den Rückgabewert der vorherigen Phase **als Signal**.
+Wenn also der Effekt `earlyRead` einen Wert vom Typ `E` zurückgibt und der nächste registrierte Effekt `write` ist, dann erhält `write` ein Signal vom Typ `E`.
+Wenn jedoch der nächste registrierte Effekt `mixedReadWrite` ist, wird dieser Effekt ein Signal vom Typ `E` erhalten, und so weiter.
+Der Effekt `read` hat keinen Rückgabewert.
+Die Weitergabe von Werten zwischen Phasen kann zur Koordinierung der Arbeit über mehrere Phasen hinweg verwendet werden.
 
 
 Effects run in the following phase order, only when dirty through signal dependencies:
