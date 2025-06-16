@@ -417,12 +417,13 @@ Hier ist eine Aufschlüsselung der einzelnen Effekte:
   Wird dieselbe Zahl zweimal gesetzt, wird dies nicht als Änderung betrachtet, so dass der Effekt `write` den Effekt `read` nicht als "dirty" markiert.
 
 3. **`read` Phase**: 
-  The effect that runs in the `read` phase logs the `newHeight`. 
-  We could also read from the DOM in that phase and store the result to a new signal.
-  But in this example this work is not necessary, because the `earlyRead` is already doing that job.
+  Der Effekt, der in der `read`-Phase abläuft, protokolliert die `newHeight`. 
+  Wir könnten in dieser Phase auch aus dem DOM lesen und das Ergebnis in einem neuen Signal speichern.
+  Aber in diesem Beispiel ist diese Arbeit nicht notwendig, weil `earlyRead` diese Aufgabe bereits erledigt.
 
-> We encourage you to scroll down to check out our Demo Application. 
-  Feel free to follow the hints in the comments to experiment with the specifics of each phase.
+> Wir empfehlen Ihnen, nach unten zu scrollen und sich unsere Demo-Anwendung anzuschauen. 
+  Folgen Sie den Hinweisen in den Kommentaren, um mit den Besonderheiten der einzelnen Phasen zu experimentieren.
+  So lassen sich die unterschiedlichen Phase am Besten verstehen.
 
 
 ## Migration Guide: From Angular's Lifecycle Hooks to Signal-Based Reactivity
