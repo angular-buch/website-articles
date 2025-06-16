@@ -427,7 +427,7 @@ Hier ist eine Aufschlüsselung der einzelnen Effekte:
 
 ## Migrationsleitfaden: Von Angulars Lifecycle Hooks zu signalbasierter Reaktivität
 
-Im April 2023 skizzierte das Angular-Team in [RFC #49682] (https://github.com/angular/angular/discussions/49682) seine Vision von signalbasierten Komponenten.
+Im April 2023 skizzierte das Angular-Team in [RFC #49682](https://github.com/angular/angular/discussions/49682) seine Vision von signalbasierten Komponenten.
 Das langfristige Ziel ist es, die traditionellen Lifecycle Hooks abzuschaffen, obwohl der RFC die Beibehaltung von `ngOnInit` und `ngOnDestroy` diskutiert. (Jetzt haben wir auch Ersatz für diese, daher wären wir nicht überrascht, wenn diese auch verschwinden werden.)
 Das Dokument schlug die Einführung von `afterRenderEffect()` als Teil einer Roadmap vor, und mit Angular 19 beginnt die finale Vision von signalbasierten Komponenten Gestalt anzunehmen.
 
