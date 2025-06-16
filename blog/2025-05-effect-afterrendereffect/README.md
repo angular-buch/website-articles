@@ -254,14 +254,14 @@ Der Effekt `read` hat keinen Rückgabewert.
 Die Weitergabe von Werten zwischen Phasen kann zur Koordinierung der Arbeit über mehrere Phasen hinweg verwendet werden.
 
 
-Effects run in the following phase order, only when dirty through signal dependencies:
+Die Effekte laufen in der folgenden Reihenfolge ab, und zwar nur dann, wenn sie durch Signalabhängigkeiten als "dirty" markiert wurden:
 
-| Phase                 | Rule                   |
+| Phase | Regel |
 |-----------------------|------------------------|
-| 1. `earlyRead`        | Use this phase to **read** from the DOM before a subsequent write callback. Prefer the `read` phase if reading can wait until after the `write` phase. **Never** write to the DOM in this phase. |
-| 2. `write`            | Use this phase to **write** to the DOM. **Never** read from the DOM in this phase. |
-| 3. `mixedReadWrite`   | Use this phase to read from and write to the DOM simultaneously. **Do not** use this phase if it is possible to divide the work among the other phases instead. |
-| 4. `read`             | Use this phase to **read** from the DOM. **Never** write to the DOM in this phase. |
+| 1. `earlyRead` | Verwenden Sie diese Phase zum **Lesen** aus dem DOM vor einem nachfolgenden Schreib-Callback. Bevorzugen Sie die `read`-Phase, wenn das Lesen bis nach der `write`-Phase warten kann. **Niemals** in dieser Phase in das DOM schreiben. |
+| 2. `write` | Verwenden Sie diese Phase zum **Schreiben** in das DOM. **Niemals** in dieser Phase aus dem DOM lesen. |
+| 3. `mixedReadWrite` | Verwenden Sie diese Phase, um gleichzeitig vom DOM zu lesen und in das DOM zu schreiben. Verwenden Sie diese Phase **nicht** , wenn es möglich ist, die Arbeit stattdessen auf die anderen Phasen aufzuteilen. |
+| 4. `read` | Verwenden Sie diese Phase zum **Lesen** aus dem DOM. **Niemals** in dieser Phase in das DOM schreiben. |
 
 [According to the docs](https://next.angular.dev/api/core/afterRenderEffect), you should prefer using the `read` and `write` phases over the `earlyRead` and `mixedReadWrite` phases when possible, to avoid performance degradation.
 Angular is unable to verify or enforce that phases are used correctly and instead relies on each developer to follow the documented guidelines.
