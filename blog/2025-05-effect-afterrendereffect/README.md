@@ -2,8 +2,8 @@
 title: 'Reactive Angular: effect and afterRenderEffect verstehen und einsetzen'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
-published: 2024-11-14
-lastModified: 2024-11-17
+published: 2025-05-01
+lastModified: 2025-05-01
 keywords:
   - Angular
   - JavaScript
@@ -18,12 +18,12 @@ header: effect.jpg
 
 Mit Angular 19 gibt es eine wichtige Neuerung: Die `effect()`-API wurde vereinfacht und die neue Funktion `afterRenderEffect()` wurde eingeführt (siehe [PR 57549](https://github.com/angular/angular/pull/57549)).
 Diese Neuerung hat Auswirkungen darauf, wie Angular Aufgaben nach dem Rendern behandelt, und ist besonders nützlich für Anwendungen, die auf präzises Timing beim Rendern und bei DOM-Manipulationen angewiesen sind.
-In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
+In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
 
-wurde eingeführt 
+
 ## Angular 19 vs. vorherige Versionen: Was ist anders?
 
-Die `effect()` API wurde als Teil des neuen Signal-basierten Reaktivitätsmodells von Angular [in Angular 16] eingeführt (https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d).
+Die `effect()` API wurde als Teil des neuen Signal-basierten Reaktivitätsmodells von Angular [in Angular 16](https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d) eingeführt .
 Angular 19 führt nun ein bedeutendes Update der `effect()` API ein. Jetzt ist es einfacher, Seiteneffekte direkt innerhalb von `effect()` Funktionen auszuführen - sogar wenn Signals verwendet werden.
 Vor dieser Änderung war der Einsatz von `effect()` stark eingeschränkt: Es wurde davon abgeraten, innerhalb eines `effect()` Signals zu setzen. Um dieses Verhalten zu erlauben, musste das Flag `allowSignalWrites` aktiviert werden:
 
@@ -42,7 +42,7 @@ Es wurde empfohlen, `effect()` nur für bestimmte Seiteneffekte zu verwenden, wi
 - Implementierung von benutzerdefinierten DOM-Verhaltensweisen, die mit der Template-Syntax nicht erreicht werden können, oder
 - Umgang mit UI-Bibliotheken von Drittanbietern, wie z. B. das Rendern auf ein `<canvas>`-Element oder die Integration von Charting-Bibliotheken.
 
-Allerdings stellte sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, aber es wurde zu oft in legitimen Fällen verwendet, in denen das Setzen von Signals sinnvoll oder sogar notwendig war, wie z. B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signals.
+Allerdings stellte sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, doch es kam in der Praxis regelmäßig in legitimen Fällen zum Einsatz, in denen das Setzen von Signals sinnvoll oder sogar notwendig war, wie z. B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signals.
 Als Reaktion darauf erlaubt der neue Ansatz von Angular nun standardmäßig das Setzen von Signals innerhalb von `effect()`, wodurch die Notwendigkeit von `allowSignalWrites` entfällt.
 Dieses flexiblere Design spiegelt das Engagement von Angular wider, die Entwicklung zu vereinfachen.
 Siehe den [offiziellen Blog-Post](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd), der diese neue Anleitung bestätigt.
@@ -67,7 +67,7 @@ Lass uns in die Details einsteigen! 🚀
 
 Sowohl `effect()` als auch `afterRenderEffect()` sind darauf ausgelegt, Änderungen in Signals zu verfolgen und darauf zu reagieren, aber sie unterscheiden sich im Timing und in den Anwendungsfällen.
 
-- **`effect()`** wird als Teil des Change Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
+- **`effect()`** wird als Teil des Change Detection ausgeführt und kann nun Signals sicher und ohne zusätzliche Flags verändern.
 - **`afterRenderEffect()`** ist eine API auf niedrigerer Ebene, die ausgeführt wird, nachdem das DOM aktualisiert wurde. 
   Sie eignet sich besonders für Aufgaben, die eine direkte Interaktion mit dem DOM erfordern, wie das Messen von Elementgrößen oder komplexe visuelle Aktualisierungen.
 
@@ -88,7 +88,7 @@ afterRenderEffect(() => {
 Wie erwartet, wird die Konsolenausgabe für `afterRenderEffect()` nach der Ausgabe von `effect()` ausgelöst.
 
 
-## Vorstellung von `Effekt()`
+## Vorstellung von `effect()`
 
 In diesem Artikel behandeln wir Effekte, die innerhalb einer Komponente erstellt werden. 
 Diese werden **Komponenteneffekte** genannt und ermöglichen das sichere Lesen und Schreiben von Komponenteneigenschaften und Signals. 
@@ -165,7 +165,7 @@ export class BookFormComponent {
 ```
 
 In diesem Beispiel bietet sich `effect()` für die Behandlung des Seiteneffekts (Änderung des Formulars) an, ohne dass unnötige Berechnungen durchgeführt werden müssen. 
-Zudem können wir jetzt problemlos Signale im Effekt setzen.
+Zudem können wir jetzt problemlos Signals im Effekt setzen.
 Um zu zeigen, dass dies nun vollkommen gültig ist, haben wir während dieser Phase ein weiteres Signal aktualisiert.
 Wir haben ein Signal namens `isEditMode` definiert, das entsprechend aktualisiert wird.
 In der Vergangenheit hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wenn Inputs geändert wurden.
@@ -175,9 +175,9 @@ In der Vergangenheit hätte man `ngOnChanges` eingesetzt, um das Formular zu pat
 
 Die früheren Einschränkungen für `effect()` wurden entfernt, so dass es jetzt schwieriger ist, zu entscheiden, wann `computed()` oder `effect()` verwendet werden soll.
 Unserer Meinung nach hängt es vom Anwendungsfall ab:
-- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signals basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines Computed-Signals ist es grundsätzlich nicht erlaubt, andere Signale zu setzen.
+- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signals basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines Computed-Signals ist es grundsätzlich nicht erlaubt, andere Signals zu setzen.
   Wir haben `computed()` und `linkedSignal()` in diesem Artikel behandelt: **[Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](https://angular-buch.com/blog/2024-11-linked-signal)**
-- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signale beinhaltet oder Seiteneffekte außerhalb der Welt der Signale erfordert, wie zum Beispiel das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
+- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signals beinhaltet oder Seiteneffekte außerhalb der Welt der Signals erfordert, wie zum Beispiel das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
 
 Für das Patchen von Formularen gibt es derzeit keinen besseren Ansatz als die Verwendung von Effekten. 
 Der Einsatz von Effekten kann auch gut für die Migration von bestehendem Code verwendet werden, der zuvor auf `ngOnChanges` gesetzt hat.
@@ -210,7 +210,7 @@ Die Angular-Dokumentation empfiehlt, `afterRender` wenn möglich zu vermeiden un
 Eine ähnliche Empfehlung gibt es auch für `afterRenderEffect()`. Es gibt eine Signatur, die für die Verwendung vorgesehen ist, und eine andere, die zwar existiert, aber nicht empfohlen wird.
 
 Es zudem einen großen Unterschied zwischen den bestehenden Hook-Methoden und dem neuen `afterRenderEffect()`:
-> **💡 Werte werden von Phase zu Phase als Signale und nicht als einfache Werte weitergegeben.**
+> **💡 Werte werden von Phase zu Phase als Signals und nicht als einfache Werte weitergegeben.**
 
 Dadurch ist es möglich, dass spätere Phasen nicht ausgeführt werden müssen, wenn sich die von früheren Phasen zurückgegebenen Werte nicht ändern - und wenn keine anderen Abhängigkeiten etabliert wurden (wir werden in Kürze genauer darauf eingehen).
 Bevor wir beginnen, hier einige wichtige Fakten über die Effekte, die durch `afterRenderEffect()` erzeugt werden:
@@ -218,7 +218,7 @@ Bevor wir beginnen, hier einige wichtige Fakten über die Effekte, die durch `af
 * **Post-Render Execution:** Diese Effekte werden ausgeführt, wenn es sicher ist, Änderungen am DOM vorzunehmen. ([Quelle: Keynote-Folien von ng-poland 2024](https://docs.google.com/presentation/d/1puZmyZ-dgnt6_b0nOBaDMpyf_FmQld1h8yAmWxjA6gk/edit?usp=sharing))
 * **Phased Execution:** Diese Effekte können für bestimmte Phasen des Renderzyklus registriert werden. 
   Das Angular-Team empfiehlt, diese Phasen für eine optimale Leistung einzuhalten.
-* **Vollständig kompatibel mit Signals** Diese Effekte arbeiten nahtlos mit dem Signal-Reaktivitätssystem von Angular zusammen, und Signale können während der Phasen gesetzt werden.
+* **Vollständig kompatibel mit Signals** Diese Effekte arbeiten nahtlos mit dem Signal-Reaktivitätssystem von Angular zusammen, und Signals können während der Phasen gesetzt werden.
 * **Selektive Ausführung:** Diese Effekte werden mindestens einmal ausgeführt, aber nur dann erneut, wenn sie aufgrund von Signalabhängigkeiten als "schmutzig" markiert sind. Wenn sich kein Signal ändert, wird der Effekt nicht erneut ausgelöst.
 * **Keine SSR:** Diese Effekte werden nur in Browserumgebungen ausgeführt, nicht auf dem Server.
 
@@ -279,7 +279,7 @@ Damit ein Effekt jedoch erneut ausgeführt werden kann, muss er aufgrund einer �
 Dieses auf das Tracking von Abhängigkeiten basierende System hilft Angular, die Leistung zu optimieren, indem es überflüssige Ausführungen verhindert.
 
 Damit ein Effekt als "dirty" markiert wird und erneut ausgeführt werden kann, muss zuvor er eine Abhängigkeit zu einem Signal hergestellt worden sein, und dieses muss sich geändert haben. 
-Wenn der Effekt keine Signale verfolgt oder wenn die verfolgten Signale unverändert bleiben, wird der Effekt nicht als "dirty" markiert und der Code wird nicht erneut ausgeführt.
+Wenn der Effekt keine Signals verfolgt oder wenn die verfolgten Signals unverändert bleiben, wird der Effekt nicht als "dirty" markiert und der Code wird nicht erneut ausgeführt.
 
 Es gibt zwei Möglichkeiten, Abhängigkeiten in `afterRenderEffect()` zu erstellen:
 
@@ -289,10 +289,10 @@ Es gibt zwei Möglichkeiten, Abhängigkeiten in `afterRenderEffect()` zu erstell
   Es ist wichtig zu verstehen, dass wir die Getter-Funktion des Signals tatsächlich ausführen müssen, da die einfache Weitergabe des Signals nicht ausreicht, um eine Abhängigkeit herzustellen.
 
 2. **Direktes Verfolgen von Komponenten-Signals**: 
-  Wir können auch Abhängigkeiten herstellen, indem wir direkt auf andere Signale unserer Komponente innerhalb des Effekts zugreifen. 
+  Wir können auch Abhängigkeiten herstellen, indem wir direkt auf andere Signals unserer Komponente innerhalb des Effekts zugreifen. 
   Im folgenden Beispiel lesen wir ein Signal von der Komponente innerhalb des Effekts `earlyRead`, um eine Abhängigkeit zu schaffen und sicherzustellen, dass der Effekt mehrfach ausgeführt wird.
 
-**💡 Angular stellt sicher, dass Effekte nur dann erneut ausgeführt werden, wenn sich ihre verfolgten Signale ändern, und markiert den Effekt selbst als "dirty".
+**💡 Angular stellt sicher, dass Effekte nur dann erneut ausgeführt werden, wenn sich ihre verfolgten Signals ändern, und markiert den Effekt selbst als "dirty".
   Ohne diese Signalabhängigkeiten wird jeder Effekt nur einmal ausgeführt!
 
 
@@ -304,7 +304,7 @@ In diesem Beispiel wird demonstriert, wie `afterRenderEffect()` verwendet werden
 Die Textarea ist so konzipiert, dass sie durch Ziehen der unteren rechten Ecke in der Größe verändert werden kann, aber wir wollen auch, dass sie ihre Höhe regelmäßig automatisch anpasst.
 Um dies zu erreichen, lesen wir die aktuelle Höhe aus dem DOM und aktualisieren sie auf der Grundlage eines zentralen Signals namens `extraHeight`.
 
-Dieses Beispiel wurde durch den Artikel [„Angular 19: afterRenderEffect“] (https://medium.com/@amosisaila/angular-19-afterrendereffect-5cf8e6482256) von Amos Lucian Isaila Onofrei inspiriert, den wir an entscheidender Stelle modifiziert haben. ( Das Originalbeispiel liest im `write`-Effekt aus dem DOM, was laut der Angular-Dokumentation ausdrücklich nicht empfohlen wird).
+Dieses Beispiel wurde durch den Artikel [Angular 19: afterRenderEffect](https://medium.com/@amosisaila/angular-19-afterrendereffect-5cf8e6482256) von Amos Lucian Isaila Onofrei inspiriert, den wir an entscheidender Stelle modifiziert haben. (Das Originalbeispiel liest im `write`-Effekt aus dem DOM, was laut der Angular-Dokumentation ausdrücklich nicht empfohlen wird).
 
 Unser Beispiel zeigt, wie man mehrere Phasen (`earlyRead`, `write` und `read`) in `afterRenderEffect()` verwendet, um DOM-Manipulationen effizient zu verarbeiten und dabei die Richtlinien vom Angular-Team für die Trennung von Lese- und Schreibvorgängen einhält:
 
@@ -495,14 +495,12 @@ Zu guter Letzt bietet der dritte Link eine interaktive Demo auf StackBlitz, wo S
 
 ## Fazit
 
-Angulars neue `effect()`-API eröffnet neue Möglichkeiten für die reaktive Zustandsverwaltung und `afterRenderEffect()` bietet bei Bedarf eine effiziente DOM-Manipulation.
-Wenn man versteht, wann man welche API verwenden sollte, können Sie leistungsfähige und dabei trotzdem gut verständliche Angular-Anwendungen mit einer klaren neuen Syntax erstellen.
+Beide APIs eröffnen neue, elegante Wege zur Zustands- und DOM-Verwaltung in Angular – reaktiv, präzise und klar. 
+Wer sich frühzeitig mit `effect()` und `afterRenderEffect()` vertraut macht, profitiert schon heute von der Architektur von morgen.
 
 > **⚠️ Bitte beachten Sie, dass sich beide APIs noch im "Developer Preview" befinden und noch Änderungen unterliegen können!
 
-Aber die Zeit vergeht ohnehin wie im Flug.
-Probieren Sie `effect()` und `afterRenderEffect()` noch heute in Ihrem Angular-Projekt aus und sehen Sie, wie sie Ihre Zustandsverwaltung und DOM-Interaktionen vereinfachen. Es wird sicherlich nicht mehr lange dauern, bis die APIs stabil sind!
-
+Nutzen Sie die Gelegenheit, `effect()` und `afterRenderEffect()` in Ihrer Anwendung auszuprobieren – die APIs werden schon bald stabil sein.
 
 <hr>
 
