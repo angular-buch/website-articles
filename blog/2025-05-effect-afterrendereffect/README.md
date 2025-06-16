@@ -454,21 +454,21 @@ Oder anders ausgedrückt, hier ist eine direkte Gegenüberstellung:
 Damit können Sie Callbacks für Aufräum- oder Zerstörungsaufgaben definieren, so dass Sie `ngOnDestroy` in Ihrer Codebasis im Prinzip nicht mehr benötigen.
 
 
-## Reminder: `afterRenderEffect()` shouldn't be used in line-of-business code
+## Erinnerung: `afterRenderEffect()` sollte nicht in Business-Code verwendet werden
 
-If you rarely needed `ngAfterViewInit` or `ngAfterContentChecked` in the past, `afterRenderEffect()` will likely be equally uncommon in your codebase. 
-It's aimed at addressing rare tasks and won't be used as frequently as foundational features like 
+Wenn Sie `ngAfterViewInit` oder `ngAfterContentChecked` in der Vergangenheit selten gebraucht haben, wird `afterRenderEffect()` in Ihrer Codebasis wahrscheinlich ebenso selten vorkommen. 
+Es zielt auf spezielle Aufgaben ab und wird nicht so häufig verwendet werden wie die grundlegenden Singnal-APIs 
 [`signal()`](https://angular.dev/api/core/signal), 
 [`computed()`](https://angular.dev/api/core/computed), 
-`effect()`, `linkedSignal()`, or `resource()`.
+`effect()`, `linkedSignal()`, oder `resource()`.
 
-In this context, think of `afterRenderEffect()` as similar in importance to `ngAfterViewInit`.
-It's an advanced lifecycle tool rather than a daily necessity. 
-Use `afterRenderEffect()` only when you need precise control over DOM operations, low-level APIs, or third-party libraries that require specific timing and coordination across rendering phases.
-If you're not building your own component library (and there are already many component libraries available), `afterRenderEffect()` should be rarely seen.
+Betrachten Sie `afterRenderEffect()` in diesem Zusammenhang als ähnlich wichtig wie `ngAfterViewInit`.
+Diese Effekte sind eher ein fortgeschrittenes Lebenszyklus-Werkzeug als eine tägliche Notwendigkeit. 
+Verwenden Sie `afterRenderEffect()` nur, wenn Sie eine präzise Kontrolle über DOM-Operationen, Low-Level-APIs oder Bibliotheken von Drittanbietern benötigen, die ein spezifisches Timing und eine Koordination über Rendering-Phasen hinweg erfordern.
+Wenn Sie also nicht Ihre eigene Komponentenbibliothek bauen (und es gibt bereits viele gute Komponentenbibliotheken), sollten Sie `afterRenderEffect()` nur selten sehen.
 
-In everyday application code, `effect()` and other signal-based APIs will cover most reactive needs without the added complexity that `afterRenderEffect()` brings. 
-In short, reach for `afterRenderEffect()` only when standard approaches don't meet your specialized requirements.
+Im alltäglichen Anwendungscode werden `effect()` und andere signalbasierte APIs die meisten Anforderungen an Reaktivität bedienen, ohne die zusätzliche Komplexität, die `afterRenderEffect()` mit sich bringt. 
+Kurz gesagt, greifen Sie nur dann zu `afterRenderEffect()`, wenn Standardansätze Ihren speziellen Anforderungen nicht mehr gerecht werden – und wirklich erst dann!
 
 
 ## Best Practices for Using `effect()` and `afterRenderEffect()`
