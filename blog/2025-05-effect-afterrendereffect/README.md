@@ -16,11 +16,11 @@ language: de
 header: effect.jpg
 ---
 
-Mit Angular 19 gibt es eine wichtige Neuerung: Die `effect()`-API wurde vereinfacht und die neue Funktion `afterRenderEffect()` wurde eingeführt. (siehe [PR 57549](https://github.com/angular/angular/pull/57549))
+Mit Angular 19 gibt es eine wichtige Neuerung: Die `effect()`-API wurde vereinfacht und die neue Funktion `afterRenderEffect()` wurde eingeführt (siehe [PR 57549](https://github.com/angular/angular/pull/57549)).
 Diese Neuerung hat Auswirkungen darauf, wie Angular Aufgaben nach dem Rendern behandelt, und ist besonders nützlich für Anwendungen, die auf präzises Timing beim Rendern und bei DOM-Manipulationen angewiesen sind.
 In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
 
-
+wurde eingeführt 
 ## Angular 19 vs. vorherige Versionen: Was ist anders?
 
 Die `effect()` API wurde als Teil des neuen Signal-basierten Reaktivitätsmodells von Angular [in Angular 16] eingeführt (https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d).
@@ -34,25 +34,25 @@ effect(() => {
 }, { allowSignalWrites: true })
 ```
 
-Früher riet die Angular-Dokumentation davon ab, Signals in `effect()` zu setzen, da dies zu Problemen wie `ExpressionChangedAfterItHasBeenChecked`-Fehlern, zyklischen Aktualisierungen oder unnötigen Change-Detection-Zyklen führen konnte.
-Es wurde empfohlen, `effect()` nur für bestimmte Seiteneffekte zu verwenden, wie z.B.:
+Früher riet die Angular-Dokumentation davon ab, Signals in `effect()` zu setzen, da dies zu Problemen wie `ExpressionChangedAfterItHasBeenChecked`-Fehlern, zyklischen Aktualisierungen oder unnötigen Change Detection-Zyklen führen konnte.
+Es wurde empfohlen, `effect()` nur für bestimmte Seiteneffekte zu verwenden, wie z. B.:
 
 - Logging von Änderungen zu Analyse- oder Debugging-Zwecken,
-- Synchronisierung der Daten mit dem lokalen Speicher (z.B. `window.localStorage`),
+- Synchronisierung der Daten mit dem lokalen Speicher (z. B. `window.localStorage`),
 - Implementierung von benutzerdefinierten DOM-Verhaltensweisen, die mit der Template-Syntax nicht erreicht werden können, oder
-- Umgang mit UI-Bibliotheken von Drittanbietern, wie z.B. das Rendern auf ein `<canvas>`-Element oder die Integration von Charting-Bibliotheken.
+- Umgang mit UI-Bibliotheken von Drittanbietern, wie z. B. das Rendern auf ein `<canvas>`-Element oder die Integration von Charting-Bibliotheken.
 
-Allerdings stellen sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, aber es wurde zu oft in legitimen Fällen verwendet, in denen das Setzen von Signalschreiben sinnvoll oder sogar notwendig war, wie z.B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signalen.
+Allerdings stellte sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, aber es wurde zu oft in legitimen Fällen verwendet, in denen das Setzen von Singals sinnvoll oder sogar notwendig war, wie z. B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signalen.
 Als Reaktion darauf erlaubt der neue Ansatz von Angular nun standardmäßig das Setzen von Signalen innerhalb von `effect()`, wodurch die Notwendigkeit von `allowSignalWrites` entfällt.
 Dieses flexiblere Design spiegelt das Engagement von Angular wider, die Entwicklung zu vereinfachen.
-Siehe den [offiziellen Blog-Post] (https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd), der diese neue Anleitung bestätigt.
+Siehe den [offiziellen Blog-Post](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd), der diese neue Anleitung bestätigt.
 
 Wir interpretieren diese Neuerung wie folgt:
 > 💡 **Es ist jetzt ein gültiger Anwendungsfall, `effect()` für Zustandsänderungen oder Seiteneffekte zu verwenden, die sich mit anderen reaktiven Konzepten wie `computed()` nur schwer umsetzen lassen.**
 
 Dieser Paradigmenwechsel steht im Einklang mit neuen Funktionen, die in Angular 19 eingeführt wurden, wie [`linkedSignal()`](https://angular.schule/blog/2024-11-linked-signal) und `resource()`.
-Beide helfen dabei, sauberere und deklarativere Code zu erreichen.
-Gute Patterns werden nicht mehr durch das `allowSignalWrites`-Flag erzwungen, sondern durch nützliche High-Level-Signal-APIs, welche direkt vom Angular-Team bereit gestellt werden.
+Beide helfen dabei, sauberere und deklarativeren Code zu erreichen.
+Gute Patterns werden nicht mehr durch das `allowSignalWrites`-Flag erzwungen, sondern durch nützliche High-Level-Signal-APIs, welche direkt vom Angular-Team bereitgestellt werden.
 
 Mit diesem Wandel ergibt sich eine neue Faustregel:
 
@@ -67,7 +67,7 @@ Lass uns in die Details einsteigen! 🚀
 
 Sowohl `effect()` als auch `afterRenderEffect()` sind darauf ausgelegt, Änderungen in Signalen zu verfolgen und darauf zu reagieren, aber sie unterscheiden sich im Timing und in den Anwendungsfällen.
 
-- **`effect()`** wird als Teil des Angular-Change-Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
+- **`effect()`** wird als Teil des Angular-Change Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
 - **`afterRenderEffect()`** ist eine API auf niedrigerer Ebene, die ausgeführt wird, nachdem das DOM aktualisiert wurde. 
   Sie eignet sich besonders für Aufgaben, die eine direkte Interaktion mit dem DOM erfordern, wie das Messen von Elementgrößen oder komplexe visuelle Aktualisierungen.
 
@@ -96,8 +96,8 @@ Es ist auch möglich, Effekte in Services zu erstellen.
 Wenn ein Dienst auf der Root-Level der Anwendung bereitgestellt wird (auch bekannt als Singleton), werden diese Effekte **root effects** genannt.
 
 Der Hauptunterschied zwischen diesen Arten von Effekten ist ihr Timing. 
-Komponenteneffekte arbeiten als Teil der Angular-Change-Detection, so dass wir sicher andere Eingangssignale lesen und Views verwalten können, die vom Komponentenzustand abhängen. 
-Root-Effekte hingegen laufen als Microtasks, unabhängig vom Komponentenbaum oder der Change-Detection.
+Komponenteneffekte arbeiten als Teil der Angular-Change Detection, so dass wir sicher andere Input-Signals lesen und Views verwalten können, die vom Komponentenzustand abhängen. 
+Root-Effekte hingegen laufen als Microtasks, unabhängig vom Komponentenbaum oder der Change Detection.
 
 In diesem Artikel konzentrieren wir uns ausschließlich auf **Komponenteneffekte**, die das sichere Lesen und Schreiben von Signalen innerhalb von Komponenten ermöglichen.
 
@@ -127,7 +127,7 @@ Hier ist unser Beispiel für ein Formular, das ein neues Buch erstellen und ein 
       <textarea id="description" [formControl]="c.description"></textarea>
 
       <button type="submit" aria-label="Submit Form">
-        {{ isEditMode() ? 'Buch bearbeiten' : ‚Buch erstellen‘ }}
+        {{ isEditMode() ? 'Buch bearbeiten' : 'Buch erstellen' }}
       </button>
     </form>
   `,
@@ -168,16 +168,16 @@ In diesem Beispiel bietet sich `effect()` für die Behandlung des Seiteneffekts 
 Zudem können wir jetzt problemlos Signale im Effekt setzen.
 Um zu zeigen, dass dies nun vollkommen gültig ist, haben wir während dieser Phase ein weiteres Signal aktualisiert.
 Wir haben ein Signal namens `isEditMode` definiert, das entsprechend aktualisiert wird.
-In der Vergangenheit wäre hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wen Input geändert wurden.
+In der Vergangenheit hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wen Input geändert wurden.
 
 
 ### Wann sollte man `effect()` anstatt `computed()` verwenden?
 
 Die früheren Einschränkungen für `effect()` wurden entfernt, so dass es jetzt schwieriger ist, zu entscheiden, wann `computed()` oder `effect()` verwendet werden soll.
 Unserer Meinung nach hängt es vom Anwendungsfall ab:
-- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signalen basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines berechneten Signals ist es grundsätzlich nicht erlaubt, andere Signale zu setzen.
-  Wir haben `computed()` und `linkedSignal()` in diesem Artikel behandelt: **[Angular 19: Einführung von LinkedSignal für Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
-- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signale beinhaltet oder Seiteneffekte außerhalb der Welt der Signale erfordert, wie z.B. das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
+- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signalen basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines Computed-Signals ist es grundsätzlich nicht erlaubt, andere Signale zu setzen.
+  Wir haben `computed()` und `linkedSignal()` in diesem Artikel behandelt: **[Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](https://angular-buch.com/blog/2024-11-linked-signal)**
+- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signale beinhaltet oder Seiteneffekte außerhalb der Welt der Signale erfordert, wie z. B. das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
 
 Für das Patchen von Formularen gibt es derzeit keinen besseren Ansatz als die Verwendung von Effekten. 
 Der Einsatz von Effekten kann auch gut für die Migration von bestehendem Code verwendet werden, der zuvor auf `ngOnChanges` gesetzt hat.
@@ -218,9 +218,9 @@ Bevor wir beginnen, hier einige wichtige Fakten über die Effekte, die durch `af
 * **Post-Render Execution:** Diese Effekte werden ausgeführt, wenn es sicher ist, Änderungen am DOM vorzunehmen. ([Quelle: Keynote-Folien von ng-poland 2024](https://docs.google.com/presentation/d/1puZmyZ-dgnt6_b0nOBaDMpyf_FmQld1h8yAmWxjA6gk/edit?usp=sharing))
 * **Phased Execution:** Diese Effekte können für bestimmte Phasen des Renderzyklus registriert werden. 
   Das Angular-Team empfiehlt, diese Phasen für eine optimale Leistung einzuhalten.
-* **100% Signal-kompatibel** Diese Effekte arbeiten nahtlos mit dem Signal-Reaktivitätssystem von Angular zusammen, und Signale können während der Phasen gesetzt werden.
-**Selektive Ausführung:** Diese Effekte werden mindestens einmal ausgeführt, aber nur dann erneut, wenn sie aufgrund von Signalabhängigkeiten als "schmutzig" markiert sind. Wenn sich kein Signal ändert, wird der Effekt nicht erneut ausgelöst.
-**Keine SSR:** Diese Effekte werden nur in Browserumgebungen ausgeführt, nicht auf dem Server.
+* **Vollständig kompatibel mit Signals** Diese Effekte arbeiten nahtlos mit dem Signal-Reaktivitätssystem von Angular zusammen, und Signale können während der Phasen gesetzt werden.
+* **Selektive Ausführung:** Diese Effekte werden mindestens einmal ausgeführt, aber nur dann erneut, wenn sie aufgrund von Signalabhängigkeiten als "schmutzig" markiert sind. Wenn sich kein Signal ändert, wird der Effekt nicht erneut ausgelöst.
+* **Keine SSR:** Diese Effekte werden nur in Browserumgebungen ausgeführt, nicht auf dem Server.
 
 
 ### Die Effekt-Phasen verstehen
@@ -247,7 +247,7 @@ afterRenderEffect({
 
 Dies ist eine vereinfachte Version der [echten `afterRenderEffect()` Signatur](https://github.com/angular/angular/blob/f3d931627523843281efb6f4207008ebbbbbb668/packages/core/src/render3/reactivity/after_render_effect.ts#L331).
 Der erste Callback erhält keine Parameter.
-Jeder nachfolgenden Callbacks empfängt den Rückgabewert der vorherigen Phase **als Signal**.
+Jeder nachfolgende Callback empfängt den Rückgabewert der vorherigen Phase **als Signal**.
 Wenn also der Effekt `earlyRead` einen Wert vom Typ `E` zurückgibt und der nächste registrierte Effekt `write` ist, dann erhält `write` ein Signal vom Typ `E`.
 Wenn jedoch der nächste registrierte Effekt `mixedReadWrite` ist, wird dieser Effekt ein Signal vom Typ `E` erhalten, und so weiter.
 Der Effekt `read` hat keinen Rückgabewert.
@@ -263,8 +263,7 @@ Die Effekte laufen in der folgenden Reihenfolge ab, und zwar nur dann, wenn sie 
 | 3. `mixedReadWrite` | Verwenden Sie diese Phase, um gleichzeitig vom DOM zu lesen und in das DOM zu schreiben. Verwenden Sie diese Phase **nicht** , wenn es möglich ist, die Arbeit stattdessen auf die anderen Phasen aufzuteilen. |
 | 4. `read` | Verwenden Sie diese Phase zum **Lesen** aus dem DOM. **Niemals** in dieser Phase in das DOM schreiben. |
 
-[Laut der offizellen Dokumentation (https://
-angular.dev/api/core/afterRenderEffect) sollte man, wenn möglich, die Phasen `read` und `write` den Phasen `earlyRead` und `mixedReadWrite` vorziehen, um Leistungseinbußen zu vermeiden.
+[Laut der offiziellen Dokumentation](https://angular.dev/api/core/afterRenderEffect) sollte man, wenn möglich, die Phasen `read` und `write` den Phasen `earlyRead` und `mixedReadWrite` vorziehen, um Leistungseinbußen zu vermeiden.
 Angular ist nicht in der Lage, die korrekte Verwendung von Phasen zu verifizieren oder zu erzwingen, und verlässt sich stattdessen darauf, dass jeder Entwickler die dokumentierten Richtlinien befolgt.
 
 Wie bereits erwähnt, gibt es auch eine zweite Signatur von `afterRenderEffect()`, die einen einzelnen Callback akzeptiert. 
@@ -364,7 +363,7 @@ export class ResizableComponent {
         });
 
         // Übergeben Sie die Höhe an den nächsten Effekt
-        // Tipp: übergeben Sie den gleichen Wert an `read`, z.B. `return 100`, um zu sehen, wie `read` übersprungen wird
+        // Tipp: übergeben Sie den gleichen Wert an `read`, z. B. `return 100`, um zu sehen, wie `read` übersprungen wird
         return newHeight;
       },
 
@@ -407,23 +406,23 @@ Hier ist eine Aufschlüsselung der einzelnen Effekte:
   Wenn Sie dies tun, werden Sie sehen, dass der `earlyRead`-Effekt nur einmal ausgeführt wird und dass jede manuelle Änderung der Textarea bei der nächsten Ausführung ignoriert wird.
 
 2. **`write` Phase**: 
-  Der Effekt, der in der `writ`-Phase abläuft, fügt den `extraHeight`-Wert zur erfassten `currentHeight` hinzu und aktualisiert die Height-Style-Eigenschaft der Textarea.
+  Der Effekt, der in der `write`-Phase ausgeführt wird, fügt den `extraHeight`-Wert zur erfassten `currentHeight` hinzu und aktualisiert die Height-Style-Eigenschaft der Textarea.
   Diese DOM-Schreiboperation passt die Höhe des Elements direkt in Pixeln an.
   Die Funktion `onCleanup` wird bereitgestellt, um alle erforderlichen Aufräumarbeiten oder Ressourcen vor dem nächsten Schreibvorgang zu erledigen.
   In unserem Beispiel sind keine Aufräumarbeiten erforderlich, aber wir wollten die Tatsache erwähnen, dass lang laufende Aufgaben (wie ein Timeout) aufgeräumt werden sollten.
   Die Bereinigung wird vor dem erneuten Eintritt in dieselbe Phase aufgerufen, oder wenn der Effekt selbst zerstört wird.
   Der `write`-Effekt übergibt dann die neue Höhe, `newHeight`, an den `read`-Effekt.
-  Tipp: Übergeben Sie denselben Wert an `read` (z.B. `return 100`) und Sie werden sehen, dass die Folgephase nicht ausgeführt wird.
+  Tipp: Übergeben Sie denselben Wert an `read` (z. B. `return 100`) und Sie werden sehen, dass die Folgephase nicht ausgeführt wird.
   Wird dieselbe Zahl zweimal gesetzt, wird dies nicht als Änderung betrachtet, so dass der Effekt `write` den Effekt `read` nicht als "dirty" markiert.
 
 3. **`read` Phase**: 
-  Der Effekt, der in der `read`-Phase abläuft, protokolliert die `newHeight`. 
+  Der Effekt, der in der `read`-Phase ausgeführt wird, protokolliert die `newHeight`. 
   Wir könnten in dieser Phase auch aus dem DOM lesen und das Ergebnis in einem neuen Signal speichern.
   Aber in diesem Beispiel ist diese Arbeit nicht notwendig, weil `earlyRead` diese Aufgabe bereits erledigt.
 
 > Wir empfehlen Ihnen, nach unten zu scrollen und sich unsere Demo-Anwendung anzuschauen. 
   Folgen Sie den Hinweisen in den Kommentaren, um mit den Besonderheiten der einzelnen Phasen zu experimentieren.
-  So lassen sich die unterschiedlichen Phase am Besten verstehen.
+  So lassen sich die unterschiedlichen Phasen am besten verstehen.
 
 
 ## Migrationsleitfaden: Von Angulars Lifecycle Hooks zu signalbasierter Reaktivität
@@ -450,14 +449,14 @@ Oder anders ausgedrückt, hier ist eine direkte Gegenüberstellung:
 | `ngAfterViewChecked`  | `afterRenderEffect()`  |
 
 
-**Hinweis:** Wenn Sie von den klassischen Lifecycle-Hooks weg vollständig weg  migrieren wollen, können Sie [`DestroyRef`](https://angular.dev/api/core/DestroyRef) verwenden.
+**Hinweis:** Wenn Sie von den klassischen Lifecycle-Hooks vollständig wegmigrieren wollen, können Sie [`DestroyRef`](https://angular.dev/api/core/DestroyRef) verwenden.
 Damit können Sie Callbacks für Aufräum- oder Zerstörungsaufgaben definieren, so dass Sie `ngOnDestroy` in Ihrer Codebasis im Prinzip nicht mehr benötigen.
 
 
 ## Erinnerung: `afterRenderEffect()` sollte nicht in Business-Code verwendet werden
 
 Wenn Sie `ngAfterViewInit` oder `ngAfterContentChecked` in der Vergangenheit selten gebraucht haben, wird `afterRenderEffect()` in Ihrer Codebasis wahrscheinlich ebenso selten vorkommen. 
-Es zielt auf spezielle Aufgaben ab und wird nicht so häufig verwendet werden wie die grundlegenden Singnal-APIs 
+Es zielt auf spezielle Aufgaben ab und wird nicht so häufig verwendet werden wie die grundlegenden Signal-APIs 
 [`signal()`](https://angular.dev/api/core/signal), 
 [`computed()`](https://angular.dev/api/core/computed), 
 `effect()`, `linkedSignal()`, oder `resource()`.
@@ -499,7 +498,7 @@ Zu guter Letzt bietet der dritte Link eine interaktive Demo auf StackBlitz, wo S
 Angulars neue `effect()`-API eröffnet neue Möglichkeiten für die reaktive Zustandsverwaltung und `afterRenderEffect()` bietet bei Bedarf eine effiziente DOM-Manipulation.
 Wenn man versteht, wann man welche API verwenden sollte, können Sie leistungsfähige und dabei trotzdem gut verständliche Angular-Anwendungen mit einer klaren neuen Syntax erstellen.
 
-> **⚠️ Bitte beachten Sie, dass sich beide APIs in der Developer Preview befinden und noch Änderungen unterliegen können!
+> **⚠️ Bitte beachten Sie, dass sich beide APIs noch im "Developer Preview" befinden und noch Änderungen unterliegen können!
 
 Aber die Zeit vergeht ohnehin wie im Flug.
 Probieren Sie `effect()` und `afterRenderEffect()` noch heute in Ihrem Angular-Projekt aus und sehen Sie, wie sie Ihre Zustandsverwaltung und DOM-Interaktionen vereinfachen. Es wird sicherlich nicht mehr lange dauern, bis die APIs stabil sind!
