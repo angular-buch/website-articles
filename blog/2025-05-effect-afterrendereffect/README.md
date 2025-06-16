@@ -81,29 +81,29 @@ Lass uns in die Details einsteigen! 🚀
 
 
 
-## Core Differences Between `effect()` and `afterRenderEffect()`
+## Kernunterschiede zwischen `effect()` und `afterRenderEffect()`
 
-Both `effect()` and `afterRenderEffect()` are designed to track and respond to changes in signals, but they differ in timing and use cases.
+Sowohl `effect()` als auch `afterRenderEffect()` sind darauf ausgelegt, Änderungen in Signalen zu verfolgen und darauf zu reagieren, aber sie unterscheiden sich im Timing und in den Anwendungsfällen.
 
-- **`effect()`** runs as part of the Angular change detection cycle and can now safely modify signals without any additional flags.
-- **`afterRenderEffect()`** is a lower-level API that executes after the DOM has been updated. 
-  It's particularly suited for tasks that require interacting directly with the DOM, such as measuring element sizes or making complex visual updates.
+- **`effect()`** wird als Teil des Angular-Change-Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
+- **`afterRenderEffect()`** ist eine API auf niedrigerer Ebene, die ausgeführt wird, nachdem das DOM aktualisiert wurde. 
+  Sie eignet sich besonders für Aufgaben, die eine direkte Interaktion mit dem DOM erfordern, wie das Messen von Elementgrößen oder komplexe visuelle Aktualisierungen.
 
-Here's a simple comparison to illustrate how these functions operate:
+Hier ist ein einfacher Vergleich, um die Funktionsweise dieser Funktionen zu veranschaulichen:
 
 ```typescript
 counter = signal(0);
 
 effect(() => {
-  console.log(`Current counter value: ${this.counter()}`);
+ console.log(`Aktueller Zählerwert: ${this.counter()}`);
 });
 
 afterRenderEffect(() => {
-  console.log('DOM rendering completed for this component');
+ console.log('DOM-Rendering für diese Komponente abgeschlossen');
 });
 ```
 
-As expected, the console output for `afterRenderEffect()` is triggered after the output of `effect()`.
+Wie erwartet, wird die Konsolenausgabe für `afterRenderEffect()` nach der Ausgabe von `effect()` ausgelöst.
 
 
 ## Introducing `effect()`
