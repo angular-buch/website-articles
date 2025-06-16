@@ -20,22 +20,6 @@ Mit Angular 19 gibt es eine wichtige Neuerung: Die `effect()`-API wurde vereinfa
 Diese Neuerung hat Auswirkungen darauf, wie Angular Aufgaben nach dem Rendern behandelt, und ist besonders nützlich für Anwendungen, die auf präzises Timing beim Rendern und bei DOM-Manipulationen angewiesen sind.
 In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
 
-<!-- ## Contents
-
-* [Angular 19 vs. Previous Versions: What's Different?](/blog/2024-11-effect-afterrendereffect#angular-19-vs-previous-versions-whats-different)
-* [Core Differences Between `effect()` and `afterRenderEffect()`](/blog/2024-11-effect-afterrendereffect#core-differences-between-effect-and-afterrendereffect)
-* [Introducing `effect()`](/blog/2024-11-effect-afterrendereffect#introducing-effect)
-  * [Example for `effect()`: setting multiple things at once](/blog/2024-11-effect-afterrendereffect#example-for-effect-setting-multiple-things-at-once)
-  * [When to choose `effect()` over `computed()`](/blog/2024-11-effect-afterrendereffect#when-to-choose-effect-over-computed)
-* [Introducing `afterRenderEffect()`](/blog/2024-11-effect-afterrendereffect#introducing-afterrendereffect)
-  * [Understanding the Phases](/blog/2024-11-effect-afterrendereffect#understanding-the-phases)
-  * [Phases Only Run Again When "Dirty" Through Signal Dependencies](/blog/2024-11-effect-afterrendereffect#phases-only-run-again-when-dirty-through-signal-dependencies)
-  * [Example of `afterRenderEffect()`: Dynamically Resizing a Textarea](/blog/2024-11-effect-afterrendereffect#example-of-afterrendereffect-dynamically-resizing-a-textarea)
-* [Migration Guide: From Angular's Lifecycle Hooks to Signal-Based Reactivity](/blog/2024-11-effect-afterrendereffect#migration-guide-from-angulars-lifecycle-hooks-to-signal-based-reactivity)
-* [Reminder: `afterRenderEffect()` shouldn't be used in line-of-business code](/blog/2024-11-effect-afterrendereffect#reminder-afterrendereffect-shouldnt-be-used-in-line-of-business-code)
-* [Best Practices for Using `effect()` and `afterRenderEffect()`](/blog/2024-11-effect-afterrendereffect#best-practices-for-using-effect-and-afterrendereffect)
-* [Demo Application](/blog/2024-11-effect-afterrendereffect#demo-application)
-* [Conclusion](/blog/2024-11-effect-afterrendereffect#conclusion) -->
 
 
 
