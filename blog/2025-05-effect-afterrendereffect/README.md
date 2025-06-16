@@ -20,7 +20,7 @@ Mit Angular 19 gibt es eine wichtige Neuerung: Die `effect()`-API wurde vereinfa
 Diese Neuerung hat Auswirkungen darauf, wie Angular Aufgaben nach dem Rendern behandelt, und ist besonders nützlich für Anwendungen, die auf präzises Timing beim Rendern und bei DOM-Manipulationen angewiesen sind.
 In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
 
-## Contents
+<!-- ## Contents
 
 * [Angular 19 vs. Previous Versions: What's Different?](/blog/2024-11-effect-afterrendereffect#angular-19-vs-previous-versions-whats-different)
 * [Core Differences Between `effect()` and `afterRenderEffect()`](/blog/2024-11-effect-afterrendereffect#core-differences-between-effect-and-afterrendereffect)
@@ -35,49 +35,49 @@ In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, un
 * [Reminder: `afterRenderEffect()` shouldn't be used in line-of-business code](/blog/2024-11-effect-afterrendereffect#reminder-afterrendereffect-shouldnt-be-used-in-line-of-business-code)
 * [Best Practices for Using `effect()` and `afterRenderEffect()`](/blog/2024-11-effect-afterrendereffect#best-practices-for-using-effect-and-afterrendereffect)
 * [Demo Application](/blog/2024-11-effect-afterrendereffect#demo-application)
-* [Conclusion](/blog/2024-11-effect-afterrendereffect#conclusion)
+* [Conclusion](/blog/2024-11-effect-afterrendereffect#conclusion) -->
 
 
-## Angular 19 vs. Previous Versions: What's Different?
 
-The `effect()` API was introduced as part of Angular's new signal-based reactivity model [in Angular 16](https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d).
-Angular 19 now introduces a significant update to the `effect()` API, making it easier to manage side effects directly within `effect()` functions, even when they involve setting signals. 
+## Angular 19 vs. vorherige Versionen: Was ist anders?
 
-Before this change, effects had a more restrictive approach: It was discouraged to set signals within `effect()`, and to allow this behavior, we had to enable the `allowSignalWrites` flag:
+Die `effect()` API wurde als Teil des neuen Signal-basierten Reaktivitätsmodells von Angular [in Angular 16] eingeführt (https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d).
+Angular 19 führt nun ein bedeutendes Update der `effect()` API ein. Jetzt ist es einfacher, Seiteneffekte direkt innerhalb von `effect()` Funktionen zu auszuführen - sogar wenn Signals verwendet werden.
+Vor dieser Änderung war der Einsatz von `effect()` stark eingeschränkt: Es wurde davon abgeraten, innerhalb eines `effect()` Signals zu setzen. Um dieses Verhalten zu erlauben, musste das Flag `allowSignalWrites` aktiviert werden:
 
 ```ts
-// OLD WAY
+// ALTER WEG
 effect(() => {
   this.mySignal.set('demo');
 }, { allowSignalWrites: true })
 ```
 
-Previously, Angular's documentation advised developers to avoid setting signals in `effect()`, as it could lead to issues like `ExpressionChangedAfterItHasBeenChecked` errors, circular updates, or unnecessary change detection cycles.
-Developers were encouraged to keep `effect()` usage limited to specific side effects, such as:
+Früher riet die Angular-Dokumentation davon ab, Signals in `effect()` zu setzen, da dies zu Problemen wie `ExpressionChangedAfterItHasBeenChecked`-Fehlern, zyklischen Aktualisierungen oder unnötigen Change-Detection-Zyklen führen konnte.
+Es wurde empfohlen, `effect()` nur für bestimmte Seiteneffekte zu verwenden, wie z.B.:
 
-- Logging changes for analytics or debugging purposes,
-- Keeping data in sync with local storage (e.g. `window.localStorage`),
-- Implementing custom DOM behaviors not achievable with template syntax or
-- Handling third-party UI libraries, such as rendering to a `<canvas>` element or integrating charting libraries.
+- Logging von Änderungen zu Analyse- oder Debugging-Zwecken,
+- Synchronisierung der Daten mit dem lokalen Speicher (z.B. `window.localStorage`),
+- Implementierung von benutzerdefinierten DOM-Verhaltensweisen, die mit der Template-Syntax nicht erreicht werden können, oder
+- Umgang mit UI-Bibliotheken von Drittanbietern, wie z.B. das Rendern auf ein `<canvas>`-Element oder die Integration von Charting-Bibliotheken.
 
-However, developers found that the `allowSignalWrites` flag was not as effective in encouraging these patterns as initially expected.
-The flag was planned as an exception, but it was too often used in legitimate cases where setting signals was reasonable or even necessary, such as updating a signal after a series of changes or working with multiple signals.
-In response, Angular's new approach now allows setting signals within `effect()` by default, removing the need for `allowSignalWrites`.
-This more flexible design reflects Angular's commitment to simplifying the development experience.
-See the [official blog post](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd) that confirms this new guidance.
+Allerdings stellen sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, aber es wurde zu oft in legitimen Fällen verwendet, in denen das Setzen von Signalschreiben sinnvoll oder sogar notwendig war, wie z.B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signalen.
+Als Reaktion darauf erlaubt der neue Ansatz von Angular nun standardmäßig das Setzen von Signalen innerhalb von `effect()`, wodurch die Notwendigkeit von `allowSignalWrites` entfällt.
+Dieses flexiblere Design spiegelt das Engagement von Angular wider, die Entwicklung zu vereinfachen.
+Siehe den [offiziellen Blog-Post] (https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd), der diese neue Anleitung bestätigt.
 
-We interpret this new information in the following way:
-> 💡 **It is now a valid case to use `effect()` for state updates or side effects that are difficult to achieve with other reactive primitives like `computed()`**.
+Wir interpretieren diese Neuerung wie folgt:
+> 💡 **Es ist jetzt ein gültiger Anwendungsfall, `effect()` für Zustandsänderungen oder Seiteneffekte zu verwenden, die sich mit anderen reaktiven Konzepten wie `computed()` nur schwer umsetzen lassen.**
 
-This change to the paradigm is in line with new features introduced in Angular 19, such as [`linkedSignal()`](https://angular.schule/blog/2024-11-linked-signal) and `resource()`.
-Both help to maintain cleaner and more declarative state management patterns where possible. 
-Good patterns are no longer enforced by the `allowSignalWrites` flag, but instead by useful high-level signal APIs.
+Dieser Paradigmenwechsel steht im Einklang mit neuen Funktionen, die in Angular 19 eingeführt wurden, wie [`linkedSignal()`](https://angular.schule/blog/2024-11-linked-signal) und `resource()`.
+Beide helfen dabei, sauberere und deklarativere Code zu erreichen.
+Gute Patterns werden nicht mehr durch das `allowSignalWrites`-Flag erzwungen, sondern durch nützliche High-Level-Signal-APIs, welche direkt vom Angular-Team bereit gestellt werden.
 
-With this shift, here's a new general rule of thumb:
-- **Use `effect()`** for tasks traditionally performed in `ngOnInit` or `ngOnChanges`.
-- **Use `afterRenderEffect()`** for tasks traditionally handled in `ngAfterViewInit` or `ngAfterViewChecked`, or when you need to interact directly with rendered DOM elements.
+Mit diesem Wandel ergibt sich eine neue Faustregel:
 
-Let's dive into the specifics! 🚀
+* **Verwende `effect()`**, für Aufgaben, die traditionell in `ngOnInit` oder `ngOnChanges` erledigt wurden.
+* **Verwende `afterRenderEffect()`**, für Aufgaben, die typischerweise in `ngAfterViewInit` oder `ngAfterViewChecked` stattfinden – oder wenn du direkt mit gerendertem DOM arbeiten musst.
+
+Lass uns in die Details einsteigen! 🚀
 
 
 
