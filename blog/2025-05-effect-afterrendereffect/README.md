@@ -299,15 +299,15 @@ Es gibt zwei Möglichkeiten, Abhängigkeiten in `afterRenderEffect()` zu erstell
 
 ### Example of `afterRenderEffect()`: Dynamically Resizing a Textarea
 
-Let's take a closer look at `afterRenderEffect()` through a practical example.
+Lassen Sie uns mit Hilfe eines praktischen Beispiels einen genaueren Blick auf `afterRenderEffect()` werfen.
 
-In this example, we demonstrate how `afterRenderEffect()` can be used to dynamically adjust the height of a `<textarea>` based on both user and programmatic changes.
-The textarea is designed to be resized by dragging the bottom-right corner, but we also want it to automatically adjust its height periodically.
-To achieve this, we read the current height from the DOM and update it based on a central signal called `extraHeight`.
+In diesem Beispiel wird demonstriert, wie `afterRenderEffect()` verwendet werden kann, um die Höhe einer `<textarea>` dynamisch anzupassen, und zwar sowohl auf der Basis von Benutzer- als auch von programmbasierten Änderungen.
+Die Textarea ist so konzipiert, dass sie durch Ziehen der unteren rechten Ecke in der Größe verändert werden kann, aber wir wollen auch, dass sie ihre Höhe regelmäßig automatisch anpasst.
+Um dies zu erreichen, lesen wir die aktuelle Höhe aus dem DOM und aktualisieren sie auf der Grundlage eines zentralen Signals namens `extraHeight`.
 
-This example was inspired by the article ["Angular 19: afterRenderEffect"](https://medium.com/@amosisaila/angular-19-afterrendereffect-5cf8e6482256) by Amos Lucian Isaila Onofrei, which we modified for a better separation between reads and writes. (The original example reads from the DOM in the `write` effect, which is explicitly not recommended according to the Angular docs.)
+Dieses Beispiel wurde durch den Artikel [„Angular 19: afterRenderEffect“] (https://medium.com/@amosisaila/angular-19-afterrendereffect-5cf8e6482256) von Amos Lucian Isaila Onofrei inspiriert, den wir an entscheidender Stelle modifiziert haben. ( Das Originalbeispiel liest im `write`-Effekt aus dem DOM, was laut der Angular-Dokumentation ausdrücklich nicht empfohlen wird).
 
-Our example will demonstrate how to use multiple phases (`earlyRead`, `write`, and `read`) in `afterRenderEffect()` to handle DOM manipulation efficiently, while respecting Angular's guidelines for separating reads and writes:
+Unser Beispiel zeigt, wie man mehrere Phasen (`earlyRead`, `write` und `read`) in `afterRenderEffect()` verwendet, um DOM-Manipulationen effizient zu verarbeiten und dabei die Richtlinien vom Angular-Team für die Trennung von Lese- und Schreibvorgängen einhält:
 
 ```typescript
 import { Component, viewChild, ElementRef, signal, afterRenderEffect } from "@angular/core";
