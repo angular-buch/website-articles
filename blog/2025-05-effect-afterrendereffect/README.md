@@ -67,7 +67,7 @@ Lass uns in die Details einsteigen! 🚀
 
 Sowohl `effect()` als auch `afterRenderEffect()` sind darauf ausgelegt, Änderungen in Signals zu verfolgen und darauf zu reagieren, aber sie unterscheiden sich im Timing und in den Anwendungsfällen.
 
-- **`effect()`** wird als Teil des Angular-Change Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
+- **`effect()`** wird als Teil des Change Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
 - **`afterRenderEffect()`** ist eine API auf niedrigerer Ebene, die ausgeführt wird, nachdem das DOM aktualisiert wurde. 
   Sie eignet sich besonders für Aufgaben, die eine direkte Interaktion mit dem DOM erfordern, wie das Messen von Elementgrößen oder komplexe visuelle Aktualisierungen.
 
@@ -96,7 +96,7 @@ Es ist auch möglich, Effekte in Services zu erstellen.
 Wenn ein Dienst auf der Root-Level der Anwendung bereitgestellt wird (auch bekannt als Singleton), werden diese Effekte **root effects** genannt.
 
 Der Hauptunterschied zwischen diesen Arten von Effekten ist ihr Timing. 
-Komponenteneffekte arbeiten als Teil der Angular-Change Detection, so dass wir sicher andere Input-Signals lesen und Views verwalten können, die vom Komponentenzustand abhängen. 
+Komponenteneffekte arbeiten als Teil der Change Detection, so dass wir sicher andere Input-Signals lesen und Views verwalten können, die vom Komponentenzustand abhängen. 
 Root-Effekte hingegen laufen als Microtasks, unabhängig vom Komponentenbaum oder der Change Detection.
 
 In diesem Artikel konzentrieren wir uns ausschließlich auf **Komponenteneffekte**, die das sichere Lesen und Schreiben von Signals innerhalb von Komponenten ermöglichen.
@@ -168,7 +168,7 @@ In diesem Beispiel bietet sich `effect()` für die Behandlung des Seiteneffekts 
 Zudem können wir jetzt problemlos Signale im Effekt setzen.
 Um zu zeigen, dass dies nun vollkommen gültig ist, haben wir während dieser Phase ein weiteres Signal aktualisiert.
 Wir haben ein Signal namens `isEditMode` definiert, das entsprechend aktualisiert wird.
-In der Vergangenheit hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wen Input geändert wurden.
+In der Vergangenheit hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wenn Inputs geändert wurden.
 
 
 ### Wann sollte man `effect()` anstatt `computed()` verwenden?
@@ -409,7 +409,7 @@ Hier ist eine Aufschlüsselung der einzelnen Effekte:
   Der Effekt, der in der `write`-Phase ausgeführt wird, fügt den `extraHeight`-Wert zur erfassten `currentHeight` hinzu und aktualisiert die Height-Style-Eigenschaft der Textarea.
   Diese DOM-Schreiboperation passt die Höhe des Elements direkt in Pixeln an.
   Die Funktion `onCleanup` wird bereitgestellt, um alle erforderlichen Aufräumarbeiten oder Ressourcen vor dem nächsten Schreibvorgang zu erledigen.
-  In unserem Beispiel sind keine Aufräumarbeiten erforderlich, aber wir wollten die Tatsache erwähnen, dass lang laufende Aufgaben (wie ein Timeout) aufgeräumt werden sollten.
+  In unserem Beispiel sind keine Aufräumarbeiten erforderlich, aber wir darauf hinweisen, dass lang laufende Aufgaben (wie ein Timeout) aufgeräumt werden sollten.
   Die Bereinigung wird vor dem erneuten Eintritt in dieselbe Phase aufgerufen, oder wenn der Effekt selbst zerstört wird.
   Der `write`-Effekt übergibt dann die neue Höhe, `newHeight`, an den `read`-Effekt.
   Tipp: Übergeben Sie denselben Wert an `read` (z. B. `return 100`) und Sie werden sehen, dass die Folgephase nicht ausgeführt wird.
@@ -472,7 +472,7 @@ Kurz gesagt, greifen Sie nur dann zu `afterRenderEffect()`, wenn Standardansätz
 
 ## Best Practices für die Verwendung von `effect()` und `afterRenderEffect()`
 
-Hier sind einige bewährte Praxisempfehlungen, um das Optimum aus den neuen Singnal-APIs herauszuholen:
+Hier sind einige bewährte Praxisempfehlungen, um das Optimum aus den neuen Signal-APIs herauszuholen:
 
 1. **Verwenden Sie `computed()` für einfache Abhängigkeiten:** Nutzen Sie `effect()` hingegen für komplexere oder zustandsabhängige Operationen.
 2. **Wählen Sie die Phasen in `afterRenderEffect()` sorgfältig aus:** Halten Sie sich an die spezifischen Phasen und vermeiden Sie `mixedReadWrite` wenn möglich.
