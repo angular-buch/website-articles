@@ -390,31 +390,31 @@ export class ResizableComponent {
 }
 ```
 
-In our setup, an interval updates the `extraHeight` signal every 4 seconds.
-By updating `extraHeight`, we create a "dirty" state that restarts the `afterRenderEffect()` phases, which checks and adjusts the height of the `<textarea>` as needed:
+In unserem Beispiel aktualisiert ein Intervall das Signal `extraHeight` alle 4 Sekunden.
+Durch die Aktualisierung von `extraHeight` schaffen wir einen „schmutzigen“ Zustand, der die `afterRenderEffect()`-Phasen neu startet, welche die Höhe des `<textarea>` bei Bedarf überprüfen und anpassen:
 
-**Explanation of the Phases**
+**Erläuterung zu den Phasen**
 
-In this example, an interval updates `extraHeight` every 4 seconds, creating a new round of execution across the phases. 
-Here's a breakdown of each effect:
+In unserem Beispiel aktualisiert ein Intervall das Signal `extraHeight` alle 4 Sekunden, wodurch eine neue Runde der Ausführung über die Phasen hinweg entsteht. 
+Hier ist eine Aufschlüsselung der einzelnen Effekte:
 
 1. **`earlyRead` Phase**: 
-  The effect that runs in the `earlyRead` phase captures the current height of the `textarea` by reading the `offsetHeight` directly from the DOM. 
-  This read operation from the DOM is necessary because the textarea can also be resized manually by the user, so its size must be checked before any adjustment.
-  The result, `currentHeight`, is passed to the next effect. 
-  In this effect, we use the `extraHeight` as our tracked dependency to ensure that the code will run multiple times.
-  We encourage you to remove this statement: `console.log('earlyRead: extra height:', this.extraHeight());`.
-  If you do this, you will see that the `earlyRead` effect will only execute once and that any manual change to the textarea will be ignored in the next run.
+  Der Effekt, der in der `earlyRead`-Phase ausgeführt wird, erfasst die aktuelle Höhe der Textarea, indem er die `offsetHeight` direkt aus dem DOM liest. 
+  Dieser Lesevorgang aus dem DOM ist notwendig, weil die Textarea auch manuell vom Benutzer in der Größe verändert werden kann, so dass ihre Größe vor jeder Anpassung überprüft werden muss.
+  Das Ergebnis, `currentHeight`, wird an den nächsten Effekt weitergegeben. 
+  In diesem Effekt verwenden wir `extraHeight` als unsere verfolgte Abhängigkeit, um sicherzustellen, dass der Code mehrfach ausgeführt werden kann.
+  Wir empfehlen Ihnen, diese Anweisung zu entfernen: `console.log('earlyRead: extra height:', this.extraHeight());`.
+  Wenn Sie dies tun, werden Sie sehen, dass der `earlyRead`-Effekt nur einmal ausgeführt wird und dass jede manuelle Änderung der Textarea bei der nächsten Ausführung ignoriert wird.
 
 2. **`write` Phase**: 
-  The effect that runs in the `write` phase adds the `extraHeight` value to the captured `currentHeight` and updates height style property of the `<textarea>`.
-  This DOM write operation directly adjusts the element's height in pixels.
-  An `onCleanup` function is provided to handle any required cleanup or resources before the next write operation.
-  In this example no cleanup is required, but we wanted to mention the fact that long-running tasks (such as a timeout) should be cleaned up.
-  The cleanup will be called before entering the same phase again, or if the effect itself is destroyed via the `AfterRenderRef`.
-  The `write` effect then passes the new height, `newHeight`, to the `read` effect.
-  Hint: Pass the same value to `read` (e.g. `return 100`) and you will see that the follow-up phase won't be executed.
-  Setting the same number twice won't be considered a change, so the `write` effect won't mark the `read` effect as dirty.
+  Der Effekt, der in der `writ`-Phase abläuft, fügt den `extraHeight`-Wert zur erfassten `currentHeight` hinzu und aktualisiert die Height-Style-Eigenschaft der Textarea.
+  Diese DOM-Schreiboperation passt die Höhe des Elements direkt in Pixeln an.
+  Die Funktion `onCleanup` wird bereitgestellt, um alle erforderlichen Aufräumarbeiten oder Ressourcen vor dem nächsten Schreibvorgang zu erledigen.
+  In unserem Beispiel sind keine Aufräumarbeiten erforderlich, aber wir wollten die Tatsache erwähnen, dass lang laufende Aufgaben (wie ein Timeout) aufgeräumt werden sollten.
+  Die Bereinigung wird vor dem erneuten Eintritt in dieselbe Phase aufgerufen, oder wenn der Effekt selbst zerstört wird.
+  Der `write`-Effekt übergibt dann die neue Höhe, `newHeight`, an den `read`-Effekt.
+  Tipp: Übergeben Sie denselben Wert an `read` (z.B. `return 100`) und Sie werden sehen, dass die Folgephase nicht ausgeführt wird.
+  Wird dieselbe Zahl zweimal gesetzt, wird dies nicht als Änderung betrachtet, so dass der Effekt `write` den Effekt `read` nicht als "dirty" markiert.
 
 3. **`read` Phase**: 
   The effect that runs in the `read` phase logs the `newHeight`. 
