@@ -106,19 +106,18 @@ afterRenderEffect(() => {
 Wie erwartet, wird die Konsolenausgabe für `afterRenderEffect()` nach der Ausgabe von `effect()` ausgelöst.
 
 
-## Introducing `effect()`
+## Vorstellung von `Effekt()`
 
-In this article, we discuss effects that are created within a component. 
-These are called **component effects** and allow safe reading and writing of component properties and signals. 
-It is also possible to create effects in services. 
-If a service is provided at the root level in the application (also known as a singleton), these effects are called **root effects**.
+In diesem Artikel behandeln wir Effekte, die innerhalb einer Komponente erstellt werden. 
+Diese werden **Komponenteneffekte** genannt und ermöglichen das sichere Lesen und Schreiben von Komponenteneigenschaften und Signalen. 
+Es ist auch möglich, Effekte in Services zu erstellen. 
+Wenn ein Dienst auf der Root-Level der Anwendung bereitgestellt wird (auch bekannt als Singleton), werden diese Effekte **root effects** genannt.
 
-The main difference between these types of effects is their timing. 
-Component effects operate as part of Angular's change detection, allowing them to safely read input signals and manage views that depend on component state. 
-Root effects, however, run as microtasks, independently of the component tree or change detection.
+Der Hauptunterschied zwischen diesen Arten von Effekten ist ihr Timing. 
+Komponenteneffekte arbeiten als Teil der Angular-Change-Detection, so dass wir sicher andere Eingangssignale lesen und Views verwalten können, die vom Komponentenzustand abhängen. 
+Root-Effekte hingegen laufen als Microtasks, unabhängig vom Komponentenbaum oder der Change-Detection.
 
-In this article, we focus solely on **component effects**, which allow to safely read and write signals within components.
-
+In diesem Artikel konzentrieren wir uns ausschließlich auf **Komponenteneffekte**, die das sichere Lesen und Schreiben von Signalen innerhalb von Komponenten ermöglichen.
 
 ### Example for `effect()`: setting multiple things at once
 
