@@ -119,14 +119,13 @@ Root-Effekte hingegen laufen als Microtasks, unabhängig vom Komponentenbaum ode
 
 In diesem Artikel konzentrieren wir uns ausschließlich auf **Komponenteneffekte**, die das sichere Lesen und Schreiben von Signalen innerhalb von Komponenten ermöglichen.
 
-### Example for `effect()`: setting multiple things at once
+### Beispiel für `effect()`: mehrere Dinge auf einmal einstellen
 
-In the following example we use `effect()` to synchronize form fields based on the input signal `currentBook`.
-The API for Reactive Forms has not yet been updated to work hand in hand with signals, so we still need to patch the form as we have done in the past.
-However, some improvements to the Reactive Forms API have already been promised.
-We also want to set another signal after we have patched the form. 
+Im folgenden Beispiel verwenden wir `effect()`, um Formularfelder basierend auf dem Eingabesignal `currentBook` zu synchronisieren.
+Die API für Reactive Forms wurde leider noch nicht aktualisiert - Signal Forms sind aktuell noch in einer frühen Entwicklungs-Phase (siehe das Projekt [Experimental Signal Forms](https://github.com/orgs/angular/projects/60)). Daher müssen wir unsere Formulare immer noch patchen, sowie wir es in der Vergangenheit bereits stets tun mussten.
+Wir wollen auch ein weiteres Signal setzen, nachdem wir das Formular gepatcht haben.
 
-Here is our example of a form that can create a new book and edit an existing book:
+Hier ist unser Beispiel für ein Formular, das ein neues Buch erstellen und ein bestehendes Buch bearbeiten kann:
 
 ```typescript
 @Component({
