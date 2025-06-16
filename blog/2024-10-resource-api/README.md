@@ -1,9 +1,9 @@
 ---
-title: 'Neu in Angular 19: Daten laden mit der Resource API'
+title: 'Reactive Angular: Daten laden mit der Resource API'
 author: Ferdinand Malcher
 mail: ferdinand@malcher.media
 published: 2024-10-29
-lastModified: 2024-11-07
+lastModified: 2025-06-16
 keywords:
   - Resource API
   - Promise
@@ -17,8 +17,6 @@ header: header-resource-api.jpg
 
 Eine interessante Neuerung mit Angular 19 ist die *Resource API*. Damit können wir intuitiv Daten laden und in Komponenten verarbeiten.
 In diesem Blogartikel stellen wir die Ideen der neuen Schnittstelle vor.
-
-> ⚠️ Bitte beachten Sie, dass die Resource API mit Angular 19 als _experimental_ veröffentlicht wird. Die Syntax und Semantik der API können sich noch ändern.
 
 Eine Resource repräsentiert einen Datensatz, der asynchron geladen wird. Dabei geht es in der Regel um HTTP-Requests, die Daten von einem Server abrufen. Die Resource geht allerdings einen Schritt weiter als nur einen einfachen HTTP-Request auszuführen: Die Daten können jederzeit neu geladen oder sogar manuell überschrieben werden. Außerdem bietet die Resource eigenständig Informationen zum Ladestatus an. Alle Informationen und Daten werden als Signals ausgegeben, sodass bei Änderungen stets der aktuelle Wert zur Verfügung steht.
 
@@ -142,7 +140,7 @@ booksResource = resource({
 Der Loader wird sofort ausgeführt, sobald das Resource-Objekt initialisiert wird. Die Resource verarbeitet die Antwort und bietet folgende Signals an, um mit den Daten zu arbeiten:
 
 - `value`: geladene Daten, hier `Book[]`
-- `status`: Zustand der Resource vom Typ `ResourceStatus`, z. B. *Resolved* oder *Loading*, siehe nächster Abschnitt
+- `status`: Zustand der Resource vom Typ `ResourceStatus`, z. B. `resolved` oder `loading`, siehe nächster Abschnitt
 - `error`: Fehler
 
 Die geladenen Bücher können wir also wir folgt im Template anzeigen:
@@ -157,16 +155,16 @@ Die geladenen Bücher können wir also wir folgt im Template anzeigen:
 
 ## Status der Resource
 
-Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z. B. um einen Ladeindikator anzuzeigen. Alle Werte von `status` sind Felder aus dem [Enum `ResourceStatus`](https://next.angular.dev/api/core/ResourceStatus):
+Mithilfe des Signals `status` können wir den Zustand der Resource auswerten, z. B. um einen Ladeindikator anzuzeigen. Alle Werte von `status` sind Teile des [Union Types `ResourceStatus`](https://angular.dev/api/core/ResourceStatus):
 
 | Status aus `ResourceStatus` | Beschreibung                                                                         |
 | --------------------------- | ------------------------------------------------------------------------------------ |
-| `Idle`                      | Es ist kein Request definiert und es wird nichts geladen. `value()` ist `undefined`. |
-| `Error`                     | Das Laden ist fehlgeschlagen. `value()` ist `undefined`.                             |
-| `Loading`                   | Die Resource lädt gerade.                                                            |
-| `Reloading`                 | Die Resource lädt gerade neu, nachdem das Neuladen mit `reload()` angefordert wurde.                |
-| `Resolved`                  | Das Laden ist abgeschlossen.                                                         |
-| `Local`                     | Der Wert wurde lokal überschrieben.                                                  |
+| `idle`                      | Es ist kein Request definiert und es wird nichts geladen. `value()` ist `undefined`. |
+| `error`                     | Das Laden ist fehlgeschlagen. `value()` ist `undefined`.                             |
+| `loading`                   | Die Resource lädt gerade.                                                            |
+| `reloading`                 | Die Resource lädt gerade neu, nachdem das Neuladen mit `reload()` angefordert wurde.                |
+| `resolved`                  | Das Laden ist abgeschlossen.                                                         |
+| `local`                     | Der Wert wurde lokal überschrieben.                                                  |
 
 
 Für einen Ladeindikator könnten wir den Zustand z. B. in einem Computed Signal verarbeiten und ein Boolean zurückgeben, wenn die Resource gerade lädt:
@@ -175,7 +173,7 @@ Für einen Ladeindikator könnten wir den Zustand z. B. in einem Computed Signal
 import { resource, computed, ResourceStatus } from '@angular/core';
 // ...
 
-isLoading = computed(() => this.booksResource.status() === ResourceStatus.Loading);
+isLoading = computed(() => this.booksResource.status() === 'loading');
 ```
 
 ```html
@@ -184,8 +182,8 @@ isLoading = computed(() => this.booksResource.status() === ResourceStatus.Loadin
 }
 ```
 
-Damit alle Fälle erfasst werden, müssen wir hier aber auch den Zustand `Reloading` berücksichtigen.
-Mit dem mitgelieferten Property `isLoading` ist das schnell gelöst: Dieses Signal gibt `true` aus, wenn sich die Resource im Zustand `Loading` oder `Reloading` befindet:
+Damit alle Fälle erfasst werden, müssen wir hier aber auch den Zustand `reloading` berücksichtigen.
+Mit dem mitgelieferten Property `isLoading` ist das schnell gelöst: Dieses Signal gibt `true` aus, wenn sich die Resource im Zustand `loading` oder `reloading` befindet:
 
 ```html
 @if (booksResource.isLoading()) {
@@ -218,7 +216,7 @@ export class BookListComponent {
 
 Die Resource stellt sicher, dass stets nur ein einziger Request gleichzeitig ausgeführt wird.
 Das Neuladen ist erst möglich, wenn der vorherige Ladevorgang abgeschlossen ist.
-Dieses Verhalten kann man im [Quellcode von Angular](https://github.com/angular/angular/blob/19.0.0-next.11/packages/core/src/resource/resource.ts#L170-L176) gut nachvollziehen.
+Dieses Verhalten kann man im [Quellcode von Angular](https://github.com/angular/angular/blob/20.0.0/packages/core/src/resource/resource.ts#L294-L296) gut nachvollziehen.
 
 
 ## Wert lokal überschreiben
@@ -248,7 +246,7 @@ export class BookListComponent {
 
 Wir möchten auf zwei Besonderheiten in diesem Code hinweisen:
 
-- Das Signal `value` liefert den Typ `T | undefined`, in unserem Fall also `Book[] | undefined`. Solange die Daten noch nicht geladen wurden, ist der Wert also `undefined`. Deshalb ist hier eine Prüfung nötig, ob `currentBookList` überhaupt existiert. Es wäre wünschenswert, wenn man der Resource einen Startwert übergeben kann, sodass `undefined` entfällt.
+- Das Signal `value` liefert den Typ `T | undefined`, in unserem Fall also `Book[] | undefined`. Solange die Daten noch nicht geladen wurden, ist der Wert also `undefined`. Deshalb ist hier eine Prüfung nötig, ob `currentBookList` überhaupt existiert. Alternativ können wir mit der Option `defaultValue` einen Startwert übergeben, um dieses Verhalten zu ändern.
 - Anstelle von `Array.sort()` verwenden wir die neue Methode `Array.toSorted()`, die das Array unverändert lässt und eine sortierte Kopie zurückgibt. So bleibt die Immutability gewahrt. `toSorted()` kann nur verwendet werden, wenn die Option `lib` in der `tsconfig.json` mindestens den Eintrag `ES2023` enthält – aktuell ist das in neuen Angular-Projekten noch nicht der Fall.
 
 
