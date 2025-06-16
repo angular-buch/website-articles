@@ -1,5 +1,5 @@
 ---
-title: 'Angular 19: Mastering effect and afterRenderEffect'
+title: 'Reactive Angular: effect and afterRenderEffect verstehen und einsetzen'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 published: 2024-11-14
@@ -12,15 +12,13 @@ keywords:
   - Effect
   - afterRenderEffect
   - Angular 19
-language: en
+language: de
 header: effect.jpg
-sticky: false
 ---
 
-
-Angular 19 has a significant change with the simplification of the `effect()` API and [the introduction of `afterRenderEffect()`](https://github.com/angular/angular/pull/57549). 
-This change impacts how Angular handles post-render tasks and is especially useful for applications that rely on precise timing for rendering and DOM manipulation. 
-In this article, we'll explore how these two APIs compare, when to use each, and how to take advantage of phased execution with `afterRenderEffect()`.
+Mit Angular 19 gibt es eine wichtige Neuerung: Die `effect()`-API wurde vereinfacht und die neue Funktion `afterRenderEffect()` wurde eingeführt. (siehe [PR 57549](https://github.com/angular/angular/pull/57549))
+Diese Neuerung hat Auswirkungen darauf, wie Angular Aufgaben nach dem Rendern behandelt, und ist besonders nützlich für Anwendungen, die auf präzises Timing beim Rendern und bei DOM-Manipulationen angewiesen sind.
+In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
 
 ## Contents
 
