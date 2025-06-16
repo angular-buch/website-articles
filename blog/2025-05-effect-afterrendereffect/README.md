@@ -426,23 +426,23 @@ Hier ist eine Aufschlüsselung der einzelnen Effekte:
   So lassen sich die unterschiedlichen Phase am Besten verstehen.
 
 
-## Migration Guide: From Angular's Lifecycle Hooks to Signal-Based Reactivity
+## Migrationsleitfaden: Von Angulars Lifecycle Hooks zu signalbasierter Reaktivität
 
-In April 2023, the Angular team outlined their vision of signal-based components in [RFC #49682](https://github.com/angular/angular/discussions/49682).
-The long-term goal is to phase out traditional lifecycle hooks, though the RFC discusses retaining `ngOnInit` and `ngOnDestroy`. (Now, we also have replacements for these.)
-The document proposed the introduction of `afterRenderEffect()` as part of a roadmap, and with Angular 19, the final vision of signal-based components is starting to take shape.
+Im April 2023 skizzierte das Angular-Team in [RFC #49682] (https://github.com/angular/angular/discussions/49682) seine Vision von signalbasierten Komponenten.
+Das langfristige Ziel ist es, die traditionellen Lifecycle Hooks abzuschaffen, obwohl der RFC die Beibehaltung von `ngOnInit` und `ngOnDestroy` diskutiert. (Jetzt haben wir auch Ersatz für diese, daher wären wir nicht überrascht, wenn diese auch verschwinden werden.)
+Das Dokument schlug die Einführung von `afterRenderEffect()` als Teil einer Roadmap vor, und mit Angular 19 beginnt die finale Vision von signalbasierten Komponenten Gestalt anzunehmen.
 
-The addition of `effect()` and `afterRenderEffect()` showcases how Angular is moving in this direction. 
-These effects are more intuitive for managing component state changes and post-render interactions, thus making the old lifecycle hooks redundant.
-For instance, `afterRenderEffect()` is designed to handle tasks traditionally managed by `ngAfterViewInit` and `ngAfterViewChecked`.
+Die Einführung von `effect()` und `afterRenderEffect()` zeigt, wie Angular sich in diese Richtung bewegt. 
+Diese Effekte sind intuitiver für die Verwaltung von Zustandsänderungen und Interaktionen nach dem Rendern, wodurch die alten Lebenszyklus-Hooks überflüssig werden.
+So übernimmt `afterRenderEffect()` Aufgaben, die traditionell von `ngAfterViewInit` und `ngAfterViewChecked` erledigt wurden.
 
-Migrating from Angular lifecycle hooks to `effect()` and `afterRenderEffect()` is straightforward:
-- **`ngOnInit` / `ngOnChanges`** → `effect()`: Handles signal-based logic and other state.
-- **`ngAfterViewInit` / `ngAfterViewChecked`** → `afterRenderEffect()`: Manages DOM manipulations post-render.
+Die Migration von Angular Lifecycle Hooks hin zu `effect()` und `afterRenderEffect()` ist relativ einfach zu bewerkstelligen: Sie können die Hooks einfach in Angular einfügen:
+- **`ngOnInit` / `ngOnChanges`** → `effect()`: Behandelt signalbasierte Logik und andere Zustände.
+- **`ngAfterViewInit` / `ngAfterViewChecked`** → `afterRenderEffect()`: Verwaltet DOM-Manipulationen nach dem Rendern.
 
-Or to put it another way, here's a direct mapping:
+Oder anders ausgedrückt, hier ist eine direkte Gegenüberstellung:
 
-| Lifecycle Hook        | Replacement            |
+| Lifecycle Hook        | Wird ersetzt durch     |
 |-----------------------|------------------------|
 | `ngOnInit`            | `effect()`             |
 | `ngOnChanges`         | `effect()`             |
@@ -450,8 +450,8 @@ Or to put it another way, here's a direct mapping:
 | `ngAfterViewChecked`  | `afterRenderEffect()`  |
 
 
-**Hint:** If you're transitioning away from classic lifecycle hooks, consider using [`DestroyRef`](https://angular.dev/api/core/DestroyRef).
-It allows you to set callbacks for cleanup or destruction tasks, so that you no longer need `ngOnDestroy` in your codebase. 
+**Hinweis:** Wenn Sie von den klassischen Lifecycle-Hooks weg vollständig weg  migrieren wollen, können Sie [`DestroyRef`](https://angular.dev/api/core/DestroyRef) verwenden.
+Damit können Sie Callbacks für Aufräum- oder Zerstörungsaufgaben definieren, so dass Sie `ngOnDestroy` in Ihrer Codebasis im Prinzip nicht mehr benötigen.
 
 
 ## Reminder: `afterRenderEffect()` shouldn't be used in line-of-business code
