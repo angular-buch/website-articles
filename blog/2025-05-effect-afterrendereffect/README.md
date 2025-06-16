@@ -263,37 +263,38 @@ Die Effekte laufen in der folgenden Reihenfolge ab, und zwar nur dann, wenn sie 
 | 3. `mixedReadWrite` | Verwenden Sie diese Phase, um gleichzeitig vom DOM zu lesen und in das DOM zu schreiben. Verwenden Sie diese Phase **nicht** , wenn es möglich ist, die Arbeit stattdessen auf die anderen Phasen aufzuteilen. |
 | 4. `read` | Verwenden Sie diese Phase zum **Lesen** aus dem DOM. **Niemals** in dieser Phase in das DOM schreiben. |
 
-[According to the docs](https://next.angular.dev/api/core/afterRenderEffect), you should prefer using the `read` and `write` phases over the `earlyRead` and `mixedReadWrite` phases when possible, to avoid performance degradation.
-Angular is unable to verify or enforce that phases are used correctly and instead relies on each developer to follow the documented guidelines.
+[Laut der offizellen Dokumentation (https://
+angular.dev/api/core/afterRenderEffect) sollte man, wenn möglich, die Phasen `read` und `write` den Phasen `earlyRead` und `mixedReadWrite` vorziehen, um Leistungseinbußen zu vermeiden.
+Angular ist nicht in der Lage, die korrekte Verwendung von Phasen zu verifizieren oder zu erzwingen, und verlässt sich stattdessen darauf, dass jeder Entwickler die dokumentierten Richtlinien befolgt.
 
-As mentioned before, there is also a second signature of `afterRenderEffect()` that accepts a single callback. 
-This function registers an effect to run after rendering is complete, specifically during the `mixedReadWrite` phase.
-However, the Angular documentation recommends specifying an explicit phase for the effect whenever possible to avoid potential performance issues.
-Therefore, we won't cover this signature in our article, as its usage is not recommended.
+Wie bereits erwähnt, gibt es auch eine zweite Signatur von `afterRenderEffect()`, die einen einzelnen Callback akzeptiert. 
+Diese Funktion registriert einen Effekt, der nach Abschluss des Renderings ausgeführt werden soll, insbesondere während der Phase `mixedReadWrite`.
+Die Angular-Dokumentation empfiehlt jedoch, wann immer möglich, eine explizite Phase für den Effekt anzugeben, um mögliche Leistungsprobleme zu vermeiden.
+Daher werden wir diese Signatur in unserem Artikel nicht behandeln, da ihre Verwendung nicht empfohlen wird.
 
 
-### Phases Only Run Again When "Dirty" Through Signal Dependencies
+### Phasen werden nur dann erneut ausgeführt, wenn sie durch Signalabhängigkeiten "dirty" sind
 
-When `afterRenderEffect()` is initially called, all registered effects execute once in sequence.
-However, for any effect to run again, it must be marked as "dirty" due to a change in signal dependencies. 
-This dependency-based system helps Angular optimize performance by preventing redundant executions.
+Wenn `afterRenderEffect()` zum ersten Mal aufgerufen wird, werden alle registrierten Effekte einmal nacheinander ausgeführt.
+Damit ein Effekt jedoch erneut ausgeführt werden kann, muss er aufgrund einer Änderung der Signalabhängigkeiten als "dirty" markiert werden. 
+Dieses auf das Tracking von Abhängigkeiten basierende System hilft Angular, die Leistung zu optimieren, indem es überflüssige Ausführungen verhindert.
 
-For an effect to be marked "dirty" and eligible to rerun, it must establish a dependency on a signal that changes. 
-If the effect does not track any signals, or if the tracked signals remain unchanged, the effect won't be marked as dirty, and its code will not re-execute.
+Damit ein Effekt als "dirty" markiert wird und erneut ausgeführt werden kann, muss zuvor er eine Abhängigkeit zu einem Signal hergestellt worden sein, und dieses muss sich geändert haben. 
+Wenn der Effekt keine Signale verfolgt oder wenn die verfolgten Signale unverändert bleiben, wird der Effekt nicht als "dirty" markiert und der Code wird nicht erneut ausgeführt.
 
-There are two main ways to establish dependencies in `afterRenderEffect()`:
+Es gibt zwei Möglichkeiten, Abhängigkeiten in `afterRenderEffect()` zu erstellen:
 
-1. **Tracking the Value of a Previous Phase's Output**: 
-  Each effect can return a value to be passed as input to the next effect (except `earlyRead`, which has no previous effect). 
-  This value is wrapped in a signal, and if we then read that signal in the following effect, we create a dependency. 
-  It's important to understand that we must actually execute the signal's getter function because simply passing the signal around is insufficient to establish a dependency.
+1. **Tracking des Wertes der Ausgabe einer vorherigen Phase**: 
+  Jeder Effekt kann einen Wert zurückgeben, der als Eingabe an den nächsten Effekt übergeben wird (außer `earlyRead`, der keinen vorherigen Effekt hat). 
+  Dieser Wert wird in ein Signal verpackt, und wenn wir dieses Signal dann im folgenden Effekt lesen, schaffen wir eine Abhängigkeit. 
+  Es ist wichtig zu verstehen, dass wir die Getter-Funktion des Signals tatsächlich ausführen müssen, da die einfache Weitergabe des Signals nicht ausreicht, um eine Abhängigkeit herzustellen.
 
-2. **Directly Tracking Component Signals**: 
-  We can also create dependencies by accessing other signals directly within the effect. 
-  In the upcoming example, we read a signal from the component within the `earlyRead` effect to create a dependency and ensure the effect executes multiple times.
+2. **Direktes Verfolgen von Komponenten-Signalen**: 
+  Wir können auch Abhängigkeiten herstellen, indem wir direkt auf andere Signale unserer Komponente innerhalb des Effekts zugreifen. 
+  Im folgenden Beispiel lesen wir ein Signal von der Komponente innerhalb des Effekts `earlyRead`, um eine Abhängigkeit zu schaffen und sicherzustellen, dass der Effekt mehrfach ausgeführt wird.
 
-> **💡 Angular ensures that effects only re-execute when their tracked signals change, marking the effect itself as "dirty."
-  Without these signal dependencies, each effect will run only once!**
+**💡 Angular stellt sicher, dass Effekte nur dann erneut ausgeführt werden, wenn sich ihre verfolgten Signale ändern, und markiert den Effekt selbst als "dirty".
+  Ohne diese Signalabhängigkeiten wird jeder Effekt nur einmal ausgeführt!
 
 
 ### Example of `afterRenderEffect()`: Dynamically Resizing a Textarea
