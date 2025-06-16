@@ -21,8 +21,6 @@ Diese Neuerung hat Auswirkungen darauf, wie Angular Aufgaben nach dem Rendern be
 In diesem Artikel sehen wir uns an, wie sich diese beiden APIs unterscheiden, und wie man die phasenbasierte Ausführung mit `afterRenderEffect()` optimal nutzt.
 
 
-
-
 ## Angular 19 vs. vorherige Versionen: Was ist anders?
 
 Die `effect()` API wurde als Teil des neuen Signal-basierten Reaktivitätsmodells von Angular [in Angular 16] eingeführt (https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d).
@@ -166,11 +164,11 @@ export class BookFormComponent {
 }
 ```
 
-In this example, `effect()` is ideal for handling the side effect (patching the form) without rerunning unnecessary computations. 
-We are also free to set signals in the effect now.
-To show that this is now perfectly valid, we updated another signal during that phase.
-We dediced for a signal called `isEditMode`, that is updated accordingly.
-In the past, we would have been using `ngOnChanges` to patch the form when the input was changed.
+In diesem Beispiel bietet sich `effect()` für die Behandlung des Seiteneffekts (Änderung des Formulars) an, ohne dass unnötige Berechnungen durchgeführt werden müssen. 
+Zudem können wir jetzt problemlos Signale im Effekt setzen.
+Um zu zeigen, dass dies nun vollkommen gültig ist, haben wir während dieser Phase ein weiteres Signal aktualisiert.
+Wir haben ein Signal namens `isEditMode` definiert, das entsprechend aktualisiert wird.
+In der Vergangenheit wäre hätte man `ngOnChanges` eingesetzt, um das Formular zu patchen, wen Input geändert wurden.
 
 
 ### When to choose `effect()` over `computed()`
