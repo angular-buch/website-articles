@@ -24,7 +24,7 @@ wurde eingeführt
 ## Angular 19 vs. vorherige Versionen: Was ist anders?
 
 Die `effect()` API wurde als Teil des neuen Signal-basierten Reaktivitätsmodells von Angular [in Angular 16] eingeführt (https://blog.angular.dev/angular-v16-is-here-4d7a28ec680d).
-Angular 19 führt nun ein bedeutendes Update der `effect()` API ein. Jetzt ist es einfacher, Seiteneffekte direkt innerhalb von `effect()` Funktionen zu auszuführen - sogar wenn Signals verwendet werden.
+Angular 19 führt nun ein bedeutendes Update der `effect()` API ein. Jetzt ist es einfacher, Seiteneffekte direkt innerhalb von `effect()` Funktionen auszuführen - sogar wenn Signals verwendet werden.
 Vor dieser Änderung war der Einsatz von `effect()` stark eingeschränkt: Es wurde davon abgeraten, innerhalb eines `effect()` Signals zu setzen. Um dieses Verhalten zu erlauben, musste das Flag `allowSignalWrites` aktiviert werden:
 
 ```ts
@@ -42,8 +42,8 @@ Es wurde empfohlen, `effect()` nur für bestimmte Seiteneffekte zu verwenden, wi
 - Implementierung von benutzerdefinierten DOM-Verhaltensweisen, die mit der Template-Syntax nicht erreicht werden können, oder
 - Umgang mit UI-Bibliotheken von Drittanbietern, wie z. B. das Rendern auf ein `<canvas>`-Element oder die Integration von Charting-Bibliotheken.
 
-Allerdings stellte sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, aber es wurde zu oft in legitimen Fällen verwendet, in denen das Setzen von Singals sinnvoll oder sogar notwendig war, wie z. B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signalen.
-Als Reaktion darauf erlaubt der neue Ansatz von Angular nun standardmäßig das Setzen von Signalen innerhalb von `effect()`, wodurch die Notwendigkeit von `allowSignalWrites` entfällt.
+Allerdings stellte sich heraus, dass das Flag `allowSignalWrites` in der Praxis viel zu häufig eingesetzt wurde. Das Flag war als Ausnahme geplant, aber es wurde zu oft in legitimen Fällen verwendet, in denen das Setzen von Signals sinnvoll oder sogar notwendig war, wie z. B. das Aktualisieren eines Signals nach einer Reihe von Änderungen oder das Verarbeiten von mehreren Signals.
+Als Reaktion darauf erlaubt der neue Ansatz von Angular nun standardmäßig das Setzen von Signals innerhalb von `effect()`, wodurch die Notwendigkeit von `allowSignalWrites` entfällt.
 Dieses flexiblere Design spiegelt das Engagement von Angular wider, die Entwicklung zu vereinfachen.
 Siehe den [offiziellen Blog-Post](https://blog.angular.dev/latest-updates-to-effect-in-angular-f2d2648defcd), der diese neue Anleitung bestätigt.
 
@@ -65,7 +65,7 @@ Lass uns in die Details einsteigen! 🚀
 
 ## Kernunterschiede zwischen `effect()` und `afterRenderEffect()`
 
-Sowohl `effect()` als auch `afterRenderEffect()` sind darauf ausgelegt, Änderungen in Signalen zu verfolgen und darauf zu reagieren, aber sie unterscheiden sich im Timing und in den Anwendungsfällen.
+Sowohl `effect()` als auch `afterRenderEffect()` sind darauf ausgelegt, Änderungen in Signals zu verfolgen und darauf zu reagieren, aber sie unterscheiden sich im Timing und in den Anwendungsfällen.
 
 - **`effect()`** wird als Teil des Angular-Change Detection ausgeführt und kann nun Signale sicher und ohne zusätzliche Flags verändern.
 - **`afterRenderEffect()`** ist eine API auf niedrigerer Ebene, die ausgeführt wird, nachdem das DOM aktualisiert wurde. 
@@ -91,7 +91,7 @@ Wie erwartet, wird die Konsolenausgabe für `afterRenderEffect()` nach der Ausga
 ## Vorstellung von `Effekt()`
 
 In diesem Artikel behandeln wir Effekte, die innerhalb einer Komponente erstellt werden. 
-Diese werden **Komponenteneffekte** genannt und ermöglichen das sichere Lesen und Schreiben von Komponenteneigenschaften und Signalen. 
+Diese werden **Komponenteneffekte** genannt und ermöglichen das sichere Lesen und Schreiben von Komponenteneigenschaften und Signals. 
 Es ist auch möglich, Effekte in Services zu erstellen. 
 Wenn ein Dienst auf der Root-Level der Anwendung bereitgestellt wird (auch bekannt als Singleton), werden diese Effekte **root effects** genannt.
 
@@ -99,7 +99,7 @@ Der Hauptunterschied zwischen diesen Arten von Effekten ist ihr Timing.
 Komponenteneffekte arbeiten als Teil der Angular-Change Detection, so dass wir sicher andere Input-Signals lesen und Views verwalten können, die vom Komponentenzustand abhängen. 
 Root-Effekte hingegen laufen als Microtasks, unabhängig vom Komponentenbaum oder der Change Detection.
 
-In diesem Artikel konzentrieren wir uns ausschließlich auf **Komponenteneffekte**, die das sichere Lesen und Schreiben von Signalen innerhalb von Komponenten ermöglichen.
+In diesem Artikel konzentrieren wir uns ausschließlich auf **Komponenteneffekte**, die das sichere Lesen und Schreiben von Signals innerhalb von Komponenten ermöglichen.
 
 ### Beispiel für `effect()`: mehrere Dinge auf einmal einstellen
 
@@ -159,7 +159,7 @@ export class BookFormComponent {
  }
 
   submitForm() {
-    / ...Logik für die Formularübermittlung
+    // ...Logik für die Formularübermittlung
   }
 }
 ```
@@ -175,9 +175,9 @@ In der Vergangenheit hätte man `ngOnChanges` eingesetzt, um das Formular zu pat
 
 Die früheren Einschränkungen für `effect()` wurden entfernt, so dass es jetzt schwieriger ist, zu entscheiden, wann `computed()` oder `effect()` verwendet werden soll.
 Unserer Meinung nach hängt es vom Anwendungsfall ab:
-- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signalen basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines Computed-Signals ist es grundsätzlich nicht erlaubt, andere Signale zu setzen.
+- **Verwenden Sie `computed()`** für die Ableitung eines Wertes, der auf anderen Signals basiert, insbesondere wenn Sie einen reinen, nur lesbaren reaktiven Wert benötigen. Innerhalb eines Computed-Signals ist es grundsätzlich nicht erlaubt, andere Signale zu setzen.
   Wir haben `computed()` und `linkedSignal()` in diesem Artikel behandelt: **[Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung](https://angular-buch.com/blog/2024-11-linked-signal)**
-- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signale beinhaltet oder Seiteneffekte außerhalb der Welt der Signale erfordert, wie z. B. das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
+- **Verwenden Sie `effect()`**, wenn die Operation komplexer ist, das Setzen mehrerer Signale beinhaltet oder Seiteneffekte außerhalb der Welt der Signale erfordert, wie zum Beispiel das Synchronisieren reaktiver Formularzustände oder das Protokollieren von Ereignissen.
 
 Für das Patchen von Formularen gibt es derzeit keinen besseren Ansatz als die Verwendung von Effekten. 
 Der Einsatz von Effekten kann auch gut für die Migration von bestehendem Code verwendet werden, der zuvor auf `ngOnChanges` gesetzt hat.
@@ -288,7 +288,7 @@ Es gibt zwei Möglichkeiten, Abhängigkeiten in `afterRenderEffect()` zu erstell
   Dieser Wert wird in ein Signal verpackt, und wenn wir dieses Signal dann im folgenden Effekt lesen, schaffen wir eine Abhängigkeit. 
   Es ist wichtig zu verstehen, dass wir die Getter-Funktion des Signals tatsächlich ausführen müssen, da die einfache Weitergabe des Signals nicht ausreicht, um eine Abhängigkeit herzustellen.
 
-2. **Direktes Verfolgen von Komponenten-Signalen**: 
+2. **Direktes Verfolgen von Komponenten-Signals**: 
   Wir können auch Abhängigkeiten herstellen, indem wir direkt auf andere Signale unserer Komponente innerhalb des Effekts zugreifen. 
   Im folgenden Beispiel lesen wir ein Signal von der Komponente innerhalb des Effekts `earlyRead`, um eine Abhängigkeit zu schaffen und sicherzustellen, dass der Effekt mehrfach ausgeführt wird.
 
