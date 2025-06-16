@@ -206,21 +206,21 @@ Die API selbst spiegelt die Funktionalität von
 
 die sich beide im **Developer Preview** befinden!
 
-The Angular documentation recommends avoiding `afterRender` when possible and suggest specifying explicit phases with `afterNextRender` to avoid significant performance degradation. 
-You'll see a similar recommendation for `afterRenderEffect()`. There is one signature that is intended for use and another that exists but is not recommended.
+Die Angular-Dokumentation empfiehlt, `afterRender` wenn möglich zu vermeiden und schlägt vor, explizite Phasen mit `afterNextRender` anzugeben, um erhebliche Leistungseinbußen zu vermeiden. 
+Eine ähnliche Empfehlung gibt es auch für `afterRenderEffect()`. Es gibt eine Signatur, die für die Verwendung vorgesehen ist, und eine andere, die zwar existiert, aber nicht empfohlen wird.
 
-However, there is one big difference between the hook methods and the new `afterRenderEffect()`:
-> **💡 Values are propagated from phase to phase as signals instead of as plain values.** 
+Es zudem einen großen Unterschied zwischen den bestehenden Hook-Methoden und dem neuen `afterRenderEffect()`:
+> **💡 Werte werden von Phase zu Phase als Signale und nicht als einfache Werte weitergegeben.**
 
-As a result, later phases may not need to execute if the values returned by earlier phases do not change – and if there is no other dependency established (we will talk about this soon).
-Before we start, here are some important facts to know about the effects created by `afterRenderEffect()`:
+Dadurch ist es möglich, dass spätere Phasen nicht ausgeführt werden müssen, wenn sich die von früheren Phasen zurückgegebenen Werte nicht ändern - und wenn keine anderen Abhängigkeiten etabliert wurden (wir werden in Kürze genauer darauf eingehen).
+Bevor wir beginnen, hier einige wichtige Fakten über die Effekte, die durch `afterRenderEffect()` erzeugt werden:
 
-* **Post-Render Execution:** These effects run when it's safe to make changes to the DOM. ([source: keynote slides from ng-poland 2024](https://docs.google.com/presentation/d/1puZmyZ-dgnt6_b0nOBaDMpyf_FmQld1h8yAmWxjA6gk/edit?usp=sharing))
-* **Phased Execution:** These effects can be registered for specific phases of the render cycle. 
-  The Angular team recommends following these phases for optimal performance.
-* **Signal Integration:** These effects work seamlessly with Angular's signal reactivity system, and signals can be set during the phases.
-* **Selective Execution:** These effects run at least once but only rerun when marked "dirty" due to signal dependencies. If no signal changes, the effect won't trigger again.
-* **No SSR:** These effects execute only in browser environments, not on the server.
+* **Post-Render Execution:** Diese Effekte werden ausgeführt, wenn es sicher ist, Änderungen am DOM vorzunehmen. ([Quelle: Keynote-Folien von ng-poland 2024](https://docs.google.com/presentation/d/1puZmyZ-dgnt6_b0nOBaDMpyf_FmQld1h8yAmWxjA6gk/edit?usp=sharing))
+* **Phased Execution:** Diese Effekte können für bestimmte Phasen des Renderzyklus registriert werden. 
+  Das Angular-Team empfiehlt, diese Phasen für eine optimale Leistung einzuhalten.
+* **100% Signal-kompatibel** Diese Effekte arbeiten nahtlos mit dem Signal-Reaktivitätssystem von Angular zusammen, und Signale können während der Phasen gesetzt werden.
+**Selektive Ausführung:** Diese Effekte werden mindestens einmal ausgeführt, aber nur dann erneut, wenn sie aufgrund von Signalabhängigkeiten als "schmutzig" markiert sind. Wenn sich kein Signal ändert, wird der Effekt nicht erneut ausgelöst.
+**Keine SSR:** Diese Effekte werden nur in Browserumgebungen ausgeführt, nicht auf dem Server.
 
 
 ### Understanding the Phases
