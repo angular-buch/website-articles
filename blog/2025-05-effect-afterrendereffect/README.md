@@ -292,8 +292,8 @@ Es gibt zwei Möglichkeiten, Abhängigkeiten in `afterRenderEffect()` zu erstell
   Wir können auch Abhängigkeiten herstellen, indem wir direkt auf andere Signals unserer Komponente innerhalb des Effekts zugreifen. 
   Im folgenden Beispiel lesen wir ein Signal von der Komponente innerhalb des Effekts `earlyRead`, um eine Abhängigkeit zu schaffen und sicherzustellen, dass der Effekt mehrfach ausgeführt wird.
 
-**💡 Angular stellt sicher, dass Effects nur dann erneut ausgeführt werden, wenn sich ihre verfolgten Signals ändern, und markiert den Effekt selbst als "dirty".
-  Ohne diese Signalabhängigkeiten wird jeder Effekt nur einmal ausgeführt!
+> **💡 Angular stellt sicher, dass Effects nur dann erneut ausgeführt werden, wenn sich ihre verfolgten Signals ändern, und markiert den Effekt selbst als "dirty".
+  Ohne diese Signalabhängigkeiten wird jeder Effekt nur einmal ausgeführt!**
 
 
 ### Beispiel für `afterRenderEffect()`: Größe einer Textarea dynamisch ändern
