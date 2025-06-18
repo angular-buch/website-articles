@@ -413,10 +413,11 @@ Hier ist eine Aufschlüsselung der einzelnen Effekte:
   In unserem Beispiel sind keine Aufräumarbeiten erforderlich. Wir weisen aber darauf hin, dass lang laufende Aufgaben (wie ein Timeout) immer sauber beendet werden sollten.
   Die Bereinigung wird vor der erneuten Ausführung der Phase aufgerufen, oder wenn der Effekt selbst zerstört wird.
   Der `write`-Effekt übergibt dann die neue Höhe `newHeight` an den `read`-Effekt.
+  
   Tipp: Übergeben Sie den gleichen Wert an `read` (z. B. `return 100`) und Sie werden sehen, dass die Folgephase nicht ausgeführt wird.
   Wird dieselbe Zahl zweimal gesetzt, wird dies nicht als Änderung betrachtet, so dass der Effekt `write` den Effekt `read` nicht als "dirty" markiert.
 
-3. **Phase `read`**: 
+4. **Phase `read`**: 
   Der Effekt, der in der `read`-Phase ausgeführt wird, protokolliert die `newHeight`. 
   Wir könnten in dieser Phase auch aus dem DOM lesen und das Ergebnis in einem neuen Signal speichern.
   Das ist in diesem Beispiel gar nicht notwendig, weil `earlyRead` diese Aufgabe bereits erledigt.
