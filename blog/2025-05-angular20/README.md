@@ -3,7 +3,7 @@ title: 'Angular 20 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2025-05-30
-lastModified: 2025-06-16
+lastModified: 2025-06-18
 keywords:
   - Angular
   - Angular 20
@@ -263,6 +263,57 @@ booksResource = httpResource<Book[]>(
 Bitte beachten Sie, dass eine Resource ausschließlich dafür gedacht ist, Daten von einer Schnittstelle *abzurufen* und mit Signals bereitzustellen.
 Schreibende Operationen wie Erstellen, Aktualisieren oder Löschen können mit einer Resource nicht abgebildet werden.
 Dafür müssen wir weiterhin direkt den `HttpClient` verwenden.
+
+
+## Anpassungen bei `resource` und `rxResource`
+
+Die Resource API ist auch mit Angular 20 weiterhin noch als *experimental* markiert.
+Das bedeutet unter anderem, dass die Schnittstelle ohne offizielle Vorwarnung geändert werden kann.
+Hier gab es kürzlich zwei interessante Anpassungen.
+
+Wir haben unseren umfangreichen [Blogpost zur Resource API](https://angular-buch.com/blog/2024-10-resource-api) entsprechend aktualisiert, sodass Sie dort stets aktuelle Beispiele finden.
+
+### resource: `params` statt `request`
+
+Die Parameter für eine Resource werden nun im Property `params` übergeben, nicht mehr in `request`.
+Auch das Property im Interface `ResourceLoaderParams`, aus dem wir die Parameter auslesen, heißt nun `params`.
+
+```ts
+// ❌ VORHER
+booksResource = resource({
+  request: () => this.isbn(),
+  loader: ({ request }) => this.#bs.getSingle(request)
+});
+
+// ✅ NACHHER
+booksResource = resource({
+  params: () => this.isbn(),
+  loader: ({ params }) => this.#bs.getSingle(params)
+});
+```
+
+Wir begrüßen diese Änderung sehr, weil die Begriffe "Request" und "Loader" bisher leicht verwechselt werden konnten.
+Mit dem Begriff "Params" ist nun klarer, dass es sich um Parameter sind, die den Loader triggern.
+
+
+### rxResource: `stream` statt `loader`
+
+Die `rxResource` ist eine besondere Variante der Resource, die als Loader ein Observable aus RxJS verwendet (die einfache Resource erwartet eine Promise als Loader).
+Ein Observable kann beliebig viele Elemente liefern, deshalb passt der Begriff "Loader" nicht in jedem Fall.
+Das Property wurde deshalb zu `stream` umbenannt.
+
+```ts
+// ❌ VORHER
+booksResource = rxResource({
+  loader: () => this.#bs.getAll()
+});
+
+// ✅ NACHHER
+booksResource = rxResource({
+  stream: () => this.#bs.getAll()
+});
+```
+
 
 
 ## Sonstiges
