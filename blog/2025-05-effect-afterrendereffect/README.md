@@ -3,7 +3,7 @@ title: 'Reactive Angular: effect and afterRenderEffect verstehen und einsetzen'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 published: 2025-05-01
-lastModified: 2025-05-01
+lastModified: 2025-06-18
 keywords:
   - Angular
   - JavaScript
@@ -203,10 +203,10 @@ Messen von Elementgrößen, die direkte Verwaltung von Animationen oder die Orch
 
 Mit der neuen Funktion `afterRenderEffect()` können wir steuern, wann bestimmte Aufgaben während des DOM-Aktualisierungsprozesses ausgeführt werden.
 Die API selbst spiegelt die Funktionalität von 
-* [`afterNextRender`](https://angular.dev/api/core/afterNextRender) *(registriert Callbacks, die das nächste Mal aufgerufen werden, wenn die Anwendung das Rendering beendet, während der angegebenen Phasen)* und
-* `afterRender` *(registriert ein Callback, das jedes Mal aufgerufen wird, wenn die Anwendung das Rendern beendet)*.
+* [`afterEveryRender`](https://angular.dev/api/core/afterEveryRender) *(registriert Callbacks, das jedes Mal aufgerufen wird, wenn die Anwendung das Rendern beendet)* und
+* [`afterNextRender`](https://angular.dev/api/core/afterNextRender) *(registriert Callbacks, die das nächste Mal aufgerufen werden, wenn die Anwendung das Rendering beendet, während der angegebenen Phasen)*.
 
-Die Funktion `afterRender` existiert seit Angular 20 nicht mehr. Schon zuvor hatte die Dokumentation empfohlen, explizite Phasen mit `afterNextRender` anzugeben, um erhebliche Leistungseinbußen zu vermeiden. 
+Die Dokumentation empfiehlt, explizite Phasen mit `afterNextRender` anzugeben, um erhebliche Leistungseinbußen zu vermeiden. 
 Eine ähnliche Empfehlung gibt es auch für `afterRenderEffect()`: Es gibt eine Signatur, die für die Verwendung vorgesehen ist, und eine andere, die zwar existiert, aber nicht empfohlen wird.
 
 Es gibt zudem einen großen Unterschied zwischen den bestehenden Hook-Funktionen und dem neuen `afterRenderEffect()`:
