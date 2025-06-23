@@ -157,13 +157,13 @@ Das würde funktionieren, aber nur im JIT (Just-in-Time)-Modus, da Angulars AOT-
 
 ## Idee 3: Nutzung interner Angular-Ivy-APIs
 
-Jetzt wird es spannend: Nachdem wir zuvor ein paar Lösungen ausprobiert haben, die nicht funktionieren, schauen wir uns nun interne Angular-Ivy-APIs an.
-Damit sind APIs gemeint, die Angular selbst verwendet, um Services zur Verfügung zu stellen.
-Wir verlassen nun also offiziell unterstützte Pfade und begeben uns auf "internes" Terrain.
+Die bisherigen Ansätze haben nicht funktioniert. Jetzt schauen wir uns die internen Ivy-APIs an.
+Das sind Mechanismen, die Angular selbst zur Bereitstellung von Services nutzt. 
+Wir greifen damit auf eine intern genutzte, aber nicht offiziell dokumentierte API zurück.
 
 Die zentrale interne API, die für uns interessant ist, heißt [`ɵɵdefineInjectable`](https://github.com/angular/angular/blob/a40abf09f1abcabda3752ed915bb90e4eafe078d/packages/core/src/di/interface/defs.ts#L167).
-Diese Funktion erstellt für eine Klasse die benötigten Metadaten, sodass Angular sie automatisch injizieren kann.
-Der Code ist gut dokumentiert, und so stehen im verlinkten Code auch gleich Hinweise zur Verwendung. (**This should be assigned to a static `ɵprov` field on a type, which will then be an `InjectableType`.**)
+Diese Funktion erstellt für eine Klasse die nötigen Metadaten, sodass Angular sie automatisch injizieren kann.
+Im verlinkten Code finden sich auch Hinweise zur Verwendung: (**This should be assigned to a static `ɵprov` field on a type, which will then be an `InjectableType`.**)
 
 ### Minimalversion ohne Konstruktor-Injection
 
@@ -214,7 +214,7 @@ An dieser Stelle habe ich bei meinen Recherchen festgestellt, das mein geschätz
 Der Decorator heißt hier `@InjectableEnhanced`, aber prinzipiell ist der Code derselbe.
 
 Der folgende Code demonstriert, wie man die fehlende Konstruktor-Injection nachbilden kann. 
-Dabei nutzt er ebenfalls die selbe Ivy-internen APIs, definiert aber explizit alle Abhängigkeiten innerhalb der Factory-Funktion:
+Dabei nutzt er ebenfalls dieselbe API wie zuvor, definiert aber explizit alle Abhängigkeiten innerhalb der Factory-Funktion:
 
 ```ts
 // Gregor's Code, minimal abgewandelt:
@@ -383,7 +383,6 @@ Wir haben jetzt drei Varianten gesehen:
 3. Unsere finale Variante, die voll auf die `inject()`-Funktion setzt und auf Konstruktor-Injection verzichtet.
 
 Die dritte Variante erweist sich als die eleganteste Lösung.
-Wir kombinieren moderne Angular-Techniken (`inject()`) mit Ivy-internen APIs (`ɵɵdefineInjectable`) und schaffen so eine saubere, wartbare und angenehme Lösung.
 
 Was meinst du?
 
