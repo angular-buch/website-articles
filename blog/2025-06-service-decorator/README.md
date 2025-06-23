@@ -13,11 +13,15 @@ language: de
 header: angular20.jpg
 ---
 
+Mit Angular 20 entfällt der Service-Suffix im neuen Style Guide.
+Das bringt kürzere Dateinamen, macht aber die Rolle von Klassen weniger offensichtlich.
+Dieser Artikel zeigt, wie ein eigener `@Service`-Decorator dieses Problem elegant lösen kann.
+
 
 ## Angular 20: Der Service Suffix ist weg
 
-Alles neu macht der Mai – oder zumindest eine neue Major-Version von Angular.
-Der neue [Style Guide](https://angular.dev/style-guide) wurde für die neueste Version stark überarbeitet und verschlankt.
+Die neue Major-Version von Angular bringt frischen Wind!
+So wurde der neue [Angular coding style guide](https://angular.dev/style-guide) für v20 stark überarbeitet und verschlankt.
 Es wird *nicht* mehr empfohlen, Komponenten, Services und Direktiven mit einem Suffix zu versehen.
 
 Der Befehl `ng generate service book-store` generiert demnach nicht mehr eine Klasse mit dem Namen `BookStoreService`, sondern vergibt nur noch den Namen `BookStore`.
@@ -50,8 +54,8 @@ export class BookStoreService { }
 export class BookStore { }
 ```
 
-Wer Angular länger kennt, der weiß das der `Injectable` Decorator eigentlich in fast allen Fällen einen Service markiert.
-Aber wenn wir ganz ehrlich sind, der Zweck des Decorators könnte klarer erkennbar sein.
+Wer Angular länger kennt, der weiß dass der `Injectable` Decorator eigentlich in fast allen Fällen einen Service markiert.
+Aber ehrlich gesagt könnte der Zweck des Decorators deutlicher erkennbar sein.
 
 In Spring beispielsweise ist `@Service` eine gängige Annotation, welche verdeutlicht, das eine Klasse Service-Logik enthält.
 
@@ -70,15 +74,15 @@ Ich finde es weiterhin sehr charmant, das der Einsatzweck schon am Anfang der Kl
 
 ## Die Motivation – Mein `@Service()`-Decorator für Angular
 
-Was tun wir also, wenn wir auf das altbekannte `Service`-Suffix verzichten wollen (oder sollen),
-aber trotzdem noch deutlich machen möchten, dass eine Klasse ein Service ist?
+Was tun wir also, wenn wir auf das altbekannte `Service`-Suffix verzichten wollen
+und trotzdem noch deutlich machen möchten, dass eine Klasse ein Service ist?
 
 Meine Idee: Warum nicht einfach einen eigenen Decorator namens `@Service()` einführen?
 So ist schon direkt am Decorator klar, womit wir es zu tun haben.
 Und weil wir schon mal dabei sind, sparen wir uns auch gleich noch das immer gleiche `providedIn: 'root'`.
 
 Wenn ich mir also eine Sache eine Änderung am Angular-Framework wünschen könnte,
-dann wäres es vielleicht folgende neue Syntax:
+dann wäre es vielleicht folgende neue Syntax:
 
 ```ts
 // book-store.ts
@@ -159,7 +163,7 @@ Wir verlassen nun also offiziell unterstützte Pfade und begeben uns auf "intern
 
 Die zentrale interne API, die für uns interessant ist, heißt [`ɵɵdefineInjectable`](https://github.com/angular/angular/blob/a40abf09f1abcabda3752ed915bb90e4eafe078d/packages/core/src/di/interface/defs.ts#L167).
 Diese Funktion erstellt für eine Klasse die benötigten Metadaten, sodass Angular sie automatisch injizieren kann.
-Der Code ist gut dokumentiert, und so stehen auf dem verlinkten Code auch gleich Hinweise zur Verwendung. (**This should be assigned to a static `ɵprov` field on a type, which will then be an `InjectableType`.**)
+Der Code ist gut dokumentiert, und so stehen im verlinkten Code auch gleich Hinweise zur Verwendung. (**This should be assigned to a static `ɵprov` field on a type, which will then be an `InjectableType`.**)
 
 ### Minimalversion ohne Konstruktor-Injection
 
@@ -191,7 +195,7 @@ Der große Vorteil dieses Ansatzes ist seine Einfachheit.
 Der große Nachteil liegt auf der Hand: Konstruktor-Injection ist nicht möglich, da wir nicht wissen, welche Abhängigkeiten der Konstruktor erwartet.
 Das folgende Beispiel macht dies deutlich.
 Wir erwarten, das der Service `BookRating` per Konstruktor-Injection verfügbar gemacht wird.
-Statt dessen ist der Wert aber einfach nur `undefiend`.
+Statt dessen ist der Wert aber einfach nur `undefined`.
 
 ```ts
 @Service()
@@ -205,9 +209,9 @@ export class BookStore {
 
 ### Gregors Variante: Konstruktor-Injection mit expliziten Abhängigkeiten
 
-An dieser Stelle habe ich bei meinen Bemühungen festgestellt, das mein geschätzer GDE-Kollege Gregor Woiwode sich mit dem Thema schon vor 5 Jahren beschäftigt hat.
-Er hat [eine Lösung](https://stackoverflow.com/a/59759381) für die fehlende Konstrutkor-Injection bereits zur Zeit von Angular 9 aufgezeigt.
-Sein Decorator heißt `@InjectableEnhanced`, aber prinzipiell ist der Code der selbe.
+An dieser Stelle habe ich bei meinen Recherchen festgestellt, das mein geschätzer GDE-Kollege Gregor Woiwode sich bereits vor 5 Jahren mit dem Thema beschäftigt hat.
+[Seine Lösung](https://stackoverflow.com/a/59759381) hat er auf StackOverflow vorgestellt.
+Der Decorator heißt hier `@InjectableEnhanced`, aber prinzipiell ist der Code derselbe.
 
 Der folgende Code demonstriert, wie man die fehlende Konstruktor-Injection nachbilden kann. 
 Dabei nutzt er ebenfalls die selbe Ivy-internen APIs, definiert aber explizit alle Abhängigkeiten innerhalb der Factory-Funktion:
@@ -294,11 +298,18 @@ Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen ode
 
 ## Idee 4: Automatische Dependency-Auflösung mit reflect-metadata
 
-Um Konstruktor-Injektionen zu ermöglichen, könnten wir zusätzlich Metadaten ([reflect-metadata](https://www.npmjs.com/package/reflect-metadata)) nutzen. 
-Das erfordert allerdings Anpassungen am Projekt (`tsconfig.json` mit `emitDecoratorMetadata: true`) und würde den eigenen Code stark vom Framework abhängig machen.
+Um Konstruktor-Injectionen ohne manuelle Angabe von Abhängigkeiten zu ermöglichen, 
+könnten wir die Bibliothek [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) nutzen. 
+Dies erfordert die Aktivierung von `emitDecoratorMetadata: true` in der `tsconfig.json` und die Einbindung von `reflect-metadata` als zusätzliche Abhängigkeit.
+
+In früheren Angular-Versionen war `reflect-metadata` oft notwendig, da der JIT-Compiler Metadaten zur Laufzeit auswertete. 
+Mit Ivy (ab Angular 9) und AOT-Compilation generiert Angular statische Metadaten während der Build-Zeit, 
+wodurch `reflect-metadata` in Produktionsumgebungen meist überflüssig ist. 
+
+Die Verwendung dieser Bibliothek würde daher die Bundle-Größe erhöhen, was in modernen Projekten vermieden werden sollte. 
 
 
-### Idee 5, die finale Idee: Elegante Dependency Injection mit `inject()`
+### Idee 5 – die finale Idee: Elegante Dependency Injection mit `inject()`
 
 Können wir es nicht einfacher haben, und zwar ohne jegliche manuelle Angabe der Konstruktor-Abhängigkeiten?
 Genau an dieser Stelle kommt die neue Angular-Funktion `inject()` ins Spiel (die es 2020 noch nicht gab).
@@ -360,7 +371,7 @@ export class BookStore {
 }
 ```
 
-Schick, oder?
+Eine elegante Lösung, oder?
 
 
 ### Fazit zu Idee 3
@@ -376,7 +387,7 @@ Wir kombinieren moderne Angular-Techniken (`inject()`) mit Ivy-internen APIs (`�
 
 Jetzt bleibt nur noch die Frage:
 
-> **Würden Sie diesen `@Service`-Decorator ausprobieren?** Oder bleiben Sie lieber beim bewährten `@Injectable()`? Ich freue mich auf Ihr Feedback auf Twitter oder BlueSky! 😊
+> **Würdest du diesen @Service-Decorator ausprobieren?** Oder bleibst du lieber beim bewährten `@Injectable()`? Ich freue mich auf dein Feedback auf Twitter oder BlueSky! 😊
 
 <hr>
 
