@@ -25,7 +25,7 @@ So wurde der neue [Angular coding style guide](https://angular.dev/style-guide) 
 Es wird *nicht* mehr empfohlen, Komponenten, Services und Direktiven mit einem Suffix zu versehen.
 
 Der Befehl `ng generate service book-store` generiert demnach nicht mehr eine Klasse mit dem Namen `BookStoreService`, sondern vergibt nur noch den Namen `BookStore`.
-Folgerichtig wird aus `book-store.service.ts` nun einfach nur `book-store.ts`
+Folgerichtig wird aus `book-store.service.ts` nun einfach nur `book-store.ts`.
 
 Das ist prinzipiell eine tolle Sache.
 Wir erhalten Dateinamen und mehr Fokus auf bewusste Benennung.
@@ -54,10 +54,10 @@ export class BookStoreService { }
 export class BookStore { }
 ```
 
-Wer Angular länger kennt, der weiß dass der `Injectable` Decorator eigentlich in fast allen Fällen einen Service markiert.
+Wer Angular länger kennt, der weiß, dass der `Injectable` Decorator eigentlich in fast allen Fällen einen Service markiert.
 Aber ehrlich gesagt könnte der Zweck des Decorators deutlicher erkennbar sein.
 
-In Spring beispielsweise ist `@Service` eine gängige Annotation, welche verdeutlicht, das eine Klasse Service-Logik enthält.
+In Spring beispielsweise ist `@Service` eine gängige Annotation, welche verdeutlicht, dass eine Klasse Service-Logik enthält.
 
 ```java
 import org.springframework.stereotype.Service;
@@ -81,7 +81,7 @@ Meine Idee: Warum nicht einfach einen eigenen Decorator namens `@Service()` einf
 So ist schon direkt am Decorator klar, womit wir es zu tun haben.
 Und weil wir schon mal dabei sind, sparen wir uns auch gleich noch das immer gleiche `providedIn: 'root'`.
 
-Wenn ich mir also eine Sache eine Änderung am Angular-Framework wünschen könnte,
+Wenn ich mir also eine Änderung am Angular-Framework wünschen könnte,
 dann wäre es vielleicht folgende neue Syntax:
 
 ```ts
@@ -97,7 +97,7 @@ So stelle ich mir das vor:
 2. Wir müssen nicht mehr bei jedem Service erneut `providedIn: 'root'` schreiben. Das hat mich schon immer gestört.
 
 
-## Das Ziel: Kompakter, klarer und weniger Boilerplate
+## Das Ziel: Kompakter, klarer und weniger Boilerplate-Code
 
 Mein Ziel ist demnach ein eleganterer Decorator, der:
 
@@ -133,7 +133,7 @@ Das Framework findet den Service einfach nicht, und wir erhalten die folgende Fe
 
 > **❌ Fehlermeldung:** NullInjectorError: No provider for BookStore!
 
-Außerdem sieht es nicht gut aus... und es handelt sich dabei auch nicht um einen Decorator.
+Außerdem ist der Ansatz auch optisch wenig überzeugend... und es handelt sich dabei auch nicht um einen Decorator.
 
 
 ## Idee 2: Eigener Decorator, der `@Injectable` wrappt
@@ -209,7 +209,7 @@ export class BookStore {
 
 ### Gregors Variante: Konstruktor-Injection mit expliziten Abhängigkeiten
 
-An dieser Stelle habe ich bei meinen Recherchen festgestellt, das mein geschätzer GDE-Kollege Gregor Woiwode sich bereits vor 5 Jahren mit dem Thema beschäftigt hat.
+An dieser Stelle habe ich bei meinen Recherchen festgestellt, das mein geschätzter GDE-Kollege Gregor Woiwode sich bereits vor 5 Jahren mit dem Thema beschäftigt hat.
 [Seine Lösung](https://stackoverflow.com/a/59759381) hat er auf StackOverflow vorgestellt.
 Der Decorator heißt hier `@InjectableEnhanced`, aber prinzipiell ist der Code derselbe.
 
@@ -217,7 +217,7 @@ Der folgende Code demonstriert, wie man die fehlende Konstruktor-Injection nachb
 Dabei nutzt er ebenfalls die selbe Ivy-internen APIs, definiert aber explizit alle Abhängigkeiten innerhalb der Factory-Funktion:
 
 ```ts
-// Gregor's Code, minimal abgwandelt:
+// Gregor's Code, minimal abgewandelt:
 
 export function InjectableEnhanced() {
   return <T extends new (...args: any[]) => InstanceType<T>>(target: T) => {
@@ -261,7 +261,7 @@ Was passiert hier genau?
 Der Code lässt sich auch so umschreiben, sodass er dem vorherigen Beispiel entspricht.
 Statt der direkten Zuweisung `((target as any).ɵprov)`, würde ich eher `Object.defineProperty() ` verwenden.
 Bei diesem Stil muss man zwar etwas mehr Code schreiben, aber dafür umgehen wir nicht mehr per Cast das Typsystem.
-Die Fehlermeldung habe ich dabei auch weg gelassen:
+Die Fehlermeldung habe ich dabei auch weggelassen:
 
 ```ts
 // Gregors Code, gekürtzt und angepasst:
@@ -293,7 +293,7 @@ export class BookStore {
 
 Dieser Ansatz ist technisch geschickt gelöst, hat aber eine klare Einschränkung: Er ist nicht generisch genug für alle Fälle.
 Für jeden einzelnen Service müssen wir manuell die Abhängigkeiten auflisten.
-Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen oder immer den selben Abhängigkeit.
+Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen oder immer denselben Abhängigkeit.
 
 
 ## Idee 4: Automatische Dependency-Auflösung mit reflect-metadata
@@ -309,7 +309,7 @@ wodurch `reflect-metadata` in Produktionsumgebungen meist überflüssig ist.
 Die Verwendung dieser Bibliothek würde daher die Bundle-Größe erhöhen, was in modernen Projekten vermieden werden sollte. 
 
 
-### Idee 5 – die finale Idee: Elegante Dependency Injection mit `inject()`
+### Idee 5: Die finale Idee – Elegante Dependency Injection mit `inject()`
 
 Können wir es nicht einfacher haben, und zwar ohne jegliche manuelle Angabe der Konstruktor-Abhängigkeiten?
 Genau an dieser Stelle kommt die neue Angular-Funktion `inject()` ins Spiel (die es 2020 noch nicht gab).
@@ -347,7 +347,7 @@ export class BookStore {
 
 Warum ist dieser Ansatz besonders elegant und modern?
 
-* Der Decorator ist sehr kurz. Weniger ist mehr.
+* Der Decorator ist bewusst kompakt gehalten.
 * Keine explizite Deklaration von Konstruktor-Abhängigkeiten nötig.
 * Der Einsatz von `inject()` wird ohnehin für modernen Code empfohlen
 * Vollständig kompatibel mit Ivy und dem Angular AOT-Compiler.
@@ -385,10 +385,10 @@ Wir haben jetzt drei Varianten gesehen:
 Die dritte Variante erweist sich als die eleganteste Lösung.
 Wir kombinieren moderne Angular-Techniken (`inject()`) mit Ivy-internen APIs (`ɵɵdefineInjectable`) und schaffen so eine saubere, wartbare und angenehme Lösung.
 
-Jetzt bleibt nur noch die Frage:
+Was meinst du?
 
 > **Würdest du diesen @Service-Decorator ausprobieren?** Oder bleibst du lieber beim bewährten `@Injectable()`? Ich freue mich auf dein Feedback auf Twitter oder BlueSky! 😊
 
 <hr>
 
-<small>**Titelbild:** Morgenstimmung im Anklamer Stadtbruch. Foto von Ferdinand Malcher (TODO)</small>
+<small>**Titelbild:** Morgenstimmung im Anklamer Stadtbruch. Foto von Ferdinand Malcher</small>
