@@ -69,7 +69,7 @@ public class BookStoreService {
 ```
 
 Zusätzlich gibt es noch weitere Annotationen wie `@Repository`, `@Controller` oder `@Component`.
-Ich finde es weiterhin sehr charmant, das der Einsatzweck schon am Anfang der Klasse klar und deutlich ausgedrückt wird.
+Ich finde es weiterhin sehr charmant, dass der Einsatzweck schon am Anfang der Klasse klar und deutlich ausgedrückt wird.
 
 
 ## Die Motivation – Mein `@Service()`-Decorator für Angular
@@ -192,7 +192,8 @@ Was macht dieser Code?
 * Die Factory-Funktion erzeugt einfach eine neue Instanz der Klasse – **aber ohne Konstruktor-Abhängigkeiten**.
 
 Der große Vorteil dieses Ansatzes ist seine Einfachheit. 
-Der große Nachteil liegt auf der Hand: Konstruktor-Injection ist nicht möglich, da wir nicht wissen, welche Abhängigkeiten der Konstruktor erwartet.
+Der große Nachteil besteht aber darin, dass Konstruktor-Injection nicht möglich ist.
+Wir wissen zur Laufzeit schlicht nicht, welche Abhängigkeiten der Konstruktor erwartet.
 Das folgende Beispiel macht dies deutlich.
 Wir erwarten, das der Service `BookRating` per Konstruktor-Injection verfügbar gemacht wird.
 Statt dessen ist der Wert aber einfach nur `undefined`.
@@ -264,7 +265,7 @@ Bei diesem Stil muss man zwar etwas mehr Code schreiben, aber dafür umgehen wir
 Die Fehlermeldung habe ich dabei auch weggelassen:
 
 ```ts
-// Gregors Code, gekürtzt und angepasst:
+// Gregors Code, gekürzt und angepasst:
 
 export function Service(): ClassDecorator {
   return (target: any) => {
@@ -293,7 +294,7 @@ export class BookStore {
 
 Dieser Ansatz ist technisch geschickt gelöst, hat aber eine klare Einschränkung: Er ist nicht generisch genug für alle Fälle.
 Für jeden einzelnen Service müssen wir manuell die Abhängigkeiten auflisten.
-Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen oder immer denselben Abhängigkeit.
+Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen oder immer denselben Abhängigkeiten.
 
 
 ## Idee 4: Automatische Dependency-Auflösung mit reflect-metadata
