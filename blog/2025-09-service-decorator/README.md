@@ -18,11 +18,11 @@ header: angular20.jpg
 ---
 
 Mit Angular 20 entfällt der Service-Suffix im neuen Style Guide.
-Das bringt kürzere Dateinamen, macht aber die Rolle von Klassen weniger offensichtlich.
+Das sorgt zwar für kürzere Dateinamen, macht aber die Rolle der Klassen weniger offensichtlich.
 Dieser Artikel zeigt ein **Gedankenexperiment**, bei dem ein eigener `@Service`-Decorator dieses Problem elegant löst.
 
 
-## Angular 20: Der Service Suffix ist weg
+## Angular 20: Der Service-Suffix ist weg
 
 Die neue Major-Version von Angular bringt einige tiefgreifende Veränderungen mit sich.
 So wurde der neue [Angular coding style guide](https://angular.dev/style-guide) für v20 stark überarbeitet und verschlankt.
@@ -58,8 +58,8 @@ export class BookStoreService { }
 export class BookStore { }
 ```
 
-Wer Angular länger kennt, der weiß, dass der `Injectable` Decorator eigentlich in fast allen Fällen einen Service markiert.
-Aber ehrlich gesagt könnte der Zweck dieses Decorators deutlicher kommuniziert werden.
+Wer Angular bereits länger nutzt, weiß, dass der `@Injectable`-Decorator fast immer einen Service kennzeichnet.
+Dennoch könnte der Einsatzzweck dieses Decorators sicherlich klarer kommuniziert werden.
 
 In Spring beispielsweise ist `@Service` eine gängige Annotation, welche verdeutlicht, dass eine Klasse Service-Logik enthält.
 
@@ -81,8 +81,8 @@ Ich finde es weiterhin sehr charmant, dass der Einsatzzweck schon am Anfang der 
 Was tun wir also, wenn wir auf das altbekannte `Service`-Suffix verzichten wollen
 und trotzdem noch deutlich machen möchten, dass eine Klasse ein Service ist?
 
-Mein Gedanke dazu: Warum nicht einfach einen eigenen Decorator namens `@Service()` einführen?
-So ist schon direkt am Decorator klar, womit wir es zu tun haben.
+Mein Gedanke dazu: Warum führen wir nicht einfach einen eigenen Decorator namens `@Service()` ein?
+Dann wäre direkt durch den Decorator ersichtlich, dass es sich bei der Klasse um einen Service handelt.
 Und weil wir schon mal dabei sind, sparen wir uns auch gleich noch das immer gleiche `providedIn: 'root'`.
 
 Wenn ich mir also eine Änderung am Angular-Framework wünschen könnte,
@@ -137,7 +137,8 @@ Das Framework findet den Service einfach nicht, und wir erhalten die folgende Fe
 
 > **❌ Fehlermeldung:** NullInjectorError: No provider for BookStore!
 
-Abgesehen davon, dass diese Lösung nicht funktioniert, handelt es sich außerdem gar nicht um einen Decorator. Ziel verfehlt!
+Abgesehen davon, dass diese Lösung technisch nicht funktioniert, erfüllt sie auch nicht unser Ziel, einen echten Decorator zu erstellen.
+Ziel verfehlt!
 
 
 ## Idee 2: Eigener Decorator, der `@Injectable` wrappt
@@ -150,7 +151,8 @@ export function Service(): ClassDecorator {
 }
 ```
 
-Das würde funktionieren, aber nur im JIT (Just-in-Time)-Modus, da Angulars AOT-Compiler dieses dynamische Vorgehen nicht unterstützt.
+Diese Variante funktioniert nur im JIT-Modus (Just-in-Time). 
+Angulars AOT-Compiler unterstützt dieses dynamische Vorgehen leider nicht.
 
 > **❌ Fehlermeldung:** The injectable 'BookStore2' needs to be compiled using the JIT compiler, but '@angular/compiler' is not available.
 > JIT compilation is discouraged for production use-cases! Consider using AOT mode instead.
@@ -262,7 +264,7 @@ export class BookStore {
 Was passiert hier genau?
 
 * Gregor definiert nicht nur `ɵprov`, sondern explizit auch `ɵfac` (die Factory), die normalerweise automatisch vom Angular-Compiler erzeugt wird. 
-  Er verhindert zudem, dass jemand die Klasse direkt instanziieren kann. Der Code verhinder dies mit einer frühen Exception.
+  Er verhindert zudem, dass jemand die Klasse direkt instanziieren kann. Der Code verhindert dies mit einer frühen Exception.
   Wer Bedenken hat, dass jemand die dekorierten Service manuell instanziiert, kann diese Prüfung gerne beibehalten.
 * Innerhalb der Factory-Funktion injiziert der Code explizit jede Abhängigkeit einzeln mittels `ɵɵinject`. 
   In diesem Fall handelt es sich um unseren Service `BookRating`.
@@ -319,7 +321,7 @@ In früheren Angular-Versionen war `reflect-metadata` oft notwendig, da der JIT-
 Mit Ivy (ab Angular 9) und AOT-Compilation generiert Angular statische Metadaten während der Build-Zeit, 
 wodurch `reflect-metadata` in Produktionsumgebungen meist überflüssig ist. 
 
-Die Verwendung dieser Bibliothek erhöht die Bundle-Größe unnötig, was in modernen Projekten zu vermeiden ist.
+Die Verwendung dieser Bibliothek erhöht unnötig die Bundle-Größe, was moderne Angular-Projekte vermeiden sollten.
 Ich habe diesen Ansatz daher nicht weiter verfolgt, `reflect-metadata` möchte ich nicht wieder als Abhängigkeit in meinem Projekt sehen. 
 
 
@@ -376,7 +378,7 @@ export class BookStore {
 }
 ```
 
-Eine elegante Lösung, oder?
+Klingt doch elegant – zumindest für unser kleines Experiment!
 
 
 ### Fazit und abschließende Gedanken
@@ -409,7 +411,7 @@ Es ist spannend und lehrreich, interne Angular-APIs auf diese Weise zu erkunden,
   Dies birgt ein erhebliches Risiko, dass der Code irgendwann nicht mehr funktioniert oder aufwändig angepasst werden muss.
 
 * **Wartbarkeit und Verständnis im Team:**
-  Ein selbst geschriebener Decorator mag elegant wirken, aber jedes neue Teammitglied müsste erst darüber informiert werden, warum im Projekt ein "magischer" Decorator verwendet wird und wie dieser funktioniert.
+  Ein selbst geschriebener Decorator wirkt vielleicht zunächst elegant, doch jedes neue Teammitglied müsste erst lernen, warum im Projekt ein "magischer" Decorator verwendet wird und wie genau dieser funktioniert.
 
 * **Geringer Mehrwert vs. Risiko:**
   Der einzige Gewinn dieses Decorators ist eine leichte Verbesserung der Lesbarkeit und minimal weniger Boilerplate-Code.
@@ -422,7 +424,7 @@ Die offizielle Angular-API garantiert uns Stabilität, Wartbarkeit und Zukunftss
 **Was meinst du dazu?**
 
 Wie findest du diesen experimentellen `@Service()`-Decorator?
-Würdest du ein solches Konstrukt dennoch einmal ausprobieren, oder bleibst du – wie ich lieber beim bewährten `@Injectable()`? ... oder sollte ich doch alles auf `@Service()` umstellen? 😅
+Würdest du ein solches Konstrukt dennoch einmal ausprobieren, oder bleibst du wie ich lieber beim bewährten `@Injectable()`? …oder sollte ich doch alles auf `@Service()` umstellen? 😅
 
 Ich freue mich auf dein Feedback auf Twitter oder BlueSky! 😊
 
