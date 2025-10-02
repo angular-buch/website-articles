@@ -2,13 +2,17 @@
 title: 'Mein experimenteller @Service()-Decorator für Angular'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
-published: 2025-07-11
-lastModified: 2025-07-11
+published: 2025-09-30
+lastModified: 2025-09-30
 keywords:
   - Angular
   - Angular 20
   - Component Suffix
   - Decorator
+  - inject
+  - Ivy
+  - ɵɵdefineInjectable
+  - ɵɵinject
 language: de
 header: angular20.jpg
 ---
@@ -20,7 +24,7 @@ Dieser Artikel zeigt ein **Gedankenexperiment**, bei dem ein eigener `@Service`-
 
 ## Angular 20: Der Service Suffix ist weg
 
-Die neue Major-Version von Angular bringt frischen Wind!
+Die neue Major-Version von Angular bringt einige tiefgreifende Veränderungen mit sich.
 So wurde der neue [Angular coding style guide](https://angular.dev/style-guide) für v20 stark überarbeitet und verschlankt.
 Es wird *nicht* mehr empfohlen, Komponenten, Services und Direktiven mit einem Suffix zu versehen.
 
@@ -55,7 +59,7 @@ export class BookStore { }
 ```
 
 Wer Angular länger kennt, der weiß, dass der `Injectable` Decorator eigentlich in fast allen Fällen einen Service markiert.
-Aber ehrlich gesagt könnte der Zweck des Decorators deutlicher erkennbar sein.
+Aber ehrlich gesagt könnte der Zweck dieses Decorators deutlicher kommuniziert werden.
 
 In Spring beispielsweise ist `@Service` eine gängige Annotation, welche verdeutlicht, dass eine Klasse Service-Logik enthält.
 
@@ -69,7 +73,7 @@ public class BookStoreService {
 ```
 
 Zusätzlich gibt es noch weitere Annotationen wie `@Repository`, `@Controller` oder `@Component`.
-Ich finde es weiterhin sehr charmant, dass der Einsatzweck schon am Anfang der Klasse klar und deutlich ausgedrückt wird.
+Ich finde es weiterhin sehr charmant, dass der Einsatzzweck schon am Anfang der Klasse eindeutig erkennbar ist.
 
 
 ## Die Motivation – Mein `@Service()`-Decorator für Angular
@@ -91,7 +95,7 @@ dann wäre es vielleicht folgende neue Syntax:
 export class BookStore { }
 ```
 
-So stelle ich mir das vor:
+Folgende Verbesserungen stelle ich mir konkret vor:
 
 1. Wir verzichten weiterhin auf das Suffix `Service`.
 2. Wir müssen nicht mehr bei jedem Service erneut `providedIn: 'root'` schreiben. Das hat mich schon immer gestört.
@@ -133,7 +137,7 @@ Das Framework findet den Service einfach nicht, und wir erhalten die folgende Fe
 
 > **❌ Fehlermeldung:** NullInjectorError: No provider for BookStore!
 
-Abgesehen davon, dass diese Lösung nicht funktioniert, handels es sich ebenso auch gar nicht um einen Decorator. Ziel verfehlt!
+Abgesehen davon, dass diese Lösung nicht funktioniert, handelt es sich außerdem gar nicht um einen Decorator. Ziel verfehlt!
 
 
 ## Idee 2: Eigener Decorator, der `@Injectable` wrappt
@@ -146,7 +150,7 @@ export function Service(): ClassDecorator {
 }
 ```
 
-Das würde funktionieren, aber nur im JIT (Just-in-Time)-Modus, da Angulars AOT-Compiler diese dynamische Erzeugung nicht unterstützt.
+Das würde funktionieren, aber nur im JIT (Just-in-Time)-Modus, da Angulars AOT-Compiler dieses dynamische Vorgehen nicht unterstützt.
 
 > **❌ Fehlermeldung:** The injectable 'BookStore2' needs to be compiled using the JIT compiler, but '@angular/compiler' is not available.
 > JIT compilation is discouraged for production use-cases! Consider using AOT mode instead.
@@ -194,8 +198,10 @@ Was macht dieser Code?
 * Die Factory-Funktion erzeugt einfach eine neue Instanz der Klasse – **aber ohne Konstruktor-Abhängigkeiten**.
 
 Der große Vorteil dieses Ansatzes ist seine Einfachheit. 
-Der große Nachteil besteht aber darin, dass Konstruktor-Injection nicht möglich ist.
-Wir wissen zur Laufzeit schlicht nicht, welche Abhängigkeiten der Konstruktor erwartet.
+Allerdings wissen wir zur Laufzeit schlicht nicht, welche Abhängigkeiten der Konstruktor erwartet. 
+Wir haben den Konstruktor daher notgedrungen ohne Argumente aufgerufen.
+Der große Nachteil besteht somit darin, dass generische Konstruktor-Injection nicht möglich ist.
+
 Das folgende Beispiel macht dies deutlich.
 Wir erwarten, das der Service `BookRating` per Konstruktor-Injection verfügbar gemacht wird.
 Stattdessen ist der Wert aber einfach nur `undefined`.
@@ -210,11 +216,14 @@ export class BookStore {
 }
 ```
 
+Diese Variante eignet sich also ausschließlich für Services ohne Konstruktor-Abhängigkeiten.
+
+
 ### Gregors Variante: Konstruktor-Injection mit expliziten Abhängigkeiten
 
 An dieser Stelle habe ich bei meinen Recherchen festgestellt, dass mein geschätzter GDE-Kollege Gregor Woiwode sich bereits vor 5 Jahren mit dem Thema beschäftigt hat.
 [Seine Lösung](https://stackoverflow.com/a/59759381) hat er auf StackOverflow vorgestellt.
-Sein Decorator hier `@InjectableEnhanced` und hat prinzipiell die gleiche Zielsetzung wie dieser Artikel.
+Sein Decorator heißt `@InjectableEnhanced` und hat prinzipiell die gleiche Zielsetzung wie dieser Artikel.
 
 Gregor hat bereits damals demonstriert, wie man die fehlende Konstruktor-Injection nachbilden kann. 
 Dabei nutzt er ebenfalls dieselbe API wie zuvor, definiert aber explizit alle Abhängigkeiten innerhalb der Factory-Funktion:
@@ -254,7 +263,7 @@ Was passiert hier genau?
 
 * Gregor definiert nicht nur `ɵprov`, sondern explizit auch `ɵfac` (die Factory), die normalerweise automatisch vom Angular-Compiler erzeugt wird. 
   Er verhindert zudem, dass jemand die Klasse direkt instanziieren kann. Der Code verhinder dies mit einer frühen Exception.
-  Wer Bedenken hat, das jemand die dekorierten Service manuell instanziiert, kann diese Prüfung gerne beibehalten.
+  Wer Bedenken hat, dass jemand die dekorierten Service manuell instanziiert, kann diese Prüfung gerne beibehalten.
 * Innerhalb der Factory-Funktion injiziert der Code explizit jede Abhängigkeit einzeln mittels `ɵɵinject`. 
   In diesem Fall handelt es sich um unseren Service `BookRating`.
   Dadurch unterstützt er direkte Konstruktor-Injection.
@@ -263,7 +272,7 @@ Was passiert hier genau?
 
 Der Code lässt sich auch so umschreiben, sodass er dem vorherigen Beispiel entspricht.
 Statt der direkten Zuweisung `((target as any).ɵprov)`, würde ich eher `Object.defineProperty() ` verwenden.
-Dieser Stil ist zwar etwas ausführlicher, dafür umgehen wir aber nicht mehr per Cast auf `any` das Typsystem.
+Dieser Stil ist zwar etwas ausführlicher, dafür umgehen wir aber nicht mehr das Typsystem per Cast auf `any`.
 Die Fehlermeldung habe ich dabei auch weggelassen:
 
 ```ts
@@ -294,7 +303,8 @@ export class BookStore {
 }
 ```
 
-Dieser Ansatz ist technisch geschickt gelöst, hat aber eine klare Einschränkung: Er ist nicht generisch genug für alle Fälle.
+Dieser Ansatz ist technisch geschickt gelöst, hat aber eine klare Einschränkung: 
+Er ist nicht generisch genug für alle Fälle.
 Für jeden einzelnen Service müssen wir manuell die Abhängigkeiten auflisten.
 Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen oder immer denselben Abhängigkeiten.
 
@@ -310,7 +320,7 @@ Mit Ivy (ab Angular 9) und AOT-Compilation generiert Angular statische Metadaten
 wodurch `reflect-metadata` in Produktionsumgebungen meist überflüssig ist. 
 
 Die Verwendung dieser Bibliothek erhöht die Bundle-Größe unnötig, was in modernen Projekten zu vermeiden ist.
-Ich bin habe diesen Ansatz daher nicht weiter verfolgt, `reflect-metadata` möchte ich nicht wieder als Abhängigkeit in meinem Projekt sehen. 
+Ich habe diesen Ansatz daher nicht weiter verfolgt, `reflect-metadata` möchte ich nicht wieder als Abhängigkeit in meinem Projekt sehen. 
 
 
 ### Idee 5: Die finale Idee: Dependency Injection mit `inject()`
