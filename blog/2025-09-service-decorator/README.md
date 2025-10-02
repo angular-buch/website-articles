@@ -14,7 +14,7 @@ keywords:
   - ɵɵdefineInjectable
   - ɵɵinject
 language: de
-header: angular20.jpg
+header: service.jpg
 ---
 
 Mit Angular 20 entfällt der Service-Suffix im neuen Style Guide.
@@ -426,9 +426,4 @@ Die offizielle Angular-API garantiert uns Stabilität, Wartbarkeit und Zukunftss
 Wie findest du diesen experimentellen `@Service()`-Decorator?
 Würdest du ein solches Konstrukt dennoch einmal ausprobieren, oder bleibst du wie ich lieber beim bewährten `@Injectable()`? …oder sollte ich doch alles auf `@Service()` umstellen? 😅
 
-Ich freue mich auf dein Feedback auf Twitter oder BlueSky! 😊
-
-
-<hr>
-
-<small>**Titelbild:** Morgenstimmung im Anklamer Stadtbruch. Foto von Ferdinand Malcher</small>
+Ich freue mich auf dein Feedback auf X oder BlueSky! 😊
