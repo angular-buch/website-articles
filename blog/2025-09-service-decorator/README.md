@@ -59,9 +59,9 @@ export class BookStore { }
 ```
 
 Wer Angular bereits länger nutzt, weiß, dass der `@Injectable`-Decorator fast immer einen Service kennzeichnet.
-Dennoch könnte der Einsatzzweck dieses Decorators sicherlich klarer kommuniziert werden.
+Dennoch könnte der Einsatzzweck dieses Decorators meiner Meinung nach noch klarer kommuniziert werden.
 
-In Spring beispielsweise ist `@Service` eine gängige Annotation, welche verdeutlicht, dass eine Klasse Service-Logik enthält.
+In dem bekannten Java-Framework Spring Boot ist `@Service` eine gängige Annotation, welche verdeutlicht, dass eine Klasse Service-Logik enthält:
 
 ```java
 import org.springframework.stereotype.Service;
@@ -72,8 +72,10 @@ public class BookStoreService {
 }
 ```
 
-Zusätzlich gibt es noch weitere Annotationen wie `@Repository`, `@Controller` oder `@Component`.
-Ich finde es weiterhin sehr charmant, dass der Einsatzzweck schon am Anfang der Klasse eindeutig erkennbar ist.
+Zusätzlich gibt es noch weitere Annotationen wie `@Repository`. 
+In Spring besitzt `@Repository` exakt dieselbe Funktionalität wie `@Service`. 
+Der einzige Unterschied ist, dass `@Repository` zusätzlich signalisiert, dass diese Klasse das Repository-Pattern implementiert. 
+Ich persönlich finde es sehr charmant, wenn der Einsatzzweck einer Klasse möglichst eindeutig erkennbar ist.
 
 
 ## Die Motivation – Mein `@Service()`-Decorator für Angular
@@ -133,7 +135,7 @@ export class BookStore extends BaseService {}
 
 Das funktioniert allerdings nicht, da Angular die Metadaten zur Compile-Zeit direkt an der Zielklasse speichert.
 Diese Metadaten werden leider nicht vererbt.
-Das Framework findet den Service einfach nicht, und wir erhalten die folgende Fehlermeldung:
+Das Framework findet den Service einfach nicht, und wir erhalten die folgende Fehlermeldung zur Laufzeit:
 
 > **❌ Fehlermeldung:** NullInjectorError: No provider for BookStore!
 
@@ -151,14 +153,23 @@ export function Service(): ClassDecorator {
 }
 ```
 
-Diese Variante funktioniert nur im JIT-Modus (Just-in-Time). 
-Angulars AOT-Compiler unterstützt dieses dynamische Vorgehen leider nicht.
+Auch dieser Code lässt sich kompilieren, doch sobald wir den entsprechend dekorierten Service per DI anfordern wollen, erhalten wir diese Fehlermeldung zur Laufzeit:
 
 > **❌ Fehlermeldung:** The injectable 'BookStore2' needs to be compiled using the JIT compiler, but '@angular/compiler' is not available.
 > JIT compilation is discouraged for production use-cases! Consider using AOT mode instead.
 > Alternatively, the JIT compiler should be loaded by bootstrapping using '@angular/platform-browser-dynamic' or '@angular/platform-server',
   or manually provide the compiler with 'import "@angular/compiler";' before bootstrapping.
 
+Um diese Fehlermeldung besser zu verstehen, benötigen wir etwas Hintergrundwissen zu den Begriffen "AOT" und "JIT", die schnell erläutert sind:
+Angular kennt zwei Arten der Kompilierung: den **JIT-Modus (Just-in-Time)** und den **AOT-Modus (Ahead-of-Time)**. 
+Im JIT-Modus kompiliert Angular Komponenten und Decorators erst während der Laufzeit direkt im Browser.
+Dies ist zwar flexibel, aber vergleichsweise langsam und wird daher in Produktionsumgebungen nicht empfohlen.
+Im Gegensatz dazu findet im AOT-Modus die Kompilierung schon während des Build-Vorgangs statt.
+Dies sorgt für deutlich bessere Performance und reduzierte Bundle-Größen.
+Seit Einführung der Ivy-Engine (ab Angular 9) ist AOT der Standard-Modus, und wir müssen uns als Entwickler normalerweise nicht mehr aktiv mit dem Thema auseinandersetzen.
+Deshalb ist es wichtig, dass unsere Decorators vollständig AOT-kompatibel sind – was hier leider nicht gegeben ist.
+
+Fazit: Diese Variante funktioniert leider nur im JIT-Modus und wird vom AOT-Compiler leider nicht unterstützt.
 
 
 ## Idee 3: Nutzung interner Angular-Ivy-APIs
@@ -219,6 +230,8 @@ export class BookStore {
 ```
 
 Diese Variante eignet sich also ausschließlich für Services ohne Konstruktor-Abhängigkeiten.
+Doch Angular stellt inzwischen eine neue Funktion bereit, die uns auch in solchen Fällen weiterhilft.
+Wie diese genau funktioniert, schauen wir uns gleich näher an!
 
 
 ### Gregors Variante: Konstruktor-Injection mit expliziten Abhängigkeiten
@@ -263,7 +276,7 @@ export class BookStore {
 
 Was passiert hier genau?
 
-* Gregor definiert nicht nur `ɵprov`, sondern explizit auch `ɵfac` (die Factory), die normalerweise automatisch vom Angular-Compiler erzeugt wird. 
+* Der Code von Gregor definiert nicht nur `ɵprov`, sondern explizit auch `ɵfac` (die Factory), die normalerweise automatisch vom Angular-Compiler erzeugt wird. 
   Er verhindert zudem, dass jemand die Klasse direkt instanziieren kann. Der Code verhindert dies mit einer frühen Exception.
   Wer Bedenken hat, dass jemand die dekorierten Service manuell instanziiert, kann diese Prüfung gerne beibehalten.
 * Innerhalb der Factory-Funktion injiziert der Code explizit jede Abhängigkeit einzeln mittels `ɵɵinject`. 
@@ -274,7 +287,7 @@ Was passiert hier genau?
 
 Der Code lässt sich auch so umschreiben, sodass er dem vorherigen Beispiel entspricht.
 Statt der direkten Zuweisung `((target as any).ɵprov)`, würde ich eher `Object.defineProperty() ` verwenden.
-Dieser Stil ist zwar etwas ausführlicher, dafür umgehen wir aber nicht mehr das Typsystem per Cast auf `any`.
+Dieser Stil ist zwar etwas ausführlicher, dafür umgehen wir aber nicht mehr das Typsystem per Type Assertion auf `any`.
 Die Fehlermeldung habe ich dabei auch weggelassen:
 
 ```ts
@@ -308,7 +321,7 @@ export class BookStore {
 Dieser Ansatz ist technisch geschickt gelöst, hat aber eine klare Einschränkung: 
 Er ist nicht generisch genug für alle Fälle.
 Für jeden einzelnen Service müssen wir manuell die Abhängigkeiten auflisten.
-Gregors Lösung funktioniert somit perfekt für spezielle Fälle mit wenigen oder immer denselben Abhängigkeiten.
+Gregors alte Lösung funktioniert somit immer noch perfekt für spezielle Fälle mit wenigen oder immer denselben Abhängigkeiten.
 
 
 ## Idee 4: Automatische Dependency-Auflösung mit reflect-metadata
@@ -378,7 +391,7 @@ export class BookStore {
 }
 ```
 
-Klingt doch elegant – zumindest für unser kleines Experiment!
+Klingt doch elegant - zumindest für unser kleines Experiment!
 
 
 ### Fazit und abschließende Gedanken
@@ -427,3 +440,7 @@ Wie findest du diesen experimentellen `@Service()`-Decorator?
 Würdest du ein solches Konstrukt dennoch einmal ausprobieren, oder bleibst du wie ich lieber beim bewährten `@Injectable()`? …oder sollte ich doch alles auf `@Service()` umstellen? 😅
 
 Ich freue mich auf dein Feedback auf X oder BlueSky! 😊
+
+<hr>
+
+<small>Vielen Dank an Danny Koppenhagen für das Review und das wertvolle Feedback!</small>
