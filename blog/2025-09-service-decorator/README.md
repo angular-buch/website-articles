@@ -120,7 +120,7 @@ Die Entwicklung eines solchen eigenen Decorators ist leider nicht komplett trivi
 Schauen wir uns ein paar mögliche Ansätze gemeinsam an:
 
 
-### Idee 1: Vererbung von `@Injectable`
+## Idee 1: Vererbung von `@Injectable`
 
 Ein logischer Gedanke wäre, eine Basisklasse mit `@Injectable()` zu annotieren und Services daraus abzuleiten:
 
@@ -338,7 +338,7 @@ Die Verwendung dieser Bibliothek erhöht unnötig die Bundle-Größe, was modern
 Ich habe diesen Ansatz daher nicht weiter verfolgt, `reflect-metadata` möchte ich nicht wieder als Abhängigkeit in meinem Projekt sehen. 
 
 
-### Idee 5: Die finale Idee: Dependency Injection mit `inject()`
+## Idee 5: Die finale Idee: Dependency Injection mit `inject()`
 
 Können wir es nicht einfacher haben, und zwar ohne jegliche manuelle Angabe der Konstruktor-Abhängigkeiten?
 Genau an dieser Stelle kommt die neue Angular-Funktion `inject()` ins Spiel (die es 2020 noch nicht gab).
