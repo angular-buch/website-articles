@@ -439,7 +439,7 @@ Die offizielle Angular-API garantiert uns Stabilität, Wartbarkeit und Zukunftss
 Wie findest du diesen experimentellen `@Service()`-Decorator?
 Würdest du ein solches Konstrukt dennoch einmal ausprobieren, oder bleibst du wie ich lieber beim bewährten `@Injectable()`? …oder sollte ich doch alles auf `@Service()` umstellen? 😅
 
-Ich freue mich auf dein Feedback auf X oder BlueSky! 😊
+Ich freue mich auf [dein Feedback auf X](https://x.com/angular_buch/status/1974084886509310387) oder [auf BlueSky](https://bsky.app/profile/johanneshoppe.de/post/3m2buzx76fk2a)! 😊
 
 <hr>
 
