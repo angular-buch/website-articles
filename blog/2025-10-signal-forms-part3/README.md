@@ -16,6 +16,7 @@ keywords:
 language: en
 header: signal-forms.jpg
 sticky: false
+hidden: true
 ---
 
 In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-signal-forms-part2/README.md), we covered the fundamentals and advanced validation patterns of Signal Forms. In this final part, we'll explore specialized topics that help you build complex, modular forms: child forms and custom UI controls.

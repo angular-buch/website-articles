@@ -15,6 +15,7 @@ keywords:
 language: en
 header: signal-forms.jpg
 sticky: false
+hidden: true
 ---
 
 In [Part 1](../2025-10-signal-forms-part1/README.md), we covered the fundamentals of Signal Forms. Now let's dive deeper into advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
