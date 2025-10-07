@@ -103,14 +103,15 @@ console.log(this.registrationForm.username().errors());  // validation errors
 
 Each `FieldState` provides several reactive properties that we can use in our templates and component logic:
 
-- `value()` - A `WritableSignal` containing the current field value
-- `valid()` - Boolean Signal indicating if the field passes all validations
-- `touched()` - Boolean Signal indicating if the user has interacted with the field
-- `errors()` - Signal containing an array of validation errors
-- `pending()` - Boolean Signal indicating if async validations are running
-- `disabled()` - Boolean Signal indicating a field is disabled or not
-- `disabledReasons()` - Signal containing an array of reasons about the disabled state
-- `hidden()` - Boolean Signal indicating a field should be hidden or not
+| State               | Description                                                         |
+|---------------------|---------------------------------------------------------------------|
+| `valid()`           | Boolean Signal indicating if the field passes all validations       |
+| `touched()`         | Boolean Signal indicating if the user has interacted with the field |
+| `errors()`          | Signal containing an array of validation errors                     |
+| `pending()`         | Boolean Signal indicating if async validations are running          |
+| `disabled()`        | Boolean Signal indicating a field is disabled or not                |
+| `disabledReasons()` | Signal containing an array of reasons about the disabled state      |
+| `hidden()`          | Boolean Signal indicating a field should be hidden or not           |
 
 ## Connecting Fields to the Template
 
@@ -134,10 +135,12 @@ export class RegistrationForm {
 ```
 
 The `Control` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
-Let's start with a basic template that connects some of our form fields by using the `[control]` property Binding of the `Control` directive:
+Let's start with a basic template that connects some of our form fields by using the `[control]` property Binding of the `Control` directive.
+Notice, that we use the form attribute `novalidate` to tell the browser, that it should not handle any field validation.
+We will do this by our own more precisely later.
 
 ```html
-<form (submit)="submit($event)">
+<form (submit)="submit($event)" novalidate>
   <div>
     <label for="username">Username</label>
     <input
@@ -202,13 +205,12 @@ The `registrationForm.email` field returns an array of `Field` objects that we c
 As you may have noticed, we also added two buttons for adding and removing e-mail input fields.
 Let us implement the missing methods for array manipulation in our component.
 We access the form models `value` signal and using the `update()` method to add or remove items on the form model.
+We call `e.preventDefault()`, to not actually execute the default form submition event and prevent bubbling the event.
 
 ```typescript
 // ...
 export class RegistrationForm {
-  protected readonly registrationModel = signal<RegisterFormData>(initialState);
-  protected readonly registrationForm = form(this.registrationModel);
-
+  // ...
   protected addEmail(e: Event): boolean {
     this.registrationForm.email.value.update((items) => [...items, '']);
     e.preventDefault();
@@ -269,7 +271,8 @@ export class RegistrationService {
 }
 ```
 
-Now let's enhance our `submit` function to use this service:
+Now let's enhance our `submit` function to use this service.
+Once finished, we call our `reset()` method with calls the same on our form model, to reset the submition state and also states like `touched()`.
 
 ```typescript
 // ...
@@ -298,7 +301,8 @@ export class RegistrationForm {
 
 ### Handling Submission States
 
-We can use the submission state in our template to provide better user feedback:
+To see what actually happens, we can use the submission state in our template to provide better user feedback.
+When running our app and submitting the form, we can now see the output is toggling as long as the form data is submitted via our fake service which resolves after two seconds and simulates a slow network transmission time.
 
 ```html
 <form (submit)="submit($event)">
@@ -322,10 +326,13 @@ We can use the submission state in our template to provide better user feedback:
 
 One of the most powerful features of Signal Forms is schema-based validation.
 Instead of defining validation rules directly on form controls, we create a declarative schema that describes all validation rules for our form.
+In this first part of out article series, we will give you a very short introduction to it.
+The next part will cover more advanced and complex scenarios - so stay tuned.
 
 ### Creating a Basic Schema
 
-Signal Forms use the `schema()` function to define validation rules:
+Signal Forms use the `schema()` function to define validation rules.
+Angular comes with some very common rules by default, that we can use, we learn about them in short.
 
 ```typescript
 import {
@@ -360,7 +367,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 
 ### Applying the Schema to our Form
 
-To use the schema, we pass it as the second parameter to the `form()` function:
+To use the schema, we simply pass it as the second parameter to the `form()` function:
 
 ```typescript
 // ...
@@ -400,7 +407,11 @@ The form itself also provides validation state that aggregates all field validat
   [disabled]="!registrationForm().valid() || registrationForm().submitting()"
   [attr.aria-busy]="registrationForm().submitting()"
 >
-  @if (registrationForm().submitting()) { Registering... } @else { Register }
+  @if (registrationForm().submitting()) {
+    Registering...
+  } @else {
+    Register
+  }
 </button>
 <!-- ... -->
 ```
@@ -460,6 +471,10 @@ In this first part, we've covered the fundamentals of Signal Forms:
 
 In **Part 2**, we'll dive deeper into advanced validation scenarios, including custom validation functions, cross-field validation, asynchronous validation, and handling server-side errors.
 
-In **Part 3**, we'll explore specialized topics like creating child forms and building custom UI controls that integrate seamlessly with Signal Forms.
+In **Part 3**, we'll dig into modularization and customization by using child forms and building custom UI controls that integrate seamlessly with Signal Forms.
 
+Once we published the new parts of this series they will be linked here.
+
+<!--
 Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](../2025-10-signal-forms-part2/README.md)!
+-->
