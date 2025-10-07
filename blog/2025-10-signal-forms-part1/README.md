@@ -407,7 +407,9 @@ The form itself also provides validation state that aggregates all field validat
 
 ## Displaying Validation Errors
 
-Let's create a simple component to display validation errors:
+Let's create a simple component to display validation errors.
+The component should receive any field and checks for its errors when the field is already marked as touched.
+It displays all errors related to the field by iterating over its `errors()` signal.
 
 ```typescript
 import { Component, input } from '@angular/core';
@@ -416,22 +418,24 @@ import { ValidationError, WithOptionalField } from '@angular/forms/signals';
 @Component({
   selector: 'app-form-error',
   template: `
+    @if (field().touched() && field().errors().length) {
     <small>
-      @for (error of errors(); track $index) {
+      @for (error of field().errors(); track $index) {
         {{ error.message }}
         @if (!$last) {
           <br />
         }
       }
     </small>
+    }
   `,
 })
-export class FormError {
-  errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+export class FormError<T> {
+  field = input.required<FieldState<T>>();
 }
 ```
 
-Now we can use this component in our form:
+Now we can use this component in our form and simply pass the field to it.
 
 ```html
 <label>
@@ -440,15 +444,14 @@ Now we can use this component in our form:
     type="text"
     [control]="registrationForm.username"
   />
-  @if (registrationForm.username().touched() && registrationForm.username().errors().length) {
-    <app-form-error [errors]="registrationForm.username().errors()" />
-  }
+  <app-form-error [field]="registrationForm.username()" />
 </label>
 ```
 
 ## What's Next?
 
 In this first part, we've covered the fundamentals of Signal Forms:
+
 - Setting up data models and field structures
 - Connecting forms to templates
 - Basic form submission
