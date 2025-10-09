@@ -1,5 +1,5 @@
 ---
-title: 'Angular Signal Forms Part 1: Getting Started with the Basics'
+title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: team@angular.schule
 published: 2025-10-06
@@ -23,20 +23,20 @@ In this first part of our three-part series, we'll cover the fundamentals you ne
 ## What Makes Signal Forms Different
 
 Signal Forms represent a paradigm shift from Angular's existing form approaches of Template Driven and Reactive Forms.
-
 They follow three core principles:
 
 1. **Full data model control**:
-   Form data is managed as a Signal that we create, control, and can update directly at any time
+   Form data is managed as a Signal that we create, control, and can update directly at any time.
 2. **Declarative logic**:
-   Validation logic is described through code in a schema
+   Validation logic is described through code in a reusable schema.
 3. **Structural mapping**:
-   The field structure mirrors the data structure 1:1
+   The field structure mirrors the data structure 1:1. It is not necessary to create the form model manually but it is derived from the data model.
 
 ## Setting up the Data Model
 
 The first step in creating a Signal Form is defining our data model.
-For our registration form, we'll create an interface that defines all the fields we need:
+For this blig post, we will create a user registration form.
+A TypeScript interface defines all the fields we need:
 
 ```typescript
 export interface RegisterFormData {
@@ -49,18 +49,21 @@ export interface RegisterFormData {
 ```
 
 Next, we create a Signal containing our initial form state.
-We keep the `initialState` as a separate constant before, so we can re-use it later for resetting the form data after submission.
+In this example, we keep the `initialState` as a separate constant before, so we can re-use it later for resetting the form data after submission.
+Of course, it is also possible to define the initial state directly when creating the Signal.
 
 ```typescript
 const initialState: RegisterFormData = {
-  username: '',
+  username: "",
   age: 18,
-  email: [''],
+  email: [""],
   newsletter: false,
   agreeToTermsAndConditions: false,
 };
 
-@Component({ /* .. */ })
+@Component({
+  /* ... */
+})
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
 }
@@ -71,21 +74,23 @@ It remains reactive and synchronizes automatically with any changes made through
 
 ## Creating the Field Structure
 
-Now that we have our data model defined, the next step is creating the field structure that connects our data model to the form model.
-Signal Forms use the `form()` function to create a `Field` object that mirrors our data structure but adds metadata for each field node.
+Now that we have our data model defined, the next step is to create the field structure that connects our data model to the form.
+Angular supplies a `form()` function to create a field tree that derives its structure from the data.
+The result is a `Field` object that mirrors our data structure and maintains metadata for each field node.
 
 ```typescript
-import { form } from '@angular/forms/signals';
+import { form } from "@angular/forms/signals";
 // ...
-@Component({ /* ... */ })
+@Component({
+  /* ... */
+})
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
   protected readonly registrationForm = form(this.registrationModel);
 }
 ```
 
-The `form()` function takes our data model Signal and creates a typed field structure.
-This structure allows us to navigate through our form field paths exactly like we would navigate through our data structure.
+This form model structure allows us to navigate through our form field paths exactly like we would navigate through our data structure.
 
 ### Accessing Field Properties
 
@@ -93,32 +98,38 @@ Once we have our form structure, we can access individual fields and their react
 
 ```typescript
 // Access field value
-console.log(this.registrationForm.username().value());  // current username value
+console.log(this.registrationForm.username().value()); // current username value
 
 // Access field states
-console.log(this.registrationForm.username().valid());   // validation status
+console.log(this.registrationForm.username().valid()); // validation status
 console.log(this.registrationForm.username().touched()); // interaction status
-console.log(this.registrationForm.username().errors());  // validation errors
+console.log(this.registrationForm.username().errors()); // validation errors
 ```
 
-Each `FieldState` provides several reactive properties that we can use in our templates and component logic:
+We can call each property as a function to receive a `FieldState` object.
+It provides several reactive properties that we can use in our templates and component logic:
 
-| State               | Description                                                         |
-|---------------------|---------------------------------------------------------------------|
-| `valid()`           | Boolean Signal indicating if the field passes all validations       |
-| `touched()`         | Boolean Signal indicating if the user has interacted with the field |
-| `errors()`          | Signal containing an array of validation errors                     |
-| `pending()`         | Boolean Signal indicating if async validations are running          |
-| `disabled()`        | Boolean Signal indicating a field is disabled or not                |
-| `disabledReasons()` | Signal containing an array of reasons about the disabled state      |
-| `hidden()`          | Boolean Signal indicating a field should be hidden or not           |
+| State             | Type                        | Description                                      |
+| ----------------- | --------------------------- | ------------------------------------------------ |
+| `value`           | `Signal<T>`                 | current value of this part of the field tree     |
+| `valid`           | `Signal<boolean>`           | `true` if the field passes all validations       |
+| `touched`         | `Signal<boolean>`           | `true` if the user has interacted with the field |
+| `errors`          | `Signal<ValidationError[]>` | array of validation errors                       |
+| `pending`         | `Signal<boolean>`           | `true` if async validations are running          |
+| `disabled`        | `Signal<boolean>`           | `true` if the field is disabled                  |
+| `disabledReasons` | `Signal<string[]>`          | array of reasons about the disabled state        |
+| `hidden`          | `Signal<boolean>`           | `true` if the field is semantically hidden       |
+
+It is important to stay aware of the diifference between `Field` and `FieldState`.
+While `Field` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
+
 
 ## Connecting Fields to the Template
 
 Now that we have our form structure in place, we need to connect it to our HTML template to create functional input fields with reactive data binding.
 Signal Forms use the `Control` directive to bind form fields to HTML input elements.
 To use the directive, we need to import it first.
-Let us also import the `JsonPipe` alongside the `Control` directive, so we can use it in our template to display the current data model value.
+In our example, we also import `JsonPipe` so we can use it in our template to display the current form value.
 
 ```typescript
 import { JsonPipe } from '@angular/common';
@@ -130,33 +141,26 @@ import { /* ... */, Control } from '@angular/forms/signals';
   templateUrl: './registration-form.html',
 })
 export class RegistrationForm {
-  protected readonly registrationModel = signal<RegisterFormData>(initialState);
+  // ...
 }
 ```
 
 The `Control` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
-Let's start with a basic template that connects some of our form fields by using the `[control]` property Binding of the `Control` directive.
-Notice, that we use the form attribute `novalidate` to tell the browser, that it should not handle any field validation.
-We will do this by our own more precisely later.
+Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[control]` property binding. On the right side of the binding, we pass the corresponding field from our form structure.
+
+Notice, that we also use the native form attribute `novalidate`: It disables the native browser field validation.
+We will handle validation later by using a form schema.
 
 ```html
 <form (submit)="submit($event)" novalidate>
   <div>
     <label for="username">Username</label>
-    <input
-      id="username"
-      type="text"
-      [control]="registrationForm.username"
-    />
+    <input id="username" type="text" [control]="registrationForm.username" />
   </div>
 
   <div>
     <label for="age">Age</label>
-    <input
-      id="age"
-      type="number"
-      [control]="registrationForm.age"
-    />
+    <input id="age" type="number" [control]="registrationForm.age" />
   </div>
 
   <div>
@@ -173,10 +177,12 @@ We will do this by our own more precisely later.
 
 <!-- Debug output to see current form data -->
 <pre>{{ registrationModel() | json }}</pre>
+<pre>{{ registrationForm().value() | json }}</pre>
 ```
 
 We have now connected each input to its corresponding field in our form structure.
 The `Control` directive handles the two-way data binding automatically, keeping our data model synchronized with user input.
+The form model automatically synchronizes with the data signal: To read the value, we can use the signal as well as the `FieldState` with its `value` property.
 
 ### Working with Arrays
 
@@ -188,14 +194,14 @@ The `registrationForm.email` field returns an array of `Field` objects that we c
 <div>
   <label>Email addresses</label>
   @for (emailField of registrationForm.email; track $index) {
-    <div>
-      <input
-        type="email"
-        [control]="emailField"
-        placeholder="Enter email address"
-      />
-      <button type="button" (click)="removeEmail($index)">Remove</button>
-    </div>
+  <div>
+    <input
+      type="email"
+      [control]="emailField"
+      placeholder="Enter email address"
+    />
+    <button type="button" (click)="removeEmail($index)">Remove</button>
+  </div>
   }
   <button type="button" (click)="addEmail($event)">Add Email</button>
 </div>
@@ -203,9 +209,13 @@ The `registrationForm.email` field returns an array of `Field` objects that we c
 ```
 
 As you may have noticed, we also added two buttons for adding and removing e-mail input fields.
-Let us implement the missing methods for array manipulation in our component.
-We access the form models `value` signal and using the `update()` method to add or remove items on the form model.
+In the corresponding methods, we access the `value` signal within the form model.
+The signal's `update()` method allows us to to add or remove items on `email` array
 We call `e.preventDefault()`, to not actually execute the default form submition event and prevent bubbling the event.
+
+please keep in mind that changes to signal values must be done immutably.
+Instead of directly manipulating the array, we always create a new array with the updated values.
+This is why we use the spread operator (`...`) to create a new array when adding an email and the `filter()` method to create a new array when removing an email.
 
 ```typescript
 // ...
@@ -218,10 +228,14 @@ export class RegistrationForm {
   }
 
   protected removeEmail(removeIndex: number): void {
-    this.registrationForm.email.value.update((items) => items.filter((_, index) => index !== removeIndex));
+    this.registrationForm.email.value.update((items) =>
+      items.filter((_, index) => index !== removeIndex)
+    );
   }
 }
 ```
+
+<!-- FM continue here -->
 
 ## Basic Form Submission
 
@@ -242,7 +256,7 @@ export class RegistrationForm {
 
     // Access current form data
     const formData = this.registrationModel();
-    console.log('Form submitted:', formData);
+    console.log("Form submitted:", formData);
   }
 }
 ```
@@ -255,10 +269,10 @@ For more complex scenarios involving asynchronous operations, loading states, an
 First, let's create a simple service to simulate handling the registration process.
 
 ```typescript
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class RegistrationService {
   registerUser(registrationData: Record<string, any>) {
@@ -313,11 +327,7 @@ When running our app and submitting the form, we can now see the output is toggl
     [disabled]="registrationForm().submitting()"
     [attr.aria-busy]="registrationForm().submitting()"
   >
-    @if (registrationForm().submitting()) {
-      Registering...
-    } @else {
-      Register
-    }
+    @if (registrationForm().submitting()) { Registering... } @else { Register }
   </button>
 </form>
 ```
@@ -341,25 +351,25 @@ import {
   required,
   minLength,
   maxLength,
-  min
-} from '@angular/forms/signals';
+  min,
+} from "@angular/forms/signals";
 // ...
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   // Username validation
-  required(fieldPath.username, { message: 'Username is required' });
+  required(fieldPath.username, { message: "Username is required" });
   minLength(fieldPath.username, 3, {
-    message: 'A username must be at least 3 characters long',
+    message: "A username must be at least 3 characters long",
   });
   maxLength(fieldPath.username, 12, {
-    message: 'A username can be max. 12 characters long',
+    message: "A username can be max. 12 characters long",
   });
 
   // Age validation
-  min(fieldPath.age, 18, { message: 'You must be >=18 years old' });
+  min(fieldPath.age, 18, { message: "You must be >=18 years old" });
 
   // Terms and conditions
   required(fieldPath.agreeToTermsAndConditions, {
-    message: 'You must agree to the terms and conditions',
+    message: "You must agree to the terms and conditions",
   });
 });
 // ...
@@ -373,7 +383,10 @@ To use the schema, we simply pass it as the second parameter to the `form()` fun
 // ...
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
-  protected readonly registrationForm = form(this.registrationModel, registrationSchema);
+  protected readonly registrationForm = form(
+    this.registrationModel,
+    registrationSchema
+  );
   // ...
 }
 ```
@@ -407,11 +420,7 @@ The form itself also provides validation state that aggregates all field validat
   [disabled]="!registrationForm().valid() || registrationForm().submitting()"
   [attr.aria-busy]="registrationForm().submitting()"
 >
-  @if (registrationForm().submitting()) {
-    Registering...
-  } @else {
-    Register
-  }
+  @if (registrationForm().submitting()) { Registering... } @else { Register }
 </button>
 <!-- ... -->
 ```
@@ -423,20 +432,19 @@ The component should receive any field and checks for its errors when the field 
 It displays all errors related to the field by iterating over its `errors()` signal.
 
 ```typescript
-import { Component, input } from '@angular/core';
-import { ValidationError, WithOptionalField } from '@angular/forms/signals';
+import { Component, input } from "@angular/core";
+import { ValidationError, WithOptionalField } from "@angular/forms/signals";
 
 @Component({
-  selector: 'app-form-error',
+  selector: "app-form-error",
   template: `
     @if (field().touched() && field().errors().length) {
     <small>
       @for (error of field().errors(); track $index) {
-        {{ error.message }}
-        @if (!$last) {
-          <br />
-        }
-      }
+      {{ error.message }}
+      @if (!$last) {
+      <br />
+      } }
     </small>
     }
   `,
@@ -451,10 +459,7 @@ Now we can use this component in our form and simply pass the field to it.
 ```html
 <label>
   Username
-  <input
-    type="text"
-    [control]="registrationForm.username"
-  />
+  <input type="text" [control]="registrationForm.username" />
   <app-form-error [field]="registrationForm.username()" />
 </label>
 ```
