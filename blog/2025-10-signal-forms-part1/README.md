@@ -54,9 +54,9 @@ Of course, it is also possible to define the initial state directly when creatin
 
 ```typescript
 const initialState: RegisterFormData = {
-  username: "",
+  username: '',
   age: 18,
-  email: [""],
+  email: [''],
   newsletter: false,
   agreeToTermsAndConditions: false,
 };
@@ -79,7 +79,7 @@ Angular supplies a `form()` function to create a field tree that derives its str
 The result is a `Field` object that mirrors our data structure and maintains metadata for each field node.
 
 ```typescript
-import { form } from "@angular/forms/signals";
+import { form } from '@angular/forms/signals';
 // ...
 @Component({
   /* ... */
@@ -152,7 +152,7 @@ Notice, that we also use the native form attribute `novalidate`: It disables the
 We will handle validation later by using a form schema.
 
 ```html
-<form (submit)="submit($event)" novalidate>
+<form (submit)="submitForm($event)" novalidate>
   <div>
     <label for="username">Username</label>
     <input id="username" type="text" [control]="registrationForm.username" />
@@ -221,10 +221,8 @@ This is why we use the spread operator (`...`) to create a new array when adding
 // ...
 export class RegistrationForm {
   // ...
-  protected addEmail(e: Event): boolean {
+  protected addEmail(): void {
     this.registrationForm.email.value.update((items) => [...items, '']);
-    e.preventDefault();
-    return false;
   }
 
   protected removeEmail(removeIndex: number): void {
@@ -235,13 +233,15 @@ export class RegistrationForm {
 }
 ```
 
-<!-- FM continue here -->
 
 ## Basic Form Submission
 
-Now that we have our form connected to the template, let's properly implement form submission.
+Now that we have connected our form to the template, we want to submit the form data.
 Signal Forms provide two approaches for handling form submission:
-basic synchronous submission and the more powerful `submit()` function for asynchronous operations.
+Basic synchronous submission and the more powerful `submit()` function for asynchronous operations.
+
+All approaches start with a form submission event handler: In the template, we already used the `(submit)` event binding on the `<form>` element.
+It is always necessary to prevent the default form submission behavior by calling `e.preventDefault()` in our `submitForm()` method.
 
 ### Simple Synchronous Submission
 
@@ -251,29 +251,30 @@ For basic cases where you want to process form data synchronously, you can direc
 // ...
 export class RegistrationForm {
   // ...
-  protected async submit(e: Event) {
-    e?.preventDefault();
+  protected submitForm(e: Event) {
+    e.preventDefault();
 
     // Access current form data
     const formData = this.registrationModel();
-    console.log("Form submitted:", formData);
+    console.log('Form submitted:', formData);
   }
 }
 ```
 
-Since our data model Signal is always kept in sync with the form fields, we can access the current form state at any time using `this.registrationModel()`.
+Since our data model signal is always kept in sync with the form fields, we can access the current form state at any time using `this.registrationModel()`.
+It is also possible to access the form data via `this.registrationForm().value()`, which provides the same result.
+
 
 ### Using the Signal Forms `submit()` Function
 
 For more complex scenarios involving asynchronous operations, loading states, and error handling, Signal Forms provide a dedicated `submit()` function.
-First, let's create a simple service to simulate handling the registration process.
+To demonstrate this, we want to simulate a registration process that involves a fake asynchronous operation.
+This service method returns a `Promise` that resolves after a two-second delay, simulating a network request.
 
 ```typescript
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: 'root' })
 export class RegistrationService {
   registerUser(registrationData: Record<string, any>) {
     return new Promise((resolve) => {
@@ -285,8 +286,10 @@ export class RegistrationService {
 }
 ```
 
-Now let's enhance our `submit` function to use this service.
-Once finished, we call our `reset()` method with calls the same on our form model, to reset the submition state and also states like `touched()`.
+Back in the form component, we extend our `submitForm()` method to use the service.
+Angular's `submit()` function takes care of managing the submission state, including setting the `submitting` state to `true` during the operation and resetting it afterward.
+To handle the actual submission, it accepts a callback function where we can perform our asynchronous logic.
+Once finished, we call our own private `#resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched()`.
 
 ```typescript
 // ...
@@ -294,32 +297,33 @@ import { /* ... */, submit } from '@angular/forms/signals';
 
 export class RegistrationForm {
   // ...
-  private readonly registrationService = inject(RegistrationService);
+  readonly #registrationService = inject(RegistrationService);
   // ...
-  protected async submit(e: Event) {
-    e?.preventDefault();
+  protected async submitForm(e: Event) {
+    e.preventDefault();
 
     await submit(this.registrationForm, async (form) => {
-      await this.registrationService.registerUser(form().value);
+      await this.#registrationService.registerUser(form().value());
       console.log('Registration successful!');
-      this.reset();
+      this.#resetForm();
     });
   }
 
-  protected reset() {
+  #resetForm() {
     this.registrationModel.set(initialState);
     this.registrationForm().reset();
   }
 }
 ```
 
-### Handling Submission States
+### Handling Submission State
 
-To see what actually happens, we can use the submission state in our template to provide better user feedback.
-When running our app and submitting the form, we can now see the output is toggling as long as the form data is submitted via our fake service which resolves after two seconds and simulates a slow network transmission time.
+To see how the submission state actually changes, we can use it in our template to provide better user feedback.
+When submitting the form we can now see that the value of the `submitting()` signal switches to `true` as long as the form data is being submitted via our fake service.
+After the asynchronous operation is complete, it switches back to `false`.
 
 ```html
-<form (submit)="submit($event)">
+<form (submit)="submitForm($event)">
   <!-- ... -->
 
   <button
@@ -327,7 +331,7 @@ When running our app and submitting the form, we can now see the output is toggl
     [disabled]="registrationForm().submitting()"
     [attr.aria-busy]="registrationForm().submitting()"
   >
-    @if (registrationForm().submitting()) { Registering... } @else { Register }
+    @if (registrationForm().submitting()) { Registering ... } @else { Register }
   </button>
 </form>
 ```
@@ -335,14 +339,16 @@ When running our app and submitting the form, we can now see the output is toggl
 ## Basic Schema-Based Validation
 
 One of the most powerful features of Signal Forms is schema-based validation.
-Instead of defining validation rules directly on form controls, we create a declarative schema that describes all validation rules for our form.
-In this first part of out article series, we will give you a very short introduction to it.
-The next part will cover more advanced and complex scenarios - so stay tuned.
+Instead of defining validation rules directly on form controls (as it was usual with Reactive Forms), we now create a declarative schema that describes all validation rules for our form.
+The interesting part is that this schema is written as code. It is not just a static configuration but can involve additional logic if needed.
+
+In this first part of our article series, we will give you a very short introduction to it.
+The next part will cover more advanced and complex scenarios – so stay tuned!
 
 ### Creating a Basic Schema
 
 Signal Forms use the `schema()` function to define validation rules.
-Angular comes with some very common rules by default, that we can use, we learn about them in short.
+Angular comes with some very common rules by default, such as `required` and `minLength`.
 
 ```typescript
 import {
@@ -352,32 +358,21 @@ import {
   minLength,
   maxLength,
   min,
-} from "@angular/forms/signals";
+} from '@angular/forms/signals';
 // ...
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // Username validation
-  required(fieldPath.username, { message: "Username is required" });
+  required(fieldPath.username, { message: 'Username is required' });
   minLength(fieldPath.username, 3, {
-    message: "A username must be at least 3 characters long",
+    message: 'A username must be at least 3 characters long',
   });
-  maxLength(fieldPath.username, 12, {
-    message: "A username can be max. 12 characters long",
-  });
-
-  // Age validation
-  min(fieldPath.age, 18, { message: "You must be >=18 years old" });
-
-  // Terms and conditions
-  required(fieldPath.agreeToTermsAndConditions, {
-    message: "You must agree to the terms and conditions",
-  });
+  // ...
 });
 // ...
 ```
 
 ### Applying the Schema to our Form
 
-To use the schema, we simply pass it as the second parameter to the `form()` function:
+To use the schema, we pass it as the second parameter to the `form()` function:
 
 ```typescript
 // ...
@@ -392,6 +387,9 @@ export class RegistrationForm {
 ```
 
 Now our form will automatically validate fields according to the rules defined in our schema.
+
+It is not strictly necessary to define the schema in a separate variable.
+However, this approach makes the schema independent and reusable.
 
 ### Built-in Validator Functions
 
@@ -411,10 +409,15 @@ Each validator function accepts an optional `opts` parameter where you can speci
 
 ### Form-Level Validation State
 
-The form itself also provides validation state that aggregates all field validations:
+Each part of the form field tree provides a `valid()` signal with validation state of all field validations below this branch.
+Practically, this means that we can check the overall form validity by calling `registrationForm().valid()`.
 
 ```html
 <!-- ... -->
+@if (!registrationForm().valid()) {
+  <p>The form is invalid. Please correct the errors.</p>
+}
+
 <button
   type="submit"
   [disabled]="!registrationForm().valid() || registrationForm().submitting()"
@@ -427,16 +430,21 @@ The form itself also provides validation state that aggregates all field validat
 
 ## Displaying Validation Errors
 
-Let's create a simple component to display validation errors.
-The component should receive any field and checks for its errors when the field is already marked as touched.
-It displays all errors related to the field by iterating over its `errors()` signal.
+To display validation errors, we can access the `errors()` signal on each field.
+It returns an array of `ValidationError` objects, each with a `kind` property that describes the type of error, e.g., `required` or `minLength`.
+The object can also contain a `message` property with the error message defined in the schema.
+These messages can be displayed directly in the template.
+
+To make the error display reusable, we can create a dedicated component for it:
+The component can receive any field and checks for its errors when the field is already marked as touched.
+It displays all errors related to the field by iterating over the `errors()` signal.
 
 ```typescript
-import { Component, input } from "@angular/core";
-import { ValidationError, WithOptionalField } from "@angular/forms/signals";
+import { Component, input } from '@angular/core';
+import { ValidationError, WithOptionalField } from '@angular/forms/signals';
 
 @Component({
-  selector: "app-form-error",
+  selector: 'app-form-error',
   template: `
     @if (field().touched() && field().errors().length) {
     <small>
@@ -450,21 +458,30 @@ import { ValidationError, WithOptionalField } from "@angular/forms/signals";
   `,
 })
 export class FormError<T> {
-  field = input.required<FieldState<T>>();
+  protected field = input.required<Field<T>>();
 }
 ```
 
-Now we can use this component in our form and simply pass the field to it.
+Now we can use this component in our form and pass any field to it.
 
 ```html
 <label>
   Username
   <input type="text" [control]="registrationForm.username" />
-  <app-form-error [field]="registrationForm.username()" />
+  <app-form-error [field]="registrationForm.username" />
 </label>
 ```
 
+
+## Summary
+
+
+
 ## What's Next?
+
+Signal Forms provide a modern and powerful way to handle forms in Angular applications.
+Getting started is straightforward and simple: Create a signal, derive the form structure and connect it to the template using the `Control` directive.
+With schema-based validation, we can define all validation rules in a clear and reusable way.
 
 In this first part, we've covered the fundamentals of Signal Forms:
 
@@ -481,5 +498,5 @@ In **Part 3**, we'll dig into modularization and customization by using child fo
 Once we published the new parts of this series they will be linked here.
 
 <!--
-Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](../2025-10-signal-forms-part2/README.md)!
+Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](../2025-10-signal-forms-part2)!
 -->
