@@ -76,7 +76,7 @@ It remains reactive and automatically synchronizes with any changes made through
 
 Now that we have our data model defined, the next step is to create the field structure that connects our data to the form.
 Angular supplies a `form()` function to create a field tree that derives its structure from the data.
-The result is a `Field` object that mirrors our data structure and maintains metadata for each field node.
+The result is a `FieldTree` object that mirrors our data structure and maintains metadata for each field node.
 
 ```typescript
 import { form } from '@angular/forms/signals';
@@ -118,9 +118,9 @@ It provides several reactive properties that we can use in our templates and com
 | `disabledReasons` | `Signal<string[]>`          | array of reasons about the disabled state        |
 | `hidden`          | `Signal<boolean>`           | `true` if the field is semantically hidden       |
 
-It is important to stay aware of the difference between `Field` and `FieldState`.
-While `Field` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
-Once we call a `Field` as a function, we get a `FieldState` as the result.
+It is important to stay aware of the difference between `FieldTree` and `FieldState`.
+While `FieldTree` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
+Once we call a `FieldTree` as a function, we get a `FieldState` as the result.
 
 
 ## Connecting Fields to the Template
@@ -146,7 +146,7 @@ export class RegistrationForm {
 
 The `Control` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
 Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[control]` property binding.
-On the right side of the binding, we pass the corresponding `Field` from our form structure.
+On the right side of the binding, we pass the corresponding `FieldTree` from our form structure.
 
 Notice, that we also use the form attribute `novalidate`: It disables the native browser field validation.
 We will handle validation later by using a form schema.
@@ -187,7 +187,7 @@ The form model automatically synchronizes with the data signal: To read the valu
 ### Working with Arrays
 
 For our email array, we need to handle dynamic addition and removal of fields:
-The `registrationForm.email` field returns an array of `Field` objects that we can iterate over using `@for()`.
+The `registrationForm.email` field returns an array of `FieldTree` objects that we can iterate over using `@for()`.
 
 ```html
 <!-- ... -->
@@ -216,7 +216,7 @@ The `registrationForm.email` field returns an array of `Field` objects that we c
 
 As you may have noticed, we also added two buttons for adding and removing e-mail input fields.
 In the corresponding methods, we access the `value` signal within the form model.
-The signal's `update()` method allows us to to add or remove items on `email` array
+The signal's `update()` method allows us to to add or remove items on `email` array.
 
 Please keep in mind that changes to signal values must be done immutably.
 Instead of directly manipulating the array, we always create a new array with the updated values.
