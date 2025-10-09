@@ -289,7 +289,7 @@ export class RegistrationService {
 Back in the form component, we extend our `submitForm()` method to use the service.
 Angular's `submit()` function takes care of managing the submission state, including setting the `submitting` state to `true` during the operation and resetting it afterward.
 To handle the actual submission, it accepts a callback function where we can perform our asynchronous logic.
-Once finished, we call our own private `#resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched()`.
+Once finished, we call our own `resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched` by calling `reset()`.
 
 ```typescript
 // ...
@@ -305,11 +305,11 @@ export class RegistrationForm {
     await submit(this.registrationForm, async (form) => {
       await this.#registrationService.registerUser(form().value());
       console.log('Registration successful!');
-      this.#resetForm();
+      this.resetForm();
     });
   }
 
-  #resetForm() {
+  protected resetForm() {
     this.registrationModel.set(initialState);
     this.registrationForm().reset();
   }
@@ -458,7 +458,7 @@ import { ValidationError, WithOptionalField } from '@angular/forms/signals';
   `,
 })
 export class FormError<T> {
-  protected field = input.required<Field<T>>();
+  readonly field = input.required<FieldState<T>>();
 }
 ```
 
@@ -471,9 +471,6 @@ Now we can use this component in our form and pass any field to it.
   <app-form-error [field]="registrationForm.username" />
 </label>
 ```
-
-
-## Summary
 
 
 
