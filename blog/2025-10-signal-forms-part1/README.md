@@ -1,9 +1,9 @@
 ---
 title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
-mail: team@angular.schule
-published: 2025-10-06
-lastModified: 2025-10-06
+mail: dannyferdigravatar@fmalcher.de # Gravatar
+published: 2025-10-09
+lastModified: 2025-10-09
 keywords:
   - Angular
   - JavaScript
@@ -22,21 +22,23 @@ In this first part of our three-part series, we'll cover the fundamentals you ne
 
 ## What Makes Signal Forms Different
 
-Signal Forms represent a paradigm shift from Angular's existing form approaches of Template Driven and Reactive Forms.
-They follow three core principles:
+Signal Forms represent a paradigm shift from Angular's existing form approaches of Template-Driven and Reactive Forms.
+The new approach follows three core principles:
 
 1. **Full data model control**:
-   Form data is managed as a Signal that we create, control, and can update directly at any time.
+   Form data is managed as a signal that we create, control, and can update directly at any time.
 2. **Declarative logic**:
    Validation logic is described through code in a reusable schema.
 3. **Structural mapping**:
-   The field structure mirrors the data structure 1:1. It is not necessary to create the form model manually but it is derived from the data model.
+   The field structure mirrors the data structure 1:1. It is not necessary to create the form model manually, but it is automatically derived from the data model.
 
 ## Setting up the Data Model
 
-The first step in creating a Signal Form is defining our data model.
-For this blig post, we will create a user registration form.
-A TypeScript interface defines all the fields we need:
+The first step in creating a Signal Form is to define our data model.
+For this blog post, we will create a user registration form.
+A TypeScript interface defines all the fields we need.
+A new user can provide name and age, multiple email addresses, and choose whether to subscribe to a newsletter via a checkbox.
+Finally, they must agree to the terms and conditions.
 
 ```typescript
 export interface RegisterFormData {
@@ -48,9 +50,9 @@ export interface RegisterFormData {
 }
 ```
 
-Next, we create a Signal containing our initial form state.
+Next, we create a signal property containing our initial form state.
 In this example, we keep the `initialState` as a separate constant before, so we can re-use it later for resetting the form data after submission.
-Of course, it is also possible to define the initial state directly when creating the Signal.
+Of course, it is also possible to define the initial state directly when creating the signal.
 
 ```typescript
 const initialState: RegisterFormData = {
@@ -61,29 +63,25 @@ const initialState: RegisterFormData = {
   agreeToTermsAndConditions: false,
 };
 
-@Component({
-  /* ... */
-})
+@Component({ /* ... */ })
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
 }
 ```
 
-This Signal serves as our single source of truth for form data.
-It remains reactive and synchronizes automatically with any changes made through the form fields.
+This signal serves as our single source of truth for all form data.
+It remains reactive and automatically synchronizes with any changes made through the form fields.
 
 ## Creating the Field Structure
 
-Now that we have our data model defined, the next step is to create the field structure that connects our data model to the form.
+Now that we have our data model defined, the next step is to create the field structure that connects our data to the form.
 Angular supplies a `form()` function to create a field tree that derives its structure from the data.
 The result is a `Field` object that mirrors our data structure and maintains metadata for each field node.
 
 ```typescript
 import { form } from '@angular/forms/signals';
 // ...
-@Component({
-  /* ... */
-})
+@Component({ /* ... */ })
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
   protected readonly registrationForm = form(this.registrationModel);
@@ -120,8 +118,9 @@ It provides several reactive properties that we can use in our templates and com
 | `disabledReasons` | `Signal<string[]>`          | array of reasons about the disabled state        |
 | `hidden`          | `Signal<boolean>`           | `true` if the field is semantically hidden       |
 
-It is important to stay aware of the diifference between `Field` and `FieldState`.
+It is important to stay aware of the difference between `Field` and `FieldState`.
 While `Field` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
+Once we call a `Field` as a function, we get a `FieldState` as the result.
 
 
 ## Connecting Fields to the Template
@@ -146,9 +145,10 @@ export class RegistrationForm {
 ```
 
 The `Control` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
-Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[control]` property binding. On the right side of the binding, we pass the corresponding field from our form structure.
+Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[control]` property binding.
+On the right side of the binding, we pass the corresponding `Field` from our form structure.
 
-Notice, that we also use the native form attribute `novalidate`: It disables the native browser field validation.
+Notice, that we also use the form attribute `novalidate`: It disables the native browser field validation.
 We will handle validation later by using a form schema.
 
 ```html
@@ -191,27 +191,32 @@ The `registrationForm.email` field returns an array of `Field` objects that we c
 
 ```html
 <!-- ... -->
-<div>
-  <label>Email addresses</label>
-  @for (emailField of registrationForm.email; track $index) {
+<fieldset>
+  <legend>
+    E-Mail Addresses
+    <button type="button" (click)="addEmail()">+</button>
+  </legend>
   <div>
-    <input
-      type="email"
-      [control]="emailField"
-      placeholder="Enter email address"
-    />
-    <button type="button" (click)="removeEmail($index)">Remove</button>
+    @for (emailField of registrationForm.email; track $index) {
+    <div>
+      <div role="group">
+        <input
+          type="email"
+          [control]="emailField"
+          [ariaLabel]="'E-Mail ' + $index"
+        />
+        <button type="button" (click)="removeEmail($index)">-</button>
+      </div>
+    </div>
+    }
   </div>
-  }
-  <button type="button" (click)="addEmail($event)">Add Email</button>
-</div>
+</fieldset>
 <!-- ... -->
 ```
 
 As you may have noticed, we also added two buttons for adding and removing e-mail input fields.
 In the corresponding methods, we access the `value` signal within the form model.
 The signal's `update()` method allows us to to add or remove items on `email` array
-We call `e.preventDefault()`, to not actually execute the default form submition event and prevent bubbling the event.
 
 Please keep in mind that changes to signal values must be done immutably.
 Instead of directly manipulating the array, we always create a new array with the updated values.
@@ -329,7 +334,7 @@ After the asynchronous operation is complete, it switches back to `false`.
   <button
     type="submit"
     [disabled]="registrationForm().submitting()"
-    [attr.aria-busy]="registrationForm().submitting()"
+    [ariaBusy]="registrationForm().submitting()"
   >
     @if (registrationForm().submitting()) { Registering ... } @else { Register }
   </button>
@@ -441,7 +446,7 @@ Practically, this means that we can check the overall form validity by calling `
 <button
   type="submit"
   [disabled]="!registrationForm().valid() || registrationForm().submitting()"
-  [attr.aria-busy]="registrationForm().submitting()"
+  [ariaBusy]="registrationForm().submitting()"
 >
   @if (registrationForm().submitting()) {
     Registering ...
