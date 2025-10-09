@@ -213,7 +213,7 @@ In the corresponding methods, we access the `value` signal within the form model
 The signal's `update()` method allows us to to add or remove items on `email` array
 We call `e.preventDefault()`, to not actually execute the default form submition event and prevent bubbling the event.
 
-please keep in mind that changes to signal values must be done immutably.
+Please keep in mind that changes to signal values must be done immutably.
 Instead of directly manipulating the array, we always create a new array with the updated values.
 This is why we use the spread operator (`...`) to create a new array when adding an email and the `filter()` method to create a new array when removing an email.
 
@@ -407,6 +407,26 @@ Signal Forms provide several built-in validation functions:
 
 Each validator function accepts an optional `opts` parameter where you can specify a custom error message.
 
+A schema for our registration form could look like this:
+
+```typescript
+export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+  // Username validation
+  required(fieldPath.username, { message: 'Username is required' });
+  minLength(fieldPath.username, 3, { message: 'A username must be at least 3 characters long' });
+  maxLength(fieldPath.username, 12, { message: 'A username can be max. 12 characters long' });
+
+  // Age validation
+  min(fieldPath.age, 18, { message: 'You must be >=18 years old.' });
+
+  // Terms and conditions
+  required(fieldPath.agreeToTermsAndConditions, {
+    message: 'You must agree to the terms and conditions.',
+  });
+});
+```
+
+
 ### Form-Level Validation State
 
 Each part of the form field tree provides a `valid()` signal with validation state of all field validations below this branch.
@@ -423,7 +443,11 @@ Practically, this means that we can check the overall form validity by calling `
   [disabled]="!registrationForm().valid() || registrationForm().submitting()"
   [attr.aria-busy]="registrationForm().submitting()"
 >
-  @if (registrationForm().submitting()) { Registering... } @else { Register }
+  @if (registrationForm().submitting()) {
+    Registering ...
+  } @else {
+    Register
+  }
 </button>
 <!-- ... -->
 ```
