@@ -12,7 +12,7 @@ keywords:
   - Angular 21
   - Signal Forms
 language: en
-header: signal-forms.jpg
+header: header-signalforms-part1.jpg
 sticky: false
 ---
 
@@ -526,3 +526,6 @@ Once we published the new parts of this series they will be linked here.
 <!--
 Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](../2025-10-signal-forms-part2)!
 -->
+
+
+<small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>

@@ -14,7 +14,7 @@ keywords:
   - Custom Controls
   - Child Forms
 language: en
-header: signal-forms.jpg
+header: header-signalforms-part3.jpg
 sticky: false
 hidden: true
 ---

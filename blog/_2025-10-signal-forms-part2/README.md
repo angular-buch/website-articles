@@ -13,7 +13,7 @@ keywords:
   - Signal Forms
   - Validation
 language: en
-header: signal-forms.jpg
+header: header-signalforms-part2.jpg
 sticky: false
 hidden: true
 ---
