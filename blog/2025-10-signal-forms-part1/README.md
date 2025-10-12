@@ -503,6 +503,15 @@ Now we can use this component in our form and pass any field to it.
 ```
 
 
+## Demo
+
+You can find a complete demo application for this blog series on GitHub and Stackblitz:
+
+- **⚡️ Stackblitz:** [https://stackblitz.com/github/angular-buch/signal-forms-registration](https://stackblitz.com/github/angular-buch/signal-forms-registration)
+- **⚙️ Code on GitHub:** [https://github.com/angular-buch/signal-forms-registration](https://github.com/angular-buch/signal-forms-registration)
+- **💻 Live Demo:** [https://angular-buch.github.io/signal-forms-registration/](https://angular-buch.github.io/signal-forms-registration/)
+
+
 
 ## What's Next?
 
