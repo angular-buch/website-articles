@@ -6,7 +6,6 @@ published: 2025-10-06
 lastModified: 2025-10-06
 keywords:
   - Angular
-  - JavaScript
   - Signals
   - Forms
   - Angular 21

@@ -6,12 +6,12 @@ published: 2025-10-06
 lastModified: 2025-10-06
 keywords:
   - Angular
-  - JavaScript
   - Signals
   - Forms
   - Angular 21
   - Signal Forms
   - Validation
+  - Schema Validation
 language: en
 header: header-signalforms-part2.jpg
 sticky: false
