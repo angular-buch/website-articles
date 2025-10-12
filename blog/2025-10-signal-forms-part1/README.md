@@ -21,6 +21,8 @@ Angular introduces Signal Forms with Version [21.0.0-next.2](https://github.com/
 This new API offers a declarative way to build forms with full control over the data model and built-in schema validation.
 In this first part of our three-part series, we'll cover the fundamentals you need to get started with Signal Forms.
 
+> ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
+
 ## What Makes Signal Forms Different
 
 Signal Forms represent a paradigm shift from Angular's existing form approaches of Template-Driven and Reactive Forms.
@@ -37,8 +39,8 @@ The new approach follows three core principles:
 
 The first step in creating a Signal Form is to define our data model.
 For this blog post, we will create a user registration form.
-A TypeScript interface defines all the fields we need.
-A new user can provide name and age, multiple email addresses, and choose whether to subscribe to a newsletter via a checkbox.
+A TypeScript interface defines all the fields we need:
+New users can provide name and age, multiple email addresses, and choose whether to subscribe to a newsletter via a checkbox.
 Finally, they must agree to the terms and conditions.
 
 ```typescript
@@ -53,7 +55,7 @@ export interface RegisterFormData {
 
 Next, we create a signal property containing our initial form state.
 In this example, we keep the `initialState` as a separate constant before, so we can re-use it later for resetting the form data after submission.
-Of course, it is also possible to define the initial state directly when creating the signal.
+Of course, it is also possible to define the initial state directly inlined when creating the signal.
 
 ```typescript
 const initialState: RegisterFormData = {
@@ -76,7 +78,7 @@ It remains reactive and automatically synchronizes with any changes made through
 ## Creating the Field Structure
 
 Now that we have our data model defined, the next step is to create the field structure that connects our data to the form.
-Angular supplies a `form()` function to create a field tree that derives its structure from the data.
+Angular provides a `form()` function to create a field tree that derives its structure from the data.
 The result is a `FieldTree` object that mirrors our data structure and maintains metadata for each field node.
 
 ```typescript
@@ -89,11 +91,11 @@ export class RegistrationForm {
 }
 ```
 
-This form model structure allows us to navigate through our form field paths exactly like we would navigate through our data structure.
 
 ### Accessing Field Properties
 
-Once we have our form structure, we can access individual fields and their reactive properties:
+This form model structure allows us to navigate through our form field paths exactly like we would navigate through our data structure.
+Using this object, we can access individual fields and their reactive properties:
 
 ```typescript
 // Access field value
@@ -105,7 +107,8 @@ console.log(this.registrationForm.username().touched()); // interaction status
 console.log(this.registrationForm.username().errors()); // validation errors
 ```
 
-We can call each property as a function to receive a `FieldState` object.
+Each nested call returns another `FieldTree` that represents the corresponding part of the form.
+We can call each `FieldTree` as a function to receive a `FieldState` object.
 It provides several reactive properties that we can use in our templates and component logic:
 
 | State             | Type                        | Description                                      |
@@ -119,7 +122,7 @@ It provides several reactive properties that we can use in our templates and com
 | `disabledReasons` | `Signal<string[]>`          | array of reasons about the disabled state        |
 | `hidden`          | `Signal<boolean>`           | `true` if the field is semantically hidden       |
 
-It is important to stay aware of the difference between `FieldTree` and `FieldState`.
+It is important to stay aware of the difference between `FieldTree` and `FieldState`:
 While `FieldTree` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
 Once we call a `FieldTree` as a function, we get a `FieldState` as the result.
 
@@ -217,7 +220,7 @@ The `registrationForm.email` field returns an array of `FieldTree` objects that 
 
 As you may have noticed, we also added two buttons for adding and removing e-mail input fields.
 In the corresponding methods, we access the `value` signal within the form model.
-The signal's `update()` method allows us to to add or remove items on `email` array.
+The signal's `update()` method allows us to to add or remove items on the `email` array.
 
 Please keep in mind that changes to signal values must be done immutably.
 Instead of directly manipulating the array, we always create a new array with the updated values.
@@ -247,9 +250,9 @@ Signal Forms provide two approaches for handling form submission:
 Basic synchronous submission and the more powerful `submit()` function for asynchronous operations.
 
 All approaches start with a form submission event handler: In the template, we already used the `(submit)` event binding on the `<form>` element.
-It is always necessary to prevent the default form submission behavior by calling `e.preventDefault()` in our `submitForm()` method.
+It is always necessary to prevent the default form submission behavior by calling `e.preventDefault()` in our `submitForm()` handler method.
 
-### Simple Synchronous Submission
+### Basic Synchronous Submission
 
 For basic cases where you want to process form data synchronously, you can directly access the current form values:
 
@@ -348,13 +351,14 @@ One of the most powerful features of Signal Forms is schema-based validation.
 Instead of defining validation rules directly on form controls (as it was usual with Reactive Forms), we now create a declarative schema that describes all validation rules for our form.
 The interesting part is that this schema is written as code. It is not just a static configuration but can involve additional logic if needed.
 
-In this first part of our article series, we will give you a very short introduction to it.
+In this first part of our article series, we will give you a very short introduction to schema-based validation.
 The next part will cover more advanced and complex scenarios – so stay tuned!
 
 ### Creating a Basic Schema
 
 Signal Forms use the `schema()` function to define validation rules.
 Angular comes with some very common rules by default, such as `required` and `minLength`.
+The provided `fieldPath` parameter allows us to navigate through the form structure and apply validation rules to specific fields.
 
 ```typescript
 import {
@@ -362,10 +366,8 @@ import {
   schema,
   required,
   minLength,
-  maxLength,
-  min,
 } from '@angular/forms/signals';
-// ...
+
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   required(fieldPath.username, { message: 'Username is required' });
   minLength(fieldPath.username, 3, {
@@ -373,12 +375,11 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   });
   // ...
 });
-// ...
 ```
 
 ### Applying the Schema to our Form
 
-To use the schema, we pass it as the second parameter to the `form()` function:
+To actually use the schema, we pass it as the second parameter to the `form()` function:
 
 ```typescript
 // ...
@@ -412,8 +413,9 @@ Signal Forms provide several built-in validation functions:
 | `pattern(field, regex, opts)`    | Regular expression match                                    | `pattern(fieldPath.username, /^[a-zA-Z0-9]+$/)` |
 
 Each validator function accepts an optional `opts` parameter where you can specify a custom error message.
+We can use this message later to display it in the component template.
 
-A schema for our registration form could look like this:
+A validation schema for our registration form could look like this:
 
 ```typescript
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
@@ -435,7 +437,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 
 ### Form-Level Validation State
 
-Each part of the form field tree provides a `valid()` signal with validation state of all field validations below this branch.
+Each part of the form field tree provides a `valid()` signal with validation state of all field validations below this field tree branch.
 Practically, this means that we can check the overall form validity by calling `registrationForm().valid()`.
 
 ```html
@@ -466,8 +468,10 @@ The object can also contain a `message` property with the error message defined 
 These messages can be displayed directly in the template.
 
 To make the error display reusable, we can create a dedicated component for it:
-The component can receive any field and checks for its errors when the field is already marked as touched.
+The component can receive any `FieldTree` and checks for its errors when the field is already marked as touched.
 It displays all errors related to the field by iterating over the `errors()` signal.
+
+To get access to the `FieldState`, we have to call the `field` property twice: Once to get the `FieldTree` from the input signal, and a second time to get the `FieldState` with its reactive properties.
 
 ```typescript
 import { Component, input } from '@angular/core';
@@ -476,19 +480,18 @@ import { ValidationError, WithOptionalField } from '@angular/forms/signals';
 @Component({
   selector: 'app-form-error',
   template: `
-    @if (field().touched() && field().errors().length) {
-    <small>
-      @for (error of field().errors(); track $index) {
-      {{ error.message }}
-      @if (!$last) {
-      <br />
-      } }
-    </small>
+    @let state = field()();
+    @if (state.touched() && state.errors().length) {
+    <ul>
+      @for (error of state.errors(); track $index) {
+      <li>{{ error.message }}</li>
+      }
+    </ul>
     }
   `,
 })
 export class FormError<T> {
-  readonly field = input.required<FieldState<T>>();
+  readonly field = input.required<FieldTree<T>>();
 }
 ```
 
