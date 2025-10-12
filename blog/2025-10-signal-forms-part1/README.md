@@ -2,15 +2,15 @@
 title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
-published: 2025-10-09
-lastModified: 2025-10-09
+published: 2025-10-13
+lastModified: 2025-10-13
 keywords:
   - Angular
-  - JavaScript
   - Signals
   - Forms
   - Angular 21
   - Signal Forms
+  - Schema Validation
 language: en
 header: header-signalforms-part1.jpg
 sticky: false
