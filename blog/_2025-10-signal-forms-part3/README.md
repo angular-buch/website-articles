@@ -1,7 +1,7 @@
 ---
 title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
-mail: team@angular.schule
+mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-06
 lastModified: 2025-10-06
 keywords:
@@ -19,6 +19,8 @@ hidden: true
 ---
 
 In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-signal-forms-part2/README.md), we covered the fundamentals and advanced validation patterns of Signal Forms. In this final part, we'll explore specialized topics that help you build complex, modular forms: child forms and custom UI controls.
+
+> ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
 ## Integrate a Child Form
 

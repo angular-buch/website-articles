@@ -1,7 +1,7 @@
 ---
 title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
-mail: team@angular.schule
+mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-06
 lastModified: 2025-10-06
 keywords:
@@ -19,6 +19,8 @@ hidden: true
 ---
 
 In [Part 1](../2025-10-signal-forms-part1/README.md), we covered the fundamentals of Signal Forms. Now let's dive deeper into advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
+
+> ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
 ## Advanced Validation Scenarios
 
@@ -428,6 +430,7 @@ export class RegistrationForm {
 ## What's Next?
 
 In this second part, we've explored advanced validation patterns:
+
 - Custom validation functions with `validate()`
 - Cross-field validation with `validateTree()`
 - Conditional validation with `applyWhen()`
@@ -437,7 +440,12 @@ In this second part, we've explored advanced validation patterns:
 - Server-side error handling
 
 In **Part 3**, we'll cover specialized topics that help you build complex, modular forms:
+
 - Creating reusable child form components
 - Building custom UI controls that integrate seamlessly with Signal Forms
 
+<!--
 Ready for the final part? Check out [Part 3: Child Forms and Custom UI Controls](../2025-10-signal-forms-part3/README.md)!
+-->
+
+<small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>
