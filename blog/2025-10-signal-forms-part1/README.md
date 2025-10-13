@@ -14,7 +14,6 @@ keywords:
 language: en
 header: header-signalforms-part1.jpg
 sticky: false
-hidden: true
 ---
 
 Angular introduces Signal Forms with Version [21.0.0-next.2](https://github.com/angular/angular/releases/tag/21.0.0-next.2), an experimental but promising approach to form handling that leverages Angular's reactive Signal primitive.
