@@ -354,6 +354,18 @@ export class RegistrationForm {
 
 The custom component integrates seamlessly with Signal Forms validation and state management, just like native HTML form controls.
 
+
+## Demo
+
+You can find a complete demo application for this blog series on GitHub and Stackblitz:
+
+- **⚡️ Stackblitz:** [https://stackblitz.com/github/angular-buch/signal-forms-registration](https://stackblitz.com/github/angular-buch/signal-forms-registration)
+- **⚙️ Code on GitHub:** [https://github.com/angular-buch/signal-forms-registration](https://github.com/angular-buch/signal-forms-registration)
+- **💻 Live Demo:** [https://angular-buch.github.io/signal-forms-registration/](https://angular-buch.github.io/signal-forms-registration/)
+
+
+
+
 ## Conclusion
 
 In this three-part series, we've explored the full spectrum of Angular Signal Forms:
