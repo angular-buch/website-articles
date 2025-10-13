@@ -12,7 +12,7 @@ keywords:
   - Component Suffix
 language: de
 header: angular20.jpg
-sticky: true
+sticky: false
 ---
 
 Alles neu macht der Mai – oder zumindest eine neue Major-Version von Angular:
