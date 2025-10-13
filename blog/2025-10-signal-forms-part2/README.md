@@ -109,22 +109,23 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 
 ### Cross-Field Validation
 
+For the two password fields, we want to ensure that both values match.
+
 For validations that depend on multiple fields (like password confirmation), use `validateTree()`:
 
 ```typescript
 import { /* ... */ validateTree } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // ... existing validations ...
-
+  // ...
   // Password confirmation validation
-  validateTree(fieldPath.password, ({ valueOf, fieldOf }) => {
-    const password = valueOf(fieldPath.password.pw1);
-    const confirmation = valueOf(fieldPath.password.pw2);
+  validateTree(fieldPath.password, (ctx) => {
+    const password = ctx.valueOf(fieldPath.password.pw1);
+    const confirmation = ctx.valueOf(fieldPath.password.pw2);
 
     if (confirmation && password !== confirmation) {
       return customError({
-        field: fieldOf(fieldPath.password.pw2), // assign error to confirmation field
+        field: ctx.fieldOf(fieldPath.password.pw2), // assign error to confirmation field
         kind: 'passwordMismatch',
         message: 'The entered password must match the one specified in "Password" field',
       });
