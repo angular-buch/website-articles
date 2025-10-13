@@ -395,3 +395,6 @@ Signal Forms represent a powerful evolution in Angular's form handling capabilit
 As Signal Forms continue to evolve from their experimental status, they promise to become a cornerstone of modern Angular application development, providing developers with the tools needed to build sophisticated, maintainable forms with confidence.
 
 Ready to start building with Signal Forms? Check out the [official Angular documentation](https://angular.dev/guide/signals) and experiment with these patterns in your own projects!
+
+
+<small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>

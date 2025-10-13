@@ -18,20 +18,23 @@ sticky: false
 hidden: true
 ---
 
-In [Part 1](../2025-10-signal-forms-part1/README.md), we covered the fundamentals of Signal Forms. Now let's dive deeper into advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
+In this part of our blog series about Signal Forms in Angular, we will explore advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
+We will learn about custom schema validation, cross-field validation, conditional validation, asynchronous validation, and how to handle server-side errors gracefully.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
+
 ## Advanced Validation Scenarios
 
-Beyond basic field validation, Signal Forms support several advanced validation patterns that are common in real-world applications.
+Beyond basic field validation (as we learned it in [Part 1](/blog/2025-10-signal-forms-part1/)), Signal Forms support several advanced validation patterns that are common in real-world applications.
 
 ### Custom Validation Functions
 
-Sometimes the built-in validators aren't sufficient for your needs.
-Signal Forms allow you to create custom validation logic using the `validate()` function.
+With the built-in validator functions, like `required` or `minLength`, you can cover many common validation scenarios.
+For more specific requirements, Signal Forms allow you to create custom validation logic using the `validate()` function.
 
-Let's extend our registration form with a more complex data model that includes nested objects and arrays:
+Let's extend our registration form with a more complex data model that includes nested objects and arrays.
+We add an array of newsletter topics and two password fields for confirmation:
 
 ```typescript
 export interface RegisterFormData {
@@ -55,22 +58,42 @@ const initialState: RegisterFormData = {
 };
 ```
 
-Now let's create custom validation for ensuring at least one email is provided:
+Our first use case is to validate each email address in the `email` array.
+We want to use the built-in `email` validator, but it must be applied to each and every field in the array.
+This is where `applyEach()` comes into play: It sets the validation rules for each item of the `email` array.
 
 ```typescript
-import { /* ... */ validate, customError, applyEach, email } from '@angular/forms/signals';
+import { /* ... */, applyEach, email } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // ... existing validations ...
-
+  // ...
   // Validate each email in the array
   applyEach(fieldPath.email, (emailPath) => {
     email(emailPath, { message: 'E-Mail format is invalid' });
   });
+});
+```
 
+> `applyEach()` applies a validation schema to each item in an array field.
+
+
+Our second use case is to ensure that at least one email address is provided in the `email` array.
+For this, we don't have to look at each individual email field, but rather at the array as a whole.
+Using the `validate()` function, we can provide custom validation for a branch in the field tree, similar to how we used built-in validators before. 
+The callback function provides access to the field state, e.g. we can use the `value` signal to read the current value of the email array.
+
+Since the value is a `string[]`, we can use `Array.some()` to check if at least one non-empty email address exists.
+To produce an error, we use the `customError()` function to create a validation error object with a `kind` and a `message`.
+If no error occurs, we return `undefined`.
+
+```typescript
+import { /* ... */ validate, customError } from '@angular/forms/signals';
+
+export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+  // ...
   // Custom validation for at least one email
-  validate(fieldPath.email, ({ value }) =>
-    !value().some((e) => e)
+  validate(fieldPath.email, (ctx) =>
+    !ctx.value().some((e) => e)
       ? customError({
           kind: 'atLeastOneEmail',
           message: 'At least one E-Mail address must be added',
@@ -80,7 +103,9 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 });
 ```
 
-The `validate()` function receives the field state and should return either `undefined` (validation passed) or an error created with `customError()`.
+> `validate()` defines custom validation logic for a specific field or branch in the form tree. It returns a validation error or `undefined` if the value is valid.
+
+
 
 ### Cross-Field Validation
 
