@@ -18,68 +18,70 @@ sticky: false
 hidden: true
 ---
 
-In this part of our blog series about Signal Forms in Angular, we will explore advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
+Beyond basic field validation (as we learned it in [Part 1](/blog/2025-10-signal-forms-part1/)), Signal Forms support several advanced validation patterns that are common in real-world applications.
+In this part of our blog series about Signal Forms in Angular, we will explore this advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
 We will learn about custom schema validation, cross-field validation, conditional validation, asynchronous validation, and how to handle server-side errors gracefully.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
-
-## Advanced Validation Scenarios
-
-Beyond basic field validation (as we learned it in [Part 1](/blog/2025-10-signal-forms-part1/)), Signal Forms support several advanced validation patterns that are common in real-world applications.
-
-### Custom Validation Functions
-
-With the built-in validator functions, like `required` or `minLength`, you can cover many common validation scenarios.
-For more specific requirements, Signal Forms allow you to create custom validation logic using the `validate()` function.
-
-Let's extend our registration form with a more complex data model that includes nested objects and arrays.
-We add an array of newsletter topics and two password fields for confirmation:
-
-```typescript
-export interface RegisterFormData {
-  username: string;
-  password: { pw1: string; pw2: string };
-  age: number;
-  email: string[];
-  newsletter: boolean;
-  newsletterTopics: string[];
-  agreeToTermsAndConditions: boolean;
-}
-
-const initialState: RegisterFormData = {
-  username: '',
-  password: { pw1: '', pw2: '' },
-  age: 18,
-  email: [''],
-  newsletter: false,
-  newsletterTopics: ['Angular'],
-  agreeToTermsAndConditions: false,
-};
-```
+## Array validation
 
 Our first use case is to validate each email address in the `email` array.
 We want to use the built-in `email` validator, but it must be applied to each and every field in the array.
-This is where `applyEach()` comes into play: It sets the validation rules for each item of the `email` array.
+This is where `applyEach()` comes into play:
+It sets the validation rules for each item of the `email` array.
 
-```typescript
+This function takes a field array as first argument and as a second again a schema which is applied to all children.
+The schema is a simple function with the field path passed to it as an argument.
+We can directly use this path and pass it into our `email()` validation function.
+We can also pass a `message` like we did for the build-in error functions before.
+
+```ts
 import { /* ... */, applyEach, email } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // ...
-  // Validate each email in the array
-  applyEach(fieldPath.email, (emailPath) => {
-    email(emailPath, { message: 'E-Mail format is invalid' });
-  });
+// ...
+applyEach(fieldPath.email, (emailPath) => {
+  email(emailPath, { message: 'E-Mail format is invalid' });
 });
 ```
 
 > `applyEach()` applies a validation schema to each item in an array field.
 
+The passed `message` is already be handled by our generic `FormError` component once we passing the field to it.
+Therefore we use this component within the `@for` loop to show the message related to the input where the validation fails.
+
+```html
+<!-- ... -->
+<fieldset>
+  <legend>
+    E-Mail Addresses
+    <button type="button" (click)="addEmail()">+</button>
+  </legend>
+  <div>
+    @for (emailField of registrationForm.email; track $index) {
+    <div>
+      <div role="group">
+        <input
+          type="email"
+          [control]="emailField"
+          [ariaLabel]="'E-Mail ' + $index"
+          [ariaInvalid]="ariaInvalidState(emailField())"
+        />
+        <button type="button" (click)="removeEmail($index)">-</button>
+      </div>
+      <app-form-error [field]="emailField" />
+    </div>
+    }
+  </div>
+</fieldset>
+<!-- ... -->
+```
+
+## Custom Validation Functions
 
 Our second use case is to ensure that at least one email address is provided in the `email` array.
 For this, we don't have to look at each individual email field, but rather at the array as a whole.
-Using the `validate()` function, we can provide custom validation for a branch in the field tree, similar to how we used built-in validators before. 
+Using the `validate()` function, we can provide custom validation for a branch in the field tree, similar to how we used built-in validators before.
 The callback function provides access to the field state, e.g. we can use the `value` signal to read the current value of the email array.
 
 Since the value is a `string[]`, we can use `Array.some()` to check if at least one non-empty email address exists.
@@ -91,7 +93,8 @@ import { /* ... */ validate, customError } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   // ...
-  // Custom validation for at least one email
+
+  // E-Mail validation
   validate(fieldPath.email, (ctx) =>
     !ctx.value().some((e) => e)
       ? customError({
@@ -105,19 +108,84 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 
 > `validate()` defines custom validation logic for a specific field or branch in the form tree. It returns a validation error or `undefined` if the value is valid.
 
+Again: We pass the optional message, to show an error message in the UI, once the validation fails.
 
+```html
+<!-- ... -->
+<fieldset>
+  <legend>
+    E-Mail Addresses
+    <button type="button" (click)="addEmail()">+</button>
+  </legend>
+  <div>
+    @for (emailField of registrationForm.email; track $index) {
+    <!-- ... -->
+    }
+  </div>
+  <app-form-error [field]="registrationForm.email" />
+</fieldset>
+<!-- ... -->
+```
 
-### Cross-Field Validation
+## Cross-Field Validation
 
 For the two password fields, we want to ensure that both values match.
-
 For validations that depend on multiple fields (like password confirmation), use `validateTree()`:
+
+Let's have a look at it and first extend our data model and the initial state, so it includes a nested object holding password information.
+
+```typescript
+export interface RegisterFormData {
+  username: string;
+  password: { pw1: string; pw2: string };
+  // ...
+}
+
+const initialState: RegisterFormData = {
+  username: '',
+  password: { pw1: '', pw2: '' },
+  // ...
+};
+```
+
+Of course we should also update our template and add two input fields of type `password`.
+The first field is the password a user chose and the second one is the confirmation.
+We also include the `FormError` component directly to show the error messages once e implemented our rules.
+We can have an error displayed for each individual field as well as for the whole group.
+
+```html
+<label>Password
+  <input
+    type="password"
+    autocomplete
+    [control]="registrationForm.password.pw1"
+  />
+  <app-form-error [field]="registrationForm.password.pw1" />
+</label>
+<label
+  >Password Confirmation
+  <input
+    type="password"
+    autocomplete
+    [control]="registrationForm.password.pw2"
+  />
+  <app-form-error [field]="registrationForm.password.pw2" />
+</label>
+<app-form-error [field]="registrationForm.password" />
+```
+
+Now we implement the validation for it.
+For validations that depend on multiple fields, we use `validateTree()`.
+We pass a `FieldTree` to it.
+
+<!-- HIER WEITER -->
 
 ```typescript
 import { /* ... */ validateTree } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   // ...
+
   // Password confirmation validation
   validateTree(fieldPath.password, (ctx) => {
     const password = ctx.valueOf(fieldPath.password.pw1);
@@ -140,7 +208,7 @@ With `validateTree()`, you get access to:
 - `valueOf()` - to access values of fields within the tree
 - `fieldOf()` - to get the field path for error assignment
 
-### Conditional Validation
+## Conditional Validation
 
 Use `applyWhen()` to apply validation rules only when certain conditions are met:
 
@@ -168,7 +236,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 });
 ```
 
-### Asynchronous Validation
+## Asynchronous Validation
 
 For validation that requires asynchronous calls (like checking username availability), use `validateAsync()`.
 
@@ -245,7 +313,7 @@ validateHttp(fieldPath.username, {
 });
 ```
 
-### Field State Control
+## Field State Control
 
 Signal Forms also provide functions to control field behavior beyond validation:
 
