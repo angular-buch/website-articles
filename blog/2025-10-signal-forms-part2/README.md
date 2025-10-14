@@ -408,6 +408,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 
   // Make certain fields read-only based on conditions
   readonly(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
+  readonly(fieldPath.someField2, (ctx) => !ctx.fieldOf(fieldPath.otherField)().valid());
 
   // Hide certain fields based on conditions
   hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
