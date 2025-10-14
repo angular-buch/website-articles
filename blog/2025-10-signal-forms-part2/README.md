@@ -2,8 +2,8 @@
 title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
-published: 2025-10-06
-lastModified: 2025-10-06
+published: 2025-10-20
+lastModified: 2025-10-20
 keywords:
   - Angular
   - Signals
@@ -30,7 +30,7 @@ We will learn about custom schema validation, cross-field validation, conditiona
 First things first: When displaying validation errors in the UI, it's important to consider accessibility.
 To properly mark fields as invalid in the UI, we should set the `aria-invalid` attribute on input elements.
 This attribute should be set to `true` if the field has been touched and contains errors.
-However, if the field hasn't been touched yet, we should avoid setting this attribute to prevent unnecessary error announcements by screen readers.
+However, if the field hasn't been touched yet or if an asynchronous validation is still in progress, we should avoid setting this attribute to prevent unnecessary error announcements by screen readers.
 This is why we return `undefined` in this case, which means the attribute won't be added to the element at all.
 
 A helper method in our component can determine the appropriate value for this invalid state:
@@ -39,7 +39,7 @@ A helper method in our component can determine the appropriate value for this in
 export class RegistrationForm {
   // ...
   protected ariaInvalidState(field: FieldTree<unknown>): boolean | undefined {
-    return field().touched() ? field().errors().length > 0 : undefined;
+    return field().touched() && !field().pending() ? field().errors().length > 0 : undefined;
   }
   // ...
 }
@@ -69,8 +69,10 @@ We want to use the built-in `email` validator, but it must be applied to each an
 This is where `applyEach()` comes into play:
 It sets the validation rules for each item of the `email` array.
 
-This function takes a field array as first argument. The second argument is a validation schema which is applied to all children.
-The schema callback provides access to the current item path. We can directly use this path and pass it into our `email()` validation function to validate each and every field in the array.
+This function takes a field array as first argument.
+The second argument is a validation schema which is applied to all children.
+The schema callback provides access to the current item path.
+We can directly use this path and pass it into our `email()` validation function to validate each and every field in the array.
 
 ```ts
 import { /* ... */, applyEach, email } from '@angular/forms/signals';
@@ -117,7 +119,8 @@ The validation messages will be displayed in the UI since we included our generi
 Our second use case is to ensure that at least one email address is provided in the `email` array.
 For this, we don't have to look at each individual email field, but rather at the array as a whole.
 Using the `validate()` function, we can provide custom validation for a branch in the field tree, similar to how we used built-in validators before.
-The callback function provides access to the field state, represented as a `ChildFieldContext`. E.g. we can use the `value` signal to read the current value of the email array.
+The callback function provides access to the field state, represented as a `ChildFieldContext`.
+E.g. we can use the `value` signal to read the current value of the email array.
 
 Since the value is a `string[]`, we can use `Array.some()` to check if at least one non-empty email address exists.
 To produce an error, we use the `customError()` function to create a validation error object with a `kind` and a `message`.
@@ -142,7 +145,6 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 ```
 
 > `validate()` defines custom validation logic for a specific field or branch in the form tree. It returns a validation error or `undefined` if the value is valid.
-
 
 To display the error message, we add our `FormError` component below the `@for` loop that renders the email fields.
 
@@ -240,21 +242,41 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 ## Conditional Validation
 
 Validations can also be applied conditionally based on the value of other fields.
-In our registration form, we want to ensure that at least one newsletter topic is selected from the list.
+In our registration form, we want to allow users to choose from newsletter topics once they decided to receive a newsletter.
+Therefore, we extend our data model and the initial state first.
+
+```typescript
+export interface RegisterFormData {
+  // ...
+  newsletter: boolean;
+  newsletterTopics: string;
+  agreeToTermsAndConditions: boolean;
+}
+
+const initialState: RegisterFormData = {
+  // ...
+  newsletter: false,
+  newsletterTopics: '',
+  agreeToTermsAndConditions: false,
+};
+```
+
+Now, we want to ensure that a newsletter topic is selected from the list (we already named it in plural since we will add a multi-selection later, but for now just start with selecting one topic).
 However, this rule only applies if the user has opted in to receive the newsletter.
 This is where `applyWhen()` comes into play!
 
-This function takes a field path as the first argument. Since we want to take the whole form into account, we pass the root path.
+This function takes a field path as the first argument.
+Since we want to take the whole form into account, we pass the root path.
 The callback function in the second argument takes the field context and returns a boolean indicating whether the condition is met.
 In this example, we take a look at the value of the `newsletter` checkbox and only apply the validation if it is `true`.
 The third argument provides the actual validation schema that should be applied when the condition is met:
-We use the `validate()` function to check if at least one topic is selected in the `newsletterTopics` array.
+We use the `validate()` function to check if a topic is selected.
 
 ```typescript
 import { /* ... */, applyWhen } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // ... existing validations ...
+  // ...
   // Only validate newsletter topics if user subscribed to newsletter
   applyWhen(
     fieldPath,
@@ -290,7 +312,7 @@ export class RegistrationService {
     return new Promise<boolean>((resolve) => {
       setTimeout(() => {
         resolve(username === 'johndoe');
-      }, 500);
+      }, 2000);
     });
   }
   // ...
@@ -337,9 +359,10 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 });
 ```
 
-Whenever the value of the username field changes, the async validation is triggered. If we enter `johndoe`, the validation will fail, and the corresponding error message will be displayed.
+Whenever the value of the username field changes, the async validation is triggered.
+If we enter `johndoe`, the validation will fail, and the corresponding error message will be displayed.
 
-> ℹ️ *Resource* is a new building block in Angular for managing asynchronous data with signals. Learn about the Resource API in our blog post: [Reactive Angular: Loading Data with the Resource API](https://angular.schule/blog/2025-05-resource-api)
+> ℹ️ *Resource* is a new building block in Angular for managing asynchronous data with signals. Learn about the Resource API in our blog post from *Angular Schule*: [Reactive Angular: Loading Data with the Resource API](https://angular.schule/blog/2025-05-resource-api)
 
 
 For HTTP endpoints, you can also use the simpler `validateHttp()` function:
@@ -355,18 +378,24 @@ validateHttp(fieldPath.username, {
 When an asynchronous validation is in progress, the field's `pending` state is set to `true`.
 We can use this state to provide user feedback in the UI:
 
-<!-- TODO: include this in the demo? -->
 ```html
+<!-- ... -->
+<input
+  type="text"
+  [control]="registrationForm.username"
+  [ariaInvalid]="ariaInvalidState(registrationForm.username)"
+/>
 @if (registrationForm.username().pending()) {
   <small>Checking availability ...</small>
 }
+<!-- ... -->
 ```
 
 ## Field State Control
 
 Signal Forms also provide functions to control field behavior beyond validation.
 All three schema functions `disabled`, `readonly` and `hidden` receive a callback that takes the field context and checks a condition.
-The corresponsing field will change its state when the condition is met.
+The corresponding field will change its state when the condition is met.
 
 ```typescript
 import { /* ... */ disabled, readonly, hidden } from '@angular/forms/signals';
@@ -386,6 +415,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 ```
 
 Disabled and read-only states are automatically reflected in the template when using the `[control]` directive.
+<!-- TODO: das ist nicht so glaube. Im Beispiel nutzen wir explizit "<select [disabled]="registrationForm.newsletterTopics().disabled()" [control]="registrationForm.newsletterTopics">" -->
 However, Angular cannot automatically hide fields in the template.
 Instead, it marks the fields as *hidden*, which we can use in our template to conditionally render the fields using `@if`.
 
@@ -396,6 +426,8 @@ Instead, it marks the fields as *hidden*, which we can use in our template to co
   </label>
 }
 ```
+
+<!-- TODO: Beispiel mit disabled aus demo -->
 
 
 ## Handling Server-Side Errors
