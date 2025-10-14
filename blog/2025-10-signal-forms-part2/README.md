@@ -365,8 +365,8 @@ We can use this state to provide user feedback in the UI:
 ## Field State Control
 
 Signal Forms also provide functions to control field behavior beyond validation.
-Both `disabled` and `hidden` receive a callback that takes the field context and checks a condition.
-The corresponsing field will be disabled when the condition is met.
+All three schema functions `disabled`, `readonly` and `hidden` receive a callback that takes the field context and checks a condition.
+The corresponsing field will change its state when the condition is met.
 
 ```typescript
 import { /* ... */ disabled, readonly, hidden } from '@angular/forms/signals';
@@ -377,12 +377,16 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   // Disable newsletter topics when newsletter is unchecked
   disabled(fieldPath.newsletterTopics, (ctx) => !ctx.valueOf(fieldPath.newsletter));
 
+  // Make certain fields read-only based on conditions
+  readonly(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
+
   // Hide certain fields based on conditions
   hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
 });
 ```
 
-Please note that Angular cannot automatically hide fields in the template.
+Disabled and read-only states are automatically reflected in the template when using the `[control]` directive.
+However, Angular cannot automatically hide fields in the template.
 Instead, it marks the fields as *hidden*, which we can use in our template to conditionally render the fields using `@if`.
 
 ```html
@@ -392,6 +396,7 @@ Instead, it marks the fields as *hidden*, which we can use in our template to co
   </label>
 }
 ```
+
 
 ## Handling Server-Side Errors
 
@@ -464,7 +469,6 @@ In this second part, we've explored advanced validation techniques and schema pa
 - Conditional validation with `applyWhen()`
 - Asynchronous validation with `validateAsync()` and `validateHttp()`
 - Field state control with `disabled()`, `readonly()`, and `hidden()`
-- Enhanced error display with accessibility support
 - Server-side error handling
 
 In **Part 3**, we'll cover specialized topics that help you build complex, modular forms:
