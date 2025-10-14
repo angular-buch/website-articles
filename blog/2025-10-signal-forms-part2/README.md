@@ -364,9 +364,9 @@ We can use this state to provide user feedback in the UI:
 
 ## Field State Control
 
-<!-- TODO FM -->
-
-Signal Forms also provide functions to control field behavior beyond validation:
+Signal Forms also provide functions to control field behavior beyond validation.
+Both `disabled` and `hidden` receive a callback that takes the field context and checks a condition.
+The corresponsing field will be disabled when the condition is met.
 
 ```typescript
 import { /* ... */ disabled, readonly, hidden } from '@angular/forms/signals';
@@ -382,7 +382,16 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 });
 ```
 
+Please note that Angular cannot automatically hide fields in the template.
+Instead, it marks the fields as *hidden*, which we can use in our template to conditionally render the fields using `@if`.
 
+```html
+@if (!registrationForm.someField().hidden()) {
+  <label>Some Field
+    <input ... />
+  </label>
+}
+```
 
 ## Handling Server-Side Errors
 
