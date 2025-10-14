@@ -416,7 +416,6 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 ```
 
 Disabled and read-only states are automatically reflected in the template when using the `[control]` directive.
-<!-- TODO: das ist nicht so glaube. Im Beispiel nutzen wir explizit "<select [disabled]="registrationForm.newsletterTopics().disabled()" [control]="registrationForm.newsletterTopics">" -->
 However, Angular cannot automatically hide fields in the template.
 Instead, it marks the fields as *hidden*, which we can use in our template to conditionally render the fields using `@if`.
 
