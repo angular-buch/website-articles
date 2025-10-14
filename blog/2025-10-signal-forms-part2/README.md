@@ -24,6 +24,44 @@ We will learn about custom schema validation, cross-field validation, conditiona
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
+
+## ARIA Support for Error Display
+
+First things first: When displaying validation errors in the UI, it's important to consider accessibility.
+To properly mark fields as invalid in the UI, we should set the `aria-invalid` attribute on input elements.
+This attribute should be set to `true` if the field has been touched and contains errors.
+However, if the field hasn't been touched yet, we should avoid setting this attribute to prevent unnecessary error announcements by screen readers.
+This is why we return `undefined` in this case, which means the attribute won't be added to the element at all.
+
+A helper method in our component can determine the appropriate value for this invalid state:
+
+```typescript
+export class RegistrationForm {
+  // ...
+  protected ariaInvalidState(field: FieldTree<unknown>): boolean | undefined {
+    return field().touched() ? field().errors().length > 0 : undefined;
+  }
+  // ...
+}
+```
+
+In our template, we can now use a `[ariaInvalid]` binding on the input elements to reflect the invalid state:
+
+```html
+<label
+  >Username
+  <input
+    type="text"
+    [control]="registrationForm.username"
+    [ariaInvalid]="ariaInvalidState(registrationForm.username)"
+  />
+  <app-form-error [field]="registrationForm.username" />
+</label>
+```
+
+This code snippet only shows the username field, but you should apply the same logic to all input fields in your form.
+
+
 ## Array validation
 
 Our first use case is to validate each email address in the `email` array.
@@ -62,7 +100,7 @@ The validation messages will be displayed in the UI since we included our generi
           type="email"
           [control]="emailField"
           [ariaLabel]="'E-Mail ' + $index"
-          [ariaInvalid]="ariaInvalidState(emailField())"
+          [ariaInvalid]="ariaInvalidState(emailField)"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
       </div>
@@ -156,6 +194,7 @@ Errors can be assigned to individual fields (`pw1`) as well as to the whole grou
     type="password"
     autocomplete
     [control]="registrationForm.password.pw1"
+    [ariaInvalid]="ariaInvalidState(registrationForm.password.pw1)"
   />
   <app-form-error [field]="registrationForm.password.pw1" />
 </label>
@@ -165,6 +204,7 @@ Errors can be assigned to individual fields (`pw1`) as well as to the whole grou
     type="password"
     autocomplete
     [control]="registrationForm.password.pw2"
+    [ariaInvalid]="ariaInvalidState(registrationForm.password.pw2)"
   />
   <app-form-error [field]="registrationForm.password.pw2" />
 </label>
@@ -342,38 +382,6 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 });
 ```
 
-## ARIA Support for Error Display
-
-To properly mark fields as invalid in the UI, we should set the `aria-invalid` attribute on input elements.
-This attribute should be set to `true` if the field has been touched and contains errors.
-
-A helper method in our component can determine the appropriate value for this invalid state:
-
-```typescript
-export class RegistrationForm {
-  // ...
-  protected ariaInvalidState(field: FieldTree<unknown>): boolean | undefined {
-    return field().touched() ? field().errors().length > 0 : undefined;
-  }
-  // ...
-}
-```
-
-In our template, we can now use a `[ariaInvalid]` binding on the input elements to reflect the invalid state:
-
-```html
-<label
-  >Username
-  <input
-    type="text"
-    [control]="registrationForm.username"
-    [ariaInvalid]="ariaInvalidState(registrationForm.username)"
-  />
-  <app-form-error [field]="registrationForm.username" />
-</label>
-```
-
-This code snippet only shows the username field, but you should apply the same logic to all input fields in your form.
 
 
 ## Handling Server-Side Errors
@@ -389,8 +397,7 @@ import { /* ... */, WithField, CustomValidationError, ValidationError } from '@a
 
 export class RegistrationForm {
   // ...
-
-  protected async submit(e: Event) {
+  protected async submitForm(e: Event) {
     e.preventDefault();
 
     await submit(this.registrationForm, async (form) => {
@@ -437,8 +444,6 @@ You can find a complete demo application for this blog series on GitHub and Stac
 - **⚡️ Stackblitz:** [https://stackblitz.com/github/angular-buch/signal-forms-registration](https://stackblitz.com/github/angular-buch/signal-forms-registration)
 - **⚙️ Code on GitHub:** [https://github.com/angular-buch/signal-forms-registration](https://github.com/angular-buch/signal-forms-registration)
 - **💻 Live Demo:** [https://angular-buch.github.io/signal-forms-registration/](https://angular-buch.github.io/signal-forms-registration/)
-
-
 
 
 ## What's Next?
