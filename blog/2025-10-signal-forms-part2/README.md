@@ -398,21 +398,26 @@ All three schema functions `disabled`, `readonly` and `hidden` receive a callbac
 The corresponding field will change its state when the condition is met.
 
 ```typescript
-import { /* ... */ disabled, readonly, hidden } from '@angular/forms/signals';
+import { /* ... */, disabled, readonly, hidden } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // ... existing validations ...
-
+  // ...
   // Disable newsletter topics when newsletter is unchecked
   disabled(fieldPath.newsletterTopics, (ctx) => !ctx.valueOf(fieldPath.newsletter));
-
-  // Make certain fields read-only based on conditions
-  readonly(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
-  readonly(fieldPath.someField2, (ctx) => !ctx.fieldOf(fieldPath.otherField)().valid());
-
-  // Hide certain fields based on conditions
-  hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
 });
+```
+
+Here are some more examples of how to use `readonly` and `hidden`:
+
+```typescript
+// make `someField` read-only if `otherField` has the value 'someValue'
+readonly(fieldPath.someField, (ctx) => ctx.valueOf(fieldPath.otherField) === 'someValue');
+
+// make `someField` read-only if `otherField` is invalid
+readonly(fieldPath.someField, (ctx) => !ctx.fieldOf(fieldPath.otherField)().valid());
+
+// hide `someField` if the value of `otherField` is falsy
+hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
 ```
 
 Disabled and read-only states are automatically reflected in the template when using the `[control]` directive.
@@ -426,8 +431,6 @@ Instead, it marks the fields as *hidden*, which we can use in our template to co
   </label>
 }
 ```
-
-<!-- TODO: Beispiel mit disabled aus demo -->
 
 
 ## Handling Server-Side Errors
