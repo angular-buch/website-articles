@@ -84,12 +84,12 @@ export const identitySchema = schema<GenderIdentity>((path) => {
 Next, we create the component class.
 We want to use the `model()` signal which should be required to pass into the component.
 We use the `model()` instead of a simple `input()` here since we also want to add a `maybeUpdateSalutationAndPronoun` method which resets the salutation and pronoun once a user will change back the selection of the gender from *diverse* to *male* or *female*.
-We also include the `Control` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
+We also include the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
 
 ```typescript
 @Component({
   // ...
-  imports: [Control, FormError]
+  imports: [Field, FormError]
 })
 export class IdentityForm {
   readonly identity = model.required<FieldTree<GenderIdentity>>();
@@ -112,7 +112,7 @@ We check for the `hidden()` signal to conditionally show the additional fields f
   >Gender
   <select
     name="gender-identity"
-    [control]="identity().gender"
+    [field]="identity().gender"
     (change)="maybeUpdateSalutationAndPronoun($event)"
   >
     <option value="" selected>Please select</option>
@@ -126,13 +126,13 @@ We check for the `hidden()` signal to conditionally show the additional fields f
   @if (!identity().salutation().hidden()) {
   <label
     >Salutation
-    <input type="text" placeholder="e. g. Mx." [control]="identity().salutation" />
+    <input type="text" placeholder="e. g. Mx." [field]="identity().salutation" />
     <app-form-error [field]="identity().salutation" />
   </label>
   } @if (!identity().pronoun().hidden()) {
   <label
     >Pronoun
-    <input type="text" placeholder="e. g. they/them" [control]="identity().pronoun" />
+    <input type="text" placeholder="e. g. they/them" [field]="identity().pronoun" />
     <app-form-error [field]="identity().pronoun" />
   </label>
   }
@@ -215,7 +215,7 @@ interface FormUiControl<T = unknown> {
 }
 ```
 
-Your custom component needs to implement this interface to work with the `Control` directive.
+Your custom component needs to implement this interface to work with the `Field` directive.
 
 ### Creating a Custom Multiselect Component
 
@@ -359,14 +359,14 @@ Now you can use your custom multiselect component in forms:
 ```typescript
 @Component({
   selector: 'app-registration-form',
-  imports: [Control, JsonPipe, IdentityForm, FormError, Multiselect],
+  imports: [Field, JsonPipe, IdentityForm, FormError, Multiselect],
   template: `
     <form (submit)="submit($event)">
       <!-- ... other form fields ... -->
 
       <div>
         <app-multiselect
-          [control]="registrationForm.newsletterTopics"
+          [field]="registrationForm.newsletterTopics"
           label="Newsletter Topics"
         ></app-multiselect>
         @if (registrationForm.newsletterTopics().touched() && registrationForm.newsletterTopics().errors().length) {
@@ -403,7 +403,7 @@ In this three-part series, we've explored the full spectrum of Angular Signal Fo
 
 **Part 1** covered the fundamentals:
 - Data models and field structures
-- Template connections with the Control directive
+- Template connections with the `Field` directive
 - Basic form submission and validation
 - Built-in validators and error display
 
