@@ -28,7 +28,7 @@ In this first part of our three-part series, we'll cover the fundamentals you ne
 
 - *Part 1: Getting Started with Signal Forms* (this post)
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
-- *Part 3: Child Forms and Custom UI Controls* (⏳ coming soon)
+- [Part 3: Child Forms and Custom UI Controls](/blog/2025-10-signal-forms-part3)
 
 
 ## What Makes Signal Forms Different
@@ -544,6 +544,6 @@ In **Part 3**, we'll dig into modularization and customization by using child fo
 
 Once we published the new parts of this series they will be linked here.
 
-Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](../2025-10-signal-forms-part2)!
+Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)!
 
 <small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>
