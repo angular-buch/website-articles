@@ -30,55 +30,91 @@ In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-sig
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - *Part 3: Child Forms and Custom UI Controls* (this post)
 
-
 ## Integrate a Child Form
 
 As forms grow in complexity, it becomes essential to break them down into smaller, reusable components.
-Signal Forms support child forms through the `apply()` function, which allows you to integrate separate form components with their own schemas.
-
-This approach promotes modularity, reusability, and better maintainability of complex forms.
+Let's have a look at an example.
+We want to allow new users to define identity information such a gender and also an optional salutaion and pronoun when the gender is set to `diverse`.
+All the fields, we want to wrap in a separate component `IdentityForm` which we can integrate in our main `RegistrationForm`.
 
 ### Creating a Child Form Component
 
-Let's create an identity form component that handles gender identity information.
-First, we'll define the interface and schema for our child form:
+We will start by creating the data model and the initial state.
 
 ```typescript
-import { Component, input } from '@angular/core';
-import { Control, Field, hidden, schema } from '@angular/forms/signals';
-
 export interface GenderIdentity {
   gender: '' | 'male' | 'female' | 'diverse';
-  salutation: string; // e.g. "Mx.", "Dr.", etc.
-  pronoun: string; // e.g. "they/them"
+  salutation: string; // e. g. "Mx.", "Dr.", etc.
+  pronoun: string; // e. g. "they/them"
 }
 
+export const initialGenderIdentityState: GenderIdentity = {
+  gender: '',
+  salutation: '',
+  pronoun: '',
+};
+```
+
+Now we think about the form schema we want to apply.
+First, we want to mark the fields for salutation and pronoun as `hidden`, when the gender is not `diverse`.
+Also we want both field to be required and validate it.
+Therefore, we can add a `when` condition to the `required()` validation function.
+We export the schema, so we can use it in the parent `RegistrationForm` component later and apply it to the main schema.
+
+```typescript
 export const identitySchema = schema<GenderIdentity>((path) => {
-  hidden(path.salutation, ({ valueOf }) => {
-    return !valueOf(path.gender) || valueOf(path.gender) !== 'diverse';
+  hidden(path.salutation, (ctx) => {
+    return !ctx.valueOf(path.gender) || ctx.valueOf(path.gender) !== 'diverse';
   });
-  hidden(path.pronoun, ({ valueOf }) => {
-    return !valueOf(path.gender) || valueOf(path.gender) !== 'diverse';
+  hidden(path.pronoun, (ctx) => {
+    return !ctx.valueOf(path.gender) || ctx.valueOf(path.gender) !== 'diverse';
+  });
+
+  required(path.salutation, {
+    when: (ctx) => ctx.valueOf(path.gender) === 'diverse',
+    message: 'Please choose a salutation, when diverse gender selected',
+  });
+  required(path.pronoun, {
+    when: (ctx) => ctx.valueOf(path.gender) === 'diverse',
+    message: 'Please choose a pronoun, when diverse gender selected',
   });
 });
+```
 
+Next, we create the component class.
+We want to use the `model()` signal which should be required to pass into the component.
+We use the `model()` instead of a simple `input()` here since we also want to add a `maybeUpdateSalutationAndPronoun` method which resets the salutation and pronoun once a user will change back the selection of the gender from *diverse* to *male* or *female*.
+We also include the `Control` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
+
+```typescript
 @Component({
-  selector: 'app-identity-form',
-  imports: [Control],
-  templateUrl: './identity-form.html',
-  styleUrl: './identity-form.scss',
+  // ...
+  imports: [Control, FormError]
 })
 export class IdentityForm {
-  readonly identity = input.required<Field<GenderIdentity>>();
+  readonly identity = model.required<FieldTree<GenderIdentity>>();
+
+  protected maybeUpdateSalutationAndPronoun(event: Event) {
+    const gender = (event.target as HTMLSelectElement).value;
+    if (gender !== 'diverse') {
+      this.identity().salutation().value.set('');
+      this.identity().pronoun().value.set('');
+    }
+  }
 }
 ```
 
-The template uses the `hidden()` signal to conditionally show additional fields:
+In the template we use the `control` directive to bind our fields with the form model.
+We check for the `hidden()` signal to conditionally show the additional fields for salutation and pronoun.
 
 ```html
-<label>
-  Gender
-  <select name="gender-identity" [control]="identity().gender">
+<label
+  >Gender
+  <select
+    name="gender-identity"
+    [control]="identity().gender"
+    (change)="maybeUpdateSalutationAndPronoun($event)"
+  >
     <option value="" selected>Please select</option>
     <option value="male">Male</option>
     <option value="female">Female</option>
@@ -88,16 +124,17 @@ The template uses the `hidden()` signal to conditionally show additional fields:
 
 <div class="group-with-gap">
   @if (!identity().salutation().hidden()) {
-    <label>
-      Salutation
-      <input type="text" placeholder="e.g. Mx." [control]="identity().salutation" />
-    </label>
-  }
-  @if (!identity().pronoun().hidden()) {
-    <label>
-      Pronoun
-      <input type="text" placeholder="e.g. they/them" [control]="identity().pronoun" />
-    </label>
+  <label
+    >Salutation
+    <input type="text" placeholder="e. g. Mx." [control]="identity().salutation" />
+    <app-form-error [field]="identity().salutation" />
+  </label>
+  } @if (!identity().pronoun().hidden()) {
+  <label
+    >Pronoun
+    <input type="text" placeholder="e. g. they/them" [control]="identity().pronoun" />
+    <app-form-error [field]="identity().pronoun" />
+  </label>
   }
 </div>
 ```
@@ -109,7 +146,7 @@ First, let's update our main data model to include the identity information:
 
 ```typescript
 import { apply } from '@angular/forms/signals';
-import { IdentityForm, identitySchema, GenderIdentity } from './identity-form/identity-form';
+import { IdentityForm, identitySchema, GenderIdentity, initialGenderIdentityState } from './identity-form/identity-form';
 
 export interface RegisterFormData {
   username: string;
@@ -124,11 +161,7 @@ export interface RegisterFormData {
 
 const initialState: RegisterFormData = {
   username: '',
-  identity: {
-    gender: '',
-    salutation: '',
-    pronoun: '',
-  },
+  identity: initialGenderIdentityState,
   age: 18,
   password: { pw1: '', pw2: '' },
   email: [''],
@@ -142,39 +175,28 @@ Next, we use the `apply()` function within our main schema to integrate the chil
 
 ```typescript
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  // ... existing validations ...
+  // ...
 
-  // Apply the identity schema to the identity field
+  // apply child schema for identity checks
   apply(fieldPath.identity, identitySchema);
 });
 ```
 
-Finally, we integrate the component in our main form template:
+Finally, we integrate the component in our main form template.
+We pass the whole `FieldTree` for the identity.
 
-```typescript
-@Component({
-  selector: 'app-registration-form',
-  imports: [Control, JsonPipe, IdentityForm, FormError],
-  template: `
-    <form (submit)="submit($event)">
-      <!-- ... other fields ... -->
-
-      <app-identity-form [identity]="registrationForm.identity"></app-identity-form>
-
-      <!-- ... rest of form ... -->
-      <button type="submit">Register</button>
-    </form>
-  `,
-})
-export class RegistrationForm {
-  protected readonly registrationModel = signal<RegisterFormData>(initialState);
-  protected readonly registrationForm = form(this.registrationModel, registrationSchema);
-  // ...
-}
+```html
+<form (submit)="submit($event)">
+  <!-- ... -->
+  <app-identity-form [identity]="registrationForm.identity"></app-identity-form>
+  <!-- ... -->
+</form>
 ```
 
 The child form now seamlessly integrates with the parent form, sharing the same validation lifecycle and state management.
 
+
+<!-- TODO: Danny hier weiter -->
 ## Create your own FormUiControl
 
 Sometimes you need form controls that go beyond standard HTML input elements.
