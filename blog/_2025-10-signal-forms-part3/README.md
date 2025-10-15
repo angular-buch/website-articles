@@ -22,6 +22,15 @@ In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-sig
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
+## Related blog posts
+
+**This blog post is part of our series about Signal Forms:**
+
+- [Part 1: Getting Started with Signal Forms](/blog/2025-10-signal-forms-part1)
+- [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
+- *Part 3: Child Forms and Custom UI Controls* (this post)
+
+
 ## Integrate a Child Form
 
 As forms grow in complexity, it becomes essential to break them down into smaller, reusable components.

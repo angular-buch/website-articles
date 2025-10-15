@@ -18,11 +18,20 @@ sticky: false
 hidden: true
 ---
 
-Beyond basic field validation (as we learned it in [Part 1](/blog/2025-10-signal-forms-part1/)), Signal Forms support several advanced validation patterns that are common in real-world applications.
-In this part of our blog series about Signal Forms in Angular, we will explore this advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
+Beyond basic field validation (as we learned it in [Part 1](/blog/2025-10-signal-forms-part1/)), Signal Forms offer 
+In this part of our blog series about Signal Forms in Angular, we will explore advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
 We will learn about custom schema validation, cross-field validation, conditional validation, asynchronous validation, and how to handle server-side errors gracefully.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
+
+## Related blog posts
+
+**This blog post is part of our series about Signal Forms:**
+
+- [Part 1: Getting Started with Signal Forms](/blog/2025-10-signal-forms-part1)
+- *Part 2: Advanced Validation and Schema Patterns* (this post)
+- *Part 3: Child Forms and Custom UI Controls* (⏳ coming soon)
+
 
 
 ## ARIA Support for Error Display
