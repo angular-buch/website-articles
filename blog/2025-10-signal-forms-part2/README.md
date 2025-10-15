@@ -18,8 +18,8 @@ sticky: false
 hidden: true
 ---
 
-Beyond basic field validation (as we learned it in [Part 1](/blog/2025-10-signal-forms-part1/)), Signal Forms offer 
-In this part of our blog series about Signal Forms in Angular, we will explore advanced validation scenarios and schema patterns that make Signal Forms truly powerful for complex form requirements.
+Angular Signal Forms offer techniques for advanced validation scenarios and schema patterns, which makes them truly powerful for complex form requirements.
+In this article, we will go beyond basic field validation as we covered it in [Part 1](/blog/2025-10-signal-forms-part1/)):
 We will learn about custom schema validation, cross-field validation, conditional validation, asynchronous validation, and how to handle server-side errors gracefully.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
@@ -31,7 +31,6 @@ We will learn about custom schema validation, cross-field validation, conditiona
 - [Part 1: Getting Started with Signal Forms](/blog/2025-10-signal-forms-part1)
 - *Part 2: Advanced Validation and Schema Patterns* (this post)
 - *Part 3: Child Forms and Custom UI Controls* (⏳ coming soon)
-
 
 
 ## ARIA Support for Error Display
@@ -48,7 +47,9 @@ A helper method in our component can determine the appropriate value for this in
 export class RegistrationForm {
   // ...
   protected ariaInvalidState(field: FieldTree<unknown>): boolean | undefined {
-    return field().touched() && !field().pending() ? field().errors().length > 0 : undefined;
+    return field().touched() && !field().pending()
+      ? field().errors().length > 0
+      : undefined;
   }
   // ...
 }
@@ -79,9 +80,9 @@ This is where `applyEach()` comes into play:
 It sets the validation rules for each item of the `email` array.
 
 This function takes a field array as first argument.
-The second argument is a validation schema which is applied to all children.
+The second argument is a validation schema which is then applied to all children.
 The schema callback provides access to the current item path.
-We can directly use this path and pass it into our `email()` validation function to validate each and every field in the array.
+We can directly use this path and pass it into our `email()` validation function to validate all fields individually.
 
 ```ts
 import { /* ... */, applyEach, email } from '@angular/forms/signals';
@@ -94,7 +95,7 @@ applyEach(fieldPath.email, (emailPath) => {
 
 > `applyEach()` applies a validation schema to each item in an array field.
 
-The validation messages will be displayed in the UI since we included our generic `FormError` component below each email input field.
+The validation messages will be displayed in the UI since we included our generic `FormError` component below each email input field. We developed this component in Part 1 of this blog series.
 
 ```html
 <!-- ... -->
@@ -129,7 +130,7 @@ Our second use case is to ensure that at least one email address is provided in 
 For this, we don't have to look at each individual email field, but rather at the array as a whole.
 Using the `validate()` function, we can provide custom validation for a branch in the field tree, similar to how we used built-in validators before.
 The callback function provides access to the field state, represented as a `ChildFieldContext`.
-E.g. we can use the `value` signal to read the current value of the email array.
+This object can be used to access the `value` signal and read the current value of the email array.
 
 Since the value is a `string[]`, we can use `Array.some()` to check if at least one non-empty email address exists.
 To produce an error, we use the `customError()` function to create a validation error object with a `kind` and a `message`.
@@ -196,8 +197,8 @@ const initialState: RegisterFormData = {
 ```
 
 We should also update our template and add two input fields of type `password`.
-To display errors, we include the `FormError` component for each field as well as for the whole password group:
-Errors can be assigned to individual fields (`pw1`) as well as to the whole group (`password`) as we will see later.
+To display errors, we include our `FormError` component for each field as well as for the whole password group:
+Errors can be assigned to individual fields (`pw1`) or to the grouping node (`password`), as we will see later.
 
 ```html
 <label>Password
@@ -224,7 +225,8 @@ Errors can be assigned to individual fields (`pw1`) as well as to the whole grou
 
 For validations that depend on multiple fields, Signal Forms provide a `validateTree()` function.
 The `ChildFieldContext` passed to the callback gives access to the entire subtree, allowing us to compare values of different fields.
-An interesting aspect of this function is that we can assign errors to any field within the subtree using the `fieldOf()` method.
+An interesting aspect of this function is that we can assign errors to any field within the subtree.
+Access to fields is possible through the `fieldOf()` method.
 We can also use the `valueOf()` method to access values of other fields in the tree.
 
 ```typescript
@@ -272,9 +274,9 @@ const initialState: RegisterFormData = {
 
 Now, we want to ensure that a newsletter topic is selected from the list (we already named it in plural since we will add a multi-selection later, but for now just start with selecting one topic).
 However, this rule only applies if the user has opted in to receive the newsletter.
-This is where `applyWhen()` comes into play!
 
-This function takes a field path as the first argument.
+This is where `applyWhen()` comes into play!
+The function takes a field path as the first argument.
 Since we want to take the whole form into account, we pass the root path.
 The callback function in the second argument takes the field context and returns a boolean indicating whether the condition is met.
 In this example, we take a look at the value of the `newsletter` checkbox and only apply the validation if it is `true`.
@@ -312,7 +314,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 All previously shown validation functions were synchronous.
 However, we can also perform asynchronous validation, like checking username availability on the server.
 To simulate an asynchronous server call, we extend our `RegistrationService` with a `checkUserExists()` method that returns a `Promise`.
-If the username is `johndoe`, we consider it taken, and the operation resolves to `true`
+If the username is `johndoe`, we consider it taken, and the operation resolves to `true`.
 
 ```typescript
 @Injectable({ providedIn: 'root' })
@@ -329,9 +331,9 @@ export class RegistrationService {
 ```
 
 To perform async validation, we can use the `validateAsync()` function in our schema.
-The `params` property allows us to pick the required data from the field state, represented as a `ChildFieldContext` object.
-The `factory` property is a function that creates a resource that actually performs the async operation
-Finally, the `errors` property maps the value of the resource to a validation error, just as we did before with custom synchronous validations.
+The `params` property allows us to pick the required data from the field state, again represented as a `ChildFieldContext` object.
+The `factory` property is a function that creates a resource that actually performs the async operation.
+Finally, the `errors` function maps the value of the resource to a validation error, just as we did before with custom synchronous validations.
 
 ```typescript
 import { /* ... */, resource } from '@angular/core';
@@ -371,7 +373,7 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 Whenever the value of the username field changes, the async validation is triggered.
 If we enter `johndoe`, the validation will fail, and the corresponding error message will be displayed.
 
-> ℹ️ *Resource* is a new building block in Angular for managing asynchronous data with signals. Learn about the Resource API in our blog post from *Angular Schule*: [Reactive Angular: Loading Data with the Resource API](https://angular.schule/blog/2025-05-resource-api)
+> ℹ️ *Resource* is a new building block in Angular for managing asynchronous data with signals. Learn about the Resource API in our blog post from *Angular.Schule*: [Reactive Angular: Loading Data with the Resource API](https://angular.schule/blog/2025-05-resource-api)
 
 
 For HTTP endpoints, you can also use the simpler `validateHttp()` function:
@@ -400,7 +402,7 @@ We can use this state to provide user feedback in the UI:
 <!-- ... -->
 ```
 
-## Field State Control
+## Controlling Field State
 
 Signal Forms also provide functions to control field behavior beyond validation.
 All three schema functions `disabled`, `readonly` and `hidden` receive a callback that takes the field context and checks a condition.
