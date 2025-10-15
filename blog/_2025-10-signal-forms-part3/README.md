@@ -1,9 +1,9 @@
 ---
 title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
-mail: team@angular.schule
-published: 2025-10-06
-lastModified: 2025-10-06
+mail: dannyferdigravatar@fmalcher.de # Gravatar
+published: 2025-10-27
+lastModified: 2025-10-27
 keywords:
   - Angular
   - Signals
@@ -19,6 +19,17 @@ hidden: true
 ---
 
 In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-signal-forms-part2/README.md), we covered the fundamentals and advanced validation patterns of Signal Forms. In this final part, we'll explore specialized topics that help you build complex, modular forms: child forms and custom UI controls.
+
+> ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
+
+## Related blog posts
+
+**This blog post is part of our series about Signal Forms:**
+
+- [Part 1: Getting Started with Signal Forms](/blog/2025-10-signal-forms-part1)
+- [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
+- *Part 3: Child Forms and Custom UI Controls* (this post)
+
 
 ## Integrate a Child Form
 
@@ -352,6 +363,18 @@ export class RegistrationForm {
 
 The custom component integrates seamlessly with Signal Forms validation and state management, just like native HTML form controls.
 
+
+## Demo
+
+You can find a complete demo application for this blog series on GitHub and Stackblitz:
+
+- **⚡️ Stackblitz:** [https://stackblitz.com/github/angular-buch/signal-forms-registration](https://stackblitz.com/github/angular-buch/signal-forms-registration)
+- **⚙️ Code on GitHub:** [https://github.com/angular-buch/signal-forms-registration](https://github.com/angular-buch/signal-forms-registration)
+- **💻 Live Demo:** [https://angular-buch.github.io/signal-forms-registration/](https://angular-buch.github.io/signal-forms-registration/)
+
+
+
+
 ## Conclusion
 
 In this three-part series, we've explored the full spectrum of Angular Signal Forms:
@@ -381,3 +404,6 @@ Signal Forms represent a powerful evolution in Angular's form handling capabilit
 As Signal Forms continue to evolve from their experimental status, they promise to become a cornerstone of modern Angular application development, providing developers with the tools needed to build sophisticated, maintainable forms with confidence.
 
 Ready to start building with Signal Forms? Check out the [official Angular documentation](https://angular.dev/guide/signals) and experiment with these patterns in your own projects!
+
+
+<small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>
