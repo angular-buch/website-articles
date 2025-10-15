@@ -2,8 +2,8 @@
 title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
-published: 2025-10-20
-lastModified: 2025-10-20
+published: 2025-10-15
+lastModified: 2025-10-15
 keywords:
   - Angular
   - Signals
@@ -15,7 +15,6 @@ keywords:
 language: en
 header: header-signalforms-part2.jpg
 sticky: false
-hidden: true
 ---
 
 Angular Signal Forms offer techniques for advanced validation scenarios and schema patterns, which makes them truly powerful for complex form requirements.
