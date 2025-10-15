@@ -49,4 +49,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<small>**Titelbild:** TODO. Foto von Ferdinand Malcher</small>
+<small>**Titelbild:** Drei Zinnen, Dolomiten, Italien. Foto von Ferdinand Malcher</small>
