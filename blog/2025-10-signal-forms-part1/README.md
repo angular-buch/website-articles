@@ -3,7 +3,7 @@ title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-13
-lastModified: 2025-10-13
+lastModified: 2025-10-15
 keywords:
   - Angular
   - Signals
@@ -138,17 +138,17 @@ Once we call a `FieldTree` as a function, we get a `FieldState` as the result.
 ## Connecting Fields to the Template
 
 Now that we have our form structure in place, we need to connect it to our HTML template to create functional input fields with reactive data binding.
-Signal Forms use the `Control` directive to bind form fields to HTML input elements.
+Signal Forms use the `Field` directive to bind form fields to HTML input elements.
 To use the directive, we need to import it first.
 In our example, we also import `JsonPipe` so we can use it in our template to display the current form value.
 
 ```typescript
 import { JsonPipe } from '@angular/common';
-import { /* ... */, Control } from '@angular/forms/signals';
+import { /* ... */, Field } from '@angular/forms/signals';
 // ...
 @Component({
   selector: 'app-registration-form',
-  imports: [Control, JsonPipe],
+  imports: [Field, JsonPipe],
   templateUrl: './registration-form.html',
 })
 export class RegistrationForm {
@@ -156,8 +156,8 @@ export class RegistrationForm {
 }
 ```
 
-The `Control` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
-Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[control]` property binding.
+The `Field` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
+Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[field]` property binding.
 On the right side of the binding, we pass the corresponding `FieldTree` from our form structure.
 
 Notice, that we also use the form attribute `novalidate`: It disables the native browser field validation.
@@ -167,12 +167,12 @@ We will handle validation later by using a form schema.
 <form (submit)="submitForm($event)" novalidate>
   <div>
     <label for="username">Username</label>
-    <input id="username" type="text" [control]="registrationForm.username" />
+    <input id="username" type="text" [field]="registrationForm.username" />
   </div>
 
   <div>
     <label for="age">Age</label>
-    <input id="age" type="number" [control]="registrationForm.age" />
+    <input id="age" type="number" [field]="registrationForm.age" />
   </div>
 
   <div>
@@ -180,7 +180,7 @@ We will handle validation later by using a form schema.
     <input
       id="newsletter"
       type="checkbox"
-      [control]="registrationForm.newsletter"
+      [field]="registrationForm.newsletter"
     />
   </div>
 
@@ -193,7 +193,7 @@ We will handle validation later by using a form schema.
 ```
 
 We have now connected each input to its corresponding field in our form structure.
-The `Control` directive handles the two-way data binding automatically, keeping our data model synchronized with user input.
+The `Field` directive handles the two-way data binding automatically, keeping our data model synchronized with user input.
 The form model automatically synchronizes with the data signal: To read the value, we can use the signal as well as the `FieldState` with its `value` property.
 
 ### Working with Arrays
@@ -214,7 +214,7 @@ The `registrationForm.email` field returns an array of `FieldTree` objects that 
       <div role="group">
         <input
           type="email"
-          [control]="emailField"
+          [field]="emailField"
           [ariaLabel]="'E-Mail ' + $index"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
@@ -508,7 +508,7 @@ Now we can use this component in our form and pass any field to it.
 ```html
 <label>
   Username
-  <input type="text" [control]="registrationForm.username" />
+  <input type="text" [field]="registrationForm.username" />
   <app-form-error [field]="registrationForm.username" />
 </label>
 ```
@@ -527,7 +527,7 @@ You can find a complete demo application for this blog series on GitHub and Stac
 ## What's Next?
 
 Signal Forms provide a modern and powerful way to handle forms in Angular applications.
-Getting started is straightforward and simple: Create a signal, derive the form structure and connect it to the template using the `Control` directive.
+Getting started is straightforward and simple: Create a signal, derive the form structure and connect it to the template using the `Field` directive.
 With schema-based validation, we can define all validation rules in a clear and reusable way.
 
 In this first part, we've covered the fundamentals of Signal Forms:

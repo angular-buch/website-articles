@@ -61,7 +61,7 @@ In our template, we can now use a `[ariaInvalid]` binding on the input elements 
   >Username
   <input
     type="text"
-    [control]="registrationForm.username"
+    [field]="registrationForm.username"
     [ariaInvalid]="ariaInvalidState(registrationForm.username)"
   />
   <app-form-error [field]="registrationForm.username" />
@@ -109,7 +109,7 @@ The validation messages will be displayed in the UI since we included our generi
       <div role="group">
         <input
           type="email"
-          [control]="emailField"
+          [field]="emailField"
           [ariaLabel]="'E-Mail ' + $index"
           [ariaInvalid]="ariaInvalidState(emailField)"
         />
@@ -204,7 +204,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
   <input
     type="password"
     autocomplete
-    [control]="registrationForm.password.pw1"
+    [field]="registrationForm.password.pw1"
     [ariaInvalid]="ariaInvalidState(registrationForm.password.pw1)"
   />
   <app-form-error [field]="registrationForm.password.pw1" />
@@ -214,7 +214,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
   <input
     type="password"
     autocomplete
-    [control]="registrationForm.password.pw2"
+    [field]="registrationForm.password.pw2"
     [ariaInvalid]="ariaInvalidState(registrationForm.password.pw2)"
   />
   <app-form-error [field]="registrationForm.password.pw2" />
@@ -392,7 +392,7 @@ We can use this state to provide user feedback in the UI:
 <!-- ... -->
 <input
   type="text"
-  [control]="registrationForm.username"
+  [field]="registrationForm.username"
   [ariaInvalid]="ariaInvalidState(registrationForm.username)"
 />
 @if (registrationForm.username().pending()) {
@@ -430,7 +430,7 @@ readonly(fieldPath.someField, (ctx) => !ctx.fieldOf(fieldPath.otherField)().vali
 hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
 ```
 
-Disabled and read-only states are automatically reflected in the template when using the `[control]` directive.
+Disabled and read-only states are automatically reflected in the template when using the `[field]` directive.
 However, Angular cannot automatically hide fields in the template.
 Instead, it marks the fields as *hidden*, which we can use in our template to conditionally render the fields using `@if`.
 
