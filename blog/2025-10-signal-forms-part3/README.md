@@ -34,8 +34,8 @@ In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-sig
 
 As forms grow in complexity, it becomes essential to break them down into smaller, reusable components.
 Let's have a look at an example.
-We want to allow new users to define identity information such a gender and also an optional salutaion and pronoun when the gender is set to `diverse`.
-All the fields, we want to wrap in a separate component `IdentityForm` which we can integrate in our main `RegistrationForm`.
+We want to allow new users to define identity information such as gender and also an optional salutation and pronoun when the gender is set to `diverse`.
+All these fields we want to wrap in a separate component `IdentityForm` which we can integrate into our main `RegistrationForm`.
 
 ### Creating a Child Form Component
 
@@ -56,10 +56,10 @@ export const initialGenderIdentityState: GenderIdentity = {
 ```
 
 Now we think about the form schema we want to apply.
-First, we want to mark the fields for salutation and pronoun as `hidden`, when the gender is not `diverse`.
-Also we want both field to be required and validate it.
+First, we want to mark the fields for salutation and pronoun as `hidden` when the gender is not `diverse`.
+Also we want both fields to be required and validated.
 Therefore, we can add a `when` condition to the `required()` validation function.
-We export the schema, so we can use it in the parent `RegistrationForm` component later and apply it to the main schema.
+We export the schema so we can use it in the parent `RegistrationForm` component later and apply it to the main schema.
 
 ```typescript
 export const identitySchema = schema<GenderIdentity>((path) => {
@@ -104,7 +104,7 @@ export class IdentityForm {
 }
 ```
 
-In the template we use the `control` directive to bind our fields with the form model.
+In the template we use the `field` directive to bind our fields with the form model.
 We check for the `hidden()` signal to conditionally show the additional fields for salutation and pronoun.
 
 ```html
@@ -196,10 +196,10 @@ We pass the whole `FieldTree` for the identity.
 The child form now seamlessly integrates with the parent form, sharing the same validation lifecycle and state management.
 
 
-<!-- TODO: Danny hier weiter -->
 ## Create your own FormUiControl
 
-Sometimes you need form controls that go beyond standard HTML input elements.
+In real-world applications, we often need form controls that go beyond standard HTML input elements.
+This can be, for example, a custom form component or a wrapper for a third-party component library.
 Signal Forms provide the `FormUiControl` interface that allows you to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
 
 ### Understanding FormUiControl
@@ -207,11 +207,25 @@ Signal Forms provide the `FormUiControl` interface that allows you to create cus
 The `FormUiControl` interface defines the contract for custom form components:
 
 ```typescript
-interface FormUiControl<T = unknown> {
-  value: WritableSignal<T>;
-  disabled?: Signal<boolean>;
-  readonly?: Signal<boolean>;
-  hidden?: Signal<boolean>;
+interface FormUiControl {
+  readonly disabled?: InputSignal<boolean>;
+  readonly readonly?: InputSignal<boolean>;
+  readonly hidden?: InputSignal<boolean>;
+  // ...
+}
+```
+
+This interface is the base, but typically we don't implement it directly but rather the more specific interfaces `FormValueControl` or `FormCheckboxControl` that extend the `FormUiControl` interface with specific properties needed for handling common value inputs or checkboxes.
+
+```typescript
+interface FormValueControl<T> extends FormUiControl {
+  readonly value: ModelSignal<TValue>;
+  // ...
+}
+
+interface FormCheckboxControl<T> extends FormUiControl {
+  readonly checked: ModelSignal<boolean>;
+  // ...
 }
 ```
 
@@ -219,37 +233,25 @@ Your custom component needs to implement this interface to work with the `Field`
 
 ### Creating a Custom Multiselect Component
 
-Let's create a custom multiselect component for selecting newsletter topics:
+Let's create a custom multiselect component for selecting newsletter topics.
+We want to allow users to select one or multiple topics from a list defined in `allTopics`.
+The component must implement `FormValueControl` with the type that we use for the model value - in our case an array of strings.
+We also have to define a required input for the form label.
+The two input properties `errors` and `disabled` we want to initialize with default values.
+Last but not least, we want to ensure that once our custom field is disabled, its value is set to an empty list.
+This we can handle with an `effect`.
 
 ```typescript
 import { Component, effect, input, model } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalField } from '@angular/forms/signals';
 
-@Component({
-  selector: 'app-multiselect',
-  templateUrl: './multiselect.html',
-  styleUrl: './multiselect.scss',
-})
+@Component({ /* ... */ })
 export class Multiselect implements FormValueControl<string[]> {
   readonly allTopics = ['Angular', 'Vue', 'React'];
   readonly value = model<string[]>([]);
   readonly label = input.required<string>();
   readonly errors = input<readonly WithOptionalField<ValidationError>[]>([]);
   readonly disabled = input<boolean>(false);
-
-  changeInput(topic: string, e: Event) {
-    const checked = (e.target as HTMLInputElement).checked;
-    const isInModel = this.value().includes(topic) && checked;
-
-    if (!isInModel && checked) {
-      this.value.update((current) => [...current, topic]);
-      return;
-    }
-
-    if (!checked) {
-      this.value.update((current) => current.filter((t) => t !== topic));
-    }
-  }
 
   constructor() {
     effect(() => {
@@ -261,7 +263,15 @@ export class Multiselect implements FormValueControl<string[]> {
 }
 ```
 
-The corresponding template uses native HTML elements for accessibility:
+Next, we implement the template where we use native HTML elements for accessibility.
+
+> For styling we use [picocss](https://picocss.com/) which is a minimalistic and lightweight and accessible styling framework for semantic HTML.
+
+We wrap the selection in a `<details>` element and place the label in the `<summary>`.
+Also we apply the attribute `aria-disabled` and hide the selection list, when the component is marked as disabled.
+The selections itself are HTML `<input>` elements of type checkbox that we display by iterating over the list of `allTopics`.
+To show the current selection state, we can simply bind the `checked` attribute to the components `value` which is a list of strings and check if the current topic is part of this list.
+For changing the input we call a method `changeInput()` (we create it right after) with the topic name and the native event.
 
 ```html
 <details class="dropdown" [ariaDisabled]="disabled()">
@@ -288,102 +298,63 @@ The corresponding template uses native HTML elements for accessibility:
 </details>
 ```
 
-And some basic styling to make it look like a dropdown:
+Now we need to implement the method `changeInput()`.
+The method has two input information: the topic for which the value should be changed and the native input event with the state, wether the checkbox is `checked` or not.
+If the input was checked and it is not already in the current list of selected topics, we add it.
+If it was unchecked, we remove it from the list.
 
-```scss
-.dropdown {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  position: relative;
-
-  summary {
-    padding: 8px 12px;
-    cursor: pointer;
-    list-style: none;
-
-    &::-webkit-details-marker {
-      display: none;
+```typescript
+// ...
+@Component({ /* ... */ })
+export class Multiselect implements FormValueControl<string[]> {
+  // ...
+  changeInput(topic: string, e: Event) {
+    const checked = (e.target as HTMLInputElement).checked;
+    const isInModel = this.value().includes(topic) && checked;
+    if (!isInModel && checked) {
+      this.value.update((current) => [...current, topic]);
+      return;
     }
-  }
-
-  ul {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    z-index: 1000;
-
-    li {
-      padding: 4px 12px;
-
-      &:hover {
-        background-color: #f5f5f5;
-      }
-
-      label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-      }
+    if (!checked) {
+      this.value.update((current) => current.filter((t) => t !== topic));
     }
-  }
-
-  &[aria-disabled="true"] {
-    opacity: 0.6;
-    pointer-events: none;
   }
 }
 ```
-
-Key features of this implementation:
-
-1. **FormValueControl Interface**: Implements the `FormValueControl<string[]>` interface which is specifically designed for value-based form controls
-2. **Model Signal**: Uses `model()` for two-way binding with the form field
-3. **Built-in Topics**: Has predefined topics (Angular, Vue, React)
-4. **Accessibility**: Uses `<details>` and `<summary>` elements for native accessibility support
-5. **Disabled State Effect**: Automatically clears selections when the control becomes disabled
-6. **Validation Support**: Accepts validation errors for display
 
 ### Using the Custom Component
 
-Now you can use your custom multiselect component in forms:
+Perfect, now we can add the new custom multiselect control to our app and replace the existing implementation for topic selection.
+This is straightforward: We handle the `MultiSelect` component just like a native input and use the `field` directive to bind the `newsletterTopics` of the form model.
 
-```typescript
-@Component({
-  selector: 'app-registration-form',
-  imports: [Field, JsonPipe, IdentityForm, FormError, Multiselect],
-  template: `
-    <form (submit)="submit($event)">
-      <!-- ... other form fields ... -->
-
-      <div>
-        <app-multiselect
-          [field]="registrationForm.newsletterTopics"
-          label="Newsletter Topics"
-        ></app-multiselect>
-        @if (registrationForm.newsletterTopics().touched() && registrationForm.newsletterTopics().errors().length) {
-          <app-form-error [errors]="registrationForm.newsletterTopics().errors()" />
-        }
-      </div>
-
-      <button type="submit">Register</button>
-    </form>
-  `,
-})
-export class RegistrationForm {
-  // ...
-}
+```html
+<!--- ... -->
+<app-multiselect
+  [field]="registrationForm.newsletterTopics"
+  label="Topics (multiple possible):"
+/>
+<app-form-error [field]="registrationForm.newsletterTopics" />
+<!--- ... -->
 ```
 
-The custom component integrates seamlessly with Signal Forms validation and state management, just like native HTML form controls.
+To make it work, we have to change one last thing:
+We need to slightly adjust our data model, since we allow now to select multiple topics for the newsletter, it has to be an array.
+The validation must not be touched, since we already check for the `length` property which works perfectly with the string array.
+
+```typescript
+export interface RegisterFormData {
+  // ...
+  newsletterTopics: string[];
+}
+
+const initialState: RegisterFormData = {
+  // ...
+  newsletterTopics: [''],
+};
+```
+
+As we can see, custom component integrates seamlessly with Signal Forms validation and state management, just like native HTML form controls.
+
 
 
 ## Demo
