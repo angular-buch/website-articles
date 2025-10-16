@@ -3,7 +3,7 @@ title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-13
-lastModified: 2025-10-15
+lastModified: 2025-10-16
 keywords:
   - Angular
   - Signals
@@ -479,7 +479,7 @@ To make the error display reusable, we can create a dedicated component for it:
 The component can receive any `FieldTree` and checks for its errors when the field is already marked as touched.
 It displays all errors related to the field by iterating over the `errors()` signal.
 
-To get access to the `FieldState`, we have to call the `field` property twice: Once to get the `FieldTree` from the input signal, and a second time to get the `FieldState` with its reactive properties.
+To get access to the `FieldState`, we have to call the `fieldRef` property twice: Once to get the `FieldTree` from the input signal, and a second time to get the `FieldState` with its reactive properties.
 
 ```typescript
 import { Component, input } from '@angular/core';
@@ -488,7 +488,7 @@ import { ValidationError, WithOptionalField } from '@angular/forms/signals';
 @Component({
   selector: 'app-form-error',
   template: `
-    @let state = field()();
+    @let state = fieldRef()();
     @if (state.touched() && state.errors().length) {
     <ul>
       @for (error of state.errors(); track $index) {
@@ -499,7 +499,7 @@ import { ValidationError, WithOptionalField } from '@angular/forms/signals';
   `,
 })
 export class FormError<T> {
-  readonly field = input.required<FieldTree<T>>();
+  readonly fieldRef = input.required<FieldTree<T>>();
 }
 ```
 
@@ -509,9 +509,13 @@ Now we can use this component in our form and pass any field to it.
 <label>
   Username
   <input type="text" [field]="registrationForm.username" />
-  <app-form-error [field]="registrationForm.username" />
+  <app-form-error [fieldRef]="registrationForm.username" />
 </label>
 ```
+
+We intentionally named the input `fieldRef` to avoid confusion with the `Field` directive.
+Whenever we use the `[field]` binding, it applies the directive to a form element.
+Since `<app-form-error>` is just a helper component, we cannot use the same name for the input property.
 
 
 ## Demo
