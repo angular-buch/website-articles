@@ -127,13 +127,13 @@ We check for the `hidden()` signal to conditionally show the additional fields f
   <label
     >Salutation
     <input type="text" placeholder="e. g. Mx." [field]="identity().salutation" />
-    <app-form-error [field]="identity().salutation" />
+    <app-form-error [fieldRef]="identity().salutation" />
   </label>
   } @if (!identity().pronoun().hidden()) {
   <label
     >Pronoun
     <input type="text" placeholder="e. g. they/them" [field]="identity().pronoun" />
-    <app-form-error [field]="identity().pronoun" />
+    <app-form-error [fieldRef]="identity().pronoun" />
   </label>
   }
 </div>
