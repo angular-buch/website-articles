@@ -64,7 +64,7 @@ In our template, we can now use a `[ariaInvalid]` binding on the input elements 
     [field]="registrationForm.username"
     [ariaInvalid]="ariaInvalidState(registrationForm.username)"
   />
-  <app-form-error [field]="registrationForm.username" />
+  <app-form-error [fieldRef]="registrationForm.username" />
 </label>
 ```
 
@@ -115,7 +115,7 @@ The validation messages will be displayed in the UI since we included our generi
         />
         <button type="button" (click)="removeEmail($index)">-</button>
       </div>
-      <app-form-error [field]="emailField" />
+      <app-form-error [fieldRef]="emailField" />
     </div>
     }
   </div>
@@ -169,7 +169,7 @@ To display the error message, we add our `FormError` component below the `@for` 
     <!-- ... -->
     }
   </div>
-  <app-form-error [field]="registrationForm.email" />
+  <app-form-error [fieldRef]="registrationForm.email" />
 </fieldset>
 <!-- ... -->
 ```
@@ -207,7 +207,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
     [field]="registrationForm.password.pw1"
     [ariaInvalid]="ariaInvalidState(registrationForm.password.pw1)"
   />
-  <app-form-error [field]="registrationForm.password.pw1" />
+  <app-form-error [fieldRef]="registrationForm.password.pw1" />
 </label>
 <label
   >Password Confirmation
@@ -217,9 +217,9 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
     [field]="registrationForm.password.pw2"
     [ariaInvalid]="ariaInvalidState(registrationForm.password.pw2)"
   />
-  <app-form-error [field]="registrationForm.password.pw2" />
+  <app-form-error [fieldRef]="registrationForm.password.pw2" />
 </label>
-<app-form-error [field]="registrationForm.password" />
+<app-form-error [fieldRef]="registrationForm.password" />
 ```
 
 For validations that depend on multiple fields, Signal Forms provide a `validateTree()` function.
