@@ -521,6 +521,6 @@ In **Part 3**, we'll cover specialized topics that help you build complex, modul
 - Creating reusable child form components
 - Building custom UI controls that integrate seamlessly with Signal Forms
 
-Ready for the final part? Check out [Part 3: Child Forms and Custom UI Controls](/blog/2025-10-signal-forms-part3/README.md)!
+Ready for the final part? Check out [Part 3: Child Forms and Custom UI Controls](/blog/2025-10-signal-forms-part3)!
 
 <small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>
