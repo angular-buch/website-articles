@@ -145,35 +145,25 @@ Now we can integrate the identity form into our main registration form.
 First, let's update our main data model to include the identity information:
 
 ```typescript
-import { apply } from '@angular/forms/signals';
-import { IdentityForm, identitySchema, GenderIdentity, initialGenderIdentityState } from './identity-form/identity-form';
+// ...
+import { GenderIdentity, initialGenderIdentityState } from '../identity-form/identity-form';
 
 export interface RegisterFormData {
-  username: string;
+  // ...
   identity: GenderIdentity;
-  age: number;
-  password: { pw1: string; pw2: string };
-  email: string[];
-  newsletter: boolean;
-  newsletterTopics: string[];
-  agreeToTermsAndConditions: boolean;
 }
 
 const initialState: RegisterFormData = {
-  username: '',
+  // ...
   identity: initialGenderIdentityState,
-  age: 18,
-  password: { pw1: '', pw2: '' },
-  email: [''],
-  newsletter: false,
-  newsletterTopics: ['Angular'],
-  agreeToTermsAndConditions: false,
 };
 ```
 
 Next, we use the `apply()` function within our main schema to integrate the child schema:
 
 ```typescript
+import { GenderIdentity, IdentityForm, identitySchema, initialGenderIdentityState } from '../identity-form/identity-form';
+
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   // ...
 
@@ -349,7 +339,7 @@ export interface RegisterFormData {
 
 const initialState: RegisterFormData = {
   // ...
-  newsletterTopics: [''],
+  newsletterTopics: ['Angular'],
 };
 ```
 
