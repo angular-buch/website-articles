@@ -18,7 +18,10 @@ sticky: false
 hidden: true
 ---
 
-In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-signal-forms-part2/README.md), we covered the fundamentals and advanced validation patterns of Signal Forms. In this final part, we'll explore specialized topics that help you build complex, modular forms: child forms and custom UI controls.
+
+
+We covered fundamentals and advanced validation patterns of Signal Forms in [Part 1](/blog/2025-10-signal-forms-part1) and [Part 2](/blog/2025-10-signal-forms-part2) of this blog series.
+In this final part, we'll explore two specialized topics that are relevant for large and modular forms: child forms and custom UI controls.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
@@ -30,16 +33,18 @@ In [Part 1](../2025-10-signal-forms-part1/README.md) and [Part 2](../2025-10-sig
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - *Part 3: Child Forms and Custom UI Controls* (this post)
 
-## Integrate a Child Form
+## Integrating Child Forms
 
 As forms grow in complexity, it becomes essential to break them down into smaller, reusable components.
-Let's have a look at an example.
-We want to allow new users to define identity information such as gender and also an optional salutation and pronoun when the gender is set to `diverse`.
-All these fields we want to wrap in a separate component `IdentityForm` which we can integrate into our main `RegistrationForm`.
+This modular approach not only enhances code maintainability but also allows to reuse form parts across the application.
+
+In our registration form example, we want to allow new users to define identity information such as gender and an optional salutation and pronoun when the gender is set to `diverse`.
+All these fields should be wrapped in a separate component `IdentityForm` that we want to use in our main `RegistrationForm`.
 
 ### Creating a Child Form Component
 
-We will start by creating the data model and the initial state.
+In our new `IdentityForm` component, we start by defining the data model and initial state for the identity information.
+Instead of including these directly in the main registration form data model, we define a new interface `GenderIdentity` that holds the relevant fields.
 
 ```typescript
 export interface GenderIdentity {
@@ -55,11 +60,15 @@ export const initialGenderIdentityState: GenderIdentity = {
 };
 ```
 
-Now we think about the form schema we want to apply.
-First, we want to mark the fields for salutation and pronoun as `hidden` when the gender is not `diverse`.
+As for every form, we want to define a schema that holds the validation and visibility logic.
+We mark the fields for salutation and pronoun as `hidden` when the selected gender is not `diverse`.
+
 Also we want both fields to be required and validated.
-Therefore, we can add a `when` condition to the `required()` validation function.
-We export the schema so we can use it in the parent `RegistrationForm` component later and apply it to the main schema.
+To apply a schema conditionally, we can use the `applyWhen()` function as covered in [Part 2](/blog/2025-10-signal-forms-part2) of this series.
+However, here's an interesting detail of the `required` validator: We can add a `when` property to apply this validation conditionally – without the need of using `applyWhen()`.
+This way we define that `salutation` and `pronoun` are only required when the gender is set to `diverse`.
+
+We export the whole schema so that we can use it in the parent `RegistrationForm` component later and apply it to the main schema.
 
 ```typescript
 export const identitySchema = schema<GenderIdentity>((path) => {
@@ -81,10 +90,11 @@ export const identitySchema = schema<GenderIdentity>((path) => {
 });
 ```
 
-Next, we create the component class.
-We want to use the `model()` signal which should be required to pass into the component.
-We use the `model()` instead of a simple `input()` here since we also want to add a `maybeUpdateSalutationAndPronoun` method which resets the salutation and pronoun once a user will change back the selection of the gender from *diverse* to *male* or *female*.
-We also include the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
+Our components needs to hold a `FieldTree` that represents the form model. Previously, we created this tree with the `form()` function.
+However, since the identity form is a child form, we want to receive the model from the parent component via an `input()`.
+
+While we're at it, we also define a method `maybeUpdateSalutationAndPronoun()` that resets the salutation and pronoun fields when the user changes the gender from `diverse` to `male` or `female`.
+Finally, we import the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
 
 ```typescript
 @Component({
@@ -104,8 +114,13 @@ export class IdentityForm {
 }
 ```
 
-In the template we use the `field` directive to bind our fields with the form model.
-We check for the `hidden()` signal to conditionally show the additional fields for salutation and pronoun.
+In the template, things are straightforward and don't differ much from what we've seen so far:
+We use the `field` directive to bind our fields with the form model.
+To conditionally show the additional fields for salutation and pronoun, we use the `hidden()` signal of the respective fields.
+To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `maybeUpdateSalutationAndPronoun()`.
+
+> Note: Resetting the fields could have been solved with an `effect` as well.
+> However, in our evaluation this led to an infinite loop, even if the value didn't change. This is most likely a bug that will be fixed in future releases of Signal Forms.
 
 ```html
 <label
@@ -141,8 +156,11 @@ We check for the `hidden()` signal to conditionally show the additional fields f
 
 ### Integrating the Child Form
 
-Now we can integrate the identity form into our main registration form.
-First, let's update our main data model to include the identity information:
+Our child form is now ready to be used: It receives a `FieldTree` and binds all its fields to the template.
+The next step is to integrate it into our main `RegistrationForm`.
+This is the place where the data model and state of the whole form is defined, including the identity information.
+We create a new data property `identity` which holds a nested object of type `GenderIdentity`.
+The `initialState` has to be updated accordingly.
 
 ```typescript
 // ...
@@ -172,25 +190,28 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
 });
 ```
 
-Finally, we integrate the component in our main form template.
-We pass the whole `FieldTree` for the identity.
+Finally, we integrate the `IdentityForm` component in our main form template.
+To make things work, we pass the `identity` field tree of our main form to the child component via property binding.
 
 ```html
 <form (submit)="submit($event)">
   <!-- ... -->
-  <app-identity-form [identity]="registrationForm.identity"></app-identity-form>
+  <app-identity-form [identity]="registrationForm.identity" />
   <!-- ... -->
 </form>
 ```
 
 The child form now seamlessly integrates with the parent form, sharing the same validation lifecycle and state management.
+`RegistrationForm` as the main form component puts all thinsg together: It holds the complete data model, applies the schemas (including the child schema), and manages form submission and validation.
+Parts of the form are passed to sub components like `IdentityForm`, which bind to the fields and handle their own UI logic.
 
 
-## Create your own FormUiControl
+
+## Creating custom Form UI Controls
 
 In real-world applications, we often need form controls that go beyond standard HTML input elements.
-This can be, for example, a custom form component or a wrapper for a third-party component library.
-Signal Forms provide the `FormUiControl` interface that allows you to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
+This can be, for example, a wrapper for a third-party component library or a completely custom UI element that fits specific design requirements.
+Signal Forms provide an interface that allows you to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
 
 ### Understanding FormUiControl
 
@@ -343,7 +364,7 @@ const initialState: RegisterFormData = {
 };
 ```
 
-As we can see, custom component integrates seamlessly with Signal Forms validation and state management, just like native HTML form controls.
+As we can see, custom components integrate seamlessly with Signal Forms validation and state management, just like native HTML form controls.
 
 
 
@@ -375,7 +396,7 @@ In this three-part series, we've explored the full spectrum of Angular Signal Fo
 - Server-side error handling
 
 **Part 3** explored specialized topics:
-- Creating modular child forms with `apply()`
+- Creating modular child forms and combining schemas with `apply()`
 - Building custom UI controls with `FormUiControl`
 
 Signal Forms represent a powerful evolution in Angular's form handling capabilities, offering:
@@ -384,9 +405,6 @@ Signal Forms represent a powerful evolution in Angular's form handling capabilit
 - **Declarative validation** through schema-based approaches
 - **Modular architecture** supporting complex, reusable form components
 
-As Signal Forms continue to evolve from their experimental status, they promise to become a cornerstone of modern Angular application development, providing developers with the tools needed to build sophisticated, maintainable forms with confidence.
-
-Ready to start building with Signal Forms? Check out the [official Angular documentation](https://angular.dev/guide/signals) and experiment with these patterns in your own projects!
-
+As Signal Forms continue to evolve from their experimental status, they promise to become a cornerstone of modern Angular application development.
 
 <small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>
