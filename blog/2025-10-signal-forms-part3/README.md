@@ -2,8 +2,8 @@
 title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
-published: 2025-10-27
-lastModified: 2025-10-27
+published: 2025-10-21
+lastModified: 2025-10-21
 keywords:
   - Angular
   - Signals
@@ -39,7 +39,7 @@ This modular approach not only enhances code maintainability but also allows to 
 
 The architectural idea is straightforward: Instead of defining the entire form in a single component, we create child components that contain specific sections of the HTML form.
 The form and data models still live in the parent component, and the child components receive the relevant parts of the `FieldTree` via property binding.
-To separate the validation logic, we can define individual schemas for each child form and apply them in the parent schema using the `apply()` function.
+To separate the data structure and validation logic, we can define individual schemas for each child form and apply them in the parent schema using the `apply()` function.
 
 In our registration form example, we want to allow new users to define identity information such as gender and an optional salutation and pronoun when the gender is set to `diverse`.
 All these fields should be wrapped in a separate component `IdentityForm` that we want to use in our main `RegistrationForm`.
@@ -64,7 +64,7 @@ export const initialGenderIdentityState: GenderIdentity = {
 };
 ```
 
-As for every form, we want to define a schema that holds the validation and visibility logic.
+As for every form, we define a schema that holds the validation and visibility logic.
 We mark the fields for salutation and pronoun as `hidden` when the selected gender is not `diverse`.
 
 Also we want both fields to be required and validated.
@@ -96,8 +96,8 @@ export const identitySchema = schema<GenderIdentity>((path) => {
 ```
 
 The full form model still has to be defined in the parent component that manages the form.
-However, specific parts of the `FieldTree` can be passed to child components via property binding.
-From the perspective of our `IdentiyForm`, we receive the model from the parent component via an `input()`.
+However, parts of the `FieldTree` can be passed to child components via property binding.
+From the perspective of our `IdentityForm`, we receive the model from the parent component via an `input()`.
 
 While we're at it, we also define a method `maybeUpdateSalutationAndPronoun()` that resets the salutation and pronoun fields when the user changes the gender from `diverse` to `male` or `female`.
 Finally, we import the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
@@ -110,8 +110,8 @@ Finally, we import the `Field` directive for binding the fields to our form elem
 export class IdentityForm {
   readonly identity = model.required<FieldTree<GenderIdentity>>();
 
-  protected maybeUpdateSalutationAndPronoun(event: Event) {
-    const gender = (event.target as HTMLSelectElement).value;
+  protected maybeUpdateSalutationAndPronoun() {
+    const gender = this.identity().gender().value();
     if (gender !== 'diverse') {
       this.identity().salutation().value.set('');
       this.identity().pronoun().value.set('');
@@ -124,8 +124,8 @@ export class IdentityForm {
 > However, in our evaluation this led to an infinite loop, even if the value didn't change. This is most likely a bug that will be fixed in future releases of Signal Forms.
 
 In the template, things are straightforward and don't differ much from what we've seen so far:
-We use the `field` directive to bind our fields with the form model.
-To conditionally show the additional fields for salutation and pronoun, we use the `hidden()` signal of the respective fields.
+We use the `Field` directive to bind our fields to the form model.
+To conditionally show the fields for salutation and pronoun, we use the `hidden()` signal to determine whether the fields are marked as hidden.
 To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `maybeUpdateSalutationAndPronoun()`.
 
 ```html
@@ -134,7 +134,7 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
   <select
     name="gender-identity"
     [field]="identity().gender"
-    (change)="maybeUpdateSalutationAndPronoun($event)"
+    (change)="maybeUpdateSalutationAndPronoun()"
   >
     <option value="" selected>Please select</option>
     <option value="male">Male</option>
@@ -166,7 +166,7 @@ Our child form is now ready to be used: It receives a `FieldTree` and binds all 
 It also exports the data model interface, initial state and schema for validation.
 The next step is to integrate all these parts into our main `RegistrationForm`.
 
-This is the place where the data model and state of the whole form is defined, including the identity information.
+This is the place where the data model and state of the whole form are defined, including the identity information.
 We create a new data property `identity` which holds a nested object of type `GenderIdentity`.
 The `initialState` has to be updated accordingly.
 
@@ -211,7 +211,7 @@ To make things work, we pass the `identity` field tree of our main form to the c
 </form>
 ```
 
-The child form now seamlessly integrates with the parent form.
+The child form now integrates with the parent form.
 `RegistrationForm` as the main form component puts all things together: It holds the complete data model, applies the schemas (including the child schema), and manages form submission and validation.
 Parts of the form are passed to sub components like `IdentityForm`, which bind to the fields and handle their own UI logic.
 
@@ -219,15 +219,15 @@ Parts of the form are passed to sub components like `IdentityForm`, which bind t
 ## Creating custom Form UI Controls
 
 So far, we've used standard HTML form elements like `<input>`, `<select>`, and `<textarea>` to build our forms.
-However, in real-world applications, we often need form controls that go beyond standard HTML input elements.
+However, in real-world applications, we often need form controls that go beyond standard HTML input elements:
 Think of a date picker, a rich text editor, a multi-select dropdown, a counter control, wrappers for third-party component libraries, or custom UI elemnts that fit specific design requirements.
 
-Signal Forms provide an interface that allows you to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
+Signal Forms provide an interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
 Our goal is to create custom component that can be used just like native HTML form elements with the `Field` directive.
 
 ### The `FormUiControl` interface 
 
-Signal Forms provide the `FormUiControl` interface that defines the contract for custom form components.
+Signal Forms provide the `FormUiControl` interface that defines the contract for custom form components:
 
 ```typescript
 interface FormUiControl {
@@ -238,8 +238,8 @@ interface FormUiControl {
 }
 ```
 
-This interface is the base, but typically we don't implement it directly.
-Instead, we use the more specific interfaces `FormValueControl` or `FormCheckboxControl` that extend the `FormUiControl` interface with specific properties needed for handling common value inputs or checkboxes.
+This interface is the base structure, but typically we don't implement it directly.
+Instead, we use the more specific interfaces `FormValueControl` or `FormCheckboxControl` that extend the `FormUiControl` interface with specific properties needed for handling common value inputs or checkboxes:
 
 ```typescript
 interface FormValueControl<T> extends FormUiControl {
@@ -247,7 +247,7 @@ interface FormValueControl<T> extends FormUiControl {
   // ...
 }
 
-interface FormCheckboxControl<T> extends FormUiControl {
+interface FormCheckboxControl extends FormUiControl {
   readonly checked: ModelSignal<boolean>;
   // ...
 }
@@ -258,17 +258,17 @@ You can see that most of the fields are optional, and only `value` or `checked` 
 
 ### Creating a Custom Multiselect Component
 
-We want to create a custom multiselect component, later to be used for selecting newsletter topics.
-Users can select one or multiple topics from a list.
+We want to create a custom multiselect component that can later be used to select newsletter topics.
+Users can choose one or multiple topics from a list.
 The component must implement `FormValueControl` with the type that we use for the model value, which is a `string[]` in our case.
 
 The most important part is the `value` property that holds the current selection as a model signal.
-`model` is a semantic combination of *input* and *output*: It receives values from the parent component but can be locally updated as well.
-All local changes are sent back to the parent component automatically as an *output*.
+`model` is a semantic combination of *input* and *output*: It receives values from the parent component but can also be updated locally.
+All local changes are automatically sent back to the parent component as an *output*.
 This way, data flows bidirectionally between the parent form and the custom component.
 
 The inputs `errors` and `disabled` are optional: These values are automatically provided by the `Field` directive when the control has errors or is disabled.
-We can use the `disabled` signal to clear the value when the control is disabled by using an `effect`.
+We can use the `disabled` input signal to clear the value when the control is disabled by using an `effect`.
 
 Our component can define additional inputs as needed:
 The inputs `label` and `selectOptions` receive the label for the form control and the list of all options to select from.
@@ -296,16 +296,16 @@ export class Multiselect implements FormValueControl<string[]> {
 }
 ```
 
-Next, we implement the template where we use native HTML elements for accessibility.
+Next, we implement the template where we use native HTML elements.
 We want to keep this example as simple as possible, so please note that this is not a production-ready multiselect component.
 
 > For styling we use [picocss](https://picocss.com/) which is a minimalistic and lightweight and accessible styling framework for semantic HTML.
 
 We wrap the selection in a `<details>` element and place the label in the `<summary>`.
 Also we apply the attribute `aria-disabled` and hide the selection list when the component is marked as disabled.
-The selection options are HTML `<input>` elements of type checkbox that we display by iterating over the list of `allTopics`.
-To show the current selection state, we can bind the `checked` property to the components `value` which is a list of strings and check if the current option is part of this list.
-For changing the input we call a method `changeInput()` (we create it right after) with the topic name and the native event.
+The selection options are HTML `<input>` elements of type checkbox that we display by iterating over the list of `selectOptions`.
+To show the current selection state, we can bind to the `checked` property: The component's `value` is a list of strings, and we can check whether the current option is part of this list.
+For changing the input we call a method `changeInput()` (we create it right after) with the (un)selected name and the native event.
 
 ```html
 <details class="dropdown" [ariaDisabled]="disabled()">
@@ -320,7 +320,7 @@ For changing the input we call a method `changeInput()` (we create it right afte
             <input
               type="checkbox"
               [name]="option"
-              [checked]="value() === option"
+              [checked]="value().includes(option)"
               (input)="changeInput(option, $event)"
             />
             {{ topic }}
@@ -364,11 +364,10 @@ export class Multiselect implements FormValueControl<string[]> {
 
 Our custom form control is now ready to be used!
 Since it implements the `FormValueControl` interface, we can use the component just like a native HTML form element.
-In our `RegistrationForm` template, we include the `MultiSelect` component and bind the field tree `newsletterTopics` to the `Field` directive.
+In our `RegistrationForm` template, we include the `MultiSelect` component and pass the field tree `newsletterTopics` to the `Field` directive.
 All inputs defined in the `FormValueControl` interface are now automatically managed by the directive.
 
 Our additional custom inputs `selectOptions` and `label` are set via property binding.
-Finally, we include the `FormError` component to display validation errors for this field.
 
 ```html
 <!--- ... -->
@@ -381,7 +380,7 @@ Finally, we include the `FormError` component to display validation errors for t
 <!--- ... -->
 ```
 
-To make it work, we have to change one last thing:
+To make the form work, we have to change one last thing:
 We need to adjust our data model to allow multiple topics: `newsletterTopics` becomes `string[]`;
 The validation doesn't have to be changed, since we already check for the `length` property which works perfectly with the string array.
 
@@ -397,9 +396,9 @@ const initialState: RegisterFormData = {
 };
 ```
 
-And thids is how we can create and use custom form UI controls with Signal Forms!
+And this is how we can create and use custom form UI controls with Signal Forms!
 Angular provides a clear and straightforward interface for building reusable form control components.
-The complexity comes with detailed handling of accessibility, keyboard navigation, and specific styling for the control – which is out of scope for this blog post.
+The real complexity comes with detailed handling of accessibility, keyboard navigation, and specific styling for the control – which is out of scope for this blog post.
 
 
 ## Demo
