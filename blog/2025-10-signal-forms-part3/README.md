@@ -2,8 +2,8 @@
 title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
-published: 2025-10-21
-lastModified: 2025-10-21
+published: 2025-10-20
+lastModified: 2025-10-20
 keywords:
   - Angular
   - Signals
@@ -16,7 +16,6 @@ keywords:
 language: en
 header: header-signalforms-part3.jpg
 sticky: false
-hidden: true
 ---
 
 
@@ -151,7 +150,8 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
     <input type="text" placeholder="e. g. Mx." [field]="identity().salutation" />
     <app-form-error [fieldRef]="identity().salutation" />
   </label>
-  } @if (!identity().pronoun().hidden()) {
+  }
+  @if (!identity().pronoun().hidden()) {
   <label>
     Pronoun
     <input type="text" placeholder="e. g. they/them" [field]="identity().pronoun" />
