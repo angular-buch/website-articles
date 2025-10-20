@@ -19,7 +19,6 @@ hidden: true
 ---
 
 
-
 We covered fundamentals and advanced validation patterns of Signal Forms in [Part 1](/blog/2025-10-signal-forms-part1) and [Part 2](/blog/2025-10-signal-forms-part2) of this blog series.
 In this final part, we'll explore two specialized topics that are relevant for large and modular forms: child forms and custom UI controls.
 
@@ -38,6 +37,10 @@ In this final part, we'll explore two specialized topics that are relevant for l
 As forms grow in complexity, it becomes essential to break them down into smaller, reusable components.
 This modular approach not only enhances code maintainability but also allows to reuse form parts across the application.
 
+The architectural idea is straightforward: Instead of defining the entire form in a single component, we create child components that contain specific sections of the HTML form.
+The form and data models still live in the parent component, and the child components receive the relevant parts of the `FieldTree` via property binding.
+To separate the validation logic, we can define individual schemas for each child form and apply them in the parent schema using the `apply()` function.
+
 In our registration form example, we want to allow new users to define identity information such as gender and an optional salutation and pronoun when the gender is set to `diverse`.
 All these fields should be wrapped in a separate component `IdentityForm` that we want to use in our main `RegistrationForm`.
 
@@ -47,6 +50,7 @@ In our new `IdentityForm` component, we start by defining the data model and ini
 Instead of including these directly in the main registration form data model, we define a new interface `GenderIdentity` that holds the relevant fields.
 
 ```typescript
+// identity-form.ts
 export interface GenderIdentity {
   gender: '' | 'male' | 'female' | 'diverse';
   salutation: string; // e. g. "Mx.", "Dr.", etc.
@@ -71,6 +75,7 @@ This way we define that `salutation` and `pronoun` are only required when the ge
 We export the whole schema so that we can use it in the parent `RegistrationForm` component later and apply it to the main schema.
 
 ```typescript
+// identity-form.ts
 export const identitySchema = schema<GenderIdentity>((path) => {
   hidden(path.salutation, (ctx) => {
     return !ctx.valueOf(path.gender) || ctx.valueOf(path.gender) !== 'diverse';
@@ -90,8 +95,9 @@ export const identitySchema = schema<GenderIdentity>((path) => {
 });
 ```
 
-Our components needs to hold a `FieldTree` that represents the form model. Previously, we created this tree with the `form()` function.
-However, since the identity form is a child form, we want to receive the model from the parent component via an `input()`.
+The full form model still has to be defined in the parent component that manages the form.
+However, specific parts of the `FieldTree` can be passed to child components via property binding.
+From the perspective of our `IdentiyForm`, we receive the model from the parent component via an `input()`.
 
 While we're at it, we also define a method `maybeUpdateSalutationAndPronoun()` that resets the salutation and pronoun fields when the user changes the gender from `diverse` to `male` or `female`.
 Finally, we import the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
@@ -114,13 +120,13 @@ export class IdentityForm {
 }
 ```
 
+> Note: Resetting the fields could have been solved with an `effect` as well.
+> However, in our evaluation this led to an infinite loop, even if the value didn't change. This is most likely a bug that will be fixed in future releases of Signal Forms.
+
 In the template, things are straightforward and don't differ much from what we've seen so far:
 We use the `field` directive to bind our fields with the form model.
 To conditionally show the additional fields for salutation and pronoun, we use the `hidden()` signal of the respective fields.
 To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `maybeUpdateSalutationAndPronoun()`.
-
-> Note: Resetting the fields could have been solved with an `effect` as well.
-> However, in our evaluation this led to an infinite loop, even if the value didn't change. This is most likely a bug that will be fixed in future releases of Signal Forms.
 
 ```html
 <label
@@ -157,12 +163,15 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
 ### Integrating the Child Form
 
 Our child form is now ready to be used: It receives a `FieldTree` and binds all its fields to the template.
-The next step is to integrate it into our main `RegistrationForm`.
+It also exports the data model interface, initial state and schema for validation.
+The next step is to integrate all these parts into our main `RegistrationForm`.
+
 This is the place where the data model and state of the whole form is defined, including the identity information.
 We create a new data property `identity` which holds a nested object of type `GenderIdentity`.
 The `initialState` has to be updated accordingly.
 
 ```typescript
+// registrsation-form.ts
 // ...
 import { GenderIdentity, initialGenderIdentityState } from '../identity-form/identity-form';
 
@@ -180,6 +189,7 @@ const initialState: RegisterFormData = {
 Next, we use the `apply()` function within our main schema to integrate the child schema:
 
 ```typescript
+// registrsation-form.ts
 import { GenderIdentity, IdentityForm, identitySchema, initialGenderIdentityState } from '../identity-form/identity-form';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
@@ -201,21 +211,23 @@ To make things work, we pass the `identity` field tree of our main form to the c
 </form>
 ```
 
-The child form now seamlessly integrates with the parent form, sharing the same validation lifecycle and state management.
-`RegistrationForm` as the main form component puts all thinsg together: It holds the complete data model, applies the schemas (including the child schema), and manages form submission and validation.
+The child form now seamlessly integrates with the parent form.
+`RegistrationForm` as the main form component puts all things together: It holds the complete data model, applies the schemas (including the child schema), and manages form submission and validation.
 Parts of the form are passed to sub components like `IdentityForm`, which bind to the fields and handle their own UI logic.
-
 
 
 ## Creating custom Form UI Controls
 
-In real-world applications, we often need form controls that go beyond standard HTML input elements.
-This can be, for example, a wrapper for a third-party component library or a completely custom UI element that fits specific design requirements.
+So far, we've used standard HTML form elements like `<input>`, `<select>`, and `<textarea>` to build our forms.
+However, in real-world applications, we often need form controls that go beyond standard HTML input elements.
+Think of a date picker, a rich text editor, a multi-select dropdown, a counter control, wrappers for third-party component libraries, or custom UI elemnts that fit specific design requirements.
+
 Signal Forms provide an interface that allows you to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
+Our goal is to create custom component that can be used just like native HTML form elements with the `Field` directive.
 
-### Understanding FormUiControl
+### The `FormUiControl` interface 
 
-The `FormUiControl` interface defines the contract for custom form components:
+Signal Forms provide the `FormUiControl` interface that defines the contract for custom form components.
 
 ```typescript
 interface FormUiControl {
@@ -226,7 +238,8 @@ interface FormUiControl {
 }
 ```
 
-This interface is the base, but typically we don't implement it directly but rather the more specific interfaces `FormValueControl` or `FormCheckboxControl` that extend the `FormUiControl` interface with specific properties needed for handling common value inputs or checkboxes.
+This interface is the base, but typically we don't implement it directly.
+Instead, we use the more specific interfaces `FormValueControl` or `FormCheckboxControl` that extend the `FormUiControl` interface with specific properties needed for handling common value inputs or checkboxes.
 
 ```typescript
 interface FormValueControl<T> extends FormUiControl {
@@ -240,17 +253,25 @@ interface FormCheckboxControl<T> extends FormUiControl {
 }
 ```
 
-Your custom component needs to implement this interface to work with the `Field` directive.
+Our custom components need to implement this interface to work with the `Field` directive.
+You can see that most of the fields are optional, and only `value` or `checked` are required.
 
 ### Creating a Custom Multiselect Component
 
-Let's create a custom multiselect component for selecting newsletter topics.
-We want to allow users to select one or multiple topics from a list defined in `allTopics`.
-The component must implement `FormValueControl` with the type that we use for the model value - in our case an array of strings.
-We also have to define a required input for the form label.
-The two input properties `errors` and `disabled` we want to initialize with default values.
-Last but not least, we want to ensure that once our custom field is disabled, its value is set to an empty list.
-This we can handle with an `effect`.
+We want to create a custom multiselect component, later to be used for selecting newsletter topics.
+Users can select one or multiple topics from a list.
+The component must implement `FormValueControl` with the type that we use for the model value, which is a `string[]` in our case.
+
+The most important part is the `value` property that holds the current selection as a model signal.
+`model` is a semantic combination of *input* and *output*: It receives values from the parent component but can be locally updated as well.
+All local changes are sent back to the parent component automatically as an *output*.
+This way, data flows bidirectionally between the parent form and the custom component.
+
+The inputs `errors` and `disabled` are optional: These values are automatically provided by the `Field` directive when the control has errors or is disabled.
+We can use the `disabled` signal to clear the value when the control is disabled by using an `effect`.
+
+Our component can define additional inputs as needed:
+The inputs `label` and `selectOptions` receive the label for the form control and the list of all options to select from.
 
 ```typescript
 import { Component, effect, input, model } from '@angular/core';
@@ -258,11 +279,12 @@ import { FormValueControl, ValidationError, WithOptionalField } from '@angular/f
 
 @Component({ /* ... */ })
 export class Multiselect implements FormValueControl<string[]> {
-  readonly allTopics = ['Angular', 'Vue', 'React'];
   readonly value = model<string[]>([]);
-  readonly label = input.required<string>();
   readonly errors = input<readonly WithOptionalField<ValidationError>[]>([]);
   readonly disabled = input<boolean>(false);
+
+  readonly selectOptions = input.required<string[]>();
+  readonly label = input.required<string>();
 
   constructor() {
     effect(() => {
@@ -275,13 +297,14 @@ export class Multiselect implements FormValueControl<string[]> {
 ```
 
 Next, we implement the template where we use native HTML elements for accessibility.
+We want to keep this example as simple as possible, so please note that this is not a production-ready multiselect component.
 
 > For styling we use [picocss](https://picocss.com/) which is a minimalistic and lightweight and accessible styling framework for semantic HTML.
 
 We wrap the selection in a `<details>` element and place the label in the `<summary>`.
-Also we apply the attribute `aria-disabled` and hide the selection list, when the component is marked as disabled.
-The selections itself are HTML `<input>` elements of type checkbox that we display by iterating over the list of `allTopics`.
-To show the current selection state, we can simply bind the `checked` attribute to the components `value` which is a list of strings and check if the current topic is part of this list.
+Also we apply the attribute `aria-disabled` and hide the selection list when the component is marked as disabled.
+The selection options are HTML `<input>` elements of type checkbox that we display by iterating over the list of `allTopics`.
+To show the current selection state, we can bind the `checked` property to the components `value` which is a list of strings and check if the current option is part of this list.
 For changing the input we call a method `changeInput()` (we create it right after) with the topic name and the native event.
 
 ```html
@@ -291,14 +314,14 @@ For changing the input we call a method `changeInput()` (we create it right afte
   </summary>
   @if (!disabled()) {
     <ul>
-      @for (topic of allTopics; track $index) {
+      @for (option of selectOptions(); track $index) {
         <li>
           <label>
             <input
               type="checkbox"
-              [name]="topic"
-              [checked]="value().includes(topic)"
-              (input)="changeInput(topic, $event)"
+              [name]="option"
+              [checked]="value() === option"
+              (input)="changeInput(option, $event)"
             />
             {{ topic }}
           </label>
@@ -309,39 +332,49 @@ For changing the input we call a method `changeInput()` (we create it right afte
 </details>
 ```
 
-Now we need to implement the method `changeInput()`.
-The method has two input information: the topic for which the value should be changed and the native input event with the state, wether the checkbox is `checked` or not.
-If the input was checked and it is not already in the current list of selected topics, we add it.
-If it was unchecked, we remove it from the list.
+Now we need to implement the method `changeInput()` that handles the changes of the checkbox inputs:
+
+- When an option is checked, we have to add it to the list of selected options.
+- When an option is unchecked, we have to remove it from the list.
+
+This is why the method needs to read the checkbox state from the native event to decide whether to add or remove the option from the list.
+We update the list by changing the `value` signal.
 
 ```typescript
 // ...
 @Component({ /* ... */ })
 export class Multiselect implements FormValueControl<string[]> {
   // ...
-  changeInput(topic: string, e: Event) {
+  changeInput(option: string, e: Event) {
     const checked = (e.target as HTMLInputElement).checked;
-    const isInModel = this.value().includes(topic) && checked;
-    if (!isInModel && checked) {
-      this.value.update((current) => [...current, topic]);
-      return;
-    }
-    if (!checked) {
-      this.value.update((current) => current.filter((t) => t !== topic));
+
+    if (checked) {
+      // option checked, add to list
+      this.value.update((current) => [...current, option]);
+    } else {
+      // option unchecked, remove from list
+      this.value.update((current) => current.filter((o) => o !== option));
     }
   }
 }
 ```
 
+
 ### Using the Custom Component
 
-Perfect, now we can add the new custom multiselect control to our app and replace the existing implementation for topic selection.
-This is straightforward: We handle the `MultiSelect` component just like a native input and use the `field` directive to bind the `newsletterTopics` of the form model.
+Our custom form control is now ready to be used!
+Since it implements the `FormValueControl` interface, we can use the component just like a native HTML form element.
+In our `RegistrationForm` template, we include the `MultiSelect` component and bind the field tree `newsletterTopics` to the `Field` directive.
+All inputs defined in the `FormValueControl` interface are now automatically managed by the directive.
+
+Our additional custom inputs `selectOptions` and `label` are set via property binding.
+Finally, we include the `FormError` component to display validation errors for this field.
 
 ```html
 <!--- ... -->
 <app-multiselect
   [field]="registrationForm.newsletterTopics"
+  [selectOptions]="['Angular', 'React', 'Vue', 'Svelte']"
   label="Topics (multiple possible):"
 />
 <app-form-error [field]="registrationForm.newsletterTopics" />
@@ -349,8 +382,8 @@ This is straightforward: We handle the `MultiSelect` component just like a nativ
 ```
 
 To make it work, we have to change one last thing:
-We need to slightly adjust our data model, since we allow now to select multiple topics for the newsletter, it has to be an array.
-The validation must not be touched, since we already check for the `length` property which works perfectly with the string array.
+We need to adjust our data model to allow multiple topics: `newsletterTopics` becomes `string[]`;
+The validation doesn't have to be changed, since we already check for the `length` property which works perfectly with the string array.
 
 ```typescript
 export interface RegisterFormData {
@@ -364,8 +397,9 @@ const initialState: RegisterFormData = {
 };
 ```
 
-As we can see, custom components integrate seamlessly with Signal Forms validation and state management, just like native HTML form controls.
-
+And thids is how we can create and use custom form UI controls with Signal Forms!
+Angular provides a clear and straightforward interface for building reusable form control components.
+The complexity comes with detailed handling of accessibility, keyboard navigation, and specific styling for the control – which is out of scope for this blog post.
 
 
 ## Demo
@@ -378,18 +412,17 @@ You can find a complete demo application for this blog series on GitHub and Stac
 
 
 
-
 ## Conclusion
 
 In this three-part series, we've explored the full spectrum of Angular Signal Forms:
 
-**Part 1** covered the fundamentals:
+**[Part 1](/blog/2025-10-signal-forms-part1/)** covered the fundamentals:
 - Data models and field structures
 - Template connections with the `Field` directive
 - Basic form submission and validation
 - Built-in validators and error display
 
-**Part 2** dove into advanced patterns:
+**[Part 2](/blog/2025-10-signal-forms-part2/)** dove into schema validation patterns:
 - Custom validation functions
 - Cross-field and conditional validation
 - Asynchronous validation
@@ -399,12 +432,8 @@ In this three-part series, we've explored the full spectrum of Angular Signal Fo
 - Creating modular child forms and combining schemas with `apply()`
 - Building custom UI controls with `FormUiControl`
 
-Signal Forms represent a powerful evolution in Angular's form handling capabilities, offering:
-- **Type safety** throughout the entire form structure
-- **Reactive patterns** that integrate seamlessly with Angular's Signal primitive
-- **Declarative validation** through schema-based approaches
-- **Modular architecture** supporting complex, reusable form components
-
-As Signal Forms continue to evolve from their experimental status, they promise to become a cornerstone of modern Angular application development.
+Signal Forms are the third major approach of form handling in Angular.
+After Template-Driven Forms and Reactive Forms, Signal Forms aim to make form handling more type-safe, reactive, and declarative.
+As the new approach continues to evolve from its experimental status, Signal Forms promise to become a cornerstone of modern Angular application development!
 
 <small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>
