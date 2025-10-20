@@ -12,6 +12,7 @@ keywords:
   - Signal Forms
   - Custom Controls
   - Child Forms
+  - ControlValueAccessor
 language: en
 header: header-signalforms-part3.jpg
 sticky: false
@@ -221,8 +222,9 @@ Parts of the form are passed to sub components like `IdentityForm`, which bind t
 So far, we've used standard HTML form elements like `<input>`, `<select>`, and `<textarea>` to build our forms.
 However, in real-world applications, we often need form controls that go beyond standard HTML input elements:
 Think of a date picker, a rich text editor, a multi-select dropdown, a counter control, wrappers for third-party component libraries, or custom UI elemnts that fit specific design requirements.
+This is something that was relatively complicated with Angular' *Reactive Forms* approach using `ControlValueAccessor`.
 
-Signal Forms provide an interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
+Signal Forms provide a simple interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
 Our goal is to create custom component that can be used just like native HTML form elements with the `Field` directive.
 
 ### The `FormUiControl` interface 
