@@ -130,8 +130,8 @@ To conditionally show the fields for salutation and pronoun, we use the `hidden(
 To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `maybeUpdateSalutationAndPronoun()`.
 
 ```html
-<label
-  >Gender
+<label>
+  Gender
   <select
     name="gender-identity"
     [field]="identity().gender"
@@ -146,14 +146,14 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
 
 <div class="group-with-gap">
   @if (!identity().salutation().hidden()) {
-  <label
-    >Salutation
+  <label>
+    Salutation
     <input type="text" placeholder="e. g. Mx." [field]="identity().salutation" />
     <app-form-error [fieldRef]="identity().salutation" />
   </label>
   } @if (!identity().pronoun().hidden()) {
-  <label
-    >Pronoun
+  <label>
+    Pronoun
     <input type="text" placeholder="e. g. they/them" [field]="identity().pronoun" />
     <app-form-error [fieldRef]="identity().pronoun" />
   </label>
@@ -221,11 +221,11 @@ Parts of the form are passed to sub components like `IdentityForm`, which bind t
 
 So far, we've used standard HTML form elements like `<input>`, `<select>`, and `<textarea>` to build our forms.
 However, in real-world applications, we often need form controls that go beyond standard HTML input elements:
-Think of a date picker, a rich text editor, a multi-select dropdown, a counter control, wrappers for third-party component libraries, or custom UI elemnts that fit specific design requirements.
+Think of a date picker, a rich text editor, a multi-select dropdown, a counter control, wrappers for third-party component libraries, or custom UI elements that fit specific design requirements.
 This is something that was relatively complicated with Angular' *Reactive Forms* approach using `ControlValueAccessor`.
 
 Signal Forms provide a simple interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
-Our goal is to create custom component that can be used just like native HTML form elements with the `Field` directive.
+Our goal is to create a custom component that can be used just like native HTML form elements with the `Field` directive.
 
 ### The `FormUiControl` interface 
 
@@ -399,8 +399,7 @@ const initialState: RegisterFormData = {
 ```
 
 And this is how we can create and use custom form UI controls with Signal Forms!
-Angular provides a clear and straightforward interface for building reusable form control components.
-The real complexity comes with detailed handling of accessibility, keyboard navigation, and specific styling for the control – which is out of scope for this blog post.
+Any component that implements the necessary interface can be directly integrated into Signal Forms with the `Field` directive.
 
 
 ## Demo
