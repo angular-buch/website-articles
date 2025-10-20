@@ -299,7 +299,7 @@ export class Multiselect implements FormValueControl<string[]> {
 ```
 
 Next, we implement the template where we use native HTML elements.
-We want to keep this example as simple as possible, so please note that this is not a production-ready multiselect component.
+We want to keep the example as simple as possible, so please remember that for a production-ready multiselect component we need to address a few more details, e.g. proper keyboard navigation.
 
 > For styling we use [picocss](https://picocss.com/) which is a minimalistic and lightweight and accessible styling framework for semantic HTML.
 
