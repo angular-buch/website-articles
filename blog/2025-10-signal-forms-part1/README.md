@@ -3,7 +3,7 @@ title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-13
-lastModified: 2025-10-16
+lastModified: 2025-10-22
 keywords:
   - Angular
   - Signals
@@ -121,7 +121,7 @@ It provides several reactive properties that we can use in our templates and com
 
 | State             | Type                        | Description                                      |
 | ----------------- | --------------------------- | ------------------------------------------------ |
-| `value`           | `Signal<T>`                 | current value of this part of the field tree     |
+| `value`           | `WritableSignal<TValue>`                 | current value of this part of the field tree     |
 | `valid`           | `Signal<boolean>`           | `true` if the field passes all validations       |
 | `touched`         | `Signal<boolean>`           | `true` if the user has interacted with the field |
 | `errors`          | `Signal<ValidationError[]>` | array of validation errors                       |
