@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-15
-lastModified: 2025-10-16
+lastModified: 2025-10-30
 keywords:
   - Angular
   - Signals
@@ -132,22 +132,22 @@ The callback function provides access to the field state, represented as a `Chil
 This object can be used to access the `value` signal and read the current value of the email array.
 
 Since the value is a `string[]`, we can use `Array.some()` to check if at least one non-empty email address exists.
-To produce an error, we use the `customError()` function to create a validation error object with a `kind` and a `message`.
+To produce an error, we return a validation error object with a `kind` and a `message`.
 If no error occurs, we return `undefined`.
 The `message` is optional, but it is recommended to provide a user-friendly message that can be displayed in the UI later.
 
 ```typescript
-import { /* ... */, validate, customError } from '@angular/forms/signals';
+import { /* ... */, validate } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   // ...
   // E-Mail validation
   validate(fieldPath.email, (ctx) =>
     !ctx.value().some((e) => e)
-      ? customError({
+      ? {
           kind: 'atLeastOneEmail',
           message: 'At least one E-Mail address must be added',
-        })
+        }
       : undefined
   );
 });
@@ -237,11 +237,11 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
   validateTree(fieldPath.password, (ctx) => {
     return ctx.value().pw2 === ctx.value().pw1
       ? undefined
-      : customError({
+      : {
           field: ctx.fieldOf(fieldPath.password.pw2), // assign the error to the second password field
           kind: 'confirmationPassword',
           message: 'The entered password must match with the one specified in "Password" field',
-        });
+        };
   });
 });
 ```
@@ -294,10 +294,10 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
     (fieldPathWhenTrue) => {
       validate(fieldPathWhenTrue.newsletterTopics, (ctx) =>
         !ctx.value().length
-          ? customError({
+          ? {
               kind: 'noTopicSelected',
               message: 'Select at least one newsletter topic',
-            })
+            }
           : undefined
       );
     }
@@ -332,7 +332,8 @@ export class RegistrationService {
 To perform async validation, we can use the `validateAsync()` function in our schema.
 The `params` property allows us to pick the required data from the field state, again represented as a `ChildFieldContext` object.
 The `factory` property is a function that creates a resource that actually performs the async operation.
-Finally, the `errors` function maps the value of the resource to a validation error, just as we did before with custom synchronous validations.
+Finally, the `onSuccess` function maps the value of the resource to a validation error, just as we did before with custom synchronous validations.
+We also have to handle errors in the asynchronous operation, which can be done using the `onError` property. If the validation fails due to a server error, we ignore it by returning `undefined`.
 
 ```typescript
 import { /* ... */, resource } from '@angular/core';
@@ -357,14 +358,15 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
     },
 
     // Map the result to validation errors
-    errors: (result) => {
+    onSuccess: (result) => {
       return result
-        ? customError({
+        ? {
             kind: 'userExists',
             message: 'The username you entered was already taken',
-          })
+          }
         : undefined;
     },
+    onError: () => undefined
   });
 });
 ```
@@ -381,7 +383,7 @@ For HTTP endpoints, you can also use the simpler `validateHttp()` function:
 validateHttp(fieldPath.username, {
   request: (ctx) => `/api/check?username=${ctx.value()}`,
   errors: (taken: boolean) =>
-    taken ? customError({ kind: 'userExists', message: 'Username already taken' }) : undefined,
+    taken ? ({ kind: 'userExists', message: 'Username already taken' }) : undefined,
 });
 ```
 
@@ -452,7 +454,7 @@ When using the `submit()` function, we can return an array of validation errors 
 The helper type `WithField` ensures that each error contains a reference to the field it belongs to.
 
 ```typescript
-import { /* ... */, WithField, CustomValidationError, ValidationError } from '@angular/forms/signals';
+import { /* ... */, WithField, ValidationErrorWithField } from '@angular/forms/signals';
 
 export class RegistrationForm {
   // ...
@@ -460,7 +462,7 @@ export class RegistrationForm {
     e.preventDefault();
 
     await submit(this.registrationForm, async (form) => {
-      const errors: WithField<CustomValidationError | ValidationError>[] = [];
+      const errors: ValidationErrorWithField[] = [];
 
       try {
         await this.#registrationService.registerUser(form().value);
@@ -469,24 +471,20 @@ export class RegistrationForm {
       } catch (e) {
         // Add server-side errors
         errors.push(
-          customError({
+          {
             field: form, // form-level error
-            error: {
-              kind: 'serverError',
-              message: 'Registration failed. Please try again.',
-            },
-          })
+            kind: 'serverError',
+            message: 'Registration failed. Please try again.',
+          }
         );
 
         // Or assign to specific field
         errors.push(
-          customError({
+          {
             field: form.username,
-            error: {
-              kind: 'serverValidation',
-              message: 'Username is not available.',
-            },
-          })
+            kind: 'serverValidation',
+            message: 'Username is not available.',
+          }
         );
       }
 
