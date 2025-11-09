@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-15
-lastModified: 2025-10-30
+lastModified: 2025-11-09
 keywords:
   - Angular
   - Signals
@@ -451,17 +451,15 @@ While client-side validation catches most errors before submission, server-side 
 Signal Forms provide an elegant way to handle these errors and display them to users with proper field-level feedback.
 When using the `submit()` function, we can return an array of validation errors from the submission callback to assign them to specific fields or to the form itself.
 
-The helper type `WithField` ensures that each error contains a reference to the field it belongs to.
+The type `ValidationErrorWithField` ensures that each error contains a reference to the field it belongs to.
 
 ```typescript
-import { /* ... */, WithField, ValidationErrorWithField } from '@angular/forms/signals';
+import { /* ... */, ValidationErrorWithField } from '@angular/forms/signals';
 
 export class RegistrationForm {
   // ...
-  protected async submitForm(e: Event) {
-    e.preventDefault();
-
-    await submit(this.registrationForm, async (form) => {
+  protected submitForm() {
+    submit(this.registrationForm, async (form) => {
       const errors: ValidationErrorWithField[] = [];
 
       try {
@@ -490,6 +488,8 @@ export class RegistrationForm {
 
       return errors;
     });
+
+    return false;
   }
 }
 ```

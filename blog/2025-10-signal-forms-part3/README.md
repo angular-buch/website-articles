@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-20
-lastModified: 2025-10-20
+lastModified: 2025-11-09
 keywords:
   - Angular
   - Signals
@@ -205,7 +205,7 @@ Finally, we integrate the `IdentityForm` component in our main form template.
 To make things work, we pass the `identity` field tree of our main form to the child component via property binding.
 
 ```html
-<form (submit)="submit($event)">
+<form (submit)="submit()">
   <!-- ... -->
   <app-identity-form [identity]="registrationForm.identity" />
   <!-- ... -->

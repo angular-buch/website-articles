@@ -3,7 +3,7 @@ title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-13
-lastModified: 2025-10-22
+lastModified: 2025-11-09
 keywords:
   - Angular
   - Signals
@@ -164,7 +164,7 @@ Notice, that we also use the form attribute `novalidate`: It disables the native
 We will handle validation later by using a form schema.
 
 ```html
-<form (submit)="submitForm($event)" novalidate>
+<form (submit)="submitForm()" novalidate>
   <div>
     <label for="username">Username</label>
     <input id="username" type="text" [field]="registrationForm.username" />
@@ -258,7 +258,8 @@ Signal Forms provide two approaches for handling form submission:
 Basic synchronous submission and the more powerful `submit()` function for asynchronous operations.
 
 All approaches start with a form submission event handler: In the template, we already used the `(submit)` event binding on the `<form>` element.
-It is always necessary to prevent the default form submission behavior by calling `e.preventDefault()` in our `submitForm()` handler method.
+It is necessary to prevent the default form submission behavior by synchronously returning `false` from our `submitForm()` handler method.
+Otherwise, the page will reload on form submission.
 
 ### Basic Synchronous Submission
 
@@ -268,12 +269,13 @@ For basic cases where you want to process form data synchronously, you can direc
 // ...
 export class RegistrationForm {
   // ...
-  protected submitForm(e: Event) {
-    e.preventDefault();
-
+  protected submitForm() {
     // Access current form data
     const formData = this.registrationModel();
     console.log('Form submitted:', formData);
+
+    // Prevent reloading (default browser behavior)
+    return false;
   }
 }
 ```
@@ -316,14 +318,14 @@ export class RegistrationForm {
   // ...
   readonly #registrationService = inject(RegistrationService);
   // ...
-  protected async submitForm(e: Event) {
-    e.preventDefault();
-
-    await submit(this.registrationForm, async (form) => {
+  protected submitForm() {
+    submit(this.registrationForm, async (form) => {
       await this.#registrationService.registerUser(form().value());
       console.log('Registration successful!');
       this.resetForm();
     });
+
+    return false;
   }
 
   protected resetForm() {
@@ -340,7 +342,7 @@ When submitting the form we can now see that the value of the `submitting()` sig
 After the asynchronous operation is complete, it switches back to `false`.
 
 ```html
-<form (submit)="submitForm($event)">
+<form (submit)="submitForm()">
   <!-- ... -->
 
   <button
