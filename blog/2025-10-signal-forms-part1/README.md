@@ -485,7 +485,7 @@ To get access to the `FieldState`, we have to call the `fieldRef` property twice
 
 ```typescript
 import { Component, input } from '@angular/core';
-import { ValidationError, WithOptionalField } from '@angular/forms/signals';
+import { FieldTree } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-form-error',
