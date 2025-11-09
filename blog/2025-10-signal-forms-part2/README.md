@@ -54,7 +54,7 @@ export class RegistrationForm {
 }
 ```
 
-In our template, we can now use a `[ariaInvalid]` binding on the input elements to reflect the invalid state:
+In our template, we can now use an `[aria-invalid]` binding on the input elements to reflect the invalid state:
 
 ```html
 <label
@@ -62,7 +62,7 @@ In our template, we can now use a `[ariaInvalid]` binding on the input elements 
   <input
     type="text"
     [field]="registrationForm.username"
-    [ariaInvalid]="ariaInvalidState(registrationForm.username)"
+    [aria-invalid]="ariaInvalidState(registrationForm.username)"
   />
   <app-form-error [fieldRef]="registrationForm.username" />
 </label>
@@ -110,8 +110,8 @@ The validation messages will be displayed in the UI since we included our generi
         <input
           type="email"
           [field]="emailField"
-          [ariaLabel]="'E-Mail ' + $index"
-          [ariaInvalid]="ariaInvalidState(emailField)"
+          [aria-label]="'E-Mail ' + $index"
+          [aria-invalid]="ariaInvalidState(emailField)"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
       </div>
@@ -205,7 +205,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
     type="password"
     autocomplete
     [field]="registrationForm.password.pw1"
-    [ariaInvalid]="ariaInvalidState(registrationForm.password.pw1)"
+    [aria-invalid]="ariaInvalidState(registrationForm.password.pw1)"
   />
   <app-form-error [fieldRef]="registrationForm.password.pw1" />
 </label>
@@ -215,7 +215,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
     type="password"
     autocomplete
     [field]="registrationForm.password.pw2"
-    [ariaInvalid]="ariaInvalidState(registrationForm.password.pw2)"
+    [aria-invalid]="ariaInvalidState(registrationForm.password.pw2)"
   />
   <app-form-error [fieldRef]="registrationForm.password.pw2" />
 </label>
@@ -395,7 +395,7 @@ We can use this state to provide user feedback in the UI:
 <input
   type="text"
   [field]="registrationForm.username"
-  [ariaInvalid]="ariaInvalidState(registrationForm.username)"
+  [aria-invalid]="ariaInvalidState(registrationForm.username)"
 />
 @if (registrationForm.username().pending()) {
   <small>Checking availability ...</small>
