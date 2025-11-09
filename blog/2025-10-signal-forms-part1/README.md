@@ -215,7 +215,7 @@ The `registrationForm.email` field returns an array of `FieldTree` objects that 
         <input
           type="email"
           [field]="emailField"
-          [ariaLabel]="'E-Mail ' + $index"
+          [aria-label]="'E-Mail ' + $index"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
       </div>
@@ -346,7 +346,7 @@ After the asynchronous operation is complete, it switches back to `false`.
   <button
     type="submit"
     [disabled]="registrationForm().submitting()"
-    [ariaBusy]="registrationForm().submitting()"
+    [aria-busy]="registrationForm().submitting()"
   >
     @if (registrationForm().submitting()) { Registering ... } @else { Register }
   </button>
@@ -457,7 +457,7 @@ Practically, this means that we can check the overall form validity by calling `
 <button
   type="submit"
   [disabled]="!registrationForm().valid() || registrationForm().submitting()"
-  [ariaBusy]="registrationForm().submitting()"
+  [aria-busy]="registrationForm().submitting()"
 >
   @if (registrationForm().submitting()) {
     Registering ...
