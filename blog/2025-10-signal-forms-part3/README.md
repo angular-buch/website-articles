@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-20
-lastModified: 2025-11-09
+lastModified: 2025-11-11
 keywords:
   - Angular
   - Signals
@@ -99,7 +99,8 @@ The full form model still has to be defined in the parent component that manages
 However, parts of the `FieldTree` can be passed to child components via property binding.
 From the perspective of our `IdentityForm`, we receive the model from the parent component via an `input()`.
 
-While we're at it, we also define a method `maybeUpdateSalutationAndPronoun()` that resets the salutation and pronoun fields when the user changes the gender from `diverse` to `male` or `female`.
+While we're at it, we also define a method `updateSalutationAndPronoun()` that resets the salutation and pronoun fields when the user changes the gender field.
+We set an empty value for the fields and call `reset()` which resets the `touched` and `dirty` state.
 Finally, we import the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
 
 ```typescript
@@ -110,12 +111,11 @@ Finally, we import the `Field` directive for binding the fields to our form elem
 export class IdentityForm {
   readonly identity = model.required<FieldTree<GenderIdentity>>();
 
-  protected maybeUpdateSalutationAndPronoun() {
-    const gender = this.identity().gender().value();
-    if (gender !== 'diverse') {
-      this.identity().salutation().value.set('');
-      this.identity().pronoun().value.set('');
-    }
+  protected updateSalutationAndPronoun() {
+    this.identity().salutation().value.set('');
+    this.identity().salutation().reset();
+    this.identity().pronoun().value.set('');
+    this.identity().pronoun().reset();
   }
 }
 ```
@@ -126,7 +126,7 @@ export class IdentityForm {
 In the template, things are straightforward and don't differ much from what we've seen so far:
 We use the `Field` directive to bind our fields to the form model.
 To conditionally show the fields for salutation and pronoun, we use the `hidden()` signal to determine whether the fields are marked as hidden.
-To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `maybeUpdateSalutationAndPronoun()`.
+To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `updateSalutationAndPronoun()`.
 
 ```html
 <label>
@@ -134,7 +134,7 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
   <select
     name="gender-identity"
     [field]="identity().gender"
-    (change)="maybeUpdateSalutationAndPronoun()"
+    (change)="updateSalutationAndPronoun()"
   >
     <option value="" selected>Please select</option>
     <option value="male">Male</option>
@@ -227,7 +227,7 @@ This is something that was relatively complicated with Angular' *Reactive Forms*
 Signal Forms provide a simple interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
 Our goal is to create a custom component that can be used just like native HTML form elements with the `Field` directive.
 
-### The `FormUiControl` interface 
+### The `FormUiControl` interface
 
 Signal Forms provide the `FormUiControl` interface that defines the contract for custom form components:
 
