@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-20
-lastModified: 2025-11-11
+lastModified: 2025-11-13
 keywords:
   - Angular
   - Signals
@@ -193,11 +193,11 @@ Next, we use the `apply()` function within our main schema to integrate the chil
 // registrsation-form.ts
 import { GenderIdentity, IdentityForm, identitySchema, initialGenderIdentityState } from '../identity-form/identity-form';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // ...
 
   // apply child schema for identity checks
-  apply(fieldPath.identity, identitySchema);
+  apply(schemaPath.identity, identitySchema);
 });
 ```
 
