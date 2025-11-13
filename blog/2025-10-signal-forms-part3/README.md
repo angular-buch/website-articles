@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-20
-lastModified: 2025-11-09
+lastModified: 2025-11-13
 keywords:
   - Angular
   - Signals
