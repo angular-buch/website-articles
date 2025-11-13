@@ -21,12 +21,36 @@ Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://a
 
 ## Versionen von TypeScript und Node.js
 
-Die folgenden Versionen von TypeScript und Node.js sind für Angular 21 *mindestens* notwendig:
+Die folgenden Versionen von TypeScript und Node.js sind für Angular 21 notwendig:
 
-- TypeScript: TODO
-- Node.js: TODO
+- TypeScript: >=5.9.0 <6.0.0
+- Node.js: ^20.19.0 || ^22.12.0 || ^24.0.0
 
-Der Support für Node.js Version TODO wurde entfernt. Ausführliche Infos zu den unterstützten Versionen finden Sie der [Angular-Dokumentation](https://angular.dev/reference/versions) finden Sie .
+Ausführliche Infos zu den unterstützten Versionen finden Sie der [Angular-Dokumentation](https://angular.dev/reference/versions).
+
+## Zoneless Change Detection: der neue Standard
+
+Schon seit einiger Zeit unterstützt Angular die zonenlose Change Detection.
+Früher wurde die Bibiothek Zone.js verwendet, um Änderungen an Daten zu ermitteln.
+Mit Signals als neuem Grundbaustein hat sich das Vorgehen deutlich geändert: Signals teilen explizit mit, dass sich ein Wert geändert hat.
+Wir haben darüber ausführlich im [Blogpost zu Angular 18](/blog/2024-05-angular18) berichtet.
+
+Nun gibt es zu dem Thema großartige Neuigkeiten: Zoneless Change Detection ist der neue Standard!
+Neue Anwendungen mit Angular 21 setzen also per Default auf den neuen Mechanismus.
+Beim Anlegen einer Anwendung mit `ng new` müssen wir nicht mehr die Option `--zoneless` verwenden.
+Es ist auch nicht mehr notwendig, die Funktion `provideZonelessChangeDetection()` in der `app.config.ts` aufzurufen.
+
+Möchte man aus Kompatibilitätsgründen doch noch die alte Umsetzung der mit Zone.js verwenden, lässt sich die Change Detection in der `app.config.ts` konfigurieren.
+Zusätzlich muss Zone.js installiert sein und unter `polyfills` in der `angular.json` eingetragen werden – so wie es früher in allen Anwendungen der Fall war.
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideZoneChangeDetection({ eventCoalescing: true }),
+};
+```
+
 
 
 ## Signal-based Forms
@@ -86,7 +110,6 @@ Noch ist der neue Ansatz aber experimentell, sodass sich die Schnittstellen und 
 
 ## TODO: vitest
 
-## TODO: Property Binding für ARIA-Attribute
 
 
 
