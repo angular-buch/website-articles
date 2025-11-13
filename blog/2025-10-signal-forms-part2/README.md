@@ -225,8 +225,6 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
 For validations that depend on multiple fields, Signal Forms provide a `validateTree()` function.
 The `ChildFieldContext` passed to the callback gives access to the entire subtree, allowing us to compare values of different fields.
 An interesting aspect of this function is that we can assign errors to any field within the subtree.
-Access to fields is possible through the `fieldOf()` method.
-We can also use the `valueOf()` method to access values of other fields in the tree.
 
 ```typescript
 import { /* ... */, validateTree } from '@angular/forms/signals';
@@ -238,13 +236,17 @@ export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
     return ctx.value().pw2 === ctx.value().pw1
       ? undefined
       : {
-          field: ctx.fieldOf(fieldPath.password.pw2), // assign the error to the second password field
+          field: ctx.field.pw2, // assign the error to the second password field
           kind: 'confirmationPassword',
           message: 'The entered password must match with the one specified in "Password" field',
         };
   });
 });
 ```
+
+Apart from this example, access to other fields is possible through the `fieldTreeOf()` method.
+We can also use `valueOf()` to access values of other fields in the tree.
+
 
 > `validateTree()` defines custom validation logic for a group of related fields. It returns a validation error or `undefined` if the values are valid.
 
@@ -426,7 +428,7 @@ Here are some more examples of how to use `readonly` and `hidden`:
 readonly(fieldPath.someField, (ctx) => ctx.valueOf(fieldPath.otherField) === 'someValue');
 
 // make `someField` read-only if `otherField` is invalid
-readonly(fieldPath.someField, (ctx) => !ctx.fieldOf(fieldPath.otherField)().valid());
+readonly(fieldPath.someField, (ctx) => !ctx.fieldTreeOf(fieldPath.otherField)().valid());
 
 // hide `someField` if the value of `otherField` is falsy
 hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
