@@ -3,7 +3,7 @@ title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-13
-lastModified: 2025-11-09
+lastModified: 2025-11-13
 keywords:
   - Angular
   - Signals
@@ -368,7 +368,7 @@ The next part will cover more advanced and complex scenarios – so stay tuned!
 
 Signal Forms use the `schema()` function to define validation rules.
 Angular comes with some very common rules by default, such as `required` and `minLength`.
-The provided `fieldPath` parameter allows us to navigate through the form structure and apply validation rules to specific fields.
+The provided `schemaPath` parameter allows us to navigate through the form structure and apply validation rules to specific fields.
 
 ```typescript
 import {
@@ -378,9 +378,9 @@ import {
   minLength,
 } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
-  required(fieldPath.username, { message: 'Username is required' });
-  minLength(fieldPath.username, 3, {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+  required(schemaPath.username, { message: 'Username is required' });
+  minLength(schemaPath.username, 3, {
     message: 'A username must be at least 3 characters long',
   });
   // ...
@@ -414,13 +414,13 @@ Signal Forms provide several built-in validation functions:
 
 | Validator                        | Description                                                 | Example                                         |
 | -------------------------------- | ----------------------------------------------------------- | ----------------------------------------------- |
-| `required(field, opts)`          | Field must be filled. For boolean values, checks for `true` | `required(fieldPath.username)`                  |
-| `minLength(field, length, opts)` | Minimum character count                                     | `minLength(fieldPath.username, 3)`              |
-| `maxLength(field, length, opts)` | Maximum character count                                     | `maxLength(fieldPath.username, 10)`             |
-| `min(field, value, opts)`        | Minimum numeric value                                       | `min(fieldPath.age, 18)`                        |
-| `max(field, value, opts)`        | Maximum numeric value                                       | `max(fieldPath.age, 120)`                       |
-| `email(field, opts)`             | Valid email address format                                  | `email(fieldPath.email)`                        |
-| `pattern(field, regex, opts)`    | Regular expression match                                    | `pattern(fieldPath.username, /^[a-zA-Z0-9]+$/)` |
+| `required(field, opts)`          | Field must be filled. For boolean values, checks for `true` | `required(schemaPath.username)`                  |
+| `minLength(field, length, opts)` | Minimum character count                                     | `minLength(schemaPath.username, 3)`              |
+| `maxLength(field, length, opts)` | Maximum character count                                     | `maxLength(schemaPath.username, 10)`             |
+| `min(field, value, opts)`        | Minimum numeric value                                       | `min(schemaPath.age, 18)`                        |
+| `max(field, value, opts)`        | Maximum numeric value                                       | `max(schemaPath.age, 120)`                       |
+| `email(field, opts)`             | Valid email address format                                  | `email(schemaPath.email)`                        |
+| `pattern(field, regex, opts)`    | Regular expression match                                    | `pattern(schemaPath.username, /^[a-zA-Z0-9]+$/)` |
 
 Each validator function accepts an optional `opts` parameter where you can specify a custom error message.
 We can use this message later to display it in the component template.
@@ -428,17 +428,17 @@ We can use this message later to display it in the component template.
 A validation schema for our registration form could look like this:
 
 ```typescript
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // Username validation
-  required(fieldPath.username, { message: 'Username is required' });
-  minLength(fieldPath.username, 3, { message: 'A username must be at least 3 characters long' });
-  maxLength(fieldPath.username, 12, { message: 'A username can be max. 12 characters long' });
+  required(schemaPath.username, { message: 'Username is required' });
+  minLength(schemaPath.username, 3, { message: 'A username must be at least 3 characters long' });
+  maxLength(schemaPath.username, 12, { message: 'A username can be max. 12 characters long' });
 
   // Age validation
-  min(fieldPath.age, 18, { message: 'You must be >=18 years old.' });
+  min(schemaPath.age, 18, { message: 'You must be >=18 years old.' });
 
   // Terms and conditions
-  required(fieldPath.agreeToTermsAndConditions, {
+  required(schemaPath.agreeToTermsAndConditions, {
     message: 'You must agree to the terms and conditions.',
   });
 });

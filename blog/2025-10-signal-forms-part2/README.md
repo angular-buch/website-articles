@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-15
-lastModified: 2025-11-09
+lastModified: 2025-11-13
 keywords:
   - Angular
   - Signals
@@ -87,7 +87,7 @@ We can directly use this path and pass it into our `email()` validation function
 import { /* ... */, applyEach, email } from '@angular/forms/signals';
 
 // ...
-applyEach(fieldPath.email, (emailPath) => {
+applyEach(schemaPath.email, (emailPath) => {
   email(emailPath, { message: 'E-Mail format is invalid' });
 });
 ```
@@ -139,10 +139,10 @@ The `message` is optional, but it is recommended to provide a user-friendly mess
 ```typescript
 import { /* ... */, validate } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // ...
   // E-Mail validation
-  validate(fieldPath.email, (ctx) =>
+  validate(schemaPath.email, (ctx) =>
     !ctx.value().some((e) => e)
       ? {
           kind: 'atLeastOneEmail',
@@ -225,26 +225,28 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
 For validations that depend on multiple fields, Signal Forms provide a `validateTree()` function.
 The `ChildFieldContext` passed to the callback gives access to the entire subtree, allowing us to compare values of different fields.
 An interesting aspect of this function is that we can assign errors to any field within the subtree.
-Access to fields is possible through the `fieldOf()` method.
-We can also use the `valueOf()` method to access values of other fields in the tree.
 
 ```typescript
 import { /* ... */, validateTree } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // ...
   // Password confirmation validation
-  validateTree(fieldPath.password, (ctx) => {
+  validateTree(schemaPath.password, (ctx) => {
     return ctx.value().pw2 === ctx.value().pw1
       ? undefined
       : {
-          field: ctx.fieldOf(fieldPath.password.pw2), // assign the error to the second password field
+          field: ctx.field.pw2, // assign the error to the second password field
           kind: 'confirmationPassword',
           message: 'The entered password must match with the one specified in "Password" field',
         };
   });
 });
 ```
+
+Apart from this example, access to other fields is possible through the `fieldTreeOf()` method.
+We can also use `valueOf()` to access values of other fields in the tree.
+
 
 > `validateTree()` defines custom validation logic for a group of related fields. It returns a validation error or `undefined` if the values are valid.
 
@@ -285,14 +287,14 @@ We use the `validate()` function to check if a topic is selected.
 ```typescript
 import { /* ... */, applyWhen } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // ...
   // Only validate newsletter topics if user subscribed to newsletter
   applyWhen(
-    fieldPath,
+    schemaPath,
     (ctx) => ctx.value().newsletter,
-    (fieldPathWhenTrue) => {
-      validate(fieldPathWhenTrue.newsletterTopics, (ctx) =>
+    (schemaPathWhenTrue) => {
+      validate(schemaPathWhenTrue.newsletterTopics, (ctx) =>
         !ctx.value().length
           ? {
               kind: 'noTopicSelected',
@@ -339,10 +341,10 @@ We also have to handle errors in the asynchronous operation, which can be done u
 import { /* ... */, resource } from '@angular/core';
 import { /* ... */, validateAsync } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // ...
   // Check username availability on the server
-  validateAsync(fieldPath.username, {
+  validateAsync(schemaPath.username, {
     // Reactive parameters for the async operation
     params: ({ value }) => value(),
 
@@ -380,7 +382,7 @@ If we enter `johndoe`, the validation will fail, and the corresponding error mes
 For HTTP endpoints, you can also use the simpler `validateHttp()` function:
 
 ```typescript
-validateHttp(fieldPath.username, {
+validateHttp(schemaPath.username, {
   request: (ctx) => `/api/check?username=${ctx.value()}`,
   errors: (taken: boolean) =>
     taken ? ({ kind: 'userExists', message: 'Username already taken' }) : undefined,
@@ -412,10 +414,10 @@ The corresponding field will change its state when the condition is met.
 ```typescript
 import { /* ... */, disabled, readonly, hidden } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((fieldPath) => {
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
   // ...
   // Disable newsletter topics when newsletter is unchecked
-  disabled(fieldPath.newsletterTopics, (ctx) => !ctx.valueOf(fieldPath.newsletter));
+  disabled(schemaPath.newsletterTopics, (ctx) => !ctx.valueOf(schemaPath.newsletter));
 });
 ```
 
@@ -423,13 +425,13 @@ Here are some more examples of how to use `readonly` and `hidden`:
 
 ```typescript
 // make `someField` read-only if `otherField` has the value 'someValue'
-readonly(fieldPath.someField, (ctx) => ctx.valueOf(fieldPath.otherField) === 'someValue');
+readonly(schemaPath.someField, (ctx) => ctx.valueOf(schemaPath.otherField) === 'someValue');
 
 // make `someField` read-only if `otherField` is invalid
-readonly(fieldPath.someField, (ctx) => !ctx.fieldOf(fieldPath.otherField)().valid());
+readonly(schemaPath.someField, (ctx) => !ctx.fieldTreeOf(schemaPath.otherField)().valid());
 
 // hide `someField` if the value of `otherField` is falsy
-hidden(fieldPath.someField, (ctx) => !ctx.valueOf(fieldPath.otherField));
+hidden(schemaPath.someField, (ctx) => !ctx.valueOf(schemaPath.otherField));
 ```
 
 Disabled and read-only states are automatically reflected in the template when using the `[field]` directive.
