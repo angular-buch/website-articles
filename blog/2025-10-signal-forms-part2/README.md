@@ -407,7 +407,7 @@ We can use this state to provide user feedback in the UI:
 
 ## Debounce: Delay updates from the UI
 
-Async validation can be expensive since by default, an async call is made with every letter entered in an input field.
+Async validation can be expensive: by default, an async call is made with every character entered in an input field.
 
 The `debounce()` function delays updates from the UI to the form model.
 When applied, updates are delayed until either the field loses focus (is touched) or the most recently debounced update resolves.
