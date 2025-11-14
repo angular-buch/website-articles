@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
 author: Danny Koppenhagen and Ferdinand Malcher
 mail: dannyferdigravatar@fmalcher.de # Gravatar
 published: 2025-10-15
-lastModified: 2025-11-13
+lastModified: 2025-11-14
 keywords:
   - Angular
   - Signals
@@ -404,6 +404,29 @@ We can use this state to provide user feedback in the UI:
 }
 <!-- ... -->
 ```
+
+## Debounce: Delay updates from the UI
+
+Async validation can be expensive since by default, an async call is made with every letter entered in an input field.
+
+The `debounce()` function delays updates from the UI to the form model.
+When applied, updates are delayed until either the field loses focus (is touched) or the most recently debounced update resolves.
+
+```typescript
+import { /* ... */, validateAsync, debounce } from '@angular/forms/signals';
+
+export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+  // Delay username updates by 500ms
+  debounce(schemaPath.username, 500);
+
+  // Async validation will only trigger after debounce delay
+  validateAsync(schemaPath.username, {
+    // ...
+  });
+});
+```
+
+This prevents excessive API calls during typing and improves performance by batching rapid user input changes.
 
 ## Controlling Field State
 
