@@ -7,6 +7,9 @@ lastModified: 2025-11-30
 keywords:
   - Angular
   - Angular 21
+  - ARIA
+  - Zoneless
+  - Signal Forms
 language: de
 header: angular21.jpg
 sticky: false
@@ -70,7 +73,6 @@ export const bookSchema = schema<Book>(fieldPath => {
   required(fieldPath.isbn);
   minLength(fieldPath.isbn, 10);
   maxLength(fieldPath.isbn, 13);
-  
   required(fieldPath.title);
 });
 
@@ -111,6 +113,7 @@ Noch ist der neue Ansatz aber experimentell, sodass sich die Schnittstellen und 
 ## TODO: vitest
 
 
+## @angular/aria
 
 
 ## Sonstiges
