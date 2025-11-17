@@ -113,8 +113,39 @@ Noch ist der neue Ansatz aber experimentell, sodass sich die Schnittstellen und 
 ## TODO: vitest
 
 
-## @angular/aria
+## @angular/aria: Barrierefreie Komponenten leicht gemacht
 
+Mit Angular 21 wurde das neue Package [`@angular/aria`](https://angular.dev/guide/aria/overview) eingeführt – eine Sammlung von headless, barrierefreien Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) implementieren.
+Das Package übernimmt die komplexe Arbeit der Barrierefreiheit, insbesondere für komplexere, häufig verwendete Patterns, die über die Standard-HTML-Elemente hinausgehen.
+Tastaturinteraktionen, ARIA-Attribute, Fokus-Management und Screen-Reader-Unterstützung werden unter der Haube der Direktiven berücksichtigt.
+
+Die Installation des neuen Pakets erfolgt wie gewohnt über die Angular CLI:
+
+```bash
+ng add @angular/aria
+```
+
+In der ersten Version bietet Angular Aria Direktiven für die folgenden interaktiven Patterns:
+
+| Komponente       | Beschreibung                                                                    |
+|------------------|---------------------------------------------------------------------------------|
+| **Accordion**    | Aufklappbereiche (Akkordeon), die einzeln oder exklusiv erweitert werden können |
+| **Autocomplete** | Texteingabe mit gefilterten Vorschlägen während der Eingabe                     |
+| **Combobox**     | Kombination aus Textfeld und Popup mit Suchergebnissen                          |
+| **Grid**         | Zweidimensionale Datenanzeige mit zellenweiser Tastaturnavigation               |
+| **Listbox**      | Ein- oder Mehrfachauswahl-Optionslisten mit Tastaturnavigation                  |
+| **Menu**         | Dropdown-Menüs mit verschachtelten Untermenüs und Tastaturkürzeln               |
+| **Multiselect**  | Mehrfachauswahl-Dropdown-Pattern mit kompakter Anzeige                          |
+| **Select**       | Einfachauswahl-Dropdown-Pattern mit Tastaturnavigation                          |
+| **Tabs**         | Tab-Interfaces mit automatischen oder manuellen Aktivierungsmodi                |
+| **Toolbar**      | Gruppierte Steuerelemente mit logischer Tastaturnavigation                      |
+| **Tree**         | Hierarchische Listen mit Erweitern/Einklappen-Funktionalität                    |
+
+Das neue Package eignet sich insbesondere dann, wenn wir komplexe Komponenten entwickeln und nicht auf bestehende barrierefreie Komponentenbibliotheken zurückgreifen können, weil sich diese zum Beispiel hinsichtlich ihres Stylings nicht anpassen lassen.
+Die Direktiven bringen keinerlei Visualität mit sich, sorgen aber für ein konsistentes Verhalten sowie eine barrierefreie Tastaturnavigation, Fokus-Handling und Screenreader-Optimierung.
+
+> Einige der Komponenten standen bereits zuvor in ähnlicher Form als [Component Development Kit (CDK)](https://material.angular.dev/cdk/dialog/overview) - dem Unterbau von Angular Material bereit.
+> Mit `@angular/aria` bringt das Angular Team den Kern dieser Sammlung ein Stück näher an die Angular Basis und stärkt das Thema Barrierefreiheit.
 
 ## Sonstiges
 
