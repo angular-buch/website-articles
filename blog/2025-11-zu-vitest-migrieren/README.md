@@ -15,7 +15,7 @@ header: angular-vitest.jpg
 ---
 
 Mit Angular 21 gibt es eine bedeutende Änderung beim Unit‑Testing:
-Vitest ist jetzt der Standard, die langjährige Kombination aus Karma und Jasmine wird abgelöst.
+Vitest ist jetzt der Standard, die bisherige Standardkombination aus Karma und Jasmine wird abgelöst.
 Beim Erzeugen eines neuen Projekts mit `ng new` verwendet Angular 21 nun standardmäßig **Vitest** als Test-Runner.
 Vitest verspricht deutlich kürzere Startzeiten, moderne Features und eine einfache Jest-kompatible API.
 In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende Angular-Projekte migrieren kannst und welche Vorteile Vitest bietet.
@@ -34,7 +34,7 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
     - [1. Überblick](/blog/2025-11-zu-vitest-migrieren#1-überblick)
     - [2. Schematic ausführen](/blog/2025-11-zu-vitest-migrieren#2-schematic-ausführen)
     - [3. Nach der Migration](/blog/2025-11-zu-vitest-migrieren#3-nach-der-migration)
-    - [4. Benutzerdefinierten Konfiguration (optional)](/blog/2025-11-zu-vitest-migrieren#4-benutzerdefinierten-konfiguration-optional)
+    - [4. Benutzerdefinierte Konfiguration (optional)](/blog/2025-11-zu-vitest-migrieren#4-benutzerdefinierte-konfiguration-optional)
 - [Die neue Syntax und APIs](/blog/2025-11-zu-vitest-migrieren#die-neue-syntax-und-apis)
   - [Globale Funktionen](/blog/2025-11-zu-vitest-migrieren#globale-funktionen)
   - [Matcher](/blog/2025-11-zu-vitest-migrieren#matcher)
@@ -47,17 +47,17 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
 
 ## Warum Angular Karma und Jasmine ersetzt
 
-_Karma und Jasmine_ haben für Angular lange Jahre gute Dienste geleistet, vor allem wegen der Ausführung in einem echten Browser. 
-Es gab aber Nachteile: die Ausführgeschwindigkeit war nie optimal und das Ökosysteme war veraltetet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
+_Karma und Jasmine_ haben für Angular lange Jahre gute Dienste geleistet, vor allem wegen der Ausführung in einem echten Browser.
+Es gab aber Nachteile: die Ausführungsgeschwindigkeit war nie optimal und das Ökosystem veraltet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
 Über mehrere Jahre prüfte das Angular-Team Alternativen (Jest, Web Test Runner usw.), ohne einen klaren Gewinner zu finden.
 [Vitest](https://vitest.dev/) wurde inzwischen äußerst populär und erwies sich als passende Lösung.
 
-Vitest passte vor allem am besten, weil es einen echten Browser-Modus bietet.
-Ähnlich wie zuvor unter Karma können Tests dadurch in einem realen Browser mit "echtem" DOM und echten Ereignissen ausgeführt werden.
-Der Browser-Modus von Vitest wurde ganz aktuell mit Vitest 4 im Oktober 2025 [als stabil deklariert](https://vitest.dev/blog/vitest-4.html#browser-mode-is-stable).
+Vitest passte besonders gut, da es einen echten Browser-Modus bietet.
+Wie zuvor bei Karma können Tests in einem realen Browser mit "echtem" DOM und echten Ereignissen ausgeführt werden.
+Der Browser-Modus wurde erst kürzlich mit Vitest 4 im Oktober 2025 [als stabil deklariert](https://vitest.dev/blog/vitest-4.html#browser-mode-is-stable).
 Gleichzeitig ist Vitest schnell und modern: Es baut auf [Vite](https://vite.dev/) auf, ist ESM- und TypeScript-first und sorgt für äußerst kurze Start- und Wiederholungszeiten.
 Dazu kommt eine sehr mächtige API mit Snapshot-Tests, flexiblen [Fake-Timern](https://vitest.dev/guide/mocking/timers.html), dem wirklich nützlichen Helfer [`expect.poll`](https://vitest.dev/api/expect.html#poll), [Test-Fixtures](https://vitest.dev/guide/test-context) und Jest-kompatiblen Matchern.
-Nicht zuletzt ist Vitest im gesamten Frontend-Ökosystem breit akzeptiert, wodurch vorhandenes Know-how gut übertragen werden kann.
+Nicht zuletzt ist Vitest im gesamten Frontend-Ökosystem weit verbreitet, wodurch vorhandenes Know-how gut übertragen werden kann.
 Kurz gesagt: Der Wechsel sorgt für Tempo, eine deutlich bessere Developer Experience und Zukunftssicherheit und hält dabei weiterhin die Möglichkeit echter Browser-Tests offen.
 
 
@@ -291,15 +291,16 @@ Dadurch vermeidest du mögliche Namenskollisionen, etwa mit gleichnamigen Funkti
 ### Matcher
 
 Die üblichen Matcher wie `toBe`, `toEqual`, `toContain` oder `toHaveBeenCalledWith` stehen in Vitest weiterhin zur Verfügung. Wenn du in Jasmine `jasmine.any(...)` verwendet hast, nutzt du in Vitest `expect.any(...)`.
-Wichtig: Vitest hat nicht das Ziel, kompatible API zu Jasmine zu schaffen.
+Wichtig: Vitest hat nicht das Ziel, eine zu Jasmine kompatible API zu schaffen.
 Stattdessen bietet Vitest eine möglichst [**Jest‑kompatible** Expect‑API](https://vitest.dev/api/expect.html) auf Basis von Chai an.
 Das Testframework Jest hat wiederum das Ziel, einigermaßen kompatibel zu Jasmine zu sein.
 Weil aber Vitest nur mit Jest kompatibel sein will, ergeben sich folgende Herausforderungen, da einige Matcher schlicht fehlen:
 
-**1) `toBeTrue()` / `toBeFalse()` gibt es in Jest/Vitest nicht**
+#### 1) `toBeTrue()` / `toBeFalse()` gibt es in Jest/Vitest nicht
 
-Jasmine bringt die strikten Bool‑Matcher `toBeTrue()` und `toBeFalse()` mit. 
-In Jest (und damit Vitest) existieren sie nicht; du verwendest stattdessen einfach [`toBe(true)`](https://vitest.dev/api/expect.html#tobe) bzw. `toBe(false)`.
+Jasmine bringt die strikten Bool‑Matcher `toBeTrue()` und `toBeFalse()` mit.
+In Jest (und damit Vitest) existieren sie nicht.
+Du kannst stattdessen einfach den Matcher [`toBe(true)`](https://vitest.dev/api/expect.html#tobe) bzw. `toBe(false)` verwenden.
 
 ```ts
 // Jasmine
@@ -311,7 +312,7 @@ expect(result).toBe(true);
 expect(flag).toBe(false);
 ```
 
-**2) `toHaveBeenCalledOnceWith()` gibt es in Jest/Vitest nicht**
+#### 2) `toHaveBeenCalledOnceWith()` gibt es in Jest/Vitest nicht
 
 Jasmine hat einen praktischen Matcher für einen Spy mit der Prüfung auf "genau einmal und genau mit diesen Argumenten". 
 Als Ersatz verwendest du einfach [`toHaveBeenCalledExactlyOnceWith()`](https://vitest.dev/api/expect.html#tohavebeencalledexactlyoncewith):
@@ -326,7 +327,7 @@ expect(spy).toHaveBeenCalledOnceWith(book);
 expect(spy).toHaveBeenCalledExactlyOnceWith(book);
 ```
 
-**3) Asynchrone Matchers: `expectAsync(...)` (Jasmine) vs. `.resolves/.rejects` (Jest/Vitest)**
+#### 3) Asynchrone Matchers: `expectAsync(...)` (Jasmine) vs. `.resolves/.rejects` (Jest/Vitest)
 
 Jasmine hat eine [eigene Async‑API](https://jasmine.github.io/api/5.12/async-matchers): `await expectAsync(promise).toBeResolved() / toBeRejectedWith(...)`. 
 Jest/Vitest nutzen stattdessen das Muster [`await expect(promise).resolves/...`](https://vitest.dev/api/expect.html#resolves) bzw. [`.rejects/...`](https://vitest.dev/api/expect.html#rejects). 
@@ -417,7 +418,7 @@ Modern ist nur die Schreibweise, bei der es zwischen Jasmine und Vitest keinen U
 Der zweite Angular-Klassiker [`fakeAsync()`](https://angular.dev/api/core/testing/fakeAsync) und [`tick()`](https://angular.dev/api/core/testing/tick) braucht hingegen einen echten Ersatz.
 (Hinweis: Diese beiden Helfer sind nicht Bestandteil von Jasmine, sondern kommen aus `@angular/core/testing`.)
 Vitest bringt ein eigenes [Fake-Timer-System](https://vitest.dev/api/vi.html#fake-timers) mit.
-Das ganze benötigt etwas Einarbeitung, denn nicht jeder Timer funktioniert gleich und nicht jeder Test braucht dieselben Werkzeuge. 
+Die Nutzung erfordert etwas Einarbeitung, denn nicht alle Timer funktionieren gleich und nicht jeder Test braucht dieselben Werkzeuge. 
 Beginnen wir mit einem einfachen zeitbasierten Beispiel. 
 Die folgende Funktion erhöht einen Counter nach genau fünf Sekunden:
 
@@ -534,8 +535,7 @@ describe('startAsyncJob', () => {
 });
 ```
 
-`runAllTimersAsync()` ist damit der konsequente Ersatz für Jasmine-Szenarien, in denen `fakeAsync()` und `tick()` zusammen mit Microtask-Flushing verwendet wurden. 
-Vitest macht das Ganze expliziter.
+`runAllTimersAsync()` ist damit ein guter Ersatz für Jasmine-Szenarien, bei denen `fakeAsync()` und `tick()` in Kombination mit Microtask-Flushing verwendet wurden. 
 
 ### TestBed und ComponentFixture
 
@@ -547,16 +547,16 @@ Auch der explizite Aufruf von `fixture.detectChanges()` ist unverändert notwend
 
 ## Bekannte Einschränkungen und Fallstricke
 
-Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser-Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen. 
-Du wirst im Vitest Ökosystem nach Alternative suchen müssen.
+Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser‑Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen.
+Du wirst im Vitest-Ökosystem nach Alternativen suchen müssen.
 
-Bei der Umstellung auf Vitest kann eine kurze Gewöhnungsphase im Team nötig sein, da bestimmte neue API-Konzepte wie `vi.spyOn`, `vi.fn` oder Restore-Strategien zwar leicht zu erlernen sind, sich aber dennoch von Jasmine unterscheiden. 
+Bei der Umstellung auf Vitest kann eine kurze Gewöhnungsphase im Team nötig sein, da bestimmte neue API-Konzepte wie `vi.spyOn`, `vi.fn` oder Strategien zum Zurücksetzen von Mocks zwar leicht zu erlernen sind, sich aber dennoch von Jasmine unterscheiden. 
 Achte deshalb darauf, dass deine Tests mögliche Manipulationen an globalen Objekten vollständig aufräumen und verwende dafür idealerweise Methoden wie [`afterEach`](https://vitest.dev/api/#aftereach) mit [`vi.restoreAllMocks()`](https://vitest.dev/api/vi.html#vi-restoreallmocks).
 
 
 ## Fazit
 
-Mit Vitest als Standard in Angular 21 wird das Testen spürbar moderner und schneller. 
+Mit Vitest als Standard in Angular 21 wird das Testen deutlich moderner und schneller. 
 Die Umstellung ist meist unkompliziert, die Migrations‑Schematics helfen beim Einstieg. 
 Wo früher `fakeAsync` und Zone.js‑Magie nötig waren, reichen heute `async/await` und flexible Fake‑Timer. 
 Und wenn es realistisch sein muss, steht dir der Browser‑Modus zur Verfügung.
