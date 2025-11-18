@@ -351,7 +351,7 @@ Bei asynchronen Erwartungen unterscheidet sich das Pattern sogar deutlich. Aller
 Daher dürfte in den meisten Projekten hier wahrscheinlich gar keine zusätzliche Arbeit anfallen.
 
 
-### Spies und Mocks
+### Spys und Mocks
 
 Das Spying-Konzept funktioniert nahezu identisch wie bei Jasmine, wird jedoch über das [`vi`‑Objekt bereitgestellt](https://vitest.dev/api/vi.html#vi-spyon):
 
