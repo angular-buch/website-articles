@@ -14,11 +14,12 @@ language: de
 header: TODO.jpg
 ---
 
-Mit Angular 21 gibt es einen großen Schnitt im Unit‑Testing: 
+Mit Angular 21 gibt es eine bedeutende Änderung im Unit‑Testing:
 Vitest ist jetzt der Standard, die langjährige Kombination aus Karma und Jasmine wird abgelöst.
-Beim Erzeugen eines neuen Projekts mit `ng new` fragt dich die CLI jetzt nach dem gewünschten Test‑Runner.
-Vitest ist dabei die Voreinstellung.
-Du kannst auf Wunsch weiterhin Jasmine wählen, aber für neue Projekte führt der Weg klar zu Vitest.
+Beim Erzeugen eines neuen Projekts mit `ng new` verwendet Angular 21 nun standardmäßig **Vitest** als Test-Runner.
+Vitest verspricht deutlich kürzere Startzeiten, moderne Features und eine einfache Jest-kompatible API.
+Besonders spannend ist dabei der echte Browser-Modus, mit dem realistische Tests ähnlich wie früher mit Karma möglich sind.
+In diesem Artikel zeigen wir dir, was Vitest für dich bedeutet, wie du bestehende Angular-Projekte einfach migrieren kannst und welche Vorteile du dadurch erhältst.
 
 ## Inhalt
 
@@ -65,9 +66,17 @@ Kurz gesagt: Der Wechsel sorgt für Tempo, eine deutlich bessere Developer Exper
 
 <!-- Quelle: https://github.com/angular/angular/blob/6178e3ebfbc69a2afa04dd19ea4d6d8b1bfb0649/adev/src/content/guide/testing/migrating-to-vitest.md -->
 
-**WICHTIG:** Die Migration eines bestehenden Projekts auf Vitest gilt derzeit als **experimentell**. 
-Dieser Prozess setzt außerdem das Application-Buildsystem voraus, das bei neu erstellten Projekten standardmäßig aktiviert ist.
-Wenn du eine bestehende Angular Anwendung hast, update diese zunächst mit `ng update` auf Version 21 und führe anschließend folgende Anleitung durch.
+Wenn du ein **neues Projekt** mit Angular 21 erzeugen möchtest, nutzt die Angular CLI standardmäßig den neuen Test-Runner Vitest.
+Die Wahl kannst du über die Option `--test-runner` beeinflussen:
+Mit `--test-runner=vitest` erhältst du die neue, schnellere und modernere Standardlösung. 
+Möchtest du dagegen weiterhin bei der bewährten Karma/Jasmine-Kombination bleiben, verwende die Option `--test-runner=karma`.
+Ohne explizite Angabe der Option wird automatisch Vitest verwendet.
+
+Um ein **bestehendes Projekt** auf Angular 21 und Vitest zu migrieren, musst du zunächst das Projekt mittels `ng update` auf Version 21 aktualisieren.
+Beachte dabei, dass die Migration bestehender Projekte zu Vitest aktuell noch **experimentell ist**.
+Außerdem setzt dieser Prozess das Application-Buildsystem voraus, das bei neu erstellten Projekten standardmäßig aktiviert ist.
+Nachdem dein Projekt auf Version 21 aktualisiert wurde, kannst du mit den folgenden Schritten fortfahren.
+
 
 ### Manuelle Migrationsschritte
 
