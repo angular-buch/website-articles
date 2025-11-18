@@ -50,7 +50,7 @@ Du kannst auf Wunsch weiterhin Jasmine wählen, aber für neue Projekte führt d
 _Karma und Jasmine_ haben für Angular lange Jahre gute Dienste geleistet, vor allem wegen der Ausführung in einem echten Browser. 
 Es gab aber Nachteile: die Ausführgeschwindigkeit war nie optimal und das Ökosysteme war veraltetet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
 Über mehrere Jahre prüfte das Angular-Team Alternativen (Jest, Web Test Runner usw.), ohne einen klaren Gewinner zu finden.
-Vitest wurde inzwischen äußerst populär und erwies sich als passende Lösung.
+[Vitest](https://vitest.dev/) wurde inzwischen äußerst populär und erwies sich als passende Lösung.
 
 Vitest passte vor allem am besten, weil es einen echten Browser-Modus bietet.
 Ähnlich wie zuvor unter Karma können Tests dadurch in einem realen Browser mit "echtem" DOM und echten Ereignissen ausgeführt werden.
