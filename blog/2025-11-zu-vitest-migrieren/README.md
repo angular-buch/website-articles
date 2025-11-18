@@ -287,14 +287,15 @@ Weil aber Vitest nur mit Jest kompatibel sein will, ergeben sich folgende Heraus
 
 **1) `toBeTrue()` / `toBeFalse()` gibt es in Jest/Vitest nicht**
 
-Jasmine bringt die strikten Bool‑Matcher `toBeTrue()` und `toBeFalse()` mit. In Jest (und damit Vitest) existieren sie nicht; du verwendest stattdessen einfach `toBe(true)` bzw. `toBe(false)`.
+Jasmine bringt die strikten Bool‑Matcher `toBeTrue()` und `toBeFalse()` mit. 
+In Jest (und damit Vitest) existieren sie nicht; du verwendest stattdessen einfach [`toBe(true)`](https://vitest.dev/api/expect.html#tobe) bzw. `toBe(false)`.
 
 ```ts
 // Jasmine
 expect(result).toBeTrue();
 expect(flag).toBeFalse();
 
-// Jest/Vitest
+// Vitest
 expect(result).toBe(true);
 expect(flag).toBe(false);
 ```
@@ -302,8 +303,7 @@ expect(flag).toBe(false);
 **2) `toHaveBeenCalledOnceWith()` gibt es in Jest/Vitest nicht**
 
 Jasmine hat einen praktischen Matcher für einen Spy mit der Prüfung auf "genau einmal und genau mit diesen Argumenten". 
-In Jest/Vitest Core gibt es diesen Matcher leider nicht.
-Als Ersatz kombinierst du einfach `toHaveBeenCalledTimes(1)` mit `toHaveBeenCalledWith(...)`:
+Als Ersatz verwendest du einfach [`toHaveBeenCalledExactlyOnceWith()`](https://vitest.dev/api/expect.html#tohavebeencalledexactlyoncewith):
 
 ```ts
 var book = {};
@@ -311,9 +311,8 @@ var book = {};
 // Jasmine
 expect(spy).toHaveBeenCalledOnceWith(book);
 
-// Jest/Vitest
-expect(spy).toHaveBeenCalledTimes(1);
-expect(spy).toHaveBeenCalledWith(book);
+// Vitest
+expect(spy).toHaveBeenCalledExactlyOnceWith(book);
 ```
 
 **3) Asynchrone Matchers: `expectAsync(...)` (Jasmine) vs. `.resolves/.rejects` (Jest/Vitest)**
