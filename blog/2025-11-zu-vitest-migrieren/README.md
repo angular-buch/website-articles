@@ -22,27 +22,27 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
 
 ## Inhalt
 
-- [Warum Angular Karma und Jasmine ersetzt](#warum-angular-karma-und-jasmine-ersetzt)
-- [Migrationsleitfaden: Von Karma/Jasmine zu Vitest](#migrationsleitfaden-von-karmajasmine-zu-vitest)
-  - [Manuelle Migrationsschritte](#manuelle-migrationsschritte)
-    - [1. Abhängigkeiten installieren](#1-abhängigkeiten-installieren)
-    - [2. `angular.json` aktualisieren](#2-angularjson-aktualisieren)
-    - [3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen](#3-eigene-karmaconfjskonfiguration-berücksichtigen)
-    - [4. Karma- und `test.ts`‑Dateien entfernen](#4-karma--und-testtsdateien-entfernen)
-    - [5. Browser‑Modus konfigurieren (optional)](#5-browsermodus-konfigurieren-optional)
-  - [Automatisches Test‑Refactoring per Schematic](#automatisches-testrefactoring-per-schematic)
-    - [1. Überblick](#1-überblick)
-    - [2. Schematic ausführen](#2-schematic-ausführen)
-    - [3. Nach der Migration](#3-nach-der-migration)
-    - [4. Benutzerdefinierten Konfiguration (optional)](#4-benutzerdefinierten-konfiguration-optional)
-- [Die neue Syntax und APIs](#die-neue-syntax-und-apis)
-  - [Globale Funktionen](#globale-funktionen)
-  - [Matcher](#matcher)
-  - [Spies und Mocks](#spies-und-mocks)
-  - [Asynchronität ohne Zone.js aber mit Vitests](#asynchronität-ohne-zonejs-aber-mit-vitests)
-  - [TestBed und ComponentFixture](#testbed-und-componentfixture)
-- [Bekannte Einschränkungen und Fallstricke](#bekannte-einschränkungen-und-fallstricke)
-- [Fazit](#fazit)
+- [Warum Angular Karma und Jasmine ersetzt](/blog/2025-11-zu-vitest-migrieren#warum-angular-karma-und-jasmine-ersetzt)
+- [Migrationsleitfaden: Von Karma/Jasmine zu Vitest](/blog/2025-11-zu-vitest-migrieren#migrationsleitfaden-von-karmajasmine-zu-vitest)
+  - [Manuelle Migrationsschritte](/blog/2025-11-zu-vitest-migrieren#manuelle-migrationsschritte)
+    - [1. Abhängigkeiten installieren](/blog/2025-11-zu-vitest-migrieren#1-abhängigkeiten-installieren)
+    - [2. `angular.json` aktualisieren](/blog/2025-11-zu-vitest-migrieren#2-angularjson-aktualisieren)
+    - [3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen](/blog/2025-11-zu-vitest-migrieren#3-eigene-karmaconfjskonfiguration-berücksichtigen)
+    - [4. Karma- und `test.ts`‑Dateien entfernen](/blog/2025-11-zu-vitest-migrieren#4-karma--und-testtsdateien-entfernen)
+    - [5. Browser‑Modus konfigurieren (optional)](/blog/2025-11-zu-vitest-migrieren#5-browsermodus-konfigurieren-optional)
+  - [Automatisches Test‑Refactoring per Schematic](/blog/2025-11-zu-vitest-migrieren#automatisches-testrefactoring-per-schematic)
+    - [1. Überblick](/blog/2025-11-zu-vitest-migrieren#1-überblick)
+    - [2. Schematic ausführen](/blog/2025-11-zu-vitest-migrieren#2-schematic-ausführen)
+    - [3. Nach der Migration](/blog/2025-11-zu-vitest-migrieren#3-nach-der-migration)
+    - [4. Benutzerdefinierten Konfiguration (optional)](/blog/2025-11-zu-vitest-migrieren#4-benutzerdefinierten-konfiguration-optional)
+- [Die neue Syntax und APIs](/blog/2025-11-zu-vitest-migrieren#die-neue-syntax-und-apis)
+  - [Globale Funktionen](/blog/2025-11-zu-vitest-migrieren#globale-funktionen)
+  - [Matcher](/blog/2025-11-zu-vitest-migrieren#matcher)
+  - [Spies und Mocks](/blog/2025-11-zu-vitest-migrieren#spies-und-mocks)
+  - [Asynchronität ohne Zone.js aber mit Vitest Timer](/blog/2025-11-zu-vitest-migrieren#asynchronität-ohne-zonejs-aber-mit-vitest-timer)
+  - [TestBed und ComponentFixture](/blog/2025-11-zu-vitest-migrieren#testbed-und-componentfixture)
+- [Bekannte Einschränkungen und Fallstricke](/blog/2025-11-zu-vitest-migrieren#bekannte-einschränkungen-und-fallstricke)
+- [Fazit](/blog/2025-11-zu-vitest-migrieren#fazit)
 
 
 ## Warum Angular Karma und Jasmine ersetzt
@@ -55,7 +55,7 @@ Es gab aber Nachteile: die Ausführgeschwindigkeit war nie optimal und das Ökos
 Vitest passte vor allem am besten, weil es einen echten Browser-Modus bietet.
 Ähnlich wie zuvor unter Karma können Tests dadurch in einem realen Browser mit "echtem" DOM und echten Ereignissen ausgeführt werden.
 Der Browser-Modus von Vitest wurde ganz aktuell mit Vitest 4 im Oktober 2025 [als stabil deklariert](https://vitest.dev/blog/vitest-4.html#browser-mode-is-stable).
-Gleichzeitig ist Vitest schnell und modern: Es baut auf [Vite](https://vite.dev/) auf, ist ESM- und TypeScript-first und sorgt so für äußerst kurze Start- und Wiederholungszeiten.
+Gleichzeitig ist Vitest schnell und modern: Es baut auf [Vite](https://vite.dev/) auf, ist ESM- und TypeScript-first und sorgt für äußerst kurze Start- und Wiederholungszeiten.
 Dazu kommt eine sehr mächtige API mit Snapshot-Tests, flexiblen [Fake-Timern](https://vitest.dev/guide/mocking/timers.html), dem wirklich nützlichen Helfer [`expect.poll`](https://vitest.dev/api/expect.html#poll), [Test-Fixtures](https://vitest.dev/guide/test-context) und Jest-kompatiblen Matchern.
 Nicht zuletzt ist Vitest im gesamten Frontend-Ökosystem breit akzeptiert, wodurch vorhandenes Know-how gut übertragen werden kann.
 Kurz gesagt: Der Wechsel sorgt für Tempo, eine deutlich bessere Developer Experience und Zukunftssicherheit und hält dabei weiterhin die Möglichkeit echter Browser-Tests offen.
@@ -148,9 +148,6 @@ npm uninstall karma karma-chrome-launcher karma-coverage karma-jasmine karma-jas
 #### 5. Browser‑Modus konfigurieren (optional)
 
 Falls du Tests in einem echten Browser ausführen möchtest, musst du einen Browser‑Provider installieren und die `angular.json` anpassen.
-
-**Browser‑Provider installieren**
-
 Wähle je nach Bedarf:
 
 * **Playwright:** `@vitest/browser-playwright` für Chromium, Firefox und WebKit
@@ -161,9 +158,9 @@ Wähle je nach Bedarf:
 npm install --save-dev @vitest/browser-playwright
 ```
 
-**`angular.json` für Browser‑Modus erweitern**
-
-Füge im `test`‑Target die Option `browsers` hinzu. Der Browsername hängt vom verwendeten Provider ab (z. B. `chromium` bei Playwright).
+Danach musst du noch die `angular.json` erweitern.
+Füge im `test`‑Target die Option `browsers` hinzu.
+Der Browsername hängt vom verwendeten Provider ab (z. B. `chromium` bei Playwright).
 
 ```json
 {
@@ -182,18 +179,19 @@ Füge im `test`‑Target die Option `browsers` hinzu. Der Browsername hängt vom
 }
 ```
 
-Headless‑Modus wird automatisch aktiviert, wenn die Umgebungsvariable `CI` gesetzt ist oder der Browsername "Headless" enthält (z. B. `ChromeHeadless`). 
+Der Headless‑Modus wird automatisch aktiviert, wenn die Umgebungsvariable `CI` gesetzt ist oder der Browsername "Headless" enthält (z. B. `ChromeHeadless`). 
 Andernfalls läuft der Browser sichtbar.
 
 ### Automatisches Test‑Refactoring per Schematic
 
-**WICHTIG:** Das Schematic `refactor-jasmine-vitest` ist experimentell und deckt nicht alle Pattern ab. Überprüfe die Änderungen immer manuell.
-
 Das Angular CLI stellt ein Schematic bereit, das deine Jasmine‑Tests automatisch auf Vitest umstellt.
+
+**WICHTIG:** Das Schematic `refactor-jasmine-vitest` ist experimentell und deckt nicht alle Pattern ab.
+Überprüfe die Änderungen immer manuell.
 
 #### 1. Überblick
 
-Das Schematic führt folgende Umwandlungen in `.spec.ts`‑Dateien durch:
+Derzeit führt das Schematic folgende Umwandlungen in den `.spec.ts`‑Dateien durch:
 
 * `fit`/`fdescribe` → `it.only`/`describe.only`
 * `xit`/`xdescribe` → `it.skip`/`describe.skip`
@@ -213,6 +211,7 @@ Es installiert weder Vitest noch andere erforderliche Abhängigkeiten.
 Außerdem nimmt es keine Änderungen an der `angular.json` vor, um den Vitest‑Builder zu aktivieren.
 Ebenso entfernt es keine Karma‑Dateien aus dem Projekt.
 Schließlich konvertiert das Schematic auch keine komplexen Spy‑Szenarien, die daher weiterhin manuell überarbeitet werden müssen.
+Die manuelle Umstellung (wie oben beschrieben) bleibt uns leider nicht erspart.
 
 
 #### 2. Schematic ausführen
@@ -230,7 +229,7 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 | `--project <name>` | Wählt ein bestimmtes Projekt in einem Workspace aus.                  |
 | `--include <path>` | Beschränkt das Refactoring auf eine Datei oder ein Verzeichnis.       |
 | `--file-suffix`    | Legt eine andere Dateiendung für Testdateien fest.                    |
-| `--add-imports`    | Fügt explizite Vitest‑Im­porte hinzu, falls Globals deaktiviert sind. |
+| `--add-imports`    | Fügt explizite Vitest‑Im­porte hinzu.                                  |
 | `--verbose`        | Aktiviert detailliertes Logging der durchgeführten Änderungen.        |
 
 #### 3. Nach der Migration
@@ -238,7 +237,8 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 1. **Tests ausführen:** Nutze `ng test`, um sicherzustellen, dass alle Tests weiterhin funktionieren.
 2. **Änderungen prüfen:** Sieh dir die Anpassungen an, besonders bei komplexen Spies oder asynchronen Tests.
 
-`ng test` führt Tests im **Watch‑Modus** aus, sofern das Terminal interaktiv ist. Auf CI läuft der Test‑Runner automatisch im Single‑Run‑Modus.
+`ng test` führt Tests im **Watch‑Modus** aus, sofern das Terminal interaktiv ist.
+In CI-Umgebungen führt der Test-Runner die Tests automatisch im Single-Run-Modus aus.
 
 #### 4. Benutzerdefinierten Konfiguration (optional)
 
