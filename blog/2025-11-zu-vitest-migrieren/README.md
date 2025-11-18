@@ -558,3 +558,7 @@ Die Umstellung ist meist unkompliziert, die Migrations‑Schematics helfen beim 
 Wo früher `fakeAsync` und Zone.js‑Magie nötig waren, reichen heute `async/await` und flexible Fake‑Timer. 
 Und wenn es realistisch sein muss, steht dir der Browser‑Modus zur Verfügung.
 Insgesamt bedeutet das: kürzere Feedback‑Schleifen, robustere Tests und weniger Reibung im Alltag. Viel Spaß beim Testen!
+
+<hr>
+
+<small>Vielen Dank an Ferdinand Malcher und Danny Koppenhagen für das Review und das wertvolle Feedback!</small>
