@@ -418,7 +418,7 @@ Der zweite Angular-Klassiker [`fakeAsync()`](https://angular.dev/api/core/testin
 (Hinweis: Diese beiden Helfer sind nicht Bestandteil von Jasmine, sondern kommen aus `@angular/core/testing`.)
 Vitest bringt ein eigenes [Fake-Timer-System](https://vitest.dev/api/vi.html#fake-timers) mit.
 Das ganze benötigt etwas Einarbeitung, denn nicht jeder Timer funktioniert gleich und nicht jeder Test braucht dieselben Werkzeuge. 
-Beginnen wir mit einem einfachen, Zeit-basierten Beispiel. 
+Beginnen wir mit einem einfachen zeitbasierten Beispiel. 
 Die folgende Funktion erhöht einen Counter nach genau fünf Sekunden:
 
 ```ts
