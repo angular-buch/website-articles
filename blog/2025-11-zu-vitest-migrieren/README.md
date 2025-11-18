@@ -14,7 +14,7 @@ language: de
 header: angular-vitest.jpg
 ---
 
-Mit Angular 21 gibt es eine bedeutende Änderung beim Unit‑Testing:
+Mit Angular 21 gibt es eine bedeutende Änderung beim Unit-Testing:
 Vitest ist jetzt der Standard, die bisherige Standardkombination aus Karma und Jasmine wird abgelöst.
 Beim Erzeugen eines neuen Projekts mit `ng new` verwendet Angular 21 nun standardmäßig **Vitest** als Test-Runner.
 Vitest verspricht deutlich kürzere Startzeiten, moderne Features und eine einfache Jest-kompatible API.
@@ -94,7 +94,7 @@ npm install --save-dev vitest jsdom
 
 #### 2. `angular.json` aktualisieren
 
-Suche in deiner `angular.json` den `test`‑Target deines Projekts und setze den `builder` auf `@angular/build:unit-test`.
+Suche in deiner `angular.json` den `test`-Target deines Projekts und setze den `builder` auf `@angular/build:unit-test`.
 
 ```json
 {
@@ -111,10 +111,10 @@ Suche in deiner `angular.json` den `test`‑Target deines Projekts und setze den
 ```
 
 Der `unit-test`‑Builder verwendet standardmäßig `"tsConfig": "tsconfig.spec.json"` und `"buildTarget": "::development"`. 
-Falls dein Projekt andere Werte benötigt, etwa weil die `development`‑Konfiguration fehlt oder spezielle Test‑Einstellungen nötig sind, kannst du eine eigene Build-Konfiguration anlegen und zuweisen, z. B. `testing`.
+Falls dein Projekt andere Werte benötigt, etwa weil die `development`-Konfiguration fehlt oder spezielle Test‑Einstellungen nötig sind, kannst du eine eigene Build-Konfiguration anlegen und zuweisen, z. B. `testing`.
 
 Der vorherige Builder `@angular/build:karma` erlaubte es, Build‑Optionen (wie `polyfills`, `assets`, `styles`) direkt im `test`-Target zu definieren. Der neue Builder `@angular/build:unit-test` unterstützt das nicht. 
-Falls sich deine Test‑Build‑Optionen von der `development`‑Konfiguration unterscheiden, musst du diese Optionen in eine eigene Build‑Konfiguration verschieben. 
+Falls sich deine Test‑Build‑Optionen von der `development`-Konfiguration unterscheiden, musst du diese Optionen in eine eigene Build-Konfiguration verschieben. 
 Stimmen sie bereits mit `development` überein, ist kein weiterer Schritt notwendig.
 
 > **Tipp:** Alternativ kannst du einfach ein neues Projekt mittels `ng new` erzeugen und die relevanten Abschnitte aus der neu generierten `angular.json` in dein bestehendes Projekt übernehmen. 
@@ -147,19 +147,19 @@ npm uninstall karma karma-chrome-launcher karma-coverage karma-jasmine karma-jas
 
 #### 5. Browser‑Modus konfigurieren (optional)
 
-Falls du Tests in einem echten Browser ausführen möchtest, musst du einen Browser‑Provider installieren und die `angular.json` anpassen.
+Falls du Tests in einem echten Browser ausführen möchtest, musst du einen Browser-Provider installieren und die `angular.json` anpassen.
 Wähle je nach Bedarf:
 
 * **Playwright:** `@vitest/browser-playwright` für Chromium, Firefox und WebKit
 * **WebdriverIO:** `@vitest/browser-webdriverio` für Chrome, Firefox, Safari und Edge
-* **Preview:** `@vitest/browser-preview` für Webcontainer‑Umgebungen wie StackBlitz
+* **Preview:** `@vitest/browser-preview` für Webcontainer-Umgebungen wie StackBlitz
 
 ```bash
 npm install --save-dev @vitest/browser-playwright
 ```
 
 Danach musst du noch die `angular.json` erweitern.
-Füge im `test`‑Target die Option `browsers` hinzu.
+Füge im `test`-Target die Option `browsers` hinzu.
 Der Browsername hängt vom verwendeten Provider ab (z. B. `chromium` bei Playwright).
 
 ```json
@@ -229,7 +229,7 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 | `--project <name>` | Wählt ein bestimmtes Projekt in einem Workspace aus.                  |
 | `--include <path>` | Beschränkt das Refactoring auf eine Datei oder ein Verzeichnis.       |
 | `--file-suffix`    | Legt eine andere Dateiendung für Testdateien fest.                    |
-| `--add-imports`    | Fügt explizite Vitest‑Im­porte hinzu.                                  |
+| `--add-imports`    | Fügt explizite Vitest-Im­porte hinzu.                                  |
 | `--verbose`        | Aktiviert detailliertes Logging der durchgeführten Änderungen.        |
 
 #### 3. Nach der Migration
@@ -292,7 +292,7 @@ Dadurch vermeidest du mögliche Namenskollisionen, etwa mit gleichnamigen Funkti
 
 Die üblichen Matcher wie `toBe`, `toEqual`, `toContain` oder `toHaveBeenCalledWith` stehen in Vitest weiterhin zur Verfügung. Wenn du in Jasmine `jasmine.any(...)` verwendet hast, nutzt du in Vitest `expect.any(...)`.
 Wichtig: Vitest hat nicht das Ziel, eine zu Jasmine kompatible API zu schaffen.
-Stattdessen bietet Vitest eine möglichst [**Jest‑kompatible** Expect‑API](https://vitest.dev/api/expect.html) auf Basis von Chai an.
+Stattdessen bietet Vitest eine möglichst [**Jest‑kompatible** Expect-API](https://vitest.dev/api/expect.html) auf Basis von Chai an.
 Das Testframework Jest hat wiederum das Ziel, einigermaßen kompatibel zu Jasmine zu sein.
 Weil aber Vitest nur mit Jest kompatibel sein will, ergeben sich folgende Herausforderungen, da einige Matcher schlicht fehlen:
 
@@ -329,7 +329,7 @@ expect(spy).toHaveBeenCalledExactlyOnceWith(book);
 
 #### 3) Asynchrone Matchers: `expectAsync(...)` (Jasmine) vs. `.resolves/.rejects` (Jest/Vitest)
 
-Jasmine hat eine [eigene Async‑API](https://jasmine.github.io/api/5.12/async-matchers): `await expectAsync(promise).toBeResolved() / toBeRejectedWith(...)`. 
+Jasmine hat eine [eigene Async-API](https://jasmine.github.io/api/5.12/async-matchers): `await expectAsync(promise).toBeResolved() / toBeRejectedWith(...)`. 
 Jest/Vitest nutzen stattdessen das Muster [`await expect(promise).resolves/...`](https://vitest.dev/api/expect.html#resolves) bzw. [`.rejects/...`](https://vitest.dev/api/expect.html#rejects). 
 Beim Umstieg müssen diese Expectations umgeschrieben werden.
 
