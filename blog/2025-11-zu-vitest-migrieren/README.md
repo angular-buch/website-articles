@@ -138,7 +138,8 @@ Weitere Einstellungen findest du in der offiziellen [Vitest‑Dokumentation](htt
 #### 4. Karma- und `test.ts`‑Dateien entfernen
 
 Du kannst nun `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. 
-Die folgenden Befehle entsprechen einem Standard‑Angular‑Projekt; in deinem Projekt können weitere Pakete vorhanden sein.
+Die folgenden Befehle entsprechen einem Standard‑Angular‑Projekt.
+In deinem Projekt können weitere Pakete vorhanden sein.
 
 ```bash
 npm uninstall karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter
