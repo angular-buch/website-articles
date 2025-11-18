@@ -264,9 +264,6 @@ Bei automatischer Suche setzt du `"runnerConfig": true` in der `angular.json`.
 Der Builder sucht dann selbstständig nach einer Datei namens `vitest-base.config.*`, zunächst im Projektverzeichnis und anschließend im Workspace-Root. 
 So kannst du beispielsweise gemeinsame Einstellungen zentral definieren und bequem wiederverwenden.
 
-Eine wichtige Erninnerung: Das Schematic `@schematics/angular:refactor-jasmine-vitest` arbeitet **ausschließlich am Test-Quellcode**.
-Es installiert keine Vitest-Abhängigkeiten und stellt auch nicht automatisch deine `angular.json` auf den Vitest-Runner um. 
-Die Konfiguration des `unit-test`-Builders geschieht wie zuvor gezeigt über `ng update` und anschließende manuelle Anpassungen.
 
 
 ## Die neue Syntax und APIs
