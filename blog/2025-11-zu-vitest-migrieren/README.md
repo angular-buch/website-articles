@@ -552,31 +552,6 @@ Du erzeugst weiterhin deine Komponenten oder Services mithilfe von `TestBed`.
 Auch der explizite Aufruf von `fixture.detectChanges()` ist unverändert notwendig, um die Change Detection manuell anzustoßen.
 
 
-
-## Vitests Browser‑Modus: Emulation, Partial, Full
-
-<!-- TODO: kann man das irgendwo einstellen -->
-
-Vitest kann Tests **in Node mit emuliertem DOM** oder **im echten Browser** ausführen. 
-Hier eine kurze Einordnung:
-
-### Emulierter DOM (Node + jsdom)
-
-Im emulierten DOM-Modus laufen Tests standardmäßig in einer Node-Umgebung mit [jsdom](https://github.com/jsdom/jsdom). Dieser Modus ist sehr schnell, simuliert aber nicht vollständig das exakte Verhalten eines echten Browsers. Für die überwiegende Mehrheit klassischer Unit-Tests ist der jsdom-Modus dennoch völlig ausreichend.
-
-### Partial Browser Mode
-
-Im Partial Browser Mode laufen sowohl der Test- als auch der App-Code direkt in einer echten Browser-Umgebung, beispielsweise innerhalb einer Iframe-Session. Dabei kannst du unmittelbar auf das `document`-Objekt zugreifen oder DOM-Utilities verwenden. Ereignisse, Fokusverhalten und Timing entsprechen dabei realistischen Bedingungen. Dieser Modus ist besonders geeignet für Komponenten-Tests, wenn jsdom an seine Grenzen stößt. Der Partial Browser Mode ist zwar etwas langsamer als der jsdom-Modus, bietet aber deutlich mehr Zuverlässigkeit bei UI-Details.
-
-### Full Browser Mode
-
-Im Full Browser Mode steuern die Tests den Browser extern über eine `page`-API, ähnlich wie es bei Playwright der Fall ist. Dadurch erhältst du Zugriff auf umfassende Actionability-Checks, robuste Elementselektoren und realistisches Benutzerverhalten. Dieser Modus liefert die realistischsten Testergebnisse, ist jedoch auch schwergewichtiger und verlangt einen ausführlicheren Test-Code. Besonders gut geeignet ist der Full Browser Mode für komplexe Interaktionen wie Drag-and-Drop, Datei-Uploads oder Canvas-Manipulationen.
-
-### Wann solltest du welchen Modus verwenden?
-
-Für Tests, die reine Logik oder einfache DOM-Abfragen enthalten, ist der jsdom-Modus optimal. Möchtest du realistischere UI-Interaktionen testen, greifst du am besten zum Partial Browser Mode. Für besonders kritische UI-Fälle mit komplexen Anforderungen eignet sich der Full Browser Mode am besten. Dabei kannst du Projekte oder spezifische Teile deiner Tests gezielt in einem echten Browser laufen lassen.
-
-
 ## Bekannte Einschränkungen und Fallstricke
 
 Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser-Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen. Du wirst im Vitest Ökosystem nach Alternative suchen müssen.
