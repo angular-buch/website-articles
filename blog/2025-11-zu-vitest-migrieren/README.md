@@ -373,7 +373,9 @@ const onItem = jasmine.createSpy().and.returnValue(true);
 const onItem = vi.fn().mockReturnValue(true);
 ```
 
-In Jasmine kann man mit den ersten Parameter einen Namen vergeben, dies dient dazu, in Fehlermeldungen und Reports aussagekräftigere Texte anzuzeigen. (siehe [Doku](https://jasmine.github.io/api/5.12/jasmine#.createSpy)). Falls du in Vitest ebenfalls einem einen sprechenden Namen geben möchtest, kannst du dies mit `.mockName('onItem')` tun.
+In Jasmine kann man mit den ersten Argument einen Namen für den Spy vergeben.
+Dies dient dazu, in Fehlermeldungen und Reports aussagekräftigere Texte anzuzeigen (siehe [Doku](https://jasmine.github.io/api/5.12/jasmine#.createSpy)).
+Falls du in Vitest ebenfalls einem einen sprechenden Namen geben möchtest, kannst du dies mit `.mockName('onItem')` tun.
 
 ```ts
 // Jasmine - mit Name
