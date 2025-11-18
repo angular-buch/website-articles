@@ -112,7 +112,7 @@ Suche in deiner `angular.json` den `test`‑Target deines Projekts und setze den
 ```
 
 Der `unit-test`‑Builder verwendet standardmäßig `"tsConfig": "tsconfig.spec.json"` und `"buildTarget": "::development"`. 
-Falls dein Projekt andere Werte benötigt, etwa weil die `development`‑Konfiguration fehlt oder spezielle Test‑Einstellungen nötig sind, kannst du eine eigene `testing`‑ oder ähnlich benannte Build‑Konfiguration anlegen und zuweisen.
+Falls dein Projekt andere Werte benötigt, etwa weil die `development`‑Konfiguration fehlt oder spezielle Test‑Einstellungen nötig sind, kannst du eine eigene Build-Konfiguration anlegen und zuweisen, z. B. `testing`.
 
 Der vorherige Builder `@angular/build:karma` erlaubte es, Build‑Optionen (wie `polyfills`, `assets`, `styles`) direkt im `test`‑Target zu definieren. Der neue Builder `@angular/build:unit-test` unterstützt das nicht. 
 Falls sich deine Test‑Build‑Optionen von der `development`‑Konfiguration unterscheiden, musst du diese Optionen in eine eigene Build‑Konfiguration verschieben. 
