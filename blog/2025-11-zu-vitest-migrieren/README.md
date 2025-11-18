@@ -412,7 +412,7 @@ it('should load data', async () => {
 
 Ggf. muss der Service für dieses Beispiel "ausgemockt" werden, damit es funktioniert.
 Hier bleibt alles unverändert.
-Modern ist nur die Schreibweise bei der es zwischen Jasmine und Vitest keinen Unterschied gibt.
+Modern ist nur die Schreibweise, bei der es zwischen Jasmine und Vitest keinen Unterschied gibt.
 
 Der zweite Angular-Klassiker [`fakeAsync()`](https://angular.dev/api/core/testing/fakeAsync) und [`tick()`](https://angular.dev/api/core/testing/tick) braucht hingegen einen echten Ersatz.
 (Hinweis: Dieser beiden Helfer sind nicht Bestandteil von Jasmine, sondern kommen aus `@angular/core/testing`.)
