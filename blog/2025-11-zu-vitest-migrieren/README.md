@@ -301,7 +301,7 @@ expect(flag).toBe(false);
 
 **2) `toHaveBeenCalledOnceWith()` gibt es in Jest/Vitest nicht**
 
-Jasmine hat einen praktischen Matcher für Spione mit der Prüfung auf "genau einmal und genau mit diesen Argumenten". 
+Jasmine hat einen praktischen Matcher für einen Spy mit der Prüfung auf "genau einmal und genau mit diesen Argumenten". 
 In Jest/Vitest Core gibt es diesen Matcher leider nicht.
 Als Ersatz kombinierst du einfach `toHaveBeenCalledTimes(1)` mit `toHaveBeenCalledWith(...)`:
 
