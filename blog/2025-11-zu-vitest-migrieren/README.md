@@ -458,7 +458,7 @@ Es eignet sich besonders gut, wenn du eine ganz bestimmte Zeitspanne simulieren 
 
 
 Doch nicht alle Timer sind so einfach. 
-Manchmal besteht der Code nur aus timerbasierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach – rein über Timeouts und Intervals:
+Manchmal besteht der Code nur aus timerbasierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach, indem es ausschließlich Timeouts und Intervals nutzt:
 
 ```ts
 // timer-sync.ts
@@ -498,7 +498,7 @@ describe('startSyncSequence', () => {
 
 Hier wäre `advanceTimersByTime()` zwar möglich, aber unnötig kompliziert. `runAllTimers()` löst einfach jedes Timeout und jedes Interval aus, bis nichts mehr übrig ist.
 
-Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeiten – etwa durch ein `await` oder Promise-Ketten.
+Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeiten, beispielsweise durch ein `await` oder Promise-Ketten.
 Dann reicht `runAllTimers()` nicht mehr aus. Das folgende Beispiel zeigt ein typisches Muster aus realen Anwendungen:
 
 ```ts
