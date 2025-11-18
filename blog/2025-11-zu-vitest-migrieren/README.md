@@ -410,7 +410,7 @@ it('should load data', async () => {
 });
 ```
 
-Ggf. muss der Service für dieses Beispiel "ausgemockt" werden damit es funktioniert.
+Ggf. muss der Service für dieses Beispiel "ausgemockt" werden, damit es funktioniert.
 Hier bleibt alles unverändert.
 Modern ist nur die Schreibweise bei der es zwischen Jasmine und Vitest keinen Unterschied gibt.
 
