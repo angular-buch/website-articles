@@ -417,8 +417,7 @@ Modern ist nur die Schreibweise, bei der es zwischen Jasmine und Vitest keinen U
 Der zweite Angular-Klassiker [`fakeAsync()`](https://angular.dev/api/core/testing/fakeAsync) und [`tick()`](https://angular.dev/api/core/testing/tick) braucht hingegen einen echten Ersatz.
 (Hinweis: Diese beiden Helfer sind nicht Bestandteil von Jasmine, sondern kommen aus `@angular/core/testing`.)
 Vitest bringt ein eigenes [Fake-Timer-System](https://vitest.dev/api/vi.html#fake-timers) mit.
-Das ganze benötigt etwas Einarbeitung.
-Denn nicht jeder Timer funktioniert gleich und nicht jeder Test braucht dieselben Werkzeuge. 
+Das ganze benötigt etwas Einarbeitung, denn nicht jeder Timer funktioniert gleich und nicht jeder Test braucht dieselben Werkzeuge. 
 Beginnen wir mit einem einfachen, Zeit-basierten Beispiel. 
 Die folgende Funktion erhöht einen Counter nach genau fünf Sekunden:
 
