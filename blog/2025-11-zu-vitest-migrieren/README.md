@@ -20,6 +20,37 @@ Beim Erzeugen eines neuen Projekts mit `ng new` fragt dich die CLI jetzt nach de
 Vitest ist dabei die Voreinstellung. <!-- quelle: https://github.com/angular/angular-cli/pull/31578 -->
 Du kannst auf Wunsch weiterhin Jasmine wählen, aber für neue Projekte führt der Weg klar zu Vitest.
 
+## Inhalt
+
+- [Warum Angular Karma und Jasmine ersetzt](#warum-angular-karma-und-jasmine-ersetzt)
+- [Migrationsleitfaden: Von Karma/Jasmine zu Vitest](#migrationsleitfaden-von-karmajasmine-zu-vitest)
+  - [Manuelle Migrationsschritte](#manuelle-migrationsschritte)
+    - [1. Abhängigkeiten installieren](#1-abhängigkeiten-installieren)
+    - [2. `angular.json` aktualisieren](#2-angularjson-aktualisieren)
+    - [3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen](#3-eigene-karmaconfjskonfiguration-berücksichtigen)
+    - [4. Karma- und `test.ts`‑Dateien entfernen](#4-karma--und-testtsdateien-entfernen)
+    - [5. Browser‑Modus konfigurieren (optional)](#5-browsermodus-konfigurieren-optional)
+  - [Automatisches Test‑Refactoring per Schematic](#automatisches-testrefactoring-per-schematic)
+    - [1. Überblick](#1-überblick)
+    - [2. Schematic ausführen](#2-schematic-ausführen)
+    - [3. Nach der Migration](#3-nach-der-migration)
+    - [4. Benutzerdefinierten Konfiguration (optional)](#4-benutzerdefinierten-konfiguration-optional)
+- [Die neue Syntax und APIs](#die-neue-syntax-und-apis)
+  - [Globale Funktionen](#globale-funktionen)
+  - [Matcher](#matcher)
+  - [Spies und Mocks](#spies-und-mocks)
+  - [Asynchronität ohne Zone.js aber mit Vitests](#asynchronität-ohne-zonejs-aber-mit-vitests)
+  - [TestBed und ComponentFixture](#testbed-und-componentfixture)
+- [Vitests Browser‑Modus: Emulation, Partial, Full](#vitests-browsermodus-emulation-partial-full)
+  - [Emulierter DOM (Node + jsdom)](#emulierter-dom-node--jsdom)
+  - [Partial Browser Mode](#partial-browser-mode)
+  - [Full Browser Mode](#full-browser-mode)
+  - [Wann solltest du welchen Modus verwenden?](#wann-solltest-du-welchen-modus-verwenden)
+- [Bekannte Einschränkungen und Fallstricke](#bekannte-einschränkungen-und-fallstricke)
+- [Fazit](#fazit)
+
+
+
 ## Warum Angular Karma und Jasmine ersetzt
 
 _Karma und Jasmine_ haben für Angular lange Jahre gute Dienste geleistet, vor allem wegen der Ausführung in einem echten Browser. 
@@ -150,9 +181,9 @@ Andernfalls läuft der Browser sichtbar.
 
 **WICHTIG:** Das Schematic `refactor-jasmine-vitest` ist experimentell und deckt nicht alle Pattern ab. Überprüfe die Änderungen immer manuell.
 
-Das Angular CLI stellt ein Schematic bereit, das Jasmine‑Tests automatisch auf Vitest umstellt.
+Das Angular CLI stellt ein Schematic bereit, das deine Jasmine‑Tests automatisch auf Vitest umstellt.
 
-#### Überblick
+#### 1. Überblick
 
 Das Schematic führt folgende Umwandlungen in `.spec.ts`‑Dateien durch:
 
@@ -165,16 +196,14 @@ Das Schematic führt folgende Umwandlungen in `.spec.ts`‑Dateien durch:
 * Umstellung der Lifecycle‑Hooks (`beforeAll`, `beforeEach`, etc.) auf Vitest‑Varianten
 * `fail()` → `vi.fail()`
 * Anpassung von Matchern an die Vitest‑API
-* TODO‑Kommentare für nicht automatisch konvertierbare Stellen
+* [TODO-Kommentare](https://github.com/angular/angular-cli/pull/31469) für nicht automatisch konvertierbare Stellen
+* Tests mit `done`-Callback werden in `async`/`await`-Tests umgeschrieben
+<!--(siehe PR https://github.com/angular/angular-cli/pull/31435 und folgende -->
 
-Das Schematic **macht nicht**:
+Das Schematic führt bestimmte Aufgaben bewusst nicht durch. Es installiert weder Vitest noch andere erforderliche Abhängigkeiten. Außerdem nimmt es keine Änderungen an der `angular.json` vor, um den Vitest‑Builder zu aktivieren. Ebenso entfernt es keine Karma‑Dateien aus dem Projekt. Schließlich konvertiert das Schematic auch keine komplexen Spy‑Szenarien, die daher weiterhin manuell überarbeitet werden müssen.
 
-* Installation von Vitest oder anderen Abhängigkeiten
-* Änderungen an `angular.json` zum Aktivieren des Vitest‑Builders
-* Entfernen von Karma‑Dateien
-* Konvertierung komplexer Spy‑Szenarien
 
-### Schematic ausführen
+#### 2. Schematic ausführen
 
 Wenn dein Projekt für Vitest konfiguriert ist, kannst du das automatische Refactoring starten:
 
@@ -192,24 +221,21 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 | `--add-imports`    | Fügt explizite Vitest‑Im­porte hinzu, falls Globals deaktiviert sind. |
 | `--verbose`        | Aktiviert detailliertes Logging der durchgeführten Änderungen.        |
 
-### Nach der Migration
+#### 3. Nach der Migration
 
 1. **Tests ausführen:** Nutze `ng test`, um sicherzustellen, dass alle Tests weiterhin funktionieren.
 2. **Änderungen prüfen:** Sieh dir die Anpassungen an, besonders bei komplexen Spies oder asynchronen Tests.
 
 `ng test` führt Tests im **Watch‑Modus** aus, sofern das Terminal interaktiv ist. Auf CI läuft der Test‑Runner automatisch im Single‑Run‑Modus.
 
-## Konfiguration
+#### 4. Benutzerdefinierten Konfiguration (optional)
 
 Die Angular CLI erzeugt die Vitest‑Konfiguration im Hintergrund basierend auf den Optionen in `angular.json`.
 
-### Eigene Vitest‑Konfiguration
+Wem die vorgesehenen Optionen nicht ausreichen, der kann eine benutzerdefinierte Konfiguration verwenden. Damit werden zwar erweiterte Optionen verfügbar, das Angular-Team bietet jedoch keinen direkten Support für die spezifischen Inhalte der Konfigurationsdatei oder darin verwendete Plugins von Drittanbietern.
+Die CLI überschreibt außerdem bestimmte Eigenschaften (`test.projects`, `test.include`), um einen ordnungsgemäßen Betrieb sicherzustellen.
 
-**WICHTIG:** Die Angular‑CLI unterstützt eine eigene Vitest‑Konfiguration, aber übernimmt keinerlei Verantwortung für deren Inhalt. Einige Einstellungen wie `test.projects` und `test.include` werden vom CLI‑Builder überschrieben.
-
-Du kannst jedoch eine `vitest.config.ts` einbinden.
-
-**1. Direkter Pfad**
+Du kannst bei Bedarf eine eigene Vitest-Konfigurationsdatei (`vitest.config.ts`) einbinden, um weitergehende Anpassungen vorzunehmen, die über die Standardoptionen hinausgehen. Dabei gibt es zwei mögliche Wege: Entweder verweist du direkt auf eine bestimmte Konfigurationsdatei, indem du den exakten Pfad in der `angular.json` angibst:
 
 ```json
 {
@@ -228,9 +254,11 @@ Du kannst jedoch eine `vitest.config.ts` einbinden.
 }
 ```
 
-**2. Automatische Suche**
+Oder du lässt die Angular CLI automatisch suchen. 
+Bei automatischer Suche setzt du `"runnerConfig": true` in der `angular.json`. 
+Der Builder sucht dann selbstständig nach einer Datei namens `vitest-base.config.*`, zunächst im Projektverzeichnis und anschließend im Workspace-Root. 
+So kannst du beispielsweise gemeinsame Einstellungen zentral definieren und bequem wiederverwenden.
 
-Wenn du `"runnerConfig": true` setzt, sucht der Builder automatisch nach einer Datei `vitest-base.config.*` im Projekt‑ oder Workspace‑Root.
 
 
 
@@ -291,11 +319,11 @@ expect(result).toBe(true);
 expect(flag).toBe(false);
 ```
 
-**2) `toHaveBeenCalledOnceWith()`: in Jasmine vorhanden, in Jest/Vitest (Core) nicht**
+**2) `toHaveBeenCalledOnceWith()` gibt es in Jest/Vitest nicht**
 
-Jasmine hat den Mathcher für Spione mit der praktischen Prüfung auf "genau einmal und genau mit diesen Argumenten". 
+Jasmine hat einen praktischen Matcher für Spione mit der Prüfung auf "genau einmal und genau mit diesen Argumenten". 
 In Jest/Vitest Core gibt es diesen Matcher leider nicht.
-Al Ersatz kombinierst du einfach `toHaveBeenCalledTimes(1)` mit `toHaveBeenCalledWith(...)`:
+Als Ersatz kombinierst du einfach `toHaveBeenCalledTimes(1)` mit `toHaveBeenCalledWith(...)`:
 
 ```ts
 var book = {};
@@ -551,9 +579,7 @@ Für Tests, die reine Logik oder einfache DOM-Abfragen enthalten, ist der jsdom-
 
 ## Bekannte Einschränkungen und Fallstricke
 
-Die Anpassungsmöglichkeiten bei der Konfiguration sind derzeit begrenzt, da eine individuelle `vitest.config.*` in der aktuellen CLI-Integration nicht vorgesehen ist. Stattdessen werden viele (aber nicht alle) Optionen über die `angular.json` gesteuert. 
-
-Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser-Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen, da sich Vitest ausschließlich auf moderne Evergreen-Browser konzentriert.
+Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser-Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen. Du wirst im Vitest Ökosystem nach Alternative suchen müssen.
 
 Bei der Umstellung auf Vitest kann eine kurze Gewöhnungsphase im Team nötig sein, da bestimmte neue API-Konzepte wie `vi.spyOn`, `vi.fn` oder Restore-Strategien zwar leicht zu erlernen sind, sich aber dennoch von Jasmine unterscheiden. Achte deshalb darauf, dass deine Tests mögliche Manipulationen an globalen Objekten vollständig aufräumen und verwende dafür idealerweise Methoden wie [`afterEach`](https://vitest.dev/api/#aftereach) mit [`vi.restoreAllMocks()`](https://vitest.dev/api/vi.html#vi-restoreallmocks).
 
