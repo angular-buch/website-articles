@@ -1,15 +1,17 @@
 ---
-title: 'Angular 20 ist da!'
+title: 'Angular 21 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2025-11-30
-lastModified: 2025-11-30
+published: 2025-11-19
+lastModified: 2025-11-19
 keywords:
   - Angular
   - Angular 21
   - ARIA
   - Zoneless
   - Signal Forms
+  - vitest
+  - Karma
 language: de
 header: angular21.jpg
 sticky: false
@@ -29,7 +31,7 @@ Die folgenden Versionen von TypeScript und Node.js sind für Angular 21 notwendi
 - TypeScript: >=5.9.0 <6.0.0
 - Node.js: ^20.19.0 || ^22.12.0 || ^24.0.0
 
-Ausführliche Infos zu den unterstützten Versionen finden Sie der [Angular-Dokumentation](https://angular.dev/reference/versions).
+Ausführliche Infos zu den unterstützten Versionen findest du der [Angular-Dokumentation](https://angular.dev/reference/versions).
 
 ## Zoneless Change Detection: der neue Standard
 
@@ -50,6 +52,7 @@ Zusätzlich muss Zone.js installiert sein und unter `polyfills` in der `angular.
 export const appConfig: ApplicationConfig = {
   providers: [
     // ...
+    // VERALTETE Change Detection mit Zone.js aktivieren
     provideZoneChangeDetection({ eventCoalescing: true }),
 };
 ```
@@ -81,12 +84,12 @@ export const bookSchema = schema<Book>(fieldPath => {
   imports: [Field]
 })
 export class MyForm {
-  bookData = signal<Book>({
+  protected readonly bookData = signal<Book>({
     isbn: '',
     title: ''
   });
 
-  bookForm = form(this.bookData, bookFormSchema);
+  protected readonly bookForm = form(this.bookData, bookFormSchema);
 }
 ```
 
@@ -113,23 +116,31 @@ Noch ist der neue Ansatz aber experimentell, sodass sich die Schnittstellen und 
 ## Vitest als neuer Test-Runner
 
 Mit Angular 21 gibt es einen der größten Umbrüche im Testing seit vielen Jahren: 
-Vitest ersetzt "offiziell" Karma und Jasmine als Standard-Test-Runner. 
-Beim Erzeugen eines neuen Projekts mit `ng new` fragt dich die CLI jetzt nach dem gewünschten Test‑Runner.
-Vitest ist dabei die Voreinstellung.
-Du kannst auf Wunsch weiterhin Jasmine wählen, aber für neue Projekte führt der Weg klar zu Vitest.
+[Vitest](https://vitest.dev) ersetzt "offiziell" Karma und Jasmine als Standard-Test-Runner. 
+Vitest ist für neue Projekte mit `ng new` die Voreinstellung.
+Für neue Projekte führt der Weg also klar zu Vitest, du kannst auf Wunsch aber weiterhin Karma/Jasmine wählen:
 
-Vitest bringt spürbare Vorteile: deutlich schnellere Testausführung, moderne APIs, eine Jest‑ähnliche Expect‑Syntax, flexible Fake‑Timer, und bei Bedarf sogar einen echten Browser‑Modus. Der Browser-Modus ist ähnlich wie zuvor unter Karma und ideal für realitätsnahe UI‑Tests. Die meisten Specs sollten weiterhin unverändert funktionieren, da Angulars `TestBed` und `ComponentFixture` vollständig gleich bleiben. Anpassungen betreffen hauptsächlich Jasmine‑spezifische Matcher oder Spies.
+```bash
+# Projekt mit Karma als Testrunner anlegen
+ng new my-project --test-runner=karma
+```
 
-Die eigentliche Umstellung erfolgt zunächst über den neuen `unit-test`-Builder in der `angular.json`. Danach kannst du für bestehende Tests ein experimentelles Schematic verwenden, das viele Jasmine‑Patterns automatisch nach Vitest überführt.
+Vitest bringt spürbare Vorteile: deutlich schnellere Testausführung, moderne APIs, eine Jest‑ähnliche Expect‑Syntax, flexible Fake‑Timer, und bei Bedarf sogar einen echten Browser-Modus.
+Der Browser-Modus ist ähnlich wie zuvor unter Karma und ideal für realitätsnahe UI‑Tests.
+Die meisten Specs sollten weiterhin unverändert funktionieren, da Angulars `TestBed` und `ComponentFixture` vollständig gleich bleiben.
+Anpassungen betreffen hauptsächlich Jasmine-spezifische Matcher oder Spys.
 
-Eine ausführliche Anleitung zur Migration, inklusive praktischer Beispiele zu Fake‑Timern, Matchern und async/await, haben wir hier für euch zusammengestellt:
+Die eigentliche Umstellung erfolgt zunächst über den neuen Builder `unit-test` in der `angular.json`.
+Danach kannst du für bestehende Tests ein experimentelles Schematic verwenden, das viele Jasmine‑Patterns automatisch nach Vitest überführt.
+
+Eine ausführliche Anleitung zur Migration, inklusive praktischer Beispiele zu Fake‑Timern, Matchern und async/await, haben wir hier zusammengestellt:
 **[Vitest in Angular 21: Was ist neu und wie kann man migrieren?](https://angular-buch.com/blog/2025-11-zu-vitest-migrieren)**
 
 
 
-## @angular/aria: Barrierefreie Komponenten leicht gemacht
+## @angular/aria: barrierefreie Komponenten leicht gemacht
 
-Mit Angular 21 wurde das neue Package [`@angular/aria`](https://angular.dev/guide/aria/overview) eingeführt – eine Sammlung von headless, barrierefreien Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) implementieren.
+Mit Angular 21 wurde das neue Package [`@angular/aria`](https://angular.dev/guide/aria/overview) eingeführt: eine Sammlung von Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) implementieren.
 Das Package übernimmt die komplexe Arbeit der Barrierefreiheit, insbesondere für komplexere, häufig verwendete Patterns, die über die Standard-HTML-Elemente hinausgehen.
 Tastaturinteraktionen, ARIA-Attribute, Fokus-Management und Screen-Reader-Unterstützung werden unter der Haube der Direktiven berücksichtigt.
 
@@ -139,7 +150,7 @@ Die Installation des neuen Pakets erfolgt wie gewohnt über die Angular CLI:
 ng add @angular/aria
 ```
 
-In der ersten Version bietet Angular Aria Direktiven für die folgenden interaktiven Patterns:
+In der ersten Version bietet @angular/aria Direktiven für die folgenden interaktiven Patterns:
 
 | Komponente       | Beschreibung                                                                    |
 |------------------|---------------------------------------------------------------------------------|
@@ -155,11 +166,11 @@ In der ersten Version bietet Angular Aria Direktiven für die folgenden interakt
 | **Toolbar**      | Gruppierte Steuerelemente mit logischer Tastaturnavigation                      |
 | **Tree**         | Hierarchische Listen mit Erweitern/Einklappen-Funktionalität                    |
 
-Das neue Package eignet sich insbesondere dann, wenn wir komplexe Komponenten entwickeln und nicht auf bestehende barrierefreie Komponentenbibliotheken zurückgreifen können, weil sich diese zum Beispiel hinsichtlich ihres Stylings nicht anpassen lassen.
+Das neue Package eignet sich insbesondere dann, wenn wir komplexe Komponenten entwickeln und nicht auf bestehende barrierefreie Komponentenbibliotheken zurückgreifen können, z. B. weil sich diese zum Beispiel hinsichtlich ihres Stylings nicht anpassen lassen.
 Die Direktiven bringen keinerlei Visualität mit sich, sorgen aber für ein konsistentes Verhalten sowie eine barrierefreie Tastaturnavigation, Fokus-Handling und Screenreader-Optimierung.
 
-> Einige der Komponenten standen bereits zuvor in ähnlicher Form als [Component Development Kit (CDK)](https://material.angular.dev/cdk/dialog/overview) - dem Unterbau von Angular Material bereit.
-> Mit `@angular/aria` bringt das Angular Team den Kern dieser Sammlung ein Stück näher an die Angular Basis und stärkt das Thema Barrierefreiheit.
+> Einige der Bausteine gab es schon zuvor in ähnlicher Form im [Component Development Kit (CDK)](https://material.angular.dev/cdk/dialog/overview) von Angular. Das CDK war der Unterbau der Komponentenbibliothek Angular Material.
+> Mit `@angular/aria` bringt das Angular Team den Kern dieser Sammlung ein Stück näher an die Angular-Basis und stärkt das Thema Barrierefreiheit.
 
 ## Sonstiges
 
