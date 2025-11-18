@@ -17,7 +17,7 @@ header: TODO.jpg
 Mit Angular 21 gibt es einen großen Schnitt im Unit‑Testing: 
 Vitest ist jetzt der Standard, die langjährige Kombination aus Karma und Jasmine wird abgelöst.
 Beim Erzeugen eines neuen Projekts mit `ng new` fragt dich die CLI jetzt nach dem gewünschten Test‑Runner.
-Vitest ist dabei die Voreinstellung. <!-- quelle: https://github.com/angular/angular-cli/pull/31578 -->
+Vitest ist dabei die Voreinstellung.
 Du kannst auf Wunsch weiterhin Jasmine wählen, aber für neue Projekte führt der Weg klar zu Vitest.
 
 ## Inhalt
@@ -41,14 +41,8 @@ Du kannst auf Wunsch weiterhin Jasmine wählen, aber für neue Projekte führt d
   - [Spies und Mocks](#spies-und-mocks)
   - [Asynchronität ohne Zone.js aber mit Vitests](#asynchronität-ohne-zonejs-aber-mit-vitests)
   - [TestBed und ComponentFixture](#testbed-und-componentfixture)
-- [Vitests Browser‑Modus: Emulation, Partial, Full](#vitests-browsermodus-emulation-partial-full)
-  - [Emulierter DOM (Node + jsdom)](#emulierter-dom-node--jsdom)
-  - [Partial Browser Mode](#partial-browser-mode)
-  - [Full Browser Mode](#full-browser-mode)
-  - [Wann solltest du welchen Modus verwenden?](#wann-solltest-du-welchen-modus-verwenden)
 - [Bekannte Einschränkungen und Fallstricke](#bekannte-einschränkungen-und-fallstricke)
 - [Fazit](#fazit)
-
 
 
 ## Warum Angular Karma und Jasmine ersetzt
@@ -71,7 +65,9 @@ Kurz gesagt: Der Wechsel sorgt für Tempo, eine deutlich bessere Developer Exper
 
 <!-- Quelle: https://github.com/angular/angular/blob/6178e3ebfbc69a2afa04dd19ea4d6d8b1bfb0649/adev/src/content/guide/testing/migrating-to-vitest.md -->
 
-**WICHTIG:** Die Migration eines bestehenden Projekts auf Vitest gilt derzeit als **experimentell**. Dieser Prozess setzt außerdem das Application-Buildsystem voraus, das bei neu erstellten Projekten standardmäßig aktiviert ist. Wenn du eine bestehende Angular Anwendung hast, update diese zunächst mit `ng update` auf Version 21 und führe anschließend folgende Anleitung durch.
+**WICHTIG:** Die Migration eines bestehenden Projekts auf Vitest gilt derzeit als **experimentell**. 
+Dieser Prozess setzt außerdem das Application-Buildsystem voraus, das bei neu erstellten Projekten standardmäßig aktiviert ist.
+Wenn du eine bestehende Angular Anwendung hast, update diese zunächst mit `ng update` auf Version 21 und führe anschließend folgende Anleitung durch.
 
 ### Manuelle Migrationsschritte
 
@@ -80,7 +76,7 @@ Bevor du das automatische Refactoring‑Schematic verwendest, musst du dein Proj
 #### 1. Abhängigkeiten installieren
 
 Installiere `vitest` sowie eine DOM‑Emulationsbibliothek. 
-Obwohl Tests weiterhin im Browser ausgeführt werden können (siehe [chritt 5), verwendet Vitest standardmäßig eine DOM‑Emulation, um eine Browserumgebung in Node.js zu simulieren und Tests schneller auszuführen. 
+Obwohl Tests weiterhin im Browser ausgeführt werden können (siehe Schritt 5), verwendet Vitest standardmäßig eine DOM‑Emulation, um eine Browserumgebung in Node.js zu simulieren und Tests schneller auszuführen. 
 Die CLI erkennt automatisch `happy-dom`, falls es installiert ist; ansonsten greift sie auf `jsdom` zurück. 
 Eines der beiden Pakete muss vorhanden sein.
 
@@ -106,13 +102,15 @@ Suche in deiner `angular.json` den `test`‑Target deines Projekts und setze den
 }
 ```
 
-Der `unit-test`‑Builder verwendet standardmäßig `"tsConfig": "tsconfig.spec.json"` und `"buildTarget": "::development"`. Falls dein Projekt andere Werte benötigt, etwa weil die `development`‑Konfiguration fehlt oder spezielle Test‑Einstellungen nötig sind, kannst du eine eigene `testing`‑ oder ähnlich benannte Build‑Konfiguration anlegen und zuweisen.
+Der `unit-test`‑Builder verwendet standardmäßig `"tsConfig": "tsconfig.spec.json"` und `"buildTarget": "::development"`. 
+Falls dein Projekt andere Werte benötigt, etwa weil die `development`‑Konfiguration fehlt oder spezielle Test‑Einstellungen nötig sind, kannst du eine eigene `testing`‑ oder ähnlich benannte Build‑Konfiguration anlegen und zuweisen.
 
 Der vorherige Builder `@angular/build:karma` erlaubte es, Build‑Optionen (wie `polyfills`, `assets`, `styles`) direkt im `test`‑Target zu definieren. Der neue Builder `@angular/build:unit-test` unterstützt das nicht. 
 Falls sich deine Test‑Build‑Optionen von der `development`‑Konfiguration unterscheiden, musst du diese Optionen in eine eigene Build‑Konfiguration verschieben. 
 Stimmen sie bereits mit `development` überein, ist kein weiterer Schritt notwendig.
 
-> **Tipp:** Alternativ kannst du einfach ein neues Projekt mittels `ng new` erzeugen und die relevanten Abschnitte aus der neu generierten `angular.json` in dein bestehendes Projekt übernehmen. So erhältst du automatisch eine saubere Vorlage für die Vitest-Konfiguration.
+> **Tipp:** Alternativ kannst du einfach ein neues Projekt mittels `ng new` erzeugen und die relevanten Abschnitte aus der neu generierten `angular.json` in dein bestehendes Projekt übernehmen. 
+> So erhältst du automatisch eine saubere Vorlage für die Vitest-Konfiguration.
 
 
 #### 3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen
@@ -131,7 +129,8 @@ Weitere Einstellungen findest du in der offiziellen [Vitest‑Dokumentation](htt
 
 #### 4. Karma- und `test.ts`‑Dateien entfernen
 
-Du kannst nun `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. Die folgenden Befehle entsprechen einem Standard‑Angular‑Projekt; in deinem Projekt können weitere Pakete vorhanden sein.
+Du kannst nun `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. 
+Die folgenden Befehle entsprechen einem Standard‑Angular‑Projekt; in deinem Projekt können weitere Pakete vorhanden sein.
 
 ```bash
 npm uninstall karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter
@@ -200,7 +199,11 @@ Das Schematic führt folgende Umwandlungen in `.spec.ts`‑Dateien durch:
 * Tests mit `done`-Callback werden in `async`/`await`-Tests umgeschrieben
 <!--(siehe PR https://github.com/angular/angular-cli/pull/31435 und folgende -->
 
-Das Schematic führt bestimmte Aufgaben bewusst nicht durch. Es installiert weder Vitest noch andere erforderliche Abhängigkeiten. Außerdem nimmt es keine Änderungen an der `angular.json` vor, um den Vitest‑Builder zu aktivieren. Ebenso entfernt es keine Karma‑Dateien aus dem Projekt. Schließlich konvertiert das Schematic auch keine komplexen Spy‑Szenarien, die daher weiterhin manuell überarbeitet werden müssen.
+Das Schematic führt bestimmte Aufgaben bewusst nicht durch.
+Es installiert weder Vitest noch andere erforderliche Abhängigkeiten.
+Außerdem nimmt es keine Änderungen an der `angular.json` vor, um den Vitest‑Builder zu aktivieren.
+Ebenso entfernt es keine Karma‑Dateien aus dem Projekt.
+Schließlich konvertiert das Schematic auch keine komplexen Spy‑Szenarien, die daher weiterhin manuell überarbeitet werden müssen.
 
 
 #### 2. Schematic ausführen
@@ -232,10 +235,12 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 
 Die Angular CLI erzeugt die Vitest‑Konfiguration im Hintergrund basierend auf den Optionen in `angular.json`.
 
-Wem die vorgesehenen Optionen nicht ausreichen, der kann eine benutzerdefinierte Konfiguration verwenden. Damit werden zwar erweiterte Optionen verfügbar, das Angular-Team bietet jedoch keinen direkten Support für die spezifischen Inhalte der Konfigurationsdatei oder darin verwendete Plugins von Drittanbietern.
+Wem die vorgesehenen Optionen nicht ausreichen, der kann eine benutzerdefinierte Konfiguration verwenden.
+Damit werden zwar erweiterte Optionen verfügbar, das Angular-Team bietet jedoch keinen direkten Support für die spezifischen Inhalte der Konfigurationsdatei oder darin verwendete Plugins von Drittanbietern.
 Die CLI überschreibt außerdem bestimmte Eigenschaften (`test.projects`, `test.include`), um einen ordnungsgemäßen Betrieb sicherzustellen.
 
-Du kannst bei Bedarf eine eigene Vitest-Konfigurationsdatei (`vitest.config.ts`) einbinden, um weitergehende Anpassungen vorzunehmen, die über die Standardoptionen hinausgehen. Dabei gibt es zwei mögliche Wege: Entweder verweist du direkt auf eine bestimmte Konfigurationsdatei, indem du den exakten Pfad in der `angular.json` angibst:
+Du kannst bei Bedarf eine eigene Vitest-Konfigurationsdatei (`vitest.config.ts`) einbinden, um weitergehende Anpassungen vorzunehmen, die über die Standardoptionen hinausgehen.
+Dabei gibt es zwei mögliche Wege: Entweder verweist du direkt auf eine bestimmte Konfigurationsdatei, indem du den exakten Pfad in der `angular.json` angibst:
 
 ```json
 {
@@ -259,31 +264,9 @@ Bei automatischer Suche setzt du `"runnerConfig": true` in der `angular.json`.
 Der Builder sucht dann selbstständig nach einer Datei namens `vitest-base.config.*`, zunächst im Projektverzeichnis und anschließend im Workspace-Root. 
 So kannst du beispielsweise gemeinsame Einstellungen zentral definieren und bequem wiederverwenden.
 
-
-
-
-<!-- mein Alter Text, zusammen gesucht aus PRs 
-
-
-Für die Umstellung bestehender Tests bringt die CLI ein experimentelles Refactoring-Schematic mit, das gezielt Jasmine-Syntax auf Vitest-APIs umschreibt. Es wird über den Befehl angestoßen:
-
-```bash
-ng generate jasmine-to-vitest --project <projektname>
-```
-
-Das Schematic ermittelt das angegebene Projekt (oder, falls kein Name übergeben wird, das einzige Projekt im Workspace) und durchläuft dann dessen Quellordner. Welche Dateien genau verarbeitet werden, lässt sich über die Option `--include` einschränken; so kannst du z. B. nur bestimmte Ordner oder ein anderes Muster als `**/*.spec.ts` refactoren.
-
-Für jede gefundene Testdatei wird der Quelltext umgeschrieben
-Dabei werden unter anderem fokussierte Tests `fdescribe`/`fit` in `describe.only`/`it.only` überführt, 
-übersprungene Tests `xdescribe`/`xit` in `describe.skip`/`it.skip`, Aufrufe von `pending()` in übersprungene Tests. 
-Zusätzlich werden Jasmine-Matcher auf die Vitest/Jest-Expect-APIs gemappt, Jasmine-Spies (`jasmine.createSpy`, `spyOn`, `jasmine.createSpyObj` usw.) in `vi.fn()` bzw. `vi.spyOn()` konvertiert und Jasmine-typische Typannotationen (etwa `jasmine.Spy`) angepasst. Soweit möglich, werden Tests mit `done`-Callback in `async`/`await`-Tests umgeschrieben.
-Wo der automatische Umbau nicht eindeutig möglich ist, fügt das Schematic [TODO-Kommentare](https://github.com/angular/angular-cli/pull/31469) ein, damit du die Stellen gezielt manuell nacharbeiten kannst. Optional kann es über Argument [`--addImports`](https://github.com/angular/angular-cli/commit/f89750b27) fehlende Vitest-Imports ergänzen.
--->
-
 Eine wichtige Erninnerung: Das Schematic `@schematics/angular:refactor-jasmine-vitest` arbeitet **ausschließlich am Test-Quellcode**.
 Es installiert keine Vitest-Abhängigkeiten und stellt auch nicht automatisch deine `angular.json` auf den Vitest-Runner um. 
 Die Konfiguration des `unit-test`-Builders geschieht wie zuvor gezeigt über `ng update` und anschließende manuelle Anpassungen.
-
 
 
 ## Die neue Syntax und APIs
@@ -466,7 +449,7 @@ Es eignet sich besonders gut, wenn du eine ganz bestimmte Zeitspanne simulieren 
 
 
 Doch nicht alle Timer sind so einfach. 
-Manchmal besteht der Code nur aus Timer-basierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach – rein über Timeouts und Intervals:
+Manchmal besteht der Code nur aus Timer-basierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach - rein über Timeouts und Intervals:
 
 ```ts
 // timer-sync.ts
@@ -506,7 +489,8 @@ describe('startSyncSequence', () => {
 
 Hier wäre `advanceTimersByTime()` zwar möglich, aber unnötig kompliziert. `runAllTimers()` löst einfach jedes Timeout und jedes Interval aus, bis nichts mehr übrig ist.
 
-Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeiten – etwa durch ein `await` oder Promise-Ketten. Dann reicht `runAllTimers()` nicht mehr aus. Das folgende Beispiel zeigt ein typisches Muster aus realen Anwendungen:
+Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeiten - etwa durch ein `await` oder Promise-Ketten.
+Dann reicht `runAllTimers()` nicht mehr aus. Das folgende Beispiel zeigt ein typisches Muster aus realen Anwendungen:
 
 ```ts
 // timer-async.ts
@@ -542,7 +526,8 @@ describe('startAsyncJob', () => {
 });
 ```
 
-`runAllTimersAsync()` ist damit der konsequente Ersatz für Jasmine-Szenarien, in denen `fakeAsync()` und `tick()` zusammen mit Microtask-Flushing verwendet wurden. Vitest macht das Ganze expliziter.
+`runAllTimersAsync()` ist damit der konsequente Ersatz für Jasmine-Szenarien, in denen `fakeAsync()` und `tick()` zusammen mit Microtask-Flushing verwendet wurden. 
+Vitest macht das Ganze expliziter.
 
 ### TestBed und ComponentFixture
 
@@ -554,9 +539,11 @@ Auch der explizite Aufruf von `fixture.detectChanges()` ist unverändert notwend
 
 ## Bekannte Einschränkungen und Fallstricke
 
-Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser-Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen. Du wirst im Vitest Ökosystem nach Alternative suchen müssen.
+Spezielle Karma-Anwendungsfälle wie eigene Karma-Plugins oder individuelle Browser-Launcher lassen sich erwartungsgemäß nicht direkt auf Vitest übertragen. 
+Du wirst im Vitest Ökosystem nach Alternative suchen müssen.
 
-Bei der Umstellung auf Vitest kann eine kurze Gewöhnungsphase im Team nötig sein, da bestimmte neue API-Konzepte wie `vi.spyOn`, `vi.fn` oder Restore-Strategien zwar leicht zu erlernen sind, sich aber dennoch von Jasmine unterscheiden. Achte deshalb darauf, dass deine Tests mögliche Manipulationen an globalen Objekten vollständig aufräumen und verwende dafür idealerweise Methoden wie [`afterEach`](https://vitest.dev/api/#aftereach) mit [`vi.restoreAllMocks()`](https://vitest.dev/api/vi.html#vi-restoreallmocks).
+Bei der Umstellung auf Vitest kann eine kurze Gewöhnungsphase im Team nötig sein, da bestimmte neue API-Konzepte wie `vi.spyOn`, `vi.fn` oder Restore-Strategien zwar leicht zu erlernen sind, sich aber dennoch von Jasmine unterscheiden. 
+Achte deshalb darauf, dass deine Tests mögliche Manipulationen an globalen Objekten vollständig aufräumen und verwende dafür idealerweise Methoden wie [`afterEach`](https://vitest.dev/api/#aftereach) mit [`vi.restoreAllMocks()`](https://vitest.dev/api/vi.html#vi-restoreallmocks).
 
 
 ## Fazit
