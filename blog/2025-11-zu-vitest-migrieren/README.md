@@ -14,12 +14,11 @@ language: de
 header: angular-vitest.jpg
 ---
 
-Mit Angular 21 gibt es eine bedeutende Änderung im Unit‑Testing:
+Mit Angular 21 gibt es eine bedeutende Änderung beim Unit‑Testing:
 Vitest ist jetzt der Standard, die langjährige Kombination aus Karma und Jasmine wird abgelöst.
 Beim Erzeugen eines neuen Projekts mit `ng new` verwendet Angular 21 nun standardmäßig **Vitest** als Test-Runner.
 Vitest verspricht deutlich kürzere Startzeiten, moderne Features und eine einfache Jest-kompatible API.
-Besonders spannend ist dabei der echte Browser-Modus, mit dem realistische Tests ähnlich wie früher mit Karma möglich sind.
-In diesem Artikel zeigen wir dir, was Vitest für dich bedeutet, wie du bestehende Angular-Projekte einfach migrieren kannst und welche Vorteile du dadurch erhältst.
+In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende Angular-Projekte migrieren kannst und welche Vorteile Vitest bietet.
 
 ## Inhalt
 
