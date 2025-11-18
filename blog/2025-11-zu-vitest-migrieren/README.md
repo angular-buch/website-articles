@@ -186,7 +186,7 @@ Andernfalls läuft der Browser sichtbar.
 
 Das Angular CLI stellt ein Schematic bereit, das deine Jasmine‑Tests automatisch auf Vitest umstellt.
 
-**WICHTIG:** Das Schematic `refactor-jasmine-vitest` ist experimentell und deckt nicht alle Pattern ab.
+**WICHTIG:** Das Schematic `refactor-jasmine-vitest` ist experimentell und deckt nicht alle Patterns ab.
 Überprüfe die Änderungen immer manuell.
 
 #### 1. Überblick
