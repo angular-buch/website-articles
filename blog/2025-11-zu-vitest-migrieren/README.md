@@ -240,7 +240,7 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 `ng test` führt Tests im **Watch‑Modus** aus, sofern das Terminal interaktiv ist.
 In CI-Umgebungen führt der Test-Runner die Tests automatisch im Single-Run-Modus aus.
 
-#### 4. Benutzerdefinierten Konfiguration (optional)
+#### 4. Benutzerdefinierte Konfiguration (optional)
 
 Die Angular CLI erzeugt die Vitest‑Konfiguration im Hintergrund basierend auf den Optionen in `angular.json`.
 
