@@ -457,7 +457,7 @@ Es eignet sich besonders gut, wenn du eine ganz bestimmte Zeitspanne simulieren 
 
 
 Doch nicht alle Timer sind so einfach. 
-Manchmal besteht der Code nur aus Timer-basierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach - rein über Timeouts und Intervals:
+Manchmal besteht der Code nur aus timerbasierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach – rein über Timeouts und Intervals:
 
 ```ts
 // timer-sync.ts
