@@ -291,7 +291,7 @@ Dadurch vermeidest du mögliche Namenskollisionen, etwa mit gleichnamigen Funkti
 ### Matcher
 
 Die üblichen Matcher wie `toBe`, `toEqual`, `toContain` oder `toHaveBeenCalledWith` stehen in Vitest weiterhin zur Verfügung. Wenn du in Jasmine `jasmine.any(...)` verwendet hast, nutzt du in Vitest `expect.any(...)`. Wichtig: Vitest hat als Ziel nicht eine Kompatible API mit Jasmine, sondern bietet möglichst [**Jest‑kompatible** Expect‑API](https://vitest.dev/api/expect.html) auf Basis von Chai. 
-Und Jest wiederrum hat als Ziel einigermaßen mit Jasmine kompatiblel zu sein.
+Das Testframework Jest hat wiederum das Ziel, einigermaßen kompatibel zu Jasmine zu sein.
 Weil aber Vitest nur mit Jest kompatibel sein will, ergeben sich folgende Herausforderungen, da einige Matcher schlicht fehlen:
 
 **1) `toBeTrue()` / `toBeFalse()` gibt es in Jest/Vitest nicht**
