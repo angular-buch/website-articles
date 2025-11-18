@@ -268,7 +268,7 @@ Dabei gibt es zwei mögliche Wege: Entweder verweist du direkt auf eine bestimmt
 }
 ```
 
-Oder du lässt die Angular CLI automatisch suchen. 
+Alternativ kannst du die Angular CLI automatisch suchen lassen.
 Bei automatischer Suche setzt du `"runnerConfig": true` in der `angular.json`. 
 Der Builder sucht dann selbstständig nach einer Datei namens `vitest-base.config.*`, zunächst im Projektverzeichnis und anschließend im Workspace-Root. 
 So kannst du beispielsweise gemeinsame Einstellungen zentral definieren und bequem wiederverwenden.
