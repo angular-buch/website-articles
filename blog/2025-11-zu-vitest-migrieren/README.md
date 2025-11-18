@@ -497,7 +497,7 @@ describe('startSyncSequence', () => {
 
 Hier wäre `advanceTimersByTime()` zwar möglich, aber unnötig kompliziert. `runAllTimers()` löst einfach jedes Timeout und jedes Interval aus, bis nichts mehr übrig ist.
 
-Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeiten - etwa durch ein `await` oder Promise-Ketten.
+Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeiten – etwa durch ein `await` oder Promise-Ketten.
 Dann reicht `runAllTimers()` nicht mehr aus. Das folgende Beispiel zeigt ein typisches Muster aus realen Anwendungen:
 
 ```ts
