@@ -72,7 +72,7 @@ Möchtest du dagegen weiterhin bei der bewährten Karma/Jasmine-Kombination blei
 Ohne explizite Angabe der Option wird automatisch Vitest verwendet.
 
 Um ein **bestehendes Projekt** auf Angular 21 und Vitest zu migrieren, musst du zunächst das Projekt mittels `ng update` auf Version 21 aktualisieren.
-Beachte dabei, dass die Migration bestehender Projekte zu Vitest aktuell noch **experimentell ist**.
+Beachte dabei, dass die Migration bestehender Projekte zu Vitest aktuell noch **experimentell** ist.
 Außerdem setzt dieser Prozess das Application-Buildsystem voraus, das bei neu erstellten Projekten standardmäßig aktiviert ist.
 Nachdem dein Projekt auf Version 21 aktualisiert wurde, kannst du mit den folgenden Schritten fortfahren.
 
