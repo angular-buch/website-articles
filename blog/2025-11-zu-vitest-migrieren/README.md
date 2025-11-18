@@ -9,7 +9,7 @@ keywords:
   - Angular 21
   - Vitest
   - Karma
-  - Jamsine
+  - Jasmine
 language: de
 header: TODO.jpg
 ---
@@ -53,7 +53,7 @@ Es gab aber Nachteile: die Ausführgeschwindigkeit war nie optimal und das Ökos
 Vitest wurde inzwischen äußerst populär und erwies sich als passende Lösung.
 
 Vitest passte vor allem am besten, weil es einen echten Browser-Modus bietet.
-Ähnlich wie zuvor unter Karma können Tests dadurch in einem realen Browser mit „echtem“ DOM und echten Ereignissen ausgeführt werden.
+Ähnlich wie zuvor unter Karma können Tests dadurch in einem realen Browser mit "echtem" DOM und echten Ereignissen ausgeführt werden.
 Der Browser-Modus von Vitest wurde ganz aktuell mit Vitest 4 im Oktober 2025 [als stabil deklariert](https://vitest.dev/blog/vitest-4.html#browser-mode-is-stable).
 Gleichzeitig ist Vitest schnell und modern: Es baut auf [Vite](https://vite.dev/) auf, ist ESM- und TypeScript-first und sorgt so für äußerst kurze Start- und Wiederholungszeiten.
 Dazu kommt eine sehr mächtige API mit Snapshot-Tests, flexiblen [Fake-Timern](https://vitest.dev/guide/mocking/timers.html), dem wirklich nützlichen Helfer [`expect.poll`](https://vitest.dev/api/expect.html#poll), [Test-Fixtures](https://vitest.dev/guide/test-context) und Jest-kompatiblen Matchern.
