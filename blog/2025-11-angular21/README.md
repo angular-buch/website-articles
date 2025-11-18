@@ -10,7 +10,7 @@ keywords:
   - ARIA
   - Zoneless
   - Signal Forms
-  - vitest
+  - Vitest
   - Karma
 language: de
 header: angular21.jpg
@@ -170,21 +170,25 @@ Das neue Package eignet sich insbesondere dann, wenn wir komplexe Komponenten en
 Die Direktiven bringen keinerlei Visualität mit sich, sorgen aber für ein konsistentes Verhalten sowie eine barrierefreie Tastaturnavigation, Fokus-Handling und Screenreader-Optimierung.
 
 > Einige der Bausteine gab es schon zuvor in ähnlicher Form im [Component Development Kit (CDK)](https://material.angular.dev/cdk/dialog/overview) von Angular. Das CDK war der Unterbau der Komponentenbibliothek Angular Material.
-> Mit `@angular/aria` bringt das Angular Team den Kern dieser Sammlung ein Stück näher an die Angular-Basis und stärkt das Thema Barrierefreiheit.
+> Mit `@angular/aria` bringt das Angular-Team den Kern dieser Sammlung ein Stück näher an die Angular-Basis und stärkt das Thema Barrierefreiheit.
 
 ## Sonstiges
 
-Alle Details zu den Neuerungen finden Sie immer im Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
+Alle Details zu den Neuerungen findest du immer im Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
 Einige interessante Aspekte haben wir hier zusammengetragen:
 
-- **TITLE:** (siehe [Commit]())
+- **Bindings für ARIA-Attribute:** Bisher mussten wir für ARIA-Attribute immer ein Attribute Binding verwenden: `[attr.aria-label]="myLabel"`. Die Attribute können nun auch direkt gebunden werden: `[aria-label]="myLabel"`.
+- **Tailwind-Support für `ng new`:** Angular unterstützt schon länger direkt TailwindCSS. Nun kann das Framework auch direkt beim Anlegen einer Anwendung konfiguriert werden: `ng new --style=tailwind`, (siehe [Commit](https://github.com/angular/angular-cli/commit/4912f39906b11a3212f11d5a00d577e2a0bacab4)).
+- **MCP-Tool für Zoneless Migration:** Der MCP-Server der Angular CLI bietet ein Werkzeug an, um Anwendungen auf Zoneless Change Detection zu migrieren (siehe [Commit](https://github.com/angular/angular-cli/commit/1be35b3433179481be85ea1cb892d66170e0aebe)).
+- **MCP-Tool zum Lernen von Angular:** Angular bietet das MCP-Tool `ai-tutor` an. Der Chat-Agent leitet schrittweise durch die Arbeit mit Angular und soll den Einstieg vereinfachen (siehe [Commit](https://github.com/angular/angular-cli/commit/6d3a3c5799bde1bab5c3878e0783ffa6854e36ad)).
+- **Migration für `RouterTestingModule`:** Das `RouterTestingModule` für Unit-Tests wird nicht mehr unterstützt. Ein Migrationsskript kann die Tests auf das neuere `provideRouterTesting()` umstellen (siehe [Commit](https://github.com/angular/angular/commit/861cee34e0e9b5562cfe70d245f30b7ddea7d8fd)).
 
 
 <hr>
 
 
-Wir wünschen Ihnen viel Spaß beim Entwickeln mit Angular 21!
-Haben Sie Fragen zur neuen Version zu Angular oder zu unserem Buch? Schreiben Sie uns!
+Wir wünschen dir viel Spaß beim Entwickeln mit Angular 21!
+Hast du Fragen zur neuen Version zu Angular oder zu unserem Buch? Schreibe uns!
 
 **Viel Spaß wünschen
 Ferdinand, Danny und Johannes**
