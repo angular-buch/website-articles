@@ -235,7 +235,7 @@ Das Schematic bietet eine Reihe von zusätzlichen Optionen:
 #### 3. Nach der Migration
 
 1. **Tests ausführen:** Nutze `ng test`, um sicherzustellen, dass alle Tests weiterhin funktionieren.
-2. **Änderungen prüfen:** Sieh dir die Anpassungen an, besonders bei komplexen Spies oder asynchronen Tests.
+2. **Änderungen prüfen:** Sieh dir die Anpassungen an, besonders bei komplexen Spys oder asynchronen Tests.
 
 `ng test` führt Tests im **Watch‑Modus** aus, sofern das Terminal interaktiv ist.
 In CI-Umgebungen führt der Test-Runner die Tests automatisch im Single-Run-Modus aus.
