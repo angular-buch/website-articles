@@ -363,7 +363,7 @@ spyOn(service, 'loadData').and.returnValue(of([]));
 vi.spyOn(service, 'loadData').mockReturnValue(of([]));
 ```
 
-Für Spies, die bei Jasmine mit `jasmine.createSpy()` erzeugt wurden, verwendest du in Vitest jetzt einfach [`vi.fn()`](https://vitest.dev/api/vi.html#vi-fn):
+Für Spys, die bei Jasmine mit `jasmine.createSpy()` erzeugt wurden, verwendest du in Vitest jetzt einfach [`vi.fn()`](https://vitest.dev/api/vi.html#vi-fn):
 
 ```ts
 // Jasmine
