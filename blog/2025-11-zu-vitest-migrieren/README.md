@@ -415,7 +415,7 @@ Hier bleibt alles unverändert.
 Modern ist nur die Schreibweise, bei der es zwischen Jasmine und Vitest keinen Unterschied gibt.
 
 Der zweite Angular-Klassiker [`fakeAsync()`](https://angular.dev/api/core/testing/fakeAsync) und [`tick()`](https://angular.dev/api/core/testing/tick) braucht hingegen einen echten Ersatz.
-(Hinweis: Dieser beiden Helfer sind nicht Bestandteil von Jasmine, sondern kommen aus `@angular/core/testing`.)
+(Hinweis: Diese beiden Helfer sind nicht Bestandteil von Jasmine, sondern kommen aus `@angular/core/testing`.)
 Vitest bringt ein eigenes [Fake-Timer-System](https://vitest.dev/api/vi.html#fake-timers) mit.
 Das ganze benötigt etwas Einarbeitung.
 Denn nicht jeder Timer funktioniert gleich und nicht jeder Test braucht dieselben Werkzeuge. 
