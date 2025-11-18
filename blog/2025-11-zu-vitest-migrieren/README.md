@@ -11,7 +11,7 @@ keywords:
   - Karma
   - Jasmine
 language: de
-header: TODO.jpg
+header: angular-vitest.jpg
 ---
 
 Mit Angular 21 gibt es eine bedeutende Änderung im Unit‑Testing:
