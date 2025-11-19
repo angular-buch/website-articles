@@ -200,7 +200,7 @@ Es wird nicht mehr empfohlen, die Direktive `ngClass` zu verwenden.
 Wir haben darüber schon vor einem Jahr in einem Blogposzt berichtet.
 Zur Umstellung auf direkte Class Bindings bietet Angular ein Migrationsskript an:
 
-```
+```bash
 ng generate @angular/core:ngclass-to-class
 ```
 
