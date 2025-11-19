@@ -64,7 +64,6 @@ export class BlogService {
 
     const meta = parsedJekyllMarkdown.parsedYaml || {};
 
-
     if (meta.header) {
       const url = meta.header;
       const relativePath = this.config.blogPostsFolder + '/' + folder + '/' + meta.header;
@@ -75,8 +74,8 @@ export class BlogService {
     return {
       slug: folder,
       html: emoji.emojify(parsedJekyllMarkdown.html),
-      meta: meta
-    } as BlogEntryFull;
+      meta
+    } satisfies BlogEntryFull;
   }
 
   private getImageDimensions(path: string) {
