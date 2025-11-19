@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-13
-lastModified: 2025-11-13
+lastModified: 2025-11-19
 keywords:
   - Angular
   - Signals
@@ -18,7 +18,7 @@ header: header-signalforms-part1.jpg
 sticky: false
 ---
 
-Angular introduces Signal Forms with Version [21.0.0-next.2](https://github.com/angular/angular/releases/tag/21.0.0-next.2), an experimental but promising approach to form handling that leverages Angular's reactive Signal primitive.
+Angular introduces Signal Forms with Version [21.0.0](https://github.com/angular/angular/releases/tag/21.0.0), an experimental but promising approach to form handling that leverages Angular's reactive Signal primitive.
 This new API offers a declarative way to build forms with full control over the data model and built-in schema validation.
 In this first part of our three-part series, we'll cover the fundamentals you need to get started with Signal Forms.
 
