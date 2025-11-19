@@ -1,7 +1,7 @@
 ---
 title: 'Modern Angular: den BookMonkey migrieren'
 author: Danny Koppenhagen
-mail2: mail@d-koppenhagen.de
+mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2024-05-05
