@@ -14,7 +14,8 @@ keywords:
   - Karma
 language: de
 header: angular21.jpg
-sticky: false
+sticky: true
+isUpdatePost: true
 ---
 
 Bevor wir uns in den Trubel zum Jahresende stürzen, gibt es Neuigkeiten aus der Angular-Welt:
