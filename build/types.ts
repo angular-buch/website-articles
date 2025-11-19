@@ -23,6 +23,7 @@ export interface BlogEntry {
 export interface BlogEntryFullMeta extends BlogEntryMeta {
   hidden?: boolean;
   bio?: string;
+  bio2?: string;
   lastModified?: string;
   keywords?: string[];
   'darken-header': boolean;
@@ -30,6 +31,6 @@ export interface BlogEntryFullMeta extends BlogEntryMeta {
 }
 
 export interface BlogEntryFull extends BlogEntry {
-  error: string;
+  error?: string;
   meta: BlogEntryFullMeta;
 }
