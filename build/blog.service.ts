@@ -3,7 +3,7 @@ import sizeOf from 'image-size';
 import { readdir, readFile } from 'fs/promises';
 
 import { JekyllMarkdownParser } from './jekyll-markdown-parser';
-import { BlogEntry } from './types';
+import { BlogEntryFull } from './types';
 import { BuildConfig } from './config';
 
 export class BlogService {
@@ -11,7 +11,7 @@ export class BlogService {
   constructor(private config: BuildConfig) {}
 
   /** simple way to sort things: create a sort key that can be easily sorted */
-  private getSortKey(entry: BlogEntry) {
+  private getSortKey(entry: BlogEntryFull) {
     return (entry.meta.sticky ? 'Z' : 'A') + '---' + (+entry.meta.published) + '---' + entry.slug;
   }
 
@@ -33,7 +33,7 @@ export class BlogService {
   /** read metadata and contents for all blog posts as list */
   async getBlogList() {
     const blogDirs = await this.readBlogFolders();
-    const blogEntries: BlogEntry[] = [];
+    const blogEntries: BlogEntryFull[] = [];
 
     for (const blogDir of blogDirs) {
       try {
@@ -49,7 +49,7 @@ export class BlogService {
               title: 'A minor error occurred while reading: ' + blogDir,
               hidden: true
             }
-          } as BlogEntry;
+          } as BlogEntryFull;
           blogEntries.push(errorBlogEntry);
       }
     }
@@ -76,7 +76,7 @@ export class BlogService {
       slug: folder,
       html: emoji.emojify(parsedJekyllMarkdown.html),
       meta: meta
-    } as BlogEntry;
+    } as BlogEntryFull;
   }
 
   private getImageDimensions(path: string) {
