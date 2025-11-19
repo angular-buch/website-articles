@@ -9,6 +9,7 @@ keywords:
   - Angular CLI
 language: de
 header: angular5.png
+isUpdatePost: true
 ---
 
 Dank der Angular CLI ist es ziemlich einfach, eine neue Anwendung mit der aktuellen Version von Angular zu erstellen.

@@ -8,23 +8,9 @@ keywords:
   - Angular 5
 language: de
 header: angular5.png
+isUpdatePost: true
 ---
 
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 6 ist da!](/blog/2018-05-angular6)
-> * [Angular 7 ist da!](/blog/2018-10-angular7)
-> * [Angular 8 ist da!](/blog/2019-06-angular8)
-> * [Angular 9 ist da!](/blog/2020-02-angular9)
-> * [Angular 10 ist da!](/blog/2020-06-angular10)
-> * [Angular 11 ist da!](/blog/2020-11-angular11)
-> * [Angular 12 ist da!](/blog/2021-06-angular12)
-> * [Angular 13 ist da!](/blog/2021-11-angular13)
-> * [Angular 14 ist da!](/blog/2022-06-angular14)
-> * [Angular 15 ist da!](/blog/2022-11-angular15)
-> * [Angular 16 ist da!](/blog/2023-05-angular16)
-
-<br>
-<br>
 
 Angular 5 ist da! Anfang November 2017 erschien die neue Major-Version von Angular und bringt einige Neuerungen mit sich. Die gute Nachricht: Ihre alten Projekte mit Angular 4 sind weiterhin lauffähig – nur an einigen wenigen Stellen müssen Kleinigkeiten angepasst werden.
 

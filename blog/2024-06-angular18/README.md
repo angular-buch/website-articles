@@ -14,6 +14,7 @@ keywords:
 language: de
 header: angular18.jpg
 sticky: false
+isUpdatePost: true
 ---
 
 Und schon wieder ist ein halbes Jahr vergangen:
@@ -29,10 +30,6 @@ Wenn Sie sich einen kurzweiligen Gesamtüberblick verschaffen wollen, so lohnt e
 [What’s new in Angular v18](https://www.youtube.com/watch?v=DK8M-ZFjaMw) 
 
 Und für eine Zusammenfassung in deutscher Sprache lesen Sie jetzt einfach weiter. 🙂
-
-
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 19 ist da!](/blog/2024-11-angular19)
 
 
 ## Neue Offizielle Website 

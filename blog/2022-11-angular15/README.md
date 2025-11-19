@@ -14,7 +14,7 @@ keywords:
   - Standalone Components
 language: de
 header: angular15.jpg
-sticky: false
+isUpdatePost: true
 ---
 
 Am 16. November 2022 erschien die neue Major-Version von Angular: **Angular 15.0.0**!
@@ -27,12 +27,6 @@ Im Fokus des neuen Releases standen vor allem diese drei Themen:
 In diesem Blogpost fassen wir wieder die wichtigsten Neuigkeiten zusammen.
 Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v15-is-now-available-df7be7f2f4c8) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
 Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
-
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 16 ist da!](/blog/2023-05-angular16)
-> * [Angular 17 ist da!](/blog/2023-11-angular17)
-> * [Angular 18 ist da!](/blog/2024-06-angular18)
-> * [Angular 19 ist da!](/blog/2024-11-angular19)
 
 
 ## Projekt updaten

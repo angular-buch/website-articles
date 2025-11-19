@@ -18,6 +18,7 @@ keywords:
   - BookMonkey
 language: de
 header: header-modernangular.jpg
+isUpdatePost: true
 ---
 
 Angular erlebt einen Aufschwung: Mit den letzten Major-Versionen des Frameworks wurden einige wichtige neue Konzepte und Features eingeführt.

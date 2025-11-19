@@ -1,6 +1,7 @@
 export interface BlogEntryMeta {
   title: string;
-  hidden: boolean;
+  isUpdatePost?: boolean;
+  hidden?: boolean;
   author: string;
   mail: string;
   bio?: string;
@@ -38,6 +39,7 @@ export interface BlogEntryLight {
   html: string;
   meta: {
     title: string;
+    isUpdatePost?: boolean;
 
     author: string;
     mail: string;

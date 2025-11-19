@@ -13,6 +13,7 @@ keywords:
 language: de
 header: angular20.jpg
 sticky: false
+isUpdatePost: true
 ---
 
 Alles neu macht der Mai – oder zumindest eine neue Major-Version von Angular:

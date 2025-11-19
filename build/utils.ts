@@ -42,6 +42,7 @@ export function makeLightBlogList(fullList: BlogEntry[]): BlogEntryLight[] {
       if (entry.meta.author2) { result.meta.author2 = entry.meta.author2; }
       if (entry.meta.mail2) { result.meta.mail2 = entry.meta.mail2; }
       if (entry.meta.twitter2) { result.meta.twitter2 = entry.meta.twitter2; }
+      if (entry.meta.isUpdatePost) { result.meta.isUpdatePost = entry.meta.isUpdatePost; }
 
       return result;
     });

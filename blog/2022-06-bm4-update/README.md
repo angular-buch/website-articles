@@ -11,6 +11,7 @@ keywords:
   - Strict Mode
 language: de
 header: bm4update.jpg
+isUpdatePost: true
 ---
 
 Das Angular-Ökosystem wird kontinuierlich verbessert.

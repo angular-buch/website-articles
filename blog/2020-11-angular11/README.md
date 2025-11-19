@@ -13,7 +13,7 @@ keywords:
   - Hot Module Reloading
 language: de
 header: angular11.jpg
-sticky: false
+isUpdatePost: true
 ---
 
 Es hätte kein schöneres Datum sein können: am 11.11.2020 wurde die neue Major-Version **Angular 11.0** veröffentlicht – fünf Monate nach dem [Release von Angular 10](/blog/2020-06-angular10).
@@ -26,13 +26,6 @@ Besonderer Fokus wurde in Angular 11.0 auf die Verbesserung des Toolings gelegt.
 Dabei sind auch einige kleine Breaking Changes enthalten, die allerdings mithilfe der mitgelieferten Migrationsskripte und `ng update` leicht zu bewältigen sind.
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/version-11-of-angular-now-available-74721b7952f7).
-
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 12 ist da!](/blog/2021-06-angular12)
-> * [Angular 13 ist da!](/blog/2021-11-angular13)
-> * [Angular 14 ist da!](/blog/2022-06-angular14)
-> * [Angular 15 ist da!](/blog/2022-11-angular15)
-> * [Angular 16 ist da!](/blog/2023-05-angular16)
 
 ## Update auf Angular 11
 
