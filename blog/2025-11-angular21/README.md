@@ -173,6 +173,28 @@ Die Direktiven bringen keinerlei Visualität mit sich, sorgen aber für ein kons
 > Einige der Bausteine gab es schon zuvor in ähnlicher Form im [Component Development Kit (CDK)](https://material.angular.dev/cdk/dialog/overview) von Angular. Das CDK war der Unterbau der Komponentenbibliothek Angular Material.
 > Mit `@angular/aria` bringt das Angular-Team den Kern dieser Sammlung ein Stück näher an die Angular-Basis und stärkt das Thema Barrierefreiheit.
 
+
+## Providers für `HttpClient`
+
+Mit Angular 21 werden die Providers für den `HttpClient` automatisch eingebunden.
+Es ist also nicht mehr zwingend notwendig, in der `app.config.ts` die Funktion `provideHttpClient()` aufzurufen.
+
+Wollen wir die HTTP-Integration konfigurieren, z. B. mit Interceptors oder der Funktion `withFetch()`, müssen wir die Funktion allerdings weiterhin verwenden:
+
+```
+// app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([ /* ... */ ])
+    )
+  ]
+};
+```
+
+
 ## Sonstiges
 
 Alle Details zu den Neuerungen findest du immer im Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
