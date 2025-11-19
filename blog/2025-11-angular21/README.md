@@ -181,7 +181,7 @@ Es ist also nicht mehr zwingend notwendig, in der `app.config.ts` die Funktion `
 
 Wollen wir die HTTP-Integration konfigurieren, z. B. mit Interceptors oder der Funktion `withFetch()`, müssen wir die Funktion allerdings weiterhin verwenden:
 
-```
+```ts
 // app.config.ts
 export const appConfig: ApplicationConfig = {
   providers: [
