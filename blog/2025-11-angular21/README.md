@@ -194,6 +194,19 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+## Migrationsskripte
+
+Es wird nicht mehr empfohlen, die Direktive `ngClass` zu verwenden. 
+Wir haben darüber schon vor einem Jahr in einem Blogposzt berichtet.
+Zur Umstellung auf direkte Class Bindings bietet Angular ein Migrationsskript an:
+
+```
+ng generate @angular/core:ngclass-to-class
+```
+
+Das `RouterTestingModule` für Unit-Tests wird ebenfalls nicht mehr unterstützt.
+Ein Migrationsskript kann die Tests auf das neuere `provideRouterTesting()` umstellen, siehe [Commit](https://github.com/angular/angular/commit/861cee34e0e9b5562cfe70d245f30b7ddea7d8fd).
+
 
 ## Sonstiges
 
@@ -204,7 +217,6 @@ Einige interessante Aspekte haben wir hier zusammengetragen:
 - **Tailwind-Support für `ng new`:** Angular unterstützt schon länger direkt TailwindCSS. Nun kann das Framework auch direkt beim Anlegen einer Anwendung konfiguriert werden: `ng new --style=tailwind`, (siehe [Commit](https://github.com/angular/angular-cli/commit/4912f39906b11a3212f11d5a00d577e2a0bacab4)).
 - **MCP-Tool für Zoneless Migration:** Der MCP-Server der Angular CLI bietet ein Werkzeug an, um Anwendungen auf Zoneless Change Detection zu migrieren (siehe [Commit](https://github.com/angular/angular-cli/commit/1be35b3433179481be85ea1cb892d66170e0aebe)).
 - **MCP-Tool zum Lernen von Angular:** Angular bietet das MCP-Tool `ai-tutor` an. Der Chat-Agent leitet schrittweise durch die Arbeit mit Angular und soll den Einstieg vereinfachen (siehe [Commit](https://github.com/angular/angular-cli/commit/6d3a3c5799bde1bab5c3878e0783ffa6854e36ad)).
-- **Migration für `RouterTestingModule`:** Das `RouterTestingModule` für Unit-Tests wird nicht mehr unterstützt. Ein Migrationsskript kann die Tests auf das neuere `provideRouterTesting()` umstellen (siehe [Commit](https://github.com/angular/angular/commit/861cee34e0e9b5562cfe70d245f30b7ddea7d8fd)).
 
 
 <hr>
