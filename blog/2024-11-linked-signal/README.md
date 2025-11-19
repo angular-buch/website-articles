@@ -1,7 +1,9 @@
 ---
 title: 'Neu in Angular 19: LinkedSignal für reaktive Zustandsverwaltung'
-author: Johannes Hoppe and Ferdinand Malcher
-mail: team@angular.schule
+author: Johannes Hoppe
+mail: johannes.hoppe@haushoppe-its.de
+author2: Ferdinand Malcher
+mail2: mail@fmalcher.de
 published: 2024-11-07
 lastModified: 2024-12-04
 keywords:
