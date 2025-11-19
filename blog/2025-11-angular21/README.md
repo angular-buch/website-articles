@@ -19,7 +19,7 @@ isUpdatePost: true
 ---
 
 Bevor wir uns in den Trubel zum Jahresende stürzen, gibt es Neuigkeiten aus der Angular-Welt:
-Am **19. November 2025** wurde **Angular 21** veröffentlicht! Die offiziellen Release-Informationen finden Sie wie immer im [Angular-Blog](TODO).
+Am **19. November 2025** wurde **Angular 21** veröffentlicht! <!--Die offiziellen Release-Informationen finden Sie wie immer im [Angular-Blog](TODO).-->
 
 Die Migration eines bestehenden Projekts auf Angular 21 kann mit dem Befehl `ng update` durchgeführt werden.
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
@@ -114,7 +114,7 @@ Das Angular-Team legt außerdem großen Wert auf Abwärtskompatibilität, sodass
 Noch ist der neue Ansatz aber experimentell, sodass sich die Schnittstellen und Konzepte noch ändern können.
 
 
-## Vitest als neuer Test-Runner
+## Vitest: der neue Test-Runner
 
 Mit Angular 21 gibt es einen der größten Umbrüche im Testing seit vielen Jahren: 
 [Vitest](https://vitest.dev) ersetzt "offiziell" Karma und Jasmine als Standard-Test-Runner. 
@@ -127,15 +127,15 @@ ng new my-project --test-runner=karma
 ```
 
 Vitest bringt spürbare Vorteile: deutlich schnellere Testausführung, moderne APIs, eine Jest‑ähnliche Expect‑Syntax, flexible Fake‑Timer, und bei Bedarf sogar einen echten Browser-Modus.
-Der Browser-Modus ist ähnlich wie zuvor unter Karma und ideal für realitätsnahe UI‑Tests.
+Der Browser-Modus ist ähnlich wie zuvor unter Karma und ideal für realitätsnahe UI-Tests.
 Die meisten Specs sollten weiterhin unverändert funktionieren, da Angulars `TestBed` und `ComponentFixture` vollständig gleich bleiben.
 Anpassungen betreffen hauptsächlich Jasmine-spezifische Matcher oder Spys.
 
 Die eigentliche Umstellung erfolgt zunächst über den neuen Builder `unit-test` in der `angular.json`.
-Danach kannst du für bestehende Tests ein experimentelles Schematic verwenden, das viele Jasmine‑Patterns automatisch nach Vitest überführt.
+Danach kannst du für bestehende Tests ein experimentelles Schematic verwenden, das viele Jasmine-Patterns automatisch nach Vitest überführt.
 
-Eine ausführliche Anleitung zur Migration, inklusive praktischer Beispiele zu Fake‑Timern, Matchern und async/await, haben wir hier zusammengestellt:
-**[Vitest in Angular 21: Was ist neu und wie kann man migrieren?](https://angular-buch.com/blog/2025-11-zu-vitest-migrieren)**
+Eine ausführliche Anleitung zur Migration, inklusive praktischer Beispiele zu Fake-Timern, Matchern und async/await, haben wir hier zusammengestellt:
+**[Vitest in Angular 21: Was ist neu und wie kann man migrieren?](/blog/2025-11-zu-vitest-migrieren)**
 
 
 
@@ -151,7 +151,7 @@ Die Installation des neuen Pakets erfolgt wie gewohnt über die Angular CLI:
 ng add @angular/aria
 ```
 
-In der ersten Version bietet @angular/aria Direktiven für die folgenden interaktiven Patterns:
+In der ersten Version bietet `@angular/aria` Direktiven für die folgenden interaktiven Patterns:
 
 | Komponente       | Beschreibung                                                                    |
 |------------------|---------------------------------------------------------------------------------|
@@ -197,8 +197,8 @@ export const appConfig: ApplicationConfig = {
 ## Migrationsskripte
 
 Es wird nicht mehr empfohlen, die Direktive `ngClass` zu verwenden. 
-Wir haben darüber schon vor einem Jahr in einem Blogposzt berichtet.
-Zur Umstellung auf direkte Class Bindings bietet Angular ein Migrationsskript an:
+Wir haben darüber schon vor einem Jahr [in einem Blogposzt berichtet](https://angular.schule/blog/2024-11-ngclass-ngstyle).
+Zur Umstellung auf direkte Class Bindings mit `[class]` bietet Angular ein Migrationsskript an:
 
 ```bash
 ng generate @angular/core:ngclass-to-class
@@ -210,7 +210,7 @@ Ein Migrationsskript kann die Tests auf das neuere `provideRouterTesting()` umst
 
 ## Sonstiges
 
-Alle Details zu den Neuerungen findest du immer im Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
+Alle Details zu den Neuerungen findest du immer im Changelog von [Angular](https://github.com/angular/angular/releases) und der [Angular CLI](https://github.com/angular/angular-cli/releases).
 Einige interessante Aspekte haben wir hier zusammengetragen:
 
 - **Bindings für ARIA-Attribute:** Bisher mussten wir für ARIA-Attribute immer ein Attribute Binding verwenden: `[attr.aria-label]="myLabel"`. Die Attribute können nun auch direkt gebunden werden: `[aria-label]="myLabel"`.
