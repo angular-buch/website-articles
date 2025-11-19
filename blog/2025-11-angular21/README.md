@@ -19,7 +19,9 @@ isUpdatePost: true
 ---
 
 Bevor wir uns in den Trubel zum Jahresende stürzen, gibt es Neuigkeiten aus der Angular-Welt:
-Am **19. November 2025** wurde **Angular 21** veröffentlicht! <!--Die offiziellen Release-Informationen finden Sie wie immer im [Angular-Blog](TODO).-->
+Am **19. November 2025** wurde **Angular 21** veröffentlicht!
+Die wichtigsten Neuigkeiten: Signal Forms, Zoneless Apps, Testing mit Vitest und das neue Paket `@angular/aria`.
+<!--Die offiziellen Release-Informationen finden Sie wie immer im [Angular-Blog](TODO).-->
 
 Die Migration eines bestehenden Projekts auf Angular 21 kann mit dem Befehl `ng update` durchgeführt werden.
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
