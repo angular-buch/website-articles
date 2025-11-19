@@ -10,7 +10,7 @@ keywords:
   - Ivy
 language: de
 header: angular13.jpg
-sticky: false
+isUpdatePost: true
 ---
 
 Noch vor dem Jahresende erschien Anfang November 2021 die neue Major-Version 13 von Angular.
@@ -22,11 +22,6 @@ Den Code des Beispielprojekts *BookMonkey* aus dem Angular-Buch halten wir stets
 Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v13-is-now-available-cce66f7bc296).
 Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
 
-
-> **Die Update-Infos für neuere Versionen von Angular finden Sie in separaten Blogartikeln. Wenn Sie das Update durchführen möchten, lesen Sie bitte alle Artikel in der gegebenen Reihenfolge.**
-> * [Angular 14 ist da!](/blog/2022-06-angular14)
-> * [Angular 15 ist da!](/blog/2022-11-angular15)
-> * [Angular 16 ist da!](/blog/2023-05-angular16)
 
 ## Projekt updaten
 

@@ -14,6 +14,7 @@ keywords:
 language: de
 header: angular19.jpg
 sticky: false
+isUpdatePost: true
 ---
 
 Neben grauen Herbsttagen hat der November in Sachen Angular einiges zu bieten: Am **19. November 2024** wurde die neue **Major-Version Angular 19** releaset!

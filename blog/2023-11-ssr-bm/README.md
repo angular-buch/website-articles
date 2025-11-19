@@ -12,6 +12,7 @@ keywords:
   - BookMonkey
 language: de
 header: bm.jpg
+isUpdatePost: true
 ---
 
 Mit Angular 17 wurde der Build-Prozess für Server-Side Rendering (SSR) und Pre-Rendering grundlegend überarbeitet.
