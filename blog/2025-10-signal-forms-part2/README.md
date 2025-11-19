@@ -1,7 +1,9 @@
 ---
 title: 'Angular Signal Forms Part 2: Advanced Validation and Schema Patterns'
-author: Danny Koppenhagen and Ferdinand Malcher
-mail: dannyferdigravatar@fmalcher.de # Gravatar
+author: Danny Koppenhagen
+mail2: mail@d-koppenhagen.de
+author2: Ferdinand Malcher
+mail2: mail@fmalcher.de
 published: 2025-10-15
 lastModified: 2025-11-15
 keywords:
