@@ -48,7 +48,7 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
 ## Warum Angular Karma und Jasmine ersetzt
 
 _Karma und Jasmine_ haben für Angular lange Jahre gute Dienste geleistet, vor allem wegen der Ausführung in einem echten Browser.
-Es gab aber Nachteile: die Ausführungsgeschwindigkeit war nie optimal und das Ökosystem veraltet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
+Es gab aber Nachteile: die Ausführungsgeschwindigkeit war nie optimal und das Ökosystem ist veraltet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
 Über mehrere Jahre prüfte das Angular-Team Alternativen (Jest, Web Test Runner usw.), ohne einen klaren Gewinner zu finden.
 [Vitest](https://vitest.dev/) wurde inzwischen äußerst populär und erwies sich als passende Lösung.
 
@@ -123,7 +123,7 @@ Stimmen sie bereits mit `development` überein, ist kein weiterer Schritt notwen
 
 #### 3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen
 
-Eigene Einstellungen in aus der Datei `karma.conf.js` werden nicht automatisch migriert. 
+Eigene Einstellungen aus der Datei `karma.conf.js` werden nicht automatisch migriert. 
 Prüfe diese Datei, bevor du sie löschst, und übertrage relevante Optionen manuell.
 Viele Karma‑Optionen besitzen Vitest‑Entsprechungen, die du in einer `vitest.config.ts` definieren kannst und dann über `runnerConfig` in der `angular.json` einbindest.
 
@@ -291,7 +291,7 @@ Dadurch vermeidest du mögliche Namenskollisionen, etwa mit gleichnamigen Funkti
 ### Matcher
 
 Die üblichen Matcher wie `toBe`, `toEqual`, `toContain` oder `toHaveBeenCalledWith` stehen in Vitest weiterhin zur Verfügung. Wenn du in Jasmine `jasmine.any(...)` verwendet hast, nutzt du in Vitest `expect.any(...)`.
-Wichtig: Vitest hat nicht das Ziel, eine zu Jasmine kompatible API zu schaffen.
+Wichtig: Vitest hat nicht das Ziel, eine mit Jasmine kompatible API zu schaffen.
 Stattdessen bietet Vitest eine möglichst [**Jest‑kompatible** Expect-API](https://vitest.dev/api/expect.html) auf Basis von Chai an.
 Das Testframework Jest hat wiederum das Ziel, einigermaßen kompatibel zu Jasmine zu sein.
 Weil aber Vitest nur mit Jest kompatibel sein will, ergeben sich folgende Herausforderungen, da einige Matcher schlicht fehlen:
@@ -374,9 +374,9 @@ const onItem = jasmine.createSpy().and.returnValue(true);
 const onItem = vi.fn().mockReturnValue(true);
 ```
 
-In Jasmine kann man mit den ersten Argument einen Namen für den Spy vergeben.
+In Jasmine kann man mit dem ersten Argument einen Namen für den Spy vergeben.
 Dies dient dazu, in Fehlermeldungen und Reports aussagekräftigere Texte anzuzeigen (siehe [Doku](https://jasmine.github.io/api/5.12/jasmine#.createSpy)).
-Falls du in Vitest ebenfalls einem einen sprechenden Namen geben möchtest, kannst du dies mit `.mockName('onItem')` tun.
+Falls du in Vitest ebenfalls einem Spy einen sprechenden Namen geben möchtest, kannst du dies mit `.mockName('onItem')` tun.
 
 ```ts
 // Jasmine - mit Name
@@ -390,10 +390,10 @@ const onItem = vi.fn().mockName('onItem').mockReturnValue(true);
 
 Seit Angular 21 laufen Unit-Tests standardmäßig zoneless. 
 Das bedeutet: Die früheren Angular-Hilfsfunktionen `waitForAsync()` und `fakeAsync()`/`tick()` funktionieren nicht mehr automatisch, weil sie auf Zone.js basieren. 
-Entscheidend ist: Das hat erstmal nichts mit Vitest zu tun.
+Entscheidend ist: Das hat nichts mit Vitest zu tun.
 Auch unter Jasmine hätte man in einer zonenlosen Umgebung auf diese Utilitys verzichten müssen.
 
-Für einfache asynchrone Tests ersetzt man `waitForAsync()` daher durch ganz normales `async/await`, das es seit vielen Jahren auch mit Jasmine möglich ist.
+Für einfache asynchrone Tests ersetzt man `waitForAsync()` daher durch ganz normales `async/await`, das seit vielen Jahren auch mit Jasmine möglich ist.
 Folgendes Update funktioniert also unabhängig vom Test-Runner:
 
 ```ts
