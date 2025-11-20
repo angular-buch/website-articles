@@ -339,9 +339,29 @@ Der MCP-Server bietet aktuell sieben Tools an:
 
 Der MCP-Server wird kontinuierlich weiterentwickelt, um noch bessere Unterstützung bei der Entwicklung zu ermöglichen.
 
-Wichtig ist: Der MCP-Server liefert Inhalte, trifft aber **keine kontextabhängige Auswahl**. Die Integration und Nutzung dieser Inhalte obliegt den jeweiligen Tools wie GitHub Copilot, Cursor oder Claude Desktop. Diese können den Server lokal starten, per JSON-RPC abfragen und bei Bedarf passende Informationen aus den verfügbaren Tools gezielt in den eigenen Prompt einfügen. Damit diese Kommunikation funktioniert, muss der MCP-Server jedoch erst korrekt im jeweiligen Agenten konfiguriert werden. Dies geschieht zum Beispiel durch eine Datei wie `mcp.json`. Angular generiert solche Konfigurationsdateien nicht automatisch. Sie müssen aktuelle (noch) manuell angelegt werden.
+**Wie funktioniert das konkret?** Am Beispiel des [`get_best_practices`](https://github.com/angular/angular-cli/blob/26719451c35288c0b5342eceda3460ed24bd3171/packages/angular/cli/src/commands/mcp/tools/best-practices.ts#L11)-Tools wird das Zusammenspiel deutlich:
+Ein Entwickler möchte eine neue Funktionalität zur Anwendung hinzufügen, zum Beispiel ein reaktives Formular mit Validierung.
+Er beschreibt dem AI-Assistenten die gewünschte Funktionalität.
+Die KI analysiert die Anfrage, erkennt, dass Angular-Code geschrieben werden muss, und führt **autonom** einen Aufruf des `get_best_practices`-Tools vom MCP-Server durch.
+So werden die aktuellen Coding-Richtlinien abgerufen und fließen direkt in die Code-Generierung ein.
+Der Entwickler erhält Code, der den neuesten Standards entspricht.
+Je nach Agent werden die Tool-Aufrufe transparent in Statusmeldungen angezeigt oder laufen vollständig im Hintergrund ab.
+Es gibt keine spezielle Syntax zum manuellen Aufrufen der Tools.
+Die KI entscheidet vollständig eigenständig, wann welches Tool hilfreich ist.
 
-Wird der übermittelte Text vom MCP-Server zu umfangreich, kann er das Kontextfenster des Modells überschreiten. Dies geschieht schnell bei längeren Sessions und insbesondere bei umfangreichen Projekten oder komplexen Fragen. Ein möglicher Ansatz zur Lösung dieses Problems ist der Einsatz von Vektordatenbanken, die projektbezogenes Wissen semantisch indizieren. Solche Systeme sind aktuell noch nicht Teil der Angular-Toolchain, zeigen aber die Richtung, in die sich die Integration von strukturiertem Wissen und generativer KI entwickeln könnte.
+Wichtig ist: Der MCP-Server liefert Inhalte, trifft aber **keine kontextabhängige Auswahl**. Die Integration und Nutzung dieser Inhalte obliegt dem jeweiligen AI-Agenten. Dieser kann den Server lokal starten, per JSON-RPC abfragen und bei Bedarf passende Informationen aus den verfügbaren Tools gezielt in den eigenen Prompt einfügen.
+
+Damit diese Kommunikation funktioniert, muss der MCP-Server jedoch erst korrekt im jeweiligen Agenten konfiguriert werden. Dies geschieht zum Beispiel durch eine Datei wie `mcp.json`. Angular generiert solche Konfigurationsdateien (leider) nicht automatisch. Sie müssen aktuell manuell angelegt werden.
+
+Wird der übermittelte Text vom MCP-Server zu umfangreich, kann er das Kontextfenster des Modells überschreiten.
+**Dies ist aktuell einer der größten Schmerzpunkte bei der Entwicklung mit AI-Assistenten:**
+Die Limitierung tritt schnell bei längeren Sessions auf, insbesondere bei umfangreichen Projekten oder komplexen Fragestellungen.
+In der Praxis bedeutet das: Der AI-Agent verliert den Überblick über frühere Teile der Konversation, kann nicht mehr auf alle relevanten Informationen zugreifen oder muss wichtige Best Practices weglassen, weil der verfügbare Platz erschöpft ist.
+Ein Phänomen, das sicherlich jeder schon einmal erlebt hat: Die AI scheint alles zu "vergessen", und man muss alle wichtigen Informationen noch einmal vorkauen.
+Das führt zu inkonsistenten Antworten, veralteten Code-Vorschlägen oder der Notwendigkeit, Konversationen neu zu starten und den Kontext manuell wiederherzustellen.
+
+Ein möglicher Ansatz zur Lösung dieses Problems ist der Einsatz von Vektordatenbanken, die projektbezogenes Wissen semantisch indizieren.
+Solche Systeme sind aktuell noch nicht Teil der Angular-Toolchain, zeigen aber die Richtung, in die sich die Integration von strukturiertem Wissen und generativer KI entwickeln könnte.
 
 **Das ist allerdings noch Zukunftsmusik.** Wir sind gespannt, wie das Angular-Team es in zukünftigen Versionen schaffen wird, möglichst präzise und kontextsensitive Instruktionen bereitzustellen – idealerweise dynamisch, skalierbar und abgestimmt auf die jeweiligen Werkzeuge.
 
