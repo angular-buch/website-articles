@@ -1,21 +1,19 @@
 ---
 title: 'Vibe-Coding mit Angular 21'
 author: Johannes Hoppe
-mail: team@angular-buch.com
-published: 2025-11-19
+mail: johannes.hoppe@haushoppe-its.de
+published: 2025-11-20
 lastModified: 2025-11-20
 keywords:
   - Angular
   - Angular 21
+  - MCP
+  - Model Context Protocol
   - MCP-Server
-  - ARIA
-  - Zoneless
-  - Signal Forms
-  - Vitest
-  - Karma
+  - Vibe
+  - Vibe-Coding
 language: de
 header: angular21.jpg
-sticky: false
 ---
 
 Auf der Google I/O 2025 hat das Angular-Team die neue Ressource [angular.dev/ai](https://angular.dev/ai) vorgestellt.
