@@ -3,7 +3,7 @@ title: 'Angular 21 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2025-11-19
-lastModified: 2025-11-19
+lastModified: 2025-11-20
 keywords:
   - Angular
   - Angular 21
@@ -198,6 +198,33 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+## MCP-Server für LLM-Unterstützung
+
+Angular bietet einen eigenen MCP-Server an, der in LLM-Werkzeuge integriert werden kann.
+Damit wird die "Wissenslücke" geschlossen zwischen dem trainierten Modell und den aktuellen Best Practices und tatsächlichen Gegebenheiten im Projekt.
+Der Server steckt noch in den Kinderschuhen und bietet derzeit nur ein paar wenige Tools an:
+
+- alle Projekte im Workspace auflisten
+- Best Practices bereitstellen
+- die Dokumentation durchsuchen
+- die Anwendung auf Zoneless Change Detection migrieren
+- mit einem Guide durch Angular führen
+
+Der MCP-Server wird in den nächsten Monaten weitere Tools erhalten, um noch bessere Unterstützung bei der Entwicklung zu ermöglichen.
+
+Beim Anlegen einer neuen Anwendung fragt das interaktive Prompt außerdem, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest.
+Die zugehörige Komandozeilenoption lautet `--ai-config`:
+
+```
+--ai-config     Specifies which AI tools to generate
+                configuration files for. These file are used to
+                improve the outputs of AI tools by following the
+                best practices.
+  [array] [choices: "agents", "claude", "copilot", "cursor",
+                "gemini", "jetbrains", "none", "windsurf"]
+```
+
+
 ## Migrationsskripte
 
 Es wird nicht mehr empfohlen, die Direktive `ngClass` zu verwenden. 
@@ -219,9 +246,6 @@ Einige interessante Aspekte haben wir hier zusammengetragen:
 
 - **Bindings für ARIA-Attribute:** Bisher mussten wir für ARIA-Attribute immer ein Attribute Binding verwenden: `[attr.aria-label]="myLabel"`. Die Attribute können nun auch direkt gebunden werden: `[aria-label]="myLabel"`.
 - **Tailwind-Support für `ng new`:** Angular unterstützt schon länger direkt TailwindCSS. Nun kann das Framework auch direkt beim Anlegen einer Anwendung konfiguriert werden: `ng new --style=tailwind`, (siehe [Commit](https://github.com/angular/angular-cli/commit/4912f39906b11a3212f11d5a00d577e2a0bacab4)).
-- **MCP-Tool für Zoneless Migration:** Der MCP-Server der Angular CLI bietet ein Werkzeug an, um Anwendungen auf Zoneless Change Detection zu migrieren (siehe [Commit](https://github.com/angular/angular-cli/commit/1be35b3433179481be85ea1cb892d66170e0aebe)).
-- **MCP-Tool zum Lernen von Angular:** Angular bietet das MCP-Tool `ai-tutor` an. Der Chat-Agent leitet schrittweise durch die Arbeit mit Angular und soll den Einstieg vereinfachen (siehe [Commit](https://github.com/angular/angular-cli/commit/6d3a3c5799bde1bab5c3878e0783ffa6854e36ad)).
-
 
 <hr>
 
