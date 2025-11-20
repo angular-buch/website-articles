@@ -43,7 +43,7 @@ Die zugehörige Kommandozeilenoption lautet `--ai-config`:
 ```
 
 Dadurch wird eine dedizierte Markdown-Datei generiert, die eine kleine Sammlung von Regeln und Best Practices für deinen KI-Agenten enthält.
-Diese Datei dient als Leitfaden, um sicherzustellen, dass AI-Tools konsistent hochwertigen Code erzeugen, der den aktuellen Angular-Standards entspricht.
+Diese Datei dient als Leitfaden, um sicherzustellen, dass AI-Tools konsistenten hochwertigen Code erzeugen, der den aktuellen Angular-Standards entspricht.
 Je nach ausgewähltem Tool variiert der Dateiname und der Speicherort, etwa `.claude/CLAUDE.md` für Claude, `.gemini/GEMINI.md` für Gemini oder `AGENTS.md` nach dem [neuen Standard](https://agents.md/).
 Diese Datei dient als Custom Prompt, der ohne Zutun der Entwickler*innen sehr früh in die Session eingelesen wird.
 Der Inhalt bleibt jedoch über alle Varianten hinweg identisch und ist in klare Abschnitte unterteilt, wie TypeScript Best Practices, Angular Best Practices, Components, State Management, Templates und Services.
@@ -121,7 +121,7 @@ Unserer Meinung nach ist die erzeugte Datei ein guter Anfang, sie müsste aber d
 
 Angular bietet einen eigenen [MCP-Server](https://angular.dev/ai/mcp) an, der in AI-Agenten integriert werden kann.
 Die Unterstützung wurde bereits in Angular 20.2 als experimentelles Feature eingeführt und ist mit Angular 21 nun stabil.
-Der MCP-Server kann mit verschiedenen Agenten genutzt werden, darunter Claude Desktop, Claude Code, GitHub Copilot (VS Code), Cursor und viele mehr.
+Der MCP-Server kann mit verschiedenen Agenten genutzt werden, darunter Claude Desktop, Claude Code, GitHub Copilot (VS Code), Cursor und viele weitere.
 
 Damit wird die "Wissenslücke" zwischen dem trainierten Modell und den aktuellen Best Practices geschlossen: 
 LLMs können so auch brandneue Features wie Signal Forms und Angular Aria nutzen, obwohl sie zum Zeitpunkt des Trainings noch nicht existierten.
