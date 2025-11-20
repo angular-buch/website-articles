@@ -31,7 +31,7 @@ Angular bietet hierfür zwei konkrete Ansätze: die `AGENTS.md`-Dateien mit Codi
 ### AGENTS.md: Best Practices für AI-Tools
 
 Beim Anlegen einer neuen Anwendung fragt der interaktive Prompt jetzt, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest.
-Die zugehörige Komandozeilenoption lautet `--ai-config`:
+Die zugehörige Kommandozeilenoption lautet `--ai-config`:
 
 ```
 --ai-config     Specifies which AI tools to generate

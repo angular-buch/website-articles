@@ -124,7 +124,7 @@ Mit Angular 21 gibt es einen der größten Umbrüche im Testing seit vielen Jah
 Vitest wurde bereits mit [Angular 20 (Mai 2025) als experimenteller Test-Runner eingeführt](https://angular-buch.com/blog/2025-05-angular20#experimenteller-test-builder-f%C3%BCr-vitest).
 Mit Angular 21 ist Vitest nun offiziell stabil und nicht mehr als experimentell gekennzeichnet.
 
-Vitest wurde damit gleichzeitig für neue Projekte mit `ng new` die Voreinstellung.
+Vitest wurde damit gleichzeitig für neue Projekte mit `ng new` zur Voreinstellung.
 Für neue Projekte führt der Weg also klar zu Vitest, du kannst auf Wunsch aber weiterhin Karma/Jasmine wählen:
 
 ```bash
@@ -212,7 +212,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Angulars Unterstützung für AI-Assistenten
 
-Beim Anlegen einer neuen Anwendung (`ng new`) fragt der interaktive Prompt jetzt nach, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest (Komandozeilenoption `--ai-config`). 
+Beim Anlegen einer neuen Anwendung (`ng new`) fragt der interaktive Prompt jetzt nach, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest (Kommandozeilenoption `--ai-config`). 
 Dadurch wird eine Datei erzeugt, die als _Custom Prompt_ automatisch in AI-Assistenten wie Claude Code, GitHub Copilot, Cursor und vielen weiteren eingelesen wird und diese mit aktuellen Angular Best Practices versorgt:
 
 ```bash
