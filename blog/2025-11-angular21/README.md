@@ -7,6 +7,7 @@ lastModified: 2025-11-20
 keywords:
   - Angular
   - Angular 21
+  - MCP-Server
   - ARIA
   - Zoneless
   - Signal Forms
