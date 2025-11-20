@@ -212,21 +212,28 @@ export const appConfig: ApplicationConfig = {
 
 ## Angulars Unterstützung für AI-Assistenten
 
-Beim Anlegen einer neuen Anwendung (`ng new`) fragt der interaktive Prompt jetzt nach, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest (Komandozeilenoption `--ai-config`). 
-Dadurch wird eine Datei erzeugt, die als Custom Prompt automatisch in AI-Assistenten wie Claude Code, GitHub Copilot oder Cursor eingelesen wird und diese mit aktuellen Angular Best Practices versorgt:
+Beim Anlegen einer neuen Anwendung (`ng new`) fragt der interaktive Prompt jetzt nach, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest (Komandozeilenoption `--ai-config` ). 
+Dadurch wird eine Datei erzeugt, die als _Custom Prompt_ automatisch in AI-Assistenten wie Claude Code, GitHub Copilot, Cursor und vielen weiteren eingelesen wird und diese mit aktuellen Angular Best Practices versorgt:
 
 ```bash
---ai-config     Specifies which AI tools to generate
-                configuration files for. These file are used to
-                improve the outputs of AI tools by following the
-                best practices.
-  [array] [choices: "agents", "claude", "copilot", "cursor",
-                "gemini", "jetbrains", "none", "windsurf"]
+? Which AI tools do you want to configure with Angular best practices? https://angular.dev/ai/develop-with-ai
+ ◉ None
+ ◯ Agents.md      [ https://agents.md/                                               ]
+❯◯ Claude         [ https://docs.anthropic.com/en/docs/claude-code/memory            ]
+ ◯ Cursor         [ https://docs.cursor.com/en/context/rules                         ]
+ ◯ Gemini         [ https://ai.google.dev/gemini-api/docs                            ]
+ ◯ GitHub Copilot [ https://code.visualstudio.com/docs/copilot/copilot-customization ]
+ ◯ JetBrains AI   [ https://www.jetbrains.com/help/junie/customize-guidelines.html   ]
+
+↑↓ navigate • space select • a all • i invert • ⏎ submit
 ```
 
-Allerdings gibt es auch Herausforderungen: Custom Prompts werden bei längeren Sessions häufig vergessen, und das begrenzte Kontextfenster führt zu inkonsistenten Ergebnissen.
+Je nach ausgewähltem Tool variiert der Dateiname und der Speicherort, etwa `.claude/CLAUDE.md` für Claude, `.gemini/GEMINI.md` für Gemini oder `AGENTS.md` nach dem [neuen Standard](https://agents.md/) sowie optional ein Frontmatter.
+Der eigentliche Inhalt mit den Angular Best Practices bleibt identisch.
 
-Um dieses Problem besser zu beherrschen, bietet Angular zusätzlich einen eigenen MCP-Server an, der AI-Agenten strukturierten Zugriff auf sieben Tools ermöglicht.
+Allerdings gibt es auch Herausforderungen: Custom Prompts werden bei längeren Sessions häufig vergessen, und das begrenzte Kontextfenster führt zu inkonsistenten Ergebnissen.
+Um dieses Problem besser zu beherrschen, bietet Angular zusätzlich einen eigenen MCP-Server an, der mit Angular 21 nun stabil ist. 
+Der Server ermöglicht AI-Agenten strukturierten Zugriff auf sieben Tools.
 Damit wird die "Wissenslücke" zwischen dem trainierten Modell und den aktuellen Best Practices geschlossen: 
 LLMs können so auch brandneue Features wie Signal Forms und Angular Aria nutzen, obwohl sie zum Zeitpunkt des Trainings noch nicht existierten.
 
