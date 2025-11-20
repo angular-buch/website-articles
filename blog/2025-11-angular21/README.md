@@ -239,7 +239,8 @@ Die zugehörige Komandozeilenoption lautet `--ai-config`:
 
 Dadurch eine dedizierte Markdown-Datei generiert, die eine kleine Sammlung von Regeln und Best Practices für Ihren KI-Agenten enthält. 
 Diese Datei dient als Leitfaden, um sicherzustellen, dass AI-Tools konsistent hochwertigen Code erzeugen, der den aktuellen Angular-Standards entspricht.
-Je nach ausgewähltem Tool variiert der Dateiname und der Speicherort, etwa `.claude/CLAUDE.md` für Claude, `.gemini/GEMINI.md` für Gemini oder `AGENTS.md` nach dem [neuen Standard](https://agents.md/), was eine nahtlose Integration in verschiedene AI-Umgebungen ermöglicht.
+Je nach ausgewähltem Tool variiert der Dateiname und der Speicherort, etwa `.claude/CLAUDE.md` für Claude, `.gemini/GEMINI.md` für Gemini oder `AGENTS.md` nach dem [neuen Standard](https://agents.md/).
+Diese Datei dient als Custom Prompt, der ohne Zutun der Entwickler*innen sehr früh in die Session eingelesen wird.
 Der Inhalt bleibt jedoch über alle Varianten hinweg identisch und ist in klare Abschnitte unterteilt, wie TypeScript Best Practices, Angular Best Practices, Components, State Management, Templates und Services.
 [Hier](https://github.com/angular/angular/blob/890414245ff313841c30759cbd193f72f3a89297/packages/core/resources/best-practices.md) kannst du den aktuellen Text der `AGENTS.md` nachlesen:
 
@@ -340,11 +341,11 @@ Der MCP-Server bietet aktuell sieben Tools an:
 Der MCP-Server wird kontinuierlich weiterentwickelt, um noch bessere Unterstützung bei der Entwicklung zu ermöglichen.
 
 **Wie funktioniert das konkret?** Am Beispiel des [`get_best_practices`](https://github.com/angular/angular-cli/blob/26719451c35288c0b5342eceda3460ed24bd3171/packages/angular/cli/src/commands/mcp/tools/best-practices.ts#L11)-Tools wird das Zusammenspiel deutlich:
-Ein Entwickler möchte eine neue Funktionalität zur Anwendung hinzufügen, zum Beispiel ein reaktives Formular mit Validierung.
-Er beschreibt dem AI-Assistenten die gewünschte Funktionalität.
+Ein*e Entwickler*in möchte eine neue Funktionalität zur Anwendung hinzufügen, zum Beispiel ein reaktives Formular mit Validierung.
+Die Person beschreibt dem AI-Assistenten die gewünschte Funktionalität.
 Die KI analysiert die Anfrage, erkennt, dass Angular-Code geschrieben werden muss, und führt **autonom** einen Aufruf des `get_best_practices`-Tools vom MCP-Server durch.
 So werden die aktuellen Coding-Richtlinien abgerufen und fließen direkt in die Code-Generierung ein.
-Der Entwickler erhält Code, der den neuesten Standards entspricht.
+Die Person erhält Code, der den neuesten Standards entspricht.
 Je nach Agent werden die Tool-Aufrufe transparent in Statusmeldungen angezeigt oder laufen vollständig im Hintergrund ab.
 Es gibt keine spezielle Syntax zum manuellen Aufrufen der Tools.
 Die KI entscheidet vollständig eigenständig, wann welches Tool hilfreich ist.
@@ -359,6 +360,9 @@ Die Limitierung tritt schnell bei längeren Sessions auf, insbesondere bei umfan
 In der Praxis bedeutet das: Der AI-Agent verliert den Überblick über frühere Teile der Konversation, kann nicht mehr auf alle relevanten Informationen zugreifen oder muss wichtige Best Practices weglassen, weil der verfügbare Platz erschöpft ist.
 Ein Phänomen, das sicherlich jeder schon einmal erlebt hat: Die AI scheint alles zu "vergessen", und man muss alle wichtigen Informationen noch einmal vorkauen.
 Das führt zu inkonsistenten Antworten, veralteten Code-Vorschlägen oder der Notwendigkeit, Konversationen neu zu starten und den Kontext manuell wiederherzustellen.
+
+**Hinzu kommt:** Viele AI-Agenten tendieren dazu, Custom Prompts wie die AGENTS.md im Laufe der Konversation zu vergessen und nur noch auf den ursprünglichen System-Prompt zurückzufallen.
+Das führt zu einer kompromittierten Konversation, über die man als Entwickler*in keinen Einfluss hat.
 
 Ein möglicher Ansatz zur Lösung dieses Problems ist der Einsatz von Vektordatenbanken, die projektbezogenes Wissen semantisch indizieren.
 Solche Systeme sind aktuell noch nicht Teil der Angular-Toolchain, zeigen aber die Richtung, in die sich die Integration von strukturiertem Wissen und generativer KI entwickeln könnte.
