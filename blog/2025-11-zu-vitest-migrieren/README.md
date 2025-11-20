@@ -461,7 +461,6 @@ Doch nicht alle Timer sind so einfach.
 Manchmal besteht der Code nur aus timerbasierten Aktionen, aber ohne zusätzliche Promises. Das folgende Beispiel inkrementiert einen Counter mehrfach, indem es ausschließlich Timeouts und Intervals nutzt:
 
 ```ts
-// timer-sync.ts
 export function startSyncSequence(counter: { value: number }) {
   setTimeout(() => { counter.value++; }, 300);
   const interval = setInterval(() => {
