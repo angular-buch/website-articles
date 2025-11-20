@@ -14,6 +14,7 @@ keywords:
   - Vibe-Coding
 language: de
 header: angular21.jpg
+hidden: true
 ---
 
 Auf der Google I/O 2025 hat das Angular-Team die neue Ressource [angular.dev/ai](https://angular.dev/ai) vorgestellt.

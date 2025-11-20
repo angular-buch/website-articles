@@ -247,7 +247,7 @@ Der MCP-Server bietet aktuell sieben Tools an:
 6. Die Dokumentation durchsuchen (`search_documentation`).
 7. Code-Migrationen mit Schematics durchführen (`modernize`, **experimentell**).
 
-Mehr Details zu `AGENTS.md`, MCP und praktischen Erfahrungen findest du in unserem ausführlichen Artikel über [Vibe-Coding mit Angular](/blog/2025-11-ai-mcp-vibe-coding).
+<!-- Mehr Details zu `AGENTS.md`, MCP und praktischen Erfahrungen findest du in unserem ausführlichen Artikel über [Vibe-Coding mit Angular](/blog/2025-11-ai-mcp-vibe-coding). -->
 
 
 ## Migrationsskripte
