@@ -210,31 +210,22 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Angular's Umfangreiche Unterstüttung AI-Assistenten
+## Angulars umfangreiche Unterstützung für AI-Assistenten
 
 Auf der Google I/O 2025 hat das Angular-Team die neue Ressource [angular.dev/ai](https://angular.dev/ai) vorgestellt.
 Sie bietet umfassende Anleitungen und Beispiele für die Entwicklung von KI-gestützten Anwendungen mit Angular.
+Dazu gehören etwa Chatbots, KI-Editoren oder agentenbasierte Workflows.
+Die Seite zeigt konkrete Integrationsmöglichkeiten mit Genkit, Firebase AI Logic und der Gemini API, inklusive Starter-Kits und Best Practices für sichere API-Nutzung und Fehlerbehandlung.
 
-Angular bietet unter anderem einen eigenen [MCP-Server](https://angular.dev/ai/mcp) an, der in LLM-Werkzeuge integriert werden kann.
-Die MCP-Unterstützung (Model Context Protocol) wurde bereits in Angular 20.2 als experimentelles Feature eingeführt und ist mit Angular 21 nun stabil.
-Der MCP-Server kann mit verschiedenen Agenten genutzt werden, darunter Claude Desktop, Claude Code, GitHub Copilot (VS Code), Cursor und viele mehr.
+Bei der Diskussion sollte man immer unterscheiden zwischen: "AI in Apps einbauen" vs. "AI hilft beim Coden".
+Beide Richtungen sind spannend.
+Als Angular-Buch-Team interessiert uns jedoch natürlich besonders, wie AI-Assistenten uns beim Schreiben von Angular-Code unterstützen können.
 
-Damit wird die "Wissenslücke" zwischen dem trainierten Modell und den aktuellen Best Practices geschlossen: 
-LLMs können so auch brandneue Features wie Signal Forms und Angular Aria nutzen, obwohl sie zum Zeitpunkt des Trainings noch nicht existierten.
+Angular bietet hierfür zwei konkrete Ansätze: die `AGENTS.md`-Dateien mit Coding-Richtlinien und den MCP-Server für strukturierten Zugriff auf aktuelle Best Practices und Dokumentation.
 
-Der MCP-Server bietet aktuell sieben Tools an:
+### AGENTS.md: Best Practices für AI-Tools
 
-1. Mit einem interaktiven KI-Tutor Angular kennenlernen (`ai_tutor`). Siehe auch die Dokumentation unter ["Angular AI Tutor"](https://angular.dev/ai/ai-tutor).
-2. Moderne Angular-Pattern-Beispiele finden (`find_examples`).
-3. Best Practices bereitstellen (`get_best_practices`).
-4. Alle Projekte im Workspace auflisten (`list_projects`).
-5. Die Anwendung auf Zoneless Change Detection migrieren (`onpush_zoneless_migration`).
-6. Die Dokumentation durchsuchen (`search_documentation`).
-7. Code-Migrationen mit Schematics durchführen (`modernize`, **experimentell**).
-
-Der MCP-Server wird kontinuierlich weiterentwickelt, um noch bessere Unterstützung bei der Entwicklung zu ermöglichen.
-
-Beim Anlegen einer neuen Anwendung fragt das interaktive Prompt außerdem, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest.
+Beim Anlegen einer neuen Anwendung fragt der interaktive Prompt jetzt, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest.
 Die zugehörige Komandozeilenoption lautet `--ai-config`:
 
 ```
@@ -317,20 +308,42 @@ Je nachdem, wie optimiert das Modell ist, wie viele Inputs es verarbeiten kann, 
 Ein schwächeres Modell wird höchstwahrscheinlich hilflos raten und dabei selbstbewusst völlig falsche Informationen halluzinieren.
 
 Ein starkes Modell hingegen kann die Instruktionen präzise interpretieren und tatsächlich fundierte Vorschläge machen.
-Unserer Meinung nach ist die erzeugte Datei ein guter Anfang, sie müsste aber deutlich mehr konkrete und kontextspezifische Anweisungen beinhalten. Ein Weg, solche Informationen bereitzustellen, ist der MCP-Server, der im Kern eine Sammlung strukturierter Prompts und aktueller Best Practices enthält.
+Unserer Meinung nach ist die erzeugte Datei ein guter Anfang, sie müsste aber deutlich mehr konkrete und kontextspezifische Anweisungen beinhalten. Ein Weg, solche Informationen bereitzustellen, ist der MCP-Server (siehe unten), der im Kern eine Sammlung strukturierter Prompts und aktueller Best Practices enthält.
 
-Die Kommunikation erfolgt über das standardisierte Model Context Protocol (MCP) – ein JSON-RPC-2.0-basiertes Protokoll, das entweder lokal über STDIO oder remote über HTTP mit Streaming-Support genutzt werden kann. Der Angular CLI MCP-Server wird in der Praxis lokal gestartet (z. B. mit `npx @angular/cli mcp`) und stellt seine Funktionen in Form sogenannter „Tools“ bereit – etwa `get_best_practices`, `find_examples` oder `list_projects`.
+
+Übrigens, ein Beispiel dafür, wie schnell sich die Arbeit mit Agenten überholt, ist der Hinweis "*Do not write regular expressions in templates (they are not supported).*".
+Dieser ist bereits veraltet (siehe unten), denn Angular unterstützt jetzt reguläre Ausdrücke im Template, sodass sich dieser Ratschlag sogar kontraproduktiv auswirken kann.
+Das zeigt: Selbst präzise formulierte Guidelines müssen regelmäßig überprüft und an den aktuellen Stand der Technik angepasst werden, um Missverständnisse und veraltete Empfehlungen zu vermeiden.
+Wir haben bereits einen [Pull Request (#65416)](https://github.com/angular/angular/pull/65416) erstellt.
+
+
+### MCP-Server: Strukturiertes Wissen für AI-Agenten
+
+Angular bietet einen eigenen [MCP-Server](https://angular.dev/ai/mcp) an, der in AI-Agenten integriert werden kann.
+Die Unterstützung  wurde bereits in Angular 20.2 als experimentelles Feature eingeführt und ist mit Angular 21 nun stabil.
+Der MCP-Server kann mit verschiedenen Agenten genutzt werden, darunter Claude Desktop, Claude Code, GitHub Copilot (VS Code), Cursor und viele mehr.
+
+Damit wird die "Wissenslücke" zwischen dem trainierten Modell und den aktuellen Best Practices geschlossen: 
+LLMs können so auch brandneue Features wie Signal Forms und Angular Aria nutzen, obwohl sie zum Zeitpunkt des Trainings noch nicht existierten.
+
+Die Kommunikation erfolgt über das standardisierte Model Context Protocol (MCP), welches ein Protokoll auf Basis von JSON-RPC 2.0 ist. Der Server wird in der Regel lokal auf dem eigenen Rechnter gestartet (z. B. mit `npx @angular/cli mcp`) und stellt seine Funktionen in Form sogenannter "Tools" bereit.
+Der MCP-Server bietet aktuell sieben Tools an:
+
+1. Mit einem interaktiven KI-Tutor Angular kennenlernen (`ai_tutor`). Siehe auch die Dokumentation unter ["Angular AI Tutor"](https://angular.dev/ai/ai-tutor).
+2. Moderne Angular-Pattern-Beispiele finden (`find_examples`).
+3. Best Practices bereitstellen (`get_best_practices`).
+4. Alle Projekte im Workspace auflisten (`list_projects`).
+5. Die Anwendung auf Zoneless Change Detection migrieren (`onpush_zoneless_migration`).
+6. Die Dokumentation durchsuchen (`search_documentation`).
+7. Code-Migrationen mit Schematics durchführen (`modernize`, **experimentell**).
+
+Der MCP-Server wird kontinuierlich weiterentwickelt, um noch bessere Unterstützung bei der Entwicklung zu ermöglichen.
 
 Wichtig ist: Der MCP-Server liefert Inhalte, trifft aber **keine kontextabhängige Auswahl**. Die Integration und Nutzung dieser Inhalte obliegt den jeweiligen Tools wie GitHub Copilot, Cursor oder Claude Desktop. Diese können den Server lokal starten, per JSON-RPC abfragen und bei Bedarf passende Informationen aus den verfügbaren Tools gezielt in den eigenen Prompt einfügen. Damit diese Kommunikation funktioniert, muss der MCP-Server jedoch erst korrekt im jeweiligen Agenten konfiguriert werden. Dies geschieht zum Beispiel durch eine Datei wie `mcp.json`. Angular generiert solche Konfigurationsdateien nicht automatisch. Sie müssen aktuelle (noch) manuell angelegt werden.
 
 Wird der übermittelte Text vom MCP-Server zu umfangreich, kann er das Kontextfenster des Modells überschreiten. Dies geschieht schnell bei längeren Sessions und insbesondere bei umfangreichen Projekten oder komplexen Fragen. Ein möglicher Ansatz zur Lösung dieses Problems ist der Einsatz von Vektordatenbanken, die projektbezogenes Wissen semantisch indizieren. Solche Systeme sind aktuell noch nicht Teil der Angular-Toolchain, zeigen aber die Richtung, in die sich die Integration von strukturiertem Wissen und generativer KI entwickeln könnte.
 
 **Das ist allerdings noch Zukunftsmusik.** Wir sind gespannt, wie das Angular-Team es in zukünftigen Versionen schaffen wird, möglichst präzise und kontextsensitive Instruktionen bereitzustellen – idealerweise dynamisch, skalierbar und abgestimmt auf die jeweiligen Werkzeuge.
-
-Übrigens, ein Beispiel dafür, wie schnell sich die Arbeit mit Agenten überholt, ist der Hinweis "*Do not write regular expressions in templates (they are not supported).*".
-Dieser ist bereits veraltet (siehe unten), denn Angular unterstützt jetzt reguläre Ausdrücke im Template, sodass sich dieser Ratschlag sogar kontraproduktiv auswirken kann.
-Das zeigt: Selbst präzise formulierte Guidelines müssen regelmäßig überprüft und an den aktuellen Stand der Technik angepasst werden, um Missverständnisse und veraltete Empfehlungen zu vermeiden.
-Wir haben bereits einen [Pull Request (#65416)](https://github.com/angular/angular/pull/65416) erstellt.
 
 
 
