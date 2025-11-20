@@ -3,7 +3,7 @@ title: 'Vitest in Angular 21: Was ist neu und wie kann man migrieren?'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 published: 2025-11-18
-lastModified: 2025-11-18
+lastModified: 2025-11-20
 keywords:
   - Angular
   - Angular 21
@@ -94,7 +94,7 @@ npm install --save-dev vitest jsdom
 
 #### 2. `angular.json` aktualisieren
 
-Suche in deiner `angular.json` den `test`-Target deines Projekts und setze den `builder` auf `@angular/build:unit-test`.
+Suche in der Datei `angular.json` das `test`-Target deines Projekts und setze den `builder` auf `@angular/build:unit-test`.
 
 ```json
 {
@@ -123,7 +123,7 @@ Stimmen sie bereits mit `development` überein, ist kein weiterer Schritt notwen
 
 #### 3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen
 
-Eigene Einstellungen in `karma.conf.js` werden nicht automatisch migriert. 
+Eigene Einstellungen in aus der Datei `karma.conf.js` werden nicht automatisch migriert. 
 Prüfe diese Datei, bevor du sie löschst, und übertrage relevante Optionen manuell.
 Viele Karma‑Optionen besitzen Vitest‑Entsprechungen, die du in einer `vitest.config.ts` definieren kannst und dann über `runnerConfig` in der `angular.json` einbindest.
 
@@ -137,7 +137,7 @@ Weitere Einstellungen findest du in der offiziellen [Vitest‑Dokumentation](htt
 
 #### 4. Karma- und `test.ts`‑Dateien entfernen
 
-Du kannst nun `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. 
+Du kannst nun die Dateien `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. 
 Die folgenden Befehle entsprechen einem Standard‑Angular‑Projekt.
 In deinem Projekt können weitere Pakete vorhanden sein.
 
@@ -152,7 +152,7 @@ Wähle je nach Bedarf:
 
 * **Playwright:** `@vitest/browser-playwright` für Chromium, Firefox und WebKit
 * **WebdriverIO:** `@vitest/browser-webdriverio` für Chrome, Firefox, Safari und Edge
-* **Preview:** `@vitest/browser-preview` für Webcontainer-Umgebungen wie StackBlitz
+* **Preview:** `@vitest/browser-preview` für WebContainer-Umgebungen wie StackBlitz
 
 ```bash
 npm install --save-dev @vitest/browser-playwright
@@ -191,7 +191,7 @@ Das Angular CLI stellt ein Schematic bereit, das deine Jasmine‑Tests automatis
 
 #### 1. Überblick
 
-Derzeit führt das Schematic folgende Umwandlungen in den `.spec.ts`‑Dateien durch:
+Derzeit führt das Schematic folgende Umwandlungen in Dateien mit der Endung `.spec.ts` durch:
 
 * `fit`/`fdescribe` → `it.only`/`describe.only`
 * `xit`/`xdescribe` → `it.skip`/`describe.skip`
@@ -348,9 +348,9 @@ await expect(doWork()).rejects.toThrow('Boom');
 Vitest zielt also bei den Matchern auf Jest‑Kompatibilität ab. 
 Kompatibilität mit Jasmine steht hingegen überhaupt nicht im Fokus. 
 In der Praxis ist der Anpassungsaufwand meist gering (vor allem bei `toBeTrue`/`toBeFalse` und `toHaveBeenCalledOnceWith`), aber er existiert. 
-Bei asynchronen Erwartungen unterscheidet sich das Pattern sogar deutlich. Allerdings wurde `expectAsync` in der Angular-Dokumentation nie erwähnt; stattdessen wurden eigene Hilfsfunktionen gezeigt.
+Bei asynchronen Erwartungen unterscheidet sich das Pattern sogar deutlich. 
+Aber keine Sorge: Die Wahrscheinlichkeit, dass dein Projekt `expectAsync` verwendet, ist sehr gering, da in der Angular-Dokumentation stattdessen immer Angular-spezifische Hilfsfunktionen gezeigt wurden.
 Daher dürfte in den meisten Projekten hier wahrscheinlich gar keine zusätzliche Arbeit anfallen.
-
 
 ### Spys und Mocks
 
@@ -430,7 +430,7 @@ export function startFiveSecondTimer(counter: { value: number }) {
 }
 ```
 
-Für solche Fälle ist `vi.advanceTimersByTime()` ideal, denn man kann gezielt simulieren, dass exakt eine bestimmte Zeit verstrichen ist. Ganz ähnlich wie früher `tick(5000)`, aber ohne fakeAsync-Zone:
+Für solche Fälle ist `vi.advanceTimersByTime()` ideal, denn man kann gezielt simulieren, dass exakt eine bestimmte Zeit verstrichen ist. Ganz ähnlich wie früher `tick(5000)`, aber ohne `fakeAsync()`-Zone:
 
 ```ts
 import { describe, it, expect, vi } from 'vitest';
@@ -502,7 +502,6 @@ Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeite
 Dann reicht `runAllTimers()` nicht mehr aus. Das folgende Beispiel zeigt ein typisches Muster aus realen Anwendungen:
 
 ```ts
-// timer-async.ts
 export function startAsyncJob(): Promise<string> {
   return new Promise(resolve => {
     setTimeout(async () => {
@@ -535,7 +534,7 @@ describe('startAsyncJob', () => {
 });
 ```
 
-`runAllTimersAsync()` ist damit ein guter Ersatz für Jasmine-Szenarien, bei denen `fakeAsync()` und `tick()` in Kombination mit Microtask-Flushing verwendet wurden. 
+`runAllTimersAsync()` ist damit ein guter Ersatz für Tests, bei denen bisher `fakeAsync()` und `tick()` in Kombination mit Microtask-Flushing verwendet wurden. 
 
 ### TestBed und ComponentFixture
 
