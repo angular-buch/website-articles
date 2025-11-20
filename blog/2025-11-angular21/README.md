@@ -107,9 +107,9 @@ Im Template erstellen wir die Datenbindungen mithilfe einer einzigen Direktive:
 
 Wir haben ausführliche Blogposts in englischer Sprache zu Signal Forms veröffentlicht:
 
-- **Part 1: Getting Started with the Basics:** https://angular-buch.com/blog/2025-10-signal-forms-part1
-- **Part 2: Advanced Validation and Schema Patterns:** https://angular-buch.com/blog/2025-10-signal-forms-part2
-- **Part 3: Child Forms and Custom UI Controls:** https://angular-buch.com/blog/2025-10-signal-forms-part3
+- [**Part 1: Getting Started with the Basics**](https://angular-buch.com/blog/2025-10-signal-forms-part1)
+- [**Part 2: Advanced Validation and Schema Patterns**](https://angular-buch.com/blog/2025-10-signal-forms-part2)
+- [**Part 3: Child Forms and Custom UI Controls:**](https://angular-buch.com/blog/2025-10-signal-forms-part3)
 
 Perspektivisch könnten mit dem neuen Ansatz die älteren Varianten *Reactive Forms* und *Template-Driven Forms* verdrängt werden.
 Das Angular-Team legt außerdem großen Wert auf Abwärtskompatibilität, sodass die Migration auf ein Signal-basiertes Formular kein großes Problem sein sollte.
@@ -120,10 +120,16 @@ Noch ist der neue Ansatz aber experimentell, sodass sich die Schnittstellen und 
 
 Mit Angular 21 gibt es einen der größten Umbrüche im Testing seit vielen Jahren: 
 [Vitest](https://vitest.dev) ersetzt "offiziell" Karma und Jasmine als Standard-Test-Runner. 
-Vitest ist für neue Projekte mit `ng new` die Voreinstellung.
+Vitest wurde bereits mit [Angular 20 (Mai 2025) als experimenteller Test-Runner eingeführt](https://angular-buch.com/blog/2025-05-angular20#experimenteller-test-builder-f%C3%BCr-vitest).
+Mit Angular 21 ist Vitest nun offiziell stabil und nicht mehr als experimentell gekennzeichnet.
+
+Vitest wurde damit gleichzeitig für neue Projekte mit `ng new` die Voreinstellung.
 Für neue Projekte führt der Weg also klar zu Vitest, du kannst auf Wunsch aber weiterhin Karma/Jasmine wählen:
 
 ```bash
+# Projekt mit Vitest als Testrunner anlegen
+ng new my-project
+
 # Projekt mit Karma als Testrunner anlegen
 ng new my-project --test-runner=karma
 ```
@@ -134,10 +140,15 @@ Die meisten Specs sollten weiterhin unverändert funktionieren, da Angulars `Tes
 Anpassungen betreffen hauptsächlich Jasmine-spezifische Matcher oder Spys.
 
 Die eigentliche Umstellung erfolgt zunächst über den neuen Builder `unit-test` in der `angular.json`.
-Danach kannst du für bestehende Tests ein experimentelles Schematic verwenden, das viele Jasmine-Patterns automatisch nach Vitest überführt.
+Danach kannst du für bestehende Tests ein experimentelles Schematic verwenden, das viele Jasmine-Patterns automatisch nach Vitest überführt:
 
+```bash
+ng g @schematics/angular:refactor-jasmine-vitest
+```
+
+Gleichzeitig hat das Angular-Team die Unterstützung für die Test-Runner Jest und Web Test Runner als **deprecated** markiert.
 Eine ausführliche Anleitung zur Migration, inklusive praktischer Beispiele zu Fake-Timern, Matchern und async/await, haben wir hier zusammengestellt:
-**[Vitest in Angular 21: Was ist neu und wie kann man migrieren?](/blog/2025-11-zu-vitest-migrieren)**
+- **[Vitest in Angular 21: Was ist neu und wie kann man migrieren?](/blog/2025-11-zu-vitest-migrieren)**
 
 
 
@@ -224,6 +235,9 @@ Die zugehörige Komandozeilenoption lautet `--ai-config`:
                 "gemini", "jetbrains", "none", "windsurf"]
 ```
 
+Auf der Google I/O 2025 hat das Angular-Team außerdem die neue Ressource [angular.dev/ai](https://angular.dev/ai) vorgestellt.
+Sie bietet umfassende Anleitungen und Beispiele für die Entwicklung von KI-gestützten Anwendungen mit Angular.
+
 
 ## Migrationsskripte
 
@@ -238,6 +252,10 @@ ng generate @angular/core:ngclass-to-class
 Das `RouterTestingModule` für Unit-Tests wird ebenfalls nicht mehr unterstützt.
 Ein Migrationsskript kann die Tests auf das neuere `provideRouterTesting()` umstellen, siehe [Commit](https://github.com/angular/angular/commit/861cee34e0e9b5562cfe70d245f30b7ddea7d8fd).
 
+```bash
+ng generate @angular/core:router-testing-module-migration
+```
+
 
 ## Sonstiges
 
@@ -245,7 +263,8 @@ Alle Details zu den Neuerungen findest du immer im Changelog von [Angular](https
 Einige interessante Aspekte haben wir hier zusammengetragen:
 
 - **Bindings für ARIA-Attribute:** Bisher mussten wir für ARIA-Attribute immer ein Attribute Binding verwenden: `[attr.aria-label]="myLabel"`. Die Attribute können nun auch direkt gebunden werden: `[aria-label]="myLabel"`.
-- **Tailwind-Support für `ng new`:** Angular unterstützt schon länger direkt TailwindCSS. Nun kann das Framework auch direkt beim Anlegen einer Anwendung konfiguriert werden: `ng new --style=tailwind`, (siehe [Commit](https://github.com/angular/angular-cli/commit/4912f39906b11a3212f11d5a00d577e2a0bacab4)).
+- **Reguläre Ausdrücke in Templates:** Angular unterstützt jetzt reguläre Ausdrücke direkt in Templates (siehe [PR](https://github.com/angular/angular/pull/63857)).
+- **Tailwind-Support für `ng new`:** Angular unterstützt schon länger direkt TailwindCSS. Nun kann das Framework auch direkt beim Anlegen einer Anwendung konfiguriert werden: `ng new --style=tailwind` (siehe [Commit](https://github.com/angular/angular-cli/commit/4912f39906b11a3212f11d5a00d577e2a0bacab4)).
 
 <hr>
 
