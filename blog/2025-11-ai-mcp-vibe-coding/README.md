@@ -41,7 +41,7 @@ Die zugehörige Komandozeilenoption lautet `--ai-config`:
                 "gemini", "jetbrains", "none", "windsurf"]
 ```
 
-Dadurch eine dedizierte Markdown-Datei generiert, die eine kleine Sammlung von Regeln und Best Practices für Ihren KI-Agenten enthält. 
+Dadurch wird eine dedizierte Markdown-Datei generiert, die eine kleine Sammlung von Regeln und Best Practices für deinen KI-Agenten enthält.
 Diese Datei dient als Leitfaden, um sicherzustellen, dass AI-Tools konsistent hochwertigen Code erzeugen, der den aktuellen Angular-Standards entspricht.
 Je nach ausgewähltem Tool variiert der Dateiname und der Speicherort, etwa `.claude/CLAUDE.md` für Claude, `.gemini/GEMINI.md` für Gemini oder `AGENTS.md` nach dem [neuen Standard](https://agents.md/).
 Diese Datei dient als Custom Prompt, der ohne Zutun der Entwickler*innen sehr früh in die Session eingelesen wird.
@@ -116,22 +116,16 @@ Ein starkes Modell hingegen kann die Instruktionen präzise interpretieren und t
 Unserer Meinung nach ist die erzeugte Datei ein guter Anfang, sie müsste aber deutlich mehr konkrete und kontextspezifische Anweisungen beinhalten. Ein Weg, solche Informationen bereitzustellen, ist der MCP-Server (siehe unten), der im Kern eine Sammlung strukturierter Prompts und aktueller Best Practices enthält.
 
 
-Übrigens, ein Beispiel dafür, wie schnell sich die Arbeit mit Agenten überholt, ist der Hinweis "*Do not write regular expressions in templates (they are not supported).*".
-Dieser ist bereits veraltet (siehe unten), denn Angular unterstützt jetzt reguläre Ausdrücke im Template, sodass sich dieser Ratschlag sogar kontraproduktiv auswirken kann.
-Das zeigt: Selbst präzise formulierte Guidelines müssen regelmäßig überprüft und an den aktuellen Stand der Technik angepasst werden, um Missverständnisse und veraltete Empfehlungen zu vermeiden.
-Wir haben bereits einen [Pull Request (#65416)](https://github.com/angular/angular/pull/65416) erstellt.
-
-
 ### MCP-Server: Strukturiertes Wissen für AI-Agenten
 
 Angular bietet einen eigenen [MCP-Server](https://angular.dev/ai/mcp) an, der in AI-Agenten integriert werden kann.
-Die Unterstützung  wurde bereits in Angular 20.2 als experimentelles Feature eingeführt und ist mit Angular 21 nun stabil.
+Die Unterstützung wurde bereits in Angular 20.2 als experimentelles Feature eingeführt und ist mit Angular 21 nun stabil.
 Der MCP-Server kann mit verschiedenen Agenten genutzt werden, darunter Claude Desktop, Claude Code, GitHub Copilot (VS Code), Cursor und viele mehr.
 
 Damit wird die "Wissenslücke" zwischen dem trainierten Modell und den aktuellen Best Practices geschlossen: 
 LLMs können so auch brandneue Features wie Signal Forms und Angular Aria nutzen, obwohl sie zum Zeitpunkt des Trainings noch nicht existierten.
 
-Die Kommunikation erfolgt über das standardisierte Model Context Protocol (MCP), welches ein Protokoll auf Basis von JSON-RPC 2.0 ist. Der Server wird in der Regel lokal auf dem eigenen Rechnter gestartet (z. B. mit `npx @angular/cli mcp`) und stellt seine Funktionen in Form sogenannter "Tools" bereit.
+Die Kommunikation erfolgt über das standardisierte Model Context Protocol (MCP). Der Server wird in der Regel lokal auf dem eigenen Rechner gestartet (z. B. mit `ng mcp`) und stellt seine Funktionen in Form sogenannter "Tools" bereit.
 Der MCP-Server bietet aktuell sieben Tools an:
 
 1. Mit einem interaktiven KI-Tutor Angular kennenlernen (`ai_tutor`). Siehe auch die Dokumentation unter ["Angular AI Tutor"](https://angular.dev/ai/ai-tutor).
@@ -162,11 +156,11 @@ Wird der übermittelte Text vom MCP-Server zu umfangreich, kann er das Kontextfe
 **Dies ist aktuell einer der größten Schmerzpunkte bei der Entwicklung mit AI-Assistenten:**
 Die Limitierung tritt schnell bei längeren Sessions auf, insbesondere bei umfangreichen Projekten oder komplexen Fragestellungen.
 In der Praxis bedeutet das: Der AI-Agent verliert den Überblick über frühere Teile der Konversation, kann nicht mehr auf alle relevanten Informationen zugreifen oder muss wichtige Best Practices weglassen, weil der verfügbare Platz erschöpft ist.
-Ein Phänomen, das sicherlich jeder schon einmal erlebt hat: Die AI scheint alles zu "vergessen", und man muss alle wichtigen Informationen noch einmal vorkauen.
+Es ist ein Phänomen, das du bei der Arbeit mit AI-Assistenten bestimmt schon einmal erlebt hast: Die AI scheint alles zu "vergessen", und man muss alle wichtigen Informationen noch einmal vorkauen.
 Das führt zu inkonsistenten Antworten, veralteten Code-Vorschlägen oder der Notwendigkeit, Konversationen neu zu starten und den Kontext manuell wiederherzustellen.
 
 **Hinzu kommt:** Viele AI-Agenten tendieren dazu, Custom Prompts wie die AGENTS.md im Laufe der Konversation zu vergessen und nur noch auf den ursprünglichen System-Prompt zurückzufallen.
-Das führt zu einer kompromittierten Konversation, über die man als Entwickler*in keinen Einfluss hat.
+Das führt zu einer kompromittierten Konversation, auf die man als Entwickler*in keinen Einfluss hat.
 
 Ein möglicher Ansatz zur Lösung dieses Problems ist der Einsatz von Vektordatenbanken, die projektbezogenes Wissen semantisch indizieren.
 Solche Systeme sind aktuell noch nicht Teil der Angular-Toolchain, zeigen aber die Richtung, in die sich die Integration von strukturiertem Wissen und generativer KI entwickeln könnte.

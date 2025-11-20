@@ -212,7 +212,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Angulars Unterstützung für AI-Assistenten
 
-Beim Anlegen einer neuen Anwendung (`ng new`) fragt der interaktive Prompt jetzt nach, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest (Komandozeilenoption `--ai-config` ). 
+Beim Anlegen einer neuen Anwendung (`ng new`) fragt der interaktive Prompt jetzt nach, ob du eine Config für ein bestimmtes KI-Werkzeug generieren möchtest (Komandozeilenoption `--ai-config`). 
 Dadurch wird eine Datei erzeugt, die als _Custom Prompt_ automatisch in AI-Assistenten wie Claude Code, GitHub Copilot, Cursor und vielen weiteren eingelesen wird und diese mit aktuellen Angular Best Practices versorgt:
 
 ```bash
