@@ -3,7 +3,7 @@ title: 'Vitest in Angular 21: Was ist neu und wie kann man migrieren?'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 published: 2025-11-18
-lastModified: 2025-11-18
+lastModified: 2025-11-20
 keywords:
   - Angular
   - Angular 21
@@ -48,7 +48,7 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
 ## Warum Angular Karma und Jasmine ersetzt
 
 _Karma und Jasmine_ haben für Angular lange Jahre gute Dienste geleistet, vor allem wegen der Ausführung in einem echten Browser.
-Es gab aber Nachteile: die Ausführungsgeschwindigkeit war nie optimal und das Ökosystem veraltet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
+Es gab aber Nachteile: die Ausführungsgeschwindigkeit war nie optimal und das Ökosystem ist veraltet ([Karma ist seit 2023 deprecated](https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes)). 
 Über mehrere Jahre prüfte das Angular-Team Alternativen (Jest, Web Test Runner usw.), ohne einen klaren Gewinner zu finden.
 [Vitest](https://vitest.dev/) wurde inzwischen äußerst populär und erwies sich als passende Lösung.
 
@@ -94,7 +94,7 @@ npm install --save-dev vitest jsdom
 
 #### 2. `angular.json` aktualisieren
 
-Suche in deiner `angular.json` den `test`-Target deines Projekts und setze den `builder` auf `@angular/build:unit-test`.
+Suche in der Datei `angular.json` das `test`-Target deines Projekts und setze den `builder` auf `@angular/build:unit-test`.
 
 ```json
 {
@@ -123,7 +123,7 @@ Stimmen sie bereits mit `development` überein, ist kein weiterer Schritt notwen
 
 #### 3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen
 
-Eigene Einstellungen in `karma.conf.js` werden nicht automatisch migriert. 
+Eigene Einstellungen aus der Datei `karma.conf.js` werden nicht automatisch migriert. 
 Prüfe diese Datei, bevor du sie löschst, und übertrage relevante Optionen manuell.
 Viele Karma‑Optionen besitzen Vitest‑Entsprechungen, die du in einer `vitest.config.ts` definieren kannst und dann über `runnerConfig` in der `angular.json` einbindest.
 
@@ -137,7 +137,7 @@ Weitere Einstellungen findest du in der offiziellen [Vitest‑Dokumentation](htt
 
 #### 4. Karma- und `test.ts`‑Dateien entfernen
 
-Du kannst nun `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. 
+Du kannst nun die Dateien `karma.conf.js` sowie `src/test.ts` löschen und alle Karma‑bezogenen Pakete deinstallieren. 
 Die folgenden Befehle entsprechen einem Standard‑Angular‑Projekt.
 In deinem Projekt können weitere Pakete vorhanden sein.
 
@@ -152,7 +152,7 @@ Wähle je nach Bedarf:
 
 * **Playwright:** `@vitest/browser-playwright` für Chromium, Firefox und WebKit
 * **WebdriverIO:** `@vitest/browser-webdriverio` für Chrome, Firefox, Safari und Edge
-* **Preview:** `@vitest/browser-preview` für Webcontainer-Umgebungen wie StackBlitz
+* **Preview:** `@vitest/browser-preview` für WebContainer-Umgebungen wie StackBlitz
 
 ```bash
 npm install --save-dev @vitest/browser-playwright
@@ -191,7 +191,7 @@ Das Angular CLI stellt ein Schematic bereit, das deine Jasmine‑Tests automatis
 
 #### 1. Überblick
 
-Derzeit führt das Schematic folgende Umwandlungen in den `.spec.ts`‑Dateien durch:
+Derzeit führt das Schematic folgende Umwandlungen in Dateien mit der Endung `.spec.ts` durch:
 
 * `fit`/`fdescribe` → `it.only`/`describe.only`
 * `xit`/`xdescribe` → `it.skip`/`describe.skip`
@@ -291,7 +291,7 @@ Dadurch vermeidest du mögliche Namenskollisionen, etwa mit gleichnamigen Funkti
 ### Matcher
 
 Die üblichen Matcher wie `toBe`, `toEqual`, `toContain` oder `toHaveBeenCalledWith` stehen in Vitest weiterhin zur Verfügung. Wenn du in Jasmine `jasmine.any(...)` verwendet hast, nutzt du in Vitest `expect.any(...)`.
-Wichtig: Vitest hat nicht das Ziel, eine zu Jasmine kompatible API zu schaffen.
+Wichtig: Vitest hat nicht das Ziel, eine mit Jasmine kompatible API zu schaffen.
 Stattdessen bietet Vitest eine möglichst [**Jest‑kompatible** Expect-API](https://vitest.dev/api/expect.html) auf Basis von Chai an.
 Das Testframework Jest hat wiederum das Ziel, einigermaßen kompatibel zu Jasmine zu sein.
 Weil aber Vitest nur mit Jest kompatibel sein will, ergeben sich folgende Herausforderungen, da einige Matcher schlicht fehlen:
@@ -348,9 +348,9 @@ await expect(doWork()).rejects.toThrow('Boom');
 Vitest zielt also bei den Matchern auf Jest‑Kompatibilität ab. 
 Kompatibilität mit Jasmine steht hingegen überhaupt nicht im Fokus. 
 In der Praxis ist der Anpassungsaufwand meist gering (vor allem bei `toBeTrue`/`toBeFalse` und `toHaveBeenCalledOnceWith`), aber er existiert. 
-Bei asynchronen Erwartungen unterscheidet sich das Pattern sogar deutlich. Allerdings wurde `expectAsync` in der Angular-Dokumentation nie erwähnt; stattdessen wurden eigene Hilfsfunktionen gezeigt.
+Bei asynchronen Erwartungen unterscheidet sich das Pattern sogar deutlich. 
+Aber keine Sorge: Die Wahrscheinlichkeit, dass dein Projekt `expectAsync` verwendet, ist sehr gering, da in der Angular-Dokumentation stattdessen immer Angular-spezifische Hilfsfunktionen gezeigt wurden.
 Daher dürfte in den meisten Projekten hier wahrscheinlich gar keine zusätzliche Arbeit anfallen.
-
 
 ### Spys und Mocks
 
@@ -374,9 +374,9 @@ const onItem = jasmine.createSpy().and.returnValue(true);
 const onItem = vi.fn().mockReturnValue(true);
 ```
 
-In Jasmine kann man mit den ersten Argument einen Namen für den Spy vergeben.
+In Jasmine kann man mit dem ersten Argument einen Namen für den Spy vergeben.
 Dies dient dazu, in Fehlermeldungen und Reports aussagekräftigere Texte anzuzeigen (siehe [Doku](https://jasmine.github.io/api/5.12/jasmine#.createSpy)).
-Falls du in Vitest ebenfalls einem einen sprechenden Namen geben möchtest, kannst du dies mit `.mockName('onItem')` tun.
+Falls du in Vitest ebenfalls einem Spy einen sprechenden Namen geben möchtest, kannst du dies mit `.mockName('onItem')` tun.
 
 ```ts
 // Jasmine - mit Name
@@ -390,10 +390,10 @@ const onItem = vi.fn().mockName('onItem').mockReturnValue(true);
 
 Seit Angular 21 laufen Unit-Tests standardmäßig zoneless. 
 Das bedeutet: Die früheren Angular-Hilfsfunktionen `waitForAsync()` und `fakeAsync()`/`tick()` funktionieren nicht mehr automatisch, weil sie auf Zone.js basieren. 
-Entscheidend ist: Das hat erstmal nichts mit Vitest zu tun.
+Entscheidend ist: Das hat nichts mit Vitest zu tun.
 Auch unter Jasmine hätte man in einer zonenlosen Umgebung auf diese Utilitys verzichten müssen.
 
-Für einfache asynchrone Tests ersetzt man `waitForAsync()` daher durch ganz normales `async/await`, das es seit vielen Jahren auch mit Jasmine möglich ist.
+Für einfache asynchrone Tests ersetzt man `waitForAsync()` daher durch ganz normales `async/await`, das seit vielen Jahren auch mit Jasmine möglich ist.
 Folgendes Update funktioniert also unabhängig vom Test-Runner:
 
 ```ts
@@ -430,7 +430,7 @@ export function startFiveSecondTimer(counter: { value: number }) {
 }
 ```
 
-Für solche Fälle ist `vi.advanceTimersByTime()` ideal, denn man kann gezielt simulieren, dass exakt eine bestimmte Zeit verstrichen ist. Ganz ähnlich wie früher `tick(5000)`, aber ohne fakeAsync-Zone:
+Für solche Fälle ist `vi.advanceTimersByTime()` ideal, denn man kann gezielt simulieren, dass exakt eine bestimmte Zeit verstrichen ist. Ganz ähnlich wie früher `tick(5000)`, aber ohne `fakeAsync()`-Zone:
 
 ```ts
 import { describe, it, expect, vi } from 'vitest';
@@ -502,7 +502,6 @@ Noch interessanter wird es, wenn Timer-Callbacks selbst wieder asynchron arbeite
 Dann reicht `runAllTimers()` nicht mehr aus. Das folgende Beispiel zeigt ein typisches Muster aus realen Anwendungen:
 
 ```ts
-// timer-async.ts
 export function startAsyncJob(): Promise<string> {
   return new Promise(resolve => {
     setTimeout(async () => {
@@ -535,7 +534,7 @@ describe('startAsyncJob', () => {
 });
 ```
 
-`runAllTimersAsync()` ist damit ein guter Ersatz für Jasmine-Szenarien, bei denen `fakeAsync()` und `tick()` in Kombination mit Microtask-Flushing verwendet wurden. 
+`runAllTimersAsync()` ist damit ein guter Ersatz für Tests, bei denen bisher `fakeAsync()` und `tick()` in Kombination mit Microtask-Flushing verwendet wurden. 
 
 ### TestBed und ComponentFixture
 
