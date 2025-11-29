@@ -31,7 +31,7 @@ We will learn about custom schema validation, cross-field validation, conditiona
 
 - [Part 1: Getting Started with Signal Forms](/blog/2025-10-signal-forms-part1)
 - *Part 2: Advanced Validation and Schema Patterns* (this post)
-- [Part 3: Child Forms and Custom UI Controls](/blog/2025-10-signal-forms-part3)
+- [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
 
 
 ## ARIA Support for Error Display
@@ -546,7 +546,8 @@ In **Part 3**, we'll cover specialized topics that help you build complex, modul
 
 - Creating reusable child form components
 - Building custom UI controls that integrate seamlessly with Signal Forms
+- Provide a custom `SignalFormsConfig`
 
-Ready for the final part? Check out [Part 3: Child Forms and Custom UI Controls](/blog/2025-10-signal-forms-part3)!
+Ready for the final part? Check out [Part 3: Child Forms and Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)!
 
 <small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>

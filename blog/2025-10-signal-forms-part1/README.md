@@ -30,7 +30,7 @@ In this first part of our three-part series, we'll cover the fundamentals you ne
 
 - *Part 1: Getting Started with Signal Forms* (this post)
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
-- [Part 3: Child Forms and Custom UI Controls](/blog/2025-10-signal-forms-part3)
+- [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
 
 
 ## What Makes Signal Forms Different
@@ -548,7 +548,7 @@ In this first part, we've covered the fundamentals of Signal Forms:
 
 In **Part 2**, we'll dive deeper into advanced validation scenarios, including custom validation functions, cross-field validation, asynchronous validation, and handling server-side errors.
 
-In **Part 3**, we'll dig into modularization and customization by using child forms and building custom UI controls that integrate seamlessly with Signal Forms.
+In **Part 3**, we'll dig into modularization and customization by using child forms and building custom UI controls that integrate seamlessly with Signal Forms. Also we'll have a look at how to provide a custom `SignalFormsConfig`.
 
 Once we published the new parts of this series they will be linked here.
 
