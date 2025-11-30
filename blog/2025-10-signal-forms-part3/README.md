@@ -444,7 +444,7 @@ export const signalFormsConfig: SignalFormsConfig = {
 ```
 
 Once we create our config, we need to provide it.
-We can either provide it at application level, rout level or only for a specific component by passing it to `provideSignalFormsConfig()` into the `providers`.
+We can either provide it at application level, route level or only for a specific component by passing it to `provideSignalFormsConfig()` into the `providers` array.
 
 ```ts
 // app.config.ts
