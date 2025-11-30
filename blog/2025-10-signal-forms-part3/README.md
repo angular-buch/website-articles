@@ -428,7 +428,7 @@ export const signalFormsConfig: SignalFormsConfig = {
 ```
 
 If you used Angular Reactive or Template-Driven Forms before, you may have noticed that this behavior was applied automatically.
-For example, valid input fields have always had the class `ng-valid` applied to them and we needed to use these classes in our CSS for styling elements.
+For example, valid input fields have always had the class `ng-valid` applied to them and we could use these classes in our CSS for styling elements.
 However, this wasn't really flexible, especially when working with CSS libraries that used their own classes.
 Also, a bunch of CSS classes were applied even if we don't use them.
 If we still want to have the behavior from before, we can use the provided compatibility config:
