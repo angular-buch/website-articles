@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-20
-lastModified: 2025-11-29
+lastModified: 2025-11-30
 keywords:
   - Angular
   - Signals
