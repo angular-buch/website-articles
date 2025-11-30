@@ -1,11 +1,11 @@
 ---
-title: 'Angular Signal Forms Part 3: Child Forms and Custom UI Controls'
+title: 'Angular Signal Forms Part 3: Child Forms, Custom UI Controls and SignalFormsConfig'
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-20
-lastModified: 2025-11-13
+lastModified: 2025-11-30
 keywords:
   - Angular
   - Signals
@@ -15,6 +15,8 @@ keywords:
   - Custom Controls
   - Child Forms
   - ControlValueAccessor
+  - NG_STATUS_CLASSES
+  - SignalFormsConfig
 language: en
 header: header-signalforms-part3.jpg
 sticky: false
@@ -22,7 +24,8 @@ sticky: false
 
 
 We covered fundamentals and advanced validation patterns of Signal Forms in [Part 1](/blog/2025-10-signal-forms-part1) and [Part 2](/blog/2025-10-signal-forms-part2) of this blog series.
-In this final part, we'll explore two specialized topics that are relevant for large and modular forms: child forms and custom UI controls.
+In this final part, we'll explore more specialized topics that are relevant for large and modular forms: child forms and custom UI controls.
+Last but not least, we'll have a look at providing a custom `SignalFormsConfig`.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
@@ -327,7 +330,7 @@ For changing the input we call a method `changeInput()` (we create it right afte
               [checked]="value().includes(option)"
               (input)="changeInput(option, $event)"
             />
-            {{ topic }}
+            {{ option }}
           </label>
         </li>
       }
@@ -404,6 +407,61 @@ And this is how we can create and use custom form UI controls with Signal Forms!
 Any component that implements the necessary interface can be directly integrated into Signal Forms with the `Field` directive.
 
 
+## Provide a custom `SignalFormsConfig`
+
+Now that we know how to create large and modular forms and how to implement validation rules, we want to explore how we can customize Signal Forms.
+Signal Forms offer us a way to configure how they behave in terms of automatically applying CSS classes based on a form field's state.
+To do so, we need to create a `SignalFormsConfig` which accepts a `classes` object.
+The keys of this object are the names of the CSS classes that should be applied whenever the assigned value, which is a predicate function with access to a form field's state, evaluates to `true`.
+Looking at the example below, the CSS class `error` is applied for each form field that is touched and has at least one error assigned to it.
+
+```ts
+// signal-forms.config.ts
+import { SignalFormsConfig } from '@angular/forms/signals';
+
+export const signalFormsConfig: SignalFormsConfig = {
+  classes: {
+    valid: (state) => state.valid(),
+    error: (state) => state.touched() && state.errors().length > 0,
+  },
+};
+```
+
+If you used Angular Reactive or Template-Driven Forms before, you may have noticed that this behavior was applied automatically.
+For example, valid input fields have always had the class `ng-valid` applied to them and we could use these classes in our CSS for styling elements.
+However, this wasn't really flexible, especially when working with CSS libraries that used their own classes.
+Also, a bunch of CSS classes were applied even if we didn't use them.
+If we still want to have the behavior from before, we can use the provided compatibility config:
+
+```ts
+// signal-forms.config.ts
+import { SignalFormsConfig } from '@angular/forms/signals';
+import { NG_STATUS_CLASSES } from '@angular/forms/signals/compat';
+
+export const signalFormsConfig: SignalFormsConfig = {
+  classes: NG_STATUS_CLASSES,
+};
+```
+
+Once we create our config, we need to provide it.
+We can either provide it at application level, route level or only for a specific component by passing it to `provideSignalFormsConfig()` into the `providers` array.
+
+```ts
+// app.config.ts
+import { provideSignalFormsConfig } from '@angular/forms/signals';
+// ...
+import { signalFormsConfig } from './signal-forms.config';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideSignalFormsConfig(signalFormsConfig),
+  ],
+};
+```
+
+If we run the app with the form now and we investigate the DOM, we can see that the CSS classes are always applied based on our defined predicate function.
+
 ## Demo
 
 You can find a complete demo application for this blog series on GitHub and Stackblitz:
@@ -432,7 +490,7 @@ In this three-part series, we've explored the full spectrum of Angular Signal Fo
 
 **Part 3** explored specialized topics:
 - Creating modular child forms and combining schemas with `apply()`
-- Building custom UI controls with `FormUiControl`
+- Building custom UI controls with `FormValueControl`
 
 Signal Forms are the third major approach of form handling in Angular.
 After Template-Driven Forms and Reactive Forms, Signal Forms aim to make form handling more type-safe, reactive, and declarative.
