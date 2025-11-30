@@ -409,7 +409,7 @@ Any component that implements the necessary interface can be directly integrated
 
 ## Provide a custom `SignalFormsConfig`
 
-Now that we know how to create great and modular forms and how to implement validation rules, we want to explore how we can customize Signal Forms.
+Now that we know how to create large and modular forms and how to implement validation rules, we want to explore how we can customize Signal Forms.
 Signal Forms offer us a way to configure how they behave in terms of automatically applying CSS classes based on a form field's state.
 Therefore we need to create a `SignalFormsConfig` which accepts a `classes` object.
 The keys of this object are the names of the CSS classes that should be applied whenever the assigned value, which is a predicate function with access to a form field's state, evaluates to `true`.
