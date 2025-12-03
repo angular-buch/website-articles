@@ -356,7 +356,7 @@ Daher dürfte in den meisten Projekten hier wahrscheinlich gar keine zusätzlich
 
 ### Spys und Mocks
 
-Das Spying-Konzept funktioniert nahezu identisch wie bei Jasmine, wird jedoch über das [`vi`‑Objekt bereitgestellt](https://vitest.dev/api/vi.html#vi-spyon):
+Das Spying-Konzept ist ähnlich wie bei Jasmine und wird über das [`vi`‑Objekt bereitgestellt](https://vitest.dev/api/vi.html#vi-spyon):
 
 ```ts
 // Jasmine
@@ -387,6 +387,26 @@ const onItem = jasmine.createSpy('onItem').and.returnValue(true);
 // Vitest - mit Name
 const onItem = vi.fn().mockName('onItem').mockReturnValue(true);
 ```
+
+#### Wichtiger Unterschied: Default-Verhalten von Spies
+
+Bei Jasmine gibt ein Spy standardmäßig `undefined` zurück, wenn keine spezifische Rückgabe konfiguriert wurde.
+In Vitest hingegen wird die **Original-Implementierung ausgeführt**, sofern du nicht explizit einen Mock-Wert setzt:
+
+```ts
+// Jasmine
+const spy = spyOn(service, 'rateUp');
+const result = service.rateUp(book);
+// result = undefined ❌ (Spy stubbed die Methode)
+
+// Vitest
+const spy = vi.spyOn(service, 'rateUp');
+const result = service.rateUp(book);
+// result = { rating: 4 } ✅ (Original wird aufgerufen!)
+```
+
+Dieser Unterschied ist besonders wichtig zu beachten, wenn du bestehende Jasmine-Tests zu Vitest migrierst.
+Falls du das ursprüngliche Verhalten von Jasmine benötigst (also `undefined` zurückgeben), musst du explizit `.mockReturnValue(undefined)` verwenden.
 
 ### Asynchronität ohne Zone.js mit Vitest Timer
 
