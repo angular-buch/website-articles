@@ -399,12 +399,12 @@ const book = { isbn: '123', rating: 3 };
 // Jasmine
 const spy = spyOn(service, 'rateUp');
 const result = service.rateUp(book);
-// result = undefined ❌ (Spy stubbed die Methode)
+// result = undefined (Spy stubbed die Methode)
 
 // Vitest
 const spy = vi.spyOn(service, 'rateUp');
 const result = service.rateUp(book);
-// result = { rating: 4 } ✅ (Originale Methode wird aufgerufen!)
+// result = { rating: 4 } (Originale Methode wird aufgerufen!)
 ```
 
 Dieser Unterschied ist besonders wichtig zu beachten, wenn du bestehende Jasmine-Tests zu Vitest migrierst.
