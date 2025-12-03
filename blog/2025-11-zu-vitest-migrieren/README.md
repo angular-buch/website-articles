@@ -410,6 +410,32 @@ const result = service.rateUp(book);
 Dieser Unterschied ist besonders wichtig zu beachten, wenn du bestehende Jasmine-Tests zu Vitest migrierst.
 Falls du das ursprüngliche Verhalten von Jasmine benötigst (also `undefined` zurückgeben), musst du explizit `.mockReturnValue(undefined)` verwenden.
 
+#### Spies aufräumen
+
+Angular TestBed erstellt vor jedem Test eine neue Test-Umgebung.
+Dadurch werden auch Services neu instanziiert. Spies auf Services verschwinden also automatisch zwischen Tests.
+
+Spies auf **globale Objekte** bleiben jedoch aktiv:
+
+```ts
+vi.spyOn(Math, 'random').mockReturnValue(0.5);
+vi.spyOn(console, 'log');
+```
+
+Solche Spies würden ohne explizites Aufräumen in nachfolgende Tests "hineinlaufen" und dort zu unerwartetem Verhalten führen (Test Pollution).
+
+**Wenn** du globale Objekte mockst, solltest du Spies in `afterEach()` aufräumen:
+
+```ts
+import { afterEach, vi } from 'vitest';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+```
+
+Alternativ kannst du in der `vitest.config.ts` die Option `test.restoreMocks: true` setzen, dann erledigt Vitest das Aufräumen automatisch.
+
 ### Asynchronität ohne Zone.js mit Vitest Timer
 
 Seit Angular 21 laufen Unit-Tests standardmäßig zoneless. 
