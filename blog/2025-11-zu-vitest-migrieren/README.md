@@ -394,7 +394,7 @@ Bei Jasmine gibt ein Spy standardmäßig `undefined` zurück, wenn keine spezifi
 In Vitest hingegen wird die **Original-Implementierung ausgeführt**, sofern du nicht explizit einen Mock-Wert setzt:
 
 ```ts
-const book = { isbn: '123', rating: 3 };
+const book = { rating: 3 };
 
 // Jasmine
 const spy = spyOn(service, 'rateUp');
