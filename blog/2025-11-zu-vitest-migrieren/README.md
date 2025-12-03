@@ -394,6 +394,8 @@ Bei Jasmine gibt ein Spy standardmäßig `undefined` zurück, wenn keine spezifi
 In Vitest hingegen wird die **Original-Implementierung ausgeführt**, sofern du nicht explizit einen Mock-Wert setzt:
 
 ```ts
+const book = { isbn: '123', rating: 3 };
+
 // Jasmine
 const spy = spyOn(service, 'rateUp');
 const result = service.rateUp(book);
@@ -402,7 +404,7 @@ const result = service.rateUp(book);
 // Vitest
 const spy = vi.spyOn(service, 'rateUp');
 const result = service.rateUp(book);
-// result = { rating: 4 } ✅ (Original wird aufgerufen!)
+// result = { rating: 4 } ✅ (Originale Methode wird aufgerufen!)
 ```
 
 Dieser Unterschied ist besonders wichtig zu beachten, wenn du bestehende Jasmine-Tests zu Vitest migrierst.
