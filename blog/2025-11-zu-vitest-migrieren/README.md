@@ -356,7 +356,7 @@ Daher dürfte in den meisten Projekten hier wahrscheinlich gar keine zusätzlich
 
 ### Spys und Mocks
 
-Das Spying-Konzept funktioniert nahezu identisch wie bei Jasmine, wird jedoch über das [`vi`‑Objekt bereitgestellt](https://vitest.dev/api/vi.html#vi-spyon):
+Das Spying-Konzept ist ähnlich wie bei Jasmine und wird über das [`vi`‑Objekt bereitgestellt](https://vitest.dev/api/vi.html#vi-spyon):
 
 ```ts
 // Jasmine
@@ -387,6 +387,57 @@ const onItem = jasmine.createSpy('onItem').and.returnValue(true);
 // Vitest - mit Name
 const onItem = vi.fn().mockName('onItem').mockReturnValue(true);
 ```
+
+#### Wichtiger Unterschied: Default-Verhalten von Spys
+
+Bei Jasmine gibt ein Spy standardmäßig `undefined` zurück, wenn keine spezifische Rückgabe konfiguriert wurde.
+In Vitest hingegen wird die **Original-Implementierung ausgeführt**, sofern du nicht explizit einen Mock-Wert setzt:
+
+```ts
+const book = { rating: 3 };
+
+// Jasmine
+const spy = spyOn(service, 'rateUp');
+const result = service.rateUp(book);
+// result = undefined (Spy stubbed die Methode)
+
+// Vitest
+const spy = vi.spyOn(service, 'rateUp');
+const result = service.rateUp(book);
+// result = { rating: 4 } (Originale Methode wird aufgerufen!)
+```
+
+Dieser Unterschied ist besonders wichtig zu beachten, wenn du bestehende Jasmine-Tests zu Vitest migrierst.
+Falls du das ursprüngliche Verhalten von Jasmine benötigst (also `undefined` zurückgeben), musst du explizit `.mockReturnValue(undefined)` verwenden.
+
+#### Spys aufräumen
+
+Angular TestBed erstellt vor jedem Test eine neue Testumgebung.
+Dadurch werden auch Services neu instanziiert. Spys auf Services verschwinden also automatisch zwischen Tests.
+
+Spys auf **globale Objekte** bleiben jedoch aktiv:
+
+```ts
+vi.spyOn(Math, 'random').mockReturnValue(0.5);
+vi.spyOn(console, 'log');
+```
+
+Solche Spys würden ohne explizites Aufräumen in nachfolgende Tests "hineinlaufen" und dort zu unerwartetem Verhalten führen (Test Pollution).
+
+**Wenn** du globale Objekte mockst, solltest du Spys in `afterEach()` aufräumen:
+
+```ts
+import { afterEach, vi } from 'vitest';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+```
+
+Alternativ kannst du in der `vitest.config.ts` die Option `test.restoreMocks: true` setzen, dann erledigt Vitest das Aufräumen automatisch.
+
+Leider ist diese Einstellung nicht der Default.
+Das Angular-Team hat sich [bewusst für das Standard-Vitest-Verhalten entschieden](https://github.com/angular/angular-cli/issues/30478) und damit auf maximale Jasmine-Kompatibilität verzichtet.
 
 ### Asynchronität ohne Zone.js mit Vitest Timer
 
