@@ -388,7 +388,7 @@ const onItem = jasmine.createSpy('onItem').and.returnValue(true);
 const onItem = vi.fn().mockName('onItem').mockReturnValue(true);
 ```
 
-#### Wichtiger Unterschied: Default-Verhalten von Spies
+#### Wichtiger Unterschied: Default-Verhalten von Spys
 
 Bei Jasmine gibt ein Spy standardmäßig `undefined` zurück, wenn keine spezifische Rückgabe konfiguriert wurde.
 In Vitest hingegen wird die **Original-Implementierung ausgeführt**, sofern du nicht explizit einen Mock-Wert setzt:
@@ -410,7 +410,7 @@ const result = service.rateUp(book);
 Dieser Unterschied ist besonders wichtig zu beachten, wenn du bestehende Jasmine-Tests zu Vitest migrierst.
 Falls du das ursprüngliche Verhalten von Jasmine benötigst (also `undefined` zurückgeben), musst du explizit `.mockReturnValue(undefined)` verwenden.
 
-#### Spies aufräumen
+#### Spys aufräumen
 
 Angular TestBed erstellt vor jedem Test eine neue Testumgebung.
 Dadurch werden auch Services neu instanziiert. Spys auf Services verschwinden also automatisch zwischen Tests.
