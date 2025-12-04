@@ -412,19 +412,19 @@ Falls du das ursprüngliche Verhalten von Jasmine benötigst (also `undefined` z
 
 #### Spies aufräumen
 
-Angular TestBed erstellt vor jedem Test eine neue Test-Umgebung.
-Dadurch werden auch Services neu instanziiert. Spies auf Services verschwinden also automatisch zwischen Tests.
+Angular TestBed erstellt vor jedem Test eine neue Testumgebung.
+Dadurch werden auch Services neu instanziiert. Spys auf Services verschwinden also automatisch zwischen Tests.
 
-Spies auf **globale Objekte** bleiben jedoch aktiv:
+Spys auf **globale Objekte** bleiben jedoch aktiv:
 
 ```ts
 vi.spyOn(Math, 'random').mockReturnValue(0.5);
 vi.spyOn(console, 'log');
 ```
 
-Solche Spies würden ohne explizites Aufräumen in nachfolgende Tests "hineinlaufen" und dort zu unerwartetem Verhalten führen (Test Pollution).
+Solche Spys würden ohne explizites Aufräumen in nachfolgende Tests "hineinlaufen" und dort zu unerwartetem Verhalten führen (Test Pollution).
 
-**Wenn** du globale Objekte mockst, solltest du Spies in `afterEach()` aufräumen:
+**Wenn** du globale Objekte mockst, solltest du Spys in `afterEach()` aufräumen:
 
 ```ts
 import { afterEach, vi } from 'vitest';
