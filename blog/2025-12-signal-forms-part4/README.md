@@ -4,8 +4,8 @@ author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
-published: 2025-12-10
-lastModified: 2025-12-10
+published: 2025-12-08
+lastModified: 2025-12-08
 keywords:
   - Angular
   - Signals
