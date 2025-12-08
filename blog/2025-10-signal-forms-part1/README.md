@@ -20,7 +20,7 @@ sticky: false
 
 Angular introduces Signal Forms with Version [21.0.0](https://github.com/angular/angular/releases/tag/21.0.0), an experimental but promising approach to form handling that leverages Angular's reactive Signal primitive.
 This new API offers a declarative way to build forms with full control over the data model and built-in schema validation.
-In this first part of our three-part series, we'll cover the fundamentals you need to get started with Signal Forms.
+In this first part of our four-part series, we'll cover the fundamentals you need to get started with Signal Forms.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
@@ -31,6 +31,7 @@ In this first part of our three-part series, we'll cover the fundamentals you ne
 - *Part 1: Getting Started with Signal Forms* (this post)
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
+- [Part 4: Metadata and Accessibility Handling](/blog/2025-12-signal-forms-part4)
 
 
 ## What Makes Signal Forms Different
@@ -550,7 +551,7 @@ In **Part 2**, we'll dive deeper into advanced validation scenarios, including c
 
 In **Part 3**, we'll dig into modularization and customization by using child forms and building custom UI controls that integrate seamlessly with Signal Forms. Also we'll have a look at how to provide a custom `SignalFormsConfig`.
 
-Once we published the new parts of this series they will be linked here.
+In **Part 4**, we'll explore field metadata and we'll create a directive which adds accessibility features that help create more inclusive and user-friendly forms.
 
 Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)!
 
