@@ -146,7 +146,7 @@ export class FormFieldInfo<T> {
 
     if (field.pending()) {
       // Show loading state for async validation
-      messages = [{ info: 'Checking availability ...', cssClass: 'pending' }];
+      messages = [{ info: 'Checking validity ...', cssClass: 'pending' }];
     } else if (field.touched() && field.errors().length > 0) {
       // Show validation errors
       messages = field.errors().map((e) => ({
@@ -167,7 +167,9 @@ export class FormFieldInfo<T> {
 
 ### Using the Component
 
-As the final step, we replace the old `FormError` component with the new `FormFieldInfo` component in your templates. To make things work, we have to adjust the `imports` section of the component accordingly.
+As the final step, we replace the old `FormError` component with the new `FormFieldInfo` component in your templates.
+To make things work, we have to adjust the `imports` section of the component accordingly.
+Also we can now remove the `pending()` check here since it will be handled by our `FormFieldInfo` component.
 
 ```html
 <label>
@@ -180,6 +182,10 @@ As the final step, we replace the old `FormError` component with the new `FormFi
     id="username-info"
     [fieldRef]="registrationForm.username"
   />
+  <!-- Remove the following -->
+  @if (registrationForm.username().pending()) {
+     <small>Checking availability ...</small>
+  }
 </label>
 ```
 
@@ -191,11 +197,12 @@ With additional metadata, we can display more than errors. All necessary informa
 Accessibility is crucial for creating inclusive web applications.
 Currently we show field-related information close to the field itself by using the `FormFieldInfo` component we just created.
 This is great but with the current solution it is not accessible for screen readers: The form field itself and the message aren't linked semantically.
-to solve this, we want to create a directive that automatically adds appropriate ARIA attributes to form fields based on their state, making our forms more accessible to users with assistive technologies.
+To solve this, we want to create a directive that automatically adds appropriate ARIA attributes to form fields based on their state, making our forms more accessible to users with assistive technologies.
 
 ### The `FieldAriaAttributes` Directive
 
 This directive automatically manages ARIA attributes based on the field's current state.
+With this approach, it replaces also our current solution where we called `[aria-invalid]="ariaInvalidState(...)"`.
 To apply the directive to form field automatically, we set the selector to `[field]`, so it works together with the existing `Field` directive.
 
 The directive receives the field as an input.
@@ -246,7 +253,8 @@ export class FieldAriaAttributes<T> {
 }
 ```
 
-The directive now manages four key ARIA attributes:
+We can no remove out method `ariaInvalidState()` from the `RegistrationForm` component.
+Also we remove the manual bindings for `aria-invalid` from the template of the `RegistrationForm` since this and other attributes will now be applied by our directive which manages four key ARIA attributes:
 
 - **`aria-invalid`**: set to `true` when the field has been touched and contains validation errors.
 - **`aria-busy`**: set to `true` during async validation to indicate loading state.
