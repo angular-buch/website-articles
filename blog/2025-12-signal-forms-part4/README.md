@@ -125,7 +125,7 @@ import { FIELD_INFO } from '../form-props';
 @Component({
   selector: 'app-form-field-info',
   template: `
-    @if (messages()) {
+    @if (messages().length) {
     <ul>
       @for (message of messages(); track $index) {
       <li [class]="message.cssClass">
