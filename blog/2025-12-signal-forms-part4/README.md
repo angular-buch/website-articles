@@ -297,6 +297,9 @@ To make it really accessible we need to pass the ID of the targeting message ele
 
 The directive ensures that your Signal Forms automatically provide excellent accessibility support without requiring manual ARIA attribute management.
 
+You may noticed, we now used our new Directive and Component only in the main `RegistrationForm`.
+Of course we should also update our child component `IdentityForm`.
+
 ## Demo
 
 You can find a complete demo application for this blog series on GitHub and Stackblitz:
