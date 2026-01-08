@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-12-08
-lastModified: 2025-12-08
+lastModified: 2026-01-08
 keywords:
   - Angular
   - Signals
@@ -70,17 +70,17 @@ import { metadata } from '@angular/forms/signals';
 import { FIELD_INFO } from './form-props';
 
 // ...
-export const formSchema = schema<RegisterFormData>((schemaPath) => {
+export const formSchema = schema<RegisterFormData>((path) => {
   // Username validation and metadata
-  required(schemaPath.username, { message: 'Username is required' });
-  minLength(schemaPath.username, 3, { message: 'A username must be at least 3 characters long' });
-  metadata(schemaPath.username, FIELD_INFO, () => 'A username must consist of 3-12 characters.');
+  required(path.username, { message: 'Username is required' });
+  minLength(path.username, 3, { message: 'A username must be at least 3 characters long' });
+  metadata(path.username, FIELD_INFO, () => 'A username must consist of 3-12 characters.');
   // ...
   // Email metadata
-  metadata(schemaPath.email, FIELD_INFO, () => 'Please enter at least one valid e-mail address.');
+  metadata(path.email, FIELD_INFO, () => 'Please enter at least one valid e-mail address.');
   // ...
   // Password metadata
-  metadata(schemaPath.password, FIELD_INFO, () => 'Please enter a password with min 8 characters and a special character.');
+  metadata(path.password, FIELD_INFO, () => 'Please enter a password with min 8 characters and a special character.');
   // ...
 });
 // ...
@@ -176,7 +176,7 @@ Also we can now remove the `pending()` check here since it will be handled by ou
   Username
   <input
     type="text"
-    [field]="registrationForm.username"
+    [formField]="registrationForm.username"
   />
   <app-form-field-info
     id="username-info"
@@ -203,7 +203,7 @@ To solve this, we want to create a directive that automatically adds appropriate
 
 This directive automatically manages ARIA attributes based on the field's current state.
 With this approach, it replaces also our current solution where we called `[aria-invalid]="ariaInvalidState(...)"`.
-To apply the directive to form field automatically, we set the selector to `[field]`, so it works together with the existing `Field` directive.
+To apply the directive to form field automatically, we set the selector to `[formField]`, so it works together with the existing `FormField` directive.
 
 The directive receives the field as an input.
 It also accepts another input with the ID of the HTML element that contains the related messages (info, errors, loading).
@@ -219,7 +219,7 @@ import { computed, Directive, input } from '@angular/core';
 import { FieldTree } from '@angular/forms/signals';
 
 @Directive({
-  selector: '[field]',
+  selector: '[formField]',
   host: {
     '[aria-invalid]': 'ariaInvalid()',
     '[aria-busy]': 'ariaBusy()',
@@ -263,7 +263,7 @@ Also we remove the manual bindings for `aria-invalid` from the template of the `
 
 ### Using the Directive
 
-The directive works seamlessly with the existing `Field` directive since we defined the selector to be `[field]`.
+The directive works seamlessly with the existing `FormField` directive since we defined the selector to be `[formField]`.
 To use it, we need to import it in our component holding the form in the component's decorator.
 
 ```typescript
@@ -277,7 +277,7 @@ export class RegistrationForm {
 }
 ```
 
-Basically that's it: The attributes `aria-invalid` and `aria-busy` are automatically set since our directive binds to the existing `[field]` directive.
+Basically that's it: The attributes `aria-invalid` and `aria-busy` are automatically set since our directive binds to the existing `[formField]` directive.
 To make it really accessible we need to pass the ID of the targeting message element as the `fieldDescriptionId` input to connect the field with its description element:
 
 ```html
@@ -285,7 +285,7 @@ To make it really accessible we need to pass the ID of the targeting message ele
   Username
   <input
     type="text"
-    [field]="registrationForm.username"
+    [formField]="registrationForm.username"
     fieldDescriptionId="username-info"
   />
   <app-form-field-info
@@ -317,7 +317,7 @@ In this four-part series, we've explored the full spectrum of Angular Signal For
 **[Part 1](/blog/2025-10-signal-forms-part1/)** covered the fundamentals:
 
 - Data models and field structures
-- Template connections with the `Field` directive
+- Template connections with the `FormField` directive
 - Basic form submission and validation
 - Built-in validators and error display
 

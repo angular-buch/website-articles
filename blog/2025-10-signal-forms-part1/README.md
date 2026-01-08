@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-13
-lastModified: 2025-11-19
+lastModified: 2026-01-08
 keywords:
   - Angular
   - Signals
@@ -32,7 +32,6 @@ In this first part of our four-part series, we'll cover the fundamentals you nee
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
 - [Part 4: Metadata and Accessibility Handling](/blog/2025-12-signal-forms-part4)
-
 
 ## What Makes Signal Forms Different
 
@@ -102,7 +101,6 @@ export class RegistrationForm {
 }
 ```
 
-
 ### Accessing Field Properties
 
 This form model structure allows us to navigate through our form field paths exactly like we would navigate through our data structure.
@@ -124,7 +122,7 @@ It provides several reactive properties that we can use in our templates and com
 
 | State             | Type                        | Description                                      |
 | ----------------- | --------------------------- | ------------------------------------------------ |
-| `value`           | `WritableSignal<TValue>`                 | current value of this part of the field tree     |
+| `value`           | `WritableSignal<TValue>`    | current value of this part of the field tree     |
 | `valid`           | `Signal<boolean>`           | `true` if the field passes all validations       |
 | `touched`         | `Signal<boolean>`           | `true` if the user has interacted with the field |
 | `errors`          | `Signal<ValidationError[]>` | array of validation errors                       |
@@ -137,21 +135,20 @@ It is important to stay aware of the difference between `FieldTree` and `FieldSt
 While `FieldTree` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
 Once we call a `FieldTree` as a function, we get a `FieldState` as the result.
 
-
 ## Connecting Fields to the Template
 
 Now that we have our form structure in place, we need to connect it to our HTML template to create functional input fields with reactive data binding.
-Signal Forms use the `Field` directive to bind form fields to HTML input elements.
+Signal Forms use the `FormField` directive to bind form fields to HTML input elements.
 To use the directive, we need to import it first.
 In our example, we also import `JsonPipe` so we can use it in our template to display the current form value.
 
 ```typescript
 import { JsonPipe } from '@angular/common';
-import { /* ... */, Field } from '@angular/forms/signals';
+import { /* ... */, FormField } from '@angular/forms/signals';
 // ...
 @Component({
   selector: 'app-registration-form',
-  imports: [Field, JsonPipe],
+  imports: [FormField, JsonPipe],
   templateUrl: './registration-form.html',
 })
 export class RegistrationForm {
@@ -159,8 +156,8 @@ export class RegistrationForm {
 }
 ```
 
-The `Field` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
-Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[field]` property binding.
+The `FormField` directive works directly with all standard HTML form elements like `<input>`, `<textarea>`, and `<select>`.
+Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[formField]` property binding.
 On the right side of the binding, we pass the corresponding `FieldTree` from our form structure.
 
 Notice, that we also use the form attribute `novalidate`: It disables the native browser field validation.
@@ -170,12 +167,12 @@ We will handle validation later by using a form schema.
 <form (submit)="submitForm()" novalidate>
   <div>
     <label for="username">Username</label>
-    <input id="username" type="text" [field]="registrationForm.username" />
+    <input id="username" type="text" [formField]="registrationForm.username" />
   </div>
 
   <div>
     <label for="age">Age</label>
-    <input id="age" type="number" [field]="registrationForm.age" />
+    <input id="age" type="number" [formField]="registrationForm.age" />
   </div>
 
   <div>
@@ -183,7 +180,7 @@ We will handle validation later by using a form schema.
     <input
       id="newsletter"
       type="checkbox"
-      [field]="registrationForm.newsletter"
+      [formField]="registrationForm.newsletter"
     />
   </div>
 
@@ -196,7 +193,7 @@ We will handle validation later by using a form schema.
 ```
 
 We have now connected each input to its corresponding field in our form structure.
-The `Field` directive handles the two-way data binding automatically, keeping our data model synchronized with user input.
+The `FormField` directive handles the two-way data binding automatically, keeping our data model synchronized with user input.
 The form model automatically synchronizes with the data signal: To read the value, we can use the signal as well as the `FieldState` with its `value` property.
 
 ### Working with Arrays
@@ -217,7 +214,7 @@ The `registrationForm.email` field returns an array of `FieldTree` objects that 
       <div role="group">
         <input
           type="email"
-          [field]="emailField"
+          [formField]="emailField"
           [aria-label]="'E-Mail ' + $index"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
@@ -253,7 +250,6 @@ export class RegistrationForm {
 }
 ```
 
-
 ## Basic Form Submission
 
 Now that we have connected our form to the template, we want to submit the form data.
@@ -285,7 +281,6 @@ export class RegistrationForm {
 
 Since our data model signal is always kept in sync with the form fields, we can access the current form state at any time using `this.registrationModel()`.
 It is also possible to access the form data via `this.registrationForm().value()`, which provides the same result.
-
 
 ### Using the Signal Forms `submit()` Function
 
@@ -371,7 +366,7 @@ The next part will cover more advanced and complex scenarios – so stay tuned!
 
 Signal Forms use the `schema()` function to define validation rules.
 Angular comes with some very common rules by default, such as `required` and `minLength`.
-The provided `schemaPath` parameter allows us to navigate through the form structure and apply validation rules to specific fields.
+The provided `path` parameter allows us to navigate through the form structure and apply validation rules to specific fields.
 
 ```typescript
 import {
@@ -381,9 +376,9 @@ import {
   minLength,
 } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
-  required(schemaPath.username, { message: 'Username is required' });
-  minLength(schemaPath.username, 3, {
+export const registrationSchema = schema<RegisterFormData>((path) => {
+  required(path.username, { message: 'Username is required' });
+  minLength(path.username, 3, {
     message: 'A username must be at least 3 characters long',
   });
   // ...
@@ -415,15 +410,15 @@ However, this approach makes the schema independent and reusable.
 
 Signal Forms provide several built-in validation functions:
 
-| Validator                        | Description                                                 | Example                                         |
-| -------------------------------- | ----------------------------------------------------------- | ----------------------------------------------- |
-| `required(field, opts)`          | Field must be filled. For boolean values, checks for `true` | `required(schemaPath.username)`                  |
-| `minLength(field, length, opts)` | Minimum character count                                     | `minLength(schemaPath.username, 3)`              |
-| `maxLength(field, length, opts)` | Maximum character count                                     | `maxLength(schemaPath.username, 10)`             |
-| `min(field, value, opts)`        | Minimum numeric value                                       | `min(schemaPath.age, 18)`                        |
-| `max(field, value, opts)`        | Maximum numeric value                                       | `max(schemaPath.age, 120)`                       |
-| `email(field, opts)`             | Valid email address format                                  | `email(schemaPath.email)`                        |
-| `pattern(field, regex, opts)`    | Regular expression match                                    | `pattern(schemaPath.username, /^[a-zA-Z0-9]+$/)` |
+| Validator                       | Description                                                 | Example                                    |
+| ------------------------------- | ----------------------------------------------------------- | ------------------------------------------ |
+| `required(path, opts)`          | Field must be filled. For boolean values, checks for `true` | `required(path.username)`                  |
+| `minLength(path, length, opts)` | Minimum character count                                     | `minLength(path.username, 3)`              |
+| `maxLength(path, length, opts)` | Maximum character count                                     | `maxLength(path.username, 10)`             |
+| `min(path, value, opts)`        | Minimum numeric value                                       | `min(path.age, 18)`                        |
+| `max(path, value, opts)`        | Maximum numeric value                                       | `max(path.age, 120)`                       |
+| `email(path, opts)`             | Valid email address format                                  | `email(path.email)`                        |
+| `pattern(path, regex, opts)`    | Regular expression match                                    | `pattern(path.username, /^[a-zA-Z0-9]+$/)` |
 
 Each validator function accepts an optional `opts` parameter where you can specify a custom error message.
 We can use this message later to display it in the component template.
@@ -431,22 +426,25 @@ We can use this message later to display it in the component template.
 A validation schema for our registration form could look like this:
 
 ```typescript
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // Username validation
-  required(schemaPath.username, { message: 'Username is required' });
-  minLength(schemaPath.username, 3, { message: 'A username must be at least 3 characters long' });
-  maxLength(schemaPath.username, 12, { message: 'A username can be max. 12 characters long' });
+  required(path.username, { message: 'Username is required' });
+  minLength(path.username, 3, {
+    message: 'A username must be at least 3 characters long',
+  });
+  maxLength(path.username, 12, {
+    message: 'A username can be max. 12 characters long',
+  });
 
   // Age validation
-  min(schemaPath.age, 18, { message: 'You must be >=18 years old.' });
+  min(path.age, 18, { message: 'You must be >=18 years old.' });
 
   // Terms and conditions
-  required(schemaPath.agreeToTermsAndConditions, {
+  required(path.agreeToTermsAndConditions, {
     message: 'You must agree to the terms and conditions.',
   });
 });
 ```
-
 
 ### Form-Level Validation State
 
@@ -495,11 +493,11 @@ import { FieldTree } from '@angular/forms/signals';
   template: `
     @let state = fieldRef()();
     @if (state.touched() && state.errors().length) {
-    <ul>
-      @for (error of state.errors(); track $index) {
-      <li>{{ error.message }}</li>
-      }
-    </ul>
+      <ul>
+        @for (error of state.errors(); track $index) {
+          <li>{{ error.message }}</li>
+        }
+      </ul>
     }
   `,
 })
@@ -513,15 +511,14 @@ Now we can use this component in our form and pass any field to it.
 ```html
 <label>
   Username
-  <input type="text" [field]="registrationForm.username" />
+  <input type="text" [formField]="registrationForm.username" />
   <app-form-error [fieldRef]="registrationForm.username" />
 </label>
 ```
 
-We intentionally named the input `fieldRef` to avoid confusion with the `Field` directive.
-Whenever we use the `[field]` binding, it applies the directive to a form element.
+We intentionally named the input `fieldRef` to avoid confusion with the `FormField` directive.
+Whenever we use the `[formField]` binding, it applies the directive to a form element.
 Since `<app-form-error>` is just a helper component, we cannot use the same name for the input property.
-
 
 ## Demo
 
@@ -531,12 +528,10 @@ You can find a complete demo application for this blog series on GitHub and Stac
 - **⚙️ Code on GitHub:** [https://github.com/angular-buch/signal-forms-registration](https://github.com/angular-buch/signal-forms-registration)
 - **💻 Live Demo:** [https://angular-buch.github.io/signal-forms-registration/](https://angular-buch.github.io/signal-forms-registration/)
 
-
-
 ## What's Next?
 
 Signal Forms provide a modern and powerful way to handle forms in Angular applications.
-Getting started is straightforward and simple: Create a signal, derive the form structure and connect it to the template using the `Field` directive.
+Getting started is straightforward and simple: Create a signal, derive the form structure and connect it to the template using the `FormField` directive.
 With schema-based validation, we can define all validation rules in a clear and reusable way.
 
 In this first part, we've covered the fundamentals of Signal Forms:

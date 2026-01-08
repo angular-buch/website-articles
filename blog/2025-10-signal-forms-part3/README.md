@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-20
-lastModified: 2025-11-30
+lastModified: 2026-01-08
 keywords:
   - Angular
   - Signals
@@ -107,7 +107,7 @@ From the perspective of our `IdentityForm`, we receive the model from the parent
 
 While we're at it, we also define a method `updateSalutationAndPronoun()` that resets the salutation and pronoun fields when the user changes the gender field.
 We set an empty value for the fields and call `reset()` which resets the `touched` and `dirty` state.
-Finally, we import the `Field` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
+Finally, we import the `FormField` directive for binding the fields to our form elements in the template and our `FormError` component to be able to display validation errors.
 
 ```typescript
 @Component({
@@ -130,7 +130,7 @@ export class IdentityForm {
 > However, in our evaluation this led to an infinite loop, even if the value didn't change. This is most likely a bug that will be fixed in future releases of Signal Forms.
 
 In the template, things are straightforward and don't differ much from what we've seen so far:
-We use the `Field` directive to bind our fields to the form model.
+We use the `FormField` directive to bind our fields to the form model.
 To conditionally show the fields for salutation and pronoun, we use the `hidden()` signal to determine whether the fields are marked as hidden.
 To trigger the reset logic, we bind the `change` event of the gender `<select>` to our method `updateSalutationAndPronoun()`.
 
@@ -139,7 +139,7 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
   Gender
   <select
     name="gender-identity"
-    [field]="identity().gender"
+    [formField]="identity().gender"
     (change)="updateSalutationAndPronoun()"
   >
     <option value="" selected>Please select</option>
@@ -153,14 +153,14 @@ To trigger the reset logic, we bind the `change` event of the gender `<select>` 
   @if (!identity().salutation().hidden()) {
   <label>
     Salutation
-    <input type="text" placeholder="e. g. Mx." [field]="identity().salutation" />
+    <input type="text" placeholder="e. g. Mx." [formField]="identity().salutation" />
     <app-form-error [fieldRef]="identity().salutation" />
   </label>
   }
   @if (!identity().pronoun().hidden()) {
   <label>
     Pronoun
-    <input type="text" placeholder="e. g. they/them" [field]="identity().pronoun" />
+    <input type="text" placeholder="e. g. they/them" [formField]="identity().pronoun" />
     <app-form-error [fieldRef]="identity().pronoun" />
   </label>
   }
@@ -199,11 +199,11 @@ Next, we use the `apply()` function within our main schema to integrate the chil
 // registrsation-form.ts
 import { GenderIdentity, IdentityForm, identitySchema, initialGenderIdentityState } from '../identity-form/identity-form';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
 
   // apply child schema for identity checks
-  apply(schemaPath.identity, identitySchema);
+  apply(path.identity, identitySchema);
 });
 ```
 
@@ -231,7 +231,7 @@ Think of a date picker, a rich text editor, a multi-select dropdown, a counter c
 This is something that was relatively complicated with Angular' *Reactive Forms* approach using `ControlValueAccessor`.
 
 Signal Forms provide a simple interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
-Our goal is to create a custom component that can be used just like native HTML form elements with the `Field` directive.
+Our goal is to create a custom component that can be used just like native HTML form elements with the `FormField` directive.
 
 ### The `FormUiControl` interface
 
@@ -261,7 +261,7 @@ interface FormCheckboxControl extends FormUiControl {
 }
 ```
 
-Our custom components need to implement this interface to work with the `Field` directive.
+Our custom components need to implement this interface to work with the `FormField` directive.
 You can see that most of the fields are optional, and only `value` or `checked` are required.
 
 ### Creating a Custom Multiselect Component
@@ -275,7 +275,7 @@ The most important part is the `value` property that holds the current selection
 All local changes are automatically sent back to the parent component as an *output*.
 This way, data flows bidirectionally between the parent form and the custom component.
 
-The inputs `errors` and `disabled` are optional: These values are automatically provided by the `Field` directive when the control has errors or is disabled.
+The inputs `errors` and `disabled` are optional: These values are automatically provided by the `FormField` directive when the control has errors or is disabled.
 We can use the `disabled` input signal to clear the value when the control is disabled by using an `effect`.
 
 Our component can define additional inputs as needed:
@@ -372,7 +372,7 @@ export class Multiselect implements FormValueControl<string[]> {
 
 Our custom form control is now ready to be used!
 Since it implements the `FormValueControl` interface, we can use the component just like a native HTML form element.
-In our `RegistrationForm` template, we include the `MultiSelect` component and pass the field tree `newsletterTopics` to the `Field` directive.
+In our `RegistrationForm` template, we include the `MultiSelect` component and pass the field tree `newsletterTopics` to the `FormField` directive.
 All inputs defined in the `FormValueControl` interface are now automatically managed by the directive.
 
 Our additional custom inputs `selectOptions` and `label` are set via property binding.
@@ -380,11 +380,11 @@ Our additional custom inputs `selectOptions` and `label` are set via property bi
 ```html
 <!--- ... -->
 <app-multiselect
-  [field]="registrationForm.newsletterTopics"
+  [formField]="registrationForm.newsletterTopics"
   [selectOptions]="['Angular', 'React', 'Vue', 'Svelte']"
   label="Topics (multiple possible):"
 />
-<app-form-error [field]="registrationForm.newsletterTopics" />
+<app-form-error [formField]="registrationForm.newsletterTopics" />
 <!--- ... -->
 ```
 
@@ -405,7 +405,7 @@ const initialState: RegisterFormData = {
 ```
 
 And this is how we can create and use custom form UI controls with Signal Forms!
-Any component that implements the necessary interface can be directly integrated into Signal Forms with the `Field` directive.
+Any component that implements the necessary interface can be directly integrated into Signal Forms with the `FormField` directive.
 
 
 ## Provide a custom `SignalFormsConfig`
@@ -479,7 +479,7 @@ In this four-part series, we've explored the full spectrum of Angular Signal For
 
 **[Part 1](/blog/2025-10-signal-forms-part1/)** covered the fundamentals:
 - Data models and field structures
-- Template connections with the `Field` directive
+- Template connections with the `FormField` directive
 - Basic form submission and validation
 - Built-in validators and error display
 

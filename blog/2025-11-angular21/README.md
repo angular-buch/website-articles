@@ -3,7 +3,7 @@ title: 'Angular 21 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2025-11-19
-lastModified: 2025-11-20
+lastModified: 2026-01-08
 keywords:
   - Angular
   - Angular 21
@@ -86,7 +86,7 @@ export const bookFormSchema = schema<Book>(fieldPath => {
 
 @Component({
   // ...
-  imports: [Field]
+  imports: [FormField]
 })
 export class MyForm {
   protected readonly bookData = signal<Book>({
@@ -102,8 +102,8 @@ Im Template erstellen wir die Datenbindungen mithilfe einer einzigen Direktive:
 
 ```html
 <form>
-  <input [field]="bookForm.isbn" />
-  <input [field]="bookForm.title" />
+  <input [formField]="bookForm.isbn" />
+  <input [formField]="bookForm.title" />
 </form>
 ```
 
