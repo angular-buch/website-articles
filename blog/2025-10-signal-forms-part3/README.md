@@ -422,8 +422,8 @@ import { SignalFormsConfig } from '@angular/forms/signals';
 
 export const signalFormsConfig: SignalFormsConfig = {
   classes: {
-    valid: (state) => state.valid(),
-    error: (state) => state.touched() && state.errors().length > 0,
+    valid: (field) => field.state().valid(),
+    error: (field) => field.state().touched() && field.state().errors().length > 0,
   },
 };
 ```
