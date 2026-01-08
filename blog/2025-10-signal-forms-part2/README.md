@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-15
-lastModified: 2025-11-15
+lastModified: 2026-01-08
 keywords:
   - Angular
   - Signals
@@ -64,7 +64,7 @@ In our template, we can now use an `[aria-invalid]` binding on the input element
   >Username
   <input
     type="text"
-    [field]="registrationForm.username"
+    [formField]="registrationForm.username"
     [aria-invalid]="ariaInvalidState(registrationForm.username)"
   />
   <app-form-error [fieldRef]="registrationForm.username" />
@@ -90,7 +90,7 @@ We can directly use this path and pass it into our `email()` validation function
 import { /* ... */, applyEach, email } from '@angular/forms/signals';
 
 // ...
-applyEach(schemaPath.email, (emailPath) => {
+applyEach(path.email, (emailPath) => {
   email(emailPath, { message: 'E-Mail format is invalid' });
 });
 ```
@@ -112,7 +112,7 @@ The validation messages will be displayed in the UI since we included our generi
       <div role="group">
         <input
           type="email"
-          [field]="emailField"
+          [formField]="emailField"
           [aria-label]="'E-Mail ' + $index"
           [aria-invalid]="ariaInvalidState(emailField)"
         />
@@ -142,10 +142,10 @@ The `message` is optional, but it is recommended to provide a user-friendly mess
 ```typescript
 import { /* ... */, validate } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
   // E-Mail validation
-  validate(schemaPath.email, (ctx) =>
+  validate(path.email, (ctx) =>
     !ctx.value().some((e) => e)
       ? {
           kind: 'atLeastOneEmail',
@@ -207,7 +207,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
   <input
     type="password"
     autocomplete
-    [field]="registrationForm.password.pw1"
+    [formField]="registrationForm.password.pw1"
     [aria-invalid]="ariaInvalidState(registrationForm.password.pw1)"
   />
   <app-form-error [fieldRef]="registrationForm.password.pw1" />
@@ -217,7 +217,7 @@ Errors can be assigned to individual fields (`pw1`) or to the grouping node (`pa
   <input
     type="password"
     autocomplete
-    [field]="registrationForm.password.pw2"
+    [formField]="registrationForm.password.pw2"
     [aria-invalid]="ariaInvalidState(registrationForm.password.pw2)"
   />
   <app-form-error [fieldRef]="registrationForm.password.pw2" />
@@ -232,14 +232,14 @@ An interesting aspect of this function is that we can assign errors to any field
 ```typescript
 import { /* ... */, validateTree } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
   // Password confirmation validation
-  validateTree(schemaPath.password, (ctx) => {
+  validateTree(path.password, (ctx) => {
     return ctx.value().pw2 === ctx.value().pw1
       ? undefined
       : {
-          field: ctx.field.pw2, // assign the error to the second password field
+          field: ctx.fieldTree.pw2, // assign the error to the second password field
           kind: 'confirmationPassword',
           message: 'The entered password must match with the one specified in "Password" field',
         };
@@ -290,14 +290,14 @@ We use the `validate()` function to check if a topic is selected.
 ```typescript
 import { /* ... */, applyWhen } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
   // Only validate newsletter topics if user subscribed to newsletter
   applyWhen(
-    schemaPath,
+    path,
     (ctx) => ctx.value().newsletter,
-    (schemaPathWhenTrue) => {
-      validate(schemaPathWhenTrue.newsletterTopics, (ctx) =>
+    (pathWhenTrue) => {
+      validate(pathWhenTrue.newsletterTopics, (ctx) =>
         !ctx.value().length
           ? {
               kind: 'noTopicSelected',
@@ -344,10 +344,10 @@ We also have to handle errors in the asynchronous operation, which can be done u
 import { /* ... */, resource } from '@angular/core';
 import { /* ... */, validateAsync } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
   // Check username availability on the server
-  validateAsync(schemaPath.username, {
+  validateAsync(path.username, {
     // Reactive parameters for the async operation
     params: ({ value }) => value(),
 
@@ -385,7 +385,7 @@ If we enter `johndoe`, the validation will fail, and the corresponding error mes
 For HTTP endpoints, you can also use the simpler `validateHttp()` function:
 
 ```typescript
-validateHttp(schemaPath.username, {
+validateHttp(path.username, {
   request: (ctx) => `/api/check?username=${ctx.value()}`,
   errors: (taken: boolean) =>
     taken ? ({ kind: 'userExists', message: 'Username already taken' }) : undefined,
@@ -399,7 +399,7 @@ We can use this state to provide user feedback in the UI:
 <!-- ... -->
 <input
   type="text"
-  [field]="registrationForm.username"
+  [formField]="registrationForm.username"
   [aria-invalid]="ariaInvalidState(registrationForm.username)"
 />
 @if (registrationForm.username().pending()) {
@@ -419,12 +419,12 @@ This means that not each and every character changes the form value and triggers
 ```typescript
 import { /* ... */, validateAsync, debounce } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // Delay username updates by 500ms
-  debounce(schemaPath.username, 500);
+  debounce(path.username, 500);
 
   // Async validation will only trigger after debounce delay
-  validateAsync(schemaPath.username, {
+  validateAsync(path.username, {
     // ...
   });
 });
@@ -441,10 +441,10 @@ The corresponding field will change its state when the condition is met.
 ```typescript
 import { /* ... */, disabled, readonly, hidden } from '@angular/forms/signals';
 
-export const registrationSchema = schema<RegisterFormData>((schemaPath) => {
+export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
   // Disable newsletter topics when newsletter is unchecked
-  disabled(schemaPath.newsletterTopics, (ctx) => !ctx.valueOf(schemaPath.newsletter));
+  disabled(path.newsletterTopics, (ctx) => !ctx.valueOf(path.newsletter));
 });
 ```
 
@@ -452,16 +452,16 @@ Here are some more examples of how to use `readonly` and `hidden`:
 
 ```typescript
 // make `someField` read-only if `otherField` has the value 'someValue'
-readonly(schemaPath.someField, (ctx) => ctx.valueOf(schemaPath.otherField) === 'someValue');
+readonly(path.someField, (ctx) => ctx.valueOf(path.otherField) === 'someValue');
 
 // make `someField` read-only if `otherField` is invalid
-readonly(schemaPath.someField, (ctx) => !ctx.fieldTreeOf(schemaPath.otherField)().valid());
+readonly(path.someField, (ctx) => !ctx.fieldTreeOf(path.otherField)().valid());
 
 // hide `someField` if the value of `otherField` is falsy
-hidden(schemaPath.someField, (ctx) => !ctx.valueOf(schemaPath.otherField));
+hidden(path.someField, (ctx) => !ctx.valueOf(path.otherField));
 ```
 
-Disabled and read-only states are automatically reflected in the template when using the `[field]` directive.
+Disabled and read-only states are automatically reflected in the template when using the `[formField]` directive.
 However, Angular cannot automatically hide fields in the template.
 Instead, it marks the fields as *hidden*, which we can use in our template to conditionally render the fields using `@if`.
 
@@ -499,7 +499,7 @@ export class RegistrationForm {
         // Add server-side errors
         errors.push(
           {
-            field: form, // form-level error
+            fieldTree: form, // form-level error
             kind: 'serverError',
             message: 'Registration failed. Please try again.',
           }
@@ -508,7 +508,7 @@ export class RegistrationForm {
         // Or assign to specific field
         errors.push(
           {
-            field: form.username,
+            fieldTree: form.username,
             kind: 'serverValidation',
             message: 'Username is not available.',
           }
