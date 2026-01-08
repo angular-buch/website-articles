@@ -89,13 +89,13 @@ export const formSchema = schema<RegisterFormData>((path) => {
 ### Accessing Metadata in Components
 
 Once the metadata has been assigned, we can access it in our components.
-We can use the `hasMetadata()` method to check whether a field has metadata for the passed metadata key.
+We can check if a field has metadata for the passed metadata key.
 To retrieve the actual value, we use the `metadata()` method.
 
 ```typescript
 // Check if field has metadata
-if (field.hasMetadata(FIELD_INFO)) {
-  const info = field.metadata(FIELD_INFO);
+if (field.metadata(FIELD_INFO)) {
+  const info = field.metadata(FIELD_INFO)?.();
   console.log(info); // "A username must consist of 3-12 characters."
 }
 ```
@@ -153,10 +153,10 @@ export class FormFieldInfo<T> {
         info: e.message || 'Invalid',
         cssClass: 'invalid'
       }));
-    } else if (field.hasMetadata(FIELD_INFO)) {
+    } else if (field.metadata(FIELD_INFO)) {
       // Show helpful information when field is valid or untouched
       messages = [{
-        info: field.metadata(FIELD_INFO)!,
+        info: field.metadata(FIELD_INFO)?.()!,
         cssClass: field.valid() ? 'valid' : 'info'
       }];
     }
