@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-13
-lastModified: 2026-01-08
+lastModified: 2026-01-14
 keywords:
   - Angular
   - Signals
@@ -253,10 +253,9 @@ export class RegistrationForm {
 ## Basic Form Submission
 
 Now that we have connected our form to the template, we want to submit the form data.
-Signal Forms provide two approaches for handling form submission:
-Basic synchronous submission and the more powerful `submit()` function for asynchronous operations.
+We can simply use the form data and submit them or we can use the more powerful `submit()` function.
 
-All approaches start with a form submission event handler: In the template, we already used the `(submit)` event binding on the `<form>` element.
+Both approaches start with a form submission event handler: In the template, we already used the `(submit)` event binding on the `<form>` element.
 It is necessary to prevent the default form submission behavior by synchronously returning `false` from our `submitForm()` handler method.
 Otherwise, the page will reload on form submission.
 
@@ -282,6 +281,8 @@ export class RegistrationForm {
 Since our data model signal is always kept in sync with the form fields, we can access the current form state at any time using `this.registrationModel()`.
 It is also possible to access the form data via `this.registrationForm().value()`, which provides the same result.
 
+This approach is quite simple but not so effective once we want to validate the form data before submitting and when we want to give the user feedback about submission errors which may come from our connected backend service.
+
 ### Using the Signal Forms `submit()` Function
 
 For more complex scenarios involving asynchronous operations, loading states, and error handling, Signal Forms provide a dedicated `submit()` function.
@@ -306,7 +307,7 @@ export class RegistrationService {
 Back in the form component, we extend our `submitForm()` method to use the service.
 Angular's `submit()` function takes care of managing the submission state, including setting the `submitting` state to `true` during the operation and resetting it afterward.
 To handle the actual submission, it accepts a callback function where we can perform our asynchronous logic.
-Once finished, we call our own `resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched` by calling `reset()`.
+Once we called our service to send the data, we call our own `resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched` by calling `reset()`.
 
 ```typescript
 // ...
@@ -332,6 +333,10 @@ export class RegistrationForm {
   }
 }
 ```
+
+It is important to know, that the `submit()` function not only sets the `submitting` signal.
+The passed asynchronous callback function is only executed once the form is not in the state `invalid` (we will learn more about validation later on).
+Also, once `submit()` is called, it marks all form fields as `touched`, which es very helpful, if we only show error messages related to a form field when a field has been touched.
 
 ### Handling Submission State
 
@@ -457,11 +462,7 @@ Practically, this means that we can check the overall form validity by calling `
   <p>The form is invalid. Please correct the errors.</p>
 }
 
-<button
-  type="submit"
-  [disabled]="!registrationForm().valid() || registrationForm().submitting()"
-  [aria-busy]="registrationForm().submitting()"
->
+<button type="submit" [aria-busy]="registrationForm().submitting()">
   @if (registrationForm().submitting()) {
     Registering ...
   } @else {
@@ -480,6 +481,7 @@ These messages can be displayed directly in the template.
 
 To make the error display reusable, we can create a dedicated component for it:
 The component can receive any `FieldTree` and checks for its errors when the field is already marked as touched.
+This is the case, when either the user has entered the field and left it or when we called the `submit()` function for our form which marks all form fields as `touched`.
 It displays all errors related to the field by iterating over the `errors()` signal.
 
 To get access to the `FieldState`, we have to call the `fieldRef` property twice: Once to get the `FieldTree` from the input signal, and a second time to get the `FieldState` with its reactive properties.
