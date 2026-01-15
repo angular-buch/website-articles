@@ -5,7 +5,7 @@ mail: johannes.hoppe@haushoppe-its.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2022-11-25
-lastModified: 2022-11-25
+lastModified: 2026-01-15
 keywords:
   - Angular
   - JavaScript
@@ -23,6 +23,8 @@ sticky: false
 Wussten Sie bereits, dass Propertys in JavaScript und TypeScript leicht unterschiedlich implementiert sind und es ein inkompatibles Verhalten gibt?
 In Projekten mit Angular 15 wird deshalb in der TypeScript-Konfiguration die Option `useDefineForClassFields` gesetzt.
 Wir zeigen Ihnen, was es damit auf sich hat und wie Sie Ihren Code schreiben müssen, damit er zukunftssicher in beiden Programmiersprachen gleich funktioniert.
+
+> **EDIT (Januar 2026): Dieser Artikel aus dem Jahr 2022 hat sich bewahrheitet! Die vorhergesagten Breaking Changes sind tatsächlich eingetreten. Das Angular-Team hat darauf mit einer automatischen Migration reagiert (siehe weiter unten). Wir empfehlen dringend, bestehenden Code zu migrieren!**
 
 
 ## Inhalt
@@ -191,6 +193,14 @@ export class MyComponent {
 > **Tipp:** Wenn wir bei der direkten Initialisierung von Propertys auf injizierte Services zugreifen wollen, sollten wir
 >* die Initialisierung im Konstruktor durchführen oder
 >* die Funktion `inject()` verwenden.
+
+> **EDIT (Januar 2026): Das Angular-Team stellt eine automatische Migration bereit, welche das Problem löst. Der folgende Befehl migriert Constructor Injection zu `inject()`:**
+>
+> ```bash
+> ng generate @angular/core:inject
+> ```
+>
+> **Mehr Infos: [angular.dev/reference/migrations/inject-function](https://angular.dev/reference/migrations/inject-function)**
 
 
 ## Auswirkungen auf bestehenden Angular-Code
