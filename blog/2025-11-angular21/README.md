@@ -75,7 +75,7 @@ Angular leitet aus den Daten die Struktur des Formulars ab.
 Die Regeln zur Validierung werden in Form eines Schemas definiert, das als Code notiert wird.
 
 ```ts
-import { schema, form, Field } from '@angular/forms/signals';
+import { schema, form, FormField } from '@angular/forms/signals';
 
 export const bookFormSchema = schema<Book>(fieldPath => {
   required(fieldPath.isbn);
