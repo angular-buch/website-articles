@@ -117,7 +117,7 @@ Eine besonders elegante Lösung bietet der MCP-Server der Angular CLI.
 
 ## Der MCP-Server von Angular
 
-Das MCP (Model Context Protocol) ist ein offener Standard, der Verbindungen zwischen AI-Anwendungen und externen Systemen ermöglicht.
+Das [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) ist ein offener Standard, der Verbindungen zwischen AI-Anwendungen und externen Systemen ermöglicht.
 MCP-Server können Ressourcen (Datenquellen), Tools (aufrufbare Funktionen) und Prompts (vordefinierte Anweisungen) bereitstellen.
 Das Angular-Team ist auf diesem neuen Feld sehr aktiv und stellt über die Angular CLI einen integrierten MCP-Server bereit.
 
@@ -166,7 +166,7 @@ https://angular.dev/ai/mcp
 Das Flag `-y` beim `npx`-Befehl installiert die Angular CLI ohne Rückfrage, falls sie nicht vorhanden ist.
 Der Befehl `ng mcp` gibt im Terminal nur eine Hilfestellung zur Einrichtung aus.
 Die genaue Konfiguration unterscheidet sich je nach Agent. Typische Konfigurationsdateien sind `mcp.json` oder `settings.json`.
-Die Angular-Dokumentation enthält Anleitungen für verschiedene Agenten.
+Die [Angular-Dokumentation](https://angular.dev/ai) enthält Anleitungen für verschiedene Agenten.
 
 Sobald der MCP-Server konfiguriert ist, entscheidet der AI-Agent selbstständig, wann er welches Tool aufruft.
 Der MCP-Server läuft dabei nicht permanent, sondern wird nur bei Bedarf gestartet und wieder beendet.
@@ -175,7 +175,7 @@ Einige Tools wie `modernize` können aber auch Generatoren der Angular CLI aufru
 Falls du ein bestimmtes Tool nutzen möchtest, bitte den Agenten explizit darum, z. B. mit „Nutze das Tool `search_documentation`, um nach Signal Forms zu suchen".
 
 Wenn du neugierig geworden bist, kannst du den MCP-Server der Angular CLI selbst erforschen.
-Mit dem Werkzeug *MCP Inspector* lassen sich alle verfügbaren Tools im Webbrowser anzeigen und testen:
+Mit dem Werkzeug [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) lassen sich alle verfügbaren Tools im Webbrowser anzeigen und testen:
 
 ```bash
 npx @modelcontextprotocol/inspector "npx" --args "-y @angular/cli mcp"
@@ -198,7 +198,7 @@ Zerlege komplexe Aufgaben in kleine Schritte und verfeinere das Ergebnis schritt
 Fordere den Agenten auf, die erstellte Software selbst zu überprüfen und Fehler zu finden.
 Lass ihn prüfen, ob der Code dem Angular-Styleguide entspricht.
 - **Einfachheit bevorzugen**: AI-Agenten produzieren bei klaren, einfachen Strukturen bessere Ergebnisse – genau wie Menschen auch.
-Statt komplexe Architekturen zu entwerfen, nutze bewährte Abstraktionen wie die Resource API.
+Statt komplexe Architekturen zu entwerfen, nutze bewährte Abstraktionen wie die [Resource API](https://angular.dev/guide/signals/resource).
 Einfacher Code ist leichter zu generieren, zu prüfen und zu warten.
 - **Tests generieren lassen**: Lass dir Unit- und Integrationstests generieren, ggf. auch E2E-Tests.
 Das Erstellen von `TestBed`-Konfigurationen und Mocks ist eine Stärke von AI-Agenten.
@@ -232,4 +232,8 @@ AI-Agenten sind mächtige Werkzeuge, die uns bei der Entwicklung mit Angular unt
 Mit Konfigurationsdateien und dem MCP-Server der Angular CLI schließt du die Lücke zwischen veralteten Trainingsdaten und aktuellen Best Practices.
 Doch AI ersetzt kein Fachwissen.
 Wer die Konzepte von Angular nicht versteht, kann auch nicht beurteilen, ob der generierte Code korrekt ist.
-Deshalb gilt: Nutze AI als Beschleuniger, aber investiere in dein eigenes Verständnis – zum Beispiel mit diesem Buch.
+Deshalb gilt: Nutze AI als Beschleuniger, aber investiere in dein eigenes Verständnis – zum Beispiel mit [unserem Buch](https://angular-buch.com/kaufen).
+
+---
+
+*Genau genommen handelt es sich bei AI nicht um echte Intelligenz, sondern um statistische Mustererkennung auf Basis großer Textmengen. Die populären Begriffe „Künstliche Intelligenz" beziehungsweise „Artificial Intelligence" haben sich trotzdem im Sprachgebrauch etabliert, und wir verwenden sie hier ebenso.*
