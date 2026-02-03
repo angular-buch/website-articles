@@ -28,6 +28,17 @@ Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Akt
 
 <!-- TODO: Screenshot: Ein AI-Agent fragt vor einer Änderung nach Bestätigung -->
 
+## Inhalt
+
+* [Herausforderung: veraltetes Wissen](/blog/2026-02-agentic-coding#herausforderung-veraltetes-wissen)
+* [AI-Konfigurationsdateien](/blog/2026-02-agentic-coding#ai-konfigurationsdateien)
+* [Herausforderung: das Kontextfenster](/blog/2026-02-agentic-coding#herausforderung-das-kontextfenster)
+* [Der MCP-Server von Angular](/blog/2026-02-agentic-coding#der-mcp-server-von-angular)
+  * [Die Tools im Überblick](/blog/2026-02-agentic-coding#die-tools-im-überblick)
+  * [Den MCP-Server einrichten](/blog/2026-02-agentic-coding#den-mcp-server-einrichten)
+* [Empfehlungen für die Praxis](/blog/2026-02-agentic-coding#empfehlungen-für-die-praxis)
+* [Fazit](/blog/2026-02-agentic-coding#fazit)
+
 Angular bietet für die Arbeit mit solchen Agenten spezielle Unterstützung, damit wir optimale Ergebnisse erhalten und der generierte Code den aktuellen Best Practices entspricht.
 Bevor wir ins Detail gehen, sollten wir aber besprechen, warum diese Unterstützung überhaupt notwendig ist.
 
@@ -123,7 +134,11 @@ Warum hilft das?
 MCP-Tools werden bei Bedarf frisch aufgerufen.
 Die Informationen werden bei Bedarf in den Kontext eingelesen. Gehen sie durch Zusammenfassung verloren, können sie jederzeit erneut abgerufen werden.
 Zusätzlich pflegt das Angular-Team die Antworten und aktualisiert sie regelmäßig, sodass auch das Problem veralteten Wissens adressiert wird.
-Der MCP-Server von Angular stellt verschiedene Tools bereit, dazu gehören:
+Der MCP-Server von Angular stellt verschiedene Tools bereit.
+
+### Die Tools im Überblick
+
+**Standard-Tools:**
 
 - `get_best_practices`: liefert Coding-Richtlinien für moderne Angular-Entwicklung.
 - `search_documentation`: durchsucht die offizielle Angular-Dokumentation versionsspezifisch basierend auf Stichworten.
@@ -131,9 +146,16 @@ Der MCP-Server von Angular stellt verschiedene Tools bereit, dazu gehören:
 - `ai_tutor`: startet einen interaktiven Angular-Kurs, der Schritt für Schritt durch das Framework führt.
 - `list_projects`: identifiziert Anwendungen und Bibliotheken im Workspace.
 - `onpush_zoneless_migration`: analysiert Code und liefert Anweisungen zur Migration auf OnPush-Change-Detection.
-- `modernize`: unterstützt Migrationen zu modernen Patterns wie Standalone Components, Signal-basierten Inputs oder dem neuen Control Flow.
 
-Da das Angular-Team das Thema AI stark im Fokus hat, sind seit Drucklegung dieses Buchs wahrscheinlich weitere nützliche Tools hinzugekommen.
+**Experimentelle Tools:**
+
+- `modernize`: unterstützt Migrationen zu modernen Patterns wie Standalone Components, Signal-basierten Inputs oder dem neuen Control Flow.
+- `build`: führt einen einmaligen Build mit `ng build` durch.
+- `devserver.start`, `devserver.stop`, `devserver.wait_for_build`: verwaltet den Development Server.
+- `e2e`: führt End-to-End-Tests aus.
+- `test`: führt Unit-Tests aus.
+
+Da das Angular-Team das Thema AI stark im Fokus hat, werden regelmäßig weitere Tools hinzugefügt.
 
 ### Den MCP-Server einrichten
 
