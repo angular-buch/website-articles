@@ -1,9 +1,8 @@
 ---
-title: 'AI-Unterstützung für Angular'
+title: 'Agentic Coding: AI-Unterstützung für Angular'
 author: Angular-Buch Team
 mail: team@angular-buch.com
-published: 2025-02-02
-lastModified: 2025-02-02
+published: 2026-02-03
 keywords:
   - Angular
   - AI
@@ -16,7 +15,6 @@ keywords:
   - LLM
 language: de
 header: angular21.jpg
-hidden: true
 ---
 
 Softwareprojekte werden komplexer, und Anforderungen steigen.
@@ -24,7 +22,7 @@ Werkzeuge für AI (Artificial Intelligence) können uns bei der Entwicklung unte
 
 Den Weg in den Alltag fand AI durch browserbasierte Chats wie ChatGPT, Gemini oder Perplexity.
 Doch wer damit Software entwickelt, stößt schnell an Grenzen: Der Chat kennt das Projekt nicht, und Code muss manuell hin- und herkopiert werden.
-Einen Schritt weiter gehen *AI-Agenten*: Sie haben direkten Zugriff auf das Projekt, können Dateien lesen und bearbeiten, Befehle ausführen und mehrere Schritte autonom planen.
+Einen Schritt weiter gehen **AI-Agenten**: Sie haben direkten Zugriff auf das Projekt, können Dateien lesen und bearbeiten, Befehle ausführen und mehrere Schritte autonom planen.
 Agenten können also prinzipiell alles tun, was wir am Computer auch tun könnten.
 Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Aktionen nach Bestätigung.
 
@@ -46,7 +44,7 @@ Aktuelle Neuerungen wie Signal Forms, die Resource API oder Angular Aria sind wo
 Bedenkt man zudem, dass ältere Konzepte über Jahre hinweg mehr Dokumentation, Tutorials und Codebeispiele angesammelt haben, ist es statistisch wahrscheinlicher, dass das Modell diese vorschlägt.
 Für die Wartung bestehender Legacy-Projekte ist dies ein Vorteil.
 Wer aber eine moderne Anwendung mit aktuellen Best Practices anstrebt, erhält vom Modell mit höherer Wahrscheinlichkeit ältere Lösungsansätze.
-Im ungünstigsten Fall vermischt das Modell alte und neue Konzepte oder *halluziniert*, d. h. es erzeugt plausibel klingende aber faktisch falsche Aussagen.
+Im ungünstigsten Fall vermischt das Modell alte und neue Konzepte oder **halluziniert**, d. h. es erzeugt plausibel klingende aber faktisch falsche Aussagen.
 Das Ergebnis ist inkonsistenter oder nicht funktionierender Code.
 
 Die Lösung liegt darin, dem AI-Agenten den notwendigen Kontext bereitzustellen.
@@ -59,14 +57,14 @@ Angular bietet dafür zwei Werkzeuge:
 
 Zu Beginn ihrer Arbeit benötigen AI-Agenten möglichst viele gute Informationen.
 Man spricht hier auch von Kontext.
-Der Hersteller hat bereits grundlegende Regeln und Instruktionen bereitgestellt, den sogenannten *System Prompt*.
+Der Hersteller hat bereits grundlegende Regeln und Instruktionen bereitgestellt, den sogenannten **System Prompt**.
 Doch das reicht in der Regel nicht aus: Der Agent hat noch keine Kenntnis über das spezifische Projekt, für das er Arbeit erledigen soll.
 
 Hier kommen projektspezifische Konfigurationsdateien ins Spiel.
 Die meisten AI-Agenten suchen nach solchen Dateien mit einem bestimmten Namen: Claude Code erwartet `.claude/CLAUDE.md`, Cursor verwendet `.cursorrules`, GitHub Copilot nutzt `.github/copilot-instructions.md` und so weiter.
 Jeder Hersteller hat seinen eigenen Standard, doch der generische Dateiname `AGENTS.md` könnte sich als herstellerübergreifender Standard etablieren.
 Diese Dateien enthalten eine Sammlung von Regeln und Best Practices für das jeweilige Projekt.
-Man spricht hier von einem *Custom Prompt*: eine Datei mit projektspezifischen Anweisungen, die das Verhalten des AI-Agenten steuert und den System Prompt ergänzt.
+Man spricht hier von einem **Custom Prompt**: eine Datei mit projektspezifischen Anweisungen, die das Verhalten des AI-Agenten steuert und den System Prompt ergänzt.
 Man könnte diese Eingaben auch vor jeder Konversation manuell eingeben, aber das wäre aufwendig, und man vergisst es schnell.
 
 Da sich noch kein einheitlicher Standard für den Dateinamen etabliert hat, unterstützt die Angular CLI verschiedene Varianten.
@@ -105,11 +103,11 @@ Der Custom Prompt liegt in diesem Fenster, und bei längeren Sessions können di
 
 Wird das Kontextfenster überschritten, „vergisst" der AI-Agent frühere Teile der Konversation.
 Dieses Vergessen ist technisch notwendig, damit die Unterhaltung weitergehen kann.
-Das häufigste Mittel besteht darin, die bisherige Konversation bestmöglich zusammenzufassen (engl. *Context Summarization*).
+Das häufigste Mittel besteht darin, die bisherige Konversation bestmöglich zusammenzufassen (engl. **Context Summarization**).
 Das funktioniert manchmal hervorragend, und manchmal leider überhaupt nicht.
 Hat die Zusammenfassung wichtige Aspekte entfernt, führt dies zu inkonsistenten Antworten oder veralteten Codevorschlägen.
 
-Damit verwandt ist der *Lost-in-the-Middle*-Effekt: Informationen, die in der Mitte eines sehr langen Kontexts stehen, werden vom Modell weniger stark berücksichtigt als Informationen am Anfang oder Ende.
+Damit verwandt ist der **Lost-in-the-Middle**-Effekt: Informationen, die in der Mitte eines sehr langen Kontexts stehen, werden vom Modell weniger stark berücksichtigt als Informationen am Anfang oder Ende.
 Das kann dazu führen, dass initiale Instruktionen aus den Custom Prompts im Laufe der Konversation vernachlässigt werden und das Modell nur noch auf den ursprünglichen System Prompt zurückfällt.
 Je länger die Session andauert, desto wahrscheinlicher werden solche Effekte.
 Moderne AI-Agenten nutzen neben der Zusammenfassung weitere Strategien, z. B. gezielte Tool-Aufrufe oder Sub-Agenten mit eigenem Kontextfenster.
