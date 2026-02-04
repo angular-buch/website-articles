@@ -46,20 +46,40 @@ export class JekyllMarkdownParser {
 
   constructor(private baseUrl: string) {}
 
-  private _imageRenderer(href: string, title: string, text: string) {
+  /**
+   * Check if a URL is absolute (should not be transformed).
+   * Absolute URLs include: https://, http://, data:, //, assets/, /
+   */
+  private _isAbsoluteUrl(url: string): boolean {
+    return url.startsWith('https://') || url.startsWith('http://') ||
+           url.startsWith('data:') || url.startsWith('//') ||
+           url.startsWith('assets/') || url.startsWith('/');
+  }
+
+  /**
+   * Normalize a relative URL by stripping ./ prefix.
+   */
+  private _normalizeRelativeUrl(url: string): string {
+    return url.startsWith('./') ? url.slice(2) : url;
+  }
+
+  /**
+   * Custom image renderer that transforms relative URLs to absolute URLs.
+   *
+   * NOTE: marked already escapes special characters in alt/title text before
+   * passing them to this renderer. We do NOT need to escape again.
+   * - `"` is already `&quot;`
+   * - `<` is already `&lt;`
+   * - `&` is already `&amp;`
+   */
+  private _imageRenderer(href: string, title: string | null, text: string) {
     let src = href;
 
-    // Skip: absolute URLs (https://), data URIs, protocol-relative URLs, website assets, absolute paths
-    const isAbsolute = href.startsWith('https://') || href.startsWith('http://') ||
-                       href.startsWith('data:') || href.startsWith('//') ||
-                       href.startsWith('assets/') || href.startsWith('/');
-
-    if (!isAbsolute) {
-      // Normalize: strip ./ prefix
-      const normalizedHref = href.startsWith('./') ? href.slice(2) : href;
-      src = this.baseUrl + normalizedHref;
+    if (!this._isAbsoluteUrl(href)) {
+      src = this.baseUrl + this._normalizeRelativeUrl(href);
     }
 
+    // text and title are already escaped by marked
     let out = `<img src="${src}" alt="${text}"`;
     if (title) {
       out += ` title="${title}"`;
@@ -71,15 +91,10 @@ export class JekyllMarkdownParser {
   // Transform relative paths in raw HTML <img> tags to absolute URLs
   private _transformRelativeImagePaths(html: string): string {
     return html.replace(/<img([^>]*)\ssrc="([^"]+)"/g, (match, attrs, src) => {
-      // Skip: absolute URLs (https://), data URIs, protocol-relative URLs, website assets, absolute paths
-      if (src.startsWith('https://') || src.startsWith('http://') ||
-          src.startsWith('data:') || src.startsWith('//') ||
-          src.startsWith('assets/') || src.startsWith('/')) {
+      if (this._isAbsoluteUrl(src)) {
         return match;
       }
-      // Normalize: strip ./ prefix
-      const normalizedSrc = src.startsWith('./') ? src.slice(2) : src;
-      return `<img${attrs} src="${this.baseUrl}${normalizedSrc}"`;
+      return `<img${attrs} src="${this.baseUrl}${this._normalizeRelativeUrl(src)}"`;
     });
   }
 

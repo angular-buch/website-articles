@@ -21,7 +21,6 @@ export interface BlogEntry extends EntryBase {
 export interface BlogEntryFullMeta extends BlogEntryMeta {
   bio?: string;
   bio2?: string;
-  lastModified?: string;
   keywords?: string[];
   'darken-header': boolean;
   sticky?: boolean;
