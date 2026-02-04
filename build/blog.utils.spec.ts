@@ -74,14 +74,35 @@ to meet the extraction requirement.</p>`;
     expect(result).toBe(html);
   });
 
-  it('should count length including tags when determining > 100', () => {
-    // The function checks m.length > 100 where m includes the <p> tags
-    // So '<p>...</p>' = 7 chars for tags, need 94+ chars of content
-    const exactly100 = '<p>' + 'x'.repeat(93) + '</p>'; // exactly 100 chars total
-    const over100 = '<p>' + 'x'.repeat(94) + '</p>'; // 101 chars total
+  it('should count TEXT length (not HTML length) when determining > 100', () => {
+    // The function now strips HTML tags before counting length.
+    // '<p>xxx</p>' has 3 chars of TEXT content, not 10.
+    const exactly100TextChars = '<p>' + 'x'.repeat(100) + '</p>'; // 100 text chars
+    const over100TextChars = '<p>' + 'x'.repeat(101) + '</p>'; // 101 text chars
 
-    expect(extractFirstBigParagraph(exactly100)).toBe('');
-    expect(extractFirstBigParagraph(over100)).toBe(over100);
+    expect(extractFirstBigParagraph(exactly100TextChars)).toBe('');
+    expect(extractFirstBigParagraph(over100TextChars)).toBe(over100TextChars);
+  });
+
+  it('should not count HTML attributes in length calculation', () => {
+    // A paragraph with lots of HTML attributes but short text
+    const shortTextLongHtml = '<p class="very-long-class-name-that-would-exceed-100-chars-if-counted" id="another-long-id" data-test="more-attributes">Short text</p>';
+
+    // This has < 100 text chars, so should return empty
+    expect(extractFirstBigParagraph(shortTextLongHtml)).toBe('');
+  });
+
+  it('should count nested HTML tags text content only', () => {
+    // Text with nested tags - should count the text inside, not the tag markup
+    const nestedHtml = '<p>This has <strong>bold</strong> and <em>italic</em> ' +
+      'and <a href="very-long-url-that-should-not-count">linked</a> text ' +
+      'but the actual text content is what matters for the length check ' +
+      'so we need enough plain text characters here.</p>';
+
+    // The text content is long enough, so it should match
+    const result = extractFirstBigParagraph(nestedHtml);
+    expect(result).toContain('This has');
+    expect(result.length).toBeGreaterThan(0);
   });
 });
 

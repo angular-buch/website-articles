@@ -32,21 +32,18 @@ export async function copyEntriesToDist<T extends { slug: string }>(
   sourceFolder: string,
   distFolder: string
 ): Promise<void> {
-  await Promise.all(entries.map(async (entry) => {
-    try {
-      const entryDistFolder = `${distFolder}/${entry.slug}`;
+  // Process sequentially to fail fast on first error
+  for (const entry of entries) {
+    const entryDistFolder = `${distFolder}/${entry.slug}`;
 
-      await mkdirp(entryDistFolder);
-      await copy(`${sourceFolder}/${entry.slug}`, entryDistFolder);
-      await remove(`${entryDistFolder}/README.md`);
+    await mkdirp(entryDistFolder);
+    await copy(`${sourceFolder}/${entry.slug}`, entryDistFolder);
+    await remove(`${entryDistFolder}/README.md`);
 
-      const entryJsonPath = `${entryDistFolder}/entry.json`;
-      await writeJson(entryJsonPath, entry);
-      console.log('Generated post file:', entryJsonPath);
-    } catch (error: any) {
-      console.error(`Failed to process ${entry.slug}:`, error.message);
-    }
-  }));
+    const entryJsonPath = `${entryDistFolder}/entry.json`;
+    await writeJson(entryJsonPath, entry);
+    console.log('Generated post file:', entryJsonPath);
+  }
 }
 
 /** Simple way to sort things: create a sort key that can be easily sorted */
@@ -59,7 +56,18 @@ function getSortKey(entry: EntryBase): string {
 }
 
 
-/** Convert markdown README to full blog post object */
+/**
+ * Convert markdown README to full blog post object.
+ *
+ * IMPORTANT: This function transforms raw YAML data into the target type T.
+ * The generic T is a type ASSERTION - the function trusts that the YAML
+ * contains all required properties. If YAML is incomplete, runtime errors
+ * may occur elsewhere. This is acceptable because we control all blog posts.
+ *
+ * Transformation details:
+ * - `header` (string in YAML) → `header` (object with url/width/height)
+ * - Emojis in HTML are converted via node-emoji
+ */
 export function markdownToEntry<T extends EntryBase>(
   markdown: string,
   folder: string,
@@ -71,8 +79,9 @@ export function markdownToEntry<T extends EntryBase>(
 
   const meta = parsedJekyllMarkdown.parsedYaml || {};
 
+  // Transform header from string (YAML) to object with dimensions
   if (meta.header) {
-    const url = meta.header;
+    const url = meta.header;  // Original string from YAML
     const relativePath = blogPostsFolder + '/' + folder + '/' + meta.header;
     const { width, height } = getImageDimensions(relativePath);
     meta.header = { url, width, height };

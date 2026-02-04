@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { readMarkdownFile, getEntryList, markdownToEntry } from './base.utils';
 import { EntryBase } from './base.types';
 import * as fs from 'fs/promises';
@@ -86,7 +86,7 @@ describe('base.utils', () => {
     });
   });
 
-  describe('markdownToEntry - Error Handling', () => {
+  describe('markdownToEntry', () => {
     it('should throw when header image does not exist', () => {
       const markdown = '---\ntitle: Test\npublished: 2024-01-01\nheader: non-existent.jpg\n---\nContent';
 
@@ -96,6 +96,53 @@ describe('base.utils', () => {
         'https://example.com/',
         '/non/existent/path'
       )).toThrow();
+    });
+
+    it('should convert emoji shortcodes to unicode emojis', () => {
+      const markdown = '---\ntitle: Test\npublished: 2024-01-01\n---\n\nHello :smile: World :rocket:';
+
+      const result = markdownToEntry<EntryBase>(
+        markdown,
+        'test-entry',
+        'https://example.com/',
+        '/tmp'
+      );
+
+      // node-emoji converts :smile: to 😄 and :rocket: to 🚀
+      expect(result.html).toContain('😄');
+      expect(result.html).toContain('🚀');
+      expect(result.html).not.toContain(':smile:');
+      expect(result.html).not.toContain(':rocket:');
+    });
+
+    it('should parse published date as Date object (not string)', () => {
+      const markdown = '---\ntitle: Test\npublished: 2024-06-15\n---\nContent';
+
+      const result = markdownToEntry<EntryBase>(
+        markdown,
+        'test-entry',
+        'https://example.com/',
+        '/tmp'
+      );
+
+      // js-yaml parses unquoted dates as Date objects
+      expect(result.meta.published).toBeInstanceOf(Date);
+      expect(result.meta.published.getFullYear()).toBe(2024);
+      expect(result.meta.published.getMonth()).toBe(5); // June is 5 (0-indexed)
+      expect(result.meta.published.getDate()).toBe(15);
+    });
+
+    it('should set slug from folder name', () => {
+      const markdown = '---\ntitle: Test\npublished: 2024-01-01\n---\nContent';
+
+      const result = markdownToEntry<EntryBase>(
+        markdown,
+        'my-awesome-post',
+        'https://example.com/',
+        '/tmp'
+      );
+
+      expect(result.slug).toBe('my-awesome-post');
     });
   });
 
