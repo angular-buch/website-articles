@@ -1,5 +1,6 @@
 import { remove, mkdirp } from 'fs-extra';
-import { DIST_FOLDER } from '../config';
+
+const DIST_FOLDER = './dist';
 
 async function init(): Promise<void> {
   await remove(DIST_FOLDER);

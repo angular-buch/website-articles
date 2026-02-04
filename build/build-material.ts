@@ -1,11 +1,24 @@
+import { existsSync } from 'fs';
 import { mkdirp } from 'fs-extra';
 
 import { MaterialEntry } from './material.types';
 import { copyEntriesToDist, getEntryList } from './base.utils';
-import { MARKDOWN_BASE_URL, DIST_FOLDER, MATERIAL_FOLDER } from '../config';
+
+const MARKDOWN_BASE_URL = process.env.MARKDOWN_BASE_URL;
+const MATERIAL_FOLDER = '../material';
+const DIST_FOLDER = './dist';
 
 async function build(): Promise<void> {
-  // NOTE: Does NOT clear dist folder - assumes build-init ran first!
+  // Graceful exit if material folder doesn't exist (e.g., in angular-schule)
+  if (!existsSync(MATERIAL_FOLDER)) {
+    console.log('No material folder found, skipping...');
+    return;
+  }
+
+  if (!MARKDOWN_BASE_URL) {
+    throw new Error('MARKDOWN_BASE_URL environment variable is required');
+  }
+
   await mkdirp(DIST_FOLDER + '/material');
 
   const materialList = await getEntryList<MaterialEntry>(MATERIAL_FOLDER, MARKDOWN_BASE_URL + 'material/');
