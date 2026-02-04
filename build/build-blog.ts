@@ -3,11 +3,7 @@ import { copy, remove, mkdirp, writeJson } from 'fs-extra';
 import { BlogEntryFull } from './blog.types';
 import { copyEntriesToDist, getEntryList } from './base.utils';
 import { makeLightBlogList } from './blog.utils';
-
-/** CONFIG */
-const MARKDOWN_BASE_URL = 'https://website-articles.angular-buch.com/';
-const DIST_FOLDER = './dist';
-const BLOG_POSTS_FOLDER = '../blog';
+import { MARKDOWN_BASE_URL, DIST_FOLDER, BLOG_POSTS_FOLDER } from '../config';
 
 async function build(): Promise<void> {
   // empty dist folder (for local builds)
