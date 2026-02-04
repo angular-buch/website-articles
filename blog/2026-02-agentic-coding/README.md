@@ -36,6 +36,7 @@ Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Akt
 * [Der MCP-Server von Angular](/blog/2026-02-agentic-coding#der-mcp-server-von-angular)
   * [Die Tools im Überblick](/blog/2026-02-agentic-coding#die-tools-im-überblick)
   * [Den MCP-Server einrichten](/blog/2026-02-agentic-coding#den-mcp-server-einrichten)
+  * [Experimentelle Tools aktivieren](/blog/2026-02-agentic-coding#experimentelle-tools-aktivieren)
 * [Empfehlungen für die Praxis](/blog/2026-02-agentic-coding#empfehlungen-für-die-praxis)
 * [Fazit](/blog/2026-02-agentic-coding#fazit)
 
@@ -112,6 +113,8 @@ Der Custom Prompt liegt in diesem Fenster, und bei längeren Sessions können di
 
 ## Herausforderung: das Kontextfenster
 
+![Hier wird es bald knapp. Die Context ist bald voll!](context-command.png)
+
 Wird das Kontextfenster überschritten, „vergisst" der AI-Agent frühere Teile der Konversation.
 Dieses Vergessen ist technisch notwendig, damit die Unterhaltung weitergehen kann.
 Das häufigste Mittel besteht darin, die bisherige Konversation bestmöglich zusammenzufassen (engl. **Context Summarization**).
@@ -149,13 +152,13 @@ Der MCP-Server von Angular stellt verschiedene Tools bereit.
 
 **Experimentelle Tools:**
 
-- `modernize`: unterstützt Migrationen zu modernen Patterns wie Standalone Components, Signal-basierten Inputs oder dem neuen Control Flow.
+- `modernize`: führt Code-Migrationen durch, z. B. Control Flow (`*ngIf`/`*ngFor` → `@if`/`@for`), Inject-Funktion (Constructor-Injection → `inject()`), Signal Inputs (`@Input` → `input()`), Signal Outputs (`@Output` → `output()`), Signal Queries (`ViewChild`/`ContentChild` → Signals) und Self-Closing Tags.
 - `build`: führt einen einmaligen Build mit `ng build` durch.
 - `devserver.start`, `devserver.stop`, `devserver.wait_for_build`: verwaltet den Development Server.
 - `e2e`: führt End-to-End-Tests aus.
 - `test`: führt Unit-Tests aus.
 
-Da das Angular-Team das Thema AI stark im Fokus hat, werden regelmäßig weitere Tools hinzugefügt.
+Da das Angular-Team das Thema AI stark im Fokus hat, kommen wahrscheinlich regelmäßig weitere Tools hinzu.
 
 ### Den MCP-Server einrichten
 
@@ -187,6 +190,45 @@ Das Flag `-y` beim `npx`-Befehl installiert die Angular CLI ohne Rückfrage, fal
 Der Befehl `ng mcp` gibt im Terminal nur eine Hilfestellung zur Einrichtung aus.
 Die genaue Konfiguration unterscheidet sich je nach Agent. Typische Konfigurationsdateien sind `mcp.json` oder `settings.json`.
 Die [Angular-Dokumentation](https://angular.dev/ai) enthält Anleitungen für verschiedene Agenten.
+
+### Experimentelle Tools aktivieren
+
+Die experimentellen Tools sind standardmäßig deaktiviert.
+Um sie zu nutzen, müssen sie mit dem Flag `--experimental-tool` (kurz: `-E`) explizit aktiviert werden.
+Die Standard-Tools bleiben dabei erhalten – die experimentellen Tools werden hinzugefügt, nicht ersetzt.
+
+Einzelne Tools aktivieren:
+
+```json
+{
+    "mcpServers": {
+        "angular-cli": {
+            "command": "npx",
+            "args": ["-y", "@angular/cli", "mcp", "-E", "modernize", "-E", "test"]
+        }
+    }
+}
+```
+
+Alle experimentellen Tools auf einmal aktivieren:
+
+```json
+{
+    "mcpServers": {
+        "angular-cli": {
+            "command": "npx",
+            "args": ["-y", "@angular/cli", "mcp", "-E", "all"]
+        }
+    }
+}
+```
+
+Es gibt auch die Gruppe `devserver`, die nur die Devserver-Tools (`devserver.start`, `devserver.stop`, `devserver.wait_for_build`) aktiviert.
+
+Zusätzlich stehen zwei weitere Optionen zur Verfügung:
+
+- `--read-only`: Aktiviert nur lesende Tools, die keine Dateien verändern.
+- `--local-only`: Aktiviert nur Tools, die keinen Internetzugang benötigen.
 
 Sobald der MCP-Server konfiguriert ist, entscheidet der AI-Agent selbstständig, wann er welches Tool aufruft.
 Der MCP-Server läuft dabei nicht permanent, sondern wird nur bei Bedarf gestartet und wieder beendet.
