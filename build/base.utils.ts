@@ -51,6 +51,10 @@ export async function copyEntriesToDist<T extends { slug: string }>(
 
 /** Simple way to sort things: create a sort key that can be easily sorted */
 function getSortKey(entry: EntryBase): string {
+  // js-yaml parses unquoted dates (e.g., `published: 2024-01-15`) as Date objects.
+  // The unary + converts Date to timestamp (number), which sorts correctly.
+  // Note: If the date were a string, +string would return NaN, but our YAML
+  // files use unquoted dates, so this works correctly.
   return (entry.meta.sticky ? 'Z' : 'A') + '---' + (+entry.meta.published) + '---' + entry.slug;
 }
 

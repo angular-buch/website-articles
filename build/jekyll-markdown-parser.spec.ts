@@ -269,6 +269,57 @@ title: Test
     });
   });
 
+  describe('HTML pass-through (trusted content)', () => {
+    // INTENTIONAL BEHAVIOR: We trust markdown content from our own repository.
+    // Raw HTML in the document body is passed through unescaped.
+    // This allows rich formatting like <mark>, <abbr>, custom divs, etc.
+    // Note: marked escapes HTML in alt/title attributes for safety.
+
+    it('should allow inline HTML elements in markdown', () => {
+      const input = `---
+title: Test
+---
+
+This has <mark>highlighted</mark> text and <abbr title="HyperText Markup Language">HTML</abbr>.
+`;
+      const parser = new JekyllMarkdownParser(baseUrl);
+      const result = parser.parse(input);
+
+      expect(result.html).toContain('<mark>highlighted</mark>');
+      expect(result.html).toContain('<abbr title="HyperText Markup Language">HTML</abbr>');
+    });
+
+    it('should allow block-level HTML elements', () => {
+      const input = `---
+title: Test
+---
+
+<div class="custom-box">
+  <p>Custom styled content</p>
+</div>
+`;
+      const parser = new JekyllMarkdownParser(baseUrl);
+      const result = parser.parse(input);
+
+      expect(result.html).toContain('<div class="custom-box">');
+      expect(result.html).toContain('<p>Custom styled content</p>');
+    });
+
+    it('should preserve raw HTML img tags with all attributes', () => {
+      const input = `---
+title: Test
+---
+
+<img src="photo.jpg" alt="A special image" class="rounded shadow" loading="lazy">
+`;
+      const parser = new JekyllMarkdownParser(baseUrl);
+      const result = parser.parse(input);
+
+      expect(result.html).toContain('class="rounded shadow"');
+      expect(result.html).toContain('loading="lazy"');
+    });
+  });
+
   describe('Code blocks', () => {
     it('should NOT transform img tags inside code blocks', () => {
       const input = `---

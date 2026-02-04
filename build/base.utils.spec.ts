@@ -98,4 +98,108 @@ describe('base.utils', () => {
       )).toThrow();
     });
   });
+
+  describe('getEntryList - Sorting', () => {
+    const testDir = '/tmp/test-blog-sorting-' + Date.now();
+
+    beforeEach(async () => {
+      await fs.mkdir(testDir, { recursive: true });
+    });
+
+    afterEach(async () => {
+      await fs.rm(testDir, { recursive: true, force: true });
+    });
+
+    /**
+     * SORTING BEHAVIOR DOCUMENTATION:
+     * --------------------------------
+     * getSortKey uses `+entry.meta.published` to convert dates to timestamps.
+     *
+     * IMPORTANT: js-yaml parses unquoted dates (e.g., `published: 2024-01-15`)
+     * as JavaScript Date objects, NOT strings!
+     *
+     * - `+DateObject` = timestamp (number) -> sorts correctly
+     * - `+"2024-01-15"` = NaN (if it were a string)
+     *
+     * Our YAML files use unquoted dates, so js-yaml gives us Date objects,
+     * and the sorting works correctly. This is NOT a bug.
+     */
+
+    it('should sort entries by published date (newest first)', async () => {
+      // js-yaml parses unquoted dates as Date objects, so sorting works
+      const entries = [
+        { dir: 'middle-post', date: '2024-06-15' },
+        { dir: 'oldest-post', date: '2023-01-01' },
+        { dir: 'newest-post', date: '2025-12-31' },
+      ];
+
+      for (const e of entries) {
+        const entryDir = path.join(testDir, e.dir);
+        await fs.mkdir(entryDir, { recursive: true });
+        await fs.writeFile(
+          path.join(entryDir, 'README.md'),
+          `---\ntitle: ${e.dir}\npublished: ${e.date}\n---\nContent`
+        );
+      }
+
+      const result = await getEntryList<EntryBase>(testDir, 'https://example.com/');
+
+      expect(result).toHaveLength(3);
+      // Newest first (descending order)
+      expect(result[0].slug).toBe('newest-post');   // 2025-12-31
+      expect(result[1].slug).toBe('middle-post');   // 2024-06-15
+      expect(result[2].slug).toBe('oldest-post');   // 2023-01-01
+    });
+
+    it('should sort sticky entries before non-sticky entries', async () => {
+      const entries = [
+        { dir: 'normal-new', date: '2025-01-01', sticky: false },
+        { dir: 'sticky-old', date: '2020-01-01', sticky: true },
+        { dir: 'normal-old', date: '2020-01-01', sticky: false },
+      ];
+
+      for (const e of entries) {
+        const entryDir = path.join(testDir, e.dir);
+        await fs.mkdir(entryDir, { recursive: true });
+        const stickyLine = e.sticky ? 'sticky: true\n' : '';
+        await fs.writeFile(
+          path.join(entryDir, 'README.md'),
+          `---\ntitle: ${e.dir}\npublished: ${e.date}\n${stickyLine}---\nContent`
+        );
+      }
+
+      const result = await getEntryList<EntryBase>(testDir, 'https://example.com/');
+
+      expect(result).toHaveLength(3);
+      // Sticky first, then by date
+      expect(result[0].slug).toBe('sticky-old');    // sticky, even though old
+      expect(result[1].slug).toBe('normal-new');    // 2025-01-01
+      expect(result[2].slug).toBe('normal-old');    // 2020-01-01
+    });
+
+    it('should use slug as tiebreaker for same date', async () => {
+      const entries = [
+        { dir: 'zzz-post', date: '2024-01-01' },
+        { dir: 'aaa-post', date: '2024-01-01' },
+        { dir: 'mmm-post', date: '2024-01-01' },
+      ];
+
+      for (const e of entries) {
+        const entryDir = path.join(testDir, e.dir);
+        await fs.mkdir(entryDir, { recursive: true });
+        await fs.writeFile(
+          path.join(entryDir, 'README.md'),
+          `---\ntitle: ${e.dir}\npublished: ${e.date}\n---\nContent`
+        );
+      }
+
+      const result = await getEntryList<EntryBase>(testDir, 'https://example.com/');
+
+      expect(result).toHaveLength(3);
+      // Same date, sorted by slug descending (Z first)
+      expect(result[0].slug).toBe('zzz-post');
+      expect(result[1].slug).toBe('mmm-post');
+      expect(result[2].slug).toBe('aaa-post');
+    });
+  });
 });
