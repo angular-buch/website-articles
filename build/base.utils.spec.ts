@@ -87,21 +87,21 @@ describe('base.utils', () => {
   });
 
   describe('markdownToEntry', () => {
-    it('should throw when header image does not exist', () => {
+    it('should throw when header image does not exist', async () => {
       const markdown = '---\ntitle: Test\npublished: 2024-01-01\nheader: non-existent.jpg\n---\nContent';
 
-      expect(() => markdownToEntry<EntryBase>(
+      await expect(markdownToEntry<EntryBase>(
         markdown,
         'test-entry',
         'https://example.com/',
         '/non/existent/path'
-      )).toThrow();
+      )).rejects.toThrow();
     });
 
-    it('should convert emoji shortcodes to unicode emojis', () => {
+    it('should convert emoji shortcodes to unicode emojis', async () => {
       const markdown = '---\ntitle: Test\npublished: 2024-01-01\n---\n\nHello :smile: World :rocket:';
 
-      const result = markdownToEntry<EntryBase>(
+      const result = await markdownToEntry<EntryBase>(
         markdown,
         'test-entry',
         'https://example.com/',
@@ -115,10 +115,10 @@ describe('base.utils', () => {
       expect(result.html).not.toContain(':rocket:');
     });
 
-    it('should parse published date as Date object (not string)', () => {
+    it('should parse published date as Date object (not string)', async () => {
       const markdown = '---\ntitle: Test\npublished: 2024-06-15\n---\nContent';
 
-      const result = markdownToEntry<EntryBase>(
+      const result = await markdownToEntry<EntryBase>(
         markdown,
         'test-entry',
         'https://example.com/',
@@ -132,10 +132,10 @@ describe('base.utils', () => {
       expect(result.meta.published.getDate()).toBe(15);
     });
 
-    it('should set slug from folder name', () => {
+    it('should set slug from folder name', async () => {
       const markdown = '---\ntitle: Test\npublished: 2024-01-01\n---\nContent';
 
-      const result = markdownToEntry<EntryBase>(
+      const result = await markdownToEntry<EntryBase>(
         markdown,
         'my-awesome-post',
         'https://example.com/',

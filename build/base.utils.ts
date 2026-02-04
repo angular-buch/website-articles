@@ -1,5 +1,5 @@
 import * as emoji from 'node-emoji'
-import sizeOf from 'image-size';
+import { imageSizeFromFile } from 'image-size/fromFile';
 import { readdir, readFile } from 'fs/promises';
 import { copy, remove, writeJson, mkdirp } from 'fs-extra';
 
@@ -21,8 +21,8 @@ export async function readMarkdownFile(filePath: string): Promise<string> {
 }
 
 /** Get width and height of an image */
-export function getImageDimensions(imagePath: string): { width: number | undefined; height: number | undefined } {
-  const { width, height } = sizeOf(imagePath);
+export async function getImageDimensions(imagePath: string): Promise<{ width: number | undefined; height: number | undefined }> {
+  const { width, height } = await imageSizeFromFile(imagePath);
   return { width, height };
 }
 
@@ -68,12 +68,12 @@ function getSortKey(entry: EntryBase): string {
  * - `header` (string in YAML) → `header` (object with url/width/height)
  * - Emojis in HTML are converted via node-emoji
  */
-export function markdownToEntry<T extends EntryBase>(
+export async function markdownToEntry<T extends EntryBase>(
   markdown: string,
   folder: string,
   baseUrl: string,
   blogPostsFolder: string
-): T {
+): Promise<T> {
   const parser = new JekyllMarkdownParser(baseUrl + folder + '/');
   const parsedJekyllMarkdown = parser.parse(markdown);
 
@@ -83,7 +83,7 @@ export function markdownToEntry<T extends EntryBase>(
   if (meta.header) {
     const url = meta.header;  // Original string from YAML
     const relativePath = blogPostsFolder + '/' + folder + '/' + meta.header;
-    const { width, height } = getImageDimensions(relativePath);
+    const { width, height } = await getImageDimensions(relativePath);
     meta.header = { url, width, height };
   }
 
@@ -102,7 +102,7 @@ export async function getEntryList<T extends EntryBase>(entriesFolder: string, m
   for (const entryDir of entryDirs) {
     const readmePath = `${entriesFolder}/${entryDir}/README.md`;
     const readme = await readMarkdownFile(readmePath);
-    const entry = markdownToEntry<T>(readme, entryDir, markdownBaseUrl, entriesFolder);
+    const entry = await markdownToEntry<T>(readme, entryDir, markdownBaseUrl, entriesFolder);
     entries.push(entry);
   }
 
