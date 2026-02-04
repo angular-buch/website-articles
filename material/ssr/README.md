@@ -27,9 +27,9 @@ Die Basis einer Angular-Anwendung ist eine einzige leere HTML-Seite.
 Sie ist der Einstiegspunkt in die Anwendung und die Seite, die beim Start im Browser geladen wird.
 
 Dazu starten wir die Anwendung mit `ng serve`, öffnen die Anwendung im Browser und lassen uns den Seitenquelltext anzeigen.
-Bitte schauen dir die Datei wirklich im Browser an, denn das "Original" aus dem Dateisystem enthält nicht die Referenzen auf die gebauten Bundles.
+Bitte schau dir die Datei wirklich im Browser an, denn das "Original" aus dem Dateisystem enthält nicht die Referenzen auf die gebauten Bundles.
 Nutze bitte auch nicht den Elements-Tab in den Chrome DevTools, sondern die statische Quelltextanzeige.
-In Chrome kickst du dazu rechts in die Seite und wählen *View Page Source* / *Seitenquelltext anzeigen*.
+In Chrome klickst du dazu rechts in die Seite und wählst *View Page Source* / *Seitenquelltext anzeigen*.
 
 Dort bekommen wir den folgenden Quelltext präsentiert:
 
@@ -75,8 +75,8 @@ Das bedeutet, dass Suchmaschinen lediglich eine weiße Seite sehen – für die 
 
 Diese Thematik betrifft auch andere Situationen, in denen Maschinen unsere Anwendung aufrufen.
 Ein gutes Beispiel dafür ist die Inhaltsvorschau in sozialen Netzwerken.
-Wenn Sie einen Link zu Ihrer Anwendung auf BlueSky oder LinkedIn posten, so generiert die Plattform automatisch eine ansprechende Vorschau mit einem Bild und dem Text von der Seite.
-Ist die abgerufene Seite allerdings leer, so wird die Vorschau nur wenig Informationen enthalten.
+Wenn du einen Link zu deiner Anwendung auf BlueSky oder LinkedIn postest, generiert die Plattform automatisch eine ansprechende Vorschau mit einem Bild und dem Text von der Seite.
+Ist die abgerufene Seite allerdings leer, wird die Vorschau nur wenig Informationen enthalten.
 
 Ein weiteres Problem tritt auf, wenn wir die Ladezeit der Anwendung über eine echte Internetverbindung betrachten.
 Ist die Anwendung einmal geladen, so reagiert sie schnell.
@@ -86,9 +86,9 @@ Trotzdem benötigt der Prozess eine Weile – und währenddessen sehen wir nur e
 
 Für diese Herausforderungen gibt es zwei effektive Lösungen:
 
-**Keine Single-Page-Anwendung nutzen:** Mit einer herkömmlichen Webanwendung haben Sie diese Probleme nicht.
-Dafür haben sie aber andere Probleme: Das Nachladen dynamischer oder interaktiver Inhalte gestaltet sich als deutlich komplizierter.
-Außerdem verzichten sie dann auf Angular, und das wäre wirklich schade!
+**Keine Single-Page-Anwendung nutzen:** Mit einer herkömmlichen Webanwendung hast du diese Probleme nicht.
+Dafür hast du aber andere Probleme: Das Nachladen dynamischer oder interaktiver Inhalte gestaltet sich als deutlich komplizierter.
+Außerdem verzichtest du dann auf Angular, und das wäre wirklich schade!
 
 **HTML-Seite nicht leer lassen:** Wir können uns darum bemühen, die ausgelieferte HTML-Seite mit Leben zu füllen, sodass Menschen und Suchmaschinen bereits einen sinnvollen Inhalt statt einer leeren Seite erhalten.
 Das macht die Wartezeit erträglicher, und auch für Suchmaschinen und die automatische Inhaltsvorschau sind schon die nötigen Inhalte an Bord.
@@ -145,7 +145,7 @@ Es werden verschiedene Abhängigkeiten installiert, und unsere Anwendung erhält
 
 - **`server.ts`**: Enthält das Grundgerüst für den Serverprozess, der die Angular-Anwendung rendert und das erzeugte HTML ausliefert.
 - **`main.server.ts`**: Der Einstiegspunkt für den Server-Build.
-- **`app/app.config.ts`**: Angepasste Client-spezifische Konfiguration der Anwendung mit Hydration.
+- **`app/app.config.ts`**: Angepasste Client-spezifische Konfiguration der Anwendung mit [Hydration](#hydration).
 - **`app/app.config.server.ts`**: Die Server-spezifische Konfiguration der Anwendung.
 - **`app/app.routes.server.ts`**: Die Server-Routing-Konfiguration, in der wir festlegen, wie jede Route gerendert werden soll.
 - **`angular.json`**: Erhält neue Abschnitte mit der Build-Konfiguration für die servergerenderte Anwendung.
@@ -239,7 +239,7 @@ npm run serve:ssr:book-manager
 
 Der Server startet, und wir können die Anwendung nun unter `http://localhost:4000` erreichen.
 
-Werfen Sie nun noch einmal einen Blick in den Quellcode der ausgelieferten HTML-Seite: Sie werden sehen, dass das Element `<bm-root>` den vorgerenderten Inhalt der Angular-Anwendung enthält.
+Wirf nun noch einmal einen Blick in den Quellcode der ausgelieferten HTML-Seite: Du wirst sehen, dass das Element `<bm-root>` den vorgerenderten Inhalt der Angular-Anwendung enthält.
 Das serverseitige Rendering hat also funktioniert!
 
 Die Angular CLI bietet für Server-Side Rendering auch einen Entwicklungswebserver mit Live Reload an, ähnlich `ng serve`:
@@ -348,7 +348,7 @@ Die verfügbaren Fallback-Strategien sind:
 ### Vollständig statische Anwendung
 
 Standardmäßig erzeugt Angular beim Build sowohl vorgerenderte HTML-Dateien als auch einen Server für SSR.
-Wenn Sie eine vollständig statische Anwendung ohne Server erstellen möchten, können Sie in der `angular.json` den `outputMode` auf `static` setzen:
+Wenn du eine vollständig statische Anwendung ohne Server erstellen möchtest, kannst du in der `angular.json` den `outputMode` auf `static` setzen:
 
 ```json
 {
@@ -371,7 +371,7 @@ Die Anwendung kann dann auf einem einfachen Webserver oder CDN gehostet werden.
 
 Im Ordner `dist/book-manager/browser` befindet sich danach die geplante Ordnerstruktur mit den statisch vorgerenderten HTML-Dateien.
 Außerdem enthält der Ordner weiterhin die komplette Angular-Anwendung für den Browser.
-Sie können den gesamten Ordner nun wie gewohnt mit einem Webserver bereitstellen.
+Du kannst den gesamten Ordner nun wie gewohnt mit einem Webserver bereitstellen.
 Fragen wir die Route `/books` an, so wird zuerst die vorgerenderte Datei `books/index.html` ausgeliefert.
 Anschließend werden die JavaScript-Bundles heruntergeladen, die mittels `<script>`-Tags eingebunden sind.
 Ist die Anwendung vollständig geladen und gebootstrappt, übernimmt Angular die servergerenderte Seite, und die Anwendung funktioniert wie gewohnt.
@@ -387,10 +387,10 @@ Das hat zwar den Vorteil, dass die Seite mit allen Daten gerendert wird, die per
 Kritisch wird es, wenn lang laufende Timer in der Anwendung existieren oder gar ein Intervall verwendet wird, das niemals endet.
 Schließt die asynchrone Operation niemals ab, wird die Anwendung niemals gerendert!
 
-Probieren Sie es aus: Setzen Sie ein `setTimeout()` oder `setInterval()` in den Code und starten Sie die Anwendung mit Server-Side Rendering.
+Probier es aus: Setze ein `setTimeout()` oder `setInterval()` in den Code und starte die Anwendung mit Server-Side Rendering.
 Die Seite wird erst geladen, wenn die Operationen abgeschlossen sind.
 
-Sie müssen deshalb darauf achten, asynchrone Aufgaben nur zu starten, wenn sie in absehbarer Zeit enden – oder Sie dürfen solche Operationen nicht durchführen, wenn die Anwendung auf dem Server läuft.
+Du musst deshalb darauf achten, asynchrone Aufgaben nur zu starten, wenn sie in absehbarer Zeit enden – oder du darfst solche Operationen nicht durchführen, wenn die Anwendung auf dem Server läuft.
 
 ## Serverkompatible Komponenten schreiben
 
@@ -415,9 +415,9 @@ export class MyComponent {
 }
 ```
 
-> **Wichtig:** Vermeiden Sie die Verwendung von `isPlatformBrowser` in Templates mit `@if` oder anderen Bedingungen, um unterschiedliche Inhalte auf Server und Client zu rendern.
+> **Wichtig:** Vermeide die Verwendung von `isPlatformBrowser` in Templates mit `@if` oder anderen Bedingungen, um unterschiedliche Inhalte auf Server und Client zu rendern.
 > Dies führt zu Hydration-Mismatches und Layout-Verschiebungen, die sich negativ auf die User Experience und Core Web Vitals auswirken.
-> Verwenden Sie stattdessen `afterNextRender` für browserspezifische Initialisierungen und halten Sie den gerenderten Inhalt auf beiden Plattformen konsistent.
+> Verwende stattdessen `afterNextRender` für browserspezifische Initialisierungen und halte den gerenderten Inhalt auf beiden Plattformen konsistent.
 
 ### Plattform bestimmen mit `PLATFORM_ID`
 
@@ -452,7 +452,7 @@ Wir müssen also mit einer Unterscheidung nach der Plattform dafür sorgen, dass
 
 ### Zugriff auf `document` über Dependency Injection
 
-Anstatt direkt auf das globale `document`-Objekt zuzugreifen, sollten Sie das `DOCUMENT`-Token verwenden, um plattformunabhängig auf das Dokument zuzugreifen:
+Anstatt direkt auf das globale `document`-Objekt zuzugreifen, solltest du das `DOCUMENT`-Token verwenden, um plattformunabhängig auf das Dokument zuzugreifen:
 
 ```typescript
 import { Component, inject } from '@angular/core';
@@ -479,7 +479,7 @@ Der `HttpClient` hört auf, den Cache zu verwenden, sobald die Anwendung im Brow
 
 ### Cache-Optionen konfigurieren
 
-Sie können anpassen, wie Angular HTTP-Antworten während des Server-Side Renderings cached und während der Hydration wiederverwendet, indem Sie `HttpTransferCacheOptions` konfigurieren:
+Du kannst anpassen, wie Angular HTTP-Antworten während des Server-Side Renderings cached und während der Hydration wiederverwendet, indem du `HttpTransferCacheOptions` konfigurierst:
 
 ```typescript
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -500,7 +500,7 @@ bootstrapApplication(App, {
 
 Standardmäßig cached der `HttpClient` alle HEAD- und GET-Anfragen, die keine `Authorization`- oder `Proxy-Authorization`-Header enthalten.
 
-> **Wichtig:** Vermeiden Sie das Einschließen sensibler Header wie Authentifizierungs-Tokens.
+> **Wichtig:** Vermeide das Einschließen sensibler Header wie Authentifizierungs-Tokens.
 > Diese können benutzerspezifische Daten zwischen Anfragen leaken.
 
 ## Hydration
@@ -520,9 +520,9 @@ Mit aktivierter Hydration wird der vorhandene DOM wiederverwendet und ein Flacke
 
 ### Hydration aktivieren
 
-Wenn Sie die Angular CLI verwendet haben, um SSR zu aktivieren (entweder bei der Projekterstellung oder später über `ng add @angular/ssr`), ist der Code zur Aktivierung von Hydration bereits in Ihrer Anwendung enthalten.
+Wenn du die Angular CLI verwendet hast, um SSR zu aktivieren (entweder bei der Projekterstellung oder später über `ng add @angular/ssr`), ist der Code zur Aktivierung von Hydration bereits in deiner Anwendung enthalten.
 
-Bei einer manuellen Einrichtung können Sie Hydration aktivieren, indem Sie `provideClientHydration` aus `@angular/platform-browser` importieren und zu den Providern Ihrer Anwendung hinzufügen:
+Bei einer manuellen Einrichtung kannst du Hydration aktivieren, indem du `provideClientHydration` aus `@angular/platform-browser` importierst und zu den Providern deiner Anwendung hinzufügst:
 
 ```typescript
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -538,8 +538,8 @@ bootstrapApplication(App, {
 
 ### Hydration überprüfen
 
-Um zu überprüfen, ob Hydration aktiviert ist, öffnen Sie die Entwicklertools im Browser und schauen Sie in die Konsole.
-Sie sollten eine Meldung mit Hydration-bezogenen Statistiken sehen, z. B. die Anzahl der hydrierten Komponenten und Knoten.
+Um zu überprüfen, ob Hydration aktiviert ist, öffne die Entwicklertools im Browser und schau in die Konsole.
+Du solltest eine Meldung mit Hydration-bezogenen Statistiken sehen, z. B. die Anzahl der hydrierten Komponenten und Knoten.
 
 ### Event Replay
 
@@ -547,7 +547,7 @@ Wenn eine Anwendung auf dem Server gerendert wird, ist sie im Browser sichtbar, 
 Benutzer könnten annehmen, dass sie mit der Seite interagieren können, aber Event-Listener werden erst nach Abschluss der Hydration angehängt.
 
 Mit dem Event Replay-Feature können alle Events, die vor der Hydration auftreten, erfasst und nach Abschluss der Hydration wiedergegeben werden.
-Sie können es mit der Funktion `withEventReplay()` aktivieren:
+Du kannst es mit der Funktion `withEventReplay()` aktivieren:
 
 ```typescript
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -562,13 +562,13 @@ bootstrapApplication(App, {
 ### Hydration für einzelne Komponenten überspringen
 
 Einige Komponenten funktionieren möglicherweise nicht korrekt mit aktivierter Hydration, z. B. wenn sie direkte DOM-Manipulation verwenden.
-Als Workaround können Sie das Attribut `ngSkipHydration` zum Tag einer Komponente hinzufügen, um die Hydration für die gesamte Komponente zu überspringen:
+Als Workaround kannst du das Attribut `ngSkipHydration` zum Tag einer Komponente hinzufügen, um die Hydration für die gesamte Komponente zu überspringen:
 
 ```html
 <app-chart ngSkipHydration></app-chart>
 ```
 
-Alternativ können Sie `ngSkipHydration` als Host-Binding setzen:
+Alternativ kannst du `ngSkipHydration` als Host-Binding setzen:
 
 ```typescript
 @Component({
@@ -578,19 +578,19 @@ export class ChartComponent { }
 ```
 
 > **Hinweis:** Das Attribut `ngSkipHydration` kann nur auf Komponenten-Host-Knoten verwendet werden.
-> Wenn Sie es zur Root-Komponente hinzufügen, wird die Hydration für die gesamte Anwendung deaktiviert.
+> Wenn du es zur Root-Komponente hinzufügst, wird die Hydration für die gesamte Anwendung deaktiviert.
 
 ### Einschränkungen bei der Hydration
 
-Hydration erfordert, dass Ihre Anwendung auf Server und Client dieselbe DOM-Struktur erzeugt.
+Hydration erfordert, dass deine Anwendung auf Server und Client dieselbe DOM-Struktur erzeugt.
 Der Hydration-Prozess erwartet, dass der DOM-Baum an beiden Stellen die gleiche Struktur hat, einschließlich Whitespaces und Kommentarknoten.
 
 Komponenten, die direkte DOM-Manipulation mit nativen DOM-APIs durchführen, sind die häufigste Ursache für Probleme.
-Wenn Sie Komponenten haben, die den DOM mit nativen APIs manipulieren oder `innerHTML` bzw. `outerHTML` verwenden, wird der Hydration-Prozess auf Fehler stoßen.
+Wenn du Komponenten hast, die den DOM mit nativen APIs manipulieren oder `innerHTML` bzw. `outerHTML` verwenden, wird der Hydration-Prozess auf Fehler stoßen.
 
-Am besten refaktorieren Sie solche Komponenten, um diese Art der DOM-Manipulation zu vermeiden.
-Verwenden Sie Angular-APIs, wenn möglich.
-Falls Sie das Verhalten nicht refaktorieren können, verwenden Sie das Attribut `ngSkipHydration` als Workaround.
+Am besten refaktorierst du solche Komponenten, um diese Art der DOM-Manipulation zu vermeiden.
+Verwende Angular-APIs, wenn möglich.
+Falls du das Verhalten nicht refaktorieren kannst, verwende das Attribut `ngSkipHydration` als Workaround.
 
 ## Incremental Hydration
 
@@ -610,8 +610,8 @@ Mit Incremental Hydration wird der Hauptinhalt des `@defer`-Blocks ohne Layout-S
 
 ### Incremental Hydration aktivieren
 
-Sie können Incremental Hydration für Anwendungen aktivieren, die bereits SSR mit Hydration verwenden.
-Fügen Sie die Funktion `withIncrementalHydration()` zum `provideClientHydration`-Provider hinzu:
+Du kannst Incremental Hydration für Anwendungen aktivieren, die bereits SSR mit Hydration verwenden.
+Füge die Funktion `withIncrementalHydration()` zum `provideClientHydration`-Provider hinzu:
 
 ```typescript
 import { provideClientHydration, withIncrementalHydration } from '@angular/platform-browser';
@@ -624,11 +624,11 @@ bootstrapApplication(App, {
 ```
 
 > **Hinweis:** Incremental Hydration aktiviert automatisch Event Replay.
-> Wenn Sie bereits `withEventReplay()` in Ihrer Liste haben, können Sie es nach der Aktivierung von Incremental Hydration entfernen.
+> Wenn du bereits `withEventReplay()` in deiner Liste hast, kannst du es nach der Aktivierung von Incremental Hydration entfernen.
 
 ### Hydration-Trigger für `@defer`
 
-Mit Incremental Hydration können Sie zusätzliche Trigger zu `@defer`-Blöcken hinzufügen, die definieren, wann die Hydration stattfinden soll.
+Mit Incremental Hydration kannst du zusätzliche Trigger zu `@defer`-Blöcken hinzufügen, die definieren, wann die Hydration stattfinden soll.
 Ein `hydrate`-Trigger teilt Angular mit, dass die Abhängigkeiten des `@defer`-Blocks während des Server-Side Renderings geladen und der Hauptinhalt gerendert werden soll.
 Im Client bleiben die Abhängigkeiten verzögert, und der Inhalt bleibt dehydriert, bis der Hydration-Trigger ausgelöst wird.
 
@@ -712,7 +712,7 @@ Wenn der Inhalt nicht Teil der initial geladenen Route war, wird bei der Navigat
 Server-Side Rendering und Pre-Rendering sind wirkungsvolle Mittel, um die wahrgenommene Ladezeit einer Anwendung zu verkürzen.
 Außerdem wird die initiale HTML-Seite nicht leer ausgeliefert, sondern enthält bereits Informationen, die für Suchmaschinen und automatische Inhaltsvorschau sinnvoll sind.
 Obwohl beide Strategien mit moderatem Aufwand umsetzbar sind, sollte immer untersucht werden, ob sich der Einsatz von serverseitigem Rendering für eine bestimmte Anwendung lohnt.
-Dazu sollten Sie stets folgende Fragen beantworten:
+Dazu solltest du stets folgende Fragen beantworten:
 
 - Wird die Anwendung über einen externen Link aufgerufen?
 - Besuchen Suchmaschinen und Crawler die Seite?
@@ -726,11 +726,11 @@ Solche Anwendungen können z. B. ein Online-Shop, Blog oder eine öffentliche Fi
 Die Seite wird nicht von öffentlichen Suchmaschinen indexiert und wird hauptsächlich auf Desktop-Rechnern genutzt oder sogar lokal ausgeliefert.
 Beispiele sind Intranetportale, Verwaltungssoftware und Desktopanwendungen.
 Auch bei hochdynamischen Inhalten, die sich erst aus der Interaktion in der Oberfläche ergeben (z. B. ein Chat), kann es sein, dass Server-Side Rendering nicht zielführend ist.
-Ebenso müssen Sie nur die Seiten vorrendern, die von extern über einen Link aufgerufen werden können.
-Interne Bereiche wie die individuelle Bestellverwaltung in einem Online-Shop müssen Sie also nicht servergerendert ausliefern.
+Ebenso musst du nur die Seiten vorrendern, die von extern über einen Link aufgerufen werden können.
+Interne Bereiche wie die individuelle Bestellverwaltung in einem Online-Shop musst du also nicht servergerendert ausliefern.
 
 **Statische Inhalte:** Pre-Rendering bietet sich immer dann an, wenn die Anwendung statische Inhalte besitzt, die keinen zeitlichen Bezug haben und sich nur aus dem Code der Anwendung ergeben.
-Dabei müssen Sie sich nicht für eine Strategie entscheiden, sondern Sie können dynamisches Server-Side Rendering und statisches Pre-Rendering parallel nutzen.
-Beispielsweise können Sie die Startseite mit dynamischen Inhalten mittels Server-Side Rendering ausliefern, während das Impressum, das Kontaktformular und die Firmenhistorie auf der Website durch Pre-Rendering erzeugt werden.
+Dabei musst du dich nicht für eine Strategie entscheiden, sondern du kannst dynamisches Server-Side Rendering und statisches Pre-Rendering parallel nutzen.
+Beispielsweise kannst du die Startseite mit dynamischen Inhalten mittels Server-Side Rendering ausliefern, während das Impressum, das Kontaktformular und die Firmenhistorie auf der Website durch Pre-Rendering erzeugt werden.
 Da für das Pre-Rendering immer die Pfade aller zu rendernden Routen bekannt sein müssen, eignet sich dieses Verfahren ohnehin nur für statische Seiten.
-Geschützte Bereiche wie eine Nutzerverwaltung hingegen sollten Sie gar nicht vorrendern.
+Geschützte Bereiche wie eine Nutzerverwaltung hingegen solltest du gar nicht vorrendern.
