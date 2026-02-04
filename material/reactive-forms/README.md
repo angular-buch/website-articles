@@ -99,7 +99,7 @@ new FormControl<string | null>(null);
 // FormControl<string | null>
 ```
 
-Wir empfehlen Ihnen, die Option `nonNullable` für jedes Control auf `true` zu setzen.
+Wir empfehlen dir, die Option `nonNullable` für jedes Control auf `true` zu setzen.
 Das vereinfacht die Arbeit mit den erzeugten Daten, weil die Typen den tatsächlichen Eingabewert widerspiegeln.
 
 ### FormGroup
@@ -109,8 +109,8 @@ Tatsächlich übergeben wir bei der Initialisierung ein Objekt an die `FormGroup
 Jedes Control erhält in diesem Objekt einen Namen, anhand dessen wir das Feld später identifizieren können.
 
 Ein Formular besteht auf oberster Ebene meist aus einer `FormGroup` (Seit Angular 21.0.0 kann jedoch auch ein `FormArray` auf oberster Ebene verwendet werden).
-Übrigens können Sie in einer solchen `FormGroup` nicht nur `FormControl`s zusammenfassen, sondern auch weitere `FormGroup`s (und `FormArray`s und `FormRecord`s).
-Sie können Ihre Formulare also hierarchisch aufbauen – so wie es für Ihre komplexe Anwendung nötig ist.
+Übrigens kannst du in einer solchen `FormGroup` nicht nur `FormControl`s zusammenfassen, sondern auch weitere `FormGroup`s (und `FormArray`s und `FormRecord`s).
+Du kannst deine Formulare also hierarchisch aufbauen – so wie es für deine komplexe Anwendung nötig ist.
 Die Blätter dieses Baums sind allerdings immer einzelne `FormControl`s.
 
 Der Typ der `FormGroup` wird anhand der enthaltenen `FormControl`s ermittelt.
@@ -184,7 +184,7 @@ emails.removeAt(0);
 emails.insert(1, new FormControl('third@example.org', { nonNullable: true }));
 ```
 
-Mit dem Property `length` können wir die Anzahl der Elemente herausfinden, das Property `controls` liefert uns ein Array mit allen Controls, über das Sie nach Belieben mit den bekannten Bordmitteln wie `@for` iterieren können.
+Mit dem Property `length` können wir die Anzahl der Elemente herausfinden, das Property `controls` liefert uns ein Array mit allen Controls, über das du nach Belieben mit den bekannten Bordmitteln wie `@for` iterieren kannst.
 Damit ist es also ebenfalls möglich, dynamische Formulare zu entwickeln, bei denen wir zur Laufzeit Controls hinzufügen und entfernen können.
 
 ### Die Oberklasse AbstractControl
@@ -220,7 +220,7 @@ So können wir z. B. ein Formular für die Registrierung erstellen:
 
 Die Reise beginnt aber zunächst mit einer `FormGroup`, unter der sich das gesamte Formular aufspannt.
 Diese `FormGroup` legen wir direkt in einem Property der Komponentenklasse ab.
-Wir empfehlen Ihnen, für jedes Feld die Option `nonNullable` zu setzen.
+Wir empfehlen dir, für jedes Feld die Option `nonNullable` zu setzen.
 
 ```typescript
 registerForm = new FormGroup({
@@ -333,7 +333,7 @@ Auf dem `FormArray` liefert das Property `controls` schließlich ein Array mit a
 </fieldset>
 ```
 
-Sie sehen hier, dass wir bereits den Weg geebnet haben für ein hochdynamisches Formular.
+Du siehst hier, dass wir bereits den Weg geebnet haben für ein hochdynamisches Formular.
 Mit der Methode `push()` auf dem `FormArray` könnten wir nun zur Laufzeit weitere E-Mail-Felder hinzufügen – das Template wird dank `@for` automatisch aktualisiert.
 
 ## Eingebaute Validatoren nutzen
@@ -367,7 +367,7 @@ Das zweite Argument von `FormControl` kann entweder Validatoren oder das uns sch
 Welchen der beiden Wege wir verwenden, hängt davon ab, ob wir andere Optionen setzen wollen, z. B. `nonNullable`.
 In beiden Fällen können wir entweder einen einzigen Validator angeben oder ein Array von Validatorfunktionen notieren.
 
-Bitte beachten Sie, dass die Validatoren `required` und `email` direkt auf die Validatorfunktion referenzieren und deshalb ohne Funktionsklammern angegeben werden.
+Bitte beachte, dass die Validatoren `required` und `email` direkt auf die Validatorfunktion referenzieren und deshalb ohne Funktionsklammern angegeben werden.
 `minLength` und `maxLength` hingegen sind Factory-Funktionen, die erst nach dem Aufruf eine Validatorfunktion zurückgeben.
 Das klingt kompliziert, macht es aber erst möglich, Argumente an einen Validator zu übergeben.
 
@@ -465,8 +465,8 @@ submitForm() {
 }
 ```
 
-In der Praxis empfehlen wir Ihnen, `getRawValue()` zu verwenden.
-Falls Sie Controls zur Laufzeit deaktivieren möchten, kann es sinnvoll sein, `value` zu nutzen, um die deaktivierten Felder nicht zu berücksichtigen.
+In der Praxis empfehlen wir dir, `getRawValue()` zu verwenden.
+Falls du Controls zur Laufzeit deaktivieren möchtest, kann es sinnvoll sein, `value` zu nutzen, um die deaktivierten Felder nicht zu berücksichtigen.
 
 ## Formular zurücksetzen
 
@@ -515,14 +515,14 @@ this.registerForm.patchValue({
 });
 ```
 
-Wollen wir den Wert für ein einzelnes `FormControl` setzen, das nur einen String erfasst, ist die Bedeutung der beiden Methoden gleich. Wir empfehlen Ihnen, in diesem Fall `setValue()` zu verwenden.
+Wollen wir den Wert für ein einzelnes `FormControl` setzen, das nur einen String erfasst, ist die Bedeutung der beiden Methoden gleich. Wir empfehlen dir, in diesem Fall `setValue()` zu verwenden.
 Der Unterschied ist nur bei `FormGroup`, `FormArray` und `FormRecord` interessant.
 
 ## Änderungen überwachen
 
-Stellen Sie sich einmal einen komplexen Anwendungsfall vor:
-Sie möchten anhand der Formulareingaben Berechnungen durchführen und die Ergebnisse live anzeigen.
-Abstrakt formuliert möchten Sie also Änderungen an den Formularwerten überwachen und mit Aktionen darauf reagieren.
+Stell dir einmal einen komplexen Anwendungsfall vor:
+Du möchtest anhand der Formulareingaben Berechnungen durchführen und die Ergebnisse live anzeigen.
+Abstrakt formuliert möchtest du also Änderungen an den Formularwerten überwachen und mit Aktionen darauf reagieren.
 Die Bezeichnung *Reactive Forms* kommt nicht von ungefähr: Die reaktive Denkweise versteckt sich auch in unseren Formularelementen und erlaubt es uns, flexibel mit den Eingaben umzugehen.
 
 Jedes Control besitzt dafür zwei besondere Propertys: `valueChanges` und `statusChanges`.
