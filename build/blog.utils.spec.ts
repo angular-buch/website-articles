@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { extractFirstBigParagraph, makeLightBlogList } from './utils';
-import { BlogEntryFull } from './types';
+import { extractFirstBigParagraph, makeLightBlogList } from './blog.utils';
+import { BlogEntryFull } from './blog.types';
 
 describe('extractFirstBigParagraph', () => {
   it('should return empty string for empty input', () => {

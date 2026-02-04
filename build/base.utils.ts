@@ -87,13 +87,10 @@ export async function getEntryList<T extends EntryBase>(entriesFolder: string, m
   const entries: T[] = [];
 
   for (const entryDir of entryDirs) {
-    try {
-      const readmePath = `${entriesFolder}/${entryDir}/README.md`;
-      const readme = await readMarkdownFile(readmePath);
-      const entry = markdownToEntry<T>(readme, entryDir, markdownBaseUrl, entriesFolder);
-      entries.push(entry);
-
-    } catch (e: any) {}
+    const readmePath = `${entriesFolder}/${entryDir}/README.md`;
+    const readme = await readMarkdownFile(readmePath);
+    const entry = markdownToEntry<T>(readme, entryDir, markdownBaseUrl, entriesFolder);
+    entries.push(entry);
   }
 
   return entries.sort((a, b) => getSortKey(b).localeCompare(getSortKey(a)));

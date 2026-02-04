@@ -37,9 +37,6 @@ export function makeLightBlogList(fullList: BlogEntryFull[]): BlogEntry[] {
           published: entry.meta.published,
           language: entry.meta.language,
           header: entry.meta.header,
-          isUpdatePost: entry.meta.isUpdatePost,
-          hidden: entry.meta.hidden,
-          sticky: entry.meta.sticky
         },
       };
 
