@@ -14,8 +14,8 @@ Pull requests are welcome!
 ## Build
 
 ```bash
-cd build && npm install
-MARKDOWN_BASE_URL=https://website-articles.angular-buch.com/ npm run build
+git submodule update --init
+cd build && npm install && npm run build
 ```
 
-The `build/` folder is a [git subtree](https://github.com/angular-schule/website-articles-build) shared with [angular-schule/website-articles](https://github.com/angular-schule/website-articles).
+The `build/` folder is a [git submodule](https://github.com/angular-schule/website-articles-build) shared with [angular-schule/website-articles](https://github.com/angular-schule/website-articles).
