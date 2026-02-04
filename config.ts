@@ -11,3 +11,6 @@ export const DIST_FOLDER = './dist';
 
 /** Source folder for blog posts (relative to build folder) */
 export const BLOG_POSTS_FOLDER = '../blog';
+
+/** Source folder for material (relative to build folder) */
+export const MATERIAL_FOLDER = '../material';

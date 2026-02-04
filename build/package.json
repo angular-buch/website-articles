@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:blog",
+    "build": "npm run build:init && npm run build:blog && npm run build:material",
+    "build:init": "ts-node --project tsconfig.json build-init",
     "build:blog": "ts-node --project tsconfig.json build-blog",
-    "watch": "nodemon --watch ../blog --ignore 'dist/*' --ignore 'node_modules/*' --delay 2000ms -e md,jpg,png,svg --exec 'npm run build:blog'",
+    "build:material": "ts-node --project tsconfig.json build-material",
+    "watch": "nodemon --watch ../blog --watch ../material --ignore 'dist/*' --ignore 'node_modules/*' --delay 2000ms -e md,jpg,png,svg --exec 'npm run build'",
     "test": "vitest run",
     "test:watch": "vitest"
   },
