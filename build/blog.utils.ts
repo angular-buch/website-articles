@@ -1,4 +1,4 @@
-import { BlogEntryFull, BlogEntry } from './types';
+import { BlogEntry, BlogEntryFull } from './blog.types';
 
 export function extractFirstBigParagraph(html: string): string {
   if (!html) {
@@ -21,6 +21,8 @@ export function extractFirstBigParagraph(html: string): string {
   return result;
 }
 
+
+
 export function makeLightBlogList(fullList: BlogEntryFull[]): BlogEntry[] {
   return fullList
     .filter(entry => !entry.meta.hidden)
@@ -35,7 +37,9 @@ export function makeLightBlogList(fullList: BlogEntryFull[]): BlogEntry[] {
           published: entry.meta.published,
           language: entry.meta.language,
           header: entry.meta.header,
-          isUpdatePost: entry.meta.isUpdatePost
+          isUpdatePost: entry.meta.isUpdatePost,
+          hidden: entry.meta.hidden,
+          sticky: entry.meta.sticky
         },
       };
 
