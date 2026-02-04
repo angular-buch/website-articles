@@ -1,6 +1,5 @@
 import { EntryBase, EntryMetaBase } from "./base.types";
 
-/** BLOG TYPES */
 export interface BlogEntryMeta extends EntryMetaBase {
   isUpdatePost?: boolean;
   author: string;

@@ -4,6 +4,7 @@ import { BlogEntryFull } from './blog.types';
 import { copyEntriesToDist, getEntryList } from './base.utils';
 import { makeLightBlogList } from './blog.utils';
 
+/** CONFIG */
 const MARKDOWN_BASE_URL = 'https://website-articles.angular-buch.com/';
 const DIST_FOLDER = './dist';
 const BLOG_POSTS_FOLDER = '../blog';
