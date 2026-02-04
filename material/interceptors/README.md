@@ -23,7 +23,7 @@ sticky: false
 Der `HttpClient` bietet ein weiteres nützliches Feature für die Arbeit mit Serverschnittstellen: *Interceptors*.
 Interceptors fungieren als Middleware für die gesamte HTTP-Kommunikation.
 Das bedeutet, dass ein Interceptor für alle HTTP-Abfragen und -Antworten ausgeführt wird und damit an globaler Stelle Entscheidungen und Umwandlungen vornehmen kann.
-Mithilfe von Interceptors können wir zum Beispiel zusätzliche HTTP-Header setzen, Fehler abfangen oder Funktionen ausführen, ohne sie für jeden HTTP-Aufruf separat implementieren zu müssen.
+Mithilfe von Interceptors kannst du zum Beispiel zusätzliche HTTP-Header setzen, Fehler abfangen oder Funktionen ausführen, ohne sie für jeden HTTP-Aufruf separat implementieren zu müssen.
 
 Ein Interceptor wird global installiert und kann für jeden HTTP-Request und die Response entscheiden, ob und wie sie behandelt werden.
 Diese Behandlung kann unter anderem sein:
@@ -36,7 +36,7 @@ Diese Behandlung kann unter anderem sein:
 
 ## Funktionsweise der Interceptors
 
-Binden wir einen Interceptor in die Anwendung ein, so wird er bei jedem HTTP-Request aktiv:
+Bindest du einen Interceptor in die Anwendung ein, so wird er bei jedem HTTP-Request aktiv:
 Der Request läuft zunächst durch den Interceptor und kann dort verändert werden.
 Anschließend wird der Request über das Netzwerk zum Server übermittelt.
 Die Antwort vom Server wird ebenfalls im Interceptor verarbeitet, bevor sie beim Aufrufenden eintrifft.
@@ -49,10 +49,10 @@ Bei einem HTTP-Request werden die Interceptors von vorn nach hinten abgearbeitet
 
 ## Interceptors anlegen
 
-Interceptors werden in der Regel als einfach Funktion implementiert.
+Interceptors werden in der Regel als einfache Funktion implementiert.
 Angular stellt dafür den Typ `HttpInterceptorFn` bereit.
-Wir erhalten den Request und eine Funktion vom Typ `HttpHandlerFn`, an die wir den veränderten Request übergeben.
-Wollen wir Services anfordern, können wir die Funktion `inject()` nutzen, da der Interceptor stets in einem Injection Context ausgeführt wird.
+Du erhältst den Request und eine Funktion vom Typ `HttpHandlerFn`, an die du den veränderten Request übergibst.
+Wenn du Services anfordern möchtest, kannst du die Funktion `inject()` nutzen, da der Interceptor stets in einem Injection Context ausgeführt wird.
 
 ```typescript
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -81,14 +81,14 @@ export const appConfig: ApplicationConfig = {
 ## Den Request manipulieren
 
 Die Interceptor-Funktion wird für jeden ausgehenden HTTP-Request ausgeführt.
-Bevor wir den Request auf die Reise schicken, können wir den Inhalt manipulieren.
-Zum Beispiel können wir einen Interceptor entwickeln, der bestimmte Headerfelder in jeden Request einfügt.
+Bevor du den Request auf die Reise schickst, kannst du den Inhalt manipulieren.
+Zum Beispiel kannst du einen Interceptor entwickeln, der bestimmte Headerfelder in jeden Request einfügt.
 
-Dafür müssen wir den originalen Request zunächst klonen.
-Dieser Schritt ist wichtig, denn das Request-Objekt ist unveränderlich: Wir können es nicht direkt manipulieren, sondern müssen immer eine Kopie mit den Änderungen erzeugen.
-Wir verwenden dazu die Methode `clone()` und übergeben direkt die gewünschten Änderungen:
-Mit der Eigenschaft `setHeaders` können wir neue HTTP-Headerfelder hinzufügen.
-Zum Schluss rufen wir `next()` auf und übermitteln den neuen, veränderten Request an den nächsten HTTP-Handler.
+Dafür musst du den originalen Request zunächst klonen.
+Dieser Schritt ist wichtig, denn das Request-Objekt ist unveränderlich: Du kannst es nicht direkt manipulieren, sondern musst immer eine Kopie mit den Änderungen erzeugen.
+Verwende dazu die Methode `clone()` und übergib direkt die gewünschten Änderungen:
+Mit der Eigenschaft `setHeaders` kannst du neue HTTP-Headerfelder hinzufügen.
+Zum Schluss rufst du `next()` auf und übermittelst den neuen, veränderten Request an den nächsten HTTP-Handler.
 
 ```typescript
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -108,11 +108,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 ## Die Response verarbeiten
 
 Jeder Interceptor gibt ein Observable zurück: Es verarbeitet den Request und gibt die HTTP-Antworten aus, die vom Server eintreffen.
-Wir können dieses Observable nutzen, um mit den eintreffenden Daten zu arbeiten.
-Zum Beispiel können wir auf diese Weise Fehler abfangen, die Antworten loggen oder sogar den Inhalt manipulieren.
+Du kannst dieses Observable nutzen, um mit den eintreffenden Daten zu arbeiten.
+Zum Beispiel kannst du auf diese Weise Fehler abfangen, die Antworten loggen oder sogar den Inhalt manipulieren.
 
-Um alle eingehenden Responses zu loggen, können wir den Operator `tap()` verwenden.
-Er lässt den Inhalt des Observables unverändert, und wir können sowohl die erfolgreiche Serverantwort als auch fehlgeschlagene Requests auf der Konsole ausgeben.
+Um alle eingehenden Responses zu loggen, kannst du den Operator `tap()` verwenden.
+Er lässt den Inhalt des Observables unverändert, und du kannst sowohl die erfolgreiche Serverantwort als auch fehlgeschlagene Requests auf der Konsole ausgeben.
 
 ```typescript
 import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
@@ -138,13 +138,13 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 
 > **Wichtig:** Das HTTP-Observable muss completen!
 > Die HTTP-Kommunikation über die Interceptors wird mithilfe von Observables realisiert.
-> Es ist wichtig, dass das Observable, das wir aus dem Interceptor zurückgeben, immer completet wird.
+> Es ist wichtig, dass das Observable, das du aus dem Interceptor zurückgibst, immer completet wird.
 > Ist der Datenstrom nie zu Ende, so wird auch der ursprüngliche Aufruf des `HttpClient` niemals beendet.
 
 ## Interceptors einbinden
 
 Interceptors werden über die Dependency Injection von Angular als Providers bereitgestellt.
-Damit der `HttpClient` weiß, welche Interceptors ausgeführt werden sollen, nutzen wir die Funktion `provideHttpClient()` zusammen mit `withInterceptors()`.
+Damit der `HttpClient` weiß, welche Interceptors ausgeführt werden sollen, nutzt du die Funktion `provideHttpClient()` zusammen mit `withInterceptors()`.
 
 ```typescript
 // app.config.ts
@@ -189,8 +189,8 @@ Egal ob du eine unternehmensinterne oder eine öffentliche Webanwendung entwicke
 In vielen Fällen benötigt die Anwendung einen Login, um Authentifizierung und Autorisierung zu realisieren.
 
 In der Regel wird dieser Vorgang durch den Austausch von Authentifizierungstokens realisiert.
-Nach dem Login senden wir mit jedem Request an die Web-API ein Access Token, das die Berechtigung der bedienenden Person bestätigt.
-Dies ist ein klassischer Anwendungsfall für einen Interceptor, denn er ermöglicht es uns, das Token automatisch mit jedem Request einzufügen.
+Nach dem Login senden wir mit jedem Request an die Web-API ein Access Token, das die Berechtigung der nutzenden Person bestätigt.
+Dies ist ein klassischer Anwendungsfall für einen Interceptor, denn er ermöglicht es, das Token automatisch mit jedem Request einzufügen.
 
 Wir möchten dir an dieser Stelle dazu raten, eine Authentifizierungslösung nie selbst zu entwickeln.
 Das Risiko, dabei einen Fehler zu machen, ist sehr hoch, und selbst wenn du Erfahrung in diesem Bereich hast, solltest du das Rad nicht neu erfinden.
@@ -227,7 +227,7 @@ Durch den zusätzlichen Schritt und den flüchtigen Authorization Code kann sich
 
 Um den empfohlenen Authorization Code Flow fehlerfrei zu implementieren, ist es notwendig, die Spezifikationen sehr genau zu studieren.
 Damit das Fehlerrisiko gering bleibt, solltest du eine etablierte Bibliothek verwenden, um die Datenflüsse für die Autorisierung und Authentifizierung korrekt abzubilden.
-Für Angular möchten wir dir die beiden folgenden Bibliotheken empfehlen:
+Für Angular möchten wir die beiden folgenden Bibliotheken empfehlen:
 
 - [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
 - [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc)
@@ -236,7 +236,7 @@ Beide sind von der OpenID Foundation zertifiziert und bieten komfortable Schnitt
 
 ## Praxisbeispiel: API-Aufrufe mit Credentials anreichern
 
-Um sicherzustellen, dass die bedienende Person berechtigt ist, Daten von der API zu lesen und später auch zu bearbeiten, soll eine Authentifizierung mit jedem Request erfolgen.
+Um sicherzustellen, dass die nutzende Person berechtigt ist, Daten von der API zu lesen und später auch zu bearbeiten, soll eine Authentifizierung mit jedem Request erfolgen.
 Wir wollen einen Interceptor implementieren, der ein Token an die Web-API übermittelt.
 
 Die Authentifizierungsverfahren können dabei ganz unterschiedlich ausfallen, unter anderem:
@@ -250,7 +250,7 @@ Eines haben aber alle Methoden gemeinsam: Sie erfordern, dass spezielle Informat
 
 ### Service zur Authentifizierung
 
-Um mit jedem Request über einen Interceptor entsprechende Informationen mitzusenden, benötigen wir zunächst eine zentrale Stelle unserer Anwendung, die die Authentifizierung vollzieht und Informationen über den aktuellen Status ausgibt.
+Um mit jedem Request über einen Interceptor entsprechende Informationen mitzusenden, benötigen wir zunächst eine zentrale Stelle in der Anwendung, die die Authentifizierung vollzieht und Informationen über den aktuellen Status ausgibt.
 
 Hierfür wollen wir einen eigenen Service implementieren.
 Dieser Ansatz ist vergleichbar mit etablierten Bibliotheken.
@@ -321,11 +321,11 @@ Liefert der `AuthService` im Property `isAuthenticated` den Wert `true`, wollen 
 Wir verwenden die Methode `clone()` und setzen den Header `Authorization`.
 Danach übergeben wir den Request an den Handler, damit er zum nächsten Interceptor bzw. zum Server gesendet wird.
 Falls `isAuthenticated` den Wert `false` besitzt, reichen wir den originalen Request unverändert weiter.
-Das Token wird also im Header übermittelt, falls wir authentifiziert sind.
+Das Token wird also im Header übermittelt, falls eine Authentifizierung vorliegt.
 
 ### Den Interceptor registrieren
 
-Bevor der Auth-Interceptor genutzt werden kann, müssen wir ihn noch registrieren:
+Bevor der Auth-Interceptor genutzt werden kann, muss er noch registriert werden:
 
 ```typescript
 // app.config.ts
@@ -345,7 +345,7 @@ export const appConfig: ApplicationConfig = {
 ## Was haben wir gelernt?
 
 - Interceptors modifizieren HTTP-Anfragen auf globaler Ebene und requestübergreifend.
-- Mit Interceptors können wir auch die Antworten vom Server verarbeiten, bevor sie in unserem Service eintreffen.
+- Mit Interceptors lassen sich auch die Antworten vom Server verarbeiten, bevor sie im Service eintreffen.
 - Ein funktionaler Interceptor ist eine Funktion vom Typ `HttpInterceptorFn`, die den Request und eine Handler-Funktion erhält.
 - Interceptors werden mit `provideHttpClient(withInterceptors([...]))` registriert.
 - Mehrere Interceptors werden beim Request nach dem Muster A → B → C abgearbeitet. Bei der Serverantwort werden die Observables in umgekehrter Reihenfolge durchlaufen (C → B → A).
