@@ -1,38 +1,26 @@
-import { copy, remove, writeJson, mkdirp } from 'fs-extra';
+import { copy, remove, mkdirp, writeJson } from 'fs-extra';
 
-import { buildConfig } from './config';
-import { BlogService } from './blog.service';
-import { makeLightBlogList } from './utils';
+import { BlogEntryFull } from './blog.types';
+import { copyEntriesToDist, getEntryList } from './base.utils';
+import { makeLightBlogList } from './blog.utils';
+
+const MARKDOWN_BASE_URL = 'https://website-articles.angular-buch.com/';
+const DIST_FOLDER = './dist';
+const BLOG_POSTS_FOLDER = '../blog';
 
 (async () => {
-  const blogService = new BlogService(buildConfig);
-
   // empty dist folder (for local builds)
-  await remove(buildConfig.distFolder);
-  await mkdirp(buildConfig.distFolder);
+  await remove(DIST_FOLDER);
+  await mkdirp(DIST_FOLDER);
 
   // copy static index.html
-  await copy('../index.html', buildConfig.distFolder + '/index.html');
+  await copy('../index.html', DIST_FOLDER + '/index.html');
 
   // generate light blog list
-  const blogList = await blogService.getBlogList();
-  const blogListLight = makeLightBlogList(blogList);
-  await writeJson(buildConfig.distFolder + '/bloglist.json', blogListLight);
+  const entryList = await getEntryList<BlogEntryFull>(BLOG_POSTS_FOLDER, MARKDOWN_BASE_URL);
+  const blogListLight = makeLightBlogList(entryList);
+  await writeJson(DIST_FOLDER + '/bloglist.json', blogListLight);
 
   // replace README with entry.json for all blog posts
-  await Promise.all(blogList.map(async (entry) => {
-    try {
-      const entryDistFolder = `${buildConfig.distFolder}/${entry.slug}`;
-
-      await mkdirp(entryDistFolder);
-      await copy(buildConfig.blogPostsFolder + '/' + entry.slug, entryDistFolder);
-      await remove(`${entryDistFolder}/README.md`);
-
-      const entryJsonPath = `${entryDistFolder}/entry.json`;
-      await writeJson(entryJsonPath, entry);
-      console.log('Generated post file:', entryJsonPath);
-    } catch (error: any) {
-      console.error(`Failed to process ${entry.slug}:`, error.message);
-    }
-  }));
+  await copyEntriesToDist(entryList, BLOG_POSTS_FOLDER, DIST_FOLDER);
 })();

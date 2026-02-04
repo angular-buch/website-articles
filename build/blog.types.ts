@@ -1,11 +1,12 @@
-export interface BlogEntryMeta {
-  title: string;
+import { EntryBase, EntryMetaBase } from "./base.types";
+
+/** BLOG TYPES */
+export interface BlogEntryMeta extends EntryMetaBase {
   isUpdatePost?: boolean;
   author: string;
   author2?: string;
   mail: string;
   mail2?: string;
-  published: string;
   language: string;
   header: {
     url: string;
@@ -14,14 +15,11 @@ export interface BlogEntryMeta {
   };
 }
 
-export interface BlogEntry {
-  slug: string;
-  html: string;
-  meta: BlogEntryMeta
+export interface BlogEntry extends EntryBase {
+  meta: BlogEntryMeta;
 }
 
 export interface BlogEntryFullMeta extends BlogEntryMeta {
-  hidden?: boolean;
   bio?: string;
   bio2?: string;
   lastModified?: string;
@@ -31,6 +29,5 @@ export interface BlogEntryFullMeta extends BlogEntryMeta {
 }
 
 export interface BlogEntryFull extends BlogEntry {
-  error?: string;
   meta: BlogEntryFullMeta;
 }
