@@ -10,6 +10,7 @@ function stripHtmlTags(html: string): string {
 /**
  * Extract the first "big" paragraph from HTML content.
  * A paragraph is considered "big" if its TEXT content (not HTML) is > 100 chars.
+ * Falls back to first paragraph if no big paragraph exists.
  */
 export function extractFirstBigParagraph(html: string): string {
   if (!html) {
@@ -26,7 +27,9 @@ export function extractFirstBigParagraph(html: string): string {
   }
 
   // Find first paragraph where TEXT content (not HTML) is > 100 chars
-  const paragraph = matches.find(m => m && stripHtmlTags(m).length > 100) || '';
+  // Fall back to first paragraph if none is big enough
+  const bigParagraph = matches.find(m => m && stripHtmlTags(m).length > 100);
+  const paragraph = bigParagraph || matches[0] || '';
   // strip anchor tags but retain link text
   const result = paragraph.replace(/<a\s.*?>(.*?)<\/a>/g, '$1');
 

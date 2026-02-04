@@ -718,6 +718,34 @@ title: Test
       expect(result.html).toContain(`src="${baseUrl}second.jpg"`);
       expect(result.html).toContain('src="https://external.com/third.jpg"');
     });
+
+    it('should transform single-quoted src attributes', () => {
+      const input = `---
+title: Test
+---
+
+<img src='photo.jpg' alt='Photo'>
+`;
+      const parser = new JekyllMarkdownParser(baseUrl);
+      const result = parser.parse(input);
+
+      expect(result.html).toContain(`src='${baseUrl}photo.jpg'`);
+      expect(result.html).toContain("alt='Photo'");
+    });
+
+    it('should NOT transform single-quoted absolute URLs', () => {
+      const input = `---
+title: Test
+---
+
+<img src='https://example.com/external.png' alt='External'>
+`;
+      const parser = new JekyllMarkdownParser(baseUrl);
+      const result = parser.parse(input);
+
+      expect(result.html).toContain("src='https://example.com/external.png'");
+      expect(result.html).not.toContain(baseUrl);
+    });
   });
 
   describe('HTML pass-through (trusted content)', () => {

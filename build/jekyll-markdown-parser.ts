@@ -89,12 +89,13 @@ export class JekyllMarkdownParser {
   }
 
   // Transform relative paths in raw HTML <img> tags to absolute URLs
+  // Supports both double quotes (src="...") and single quotes (src='...')
   private _transformRelativeImagePaths(html: string): string {
-    return html.replace(/<img([^>]*)\ssrc="([^"]+)"/g, (match, attrs, src) => {
+    return html.replace(/<img([^>]*)\ssrc=(["'])([^"']+)\2/g, (match, attrs, quote, src) => {
       if (this._isAbsoluteUrl(src)) {
         return match;
       }
-      return `<img${attrs} src="${this.baseUrl}${this._normalizeRelativeUrl(src)}"`;
+      return `<img${attrs} src=${quote}${this.baseUrl}${this._normalizeRelativeUrl(src)}${quote}`;
     });
   }
 

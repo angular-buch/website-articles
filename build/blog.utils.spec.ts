@@ -17,9 +17,9 @@ describe('extractFirstBigParagraph', () => {
     expect(extractFirstBigParagraph(html)).toBe('');
   });
 
-  it('should return empty string when all paragraphs are too short', () => {
+  it('should return first paragraph when all paragraphs are too short (fallback)', () => {
     const html = '<p>Short</p><p>Also short</p>';
-    expect(extractFirstBigParagraph(html)).toBe('');
+    expect(extractFirstBigParagraph(html)).toBe('<p>Short</p>');
   });
 
   it('should return first paragraph longer than 100 characters', () => {
@@ -80,7 +80,8 @@ to meet the extraction requirement.</p>`;
     const exactly100TextChars = '<p>' + 'x'.repeat(100) + '</p>'; // 100 text chars
     const over100TextChars = '<p>' + 'x'.repeat(101) + '</p>'; // 101 text chars
 
-    expect(extractFirstBigParagraph(exactly100TextChars)).toBe('');
+    // exactly 100 is NOT > 100, so falls back to first paragraph
+    expect(extractFirstBigParagraph(exactly100TextChars)).toBe(exactly100TextChars);
     expect(extractFirstBigParagraph(over100TextChars)).toBe(over100TextChars);
   });
 
@@ -88,8 +89,8 @@ to meet the extraction requirement.</p>`;
     // A paragraph with lots of HTML attributes but short text
     const shortTextLongHtml = '<p class="very-long-class-name-that-would-exceed-100-chars-if-counted" id="another-long-id" data-test="more-attributes">Short text</p>';
 
-    // This has < 100 text chars, so should return empty
-    expect(extractFirstBigParagraph(shortTextLongHtml)).toBe('');
+    // This has < 100 text chars, but falls back to first paragraph
+    expect(extractFirstBigParagraph(shortTextLongHtml)).toBe(shortTextLongHtml);
   });
 
   it('should count nested HTML tags text content only', () => {
@@ -242,6 +243,24 @@ describe('makeLightBlogList', () => {
     const result2 = makeLightBlogList(entriesWithMail2Only);
     expect(result2[0].meta.author2).toBeUndefined();
     expect(result2[0].meta.mail2).toBe('author2@test.com');
+  });
+
+  it('should include isUpdatePost if present', () => {
+    const entries: BlogEntryFull[] = [
+      createMockEntry({
+        meta: { ...createMockEntry().meta, isUpdatePost: true },
+      }),
+    ];
+
+    const result = makeLightBlogList(entries);
+    expect(result[0].meta.isUpdatePost).toBe(true);
+  });
+
+  it('should not include isUpdatePost if not present in source', () => {
+    const entries: BlogEntryFull[] = [createMockEntry()];
+
+    const result = makeLightBlogList(entries);
+    expect(result[0].meta.isUpdatePost).toBeUndefined();
   });
 
   it('should return empty array for empty input', () => {
