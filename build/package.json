@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "ts-node --project tsconfig.json build",
-    "watch": "nodemon --watch ../blog --ignore 'dist/*' --ignore 'node_modules/*' --delay 2000ms -e md,jpg,png,svg --exec 'npm run build'"
+    "build": "npm run build:blog",
+    "build:blog": "ts-node --project tsconfig.json build-blog",
+    "watch": "nodemon --watch ../blog --ignore 'dist/*' --ignore 'node_modules/*' --delay 2000ms -e md,jpg,png,svg --exec 'npm run build:blog'"
   },
   "author": "",
   "license": "ISC",

@@ -1,4 +1,4 @@
-name: Build blog data
+name: Build article data
 
 on:
   push:
