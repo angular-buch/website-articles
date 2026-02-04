@@ -1,11 +1,8 @@
 import { load } from 'js-yaml';
-import { marked } from 'marked';
+import { Marked, Renderer, Tokens } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
 import hljs from 'highlight.js';
-
-// Synchronous highlighting with highlight.js
-marked.setOptions({
-  highlight: code => hljs.highlightAuto(code).value
-});
 
 /**
  * ============================================================================
@@ -40,11 +37,34 @@ marked.setOptions({
  *
  * 4. CHANGE: Converted from CommonJS module to ES6 class with constructor
  *    for baseUrl injection.
+ *
+ * 5. UPGRADE: marked v4 → v17 migration
+ *    - Using Marked class instance instead of global marked
+ *    - marked-highlight extension for syntax highlighting
+ *    - marked-gfm-heading-id extension for heading IDs
+ *    - Token-based renderer API (token object instead of separate params)
  * ============================================================================
  */
 export class JekyllMarkdownParser {
 
-  constructor(private baseUrl: string) {}
+  private marked: Marked;
+
+  constructor(private baseUrl: string) {
+    this.marked = this.createMarkedInstance();
+  }
+
+  private createMarkedInstance(): Marked {
+    const renderer = new Renderer();
+    renderer.image = this._imageRenderer.bind(this);
+
+    return new Marked(
+      markedHighlight({
+        highlight: (code) => hljs.highlightAuto(code).value
+      }),
+      gfmHeadingId(),
+      { renderer }
+    );
+  }
 
   /**
    * Check if a URL is absolute (should not be transformed).
@@ -64,25 +84,34 @@ export class JekyllMarkdownParser {
   }
 
   /**
-   * Custom image renderer that transforms relative URLs to absolute URLs.
-   *
-   * NOTE: marked already escapes special characters in alt/title text before
-   * passing them to this renderer. We do NOT need to escape again.
-   * - `"` is already `&quot;`
-   * - `<` is already `&lt;`
-   * - `&` is already `&amp;`
+   * Escape special HTML characters in attribute values.
    */
-  private _imageRenderer(href: string, title: string | null, text: string) {
-    let src = href;
+  private _escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
 
-    if (!this._isAbsoluteUrl(href)) {
-      src = this.baseUrl + this._normalizeRelativeUrl(href);
+  /**
+   * Custom image renderer that transforms relative URLs to absolute URLs.
+   * marked v17 uses token-based API: renderer receives a token object.
+   *
+   * NOTE: In marked v17, the token contains RAW unescaped text.
+   * We MUST escape special characters to prevent broken HTML.
+   */
+  private _imageRenderer(token: Tokens.Image): string {
+    let src = token.href;
+
+    if (!this._isAbsoluteUrl(token.href)) {
+      src = this.baseUrl + this._normalizeRelativeUrl(token.href);
     }
 
-    // text and title are already escaped by marked
-    let out = `<img src="${src}" alt="${text}"`;
-    if (title) {
-      out += ` title="${title}"`;
+    const escapedAlt = this._escapeHtml(token.text);
+    let out = `<img src="${src}" alt="${escapedAlt}"`;
+    if (token.title) {
+      out += ` title="${this._escapeHtml(token.title)}"`;
     }
     out += '>';
     return out;
@@ -97,12 +126,6 @@ export class JekyllMarkdownParser {
       }
       return `<img${attrs} src=${quote}${this.baseUrl}${this._normalizeRelativeUrl(src)}${quote}`;
     });
-  }
-
-  private getMarkdownRenderer() {
-    const renderer = new marked.Renderer();
-    renderer.image = this._imageRenderer.bind(this);
-    return renderer;
   }
 
   private separate(jekyllMarkdown: string): {
@@ -132,8 +155,7 @@ export class JekyllMarkdownParser {
   }
 
   private compileMarkdown(markdown: string): string {
-    const renderer = this.getMarkdownRenderer();
-    const html = marked(markdown, { renderer: renderer });
+    const html = this.marked.parse(markdown) as string;
     return this._transformRelativeImagePaths(html);
   }
 

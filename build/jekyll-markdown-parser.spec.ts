@@ -1,6 +1,22 @@
 import { describe, it, expect } from 'vitest';
-import { marked } from 'marked';
+import { Marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+import hljs from 'highlight.js';
 import { JekyllMarkdownParser } from './jekyll-markdown-parser';
+
+/**
+ * Create a Marked instance with the same extensions as JekyllMarkdownParser.
+ * Used for "raw marked" baseline tests.
+ */
+function createConfiguredMarked(): Marked {
+  return new Marked(
+    markedHighlight({
+      highlight: (code) => hljs.highlightAuto(code).value
+    }),
+    gfmHeadingId()
+  );
+}
 
 /**
  * =============================================================================
@@ -24,10 +40,12 @@ import { JekyllMarkdownParser } from './jekyll-markdown-parser';
  */
 
 /**
- * EXPECTED HTML OUTPUT - Generated with marked v4.3.0
- * ---------------------------------------------------
+ * EXPECTED HTML OUTPUT - marked v17
+ * ----------------------------------
  * This is the EXACT expected output. Every character must match!
- * If marked upgrade changes anything, this test will fail.
+ *
+ * BREAKING CHANGE from v4: marked v17 does NOT add newlines after </code></pre>.
+ * This is acceptable and documented here.
  */
 const EXPECTED_HTML_WITH_IMAGE_TRANSFORM = `<h1 id="main-heading">Main Heading</h1>
 <p>This is a paragraph with <strong>bold text</strong> and <em>italic text</em>.</p>
@@ -42,13 +60,11 @@ const EXPECTED_HTML_WITH_IMAGE_TRANSFORM = `<h1 id="main-heading">Main Heading</
 export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppComponent</span> </span>{
   title = <span class="hljs-string">&#x27;test&#x27;</span>;
 }
-</code></pre>
-<h3 id="html-template">HTML Template</h3>
+</code></pre><h3 id="html-template">HTML Template</h3>
 <pre><code class="language-html">&lt;div <span class="hljs-keyword">class</span>=&quot;<span class="hljs-symbol">container</span>&quot;&gt;
   &lt;<span class="hljs-symbol">p</span>&gt;<span class="hljs-symbol">Hello</span> <span class="hljs-symbol">World</span>&lt;/<span class="hljs-symbol">p</span>&gt;
 &lt;/<span class="hljs-symbol">div</span>&gt;
-</code></pre>
-<h2 id="images">Images</h2>
+</code></pre><h2 id="images">Images</h2>
 <p>Local image: <img src="https://example.com/blog/my-post/screenshot.png" alt="Screenshot"></p>
 <p>Image with title: <img src="https://example.com/blog/my-post/logo.png" alt="Logo" title="Company Logo"></p>
 <p>External image: <img src="https://example.com/external.png" alt="External"></p>
@@ -82,9 +98,12 @@ It spans multiple lines.</p>
 `;
 
 /**
- * EXPECTED RAW MARKED OUTPUT - Without our image transformations
- * --------------------------------------------------------------
- * This shows what marked produces BEFORE our modifications.
+ * EXPECTED RAW MARKED OUTPUT - marked v17 with extensions (no custom renderer)
+ * ----------------------------------------------------------------------------
+ * This shows what marked produces without our image URL transformation.
+ *
+ * BREAKING CHANGE from v4: marked v17 does NOT add newlines after </code></pre>.
+ * This is acceptable and documented here.
  */
 const EXPECTED_RAW_MARKED_HTML = `<h1 id="main-heading">Main Heading</h1>
 <p>This is a paragraph with <strong>bold text</strong> and <em>italic text</em>.</p>
@@ -99,13 +118,11 @@ const EXPECTED_RAW_MARKED_HTML = `<h1 id="main-heading">Main Heading</h1>
 export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AppComponent</span> </span>{
   title = <span class="hljs-string">&#x27;test&#x27;</span>;
 }
-</code></pre>
-<h3 id="html-template">HTML Template</h3>
+</code></pre><h3 id="html-template">HTML Template</h3>
 <pre><code class="language-html">&lt;div <span class="hljs-keyword">class</span>=&quot;<span class="hljs-symbol">container</span>&quot;&gt;
   &lt;<span class="hljs-symbol">p</span>&gt;<span class="hljs-symbol">Hello</span> <span class="hljs-symbol">World</span>&lt;/<span class="hljs-symbol">p</span>&gt;
 &lt;/<span class="hljs-symbol">div</span>&gt;
-</code></pre>
-<h2 id="images">Images</h2>
+</code></pre><h2 id="images">Images</h2>
 <p>Local image: <img src="screenshot.png" alt="Screenshot"></p>
 <p>Image with title: <img src="./logo.png" alt="Logo" title="Company Logo"></p>
 <p>External image: <img src="https://example.com/external.png" alt="External"></p>
@@ -244,19 +261,18 @@ function getMarkdownBody(jekyllMarkdown: string): string {
 
 /**
  * =============================================================================
- * RAW MARKED BEHAVIOR (without our modifications)
+ * CONFIGURED MARKED BEHAVIOR (with extensions, without our image transform)
  * =============================================================================
- * These tests document what marked does by itself. If these fail after a marked
- * upgrade, we know marked changed - not our code.
- *
- * NOTE: marked.setOptions() is already called in jekyll-markdown-parser.ts
- * when the module is imported. No need to configure it again here.
+ * These tests document what marked does with our configured extensions
+ * (gfmHeadingId, marked-highlight) but WITHOUT our custom image renderer.
+ * If these fail after a marked upgrade, we know marked changed - not our code.
  * =============================================================================
  */
-describe('Raw marked behavior (baseline)', () => {
+describe('Configured marked behavior (baseline)', () => {
+  const marked = createConfiguredMarked();
 
   it('should generate heading IDs automatically', () => {
-    const html = marked('# Hello World\n\n## Code Examples\n\n### Sub Section');
+    const html = marked.parse('# Hello World\n\n## Code Examples\n\n### Sub Section');
 
     expect(html).toContain('<h1 id="hello-world">Hello World</h1>');
     expect(html).toContain('<h2 id="code-examples">Code Examples</h2>');
@@ -264,7 +280,7 @@ describe('Raw marked behavior (baseline)', () => {
   });
 
   it('should handle special characters in heading IDs', () => {
-    const html = marked('## Über uns\n\n## FAQ & Hilfe\n\n## C++ Guide');
+    const html = marked.parse('## Über uns\n\n## FAQ & Hilfe\n\n## C++ Guide');
 
     expect(html).toContain('id="über-uns"');
     expect(html).toContain('id="faq--hilfe"');
@@ -272,40 +288,40 @@ describe('Raw marked behavior (baseline)', () => {
   });
 
   it('should apply syntax highlighting to code blocks', () => {
-    const html = marked('```typescript\nconst x = 1;\n```');
+    const html = marked.parse('```typescript\nconst x = 1;\n```');
 
     expect(html).toContain('<pre><code class="language-typescript">');
     expect(html).toContain('hljs-'); // highlight.js adds classes
   });
 
   it('should escape HTML in code blocks', () => {
-    const html = marked('```html\n<div class="test">Hello</div>\n```');
+    const html = marked.parse('```html\n<div class="test">Hello</div>\n```');
 
     expect(html).toContain('&lt;div');
     expect(html).toContain('&gt;');
   });
 
   it('should render inline code', () => {
-    const html = marked('Use `npm install` to install.');
+    const html = marked.parse('Use `npm install` to install.');
 
     expect(html).toContain('<code>npm install</code>');
   });
 
   it('should render bold and italic', () => {
-    const html = marked('This is **bold** and *italic*.');
+    const html = marked.parse('This is **bold** and *italic*.');
 
     expect(html).toContain('<strong>bold</strong>');
     expect(html).toContain('<em>italic</em>');
   });
 
   it('should render links', () => {
-    const html = marked('[Click here](https://example.com)');
+    const html = marked.parse('[Click here](https://example.com)');
 
     expect(html).toContain('<a href="https://example.com">Click here</a>');
   });
 
   it('should render blockquotes', () => {
-    const html = marked('> This is a quote\n> with **bold**');
+    const html = marked.parse('> This is a quote\n> with **bold**');
 
     expect(html).toContain('<blockquote>');
     expect(html).toContain('<strong>bold</strong>');
@@ -313,7 +329,7 @@ describe('Raw marked behavior (baseline)', () => {
   });
 
   it('should render unordered lists', () => {
-    const html = marked('- Item 1\n- Item 2\n- Item 3');
+    const html = marked.parse('- Item 1\n- Item 2\n- Item 3');
 
     expect(html).toContain('<ul>');
     expect(html).toContain('<li>Item 1</li>');
@@ -322,20 +338,20 @@ describe('Raw marked behavior (baseline)', () => {
   });
 
   it('should pass through raw HTML', () => {
-    const html = marked('<div class="custom">Content</div>\n\n<iframe src="x"></iframe>');
+    const html = marked.parse('<div class="custom">Content</div>\n\n<iframe src="x"></iframe>');
 
     expect(html).toContain('<div class="custom">Content</div>');
     expect(html).toContain('<iframe src="x"></iframe>');
   });
 
   it('should preserve HTML comments', () => {
-    const html = marked('<!-- comment -->\n\nText');
+    const html = marked.parse('<!-- comment -->\n\nText');
 
     expect(html).toContain('<!-- comment -->');
   });
 
   it('should render images with default src (no transformation)', () => {
-    const html = marked('![Alt](image.png "Title")');
+    const html = marked.parse('![Alt](image.png "Title")');
 
     // Default marked behavior: src is unchanged
     expect(html).toContain('src="image.png"');
@@ -344,9 +360,9 @@ describe('Raw marked behavior (baseline)', () => {
   });
 
   /**
-   * RAW MARKED CHARACTER-BY-CHARACTER TEST
-   * --------------------------------------
-   * This captures raw marked output WITHOUT our modifications.
+   * CONFIGURED MARKED CHARACTER-BY-CHARACTER TEST
+   * ---------------------------------------------
+   * This captures marked output WITH extensions but WITHOUT our image transform.
    * If this fails after a marked upgrade but JekyllMarkdownParser tests pass,
    * our code successfully compensated for marked changes.
    */
@@ -354,7 +370,7 @@ describe('Raw marked behavior (baseline)', () => {
     // Extract markdown body from COMPREHENSIVE_BLOG_POST (without YAML)
     const rawMarkdown = getMarkdownBody(COMPREHENSIVE_BLOG_POST);
 
-    const html = marked(rawMarkdown);
+    const html = marked.parse(rawMarkdown);
     expect(html).toBe(EXPECTED_RAW_MARKED_HTML);
   });
 });
