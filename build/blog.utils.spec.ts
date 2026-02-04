@@ -116,7 +116,7 @@ describe('makeLightBlogList', () => {
         title: 'Test Post',
         author: 'Test Author',
         mail: 'test@example.com',
-        published: '2024-01-01',
+        published: new Date('2024-01-01'),  // Must be Date, not string!
         language: 'en',
         header: { url: 'header.jpg', width: 800, height: 400 },
         'darken-header': false,
@@ -161,13 +161,14 @@ describe('makeLightBlogList', () => {
   });
 
   it('should include only required meta fields', () => {
+    const publishedDate = new Date('2024-01-01');
     const entries: BlogEntryFull[] = [
       createMockEntry({
         meta: {
           title: 'Test',
           author: 'Author',
           mail: 'mail@test.com',
-          published: '2024-01-01',
+          published: publishedDate,
           language: 'de',
           header: { url: 'img.jpg', width: 100, height: 50 },
           hidden: false,
@@ -186,7 +187,7 @@ describe('makeLightBlogList', () => {
     expect(meta.title).toBe('Test');
     expect(meta.author).toBe('Author');
     expect(meta.mail).toBe('mail@test.com');
-    expect(meta.published).toBe('2024-01-01');
+    expect(meta.published).toBe(publishedDate);  // Same Date object reference
     expect(meta.language).toBe('de');
     expect(meta.header).toEqual({ url: 'img.jpg', width: 100, height: 50 });
 
