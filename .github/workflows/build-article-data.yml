@@ -5,6 +5,7 @@ on:
     branches:
       - main
 env:
+  MARKDOWN_BASE_URL: https://website-articles.angular-buch.com/
   GITHUB_NAME: The Buildbot
   GITHUB_EMAIL: buildbot@angular2buch.de
   CNAME: website-articles.angular-buch.com
