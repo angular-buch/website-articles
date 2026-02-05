@@ -1,6 +1,7 @@
 ---
 title: 'Einführung in TypeScript'
 published: 2026-02-10
+lastModified: 2026-02-05
 hidden: true
 ---
 
