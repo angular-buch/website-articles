@@ -1,8 +1,8 @@
 ---
-title: 'Formulare mit Reactive Forms'
+title: '[WIP] Formulare mit Reactive Forms'
 published: 2026-02-10
 lastModified: 2026-02-05
-hidden: true
+hidden: false
 ---
 
 > **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
