@@ -1,3 +1,9 @@
+---
+title: 'Server-Side Rendering mit Angular'
+published: 2026-02-10
+hidden: true
+---
+
 > **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
 > Im Buch haben wir beim Anlegen des BookManager-Projekts bewusst die Option `--no-ssr` verwendet, um Server-Side Rendering zunächst zu deaktivieren.
 > SSR ist ein fortgeschrittenes Konzept, das nicht für jede Anwendung notwendig ist.
