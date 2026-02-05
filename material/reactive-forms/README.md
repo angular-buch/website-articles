@@ -1,20 +1,7 @@
 ---
 title: 'Formulare mit Reactive Forms'
-author: Angular Buch Team
-mail: team@angular-buch.com
 published: 2026-02-10
-lastModified: 2026-02-10
-keywords:
-  - Angular
-  - Forms
-  - Reactive Forms
-  - FormControl
-  - FormGroup
-  - FormArray
-  - Formulare
-  - Validierung
-language: de
-sticky: false
+hidden: true
 ---
 
 > **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
