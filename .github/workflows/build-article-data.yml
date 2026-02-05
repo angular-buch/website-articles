@@ -35,6 +35,5 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "$CNAME" > dist/CNAME
           npm install angular-cli-ghpages@2
-          npx angular-cli-ghpages --no-notfound --dir=dist --branch="$BRANCH" --name="$GITHUB_NAME" --email="$GITHUB_EMAIL"
+          npx angular-cli-ghpages --no-notfound --dir=dist --branch="$BRANCH" --cname="$CNAME" --name="$GITHUB_NAME" --email="$GITHUB_EMAIL"
