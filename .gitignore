@@ -2,3 +2,4 @@
 /.DS_Store
 .DS_Store
 *.psd
+.claude/settings.local.json

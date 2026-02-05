@@ -83,7 +83,7 @@ Somit benötigt ein Docker-Container nur unwesentlich mehr Ressourcen als ein na
 Software in einem Docker-Container läuft dadurch fast genauso schnell und mit fast gleichem Ressourcenverbrauch wie im nativen Betrieb.
 Sie können somit dutzende oder hunderte von Containern auf einem handelsüblichen Rechner betreiben.
 
-<img src="https://website-articles.angular-buch.com/2019-12-docker0-intro/docker-vm.png" alt="Docker-Virtualisierung" width="50%">  
+<img src="docker-vm.png" alt="Docker-Virtualisierung" width="50%">  
 <small>Quelle:
 [https://docs.docker.com/get-started/](https://docs.docker.com/get-started/)</small>
 
