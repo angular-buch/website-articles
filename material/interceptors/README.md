@@ -1,17 +1,7 @@
 ---
 title: 'Interceptors: HTTP-Requests abfangen und transformieren'
-author: Angular Buch Team
-mail: team@angular-buch.com
 published: 2026-02-10
-lastModified: 2026-02-10
-keywords:
-  - Angular
-  - HttpClient
-  - Interceptors
-  - HTTP
-  - httpResource
-language: de
-sticky: false
+hidden: true
 ---
 
 > **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
