@@ -20,11 +20,11 @@ Dies ist der 2. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
 Inhaltsverzeichnis:
 
-- [Konfiguration des Webservers](/blog/2019-12-docker1-simple-case#konfiguration-des-webservers)
-- [Das Dockerfile](/blog/2019-12-docker1-simple-case#das-dockerfile)
-- [Das Build-Skript](/blog/2019-12-docker1-simple-case#das-build-skript)
-- [Den Container starten](/blog/2019-12-docker1-simple-case#den-container-starten)
-- [Ausblick](/blog/2019-12-docker1-simple-case#ausblick)
+- [Konfiguration des Webservers](#konfiguration-des-webservers)
+- [Das Dockerfile](#das-dockerfile)
+- [Das Build-Skript](#das-build-skript)
+- [Den Container starten](#den-container-starten)
+- [Ausblick](#ausblick)
 
 > Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-1-Simple-Case).

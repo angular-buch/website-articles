@@ -16,16 +16,16 @@ Dies ist der Start unserer vierteiligen Artikelserie von unserem Gastautor Micha
 
 Inhaltsverzeichnis:
 
-- [Prinzipielles Deployment](/blog/2019-12-docker0-intro#prinzipielles-deployment)
-- [Problemstellung](/blog/2019-12-docker0-intro#problemstellung)
-- [Die Beispiel-App](/blog/2019-12-docker0-intro#die-beispiel-app)
-- [Grundsätzliches zu Docker](/blog/2019-12-docker0-intro#grundsaetzliches-zu-docker)
-  - [Images und Container](/blog/2019-12-docker0-intro#images-und-container)
-  - [Portabilität](/blog/2019-12-docker0-intro#portabilitaet)
-  - [Isoliert, schnell und ressourcenschonend](/blog/2019-12-docker0-intro#isoliert-schnell-und-ressourcenschonend)
-  - [Docker Registrys](/blog/2019-12-docker0-intro#docker-registrys)
-  - [Lösungsskizze](/blog/2019-12-docker0-intro#loesungsskizze)
-- [Ausblick](/blog/2019-12-docker0-intro#ausblick)
+- [Prinzipielles Deployment](#prinzipielles-deployment)
+- [Problemstellung](#problemstellung)
+- [Die Beispiel-App](#die-beispiel-app)
+- [Grundsätzliches zu Docker](#grundsaetzliches-zu-docker)
+  - [Images und Container](#images-und-container)
+  - [Portabilität](#portabilitaet)
+  - [Isoliert, schnell und ressourcenschonend](#isoliert-schnell-und-ressourcenschonend)
+  - [Docker Registrys](#docker-registrys)
+  - [Lösungsskizze](#loesungsskizze)
+- [Ausblick](#ausblick)
 
 Es ist soweit: Die Angular-App, die Sie Dank der zweiten Auflage des famosen Angular-Buchs erstellt haben, ist fertig!
 Die Unit- und End-to-End-Tests leuchten tiefgrün.
