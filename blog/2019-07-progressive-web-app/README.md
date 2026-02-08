@@ -27,7 +27,7 @@ Inhalt:
 
 * [Webanwendung vs. PWA vs. App](#webanwendung-vs-pwa-vs-app)
 * [Add to Homescreen](#add-to-homescreen)
-* [Offline-Funktionalität](#offline-funktionalit-t)
+* [Offline-Funktionalität](#offline-funktionalität)
 * [Push Notifications](#push-notifications)
 * [Zusammenfassung](#zusammenfassung)
 

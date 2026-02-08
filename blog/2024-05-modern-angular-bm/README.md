@@ -67,7 +67,7 @@ Zum Thema Server-Side Rendering mit Angular 17 haben wir einen separaten Artikel
   - [Observables in Signals konvertieren](#observables-in-signals-konvertieren)
   - [Signals in Observables konvertieren](#signals-in-observables-konvertieren)
 - [Signal-based Inputs](#signal-based-inputs)
-- [Router Input Bindings, Signals und RxJS](#Router-input-bindings-signals-und-rxjs)
+- [Router Input Bindings, Signals und RxJS](#router-input-bindings-signals-und-rxjs)
   - [Component Input Binding aktivieren](#component-input-binding-aktivieren)
   - [Kombination mit Signal Inputs](#kombination-mit-signal-inputs)
 - [Functional Outputs](#functional-outputs)

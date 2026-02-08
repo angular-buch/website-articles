@@ -19,12 +19,12 @@ Inhaltsverzeichnis:
 - [Prinzipielles Deployment](#prinzipielles-deployment)
 - [Problemstellung](#problemstellung)
 - [Die Beispiel-App](#die-beispiel-app)
-- [Grundsätzliches zu Docker](#grundsaetzliches-zu-docker)
+- [Grundsätzliches zu Docker](#grundsätzliches-zu-docker)
   - [Images und Container](#images-und-container)
-  - [Portabilität](#portabilitaet)
+  - [Portabilität](#portabilität)
   - [Isoliert, schnell und ressourcenschonend](#isoliert-schnell-und-ressourcenschonend)
   - [Docker Registrys](#docker-registrys)
-  - [Lösungsskizze](#loesungsskizze)
+  - [Lösungsskizze](#lösungsskizze)
 - [Ausblick](#ausblick)
 
 Es ist soweit: Die Angular-App, die Sie Dank der zweiten Auflage des famosen Angular-Buchs erstellt haben, ist fertig!

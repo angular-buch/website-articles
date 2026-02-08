@@ -18,15 +18,15 @@ Dies ist der letzte Teil unserer Artikelserie zu Angular und Docker.**
 
 Inhaltsverzeichnis:
 
-- [Interne und externe Abhängigkeiten](#abhaengigkeiten)
-- [Externe Abhängigkeiten handhaben](#externe-abhaengigkeiten-handhaben)
+- [Interne und externe Abhängigkeiten](#interne-und-externe-abhängigkeiten)
+- [Externe Abhängigkeiten handhaben](#externe-abhängigkeiten-handhaben)
 - [Docker To The Rescue](#docker-to-the-rescue)
 - [Multi-Stage Builds](#multi-stage-builds)
 - [Das Image bauen](#das-image-bauen)
 - [Vergleich](#vergleich)
-- [Grenzen der vorgestellten Lösung](#grenzen-der-vorgestellten-loesung)
+- [Grenzen der vorgestellten Lösung](#grenzen-der-vorgestellten-lösung)
 - [Fazit](#fazit)
-- [Rückblick](#rueckblick)
+- [Rückblick](#rückblick)
 
 > Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-3-Multi-Stage-Build).

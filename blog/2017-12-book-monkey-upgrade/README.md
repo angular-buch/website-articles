@@ -137,7 +137,7 @@ Hier sind in aller Kürze die notwendigen Änderungen:
 ## 5. RxJS Pipeable Operators verwenden
 
 Mit Angular 5 kommt das Konzept der Pipeable Operators in die Angular-Welt (auch bekannt unter dem alten Namen *Lettable Operators*).
-Über die neuen Operatoren haben wir im [Blogpost zu Angular 5](/blog/2017-12-angular5#rxjs-pipeable-operators) berichtet.
+Über die neuen Operatoren haben wir im [Blogpost zu Angular 5](/blog/2017-12-angular5#rxjs-pipeable-operators-ehemals-lettable) berichtet.
 
 * __[Introduce lettable RxJS operators](https://github.com/book-monkey2-build/iteration-7-i18n/commit/043a3d0bb509aea3b6d714fdda75f55d7283c842)__
 
