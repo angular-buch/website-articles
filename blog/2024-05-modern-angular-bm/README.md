@@ -48,6 +48,8 @@ Zum Thema Server-Side Rendering mit Angular 17 haben wir einen separaten Artikel
 - [Book Monkey v5: Server-Side Rendering mit Angular 17](/blog/2023-11-ssr-bm)
 
 
+**Inhaltsverzeichnis:**
+
 [[toc]]
 
 ## Die Ausgangsbasis

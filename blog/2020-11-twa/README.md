@@ -32,6 +32,8 @@ In diesem Blogpost wollen wir Ihnen zeigen, wie Sie Ihre PWA auf einfachem Weg i
 
 > **Zur Zeit gibt es noch keine Möglichkeit, PWAs in Apples App Store zu deployen.**
 
+Inhalt:
+
 [[toc]]
 
 ## Trusted Web Activities vs. Webview-Integration

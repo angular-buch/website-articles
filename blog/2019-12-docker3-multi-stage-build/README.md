@@ -16,6 +16,8 @@ Wie Sie Apps gleich im Container bauen und trotzdem schlanke Docker-Images erste
 Vermeiden Sie Risiken durch externe Abhängigkeiten!
 Dies ist der letzte Teil unserer Artikelserie zu Angular und Docker.**
 
+Inhaltsverzeichnis:
+
 [[toc]]
 
 > Sie finden den Code zum Artikel auf

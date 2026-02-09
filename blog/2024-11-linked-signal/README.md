@@ -26,14 +26,7 @@ In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktionie
 
 ## Inhalt
 
-* [Was ist ein Linked Signal?](#was-ist-ein-linked-signal)
-* [Grundlegende Nutzung von Linked Signal](#grundlegende-nutzung-von-linked-signal)
-* [Fortgeschrittene Szenarien für Linked Signals](#fortgeschrittene-szenarien-für-linked-signals)
-* [Linked Signal und andere Signals](#linked-signal-und-andere-signals)
-* [Best Practices für die Nutzung von Linked Signals](#best-practices-für-die-nutzung-von-linked-signals)
-* [Demo-Anwendung](#demo-anwendung)
-* [Fazit](#fazit)
-
+[[toc]]
 
 > **🇬🇧 This article is available in English language here: [Angular 19: Introducing LinkedSignal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
 

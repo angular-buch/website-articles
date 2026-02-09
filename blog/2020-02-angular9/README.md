@@ -25,6 +25,8 @@ Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Vers
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular Blog](https://blog.angular.io/23c97b63cfa3).
 
+**Inhalt**
+
 [[toc]]
 
 ## Update auf Angular 9

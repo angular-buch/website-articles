@@ -18,6 +18,8 @@ Wie Sie ein einziges Image zur Laufzeit an beliebige Umgebungen anpassen.
 Bleiben Sie auch ohne Code-Änderung flexibel!
 Dies ist der 3. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
+Inhaltsverzeichnis:
+
 [[toc]]
 
 Sie finden den Code zum Artikel auf
