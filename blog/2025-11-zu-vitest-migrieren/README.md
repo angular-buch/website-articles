@@ -22,30 +22,7 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
 
 > **🇬🇧 This article is available in English language here: [Vitest in Angular 21: What's new and how to migrate?](https://angular.schule/blog/2025-11-migrate-to-vitest)**
 
-## Inhalt
-
-- [Warum Angular Karma und Jasmine ersetzt](#warum-angular-karma-und-jasmine-ersetzt)
-- [Migrationsleitfaden: Von Karma/Jasmine zu Vitest](#migrationsleitfaden-von-karmajasmine-zu-vitest)
-  - [Manuelle Migrationsschritte](#manuelle-migrationsschritte)
-    - [1. Abhängigkeiten installieren](#1-abhängigkeiten-installieren)
-    - [2. `angular.json` aktualisieren](#2-angularjson-aktualisieren)
-    - [3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen](#3-eigene-karmaconfjskonfiguration-berücksichtigen)
-    - [4. Karma- und `test.ts`‑Dateien entfernen](#4-karma--und-testtsdateien-entfernen)
-    - [5. Browser‑Modus konfigurieren (optional)](#5-browsermodus-konfigurieren-optional)
-  - [Automatisches Test‑Refactoring per Schematic](#automatisches-testrefactoring-per-schematic)
-    - [1. Überblick](#1-überblick)
-    - [2. Schematic ausführen](#2-schematic-ausführen)
-    - [3. Nach der Migration](#3-nach-der-migration)
-    - [4. Benutzerdefinierte Konfiguration (optional)](#4-benutzerdefinierte-konfiguration-optional)
-- [Die neue Syntax und APIs](#die-neue-syntax-und-apis)
-  - [Globale Funktionen](#globale-funktionen)
-  - [Matcher](#matcher)
-  - [Spies und Mocks](#spys-und-mocks)
-  - [Asynchronität ohne Zone.js aber mit Vitest Timer](#asynchronität-ohne-zonejs-mit-vitest-timer)
-  - [TestBed und ComponentFixture](#testbed-und-componentfixture)
-- [Bekannte Einschränkungen und Fallstricke](#bekannte-einschränkungen-und-fallstricke)
-- [Fazit](#fazit)
-
+[[toc]]
 
 ## Warum Angular Karma und Jasmine ersetzt
 

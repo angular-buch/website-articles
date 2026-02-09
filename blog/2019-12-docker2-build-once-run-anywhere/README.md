@@ -18,13 +18,7 @@ Wie Sie ein einziges Image zur Laufzeit an beliebige Umgebungen anpassen.
 Bleiben Sie auch ohne Code-Änderung flexibel!
 Dies ist der 3. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
-Inhaltsverzeichnis:
-
-- [Motivation](#motivation)
-- [Anforderungen an die Konfigurierbarkeit](#anforderungen-an-die-konfigurierbarkeit)
-- [Konfigurierbarkeit umsetzen](#konfigurierbarkeit-umsetzen)
-- [Umgebung mit Docker konfigurieren](#umgebung-mit-docker-konfigurieren)
-- [Ausblick](#ausblick)
+[[toc]]
 
 Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-2-Build-Once-Run-Anywhere).

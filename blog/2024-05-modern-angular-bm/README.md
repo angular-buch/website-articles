@@ -48,34 +48,7 @@ Zum Thema Server-Side Rendering mit Angular 17 haben wir einen separaten Artikel
 - [Book Monkey v5: Server-Side Rendering mit Angular 17](/blog/2023-11-ssr-bm)
 
 
-**Inhaltsverzeichnis:**
-
-- [Die Ausgangsbasis](#die-ausgangsbasis)
-- [`inject()` statt Constructor Injection](#inject-statt-constructor-injection)
-- [AsyncValidator als Funktion mit `inject()`](#asyncvalidator-als-funktion-mit-inject)
-- [Standalone Components](#standalone-components)
-  - [Komponenten, Direktiven und Pipes migrieren](#komponenten-direktiven-und-pipes-migrieren)
-  - [Bootstrapping mit Standalone API](#bootstrapping-mit-standalone-api)
-  - [ApplicationConfig anlegen](#applicationconfig-anlegen)
-  - [Routen migrieren](#routen-migrieren)
-  - [NgModules entfernen](#ngmodules-entfernen)
-- [Functional Interceptors](#functional-interceptors)
-- [Control Flow mit `@if` und `@for`](#control-flow-mit-if-und-for)
-- [Application Builder verwenden](#application-builder-verwenden)
-- [Signals](#signals)
-  - [Signals in Komponenten einsetzen](#signals-in-komponenten-einsetzen)
-  - [Observables in Signals konvertieren](#observables-in-signals-konvertieren)
-  - [Signals in Observables konvertieren](#signals-in-observables-konvertieren)
-- [Signal-based Inputs](#signal-based-inputs)
-- [Router Input Bindings, Signals und RxJS](#router-input-bindings-signals-und-rxjs)
-  - [Component Input Binding aktivieren](#component-input-binding-aktivieren)
-  - [Kombination mit Signal Inputs](#kombination-mit-signal-inputs)
-- [Functional Outputs](#functional-outputs)
-- [Direktive `NgOptimizedImage` verwenden](#direktive-ngoptimizedimage-verwenden)
-- [Komponenten-Stylesheets: `styleUrls` =\> `styleUrl`](#komponenten-stylesheets-styleurls--styleurl)
-- [Migrations-Schematics von ngxtension verwenden](#migrations-schematics-von-ngxtension-verwenden)
-- [Demo und Code](#demo-und-code)
-
+[[toc]]
 
 ## Die Ausgangsbasis
 

@@ -32,23 +32,7 @@ In diesem Blogpost wollen wir Ihnen zeigen, wie Sie Ihre PWA auf einfachem Weg i
 
 > **Zur Zeit gibt es noch keine Möglichkeit, PWAs in Apples App Store zu deployen.**
 
----
-
-Inhalt:
-- [Trusted Web Activities vs. Webview-Integration](#trusted-web-activities-vs-webview-integration)
-- [TWAs im Detail](#twas-im-detail)
-- [Eine PWA als TWA in den Android Store bringen](#eine-pwa-als-twa-in-den-android-store-bringen)
-  - [Einen Android Developer Account registrieren](#einen-android-developer-account-registrieren)
-  - [Die Android-App in der Google Play Console erstellen](#die-android-app-in-der-google-play-console-erstellen)
-  - [Die App-Signatur und das Release erzeugen](#die-app-signatur-und-das-release-erzeugen)
-  - [Den App-Signaturschlüssel in der PWA hinterlegen](#den-app-signaturschlüssel-in-der-pwa-hinterlegen)
-- [Die TWA mit der Bubblewrap CLI erzeugen](#die-twa-mit-der-bubblewrap-cli-erzeugen)
-- [Die signierte App bauen](#die-signierte-app-bauen)
-  - [Mit der Bublewrap CLI](#mit-der-bublewrap-cli)
-  - [Mithilfe von Android Studio](#mithilfe-von-android-studio)
-- [Die App über die Google Play Console veröffentlichen](#die-app-über-die-google-play-console-veröffentlichen)
-
----
+[[toc]]
 
 ## Trusted Web Activities vs. Webview-Integration
 

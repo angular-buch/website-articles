@@ -18,13 +18,7 @@ Wie Sie Ihre Angular-App in ein Docker-Image packen und als Container zur Ausfü
 Vergessen Sie Ihre Sorgen über den korrekten Build und das richtige Deployment!
 Dies ist der 2. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
-Inhaltsverzeichnis:
-
-- [Konfiguration des Webservers](#konfiguration-des-webservers)
-- [Das Dockerfile](#das-dockerfile)
-- [Das Build-Skript](#das-build-skript)
-- [Den Container starten](#den-container-starten)
-- [Ausblick](#ausblick)
+[[toc]]
 
 > Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-1-Simple-Case).

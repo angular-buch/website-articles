@@ -25,24 +25,7 @@ Es gibt auch wieder kleinere Breaking Changes, doch das Update auf die neue Vers
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular Blog](https://blog.angular.io/23c97b63cfa3).
 
-**Inhalt**
-
-- [Update auf Angular 9](#update-auf-angular-9)
-- [Der neue Ivy-Renderer](#der-neue-ivy-renderer)
-  - [Bundle Sizes](#bundle-sizes)
-  - [AOT per Default](#aot-per-default)
-  - [Change Detection](#change-detection)
-  - [Testing](#testing)
-- [Server-Side Rendering und Pre-Rendering](#server-side-rendering-und-pre-rendering)
-- [`TestBed.inject<T>`: Abhängigkeiten im Test anfordern](#testbedinject-abhängigkeiten-im-test-anfordern)
-- [i18n mit `@angular/localize`](#i18n-mit-angularlocalize)
-- [`@ViewChild()` und `@ContentChild()`](#viewchild-und-contentchild)
-- [Weitere Neuigkeiten](#weitere-neuigkeiten)
-  - [Verbesserte Typprüfung in Templates](#verbesserte-typprüfung-in-templates)
-  - [Schematics für Interceptoren](#schematics-für-interceptoren)
-  - [`providedIn` für Services: `any` und `platform`](#providedin-für-services-any-und-platform)
-  - [Optional Chaining mit TypeScript](#optional-chaining-mit-typescript)
-  - [Nullish Coalescing mit TypeScript](#nullish-coalescing-mit-typescript)
+[[toc]]
 
 ## Update auf Angular 9
 

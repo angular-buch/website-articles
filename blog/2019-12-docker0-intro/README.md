@@ -14,18 +14,7 @@ header: header0.jpg
 **Warum Sie Docker nutzen sollten, um neue Versionen Ihrer Angular-App jederzeit problemlos bauen, deployen und auch in mehreren Versionen parallel zueinander betreiben zu können.
 Dies ist der Start unserer vierteiligen Artikelserie von unserem Gastautor Michael Kaaden.**
 
-Inhaltsverzeichnis:
-
-- [Prinzipielles Deployment](#prinzipielles-deployment)
-- [Problemstellung](#problemstellung)
-- [Die Beispiel-App](#die-beispiel-app)
-- [Grundsätzliches zu Docker](#grundsätzliches-zu-docker)
-  - [Images und Container](#images-und-container)
-  - [Portabilität](#portabilität)
-  - [Isoliert, schnell und ressourcenschonend](#isoliert-schnell-und-ressourcenschonend)
-  - [Docker Registrys](#docker-registrys)
-  - [Lösungsskizze](#lösungsskizze)
-- [Ausblick](#ausblick)
+[[toc]]
 
 Es ist soweit: Die Angular-App, die Sie Dank der zweiten Auflage des famosen Angular-Buchs erstellt haben, ist fertig!
 Die Unit- und End-to-End-Tests leuchten tiefgrün.
