@@ -21,7 +21,7 @@ header: header.jpg
 ---
 
 Softwareprojekte werden komplexer, und Anforderungen steigen.
-Werkzeuge für AI (Artificial Intelligence) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, sie erklären komplexe Zusammenhänge und sie schlagen Verbesserungen vor.
+Werkzeuge für AI (Artificial Intelligence) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, erklären komplexe Zusammenhänge und schlagen Verbesserungen vor.
 **In diesem Artikel zeigen wir dir, wie du mit den AI-Werkzeugen von Angular den bestmöglichen Code generierst.**
 
 ## Inhalt
@@ -52,7 +52,7 @@ Aktuelle Neuerungen wie Signal Forms, die Resource API oder Angular Aria sind wo
 Bedenkt man zudem, dass ältere Konzepte über Jahre hinweg mehr Dokumentation, Tutorials und Codebeispiele angesammelt haben, ist es statistisch wahrscheinlicher, dass das Modell diese vorschlägt.
 Für die Wartung bestehender Legacy-Projekte ist dies ein Vorteil.
 Wer aber eine moderne Anwendung mit aktuellen Best Practices anstrebt, erhält vom Modell mit höherer Wahrscheinlichkeit ältere Lösungsansätze.
-Im ungünstigsten Fall vermischt das Modell alte und neue Konzepte oder **halluziniert**, d. h. es erzeugt plausibel klingende aber faktisch falsche Aussagen.
+Im ungünstigsten Fall vermischt das Modell alte und neue Konzepte oder **halluziniert**, d. h. es erzeugt plausibel klingende, aber faktisch falsche Aussagen.
 Das Ergebnis ist inkonsistenter oder nicht funktionierender Code.
 
 Die Lösung liegt darin, dem AI-Agenten den notwendigen Kontext bereitzustellen.
@@ -114,7 +114,7 @@ Der Custom Prompt liegt in diesem Fenster, und bei längeren Sessions können di
 Wird das Kontextfenster überschritten, „vergisst" der AI-Agent frühere Teile der Konversation.
 Dieses Vergessen ist technisch notwendig, damit die Unterhaltung weitergehen kann.
 Das häufigste Mittel besteht darin, die bisherige Konversation bestmöglich zusammenzufassen (engl. **Context Summarization**).
-Das funktioniert manchmal hervorragend, und manchmal leider überhaupt nicht.
+Das funktioniert manchmal hervorragend und manchmal leider überhaupt nicht.
 Hat die Zusammenfassung wichtige Aspekte entfernt, führt dies zu inkonsistenten Antworten oder veralteten Codevorschlägen.
 
 Damit verwandt ist der **Lost-in-the-Middle**-Effekt: Informationen, die in der Mitte eines sehr langen Kontexts stehen, werden vom Modell weniger stark berücksichtigt als Informationen am Anfang oder Ende.
@@ -131,7 +131,7 @@ Das Angular-Team ist auf diesem neuen Feld sehr aktiv und stellt über die Angul
 
 Warum hilft das?
 MCP-Tools werden bei Bedarf frisch aufgerufen.
-Die Informationen werden bei Bedarf in den Kontext eingelesen. Gehen sie durch Zusammenfassung verloren, können sie jederzeit erneut abgerufen werden.
+Die Informationen landen dann im Kontext. Gehen sie durch Zusammenfassung verloren, können sie jederzeit erneut abgerufen werden.
 Zusätzlich pflegt das Angular-Team die Antworten und aktualisiert sie regelmäßig, sodass auch das Problem veralteten Wissens adressiert wird.
 Der MCP-Server von Angular stellt verschiedene Tools bereit.
 
