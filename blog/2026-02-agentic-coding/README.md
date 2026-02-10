@@ -146,7 +146,7 @@ Der MCP-Server von Angular stellt verschiedene Tools bereit.
 
 **Experimentelle Tools:**
 
-- `modernize`: unterstützt Migrationen zu modernen Patterns, z. B. Signal Inputs (`@Input` → `input()`), moderne Outputs (`@Output` → `output()`), `inject()`-Funktion, Signal Queries (`ViewChild`/`ContentChild` → Signals), Built-in Control Flow (`*ngIf`/`*ngFor` → `@if`/`@for`) und Self-Closing Tags.
+- `modernize`: unterstützt Migrationen zu modernen Patterns, z. B. Signal Inputs (`@Input` → `input()`), moderne Outputs (`@Output` → `output()`), die Funktion `inject()`, Signal Querys (`ViewChild`/`ContentChild` → Signals), Built-in Control Flow (`*ngIf`/`*ngFor` → `@if`/`@for`) und Self-Closing Tags.
 - `build`: führt einen einmaligen Build mit `ng build` durch.
 - `devserver.start`, `devserver.stop`, `devserver.wait_for_build`: verwaltet den Development Server.
 - `e2e`: führt End-to-End-Tests aus.
