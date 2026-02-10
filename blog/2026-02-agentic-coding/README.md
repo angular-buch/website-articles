@@ -107,7 +107,7 @@ Der Custom Prompt liegt in diesem Fenster, und bei längeren Sessions können di
 
 ## Herausforderung: das Kontextfenster
 
-![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt 127k von 200k Tokens (63% Auslastung). Aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Claude Code: Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters")
+![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt 127k von 200k Tokens (63% Auslastung). Aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Claude Code: Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
 
 Wird das Kontextfenster überschritten, „vergisst" der AI-Agent frühere Teile der Konversation.
 Dieses Vergessen ist technisch notwendig, damit die Unterhaltung weitergehen kann.
