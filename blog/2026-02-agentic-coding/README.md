@@ -221,8 +221,8 @@ Es gibt auch die Gruppe `devserver`, die nur die Devserver-Tools (`devserver.sta
 
 Zusätzlich stehen zwei weitere Optionen zur Verfügung:
 
-- `--read-only`: Aktiviert nur lesende Tools, die keine Dateien verändern.
-- `--local-only`: Aktiviert nur Tools, die keinen Internetzugang benötigen.
+- `--read-only`: aktiviert nur lesende Tools, die keine Dateien verändern.
+- `--local-only`: aktiviert nur Tools, die keinen Internetzugang benötigen.
 
 Sobald der MCP-Server konfiguriert ist, entscheidet der AI-Agent selbstständig, wann er welches Tool aufruft.
 Der MCP-Server läuft dabei nicht permanent, sondern wird nur bei Bedarf gestartet und wieder beendet.
