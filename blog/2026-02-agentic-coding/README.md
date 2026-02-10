@@ -7,11 +7,13 @@ published: 2026-02-03
 keywords:
   - Angular
   - AI
+  - Artificial Intelligence
+  - Künstliche Intelligenz
   - AI-Agent
   - MCP
   - Model Context Protocol
   - MCP-Server
-  - Vibe-Coding
+  - Vibe Coding
   - Agentic Coding
   - LLM
 language: de
