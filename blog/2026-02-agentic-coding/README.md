@@ -228,7 +228,7 @@ Sobald der MCP-Server konfiguriert ist, entscheidet der AI-Agent selbstständig,
 Der MCP-Server läuft dabei nicht permanent, sondern wird nur bei Bedarf gestartet und wieder beendet.
 Die meisten Tools sind rein lesend: Sie liefern Informationen wie Dokumentation, Beispiele oder Best Practices, ohne Dateien zu verändern.
 Einige Tools wie `modernize` können aber auch Generatoren der Angular CLI aufrufen und damit Code im Projekt verändern.
-Falls du ein bestimmtes Tool nutzen möchtest, bitte den Agenten explizit darum, z. B. mit „Nutze das Tool `search_documentation`, um nach Signal Forms zu suchen".
+Falls du ein bestimmtes Tool nutzen möchtest, bitte den Agenten explizit darum, z. B. mit *„Nutze das Tool `search_documentation`, um nach Signal Forms zu suchen"*.
 
 Wenn du neugierig geworden bist, kannst du den MCP-Server der Angular CLI selbst erforschen.
 Mit dem Werkzeug [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) lassen sich alle verfügbaren Tools im Webbrowser anzeigen und testen:
