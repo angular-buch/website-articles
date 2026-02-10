@@ -18,19 +18,20 @@ header: angular21.jpg
 ---
 
 Softwareprojekte werden komplexer, und Anforderungen steigen.
-Werkzeuge für AI (Artificial Intelligence) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, sie erklären komplexe Zusammenhänge und sie schlagen Verbesserungen vor.
-
-Den Weg in den Alltag fand AI durch browserbasierte Chats wie ChatGPT, Gemini oder Perplexity.
-Doch wer damit Software entwickelt, stößt schnell an Grenzen: Der Chat kennt das Projekt nicht, und Code muss manuell hin- und herkopiert werden.
-Einen Schritt weiter gehen **AI-Agenten**: Sie haben direkten Zugriff auf das Projekt, können Dateien lesen und bearbeiten, Befehle ausführen und mehrere Schritte autonom planen.
-Agenten können also prinzipiell alles tun, was wir am Computer auch tun könnten.
-Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Aktionen nach Bestätigung.
-
-![Claude Code fragt vor der Änderung einer Datei nach Bestätigung](confirmation-dialog.png "Claude Code fragt vor der Änderung einer Datei nach Bestätigung")
+Werkzeuge für AI (Artificial Intelligence)[*](#footnote-ai) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, sie erklären komplexe Zusammenhänge und sie schlagen Verbesserungen vor.
+**In diesem Artikel zeigen wir dir, wie du mit den AI-Werkzeugen von Angular den bestmöglichen Code generierst.**
 
 ## Inhalt
 
 [[toc]]
+
+## Was sind AI-Agenten?
+
+**Agentic Coding** ist der nächste Schritt nach ChatGPT: Vergiss Copy-Paste aus dem Browser. AI-Agenten arbeiten direkt in deinem Projekt – sie lesen Code, schreiben Dateien, führen Tests aus und planen eigenständig nächste Schritte. Du gibst die Richtung vor, der Agent setzt um.
+
+Den Weg in den Alltag fand AI durch browserbasierte Chats wie ChatGPT, Gemini oder Perplexity. Doch wer damit Software entwickelt, stößt schnell an Grenzen: Der Chat kennt das Projekt nicht, und Code muss manuell hin- und herkopiert werden. AI-Agenten lösen dieses Problem. Sie können prinzipiell alles tun, was wir am Computer auch tun könnten. Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Aktionen nach Bestätigung.
+
+![Terminal-Ausgabe von Claude Code: Ein Diff zeigt geplante Änderungen an der Datei app.ts – rote Zeilen werden entfernt, grüne hinzugefügt. Darunter die Bestätigungsabfrage mit den Optionen Yes, Yes allow all edits, Type here to tell Claude what to do differently, und Esc to cancel.](confirmation-dialog.png "Claude Code fragt vor der Änderung einer Datei nach Bestätigung")
 
 Angular bietet für die Arbeit mit solchen Agenten spezielle Unterstützung, damit wir optimale Ergebnisse erhalten und der generierte Code den aktuellen Best Practices entspricht.
 Bevor wir ins Detail gehen, sollten wir aber besprechen, warum diese Unterstützung überhaupt notwendig ist.
@@ -105,7 +106,7 @@ Der Custom Prompt liegt in diesem Fenster, und bei längeren Sessions können di
 
 ## Herausforderung: das Kontextfenster
 
-![Hier wird es bald knapp. Die Context ist bald voll!](context-command.png)
+![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt 127k von 200k Tokens (63% Auslastung). Aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Claude Code: Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters")
 
 Wird das Kontextfenster überschritten, „vergisst" der AI-Agent frühere Teile der Konversation.
 Dieses Vergessen ist technisch notwendig, damit die Unterhaltung weitergehen kann.
@@ -235,7 +236,7 @@ Mit dem Werkzeug [MCP Inspector](https://modelcontextprotocol.io/docs/tools/insp
 npx @modelcontextprotocol/inspector "npx" --args "-y @angular/cli mcp"
 ```
 
-<!-- TODO: Screenshot vom MCP Inspector einfügen -->
+![Der MCP Inspector im Browser zeigt die verfügbaren Tools des Angular CLI MCP-Servers. Links die Verbindungseinstellungen mit angular-cli-server Version 21.1.3, in der Mitte die Liste der Tools wie search_documentation, list_projects, onpush_zoneless_migration und build. Rechts die Detailansicht des ausgewählten Tools mit Purpose, Use Cases und Parametern.](mcp-inspector.png "Der MCP Inspector zeigt alle verfügbaren Tools des Angular CLI MCP-Servers")
 
 ## Empfehlungen für die Praxis
 
@@ -290,4 +291,4 @@ Deshalb gilt: Nutze AI als Beschleuniger, aber investiere in dein eigenes Verst�
 
 ---
 
-*Genau genommen handelt es sich bei AI nicht um echte Intelligenz, sondern um statistische Mustererkennung auf Basis großer Textmengen. Die populären Begriffe „Künstliche Intelligenz" beziehungsweise „Artificial Intelligence" haben sich trotzdem im Sprachgebrauch etabliert, und wir verwenden sie hier ebenso.*
+<a id="footnote-ai"></a>*Genau genommen handelt es sich bei AI nicht um echte Intelligenz, sondern um statistische Mustererkennung auf Basis großer Textmengen. Die populären Begriffe „Künstliche Intelligenz" beziehungsweise „Artificial Intelligence" haben sich trotzdem im Sprachgebrauch etabliert, und wir verwenden sie hier ebenso.*
