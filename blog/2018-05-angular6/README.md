@@ -140,7 +140,7 @@ Die Reactive Extensions for JavaScript (RxJS) bilden die Grundlage für reaktive
 RxJS erschien fast zeitgleich mit Angular ebenfalls in der neuen Version 6.
 Damit können die alten Operatoren mit Dot-Chaining nicht mehr verwendet werden, sondern es werden durchgehend Pipeable Operators eingesetzt.
 Dieses Thema ist allerdings nicht neu, sondern wir haben bereits mit dem Upgrade auf Angular 5 empfohlen, auf Pipeable Operators umzusteigen.
-Siehe dazu auch der [Artikel zum Upgrade auf Angular 5](/blog/2017-12-angular5#rxjs-pipeable-operators-ehemals-lettable-).
+Siehe dazu auch der [Artikel zum Upgrade auf Angular 5](/blog/2017-12-angular5#rxjs-pipeable-operators-ehemals-lettable).
 
 RxJS-Operatoren werden ab jetzt nur noch wie folgt verwendet:
 
