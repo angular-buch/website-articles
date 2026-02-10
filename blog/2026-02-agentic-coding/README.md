@@ -237,7 +237,7 @@ Mit dem Werkzeug [MCP Inspector](https://modelcontextprotocol.io/docs/tools/insp
 npx @modelcontextprotocol/inspector "npx" --args "-y @angular/cli mcp"
 ```
 
-![Der MCP Inspector im Browser zeigt die verfügbaren Tools des Angular CLI MCP-Servers. Links die Verbindungseinstellungen mit angular-cli-server Version 21.1.3, in der Mitte die Liste der Tools wie search_documentation, list_projects, onpush_zoneless_migration und build. Rechts die Detailansicht des ausgewählten Tools mit Purpose, Use Cases und Parametern.](mcp-inspector.png "Der MCP Inspector zeigt alle verfügbaren Tools des Angular CLI MCP-Servers")
+![Der MCP Inspector im Browser zeigt die verfügbaren Tools des Angular CLI MCP-Servers. Links die Verbindungseinstellungen mit angular-cli-server Version 21.1.3, in der Mitte die Liste der Tools wie search_documentation, list_projects, onpush_zoneless_migration und build. Rechts die Detailansicht des ausgewählten Tools mit Purpose, Use Cases und Parametern.](mcp-inspector.png "Der MCP Inspector zeigt alle verfügbaren Tools des Angular CLI MCP-Servers.")
 
 ## Empfehlungen für die Praxis
 
