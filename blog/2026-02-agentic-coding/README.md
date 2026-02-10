@@ -139,7 +139,7 @@ Der MCP-Server von Angular stellt verschiedene Tools bereit.
 
 - `get_best_practices`: liefert Coding-Richtlinien für moderne Angular-Entwicklung.
 - `search_documentation`: durchsucht die offizielle Angular-Dokumentation versionsspezifisch basierend auf Stichworten.
-- `find_examples`: liefert Code-Beispiele für moderne Angular-Features aus einer kuratierten Datenbank.
+- `find_examples`: liefert Codebeispiele für moderne Angular-Features aus einer kuratierten Datenbank.
 - `ai_tutor`: startet einen interaktiven Angular-Kurs, der Schritt für Schritt durch das Framework führt.
 - `list_projects`: identifiziert Anwendungen und Bibliotheken im Workspace.
 - `onpush_zoneless_migration`: analysiert Code und liefert Anweisungen zur Migration auf OnPush-Change-Detection.
