@@ -24,28 +24,7 @@ In diesem Artikel zeigen wir, was Vitest für dich bedeutet, wie du bestehende A
 
 ## Inhalt
 
-- [Warum Angular Karma und Jasmine ersetzt](/blog/2025-11-zu-vitest-migrieren#warum-angular-karma-und-jasmine-ersetzt)
-- [Migrationsleitfaden: Von Karma/Jasmine zu Vitest](/blog/2025-11-zu-vitest-migrieren#migrationsleitfaden-von-karmajasmine-zu-vitest)
-  - [Manuelle Migrationsschritte](/blog/2025-11-zu-vitest-migrieren#manuelle-migrationsschritte)
-    - [1. Abhängigkeiten installieren](/blog/2025-11-zu-vitest-migrieren#1-abhängigkeiten-installieren)
-    - [2. `angular.json` aktualisieren](/blog/2025-11-zu-vitest-migrieren#2-angularjson-aktualisieren)
-    - [3. Eigene `karma.conf.js`‑Konfiguration berücksichtigen](/blog/2025-11-zu-vitest-migrieren#3-eigene-karmaconfjskonfiguration-berücksichtigen)
-    - [4. Karma- und `test.ts`‑Dateien entfernen](/blog/2025-11-zu-vitest-migrieren#4-karma--und-testtsdateien-entfernen)
-    - [5. Browser‑Modus konfigurieren (optional)](/blog/2025-11-zu-vitest-migrieren#5-browsermodus-konfigurieren-optional)
-  - [Automatisches Test‑Refactoring per Schematic](/blog/2025-11-zu-vitest-migrieren#automatisches-testrefactoring-per-schematic)
-    - [1. Überblick](/blog/2025-11-zu-vitest-migrieren#1-überblick)
-    - [2. Schematic ausführen](/blog/2025-11-zu-vitest-migrieren#2-schematic-ausführen)
-    - [3. Nach der Migration](/blog/2025-11-zu-vitest-migrieren#3-nach-der-migration)
-    - [4. Benutzerdefinierte Konfiguration (optional)](/blog/2025-11-zu-vitest-migrieren#4-benutzerdefinierte-konfiguration-optional)
-- [Die neue Syntax und APIs](/blog/2025-11-zu-vitest-migrieren#die-neue-syntax-und-apis)
-  - [Globale Funktionen](/blog/2025-11-zu-vitest-migrieren#globale-funktionen)
-  - [Matcher](/blog/2025-11-zu-vitest-migrieren#matcher)
-  - [Spies und Mocks](/blog/2025-11-zu-vitest-migrieren#spies-und-mocks)
-  - [Asynchronität ohne Zone.js aber mit Vitest Timer](/blog/2025-11-zu-vitest-migrieren#asynchronität-ohne-zonejs-aber-mit-vitest-timer)
-  - [TestBed und ComponentFixture](/blog/2025-11-zu-vitest-migrieren#testbed-und-componentfixture)
-- [Bekannte Einschränkungen und Fallstricke](/blog/2025-11-zu-vitest-migrieren#bekannte-einschränkungen-und-fallstricke)
-- [Fazit](/blog/2025-11-zu-vitest-migrieren#fazit)
-
+[[toc]]
 
 ## Warum Angular Karma und Jasmine ersetzt
 

@@ -20,11 +20,7 @@ Dies ist der 3. Teil unserer vierteiligen Artikelserie zu Angular und Docker.**
 
 Inhaltsverzeichnis:
 
-- [Motivation](/blog/2019-12-docker2-build-once-run-anywhere#motivation)
-- [Anforderungen an die Konfigurierbarkeit](/blog/2019-12-docker2-build-once-run-anywhere#anforderungen-an-die-konfigurierbarkeit)
-- [Konfigurierbarkeit umsetzen](/blog/2019-12-docker2-build-once-run-anywhere#konfigurierbarkeit-umsetzen)
-- [Umgebung mit Docker konfigurieren](/blog/2019-12-docker2-build-once-run-anywhere#umgebung-mit-docker-konfigurieren)
-- [Ausblick](/blog/2019-12-docker2-build-once-run-anywhere#ausblick)
+[[toc]]
 
 Sie finden den Code zum Artikel auf
 [GitHub](https://github.com/MichaelKaaden/dockerized-app/tree/master/Part-2-Build-Once-Run-Anywhere).

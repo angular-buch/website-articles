@@ -27,22 +27,7 @@ Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [
 
 **Inhalt**
 
-- [Update auf Angular 9](/blog/2020-02-angular9#update-auf-angular-9)
-- [Der neue Ivy-Renderer](/blog/2020-02-angular9#der-neue-ivy-renderer)
-  - [Bundle Sizes](/blog/2020-02-angular9#bundle-sizes)
-  - [AOT per Default](/blog/2020-02-angular9#aot-per-default)
-  - [Change Detection](/blog/2020-02-angular9#change-detection)
-  - [Testing](/blog/2020-02-angular9#testing)
-- [Server-Side Rendering und Pre-Rendering](/blog/2020-02-angular9#server-side-rendering-und-pre-rendering)
-- [`TestBed.inject<T>`: Abhängigkeiten im Test anfordern](/blog/2020-02-angular9#testbed-inject)
-- [i18n mit `@angular/localize`](/blog/2020-02-angular9#i18n-localize)
-- [`@ViewChild()` und `@ContentChild()`](/blog/2020-02-angular9#viewchild-contentchild)
-- [Weitere Neuigkeiten](/blog/2020-02-angular9#weitere-neuigkeiten)
-  - [Verbesserte Typprüfung in Templates](/blog/2020-02-angular9#template-checks)
-  - [Schematics für Interceptoren](/blog/2020-02-angular9#schematics-interceptor)
-  - [`providedIn` für Services: `any` und `platform`](/blog/2020-02-angular9#provided-in)
-  - [Optional Chaining mit TypeScript](/blog/2020-02-angular9#optional-chaining-mit-typescript)
-  - [Nullish Coalescing mit TypeScript](/blog/2020-02-angular9#nullish-coalescing-mit-typescript)
+[[toc]]
 
 ## Update auf Angular 9
 
