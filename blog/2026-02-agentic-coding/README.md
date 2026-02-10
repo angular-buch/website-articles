@@ -2,6 +2,7 @@
 title: 'Agentic Coding: AI-Unterstützung für Angular'
 author: Angular-Buch Team
 mail: team@angular-buch.com
+bio: "Dieser Artikel ist ein Auszug aus dem neuen Angular-Buch von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe. Nach vier erfolgreichen Auflagen haben wir das Buch von Grund auf neu geschrieben – mit moderner Syntax, kompakt und vielen neuen Themen. Die erste Auflage erscheint in Kürze im Handel. Mehr Infos unter https://angular-buch.com"
 published: 2026-02-03
 keywords:
   - Angular
