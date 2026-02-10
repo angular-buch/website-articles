@@ -26,19 +26,11 @@ Einen Schritt weiter gehen **AI-Agenten**: Sie haben direkten Zugriff auf das Pr
 Agenten können also prinzipiell alles tun, was wir am Computer auch tun könnten.
 Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Aktionen nach Bestätigung.
 
-<!-- TODO: Screenshot: Ein AI-Agent fragt vor einer Änderung nach Bestätigung -->
+![Claude Code fragt vor der Änderung einer Datei nach Bestätigung](confirmation-dialog.png "Claude Code fragt vor der Änderung einer Datei nach Bestätigung")
 
 ## Inhalt
 
-* [Herausforderung: veraltetes Wissen](/blog/2026-02-agentic-coding#herausforderung-veraltetes-wissen)
-* [AI-Konfigurationsdateien](/blog/2026-02-agentic-coding#ai-konfigurationsdateien)
-* [Herausforderung: das Kontextfenster](/blog/2026-02-agentic-coding#herausforderung-das-kontextfenster)
-* [Der MCP-Server von Angular](/blog/2026-02-agentic-coding#der-mcp-server-von-angular)
-  * [Die Tools im Überblick](/blog/2026-02-agentic-coding#die-tools-im-überblick)
-  * [Den MCP-Server einrichten](/blog/2026-02-agentic-coding#den-mcp-server-einrichten)
-  * [Experimentelle Tools aktivieren](/blog/2026-02-agentic-coding#experimentelle-tools-aktivieren)
-* [Empfehlungen für die Praxis](/blog/2026-02-agentic-coding#empfehlungen-für-die-praxis)
-* [Fazit](/blog/2026-02-agentic-coding#fazit)
+[[toc]]
 
 Angular bietet für die Arbeit mit solchen Agenten spezielle Unterstützung, damit wir optimale Ergebnisse erhalten und der generierte Code den aktuellen Best Practices entspricht.
 Bevor wir ins Detail gehen, sollten wir aber besprechen, warum diese Unterstützung überhaupt notwendig ist.
