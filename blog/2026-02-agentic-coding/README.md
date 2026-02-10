@@ -246,39 +246,39 @@ Anfangs erfordert es Aufwand, gute Prompts zu formulieren, den richtigen Kontext
 Doch wer dieser Phase Zeit gibt, kann eine deutliche Entlastung im Arbeitsalltag erreichen.
 Die folgenden Tipps für die tägliche Arbeit helfen, diese Lernkurve zu verkürzen:
 
-- **Kontext bereitstellen**: Gib dem Agenten den Kontext, den er für die aktuelle Aufgabe braucht, und achte darauf, den Kontext nicht übermäßig mit irrelevanten Informationen zu fluten.
+- **Kontext bereitstellen:** Gib dem Agenten den Kontext, den er für die aktuelle Aufgabe braucht, und achte darauf, den Kontext nicht übermäßig mit irrelevanten Informationen zu fluten.
 Verweise auf bestehende Dateien, Interfaces oder Konventionen in deinem Projekt.
 Nutze den MCP-Server, um Angular-spezifische Best Practices abzufragen.
-- **Iterativ arbeiten**: Erwarte nicht, dass das erste Ergebnis perfekt ist.
+- **Iterativ arbeiten:** Erwarte nicht, dass das erste Ergebnis perfekt ist.
 Zerlege komplexe Aufgaben in kleine Schritte und verfeinere das Ergebnis schrittweise.
 Fordere den Agenten auf, die erstellte Software selbst zu überprüfen und Fehler zu finden.
 Lass ihn prüfen, ob der Code dem Angular-Styleguide entspricht.
-- **Einfachheit bevorzugen**: AI-Agenten produzieren bei klaren, einfachen Strukturen bessere Ergebnisse – genau wie Menschen auch.
+- **Einfachheit bevorzugen:** AI-Agenten produzieren bei klaren, einfachen Strukturen bessere Ergebnisse – genau wie Menschen auch.
 Statt komplexe Architekturen zu entwerfen, nutze bewährte Abstraktionen wie die [Resource API](https://angular.dev/guide/signals/resource).
 Einfacher Code ist leichter zu generieren, zu prüfen und zu warten.
-- **Tests generieren lassen**: Lass dir Unit- und Integrationstests generieren, ggf. auch E2E-Tests.
+- **Tests generieren lassen:** Lass dir Unit- und Integrationstests generieren, ggf. auch E2E-Tests.
 Das Erstellen von `TestBed`-Konfigurationen und Mocks ist eine Stärke von AI-Agenten.
 Du bekommst schnell Feedback, ob etwas funktioniert wie gedacht, und kannst zusammen mit dem Agenten an einer guten Lösung arbeiten.
-- **Code Reviews beibehalten**: Generierter Code sollte denselben Review-Prozess durchlaufen wie manuell geschriebener Code.
+- **Code Reviews beibehalten:** Generierter Code sollte denselben Review-Prozess durchlaufen wie manuell geschriebener Code.
 Achte besonders auf moderne Angular-Patterns wie Signals und den neuen Control Flow.
-- **Fehler erklären lassen**: Wenn ein Fehler auftritt, lass den Agenten die Fehlermeldung analysieren und Lösungsvorschläge machen.
+- **Fehler erklären lassen:** Wenn ein Fehler auftritt, lass den Agenten die Fehlermeldung analysieren und Lösungsvorschläge machen.
 Du sparst dir die Recherche und bekommst kontextbezogene Hilfe.
-- **Kritisch prüfen**: AI-Modelle neigen nach unserer Erfahrung dazu, Abkürzungen zu nehmen.
+- **Kritisch prüfen:** AI-Modelle neigen nach unserer Erfahrung dazu, Abkürzungen zu nehmen.
 Typische Beispiele sind der Typ `any` als faule Lösung statt korrekter Typisierung oder schwache Assertions wie `toBeTruthy()` statt `toEqual({ name: 'Test' })` oder `toBeGreaterThan(0)` statt `toBe(42)`.
 Achte besonders darauf, dass die AI bei fehlschlagenden Tests nicht einfach den Test anpasst, statt das eigentliche Problem zu lösen.
 Prüfe generierten Code daher immer kritisch und fordere strenge Typisierung ein.
-- **Rezepte nutzen**: Im LLM sind unzählige Implementierungsmuster aus den Trainingsdaten gespeichert.
+- **Rezepte nutzen:** Im LLM sind unzählige Implementierungsmuster aus den Trainingsdaten gespeichert.
 Beschreibe was du brauchst, und lass dir Lösungsvorschläge generieren.
 Frage auch immer nach möglichen Alternativen, und lass dir Vor- und Nachteile auflisten.
-- **Migrationen delegieren**: Bei Angular-Upgrades oder Migration zu neuen Patterns wie Standalone Components, Signals oder Control Flow kann der Agent viel Arbeit abnehmen.
+- **Migrationen delegieren:** Bei Angular-Upgrades oder Migration zu neuen Patterns wie Standalone Components, Signals oder Control Flow kann der Agent viel Arbeit abnehmen.
 Der MCP-Server stellt dafür eigene Tools bereit.
-- **Pair Programming**: Nutze den Agenten als „Sparringspartner" für Architekturentscheidungen.
+- **Pair Programming:** Nutze den Agenten als „Sparringspartner" für Architekturentscheidungen.
 Lass dir verschiedene Lösungswege aufzeigen.
 Der Agent hat kein Ego und erklärt geduldig.
-- **CLIs statt Web nutzen**: AI-Agenten erhalten zunehmend Zugangssperren, weil sie Websites intensiv crawlen.
+- **CLIs statt Web nutzen:** AI-Agenten erhalten zunehmend Zugangssperren, weil sie Websites intensiv crawlen.
 Nutze daher vorgesehene Schnittstellen: für GitHub die GitHub CLI (`gh`), für Azure DevOps die Azure CLI (`az devops`) oder bereitgestellte MCP-Server.
 Kommandozeilentools bieten eine direktere Schnittstelle als Weboberflächen und verbrauchen weniger API-Kontingent, was Kosten spart.
-- **Weitere MCP-Server**: Verbinde weitere MCP-Server mit deinem Agenten.
+- **Weitere MCP-Server:** Verbinde weitere MCP-Server mit deinem Agenten.
 Viele Werkzeuge aus dem Entwicklungsalltag bieten passende Integrationen an.
 Durch die Anbindung an deine Designsoftware, Ticketsysteme und weitere Plattformen kann der Agent direkt auf Dokumentation, Designs und Tickets zugreifen und diese Informationen in seine Arbeit einfließen lassen.
 
