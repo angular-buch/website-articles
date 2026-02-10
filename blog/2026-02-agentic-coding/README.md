@@ -19,7 +19,7 @@ header: header.jpg
 ---
 
 Softwareprojekte werden komplexer, und Anforderungen steigen.
-Werkzeuge für AI (Artificial Intelligence)[*](#footnote-ai) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, sie erklären komplexe Zusammenhänge und sie schlagen Verbesserungen vor.
+Werkzeuge für AI (Artificial Intelligence) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, sie erklären komplexe Zusammenhänge und sie schlagen Verbesserungen vor.
 **In diesem Artikel zeigen wir dir, wie du mit den AI-Werkzeugen von Angular den bestmöglichen Code generierst.**
 
 ## Inhalt
@@ -289,7 +289,3 @@ Mit Konfigurationsdateien und dem MCP-Server der Angular CLI schließt du die L�
 Doch AI ersetzt kein Fachwissen.
 Wer die Konzepte von Angular nicht versteht, kann auch nicht beurteilen, ob der generierte Code korrekt ist.
 Deshalb gilt: Nutze AI als Beschleuniger, aber investiere in dein eigenes Verständnis – zum Beispiel mit [unserem Buch](https://angular-buch.com/kaufen).
-
----
-
-<a id="footnote-ai"></a>*Genau genommen handelt es sich bei AI nicht um echte Intelligenz, sondern um statistische Mustererkennung auf Basis großer Textmengen. Die populären Begriffe „Künstliche Intelligenz" beziehungsweise „Artificial Intelligence" haben sich trotzdem im Sprachgebrauch etabliert, und wir verwenden sie hier ebenso.*
