@@ -44,7 +44,7 @@ Bevor wir ins Detail gehen, sollten wir aber besprechen, warum diese Unterstütz
 Die technische Grundlage aller AI-Agenten ist ein LLM (Large Language Model).
 Es basiert auf Trainingsdaten, die zu einem bestimmten Zeitpunkt erstellt wurden.
 Da ein solches Training extrem ressourcenintensiv ist, wird es nicht permanent durchgeführt.
-Es gibt also praktisch einen Stichtag, und selbst die besten Modelle können nur das „wissen", was bis zu diesem Datum existierte.
+Es gibt also praktisch einen Stichtag, und selbst die besten Modelle können nur das "wissen", was bis zu diesem Datum existierte.
 
 Problematisch wird das bei schnelllebigen Technologien wie Angular: Neue Features kommen hinzu und Best Practices ändern sich.
 Aktuelle Neuerungen wie Signal Forms, die Resource API oder Angular Aria sind womöglich nicht in den Trainingsdaten vorhanden.
@@ -111,7 +111,7 @@ Der Custom Prompt liegt in diesem Fenster, und bei längeren Sessions können di
 
 ![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt 127k von 200k Tokens (63% Auslastung). Aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Claude Code: Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
 
-Wird das Kontextfenster überschritten, „vergisst" der AI-Agent frühere Teile der Konversation.
+Wird das Kontextfenster überschritten, "vergisst" der AI-Agent frühere Teile der Konversation.
 Dieses Vergessen ist technisch notwendig, damit die Unterhaltung weitergehen kann.
 Das häufigste Mittel besteht darin, die bisherige Konversation bestmöglich zusammenzufassen (engl. **Context Summarization**).
 Das funktioniert manchmal hervorragend und manchmal leider überhaupt nicht.
@@ -148,7 +148,7 @@ Der MCP-Server von Angular stellt verschiedene Tools bereit.
 
 **Experimentelle Tools:**
 
-- `modernize`: unterstützt Migrationen zu modernen Patterns, z. B. Signal Inputs (`@Input` → `input()`), moderne Outputs (`@Output` → `output()`), die Funktion `inject()`, Signal Querys (`ViewChild`/`ContentChild` → Signals), Built-in Control Flow (`*ngIf`/`*ngFor` → `@if`/`@for`) und Self-Closing Tags.
+- `modernize`: unterstützt Migrationen zu modernen Patterns, z. B. Signal Inputs (`@Input` &rarr; `input()`), moderne Outputs (`@Output` &rarr; `output()`), die Funktion `inject()`, Signal Querys (`ViewChild`/`ContentChild` &rarr; Signals), Built-in Control Flow (`*ngIf`/`*ngFor` &rarr; `@if`/`@for`) und Self-Closing Tags.
 - `build`: führt einen einmaligen Build mit `ng build` durch.
 - `devserver.start`, `devserver.stop`, `devserver.wait_for_build`: verwalten den Development Server.
 - `e2e`: führt End-to-End-Tests aus.
@@ -230,7 +230,7 @@ Sobald der MCP-Server konfiguriert ist, entscheidet der AI-Agent selbstständig,
 Der MCP-Server läuft dabei nicht permanent, sondern wird nur bei Bedarf gestartet und wieder beendet.
 Die meisten Tools sind rein lesend: Sie liefern Informationen wie Dokumentation, Beispiele oder Best Practices, ohne Dateien zu verändern.
 Einige Tools wie `modernize` können aber auch Generatoren der Angular CLI aufrufen und damit Code im Projekt verändern.
-Falls du ein bestimmtes Tool nutzen möchtest, bitte den Agenten explizit darum, z. B. mit *„Nutze das Tool `search_documentation`, um nach Signal Forms zu suchen"*.
+Falls du ein bestimmtes Tool nutzen möchtest, bitte den Agenten explizit darum, z. B. mit *"Nutze das Tool `search_documentation`, um nach Signal Forms zu suchen"*.
 
 Wenn du neugierig geworden bist, kannst du den MCP-Server der Angular CLI selbst erforschen.
 Mit dem Werkzeug [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) lassen sich alle verfügbaren Tools im Webbrowser anzeigen und testen:
@@ -274,7 +274,7 @@ Beschreibe was du brauchst, und lass dir Lösungsvorschläge generieren.
 Frage auch immer nach möglichen Alternativen, und lass dir Vor- und Nachteile auflisten.
 - **Migrationen delegieren:** Bei Angular-Upgrades oder Migration zu neuen Patterns wie Standalone Components, Signals oder Control Flow kann der Agent viel Arbeit abnehmen.
 Der MCP-Server stellt dafür eigene Tools bereit.
-- **Pair Programming:** Nutze den Agenten als „Sparringspartner" für Architekturentscheidungen.
+- **Pair Programming:** Nutze den Agenten als "Sparringspartner" für Architekturentscheidungen.
 Lass dir verschiedene Lösungswege aufzeigen.
 Der Agent hat kein Ego und erklärt geduldig.
 - **CLIs statt Web nutzen:** AI-Agenten erhalten zunehmend Zugangssperren, weil sie Websites intensiv crawlen.
