@@ -32,7 +32,7 @@ Werkzeuge für AI (Artificial Intelligence)[*](#footnote-ai) können uns bei der
 
 Den Weg in den Alltag fand AI durch browserbasierte Chats wie ChatGPT, Gemini oder Perplexity. Doch wer damit Software entwickelt, stößt schnell an Grenzen: Der Chat kennt das Projekt nicht, und Code muss manuell hin- und herkopiert werden. AI-Agenten lösen dieses Problem. Sie können prinzipiell alles tun, was wir am Computer auch tun könnten. Die Agenten laufen typischerweise in einer Sandbox und fragen bei kritischen Aktionen nach Bestätigung.
 
-![Terminal-Ausgabe von Claude Code: Ein Diff zeigt geplante Änderungen an der Datei app.ts – rote Zeilen werden entfernt, grüne hinzugefügt. Darunter die Bestätigungsabfrage mit den Optionen Yes, Yes allow all edits, Type here to tell Claude what to do differently, und Esc to cancel.](confirmation-dialog.png "Claude Code fragt vor der Änderung einer Datei nach Bestätigung")
+![Terminal-Ausgabe von Claude Code: Ein Diff zeigt geplante Änderungen an der Datei app.ts – rote Zeilen werden entfernt, grüne hinzugefügt. Darunter die Bestätigungsabfrage mit den Optionen Yes, Yes allow all edits, Type here to tell Claude what to do differently, und Esc to cancel.](confirmation-dialog.png "Claude Code fragt vor der Änderung einer Datei nach Bestätigung.")
 
 Angular bietet für die Arbeit mit solchen Agenten spezielle Unterstützung, damit wir optimale Ergebnisse erhalten und der generierte Code den aktuellen Best Practices entspricht.
 Bevor wir ins Detail gehen, sollten wir aber besprechen, warum diese Unterstützung überhaupt notwendig ist.
