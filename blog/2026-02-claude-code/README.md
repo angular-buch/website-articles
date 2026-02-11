@@ -59,6 +59,26 @@ Du siehst einen Diff mit den geplanten Änderungen und hast mehrere Optionen:
 - Oder du gibst direkt Feedback ein, was anders gemacht werden soll
 
 Dieses System sorgt dafür, dass du nie die Kontrolle verlierst, auch wenn der Agent autonom arbeitet.
+
+## Warum ein Terminal?
+
+Auf den ersten Blick wirkt die Entscheidung für ein Terminal-Interface anachronistisch.
+Warum keine schicke GUI mit Buttons und Menüs?
+Warum kein Plugin für VS Code mit integriertem Panel?
+
+Die Antwort liegt in einer interessanten Designentscheidung: Das Terminal zwingt zu radikaler Einfachheit.
+Wenn dein Interface nur aus Text besteht, musst du jede Funktionalität entweder automatisieren oder über Slash-Befehle und Tastenkürzel zugänglich machen.
+Es gibt keine Ausweichmöglichkeit in Form von "hier noch ein Button, dort noch ein Dropdown".
+
+Diese Einschränkung ist gleichzeitig eine Stärke.
+Anthropic muss sich bei jeder Funktion fragen: Kann der Agent das selbst erkennen und erledigen?
+Oder ist es so häufig gebraucht, dass es einen kurzen Befehl verdient?
+Das Ergebnis ist ein Interface, das überraschend gut funktioniert – gerade weil es so reduziert ist.
+
+Natürlich gibt es auch eine VS Code-Extension (dazu später mehr).
+Aber die eigentliche Magie passiert im Terminal: ein Chat-Interface, Text rein, Aktionen raus.
+Kein Schnickschnack, nur Produktivität.
+
 Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
 
 ## Installation
