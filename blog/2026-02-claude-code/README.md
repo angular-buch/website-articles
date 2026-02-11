@@ -1,5 +1,5 @@
 ---
-title: 'Claude Code: Der AI-Agent für Angular-Entwickler'
+title: 'Claude Code: Der AI-Agent für Angular-Entwickler (und solche, die es werden wollen)'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 published: 2026-02-18
@@ -16,9 +16,10 @@ keywords:
 language: de
 ---
 
-Claude Code ist ein AI-Agent, der direkt im Terminal läuft.
-Er kann Dateien lesen und schreiben, Befehle ausführen und komplexe Aufgaben autonom planen.
-**In diesem Artikel zeige ich dir, wie du Claude Code für die Angular-Entwicklung einrichtest und effektiv nutzt.**
+Es gab noch nie einen besseren Zeitpunkt, um Software zu entwickeln.
+AI-Agenten wie Claude Code haben meinen Workflow grundlegend verändert – ich schreibe besseren Code in weniger Zeit.
+**In diesem Artikel zeige ich dir, wie das funktioniert.
+Ob du seit Jahren Angular entwickelst oder gerade erst anfängst: Die Einstiegshürde war noch nie so niedrig.**
 
 ## Inhalt
 
