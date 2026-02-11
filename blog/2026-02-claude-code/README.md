@@ -120,9 +120,7 @@ claude
 
 Dann im Claude Code Prompt:
 
-```
-Liste alle Dateien in diesem Ordner auf und erkläre kurz, was sie sind.
-```
+> Liste alle Dateien in diesem Ordner auf und erkläre kurz, was sie sind.
 
 Claude Code wird die Dateien analysieren und dir eine Übersicht geben.
 Dann probiere etwas Spannenderes:
@@ -143,17 +141,7 @@ Und mit dem Befehl `/doctor` prüfst du, ob alles korrekt eingerichtet ist.
 ## Der Workflow
 
 Jetzt wird es konkret: Wie sieht die tägliche Arbeit mit Claude Code aus?
-Ein typischer Workflow folgt diesem Muster:
-
-1. **Navigiere zum Projekt:** `cd mein-angular-projekt`
-2. **Starte Claude Code:** `claude`
-3. **Beschreibe die Aufgabe:** z. B. "Erstelle eine neue Komponente für die Benutzerregistrierung"
-4. **Beobachte:** Claude Code liest relevante Dateien und plant die Umsetzung
-5. **Review:** Du siehst die geplanten Änderungen als Diff
-6. **Bestätigen oder Anpassen:** Du entscheidest, was übernommen wird
-7. **Iteration:** Bei Bedarf gibst du weiteres Feedback
-
-Das klingt abstrakt – deshalb hier ein konkretes Beispiel, wie so eine Interaktion aussehen kann:
+Am besten zeigt das ein konkretes Beispiel:
 
 ```
 Du: Erstelle einen BookService, der Bücher über HTTP lädt.
@@ -210,31 +198,19 @@ Das klingt offensichtlich, ist aber der wichtigste Erfolgsfaktor beim Arbeiten m
 Der einfachste Weg, Kontext zu geben, ist das Referenzieren von Dateien.
 Du kannst sie direkt in deiner Anfrage erwähnen:
 
-```
-Schau dir src/app/user/user.service.ts an und füge eine Methode
-zum Löschen von Benutzern hinzu. Orientiere dich am Stil der
-bestehenden Methoden.
-```
+> Schau dir src/app/user/user.service.ts an und füge eine Methode zum Löschen von Benutzern hinzu. Orientiere dich am Stil der bestehenden Methoden.
 
 Claude Code liest die Datei automatisch und versteht den bestehenden Code.
 Du kannst auch mehrere Dateien referenzieren, um Vergleiche anzustellen oder Muster zu übertragen:
 
-```
-Vergleiche src/app/old/legacy.service.ts mit src/app/new/modern.service.ts.
-Was sind die Hauptunterschiede? Migriere den Legacy-Service zum modernen Pattern.
-```
+> Vergleiche src/app/old/legacy.service.ts mit src/app/new/modern.service.ts. Was sind die Hauptunterschiede? Migriere den Legacy-Service zum modernen Pattern.
 
 ### Bilder einbinden
 
 Eine besonders praktische Funktion: Claude Code kann auch Bilder analysieren.
-Ziehe einfach einen Screenshot oder ein Mockup per Drag & Drop ins Terminal:
+Ziehe einfach einen Screenshot oder ein Mockup per Drag & Drop ins Terminal und schreibe dazu:
 
-Ziehe das Bild einfach ins Terminal und schreibe dazu:
-
-```
-Setze dieses Design als Angular-Komponente um.
-Verwende Tailwind CSS für das Styling.
-```
+> Setze dieses Design als Angular-Komponente um. Verwende Tailwind CSS für das Styling.
 
 Das ist besonders nützlich, wenn du UI-Mockups in Komponenten umsetzen, Fehlermeldungen aus dem Browser analysieren oder Diagramme und Architekturbeschreibungen verstehen möchtest.
 
@@ -309,10 +285,7 @@ Die Regeln werden kombiniert: Globale Regeln plus projektspezifische Regeln.
 Neben der CLAUDE.md gibt es noch eine weitere Möglichkeit, Wissen dauerhaft zu speichern: das Memory-Feature.
 Sag einfach in natürlicher Sprache, was sich Claude merken soll:
 
-```
-Merke dir: In diesem Projekt verwenden wir Vitest statt Karma.
-RxJS-Operatoren immer einzeln importieren, nie das komplette 'rxjs'-Paket.
-```
+> Merke dir: In diesem Projekt verwenden wir Vitest statt Karma. RxJS-Operatoren immer einzeln importieren, nie das komplette 'rxjs'-Paket.
 
 Claude Code speichert diese Informationen in Markdown-Dateien, die bei jeder Session automatisch geladen werden.
 Noch schneller geht es mit der `#`-Taste: Tippe `#` im Prompt, und du kannst direkt eine Erinnerung zur CLAUDE.md hinzufügen – ohne den Workflow zu unterbrechen.
@@ -327,9 +300,7 @@ Du musst keine Commit-Messages mehr formulieren oder PR-Beschreibungen schreiben
 
 Gib einfach an, dass du einen Commit erstellen möchtest:
 
-```
-Erstelle einen Commit für die aktuellen Änderungen.
-```
+> Erstelle einen Commit für die aktuellen Änderungen.
 
 Claude Code führt dann automatisch `git status` und `git diff` aus, analysiert alle Änderungen, schlägt eine passende Commit-Message vor und führt den Commit nach deiner Bestätigung aus.
 
@@ -337,9 +308,7 @@ Claude Code führt dann automatisch `git status` und `git diff` aus, analysiert 
 
 Auch Pull Requests lassen sich so erstellen:
 
-```
-Erstelle einen Pull Request für diesen Branch.
-```
+> Erstelle einen Pull Request für diesen Branch.
 
 Claude Code generiert einen PR mit aussagekräftigem Titel, einer Zusammenfassung der Änderungen und einem Test-Plan.
 Voraussetzung ist die GitHub CLI (`gh`), die installiert und authentifiziert sein muss.
@@ -348,10 +317,7 @@ Voraussetzung ist die GitHub CLI (`gh`), die installiert und authentifiziert sei
 
 Und wenn du wissen möchtest, ob deine Änderungen Probleme verursachen könnten:
 
-```
-Analysiere die Änderungen im aktuellen Branch verglichen mit main.
-Gibt es potenzielle Probleme?
-```
+> Analysiere die Änderungen im aktuellen Branch verglichen mit main. Gibt es potenzielle Probleme?
 
 ### Empfehlung: Attribution abschalten
 
@@ -433,9 +399,7 @@ Die experimentellen Werkzeuge aktivierst du mit dem `--experimental-tool`-Flag i
 
 Du kannst diese Werkzeuge explizit anfordern:
 
-```
-Frage den Angular MCP-Server nach Best Practices für Signal Forms.
-```
+> Frage den Angular MCP-Server nach Best Practices für Signal Forms.
 
 Claude Code ruft dann aktuelle Informationen ab, die möglicherweise neuer sind als sein Trainingswissen.
 Mehr Details zum MCP-Server und warum er so wichtig ist, findest du in meinem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
@@ -444,29 +408,50 @@ Genug Theorie – lass uns ein konkretes Projekt umsetzen.
 
 ## Dein erstes Angular-Projekt mit Claude Code
 
-Starte Claude Code in einem leeren Verzeichnis und gib ihm eine einzige Aufgabe:
+Wichtig: Der Angular MCP-Server sollte von Anfang an angebunden sein.
+Nur so bekommt Claude Code Zugriff auf aktuelle Best Practices und generiert keinen veralteten Code.
 
-```
-Erstelle eine Angular-App namens "book-app":
-- BookListComponent zeigt eine Liste von Büchern
-- Daten kommen über einen BookService von https://api.angular.schule/books
-- Verwende die Resource API und Signals
-- Routing: /books für die Liste, / für eine Startseite
-- Unit Tests für Service und Komponente
-- Starte den Dev-Server, wenn alles fertig ist
+Allerdings gibt es ein Henne-Ei-Problem: Die MCP-Konfiguration braucht ein Projektverzeichnis – das aber noch nicht existiert.
+Die Lösung: Lass Claude Code zuerst das Projekt erstellen, starte dann neu, und arbeite ab da mit MCP-Anbindung weiter.
+
+```bash
+mkdir book-app && cd book-app
+claude
 ```
 
-Claude Code wird daraufhin selbstständig:
-1. `ng new book-app` ausführen
-2. Ein `Book`-Interface anlegen
-3. Den Service mit Resource API erstellen
-4. Die Komponente mit `@if` und `@for` bauen
-5. Routing konfigurieren
-6. Tests schreiben
-7. Den Dev-Server starten
+Instruiere Claude Code, das Projekt zu erstellen und die MCP-Konfiguration anzulegen:
+
+> Führe folgenden Befehl aus: ng new book-app --ai-config=claude --directory .
+>
+> Erstelle danach eine .mcp.json mit folgendem Inhalt:
+> {
+>     "mcpServers": {
+>         "angular-cli": {
+>             "command": "npx",
+>             "args": ["-y", "@angular/cli", "mcp"]
+>         }
+>     }
+> }
+
+Das Flag `--ai-config=claude` generiert eine passende `CLAUDE.md` für das Projekt.
+Die `.mcp.json` verbindet Claude Code mit dem Angular MCP-Server – allerdings erst beim nächsten Start.
+Drücke `Strg+D` und starte mit `claude --resume`:
+
+![MCP-Server Prompt beim Start von Claude Code](mcp-prompt.png)
+
+Jetzt kann es losgehen – mit MCP-Anbindung von Anfang an:
+
+> Erstelle folgende Features für die App:
+> - BookListComponent zeigt eine Liste von Büchern
+> - Daten kommen über einen BookService von https://api.angular.schule/books
+> - Verwende die Resource API und Signals
+> - Routing: /books für die Liste, / für eine Startseite
+> - Unit Tests für Service und Komponente
+> - Starte den Dev-Server, wenn alles fertig ist
 
 Du bestätigst jeden Schritt einzeln – oder drückst `a` (Always) und lehnst dich zurück.
-Am Ende hast du eine funktionsfähige Angular-App mit aktuellen Best Practices, ohne eine Zeile Code selbst geschrieben zu haben.
+Am Ende hast du eine funktionsfähige Angular-App mit Routing, Service, Komponente, Tests und laufendem Dev-Server – aufgebaut mit aktuellen Best Practices, ohne eine Zeile Code selbst geschrieben zu haben.
+Genau das ist der Punkt: Was früher ein halber Tag Setup war, erledigt Claude Code in einer Session.
 
 ## Praktische Beispiele
 
@@ -477,14 +462,12 @@ Hier einige Beispiele aus dem Entwickleralltag.
 
 Einer meiner häufigsten Anwendungsfälle: den Build-Fehler direkt an Claude Code weitergeben.
 
-```
-Der Build schlägt fehl:
-
-Error: src/app/user/user.component.ts:15:5
-Property 'users' does not exist on type 'UserComponent'.
-
-Analysiere das Problem und behebe es.
-```
+> Der Build schlägt fehl:
+>
+> Error: src/app/user/user.component.ts:15:5
+> Property 'users' does not exist on type 'UserComponent'.
+>
+> Analysiere das Problem und behebe es.
 
 Claude Code liest die betroffene Datei, versteht den umliegenden Code und schlägt eine Lösung vor.
 Oft ist der Fix in Sekunden erledigt – inklusive Anpassung der Tests.
@@ -494,20 +477,13 @@ Oft ist der Fix in Sekunden erledigt – inklusive Anpassung der Tests.
 Du hast ein Projekt mit NgModules, altem `subscribe()`-Pattern und `ngOnInit` überall?
 Gib Claude Code einen klaren Auftrag:
 
-```
-Migriere src/app/legacy/ von NgModules zu Standalone Components.
-Ersetze die HTTP-Calls durch die Resource API.
-Behalte die bestehende Funktionalität bei und aktualisiere die Tests.
-```
+> Migriere src/app/legacy/ von NgModules zu Standalone Components. Ersetze die HTTP-Calls durch die Resource API. Behalte die bestehende Funktionalität bei und aktualisiere die Tests.
 
 ### Code Review + Fix in einem Schritt
 
 Statt nur Probleme aufzulisten: Claude Code kann sie direkt beheben.
 
-```
-Reviewe src/app/cart/ auf Performance-Probleme, Angular Best Practices
-und potenzielle Bugs. Behebe dann alles, was du findest.
-```
+> Reviewe src/app/cart/ auf Performance-Probleme, Angular Best Practices und potenzielle Bugs. Behebe dann alles, was du findest.
 
 Das Muster ist immer gleich: Beschreibe was du willst, Claude Code liefert.
 Doch die Qualität hängt davon ab, wie du fragst.
