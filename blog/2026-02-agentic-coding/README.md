@@ -292,7 +292,6 @@ Doch AI ersetzt kein Fachwissen.
 Wer die Konzepte von Angular nicht versteht, kann auch nicht beurteilen, ob der generierte Code korrekt ist.
 Deshalb gilt: Nutze AI als Beschleuniger, aber investiere in dein eigenes Verständnis – zum Beispiel mit [unserem Buch](https://angular-buch.com/kaufen).
 
-<br>
 <hr>
 
 <small>**Titelbild:** generiert mit Nano Banana Pro (Gemini 3)</small>
