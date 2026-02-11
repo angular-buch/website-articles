@@ -13,6 +13,7 @@ keywords:
   - Anthropic
   - CLI
   - Terminal
+header: header.jpg
 language: de
 ---
 
@@ -31,24 +32,21 @@ Claude Code ist die CLI-Version von Claude, dem AI-Modell von Anthropic.
 Der entscheidende Unterschied zum Browser-Chat: Claude Code arbeitet direkt in deinem Projekt.
 Es liest deinen Code, versteht den Kontext und kann Änderungen selbst umsetzen.
 
-Stell es dir so vor: Der Browser-Chat gibt dir Ratschläge.
-Claude Code setzt sich an deinen Schreibtisch und erledigt die Arbeit.
+Stell es dir so vor: Der Browser-Chat gibt dir nur Ratschläge.
+Claude Code setzt sich aber an deinen Schreibtisch und erledigt die Arbeit. **Viel besser! 😎**
 
-Konkret heißt das: Claude Code kann deine Dateien lesen und bearbeiten, Shell-Befehle wie `ng generate` oder `npm test` ausführen, im Web nach Informationen suchen und sogar Bilder analysieren.
+Konkret heißt das: Claude Code kann deine Dateien lesen und bearbeiten, Shell-Befehle ausführen, im Web nach Informationen suchen und sogar Bilder analysieren.
 Der Agent entscheidet selbstständig, welche Schritte nötig sind, und arbeitet sie nacheinander ab – du siehst dabei immer, was gerade passiert.
 
 Das klingt nach viel Macht, und genau deshalb ist ein Aspekt besonders wichtig: die Kontrolle.
 
-Vor jeder Dateiänderung fragt Claude Code nach Bestätigung.
-Du siehst einen Diff mit den geplanten Änderungen und hast mehrere Optionen:
+Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befehl nach Bestätigung.
+Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
+In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
 
-- **y** (Yes): Änderung akzeptieren
-- **n** (No): Änderung ablehnen
-- **a** (Always): Alle weiteren Änderungen dieser Art automatisch akzeptieren
-- **e** (Edit): Die Änderung vor dem Akzeptieren bearbeiten
-- Oder du gibst direkt Feedback ein, was anders gemacht werden soll
-
-Dieses System sorgt dafür, dass du nie die Kontrolle verlierst, auch wenn der Agent autonom arbeitet.
+Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
+Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
+Das ist praktisch in isolierten Umgebungen (Container, VMs, CI) – ich persönlich habe ihn noch nie benutzt. Ist mir zu gefährlich.
 
 ## Warum ein Terminal?
 
@@ -95,6 +93,8 @@ claude
 
 Beim ersten Start wirst du aufgefordert, dich mit deinem Anthropic-Konto anzumelden.
 Du benötigst ein Claude Pro-Abo (ca. 18 EUR/Monat) oder Max-Abo (ab 90 EUR/Monat für intensivere Nutzung).
+Tipp: Wenn du jemanden kennst, der ein Max-Abo hat, kann diese Person dir mit `/passes` einen Einladungs-Code generieren – damit kannst du Claude Code eine Woche lang kostenlos testen.
+Du kennst niemanden? Schreib uns an team@angular.schule – wir helfen gerne aus!
 
 ### Der erste Start
 
@@ -568,8 +568,35 @@ Hier sind die Schwächen, die du kennen solltest:
 
 - **Übereifer:** Manchmal "verbessert" Claude Code Dinge, die du gar nicht ändern wolltest. Sei in deinen Anfragen spezifisch, was sich ändern soll – und was nicht.
 
-Diese Schwächen sind kein Grund, Claude Code nicht zu nutzen.
-Aber sie sind ein Grund, den generierten Code immer zu reviewen.
+Doch es gibt auch ernsthaftere Risiken:
+
+- **Prompt Injections:** Claude Code liest Dateien, Webseiten und MCP-Antworten – und kann versteckte Anweisungen darin als legitime Befehle interpretieren. Ein HTML-Kommentar in einer README, eine manipulierte Dependency oder ein vergifteter MCP-Server reichen aus, damit der Agent ungewollt Code ausführt oder Daten exfiltriert. Das ist kein theoretisches Risiko: Sicherheitsforscher haben [acht verschiedene Wege gefunden, in Claude Code Befehle ohne Bestätigung auszuführen](https://flatt.tech/research/posts/pwning-claude-code-in-8-different-ways/) (inzwischen gepatcht). Auch [Homograph-Angriffe](https://x.com/sheeki03/status/2018382483465867444) – bei denen ein kyrillisches Zeichen einen Befehl optisch identisch, aber funktional anders macht – werden durch "Vibe Coding" gefährlicher, weil Befehle oft ungeprüft übernommen werden.
+
+- **Datenverlust:** Eine falsch verstandene Anweisung kann Dateien löschen oder überschreiben. Im Dezember 2025 hat Googles AI-Coding-Tool Antigravity (mit Gemini 3 Pro) im autonomen Modus das [gesamte Laufwerk D: eines Entwicklers gelöscht](https://www.theregister.com/2025/12/01/google_antigravity_wipes_d_drive/). Das war nicht Claude Code – aber das Risiko ist grundsätzlich bei jedem AI-Agenten vorhanden, der Shell-Befehle ausführt.
+
+### Lösung: Docker Sandbox
+
+Wer auf Nummer sicher gehen will, startet Claude Code in einer Docker Sandbox.
+Statt:
+
+```bash
+claude
+```
+
+einfach:
+
+```bash
+docker sandbox run claude .
+```
+
+Die [Docker AI Sandbox](https://docs.docker.com/ai/sandboxes/) isoliert Claude Code in einem Container.
+Man muss sich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umgebungsvariable übergeben), aber danach bleibt die Sandbox bestehen, bis man sie explizit löscht.
+
+Das Beste: Im Container hat man den gleichen absoluten Pfad wie auf dem Host, und die Git-Konfiguration wird durchgereicht.
+Ich habe das eine Weile benutzt und merke keinen Unterschied – außer dem guten Gefühl, dass nichts Ungewolltes passieren kann.
+
+Diese Schwächen und Risiken sind kein Grund, Claude Code nicht zu nutzen.
+Aber sie sind ein Grund, den generierten Code immer zu reviewen – und bei Bedarf eine Sandbox zu verwenden.
 
 ## Fazit
 
@@ -587,4 +614,4 @@ Der Rest ergibt sich.
 
 <hr>
 
-<small>**Titelbild:** ???</small>
+<small>**Titelbild:** generiert mit Nano Banana Pro (Gemini 3)</small>
