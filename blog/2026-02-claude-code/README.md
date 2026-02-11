@@ -84,7 +84,7 @@ Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
 ## Installation
 
 Die gute Nachricht: Die Installation dauert etwa eine Minute.
-Voraussetzung ist lediglich Node.js (ab Version 18).
+Es gibt keine besonderen Voraussetzungen – nur ein unterstütztes Betriebssystem (macOS 13+, Windows 10+, oder Ubuntu 20.04+).
 
 **macOS / Linux:**
 
@@ -212,10 +212,10 @@ Zusätzlich gibt es einige Tastenkürzel, die du kennen solltest:
 
 | Kürzel | Aktion |
 |--------|--------|
-| `Esc` | Aktuelle Aktion abbrechen |
-| `Esc` (2x) | Claude Code beenden |
-| `Tab` | Autovervollständigung für Dateipfade |
-| `Strg+C` | Laufende Operation abbrechen |
+| `Strg+C` | Aktuelle Operation abbrechen |
+| `Strg+D` | Claude Code beenden |
+| `@` | Dateipfad-Autovervollständigung starten |
+| `Tab` | Vorschlag akzeptieren |
 
 Der Workflow ist also schnell erlernt.
 Doch die Qualität der Ergebnisse hängt von einem entscheidenden Faktor ab: dem Kontext.
@@ -414,14 +414,35 @@ Die Konfiguration erfolgt in der Datei `.claude/settings.json`:
 
 Mit dieser Konfiguration stehen Claude Code zusätzliche Werkzeuge zur Verfügung:
 
+**Standard-Werkzeuge (immer aktiv):**
+
 | Werkzeug | Beschreibung |
 |----------|--------------|
 | `get_best_practices` | Aktuelle Angular-Coding-Guidelines |
 | `search_documentation` | Durchsucht die offizielle Angular-Doku |
 | `find_examples` | Code-Beispiele für moderne Features |
+| `list_projects` | Identifiziert Apps und Libraries im Workspace |
+
+**Experimentelle Werkzeuge (müssen aktiviert werden):**
+
+| Werkzeug | Beschreibung |
+|----------|--------------|
 | `modernize` | Migriert zu modernen Patterns |
 | `test` | Führt Unit Tests aus |
 | `build` | Baut das Projekt |
+
+Die experimentellen Werkzeuge aktivierst du mit dem `--experimental-tool`-Flag:
+
+```json
+{
+  "mcpServers": {
+    "angular-cli": {
+      "command": "npx",
+      "args": ["-y", "@angular/cli", "mcp", "--experimental-tool", "all"]
+    }
+  }
+}
+```
 
 Du kannst diese Werkzeuge explizit anfordern:
 
