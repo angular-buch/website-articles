@@ -1,7 +1,7 @@
 ---
 title: 'Claude Code: Der AI-Agent für Angular-Entwickler'
-author: Angular-Buch Team
-mail: team@angular-buch.com
+author: Johannes Hoppe
+mail: johannes.hoppe@haushoppe-its.de
 published: 2026-02-18
 keywords:
   - Angular
@@ -18,7 +18,7 @@ language: de
 
 Claude Code ist ein AI-Agent, der direkt im Terminal läuft.
 Er kann Dateien lesen und schreiben, Befehle ausführen und komplexe Aufgaben autonom planen.
-**In diesem Artikel zeigen wir dir, wie du Claude Code für die Angular-Entwicklung einrichtest und effektiv nutzt.**
+**In diesem Artikel zeige ich dir, wie du Claude Code für die Angular-Entwicklung einrichtest und effektiv nutzt.**
 
 ## Inhalt
 
@@ -105,7 +105,7 @@ claude
 ```
 
 Beim ersten Start wirst du aufgefordert, dich mit deinem Anthropic-Konto anzumelden.
-Du benötigst ein Claude Pro-Abo (20 $/Monat) oder Max-Abo (100 $/Monat für intensivere Nutzung).
+Du benötigst ein Claude Pro-Abo (ca. 18 EUR/Monat) oder Max-Abo (ab 90 EUR/Monat für intensivere Nutzung).
 
 ### Der erste Start
 
@@ -121,7 +121,7 @@ Mach einen Screenshot der Fehlermeldung und frag nach einer Lösung – das ist 
 
 ### Die ersten Gehversuche
 
-Bevor du dich an komplexe Angular-Aufgaben wagst, empfehlen wir, mit etwas Einfachem zu beginnen.
+Bevor du dich an komplexe Angular-Aufgaben wagst, empfehle ich, mit etwas Einfachem zu beginnen.
 So bekommst du ein Gefühl für den Workflow:
 
 ```bash
@@ -451,7 +451,7 @@ Frage den Angular MCP-Server nach Best Practices für Signal Forms.
 ```
 
 Claude Code ruft dann aktuelle Informationen ab, die möglicherweise neuer sind als sein Trainingswissen.
-Mehr Details zum MCP-Server und warum er so wichtig ist, findest du in unserem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
+Mehr Details zum MCP-Server und warum er so wichtig ist, findest du in meinem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
 
 Genug Theorie – lass uns ein konkretes Projekt umsetzen.
 
@@ -615,7 +615,7 @@ Doch unabhängig von der konkreten Aufgabe gibt es einige Prinzipien, die für e
 ## Tipps für effektives Arbeiten
 
 Nach einiger Zeit mit Claude Code wirst du Muster erkennen, die zu besseren Ergebnissen führen.
-Hier die wichtigsten Erkenntnisse aus unserer Praxis.
+Hier die wichtigsten Erkenntnisse aus meiner Praxis.
 
 ### Spezifisch sein
 
@@ -704,13 +704,12 @@ Die Kosten hängen davon ab, wie intensiv du Claude Code nutzt:
 
 | Abo | Kosten | Nutzung |
 |-----|--------|---------|
-| Claude Pro | 20 $/Monat | Gut für Einsteiger und moderate Nutzung |
-| Claude Max 5x | 100 $/Monat | Für intensive tägliche Nutzung |
-| Claude Max 20x | 200 $/Monat | Für professionelle Entwickler |
+| Claude Pro | ca. 18 EUR/Monat | Gut für Einsteiger und moderate Nutzung |
+| Claude Max 5x | ca. 90 EUR/Monat | Für intensive tägliche Nutzung |
+| Claude Max 20x | ca. 180 EUR/Monat | Für professionelle Entwickler |
 | API (Pay-per-use) | variabel | Für Automatisierung und CI/CD |
 
-Eine typische Entwicklungs-Session (1-2 Stunden) verbraucht etwa 0,50–3 $ an API-Kosten.
-Bei intensiver Nutzung lohnt sich das Max-Abo, da es unbegrenzte Nutzung bietet.
+Bei intensiver Nutzung lohnt sich das Max-Abo, da es höhere Nutzungslimits bietet.
 
 ## Troubleshooting
 
@@ -745,7 +744,7 @@ Entweder direkt in Claude Code oder im Browser unter claude.ai – mach einen Sc
 
 ## Was ist noch möglich?
 
-Wir haben uns in diesem Artikel auf Angular konzentriert, aber Claude Code ist universell einsetzbar.
+Ich habe mich in diesem Artikel auf Angular konzentriert, aber Claude Code ist universell einsetzbar.
 Hier ein paar Ideen, was du noch ausprobieren kannst:
 
 - **Dokumentation schreiben:** "Erstelle eine README für dieses Projekt"
