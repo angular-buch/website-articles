@@ -185,28 +185,18 @@ Claude Code: [Write] src/app/books/book.service.spec.ts
 ```
 
 Wie du siehst, ist der Dialog iterativ: Du gibst eine Aufgabe, Claude Code arbeitet, und du steuerst nach.
-Dabei helfen dir einige Slash-Befehle, die direkt im Claude Code Prompt verfügbar sind:
 
-| Befehl | Beschreibung |
-|--------|--------------|
-| `/help` | Zeigt alle verfügbaren Befehle |
-| `/clear` | Löscht den Konversationsverlauf |
-| `/compact` | Komprimiert den Kontext (nützlich bei langen Sessions) |
-| `/context` | Zeigt die aktuelle Auslastung des Kontext-Fensters |
-| `/cost` | Zeigt die API-Kosten der aktuellen Session |
-| `/doctor` | Prüft die Installation auf Probleme |
-| `/memory` | Zeigt gespeicherte Erinnerungen an |
-| `/config` | Öffnet die Konfiguration |
-| `/permissions` | Zeigt und verwaltet Berechtigungen |
+Für den Anfang brauchst du nur vier Slash-Befehle:
 
-Zusätzlich gibt es einige Tastenkürzel, die du kennen solltest:
+- **`/help`** – wenn du nicht weiterweißt
+- **`/clear`** – frische Session starten
+- **`/compact`** – Kontext komprimieren, wenn die Session lang wird
+- **`/cost`** – was hat die Session bisher gekostet?
 
-| Kürzel | Aktion |
-|--------|--------|
-| `Strg+C` | Aktuelle Operation abbrechen |
-| `Strg+D` | Claude Code beenden |
-| `@` | Dateipfad-Autovervollständigung starten |
-| `Tab` | Vorschlag akzeptieren |
+Den Rest (es gibt noch viele mehr) lernst du nebenbei kennen – oder du fragst Claude Code einfach danach.
+
+Beim Arbeiten reicht es, `Strg+C` zum Abbrechen und `Strg+D` zum Beenden zu kennen.
+Mit `@` startest du die Dateipfad-Autovervollständigung – praktisch, um schnell auf Dateien zu verweisen.
 
 Der Workflow ist also schnell erlernt.
 Doch die Qualität der Ergebnisse hängt von einem entscheidenden Faktor ab: dem Kontext.
@@ -253,20 +243,8 @@ Das ist besonders nützlich, wenn du UI-Mockups in Komponenten umsetzen, Fehlerm
 Es gibt allerdings eine technische Einschränkung: Jedes AI-Modell hat ein begrenztes Kontext-Fenster.
 Bei Claude sind das etwa 200.000 Tokens – eine Menge, aber bei langen Sessions kann es passieren, dass frühere Informationen "vergessen" werden.
 
-Der Befehl `/context` zeigt dir die aktuelle Auslastung:
-
-```
-/context
-───────────────────────────────────────
-Context: 127k / 200k tokens (63%)
-├── System Prompt:    15k
-├── Memory Files:      3k
-├── Messages:        109k
-└── Free Space:       73k
-───────────────────────────────────────
-```
-
-Wenn der Kontext voll wird, hast du zwei Möglichkeiten:
+In der Statusleiste von Claude Code siehst du immer, wie voll dein Kontext-Fenster ist.
+Wenn es eng wird, hast du zwei Möglichkeiten:
 Mit `/compact` komprimierst du den bisherigen Verlauf durch eine Zusammenfassung.
 Mit `/clear` startest du eine komplett frische Konversation – das ist sinnvoll, wenn du ohnehin zu einer neuen Aufgabe wechselst.
 
@@ -276,7 +254,12 @@ Viel eleganter ist es, projektspezifische Regeln dauerhaft zu hinterlegen.
 ## Projekt-Konfiguration
 
 Claude Code lässt sich projektspezifisch konfigurieren, sodass es von Anfang an weiß, wie dein Projekt strukturiert ist und welchen Konventionen es folgen soll.
-Erstelle dazu eine Datei `.claude/CLAUDE.md` im Projektverzeichnis:
+
+Der einfachste Weg: Starte Claude Code in deinem Projekt und tippe `/init`.
+Claude Code analysiert dann die Projektstruktur, erkennt das verwendete Framework, die Test-Konfiguration und die Coding-Konventionen – und generiert daraus eine passende `.claude/CLAUDE.md`.
+
+Du kannst die Datei natürlich auch manuell anlegen oder die generierte Version anpassen.
+Hier ein Beispiel, wie eine CLAUDE.md für ein Angular-Projekt aussehen kann:
 
 ```markdown
 # Projektregeln für BookMonkey
@@ -696,32 +679,6 @@ Die Extension heißt "Claude Code" und ist im Marketplace verfügbar.
 Nach der Installation erscheint ein Claude-Icon in der Seitenleiste.
 Du kannst Claude Code dann direkt in VS Code nutzen, ohne das Terminal separat zu öffnen.
 Die Befehle und der Workflow bleiben dabei identisch.
-
-## Kosten im Blick
-
-Ein wichtiges Thema: Claude Code verwendet die Anthropic API, und die ist nicht kostenlos.
-Mit dem Befehl `/cost` siehst du jederzeit die Kosten der aktuellen Session:
-
-```
-/cost
-───────────────────────────
-Session cost: $1.23
-├── Input tokens:   45,231
-├── Output tokens:  12,847
-└── Cache hits:     23,102
-───────────────────────────
-```
-
-Die Kosten hängen davon ab, wie intensiv du Claude Code nutzt:
-
-| Abo | Kosten | Nutzung |
-|-----|--------|---------|
-| Claude Pro | ca. 18 EUR/Monat | Gut für Einsteiger und moderate Nutzung |
-| Claude Max 5x | ca. 90 EUR/Monat | Für intensive tägliche Nutzung |
-| Claude Max 20x | ca. 180 EUR/Monat | Für professionelle Entwickler |
-| API (Pay-per-use) | variabel | Für Automatisierung und CI/CD |
-
-Bei intensiver Nutzung lohnt sich das Max-Abo, da es höhere Nutzungslimits bietet.
 
 ## Troubleshooting
 
