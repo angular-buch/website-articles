@@ -159,9 +159,9 @@ Claude Code: Ich werde zunächst die bestehende Projektstruktur analysieren...
              + import { Book } from '../shared/book';
              + ...
 
-             Soll ich die Änderung übernehmen? [y/n/a/e]
+             Soll ich die Änderung übernehmen? [Pfeiltasten + Enter]
 
-Du: y
+Du: [Enter]
 
 Claude Code: Datei erstellt. Soll ich auch Unit Tests generieren?
 
@@ -449,7 +449,7 @@ Jetzt kann es losgehen – mit MCP-Anbindung von Anfang an:
 > - Unit Tests für Service und Komponente
 > - Starte den Dev-Server, wenn alles fertig ist
 
-Du bestätigst jeden Schritt einzeln – oder drückst `a` (Always) und lehnst dich zurück.
+Du bestätigst jeden Schritt einzeln – oder erlaubst alles für die Session und lehnst dich zurück.
 Am Ende hast du eine funktionsfähige Angular-App mit Routing, Service, Komponente, Tests und laufendem Dev-Server – aufgebaut mit aktuellen Best Practices, ohne eine Zeile Code selbst geschrieben zu haben.
 Genau das ist der Punkt: Was früher ein halber Tag Setup war, erledigt Claude Code in einer Session.
 
@@ -574,7 +574,11 @@ Doch es gibt auch ernsthaftere Risiken:
 
 - **Datenverlust:** Eine falsch verstandene Anweisung kann Dateien löschen oder überschreiben. Im Dezember 2025 hat Googles AI-Coding-Tool Antigravity (mit Gemini 3 Pro) im autonomen Modus das [gesamte Laufwerk D: eines Entwicklers gelöscht](https://www.theregister.com/2025/12/01/google_antigravity_wipes_d_drive/). Das war nicht Claude Code – aber das Risiko ist grundsätzlich bei jedem AI-Agenten vorhanden, der Shell-Befehle ausführt.
 
-### Lösung: Docker Sandbox
+Diese Schwächen und Risiken sind kein Grund, Claude Code nicht zu nutzen.
+Aber sie sind ein Grund, den generierten Code immer zu reviewen.
+Für die ernsthafteren Risiken gibt es allerdings eine elegante Lösung.
+
+## Docker Sandbox
 
 Wer auf Nummer sicher gehen will, startet Claude Code in einer Docker Sandbox.
 Statt:
@@ -594,9 +598,6 @@ Man muss sich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umge
 
 Das Beste: Im Container hat man den gleichen absoluten Pfad wie auf dem Host, und die Git-Konfiguration wird durchgereicht.
 Ich habe das eine Weile benutzt und merke keinen Unterschied – außer dem guten Gefühl, dass nichts Ungewolltes passieren kann.
-
-Diese Schwächen und Risiken sind kein Grund, Claude Code nicht zu nutzen.
-Aber sie sind ein Grund, den generierten Code immer zu reviewen – und bei Bedarf eine Sandbox zu verwenden.
 
 ## Fazit
 
