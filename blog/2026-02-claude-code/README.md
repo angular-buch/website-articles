@@ -65,8 +65,7 @@ Anthropic muss sich bei jeder Funktion fragen: Kann der Agent das selbst erkenne
 Oder ist es so häufig gebraucht, dass es einen kurzen Befehl verdient?
 Das Ergebnis ist ein Interface, das überraschend gut funktioniert – gerade weil es so reduziert ist.
 
-Natürlich gibt es auch eine VS Code-Extension (dazu später mehr).
-Aber die eigentliche Magie passiert im Terminal: ein Chat-Interface, Text rein, Aktionen raus.
+Die eigentliche Magie passiert im Terminal: ein Chat-Interface, Text rein, Aktionen raus.
 Kein Schnickschnack, nur Produktivität.
 
 Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
@@ -230,8 +229,9 @@ Was sind die Hauptunterschiede? Migriere den Legacy-Service zum modernen Pattern
 Eine besonders praktische Funktion: Claude Code kann auch Bilder analysieren.
 Ziehe einfach einen Screenshot oder ein Mockup per Drag & Drop ins Terminal:
 
+Ziehe das Bild einfach ins Terminal und schreibe dazu:
+
 ```
-[Bild hier einfügen per Drag & Drop]
 Setze dieses Design als Angular-Komponente um.
 Verwende Tailwind CSS für das Styling.
 ```
@@ -307,21 +307,16 @@ Die Regeln werden kombiniert: Globale Regeln plus projektspezifische Regeln.
 ### Memory – langfristige Erinnerungen
 
 Neben der CLAUDE.md gibt es noch eine weitere Möglichkeit, Wissen dauerhaft zu speichern: das Memory-Feature.
-Mit dem `/memory`-Befehl kannst du Informationen hinterlegen, die über Sessions hinweg erhalten bleiben:
+Sag einfach in natürlicher Sprache, was sich Claude merken soll:
 
 ```
-/memory add Für dieses Projekt verwenden wir Vitest statt Karma.
+Merke dir: In diesem Projekt verwenden wir Vitest statt Karma.
+RxJS-Operatoren immer einzeln importieren, nie das komplette 'rxjs'-Paket.
 ```
 
-Du kannst Erinnerungen auch in natürlicher Sprache hinzufügen:
-
-```
-Merke dir: In diesem Projekt importieren wir RxJS-Operatoren
-immer einzeln, nie das komplette 'rxjs'-Paket.
-```
-
-Diese Erinnerungen werden automatisch geladen und beeinflussen das Verhalten von Claude Code.
-Damit hast du eine flexible Möglichkeit, projektspezifisches Wissen anzureichern, ohne die CLAUDE.md zu bearbeiten.
+Claude Code speichert diese Informationen in Markdown-Dateien, die bei jeder Session automatisch geladen werden.
+Noch schneller geht es mit der `#`-Taste: Tippe `#` im Prompt, und du kannst direkt eine Erinnerung zur CLAUDE.md hinzufügen – ohne den Workflow zu unterbrechen.
+Mit dem Befehl `/memory` kannst du alle gespeicherten Erinnerungen einsehen und bearbeiten.
 
 ## Git-Integration
 
@@ -358,6 +353,24 @@ Analysiere die Änderungen im aktuellen Branch verglichen mit main.
 Gibt es potenzielle Probleme?
 ```
 
+### Empfehlung: Attribution abschalten
+
+Standardmäßig fügt Claude Code jedem Commit einen Trailer hinzu: `Co-Authored-By: Claude ...` und `🤖 Generated with Claude Code`.
+Das verrät sofort, dass ein AI-Agent mitgearbeitet hat – und das ist aus meiner Sicht unnötig.
+
+In der Datei `~/.claude/settings.json` (global) oder `.claude/settings.json` (pro Projekt) kannst du das abschalten:
+
+```json
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}
+```
+
+Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
+
 Die Git-Integration spart Zeit bei Routineaufgaben und sorgt für konsistente, aussagekräftige Commit-Messages.
 Doch für die Angular-Entwicklung gibt es noch ein weiteres Feature, das besonders wertvoll ist.
 
@@ -371,7 +384,7 @@ MCP ermöglicht es Claude Code, auf aktuelle Angular-Dokumentation und Best Prac
 
 ### Einrichtung
 
-Die Konfiguration erfolgt in der Datei `.claude/settings.json`:
+Die Konfiguration erfolgt in der Datei `.mcp.json` im Projekt-Root:
 
 ```json
 {
@@ -405,7 +418,7 @@ Mit dieser Konfiguration stehen Claude Code zusätzliche Werkzeuge zur Verfügun
 | `test` | Führt Unit Tests aus |
 | `build` | Baut das Projekt |
 
-Die experimentellen Werkzeuge aktivierst du mit dem `--experimental-tool`-Flag:
+Die experimentellen Werkzeuge aktivierst du mit dem `--experimental-tool`-Flag in der `.mcp.json`:
 
 ```json
 {
@@ -431,96 +444,36 @@ Genug Theorie – lass uns ein konkretes Projekt umsetzen.
 
 ## Dein erstes Angular-Projekt mit Claude Code
 
-Um das Gelernte anzuwenden, gehen wir ein konkretes Beispiel durch: eine kleine Angular-App, die Bücher anzeigt.
-Du wirst sehen, wie schnell du mit Claude Code zu einem funktionierenden Ergebnis kommst.
-
-### Schritt 1: Projekt erstellen
-
-Starte Claude Code in einem Verzeichnis deiner Wahl:
-
-```bash
-cd ~/projects
-claude
-```
-
-Dann gibst du die erste Aufgabe:
+Starte Claude Code in einem leeren Verzeichnis und gib ihm eine einzige Aufgabe:
 
 ```
-Erstelle ein neues Angular-Projekt namens "book-app".
-Verwende Standalone Components und Signals.
+Erstelle eine Angular-App namens "book-app":
+- BookListComponent zeigt eine Liste von Büchern
+- Daten kommen über einen BookService von https://api.angular.schule/books
+- Verwende die Resource API und Signals
+- Routing: /books für die Liste, / für eine Startseite
+- Unit Tests für Service und Komponente
+- Starte den Dev-Server, wenn alles fertig ist
 ```
 
-Claude Code führt `ng new book-app` aus und konfiguriert das Projekt entsprechend.
+Claude Code wird daraufhin selbstständig:
+1. `ng new book-app` ausführen
+2. Ein `Book`-Interface anlegen
+3. Den Service mit Resource API erstellen
+4. Die Komponente mit `@if` und `@for` bauen
+5. Routing konfigurieren
+6. Tests schreiben
+7. Den Dev-Server starten
 
-### Schritt 2: Datenmodell anlegen
-
-Als Nächstes benötigen wir ein Datenmodell:
-
-```
-Erstelle ein Interface für Bücher mit Titel, Autor und ISBN.
-Lege es unter src/app/shared/book.ts ab.
-```
-
-### Schritt 3: Service erstellen
-
-Jetzt der Service, der die Daten lädt:
-
-```
-Erstelle einen BookService, der Bücher von einer API lädt.
-Verwende die Resource API.
-Die API-URL ist https://api.angular.schule/books.
-```
-
-### Schritt 4: Komponente bauen
-
-Zeit für die UI:
-
-```
-Erstelle eine BookListComponent, die alle Bücher anzeigt.
-Nutze den BookService und zeige Loading-State.
-Verwende die neue Control Flow Syntax (@if, @for).
-```
-
-### Schritt 5: Routing einrichten
-
-Damit die Komponente erreichbar ist:
-
-```
-Füge Routing hinzu. Die BookListComponent soll unter /books erreichbar sein.
-Erstelle auch eine einfache Home-Komponente für die Startseite.
-```
-
-### Schritt 6: Testen
-
-Zum Abschluss prüfen wir, ob alles funktioniert:
-
-```
-Starte den Dev-Server und prüfe, ob alles funktioniert.
-```
-
-In weniger als 10 Minuten hast du eine funktionsfähige Angular-App erstellt.
-Das Beste daran: Du hast dabei aktuelle Best Practices verwendet, ohne sie alle im Detail kennen zu müssen.
+Du bestätigst jeden Schritt einzeln – oder drückst `a` (Always) und lehnst dich zurück.
+Am Ende hast du eine funktionsfähige Angular-App mit aktuellen Best Practices, ohne eine Zeile Code selbst geschrieben zu haben.
 
 ## Praktische Beispiele
 
 Nach dem Einstiegsprojekt fragst du dich vielleicht, welche anderen Aufgaben sich mit Claude Code lösen lassen.
 Hier einige Beispiele aus dem Entwickleralltag.
 
-### Neue Komponente mit allem Drum und Dran
-
-```
-Erstelle eine ProductDetailComponent:
-- Zeigt Produktdetails basierend auf einer Route-ID
-- Lädt Daten über einen ProductService (Resource API)
-- Zeigt Loading-State und Fehlerbehandlung
-- Responsive Design mit CSS Grid
-- Unit Tests für alle Szenarien
-```
-
-Claude Code erstellt daraus typischerweise 4-5 Dateien: Komponente, Template, Service, Routen-Konfiguration und Tests.
-Du bestätigst jede Datei einzeln und kannst jederzeit Anpassungen einfordern.
-
-### Fehler beheben mit Kontext
+### Build-Fehler beheben
 
 Einer meiner häufigsten Anwendungsfälle: den Build-Fehler direkt an Claude Code weitergeben.
 
@@ -533,122 +486,93 @@ Property 'users' does not exist on type 'UserComponent'.
 Analysiere das Problem und behebe es.
 ```
 
-Claude Code liest die betroffene Datei, versteht den Kontext und schlägt eine Lösung vor.
+Claude Code liest die betroffene Datei, versteht den umliegenden Code und schlägt eine Lösung vor.
+Oft ist der Fix in Sekunden erledigt – inklusive Anpassung der Tests.
 
-### Migration zu modernen Patterns
+### Legacy-Code modernisieren
 
-Legacy-Code modernisieren ist eine Stärke von Claude Code:
+Du hast ein Projekt mit NgModules, altem `subscribe()`-Pattern und `ngOnInit` überall?
+Gib Claude Code einen klaren Auftrag:
 
 ```
 Migriere src/app/legacy/ von NgModules zu Standalone Components.
-Behalte die bestehende Funktionalität bei.
-Aktualisiere auch die Imports in app.config.ts.
+Ersetze die HTTP-Calls durch die Resource API.
+Behalte die bestehende Funktionalität bei und aktualisiere die Tests.
 ```
 
-### Code Review mit Verbesserungsvorschlägen
+### Code Review + Fix in einem Schritt
 
-Claude Code kann auch als Reviewer fungieren:
-
-```
-Reviewe src/app/cart/.
-Prüfe auf:
-- Performance-Probleme
-- Angular Best Practices
-- Potenzielle Bugs
-- Verbesserungsmöglichkeiten
-
-Liste die Probleme auf und behebe sie dann.
-```
-
-### Tests nachreichen
-
-Fehlende Tests sind ein häufiges Problem, das Claude Code lösen kann:
+Statt nur Probleme aufzulisten: Claude Code kann sie direkt beheben.
 
 ```
-Die Datei src/app/auth/auth.service.ts hat keine Tests.
-Generiere umfassende Unit Tests:
-- Erfolgreiche Authentifizierung
-- Fehlgeschlagene Authentifizierung
-- Token-Refresh
-- Logout
-- Edge Cases
+Reviewe src/app/cart/ auf Performance-Probleme, Angular Best Practices
+und potenzielle Bugs. Behebe dann alles, was du findest.
 ```
 
-### Refactoring mit Resource API
-
-Und wenn du HTTP-Calls modernisieren möchtest:
-
-```
-Refaktoriere src/app/books/book.service.ts:
-- Ersetze die manuellen HTTP-Calls durch die Resource API
-- Verwende rxResource für reaktive Datenabfragen
-- Behalte das Error-Handling bei
-- Aktualisiere die Tests entsprechend
-```
-
-Diese Beispiele zeigen die Bandbreite der Möglichkeiten.
-Doch unabhängig von der konkreten Aufgabe gibt es einige Prinzipien, die für effektives Arbeiten entscheidend sind.
+Das Muster ist immer gleich: Beschreibe was du willst, Claude Code liefert.
+Doch die Qualität hängt davon ab, wie du fragst.
 
 ## Tipps für effektives Arbeiten
 
 Nach einiger Zeit mit Claude Code wirst du Muster erkennen, die zu besseren Ergebnissen führen.
 Hier die wichtigsten Erkenntnisse aus meiner Praxis.
 
-### Spezifisch sein
+### Spezifisch sein und Kontext geben
 
-Vage Anfragen führen zu vagen Ergebnissen. Vergleiche:
-
-```
-❌ Schlecht: "Erstelle einen Service"
-✅ Besser: "Erstelle einen BookService mit CRUD-Methoden,
-           der die Resource API verwendet und Bücher von
-           /api/books lädt. Typisiere alles mit dem Book-Interface
-           aus src/app/shared/book.ts."
-```
-
-### Kontext explizit geben
-
-Referenziere bestehende Dateien, damit Claude Code Muster übernehmen kann:
+Die goldene Regel: Je präziser deine Anfrage, desto besser das Ergebnis.
+Referenziere bestehende Dateien, damit Claude Code den Stil deines Projekts übernimmt.
 
 ```
-Schau dir erst src/app/shared/types.ts und
-src/app/core/api.service.ts an, bevor du beginnst.
-Der neue Service soll dem gleichen Muster folgen.
+❌ "Erstelle einen Service"
+
+✅ "Erstelle einen BookService mit CRUD-Methoden,
+   der die Resource API verwendet und Bücher von
+   /api/books lädt. Orientiere dich am Stil von
+   src/app/core/api.service.ts."
 ```
 
-### Iterativ arbeiten
+### Iterativ statt perfektionistisch
 
 Erwarte nicht, dass das erste Ergebnis perfekt ist.
-Der Workflow ist interaktiv – und das ist eine Stärke, keine Schwäche:
+Der Dialog ist interaktiv – und das ist eine Stärke:
 
 ```
 Du: Erstelle eine Login-Komponente.
 Claude: [erstellt Komponente]
-Du: Gut, aber füge noch Validierung hinzu.
+Du: Füge Validierung hinzu.
 Claude: [erweitert um Validierung]
-Du: Die Fehlermeldungen sollen auf Deutsch sein.
+Du: Die Fehlermeldungen auf Deutsch.
 Claude: [passt Texte an]
 ```
 
-### Den Agent reflektieren lassen
+Ein unterschätzter Trick: Lass Claude Code seine eigene Arbeit reviewen.
+"Schau dir den Code nochmal an – folgt er den Angular Best Practices?" liefert oft überraschend gute Verbesserungen.
 
-Ein oft unterschätzter Trick: Lass Claude Code seine eigene Arbeit überprüfen.
+### Erst planen, dann umsetzen
 
-```
-Schau dir den generierten Code nochmal an.
-Gibt es etwas, das du verbessern würdest?
-Folgt er den Angular Best Practices?
-```
+Meine wichtigste Empfehlung: Lass Claude Code nicht sofort losschreiben.
+Nutze stattdessen den **Plan Mode**.
 
-### Kritisch prüfen
+Im Plan Mode arbeitet Claude Code im Read-Only-Modus.
+Es liest deine Codebase, stellt Rückfragen, analysiert die Architektur – und erstellt dann einen strukturierten Umsetzungsplan.
+Erst wenn du den Plan freigibst, wird eine einzige Zeile Code geschrieben.
 
-So mächtig Claude Code ist – es ist nicht unfehlbar.
-Achte besonders auf diese Punkte:
+Du aktivierst den Plan Mode mit `Shift+Tab` (zweimal drücken) oder dem Befehl `/plan`.
+Wenn du den Plan abgesegnet hast, wechselst du mit `Shift+Tab` zurück in den normalen Modus und sagst: "Setze den Plan um."
 
-- **Typisierung:** Kein `any`! Fordere strikte Typen.
-- **Tests:** Assertions wie `toBeTruthy()` sind oft zu schwach. Fordere `toEqual()` mit konkreten Werten.
-- **Error Handling:** Wird es korrekt behandelt?
-- **Performance:** Bei Listen: Wurde `trackBy` verwendet?
+Warum ist das so wichtig?
+Claude Code hat ein begrenztes Kontext-Fenster.
+Wenn du sofort mit der Umsetzung startest, verliert der Agent bei größeren Aufgaben schnell den Überblick.
+Im Plan Mode strukturiert Claude seine Gedanken in einer Markdown-Datei, die auf der Festplatte liegt.
+Selbst wenn du `/compact` ausführst oder der Kontext knapp wird – die Datei bleibt erhalten.
+Falls Claude nach einem Compact den Faden verliert, reicht ein kurzes "Lies den aktuellen Plan nochmal ein" und er ist wieder auf Kurs.
+
+Mein Workflow sieht deshalb so aus:
+1. **Plan Mode an** (`Shift+Tab` 2x)
+2. **Aufgabe beschreiben** und "ultrathink" dazuschreiben – damit nimmt sich Claude Code extra Denkzeit. Du erkennst, dass es funktioniert hat, wenn der Text in Regenbogenfarben dargestellt wird.
+3. **Plan reviewen** und bei Bedarf verfeinern
+4. **Plan Mode aus** (`Shift+Tab`)
+5. **"Setze den Plan um"** – Claude Code arbeitet den Plan ab
 
 Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
 Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
@@ -671,61 +595,6 @@ Hier sind die Schwächen, die du kennen solltest:
 Diese Schwächen sind kein Grund, Claude Code nicht zu nutzen.
 Aber sie sind ein Grund, den generierten Code immer zu reviewen.
 
-## VS Code Integration
-
-Wenn du lieber in einer IDE arbeitest statt im Terminal, gibt es gute Nachrichten: Claude Code lässt sich auch in VS Code integrieren.
-Die Extension heißt "Claude Code" und ist im Marketplace verfügbar.
-
-Nach der Installation erscheint ein Claude-Icon in der Seitenleiste.
-Du kannst Claude Code dann direkt in VS Code nutzen, ohne das Terminal separat zu öffnen.
-Die Befehle und der Workflow bleiben dabei identisch.
-
-## Troubleshooting
-
-Manchmal läuft nicht alles glatt.
-Hier die häufigsten Probleme und ihre Lösungen.
-
-### "command not found: claude"
-
-Die Installation hat nicht geklappt oder der PATH stimmt nicht.
-Führe die Installation erneut aus oder starte ein neues Terminal-Fenster.
-
-### Login funktioniert nicht
-
-Prüfe, ob du ein aktives Claude Pro- oder Max-Abo hast.
-Ohne Abo funktioniert Claude Code nicht.
-
-### Claude Code antwortet nicht mehr
-
-Drücke `Esc` oder `Strg+C`, um die aktuelle Operation abzubrechen.
-Mit `/clear` startest du eine frische Session.
-
-### Änderungen werden nicht übernommen
-
-Hast du mit `y` bestätigt?
-Prüfe auch, ob du Schreibrechte für die Dateien hast.
-
-### Allgemeiner Tipp
-
-Wenn du nicht weiterkommst: Frag Claude!
-Das klingt zirkulär, funktioniert aber erstaunlich gut.
-Entweder direkt in Claude Code oder im Browser unter claude.ai – mach einen Screenshot des Problems und beschreibe, was du erwartet hast.
-
-## Was ist noch möglich?
-
-Ich habe mich in diesem Artikel auf Angular konzentriert, aber Claude Code ist universell einsetzbar.
-Hier ein paar Ideen, was du noch ausprobieren kannst:
-
-- **Dokumentation schreiben:** "Erstelle eine README für dieses Projekt"
-- **Legacy-Code verstehen:** "Erkläre mir, was diese Funktion macht"
-- **Shell-Skripte erstellen:** "Schreibe ein Skript, das alle node_modules-Ordner findet und löscht"
-- **Daten analysieren:** "Analysiere diese CSV-Datei und fasse die wichtigsten Erkenntnisse zusammen"
-- **Refactoring planen:** "Wie würdest du dieses Modul umstrukturieren?"
-- **Lernhilfe:** "Erkläre mir, wie RxJS Observables funktionieren – mit einfachen Beispielen"
-
-Die Möglichkeiten sind nahezu unbegrenzt.
-Probiere es einfach aus!
-
 ## Fazit
 
 Claude Code hat meine tägliche Arbeit verändert.
@@ -733,14 +602,11 @@ Nicht weil es perfekt ist – das ist es nicht.
 Sondern weil es die langweiligen Teile der Entwicklung übernimmt: Boilerplate, Tests, Konfiguration, Commit-Messages.
 Das gibt mir mehr Zeit für die Dinge, die wirklich zählen: Architektur, Nutzererlebnis und kreative Problemlösung.
 
-Die wichtigsten Erfolgsfaktoren:
+Dabei ist Angular nur der Anfang.
+Claude Code kann genauso gut READMEs schreiben, Shell-Skripte erstellen, CSV-Dateien analysieren oder dir RxJS Observables erklären.
+Es ist ein universelles Werkzeug – du bestimmst, wofür du es einsetzt.
 
-1. **Kontext geben:** Die CLAUDE.md und der Angular MCP-Server sind kein Nice-to-have, sondern Pflicht.
-2. **Spezifisch sein:** Je klarer deine Anfrage, desto besser das Ergebnis.
-3. **Iterativ arbeiten:** Der Dialog ist interaktiv – nutze das.
-4. **Kritisch prüfen:** Vertraue, aber überprüfe. Immer.
-
-Fang einfach an. Installiere Claude Code, öffne ein Projekt und gib eine erste Aufgabe.
+Fang einfach an. Installiere Claude Code, öffne ein Projekt, tippe `/init` und gib eine erste Aufgabe.
 Der Rest ergibt sich.
 
 <hr>
