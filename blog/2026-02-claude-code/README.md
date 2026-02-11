@@ -34,21 +34,10 @@ Es liest deinen Code, versteht den Kontext und kann Änderungen selbst umsetzen.
 Stell es dir so vor: Der Browser-Chat gibt dir Ratschläge.
 Claude Code setzt sich an deinen Schreibtisch und erledigt die Arbeit.
 
-Doch wie funktioniert das konkret? Claude Code verfügt über verschiedene Werkzeuge:
+Konkret heißt das: Claude Code kann deine Dateien lesen und bearbeiten, Shell-Befehle wie `ng generate` oder `npm test` ausführen, im Web nach Informationen suchen und sogar Bilder analysieren.
+Der Agent entscheidet selbstständig, welche Schritte nötig sind, und arbeitet sie nacheinander ab – du siehst dabei immer, was gerade passiert.
 
-| Werkzeug | Beschreibung |
-|----------|--------------|
-| **Read** | Liest Dateien aus deinem Projekt |
-| **Write** | Erstellt neue Dateien |
-| **Edit** | Bearbeitet bestehende Dateien (mit Diff-Ansicht) |
-| **Bash** | Führt Shell-Befehle aus (z. B. `ng generate`, `npm test`) |
-| **Glob** | Sucht nach Dateien anhand von Mustern |
-| **Grep** | Durchsucht Dateiinhalte |
-| **WebFetch** | Ruft Inhalte aus dem Web ab |
-| **WebSearch** | Durchsucht das Web nach Informationen |
-
-Der Agent entscheidet selbstständig, welche Werkzeuge er für eine Aufgabe benötigt.
-Du siehst dabei immer, welches Werkzeug gerade verwendet wird – und genau hier kommt ein wichtiger Aspekt ins Spiel: die Kontrolle.
+Das klingt nach viel Macht, und genau deshalb ist ein Aspekt besonders wichtig: die Kontrolle.
 
 Vor jeder Dateiänderung fragt Claude Code nach Bestätigung.
 Du siehst einen Diff mit den geplanten Änderungen und hast mehrere Optionen:
@@ -137,13 +126,14 @@ Liste alle Dateien in diesem Ordner auf und erkläre kurz, was sie sind.
 ```
 
 Claude Code wird die Dateien analysieren und dir eine Übersicht geben.
-Probiere ruhig noch ein paar weitere einfache Aufgaben aus:
+Dann probiere etwas Spannenderes:
 
-- "Fasse den Inhalt der Datei notes.txt zusammen"
-- "Finde alle PDF-Dateien in diesem Ordner"
-- "Erstelle eine neue Textdatei mit einer Einkaufsliste"
+- "Erstelle mir eine HTML-Seite, die einen Taschenrechner simuliert"
+- "Ich habe hier ein TypeScript-Projekt. Erkläre mir die Architektur."
+- "Schreibe ein Shell-Skript, das alle node_modules-Ordner auf meinem Rechner findet und ihre Gesamtgröße anzeigt"
 
-Sobald du dich mit der grundlegenden Interaktion vertraut gemacht hast, bist du bereit für den eigentlichen Workflow.
+Du wirst merken: Das Ergebnis ist erstaunlich gut – und du hast keinen Code selbst geschrieben.
+Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für den eigentlichen Workflow.
 
 ### Updates
 
@@ -544,9 +534,12 @@ Erstelle eine ProductDetailComponent:
 - Unit Tests für alle Szenarien
 ```
 
+Claude Code erstellt daraus typischerweise 4-5 Dateien: Komponente, Template, Service, Routen-Konfiguration und Tests.
+Du bestätigst jede Datei einzeln und kannst jederzeit Anpassungen einfordern.
+
 ### Fehler beheben mit Kontext
 
-Wenn der Build fehlschlägt, kannst du die Fehlermeldung direkt an Claude Code weitergeben:
+Einer meiner häufigsten Anwendungsfälle: den Build-Fehler direkt an Claude Code weitergeben.
 
 ```
 Der Build schlägt fehl:
@@ -675,7 +668,25 @@ Achte besonders auf diese Punkte:
 - **Performance:** Bei Listen: Wurde `trackBy` verwendet?
 
 Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
-Doch es gibt noch einige praktische Aspekte, die du kennen solltest.
+Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
+
+## Wo Claude Code an Grenzen stößt
+
+Kein Tool ist fehlerfrei, und Transparenz ist mir wichtiger als Hype.
+Hier sind die Schwächen, die du kennen solltest:
+
+- **Halluzinationen:** Claude Code erfindet manchmal APIs oder Funktionen, die es nicht gibt. Besonders bei seltenen Libraries passiert das. Prüfe immer, ob importierte Module existieren.
+
+- **Veraltetes Wissen:** Das Trainings-Wissen hat ein Ablaufdatum. Ohne den Angular MCP-Server generiert Claude Code gerne Code mit veralteten Patterns – etwa `ngOnInit` statt Signal-basiertem Setup.
+
+- **Große Refactorings:** Bei Änderungen über viele Dateien hinweg verliert Claude Code manchmal den Überblick. Teile komplexe Aufgaben lieber in kleinere Schritte auf.
+
+- **Tests mit wenig Substanz:** Die generierten Tests sehen auf den ersten Blick gut aus, haben aber oft schwache Assertions. `expect(component).toBeTruthy()` testet genau nichts.
+
+- **Übereifer:** Manchmal "verbessert" Claude Code Dinge, die du gar nicht ändern wolltest. Sei in deinen Anfragen spezifisch, was sich ändern soll – und was nicht.
+
+Diese Schwächen sind kein Grund, Claude Code nicht zu nutzen.
+Aber sie sind ein Grund, den generierten Code immer zu reviewen.
 
 ## VS Code Integration
 
@@ -760,18 +771,20 @@ Probiere es einfach aus!
 
 ## Fazit
 
-Claude Code ist ein mächtiges Werkzeug für die Angular-Entwicklung.
-Mit der richtigen Konfiguration – projektspezifische Regeln in `.claude/CLAUDE.md` und der Angular MCP-Server – bekommst du Code, der aktuellen Best Practices entspricht.
+Claude Code hat meine tägliche Arbeit verändert.
+Nicht weil es perfekt ist – das ist es nicht.
+Sondern weil es die langweiligen Teile der Entwicklung übernimmt: Boilerplate, Tests, Konfiguration, Commit-Messages.
+Das gibt mir mehr Zeit für die Dinge, die wirklich zählen: Architektur, Nutzererlebnis und kreative Problemlösung.
 
-Die wichtigsten Erfolgsfaktoren lassen sich in vier Punkte zusammenfassen:
+Die wichtigsten Erfolgsfaktoren:
 
-1. **Kontext geben:** Je mehr Claude Code über dein Projekt weiß, desto besser die Ergebnisse.
-2. **Spezifisch sein:** Vage Anfragen führen zu vagen Ergebnissen.
+1. **Kontext geben:** Die CLAUDE.md und der Angular MCP-Server sind kein Nice-to-have, sondern Pflicht.
+2. **Spezifisch sein:** Je klarer deine Anfrage, desto besser das Ergebnis.
 3. **Iterativ arbeiten:** Der Dialog ist interaktiv – nutze das.
-4. **Kritisch prüfen:** Der Agent ist ein Werkzeug, kein Ersatz für Expertise.
+4. **Kritisch prüfen:** Vertraue, aber überprüfe. Immer.
 
-Starte mit kleinen Aufgaben, lerne den Workflow kennen und steigere dich zu komplexeren Szenarien.
-Die Lernkurve ist kurz, der Produktivitätsgewinn kann enorm sein.
+Fang einfach an. Installiere Claude Code, öffne ein Projekt und gib eine erste Aufgabe.
+Der Rest ergibt sich.
 
 <hr>
 
