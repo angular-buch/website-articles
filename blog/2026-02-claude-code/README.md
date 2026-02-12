@@ -63,15 +63,13 @@ Anthropic muss sich bei jeder Funktion fragen: Kann der Agent das selbst erkenne
 Oder ist es so häufig gebraucht, dass es einen kurzen Befehl verdient?
 Das Ergebnis ist ein Interface, das überraschend gut funktioniert – gerade weil es so reduziert ist.
 
-Die eigentliche Magie passiert im Terminal: ein Chat-Interface, Text rein, Aktionen raus.
-Kein Schnickschnack, nur Produktivität.
-
 Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
 
 ## Installation
 
 Die gute Nachricht: Die Installation dauert etwa eine Minute.
 Es gibt keine besonderen Voraussetzungen – nur ein unterstütztes Betriebssystem (macOS 13+, Windows 10+, oder Ubuntu 20.04+).
+Für die Angular-Entwicklung sollte [Node.js](https://nodejs.org/) bereits installiert sein.
 
 **macOS / Linux:**
 
@@ -125,9 +123,11 @@ Dann im Claude Code Prompt:
 Claude Code wird die Dateien analysieren und dir eine Übersicht geben.
 Dann probiere etwas Spannenderes:
 
-- "Erstelle mir eine HTML-Seite, die einen Taschenrechner simuliert"
-- "Ich habe hier ein TypeScript-Projekt. Erkläre mir die Architektur."
-- "Schreibe ein Shell-Skript, das alle node_modules-Ordner auf meinem Rechner findet und ihre Gesamtgröße anzeigt"
+> Erstelle mir eine HTML-Seite, die einen Taschenrechner simuliert.
+
+> Ich habe hier ein TypeScript-Projekt. Erkläre mir die Architektur.
+
+> Schreibe ein Shell-Skript, das alle node_modules-Ordner auf meinem Rechner findet und ihre Gesamtgröße anzeigt.
 
 Du wirst merken: Das Ergebnis ist erstaunlich gut – und du hast keinen Code selbst geschrieben.
 Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für den eigentlichen Workflow.
@@ -336,9 +336,6 @@ In der Datei `~/.claude/settings.json` (global) oder `.claude/settings.json` (pr
 ```
 
 Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
-
-Die Git-Integration spart Zeit bei Routineaufgaben und sorgt für konsistente, aussagekräftige Commit-Messages.
-Doch für die Angular-Entwicklung gibt es noch ein weiteres Feature, das besonders wertvoll ist.
 
 ## Angular MCP-Server
 
