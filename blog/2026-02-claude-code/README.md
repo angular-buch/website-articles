@@ -68,8 +68,9 @@ Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
 ## Installation
 
 Die gute Nachricht: Die Installation dauert etwa eine Minute.
-Es gibt keine besonderen Voraussetzungen – nur ein unterstütztes Betriebssystem (macOS 13+, Windows 10+, oder Ubuntu 20.04+).
+Es gibt keine besonderen Voraussetzungen – nur ein unterstütztes Betriebssystem (macOS 10.15+, Windows 10+, oder Ubuntu 20.04+).
 Für die Angular-Entwicklung sollte [Node.js](https://nodejs.org/) bereits installiert sein.
+Gut zu wissen: Claude Code schreibt gerne Shell-Skripte und nutzt für komplexere Aufgaben auch Python – stelle sicher, dass [Python](https://www.python.org/) installiert ist, wenn du das nutzen möchtest.
 
 **macOS / Linux:**
 
@@ -217,7 +218,8 @@ Das ist besonders nützlich, wenn du UI-Mockups in Komponenten umsetzen, Fehlerm
 ### Das Kontext-Fenster
 
 Es gibt allerdings eine technische Einschränkung: Jedes AI-Modell hat ein begrenztes Kontext-Fenster.
-Bei Claude sind das etwa 200.000 Tokens – eine Menge, aber bei langen Sessions kann es passieren, dass frühere Informationen "vergessen" werden.
+Bei Claude sind das aktuell etwa 200.000 Tokens – eine Menge, aber bei langen Sessions kann es passieren, dass frühere Informationen "vergessen" werden.
+Ein Kontext-Fenster von 1 Million Tokens ist bereits in der Beta-Phase – das wird dieses Problem deutlich entschärfen.
 
 In der Statusleiste von Claude Code siehst du immer, wie voll dein Kontext-Fenster ist.
 Wenn es eng wird, hast du zwei Möglichkeiten:
@@ -542,7 +544,7 @@ Falls Claude nach einem Compact den Faden verliert, reicht ein kurzes "Lies den 
 
 Mein Workflow sieht deshalb so aus:
 1. **Plan Mode an** (`Shift+Tab` 2x)
-2. **Aufgabe beschreiben** und "ultrathink" dazuschreiben – damit nimmt sich Claude Code extra Denkzeit. Du erkennst, dass es funktioniert hat, wenn der Text in Regenbogenfarben dargestellt wird.
+2. **Aufgabe beschreiben** – Thinking ist standardmäßig aktiv, d. h. Claude Code nimmt sich Denkzeit vor jeder Antwort. Mit `Tab` kann man es ausschalten, aber ich lasse es immer an. Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
 3. **Plan reviewen** und bei Bedarf verfeinern
 4. **Plan Mode aus** (`Shift+Tab`)
 5. **"Setze den Plan um"** – Claude Code arbeitet den Plan ab
@@ -590,11 +592,16 @@ einfach:
 docker sandbox run claude .
 ```
 
-Die [Docker AI Sandbox](https://docs.docker.com/ai/sandboxes/) isoliert Claude Code in einem Container.
+Die [Docker AI Sandbox](https://docs.docker.com/ai/sandboxes/) isoliert Claude Code in einer microVM – das ist eine leichtgewichtige virtuelle Maschine, die stärker isoliert als ein normaler Docker-Container.
+Während Container sich den Kernel mit dem Host teilen (und [ein Ausbruch daher möglich ist](https://northflank.com/blog/your-containers-arent-isolated-heres-why-thats-a-problem-micro-vms-vmms-and-container-isolation)), hat eine microVM ihren eigenen Kernel – ein AI-Agent kann also selbst mit Root-Rechten nicht aus der Sandbox ausbrechen.
 Man muss sich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umgebungsvariable übergeben), aber danach bleibt die Sandbox bestehen, bis man sie explizit löscht.
 
-Das Beste: Im Container hat man den gleichen absoluten Pfad wie auf dem Host, und die Git-Konfiguration wird durchgereicht.
-Ich habe das eine Weile benutzt und merke keinen Unterschied – außer dem guten Gefühl, dass nichts Ungewolltes passieren kann.
+Das Beste: Man merkt kaum einen Unterschied zur normalen Arbeit.
+Dein Projektverzeichnis wird bidirektional synchronisiert – kein Volume-Mount, sondern echtes Kopieren unter dem gleichen absoluten Pfad wie auf dem Host.
+Docker liest deine Git-Identität (`user.name` und `user.email`) vom Host und injiziert sie in die Sandbox, sodass Commits korrekt zugeordnet werden.
+Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/agent/`), eigener Docker-Daemon.
+Wie die Architektur im Detail funktioniert, beschreibt Docker in der [Sandbox-Architektur-Dokumentation](https://docs.docker.com/ai/sandboxes/architecture/).
+Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Man vertraut hier einer Black Box.
 
 ## Fazit
 
