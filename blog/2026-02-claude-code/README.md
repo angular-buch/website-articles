@@ -237,50 +237,43 @@ Der einfachste Weg: Starte Claude Code in deinem Projekt und tippe `/init`.
 Claude Code analysiert dann die Projektstruktur, erkennt das verwendete Framework, die Test-Konfiguration und die Coding-Konventionen – und generiert daraus eine passende `.claude/CLAUDE.md`.
 
 Du kannst die Datei natürlich auch manuell anlegen oder die generierte Version anpassen.
-Hier ein Beispiel, wie eine CLAUDE.md für ein Angular-Projekt aussehen kann:
+Ein guter Ausgangspunkt sind die [offiziellen Angular AI Rules](https://angular.dev/ai/develop-with-ai) – ein umfangreiches Regelwerk, das Best Practices für TypeScript, Standalone Components, Signals, Accessibility und mehr abdeckt.
+
+Hier ein stark gekürzter Auszug, um die Idee zu zeigen.
+Wichtig: Die CLAUDE.md wird immer auf Englisch verfasst, weil Claude damit am besten arbeitet.
 
 ```markdown
-# Projektregeln für BookMonkey
+# Angular Best Practices (from angular.dev/ai/develop-with-ai)
+- Always use standalone components over NgModules
+- Use signals for state management
+- Use `input()` and `output()` functions instead of decorators
+- Set `changeDetection: ChangeDetectionStrategy.OnPush`
+- Use native control flow (`@if`, `@for`) instead of `*ngIf`, `*ngFor`
 
-## Architektur
-- Standalone Components (keine NgModules)
-- State Management mit Signals
-- Services für Datenzugriff, Resource API für HTTP
-- Strikte Trennung: Components haben keine HTTP-Logik
-
-## Dateistruktur
-- Feature-Ordner unter src/app/
-- Shared-Code unter src/app/shared/
-- Ein Feature = ein Ordner mit Component, Service, Tests
-
-## Konventionen
-- Dateinamen: kebab-case
-- Komponenten-Selektoren: app-*
-- Strikte Typisierung, kein `any`
-- Interfaces statt Classes für DTOs
-
-## Tests
-- Unit Tests mit Vitest
-- Jede public Methode braucht Tests
-- Mocking mit vi.fn() und vi.spyOn()
-
-## Angular-Version
-- Angular 21
-- Neue Control Flow Syntax (@if, @for)
-- Signal Inputs und Outputs
+# Project-specific rules
+- Unit tests with Vitest (not Karma/Jasmine)
+- Data access via services using the Resource API
+- Feature folders under src/app/, shared code under src/app/shared/
+- API base URL: https://api.example.com/v1
+- All user-facing text must be i18n-ready
 ```
 
-Diese Datei wird automatisch bei jedem Start geladen, und Claude Code befolgt diese Regeln bei allen Aufgaben.
+Neben den allgemeinen Angular-Regeln gehören also auch projektspezifische Informationen in die Datei: Test-Framework, API-Endpunkte, Ordnerstruktur, Konventionen des Teams.
+In der Praxis sind CLAUDE.md-Dateien deutlich umfangreicher als dieses Beispiel.
+Die Datei wird automatisch bei jedem Start geladen, und Claude Code befolgt diese Regeln bei allen Aufgaben.
 
-Es gibt übrigens mehrere Orte, an denen du solche Regeln hinterlegen kannst:
+Es gibt mehrere Orte, an denen du solche Regeln hinterlegen kannst:
 
 | Ort | Geltungsbereich |
 |-----|-----------------|
 | `~/.claude/CLAUDE.md` | Global für alle Projekte |
-| `.claude/CLAUDE.md` | Für das aktuelle Projekt |
-| `CLAUDE.md` (im Root) | Alternative für das Projekt |
+| `CLAUDE.md` | Für einen beliebigen Ordner (oder `.claude/CLAUDE.md`) |
+| `CLAUDE.local.md` | Persönlich, sollte in `.gitignore` stehen |
 
-Die Regeln werden kombiniert: Globale Regeln plus projektspezifische Regeln.
+Claude Code durchsucht dabei die gesamte Verzeichnishierarchie:
+Dateien in übergeordneten Ordnern werden beim Start geladen, Dateien in Unterordnern erst bei Bedarf.
+So kannst du eine `CLAUDE.md` auch in einen Unterordner wie `src/` legen – sie wird geladen, sobald Claude dort Dateien liest.
+Alle gefundenen Regeln werden kombiniert, wobei spezifischere Regeln Vorrang haben.
 
 ### Memory – langfristige Erinnerungen
 
@@ -338,6 +331,33 @@ In der Datei `~/.claude/settings.json` (global) oder `.claude/settings.json` (pr
 ```
 
 Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
+
+## Plugins
+
+Claude Code lässt sich über ein [Plugin-System](https://code.claude.com/docs/en/discover-plugins) erweitern.
+Im offiziellen Anthropic-Marketplace findest du fertige Plugins, die du direkt installieren kannst – ohne selbst etwas konfigurieren zu müssen.
+
+Tippe `/plugin` und wechsle zum **Discover**-Tab, um die verfügbaren Plugins zu durchsuchen.
+Die Installation geht direkt aus Claude Code:
+
+```
+/plugin install plugin-name@claude-plugins-official
+```
+
+Hier eine Auswahl nützlicher Plugins aus dem [offiziellen Marketplace](https://code.claude.com/docs/en/discover-plugins):
+
+| Kategorie | Plugin | Beschreibung |
+|-----------|--------|-------------|
+| Git-Workflows | `commit-commands` | Commit, Push und PR-Erstellung als Slash-Befehle |
+| Git-Workflows | `pr-review-toolkit` | Spezialisierte Agents für PR-Reviews |
+| Integrationen | `github` | Direkte GitHub-Integration via MCP |
+| Integrationen | `linear`, `asana`, `notion` | Projektmanagement-Tools anbinden |
+| Integrationen | `figma` | Designs direkt in Claude Code laden |
+| Integrationen | `sentry` | Fehlermonitoring einbinden |
+| Code-Intelligenz | `typescript-lsp` | Typprüfung und Navigation für TypeScript |
+
+Nach der Installation stehen die Plugins sofort als Slash-Befehle zur Verfügung, z. B. `/commit-commands:commit`.
+Gerade für den Einstieg ist das praktischer, als jeden Workflow in natürlicher Sprache zu formulieren.
 
 ## Angular MCP-Server
 
