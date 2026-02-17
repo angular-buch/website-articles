@@ -34,6 +34,8 @@ Seit März 2025 sammeln sich die GitHub Issues mit tausenden Upvotes, und das Pr
 Es ist das meistgemeldete UX-Problem von Claude Code überhaupt, und eine direkte Lösung von Anthropic lässt immer noch auf sich warten.
 **In diesem Artikel erkläre ich, warum der Bug existiert, warum die üblichen Workarounds nicht helfen und wie man ihn mit einem Open-Source-Tool endgültig löst.**
 
+> **🇬🇧 This article is available in English language here: [Claude Code: How to Actually Fix the Endless Scrolling Problem](https://angular.schule/blog/2026-02-claude-code-scrolling)**
+
 ## Inhalt
 
 [[toc]]
