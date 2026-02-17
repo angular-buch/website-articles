@@ -2,7 +2,7 @@
 title: 'Claude Code: Wie man den Endless-Scrolling-Bug wirklich löst'
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
-published: 2026-02-18
+published: 2026-02-17
 keywords:
   - Claude Code
   - Endless Scrolling
@@ -25,27 +25,18 @@ keywords:
   - PTY Proxy
   - Synchronized Output
   - DEC 2026
-header: header.webm
-headerWidth: 800
-headerHeight: 620
+header: header.gif
 language: de
 ---
 
 Claude Code hat einen berüchtigten Bug: Das Terminal scrollt unkontrolliert, flackert oder friert komplett ein.
 Seit März 2025 sammeln sich die GitHub Issues mit tausenden Upvotes, und das Problem ist immer noch nicht behoben.
-Es ist das meistgemeldete UX-Problem von Claude Code überhaupt: Allein die drei größten Issues ([#3648](https://github.com/anthropics/claude-code/issues/3648), [#1913](https://github.com/anthropics/claude-code/issues/1913), [#769](https://github.com/anthropics/claude-code/issues/769)) haben zusammen über 1.200 Thumbs-Up-Reaktionen, und eine direkte Lösung von Anthropic lässt immer noch auf sich warten.
+Es ist das meistgemeldete UX-Problem von Claude Code überhaupt, und eine direkte Lösung von Anthropic lässt immer noch auf sich warten.
 **In diesem Artikel erkläre ich, warum der Bug existiert, warum die üblichen Workarounds nicht helfen und wie man ihn mit einem Open-Source-Tool endgültig löst.**
 
 ## Inhalt
 
 [[toc]]
-
-> **TL;DR:** Installiere [claude-chill](https://github.com/davidbeesley/claude-chill), einen PTY-Proxy, der Claude Codes fehlerhafte Terminal-Ausgabe abfängt und nur saubere Bildschirm-Diffs weitergibt. Problem gelöst.
->
-> ```bash
-> cargo install --git https://github.com/davidbeesley/claude-chill
-> alias claude='claude-chill claude --'
-> ```
 
 ## Das Problem
 
@@ -56,8 +47,8 @@ Manchmal klappt es, manchmal nicht.
 Dann denkst du, es ist wieder stabil, und im selben Moment geht es schon wieder los.
 Es macht dich komplett aggressiv, und du kommst in der Zeit zu nichts, weil du einfach nur noch sauer bist.
 
-<video src="https://github.com/user-attachments/assets/cf147ecb-d5e3-428d-a538-38c8cab7bef3" autoplay loop muted playsinline width="100%"></video>
-<small>Quelle: <a href="https://github.com/anthropics/claude-code/issues/7216">GitHub Issue #7216</a></small>
+<video src="https://github.com/user-attachments/assets/647a822f-6247-458a-b861-0f203b310571" autoplay loop muted playsinline width="100%"></video>
+<small><em>Flickern bei der Arbeit von Johannes, aufgenommen in iTerm2</em></small>
 
 Dieses Problem ist nicht selten.
 Es ist das **meistgemeldete und frustrierendste UX-Problem** von Claude Code.
@@ -78,14 +69,14 @@ Auf GitHub gibt es dutzende Issues dazu, alle beschreiben dasselbe Symptom mit u
 
 In Issue [#9935](https://github.com/anthropics/claude-code/issues/9935) hat jemand gemessen: **4.000 bis 6.700 Scroll-Events pro Sekunde**.
 
+<video src="https://github.com/user-attachments/assets/cf147ecb-d5e3-428d-a538-38c8cab7bef3" autoplay loop muted playsinline width="100%"></video>
+<small><em>Quelle: <a href="https://github.com/anthropics/claude-code/issues/7216">GitHub Issue #7216</a> – massives Scrolling in Cursor</em></small>
+
 Besonders schlimm wird es mit **parallelen Agenten**.
 Wenn Claude Code mehrere Agenten gleichzeitig startet, liefert jeder von ihnen ständig Status-Updates zurück.
 Der Bildschirm kommt überhaupt nicht mehr zur Ruhe, und die Claude Session wird während der gesamten parallelen Ausführung unbenutzbar.
 Mehrere Issues bestätigen dieses Muster: parallele Agenten überlasten die Rendering-Pipeline komplett ([#17547](https://github.com/anthropics/claude-code/issues/17547), [#16923](https://github.com/anthropics/claude-code/issues/16923), [#10008](https://github.com/anthropics/claude-code/issues/10008)).
 Ein User, der 18 Agenten gleichzeitig laufen lässt, beschreibt es als „flicker-thrashing" sobald die Benachrichtigungen die Bildschirmhöhe überschreiten.
-
-<video src="https://github.com/user-attachments/assets/86040c0c-1388-4ced-9905-be8df81c9048" autoplay loop muted playsinline width="100%"></video>
-<small>Quelle: <a href="https://github.com/anthropics/claude-code/issues/832">GitHub Issue #832</a></small>
 
 ## Was ich zuerst versucht habe (und warum es nicht geholfen hat)
 
@@ -112,6 +103,9 @@ Ein häufiger Trigger ist Tastatureingabe während der „Thinking"-Phase.
 Sich zurückzuhalten hilft, aber wer will schon sein Verhalten an einen Bug anpassen?
 
 ## Welche Terminals sind betroffen?
+
+<video src="https://github.com/user-attachments/assets/86040c0c-1388-4ced-9905-be8df81c9048" autoplay loop muted playsinline width="100%"></video>
+<small><em>Quelle: <a href="https://github.com/anthropics/claude-code/issues/832">GitHub Issue #832</a> – Endless Scrolling auf Windows</em></small>
 
 Die folgende Tabelle fasst die Berichte aus den verschiedenen GitHub Issues zusammen.
 Die Angaben zur Häufigkeit des Auftretens sind teils messbar belegt, teils subjektiv von den betroffenen Usern beschrieben.
@@ -150,6 +144,8 @@ Jeder dieser Render-Pfade schreibt Escape-Sequenzen in den Terminal-Stream.
 Wenn sich Spinner, Statuszeile und Streaming-Antwort überlappen, bekommt das Terminal widersprüchliche Cursor-Positionen.
 Das Ergebnis: Zeilen werden an die falschen Stellen geschrieben, der Bildschirm ist korrumpiert, und jeder weitere Render verschlimmert das Chaos.
 
+<img src="diagram-comparison-de.svg" alt="Vergleich: Browser-Rendering mit Compositor vs. Terminal-Rendering ohne Compositor" width="720">
+
 ### Warum hilft Synchronized Output nicht?
 
 Synchronized Output ([DEC mode 2026](https://gist.github.com/christianparpart/d8a62cc1ab659194337d73e399004036)) ist ein Protokoll, das dem Terminal sagt: „Puffere alles zwischen Start- und End-Sequenz und zeige es atomar an."
@@ -165,7 +161,7 @@ Es ist wie ein Filmprojektor, der saubere Einzelbilder zeigt, aber jedes Bild ei
 
 Ghostty-User berichten keine Flicker-Probleme, obwohl das Argument oben auch für Ghostty gelten sollte.
 Der wahrscheinliche Grund: Ghostty rendert **GPU-beschleunigt** und verarbeitet die Escape-Sequenzen schneller als CPU-basierte Terminals.
-Die Updates sind nicht weg, aber sie werden so schnell gezeichnet, dass das menschliche Auge kein Flackern wahrnimmt.
+Meine Vermutung: Die Updates sind nicht wirklich weg, aber sie werden so schnell gezeichnet, dass das menschliche Auge kein Flackern wahrnimmt.
 Das ist weniger „das Problem ist gelöst" und mehr „das Problem ist unsichtbar".
 Wenn du Ghostty mal ausprobieren willst, nur zu (ich selbst habe es nicht getestet, ich mag mein iTerm2): Neben dem flackerfreien Rendering bietet es GPU-beschleunigtes Rendering via Metal (macOS) und OpenGL (Linux), native Ligatur-Unterstützung, das Kitty Graphics Protocol für Inline-Bilder im Terminal und über 100 eingebaute Themes. Schick ist es definitiv.
 
@@ -207,6 +203,8 @@ Es setzt sich zwischen dein Terminal und Claude Code und macht genau das, was Cl
 
 Statt tausender unkontrollierter Redraws pro Sekunde bekommt dein Terminal nur saubere, atomare Frame-Updates.
 claude-chill ist der fehlende Compositor, den Claude Code nie eingebaut hat.
+
+<img src="diagram-proxy-de.svg" alt="claude-chill als PTY-Proxy zwischen React/Ink und dem Terminal" width="720">
 
 ### Installation
 
@@ -263,7 +261,7 @@ alias claude='claude-chill claude --'
 Das `--` am Ende ist wichtig.
 Es signalisiert claude-chill, dass alle folgenden Argumente (wie `--resume`) an Claude Code durchgereicht werden sollen.
 
-Danach Shell neu laden:
+Danach musst du die Shell neu laden:
 
 ```bash
 # zsh
