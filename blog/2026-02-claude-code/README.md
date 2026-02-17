@@ -37,16 +37,7 @@ Claude Code setzt sich aber an deinen Schreibtisch und erledigt die Arbeit. **Vi
 
 Konkret heißt das: Claude Code kann deine Dateien lesen und bearbeiten, Shell-Befehle ausführen, im Web nach Informationen suchen und sogar Bilder analysieren.
 Der Agent entscheidet selbstständig, welche Schritte nötig sind, und arbeitet sie nacheinander ab – du siehst dabei immer, was gerade passiert.
-
-Das klingt nach viel Macht, und genau deshalb ist ein Aspekt besonders wichtig: die Kontrolle.
-
-Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befehl nach Bestätigung.
-Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
-In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
-
-Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
-Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
-Das ist praktisch in isolierten Umgebungen (Container, VMs, CI) – ich persönlich habe ihn noch nie benutzt. Ist mir zu gefährlich.
+Das klingt nach viel Macht – aber keine Sorge: Du behältst jederzeit die Kontrolle und bestätigst jeden Schritt.
 
 ## Warum ein Terminal?
 
@@ -173,6 +164,18 @@ Claude Code: [Write] src/app/books/book.service.spec.ts
 ```
 
 Wie du siehst, ist der Dialog iterativ: Du gibst eine Aufgabe, Claude Code arbeitet, und du steuerst nach.
+
+### Bestätigungen und Kontrolle
+
+Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befehl nach Bestätigung.
+Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
+In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
+
+Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
+Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
+Das ist praktisch in isolierten Umgebungen (Container, VMs, CI) – ich persönlich habe ihn noch nie benutzt. Ist mir zu gefährlich.
+
+### Die wichtigsten Befehle
 
 Für den Anfang brauchst du nur vier Slash-Befehle:
 
@@ -544,10 +547,14 @@ Falls Claude nach einem Compact den Faden verliert, reicht ein kurzes "Lies den 
 
 Mein Workflow sieht deshalb so aus:
 1. **Plan Mode an** (`Shift+Tab` 2x)
-2. **Aufgabe beschreiben** – Thinking ist standardmäßig aktiv, d. h. Claude Code nimmt sich Denkzeit vor jeder Antwort. Mit `Tab` kann man es ausschalten, aber ich lasse es immer an. Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
+2. **Aufgabe beschreiben**
 3. **Plan reviewen** und bei Bedarf verfeinern
 4. **Plan Mode aus** (`Shift+Tab`)
 5. **"Setze den Plan um"** – Claude Code arbeitet den Plan ab
+
+Noch ein Tipp zum Thinking: Standardmäßig ist Extended Thinking aktiv – Claude Code führt dabei vor jeder Antwort eine interne Reasoning-Schleife durch, in der es sich selbst promptet und das Problem "durchdenkt".
+Mit `Tab` kann man das ausschalten, aber ich lasse es immer an.
+Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
 
 Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
 Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
