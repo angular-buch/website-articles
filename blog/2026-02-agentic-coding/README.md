@@ -25,6 +25,8 @@ Softwareprojekte werden komplexer, und Anforderungen steigen.
 Werkzeuge für AI (Artificial Intelligence) können uns bei der Entwicklung unterstützen und Entlastung schaffen: Sie helfen unter anderem beim Generieren von Code, erklären komplexe Zusammenhänge und schlagen Verbesserungen vor.
 **In diesem Artikel zeigen wir dir, wie du mit den AI-Werkzeugen von Angular den bestmöglichen Code generierst.**
 
+> **🇬🇧 This article is available in English language here: [Agentic Coding: AI Support for Angular](https://angular.schule/blog/2026-02-agentic-coding)**
+
 ## Inhalt
 
 [[toc]]
