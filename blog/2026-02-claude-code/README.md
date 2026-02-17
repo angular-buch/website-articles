@@ -37,7 +37,7 @@ Claude Code setzt sich aber an deinen Schreibtisch und erledigt die Arbeit. **Vi
 
 Konkret heißt das: Claude Code kann deine Dateien lesen und bearbeiten, Shell-Befehle ausführen, im Web nach Informationen suchen und sogar Bilder analysieren.
 Der Agent entscheidet selbstständig, welche Schritte nötig sind, und arbeitet sie nacheinander ab – du siehst dabei immer, was gerade passiert.
-Das klingt nach viel Macht – aber keine Sorge: Du behältst jederzeit die Kontrolle und bestätigst jeden Schritt.
+Das klingt nach viel Macht – aber keine Sorge: Du behältst jederzeit die Kontrolle und kannst jeden Schritt bestätigen.
 
 ## Warum ein Terminal?
 
@@ -189,7 +189,7 @@ Den Rest (es gibt noch viele mehr) lernst du nebenbei kennen – oder du fragst 
 Beim Arbeiten reicht es, `Strg+C` zum Abbrechen und `Strg+D` zum Beenden zu kennen.
 Mit `@` startest du die Dateipfad-Autovervollständigung – praktisch, um schnell auf Dateien zu verweisen.
 
-Der Workflow ist also schnell erlernt.
+Das sind die Grundlagen.
 Doch die Qualität der Ergebnisse hängt von einem entscheidenden Faktor ab: dem Kontext.
 
 ## Kontext ist alles
@@ -406,7 +406,7 @@ Du kannst diese Werkzeuge explizit anfordern:
 Claude Code ruft dann aktuelle Informationen ab, die möglicherweise neuer sind als sein Trainingswissen.
 Mehr Details zum MCP-Server und warum er so wichtig ist, findest du in meinem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
 
-Genug Theorie – lass uns ein konkretes Projekt umsetzen.
+Lass uns all das in einem konkreten Projekt zusammenführen.
 
 ## Dein erstes Angular-Projekt mit Claude Code
 
@@ -495,10 +495,9 @@ Doch die Qualität hängt davon ab, wie du fragst.
 Nach einiger Zeit mit Claude Code wirst du Muster erkennen, die zu besseren Ergebnissen führen.
 Hier die wichtigsten Erkenntnisse aus meiner Praxis.
 
-### Spezifisch sein und Kontext geben
+### Spezifisch sein
 
 Die goldene Regel: Je präziser deine Anfrage, desto besser das Ergebnis.
-Referenziere bestehende Dateien, damit Claude Code den Stil deines Projekts übernimmt.
 
 ```
 ❌ "Erstelle einen Service"
