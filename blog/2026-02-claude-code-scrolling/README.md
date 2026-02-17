@@ -58,14 +58,14 @@ Und es ist seit fast einem Jahr bekannt, ohne dass Anthropic eine wirkliche Lös
 
 Auf GitHub gibt es dutzende Issues dazu, alle beschreiben dasselbe Symptom mit unterschiedlichen Namen:
 
-- „Endless scrolling" ([#832](https://github.com/anthropics/claude-code/issues/832), [#2118](https://github.com/anthropics/claude-code/issues/2118))
-- „Infinite scroll" ([#10008](https://github.com/anthropics/claude-code/issues/10008))
-- „Terminal flickering" ([#769](https://github.com/anthropics/claude-code/issues/769), [#9893](https://github.com/anthropics/claude-code/issues/9893))
-- „High speed scrolling" ([#1422](https://github.com/anthropics/claude-code/issues/1422), [#10835](https://github.com/anthropics/claude-code/issues/10835))
-- „UI freeze" ([#7216](https://github.com/anthropics/claude-code/issues/7216))
-- „Terminal flickering on Windows" ([#16939](https://github.com/anthropics/claude-code/issues/16939))
-- „Terminal rendering breaks" ([#16578](https://github.com/anthropics/claude-code/issues/16578))
-- „Scroll position lost" ([#18299](https://github.com/anthropics/claude-code/issues/18299))
+- "Endless scrolling" ([#832](https://github.com/anthropics/claude-code/issues/832), [#2118](https://github.com/anthropics/claude-code/issues/2118))
+- "Infinite scroll" ([#10008](https://github.com/anthropics/claude-code/issues/10008))
+- "Terminal flickering" ([#769](https://github.com/anthropics/claude-code/issues/769), [#9893](https://github.com/anthropics/claude-code/issues/9893))
+- "High speed scrolling" ([#1422](https://github.com/anthropics/claude-code/issues/1422), [#10835](https://github.com/anthropics/claude-code/issues/10835))
+- "UI freeze" ([#7216](https://github.com/anthropics/claude-code/issues/7216))
+- "Terminal flickering on Windows" ([#16939](https://github.com/anthropics/claude-code/issues/16939))
+- "Terminal rendering breaks" ([#16578](https://github.com/anthropics/claude-code/issues/16578))
+- "Scroll position lost" ([#18299](https://github.com/anthropics/claude-code/issues/18299))
 
 In Issue [#9935](https://github.com/anthropics/claude-code/issues/9935) hat jemand gemessen: **4.000 bis 6.700 Scroll-Events pro Sekunde**.
 
@@ -74,9 +74,9 @@ In Issue [#9935](https://github.com/anthropics/claude-code/issues/9935) hat jema
 
 Besonders schlimm wird es mit **parallelen Agenten**.
 Wenn Claude Code mehrere Agenten gleichzeitig startet, liefert jeder von ihnen ständig Status-Updates zurück.
-Der Bildschirm kommt überhaupt nicht mehr zur Ruhe, und die Claude Session wird während der gesamten parallelen Ausführung unbenutzbar.
+Der Bildschirm kommt überhaupt nicht mehr zur Ruhe, und die Claude-Session wird während der gesamten parallelen Ausführung unbenutzbar.
 Mehrere Issues bestätigen dieses Muster: parallele Agenten überlasten die Rendering-Pipeline komplett ([#17547](https://github.com/anthropics/claude-code/issues/17547), [#16923](https://github.com/anthropics/claude-code/issues/16923), [#10008](https://github.com/anthropics/claude-code/issues/10008)).
-Ein User, der 18 Agenten gleichzeitig laufen lässt, beschreibt es als „flicker-thrashing" sobald die Benachrichtigungen die Bildschirmhöhe überschreiten.
+Ein User, der 18 Agenten gleichzeitig laufen lässt, beschreibt es als "flicker-thrashing", sobald die Benachrichtigungen die Bildschirmhöhe überschreiten.
 
 ## Was ich zuerst versucht habe (und warum es nicht geholfen hat)
 
@@ -99,7 +99,7 @@ Ein Update auf die aktuelle Version (3.6.6) bringt Verbesserungen, löst das Pro
 
 ### Nicht tippen während Claude denkt
 
-Ein häufiger Trigger ist Tastatureingabe während der „Thinking"-Phase.
+Ein häufiger Trigger ist Tastatureingabe während der "Thinking"-Phase.
 Sich zurückzuhalten hilft, aber wer will schon sein Verhalten an einen Bug anpassen?
 
 ## Welche Terminals sind betroffen?
@@ -135,9 +135,9 @@ Statt HTML-Elemente im Browser zu erzeugen, schreibt Ink Steuerzeichen in den Te
 Das funktioniert bei einfachen Tools gut.
 Bei Claude Code wird es zum Problem, weil mehrere Dinge gleichzeitig rendern:
 
-1. **Streaming-Antworten** – jedes Token löst einen Render-Cycle aus
+1. **Streaming-Antworten** – jedes Token löst einen Render-Zyklus aus
 2. **Statuszeile** – aktualisiert sich mehrmals pro Sekunde (Timer, Token-Counter)
-3. **Spinner/Animationen** – eigener Render-Zyklus während „Thinking"
+3. **Spinner/Animationen** – eigener Render-Zyklus während "Thinking"
 4. **Input-Feld** – rendert bei jedem Tastendruck
 
 Jeder dieser Render-Pfade schreibt Escape-Sequenzen in den Terminal-Stream.
@@ -148,7 +148,7 @@ Das Ergebnis: Zeilen werden an die falschen Stellen geschrieben, der Bildschirm 
 
 ### Warum hilft Synchronized Output nicht?
 
-Synchronized Output ([DEC mode 2026](https://gist.github.com/christianparpart/d8a62cc1ab659194337d73e399004036)) ist ein Protokoll, das dem Terminal sagt: „Puffere alles zwischen Start- und End-Sequenz und zeige es atomar an."
+Synchronized Output ([DEC mode 2026](https://gist.github.com/christianparpart/d8a62cc1ab659194337d73e399004036)) ist ein Protokoll, das dem Terminal sagt: "Puffere alles zwischen Start- und End-Sequenz und zeige es atomar an."
 Claude Code sendet diese Sequenzen bereits (`\x1b[?2026h` und `\x1b[?2026l`).
 Terminals wie iTerm2 und Ghostty unterstützen sie.
 
@@ -159,24 +159,24 @@ Es ist wie ein Filmprojektor, der saubere Einzelbilder zeigt, aber jedes Bild ei
 
 ### Warum funktioniert Ghostty trotzdem?
 
-Ghostty-User berichten keine Flicker-Probleme, obwohl das Argument oben auch für Ghostty gelten sollte.
+Ghostty-User melden keine Flicker-Probleme, obwohl das Argument oben auch für Ghostty gelten sollte.
 Der wahrscheinliche Grund: Ghostty rendert **GPU-beschleunigt** und verarbeitet die Escape-Sequenzen schneller als CPU-basierte Terminals.
 Meine Vermutung: Die Updates sind nicht wirklich weg, aber sie werden so schnell gezeichnet, dass das menschliche Auge kein Flackern wahrnimmt.
-Das ist weniger „das Problem ist gelöst" und mehr „das Problem ist unsichtbar".
+Das ist weniger "das Problem ist gelöst" und mehr "das Problem ist unsichtbar".
 Wenn du Ghostty mal ausprobieren willst, nur zu (ich selbst habe es nicht getestet, ich mag mein iTerm2): Neben dem flackerfreien Rendering bietet es GPU-beschleunigtes Rendering via Metal (macOS) und OpenGL (Linux), native Ligatur-Unterstützung, das Kitty Graphics Protocol für Inline-Bilder im Terminal und über 100 eingebaute Themes. Schick ist es definitiv.
 
 ## Warum fixt Anthropic das nicht einfach?
 
 Anthropic hat durchaus reagiert.
-In Version 2.0.10 (Oktober 2025) wurde der Renderer komplett neu geschrieben, und Ende Januar 2026 wurde der neue „Differential Renderer" für alle User ausgerollt.
+In Version 2.0.10 (Oktober 2025) wurde der Renderer komplett neu geschrieben, und Ende Januar 2026 wurde der neue "Differential Renderer" für alle User ausgerollt.
 Chris Lloyd, Anthropic-Ingenieur und Autor der Terminal-Rendering-Patches, schrieb auf [Hacker News](https://news.ycombinator.com/item?id=46699072):
 
-> „we shipped our differential renderer to everyone today. We rewrote our rendering system from scratch and only ~1/3 of sessions see at least a flicker."
+> "we shipped our differential renderer to everyone today. We rewrote our rendering system from scratch and only ~1/3 of sessions see at least a flicker."
 
 Zusätzlich hat Anthropic Patches für Synchronized Output upstream eingereicht: Der Patch für VSCode (xterm.js [#5453](https://github.com/xtermjs/xterm.js/pull/5453)) wurde gemerged, und der Patch für tmux ([#4744](https://github.com/tmux/tmux/pull/4744)) wurde vom tmux-Maintainer übernommen und direkt in OpenBSD committed.
 Das hat die Situation verbessert, aber nicht gelöst.
 
-Das Kernproblem ist architektonisch: **React im Terminal ist ein Impedance Mismatch** -- zwei Systeme, die fundamental unterschiedlich arbeiten.
+Das Kernproblem ist architektonisch: **React im Terminal ist ein Impedance Mismatch.** Zwei Systeme, die fundamental unterschiedlich arbeiten.
 React geht davon aus, dass Rendering billig ist.
 Im Browser stimmt das: DOM-Diffing ist schnell, der Browser-Compositor sorgt für flackerfreie Darstellung.
 Im Terminal gibt es keinen Compositor.
@@ -279,7 +279,7 @@ Ab jetzt startet `claude` automatisch über claude-chill. Du merkst keinen Unter
 
 Ich habe den gesamten Quellcode gelesen (ein kompaktes Rust-Projekt mit 12 Quelldateien).
 Ergebnis: Der Code ist sauber (geprüft in Version 0.1.4, Commit [`2595cf7`](https://github.com/davidbeesley/claude-chill/tree/2595cf7f89e33381453cb4fba2b8bf8eb26921df)).
-Kein Netzwerkzugriff, keine Dateisystem-Schreibzugriffe (außer optionalem Debug-Logging), keine sensiblen Umgebungsvariablen.
+Kein Netzwerkzugriff, keine Dateisystem-Schreibzugriffe (außer optionalem Debug-Logging), kein Zugriff auf sensible Umgebungsvariablen.
 Die Dependencies sind etablierte Rust-Crates: `nix` für POSIX-APIs, `vt100` als Terminal-Emulator, `termwiz` (vom WezTerm-Entwickler) als Escape-Sequence-Parser.
 Der Code ist gut strukturiert, ausführlich getestet und hat eine explizite Whitelist/Blacklist für jede Terminal-Escape-Sequenz.
 

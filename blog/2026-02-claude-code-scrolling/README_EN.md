@@ -176,7 +176,7 @@ Chris Lloyd, Anthropic engineer and author of the terminal rendering patches, wr
 They also submitted upstream patches for Synchronized Output: the VSCode patch (xterm.js [#5453](https://github.com/xtermjs/xterm.js/pull/5453)) was merged, and the tmux patch ([#4744](https://github.com/tmux/tmux/pull/4744)) was accepted and integrated directly into OpenBSD.
 This improved the situation but didn't solve it.
 
-The core problem is architectural: **React in the terminal is an impedance mismatch** -- two systems that work in fundamentally different ways.
+The core problem is architectural: **React in the terminal is an impedance mismatch.** Two systems that work in fundamentally different ways.
 React assumes that rendering is cheap.
 In the browser, that's true: DOM diffing is fast, the browser compositor ensures flicker-free display.
 In the terminal, there is no compositor.
