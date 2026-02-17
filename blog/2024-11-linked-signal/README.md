@@ -28,7 +28,7 @@ In diesem Blogpost stellen wir vor, was ein Linked Signal ist, wie es funktionie
 
 [[toc]]
 
-> **🇬🇧 This article is available in English language here: [Angular 19: Introducing LinkedSignal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)**
+> 🇬🇧 This article is available in English language here: [Angular 19: Introducing LinkedSignal for Responsive Local State Management](https://angular.schule/blog/2024-11-linked-signal)
 
 
 ## Was ist ein Linked Signal?

@@ -31,7 +31,7 @@ Wir zeigen Ihnen, was es damit auf sich hat und wie Sie Ihren Code schreiben mü
 
 [[toc]]
 
-> **🇬🇧 This article is available in English language here: [TypeScript: useDefineForClassFields – How to avoid future Breaking Changes](https://angular.schule/blog/2022-11-use-define-for-class-fields)**
+> 🇬🇧 This article is available in English language here: [TypeScript: useDefineForClassFields – How to avoid future Breaking Changes](https://angular.schule/blog/2022-11-use-define-for-class-fields)
 
 
 ## Propertys initialisieren mit TypeScript

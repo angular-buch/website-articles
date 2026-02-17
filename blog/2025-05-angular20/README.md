@@ -22,7 +22,7 @@ Am **28. Mai 2025** wurde **Angular 20** veröffentlicht! Im offiziellen [Angula
 Für die Migration auf Angular 20 empfehlen wir, den Befehl `ng update` zu nutzen.
 Detaillierte Infos zu den Schritten liefert der [Angular Update Guide](https://angular.dev/update-guide).
 
-> **🇬🇧 This article is available in English language here: [Angular 20 is here!](https://angular.schule/blog/2025-05-angular20)**
+> 🇬🇧 This article is available in English language here: [Angular 20 is here!](https://angular.schule/blog/2025-05-angular20)
 
 
 ## Versionen von TypeScript und Node.js
