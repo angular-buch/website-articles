@@ -59,8 +59,8 @@ Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
 ## Installation
 
 Die gute Nachricht: Die Installation dauert etwa eine Minute.
-Es gibt keine besonderen Voraussetzungen – nur ein unterstütztes Betriebssystem (macOS 10.15+, Windows 10+, oder Ubuntu 20.04+).
-Für die Angular-Entwicklung sollte [Node.js](https://nodejs.org/) bereits installiert sein.
+Claude Code selbst braucht nur ein unterstütztes Betriebssystem (macOS 10.15+, Windows 10+, oder Ubuntu 20.04+).
+Für die Angular-Entwicklung sollte zusätzlich [Node.js](https://nodejs.org/) installiert sein.
 Gut zu wissen: Claude Code schreibt gerne Shell-Skripte und nutzt für komplexere Aufgaben auch Python – stelle sicher, dass [Python](https://www.python.org/) installiert ist, wenn du das nutzen möchtest.
 
 **macOS / Linux:**
@@ -124,12 +124,6 @@ Dann probiere etwas Spannenderes:
 Du wirst merken: Das Ergebnis ist erstaunlich gut – und du hast keinen Code selbst geschrieben.
 Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für den eigentlichen Workflow.
 
-### Updates
-
-Übrigens: Claude Code aktualisiert sich in der Regel automatisch.
-Falls nicht, kannst du manuell mit `claude update` aktualisieren.
-Und mit dem Befehl `/doctor` prüfst du, ob alles korrekt eingerichtet ist.
-
 ## Der Workflow
 
 Jetzt wird es konkret: Wie sieht die tägliche Arbeit mit Claude Code aus?
@@ -183,11 +177,14 @@ Für den Anfang brauchst du nur vier Slash-Befehle:
 - **`/clear`** – frische Session starten
 - **`/compact`** – Kontext komprimieren, wenn die Session lang wird
 - **`/cost`** – was hat die Session bisher gekostet?
+- **`/doctor`** – prüft, ob alles korrekt eingerichtet ist
 
 Den Rest (es gibt noch viele mehr) lernst du nebenbei kennen – oder du fragst Claude Code einfach danach.
+Updates passieren in der Regel automatisch. Falls nicht, hilft `claude update` auf der Kommandozeile.
 
-Beim Arbeiten reicht es, `Strg+C` zum Abbrechen und `Strg+D` zum Beenden zu kennen.
+Beim Arbeiten reicht es, `Ctrl+C` zum Abbrechen und `Ctrl+D` zum Beenden zu kennen.
 Mit `@` startest du die Dateipfad-Autovervollständigung – praktisch, um schnell auf Dateien zu verweisen.
+Undo geht mit `Ctrl+_` (nicht `Ctrl+Z`!). Wer aus Gewohnheit `Ctrl+Z` drückt, suspendiert Claude Code – dann hilft `fg` in der Shell, um zurückzukehren.
 
 Das sind die Grundlagen.
 Doch die Qualität der Ergebnisse hängt von einem entscheidenden Faktor ab: dem Kontext.
@@ -404,13 +401,13 @@ Du kannst diese Werkzeuge explizit anfordern:
 > Frage den Angular MCP-Server nach Best Practices für Signal Forms.
 
 Claude Code ruft dann aktuelle Informationen ab, die möglicherweise neuer sind als sein Trainingswissen.
-Mehr Details zum MCP-Server und warum er so wichtig ist, findest du in meinem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
 
-Lass uns all das in einem konkreten Projekt zusammenführen.
+> **Lesetipp:** Warum MCP für AI-gestützte Angular-Entwicklung so entscheidend ist und wie das Zusammenspiel von Agent und Tooling funktioniert, erkläre ich ausführlich in meinem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
 
 ## Dein erstes Angular-Projekt mit Claude Code
 
-Wichtig: Der Angular MCP-Server sollte von Anfang an angebunden sein.
+Lass uns all das in einem konkreten Projekt zusammenführen.
+Wichtig dabei: Der Angular MCP-Server sollte von Anfang an angebunden sein.
 Nur so bekommt Claude Code Zugriff auf aktuelle Best Practices und generiert keinen veralteten Code.
 
 Allerdings gibt es ein Henne-Ei-Problem: Die MCP-Konfiguration braucht ein Projektverzeichnis – das aber noch nicht existiert.
@@ -437,7 +434,7 @@ Instruiere Claude Code, das Projekt zu erstellen und die MCP-Konfiguration anzul
 
 Das Flag `--ai-config=claude` generiert eine passende `CLAUDE.md` für das Projekt.
 Die `.mcp.json` verbindet Claude Code mit dem Angular MCP-Server – allerdings erst beim nächsten Start.
-Drücke `Strg+D` und starte mit `claude --resume`:
+Drücke `Ctrl+D` und starte mit `claude --resume`:
 
 ![MCP-Server Prompt beim Start von Claude Code](mcp-prompt.png)
 
@@ -540,7 +537,7 @@ Wenn du den Plan abgesegnet hast, wechselst du mit `Shift+Tab` zurück in den no
 Warum ist das so wichtig?
 Claude Code hat ein begrenztes Kontext-Fenster.
 Wenn du sofort mit der Umsetzung startest, verliert der Agent bei größeren Aufgaben schnell den Überblick.
-Im Plan Mode strukturiert Claude seine Gedanken in einer Markdown-Datei, die auf der Festplatte liegt.
+Im Plan Mode strukturiert Claude seine "Gedanken" in einer Markdown-Datei, die auf der Festplatte liegt.
 Selbst wenn du `/compact` ausführst oder der Kontext knapp wird – die Datei bleibt erhalten.
 Falls Claude nach einem Compact den Faden verliert, reicht ein kurzes "Lies den aktuellen Plan nochmal ein" und er ist wieder auf Kurs.
 
@@ -551,8 +548,11 @@ Mein Workflow sieht deshalb so aus:
 4. **Plan Mode aus** (`Shift+Tab`)
 5. **"Setze den Plan um"** – Claude Code arbeitet den Plan ab
 
-Noch ein Tipp zum Thinking: Standardmäßig ist Extended Thinking aktiv – Claude Code führt dabei vor jeder Antwort eine interne Reasoning-Schleife durch, in der es sich selbst promptet und das Problem "durchdenkt".
-Mit `Tab` kann man das ausschalten, aber ich lasse es immer an.
+### Thinking nutzen
+
+Unabhängig vom Plan Mode gibt es noch eine weitere Stellschraube für die Qualität: Extended Thinking.
+Dabei führt Claude Code vor jeder Antwort eine interne Reasoning-Schleife durch, in der es sich selbst promptet und das Problem "durchdenkt".
+Es ist standardmäßig aktiv und lässt sich über `/config` ausschalten. Ich lasse es immer an.
 Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
 
 Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
@@ -600,14 +600,14 @@ docker sandbox run claude .
 
 Die [Docker AI Sandbox](https://docs.docker.com/ai/sandboxes/) isoliert Claude Code in einer microVM – das ist eine leichtgewichtige virtuelle Maschine, die stärker isoliert als ein normaler Docker-Container.
 Während Container sich den Kernel mit dem Host teilen (und [ein Ausbruch daher möglich ist](https://northflank.com/blog/your-containers-arent-isolated-heres-why-thats-a-problem-micro-vms-vmms-and-container-isolation)), hat eine microVM ihren eigenen Kernel – ein AI-Agent kann also selbst mit Root-Rechten nicht aus der Sandbox ausbrechen.
-Man muss sich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umgebungsvariable übergeben), aber danach bleibt die Sandbox bestehen, bis man sie explizit löscht.
+Du musst dich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umgebungsvariable übergeben), aber danach bleibt die Sandbox bestehen, bis du sie explizit löschst.
 
-Das Beste: Man merkt kaum einen Unterschied zur normalen Arbeit.
+Das Beste: Du merkst kaum einen Unterschied zur normalen Arbeit.
 Dein Projektverzeichnis wird bidirektional synchronisiert – kein Volume-Mount, sondern echtes Kopieren unter dem gleichen absoluten Pfad wie auf dem Host.
 Docker liest deine Git-Identität (`user.name` und `user.email`) vom Host und injiziert sie in die Sandbox, sodass Commits korrekt zugeordnet werden.
 Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/agent/`), eigener Docker-Daemon.
 Wie die Architektur im Detail funktioniert, beschreibt Docker in der [Sandbox-Architektur-Dokumentation](https://docs.docker.com/ai/sandboxes/architecture/).
-Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Man vertraut hier einer Black Box.
+Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Du vertraust hier einer Black Box.
 
 ## Fazit
 
