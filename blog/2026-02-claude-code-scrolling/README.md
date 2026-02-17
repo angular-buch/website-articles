@@ -34,6 +34,8 @@ Seit März 2025 sammeln sich die GitHub Issues mit tausenden Upvotes, und das Pr
 Es ist das meistgemeldete UX-Problem von Claude Code überhaupt, und eine direkte Lösung von Anthropic lässt immer noch auf sich warten.
 **In diesem Artikel erkläre ich, warum der Bug existiert, warum die üblichen Workarounds nicht helfen und wie man ihn mit einem Open-Source-Tool endgültig löst.**
 
+> **🇬🇧 This article is available in English language here: [Claude Code: How to Actually Fix the Endless Scrolling Problem](https://angular.schule/blog/2026-02-claude-code-scrolling)**
+
 ## Inhalt
 
 [[toc]]
@@ -47,8 +49,8 @@ Manchmal klappt es, manchmal nicht.
 Dann denkst du, es ist wieder stabil, und im selben Moment geht es schon wieder los.
 Es macht dich komplett aggressiv, und du kommst in der Zeit zu nichts, weil du einfach nur noch sauer bist.
 
-<video src="https://github.com/user-attachments/assets/647a822f-6247-458a-b861-0f203b310571" autoplay loop muted playsinline width="100%"></video>
-<small><em>Flickern bei der Arbeit von Johannes, aufgenommen in iTerm2</em></small>
+<video src="https://github.com/user-attachments/assets/647a822f-6247-458a-b861-0f203b310571" controls loop muted playsinline width="100%"></video>
+<small><em>⚠️ Flackerndes Video. Flickern bei der Arbeit von Johannes, aufgenommen in iTerm2</em></small>
 
 Dieses Problem ist nicht selten.
 Es ist das **meistgemeldete und frustrierendste UX-Problem** von Claude Code.
@@ -69,8 +71,8 @@ Auf GitHub gibt es dutzende Issues dazu, alle beschreiben dasselbe Symptom mit u
 
 In Issue [#9935](https://github.com/anthropics/claude-code/issues/9935) hat jemand gemessen: **4.000 bis 6.700 Scroll-Events pro Sekunde**.
 
-<video src="https://github.com/user-attachments/assets/cf147ecb-d5e3-428d-a538-38c8cab7bef3" autoplay loop muted playsinline width="100%"></video>
-<small><em>Quelle: <a href="https://github.com/anthropics/claude-code/issues/7216">GitHub Issue #7216</a> – massives Scrolling in Cursor</em></small>
+<video src="https://github.com/user-attachments/assets/cf147ecb-d5e3-428d-a538-38c8cab7bef3" controls loop muted playsinline width="100%"></video>
+<small><em>⚠️ Flackerndes Video. Quelle: <a href="https://github.com/anthropics/claude-code/issues/7216">GitHub Issue #7216</a> – massives Scrolling in Cursor</em></small>
 
 Besonders schlimm wird es mit **parallelen Agenten**.
 Wenn Claude Code mehrere Agenten gleichzeitig startet, liefert jeder von ihnen ständig Status-Updates zurück.
@@ -104,8 +106,8 @@ Sich zurückzuhalten hilft, aber wer will schon sein Verhalten an einen Bug anpa
 
 ## Welche Terminals sind betroffen?
 
-<video src="https://github.com/user-attachments/assets/86040c0c-1388-4ced-9905-be8df81c9048" autoplay loop muted playsinline width="100%"></video>
-<small><em>Quelle: <a href="https://github.com/anthropics/claude-code/issues/832">GitHub Issue #832</a> – Endless Scrolling auf Windows</em></small>
+<video src="https://github.com/user-attachments/assets/86040c0c-1388-4ced-9905-be8df81c9048" controls loop muted playsinline width="100%"></video>
+<small><em>⚠️ Flackerndes Video. Quelle: <a href="https://github.com/anthropics/claude-code/issues/832">GitHub Issue #832</a> – Endless Scrolling auf Windows</em></small>
 
 Die folgende Tabelle fasst die Berichte aus den verschiedenen GitHub Issues zusammen.
 Die Angaben zur Häufigkeit des Auftretens sind teils messbar belegt, teils subjektiv von den betroffenen Usern beschrieben.
