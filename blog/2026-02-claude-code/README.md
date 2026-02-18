@@ -3,7 +3,7 @@ title: 'Claude Code: Der AI-Agent für Angular-Entwickler (und solche, die es we
 author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 bio: '<a href="https://angular-buch.com"><img src="/assets/img/book-cover-v1m.png" alt="Angular-Buch Cover" style="float: right; margin-top: -60px; margin-right: 30px; max-width: 250px;"></a>Johannes Hoppe ist Trainer, Berater und Entwickler mit Schwerpunkt Angular. Er ist Mitautor des <b>Angular-Buchs</b>, gemeinsam mit Ferdinand Malcher und Danny Koppenhagen. Nach vier erfolgreichen Auflagen haben sie das Buch von Grund auf neu geschrieben – mit moderner Syntax, kompakt und vielen neuen Themen. Das neue Buch erscheint im Mai 2026. Mehr Infos unter <a href="https://angular-buch.com" style="text-decoration: underline;"><b>angular-buch.com</b></a>'
-bioHeading: Über den Autor
+bioHeading: Über Johannes Hoppe
 published: 2026-02-18
 keywords:
   - Angular
