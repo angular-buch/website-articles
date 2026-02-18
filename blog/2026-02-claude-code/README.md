@@ -62,7 +62,7 @@ Klingt vielversprechend? Dann lass uns loslegen.
 
 ## Loslegen
 
-## Installation
+### Installation
 
 Die gute Nachricht: Die Installation dauert etwa eine Minute.
 Claude Code selbst braucht nur ein unterstütztes Betriebssystem (macOS 10.15+, Windows 10+, oder Ubuntu 20.04+).
@@ -92,7 +92,7 @@ Du benötigst ein Claude Pro-Abo (ca. 18 EUR/Monat) oder Max-Abo (ab 90 EUR/Mona
 Tipp: Wenn du jemanden kennst, der ein Max-Abo hat, kann diese Person dir mit `/passes` einen Einladungs-Code generieren – damit kannst du Claude Code eine Woche lang kostenlos testen.
 Du kennst niemanden? Schreib uns an team@angular.schule – wir helfen gerne aus!
 
-### Der erste Start
+#### Der erste Start
 
 Wenn du `claude` zum ersten Mal ausführst, passiert Folgendes:
 
@@ -104,7 +104,7 @@ Falls bei der Installation etwas nicht klappt: Keine Sorge!
 Du kannst buchstäblich Claude (im Browser unter claude.ai) fragen, wie du Claude Code installierst.
 Mach einen Screenshot der Fehlermeldung und frag nach einer Lösung – das ist keine Ironie, sondern ein praktikabler Ansatz.
 
-### Die ersten Gehversuche
+#### Die ersten Gehversuche
 
 Bevor du dich an komplexe Angular-Aufgaben wagst, empfehle ich, mit etwas Einfachem zu beginnen.
 So bekommst du ein Gefühl für den Workflow:
@@ -130,7 +130,7 @@ Dann probiere etwas Spannenderes:
 Du wirst merken: Das Ergebnis ist erstaunlich gut – und du hast keinen Code selbst geschrieben.
 Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für den eigentlichen Workflow.
 
-## Der Workflow – Ein Chat
+### Der Workflow – Ein Chat
 
 Jetzt wird es konkret: Wie sieht die tägliche Arbeit mit Claude Code aus?
 Am besten zeigt das ein konkretes Beispiel:
@@ -165,7 +165,7 @@ Claude Code: [Write] src/app/books/book.service.spec.ts
 
 Wie du siehst, ist der Dialog iterativ: Du gibst eine Aufgabe, Claude Code arbeitet, und du steuerst nach.
 
-### Bestätigungen und Kontrolle
+#### Bestätigungen und Kontrolle
 
 Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befehl nach Bestätigung.
 Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
@@ -177,7 +177,7 @@ Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden
 Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
 Das ist praktisch in isolierten Umgebungen (Container, VMs, CI) – ich persönlich habe ihn noch nie benutzt. Ist mir zu gefährlich.
 
-### Die wichtigsten Befehle
+#### Die wichtigsten Befehle
 
 Für den Anfang brauchst du nur vier Slash-Befehle:
 
@@ -199,12 +199,12 @@ Undo geht mit `Ctrl+_` (nicht `Ctrl+Z`!). Wer aus Gewohnheit `Ctrl+Z` drückt, s
 Das sind die Grundlagen.
 Doch die Qualität der Ergebnisse hängt von einem entscheidenden Faktor ab: dem Kontext.
 
-## Kontext ist alles
+### Kontext ist alles
 
 Je mehr Claude Code über dein Projekt weiß, desto besseren Code liefert es.
 Das klingt offensichtlich, ist aber der wichtigste Erfolgsfaktor beim Arbeiten mit AI-Agenten.
 
-### Dateien referenzieren
+#### Dateien referenzieren
 
 Der einfachste Weg, Kontext zu geben, ist das Referenzieren von Dateien.
 Du kannst sie direkt in deiner Anfrage erwähnen:
@@ -219,7 +219,7 @@ Du kannst auch mehrere Dateien referenzieren, um Vergleiche anzustellen oder Mus
 In den meisten Fällen findet Claude die relevanten Dateien selbstständig.
 Mit `@` im Prompt kannst du die Dateipfad-Autovervollständigung nutzen, aber nötig ist das selten.
 
-### Bilder einbinden
+#### Bilder einbinden
 
 Eine besonders praktische Funktion: Claude Code kann auch Bilder analysieren.
 Ziehe einfach einen Screenshot oder ein Mockup per Drag & Drop ins Terminal und schreibe dazu:
@@ -228,7 +228,7 @@ Ziehe einfach einen Screenshot oder ein Mockup per Drag & Drop ins Terminal und 
 
 Das ist besonders nützlich, wenn du UI-Mockups in Komponenten umsetzen, Fehlermeldungen aus dem Browser analysieren oder Diagramme und Architekturbeschreibungen verstehen möchtest.
 
-### Das Kontext-Fenster
+#### Das Kontext-Fenster
 
 Es gibt allerdings eine technische Einschränkung: Jedes AI-Modell hat ein begrenztes Kontext-Fenster.
 Bei Claude sind das aktuell etwa 200.000 Tokens – eine Menge, aber bei langen Sessions kann es passieren, dass frühere Informationen "vergessen" werden.
@@ -249,11 +249,11 @@ Mit `/compact` kannst du das auch manuell auslösen und dabei angeben, was bei d
 Doch Kontext muss nicht nur spontan gegeben werden.
 Viel eleganter ist es, projektspezifische Regeln dauerhaft zu hinterlegen.
 
-## Projekt-Konfiguration
+### Projekt-Konfiguration
 
 Claude Code lässt sich projektspezifisch konfigurieren, sodass es von Anfang an weiß, wie dein Projekt strukturiert ist und welchen Konventionen es folgen soll.
 
-### `CLAUDE.md` – Regeln für dein Projekt
+#### `CLAUDE.md` – Regeln für dein Projekt
 
 Der einfachste Weg: Starte Claude Code in deinem Projekt und tippe `/init`.
 Claude Code analysiert dann die Projektstruktur, erkennt das verwendete Framework, die Test-Konfiguration und die Coding-Konventionen – und generiert daraus eine passende `.claude/CLAUDE.md`.
@@ -306,7 +306,7 @@ Mit `/memory` kannst du alle gespeicherten Regeln einsehen und bearbeiten.
 
 ![Diagramm: CLAUDE.md und MCP-Server werden beim Session-Start geladen und bleiben in jeder Anfrage erhalten. Skills laden beim Start nur ihre Beschreibungen, der vollständige Inhalt wird erst bei Aufruf geladen.](context-loading.svg "So lädt Claude Code den Kontext: CLAUDE.md und MCP beim Start, Skills on demand.")
 
-## Angular MCP-Server
+### Angular MCP-Server
 
 Eines der größten Probleme bei AI-Modellen ist veraltetes Trainingswissen.
 Angular entwickelt sich schnell, und was vor einem Jahr Best Practice war, kann heute überholt sein.
@@ -314,7 +314,7 @@ Der MCP-Server (Model Context Protocol) der Angular CLI löst dieses Problem ele
 
 MCP ermöglicht es Claude Code, auf aktuelle Angular-Dokumentation und Best Practices zuzugreifen – frisch und direkt von der Quelle.
 
-### Einrichtung
+#### Einrichtung
 
 Die Konfiguration erfolgt in der Datei `.mcp.json` im Projekt-Root:
 
@@ -329,7 +329,7 @@ Die Konfiguration erfolgt in der Datei `.mcp.json` im Projekt-Root:
 }
 ```
 
-### Verfügbare Werkzeuge
+#### Verfügbare Werkzeuge
 
 Mit dieser Konfiguration stehen Claude Code zusätzliche Werkzeuge zur Verfügung:
 
@@ -371,7 +371,7 @@ Claude Code ruft dann aktuelle Informationen ab, die möglicherweise neuer sind 
 
 > **Lesetipp:** Warum MCP für AI-gestützte Angular-Entwicklung so entscheidend ist und wie das Zusammenspiel von Agent und Tooling funktioniert, erkläre ich ausführlich in meinem Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding).
 
-## Dein erstes Angular-Projekt mit Claude Code
+### Dein erstes Angular-Projekt mit Claude Code
 
 Lass uns all das in einem konkreten Projekt zusammenführen.
 Wichtig dabei: Der Angular MCP-Server sollte von Anfang an angebunden sein.
@@ -419,12 +419,12 @@ Du bestätigst jeden Schritt einzeln – oder erlaubst alles für die Session un
 Am Ende hast du eine funktionsfähige Angular-App mit Routing, Service, Komponente, Tests und laufendem Dev-Server – aufgebaut mit aktuellen Best Practices, ohne eine Zeile Code selbst geschrieben zu haben.
 Genau das ist der Punkt: Was früher ein halber Tag Setup war, erledigt Claude Code in einer Session.
 
-## Praktische Beispiele
+### Praktische Beispiele
 
 Nach dem Einstiegsprojekt fragst du dich vielleicht, welche anderen Aufgaben sich mit Claude Code lösen lassen.
 Hier einige Beispiele aus dem Entwickleralltag.
 
-### Build-Fehler beheben
+#### Build-Fehler beheben
 
 Einer meiner häufigsten Anwendungsfälle: den Build-Fehler direkt an Claude Code weitergeben.
 
@@ -438,14 +438,14 @@ Einer meiner häufigsten Anwendungsfälle: den Build-Fehler direkt an Claude Cod
 Claude Code liest die betroffene Datei, versteht den umliegenden Code und schlägt eine Lösung vor.
 Oft ist der Fix in Sekunden erledigt – inklusive Anpassung der Tests.
 
-### Legacy-Code modernisieren
+#### Legacy-Code modernisieren
 
 Du hast ein Projekt mit NgModules, altem `subscribe()`-Pattern und `ngOnInit` überall?
 Gib Claude Code einen klaren Auftrag:
 
 > Migriere src/app/legacy/ von NgModules zu Standalone Components. Ersetze die HTTP-Calls durch die Resource API. Behalte die bestehende Funktionalität bei und aktualisiere die Tests.
 
-### Code Review + Fix in einem Schritt
+#### Code Review + Fix in einem Schritt
 
 Statt nur Probleme aufzulisten: Claude Code kann sie direkt beheben.
 
@@ -456,12 +456,12 @@ Doch die Qualität hängt davon ab, wie du fragst – und welche Werkzeuge du nu
 
 ## Vertiefen
 
-## Tipps für effektives Arbeiten
+### Tipps für effektives Arbeiten
 
 Nach einiger Zeit mit Claude Code wirst du Muster erkennen, die zu besseren Ergebnissen führen.
 Hier die wichtigsten Erkenntnisse aus meiner Praxis.
 
-### Spezifisch sein
+#### Spezifisch sein
 
 Die goldene Regel: Je präziser deine Anfrage, desto besser das Ergebnis.
 
@@ -474,7 +474,7 @@ Die goldene Regel: Je präziser deine Anfrage, desto besser das Ergebnis.
    src/app/core/api.service.ts."
 ```
 
-### Iterativ statt perfektionistisch
+#### Iterativ statt perfektionistisch
 
 Erwarte nicht, dass das erste Ergebnis perfekt ist.
 Der Dialog ist interaktiv – und das ist eine Stärke:
@@ -491,7 +491,7 @@ Claude: [passt Texte an]
 Ein unterschätzter Trick: Lass Claude Code seine eigene Arbeit reviewen.
 "Schau dir den Code nochmal an – folgt er den Angular Best Practices?" liefert oft überraschend gute Verbesserungen.
 
-### Erst planen, dann umsetzen
+#### Erst planen, dann umsetzen
 
 Meine wichtigste Empfehlung: Lass Claude Code nicht sofort losschreiben.
 Nutze stattdessen den **Plan Mode**.
@@ -516,19 +516,19 @@ Mein Workflow sieht deshalb so aus:
 4. **Plan Mode aus** (`Shift+Tab`)
 5. **"Setze den Plan um"** – Claude Code arbeitet den Plan ab
 
-### Thinking nutzen
+#### Thinking nutzen
 
 Unabhängig vom Plan Mode gibt es noch eine weitere Stellschraube für die Qualität: Extended Thinking.
 Dabei führt Claude Code vor jeder Antwort eine interne Reasoning-Schleife durch, in der es sich selbst promptet und das Problem "durchdenkt".
 Es ist standardmäßig aktiv und lässt sich über `/config` ausschalten. Ich lasse es immer an.
 Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
 
-### Git-Integration
+#### Git-Integration
 
 Ein weiterer Bereich, in dem Claude Code glänzt, ist die Arbeit mit Git.
 Du musst keine Commit-Messages mehr formulieren oder PR-Beschreibungen schreiben – Claude Code kann das für dich übernehmen.
 
-#### Commits erstellen
+##### Commits erstellen
 
 Gib einfach an, dass du einen Commit erstellen möchtest:
 
@@ -536,7 +536,7 @@ Gib einfach an, dass du einen Commit erstellen möchtest:
 
 Claude Code führt dann automatisch `git status` und `git diff` aus, analysiert alle Änderungen, schlägt eine passende Commit-Message vor und führt den Commit nach deiner Bestätigung aus.
 
-#### Pull Requests
+##### Pull Requests
 
 Auch Pull Requests lassen sich so erstellen:
 
@@ -545,13 +545,13 @@ Auch Pull Requests lassen sich so erstellen:
 Claude Code generiert einen PR mit aussagekräftigem Titel, einer Zusammenfassung der Änderungen und einem Test-Plan.
 Voraussetzung ist die GitHub CLI (`gh`), die installiert und authentifiziert sein muss.
 
-#### Code Reviews
+##### Code Reviews
 
 Und wenn du wissen möchtest, ob deine Änderungen Probleme verursachen könnten:
 
 > Analysiere die Änderungen im aktuellen Branch verglichen mit main. Gibt es potenzielle Probleme?
 
-#### Empfehlung: Attribution abschalten
+##### Empfehlung: Attribution abschalten
 
 Standardmäßig fügt Claude Code jedem Commit einen Trailer hinzu: `Co-Authored-By: Claude ...` und `🤖 Generated with Claude Code`.
 Das verrät sofort, dass ein AI-Agent mitgearbeitet hat – und das ist aus meiner Sicht unnötig.
@@ -569,7 +569,7 @@ In der Datei `~/.claude/settings.json` (global) oder `.claude/settings.json` (pr
 
 Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
 
-### Plugins
+#### Plugins
 
 Claude Code lässt sich über ein [Plugin-System](https://code.claude.com/docs/en/discover-plugins) erweitern.
 Im offiziellen Anthropic-Marketplace findest du fertige Plugins, die du direkt installieren kannst – ohne selbst etwas konfigurieren zu müssen.
@@ -597,7 +597,7 @@ Hier eine Auswahl nützlicher Plugins aus dem [offiziellen Marketplace](https://
 Nach der Installation stehen die Plugins sofort als Slash-Befehle zur Verfügung, z. B. `/commit-commands:commit`.
 Gerade für den Einstieg ist das praktischer, als jeden Workflow in natürlicher Sprache zu formulieren.
 
-#### Ralph Loop – autonome Iteration
+##### Ralph Loop – autonome Iteration
 
 Besonders hervorzuheben ist das `ralph-loop`-Plugin, benannt nach Ralph Wiggum aus den Simpsons – der Junge, der einfach weitermacht, egal was passiert.
 Genau das ist das Prinzip: Claude Code arbeitet in einer Schleife an einer Aufgabe und gibt nicht auf, bis sie erledigt ist.
@@ -613,7 +613,7 @@ Ein `--max-iterations`-Limit schützt dabei vor endlosen Schleifen und unkontrol
 Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
 Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
 
-## Wo Claude Code an Grenzen stößt
+### Wo Claude Code an Grenzen stößt
 
 Kein Tool ist fehlerfrei, und Transparenz ist mir wichtiger als Hype.
 Hier sind die Schwächen, die du kennen solltest:
@@ -638,7 +638,7 @@ Diese Schwächen und Risiken sind kein Grund, Claude Code nicht zu nutzen.
 Aber sie sind ein Grund, den generierten Code immer zu reviewen.
 Für die ernsthafteren Risiken gibt es allerdings eine elegante Lösung.
 
-## Docker Sandbox
+### Docker Sandbox
 
 Wer auf Nummer sicher gehen will, startet Claude Code in einer [Docker Sandbox](https://docs.docker.com/ai/sandboxes/).
 Du brauchst dafür Docker Desktop ab Version 4.58 und mindestens macOS 14 (Sonoma), Windows 10/11 oder Linux.
@@ -667,7 +667,7 @@ Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/ag
 Wie die Architektur im Detail funktioniert, beschreibt Docker in der [Sandbox-Architektur-Dokumentation](https://docs.docker.com/ai/sandboxes/architecture/).
 Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Du vertraust hier einer Black Box.
 
-## Headless-Modus und CI
+### Headless-Modus und CI
 
 Claude Code lässt sich auch non-interaktiv nutzen – ohne Chat, ohne Bestätigungen.
 Mit dem Flag `-p` (für "prompt") gibst du eine Aufgabe direkt auf der Kommandozeile mit:
