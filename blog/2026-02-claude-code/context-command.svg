@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 720 560" fill="none">
+  <rect width="720" height="560" rx="6" fill="#173449"/>
+
+  <!-- /context command -->
+  <text y="24" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="13">
+    <tspan x="16" fill="#F5A97F">❯ </tspan><tspan fill="#CDD6F4" text-decoration="underline">/context</tspan>
+  </text>
+
+  <!-- └ Context Usage -->
+  <text y="48" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="13">
+    <tspan x="30" fill="#6C7086">└ </tspan><tspan fill="#CDD6F4" font-weight="bold">Context Usage</tspan>
+  </text>
+
+  <!-- Bar visualization (simplified block chars) -->
+  <!-- Row 1: all filled -->
+  <rect x="50" y="60" width="240" height="14" rx="2" fill="#9399B2" fill-opacity="0.3"/>
+
+  <!-- Model info -->
+  <text x="340" y="72" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">claude-opus-4-5-20251101 · 127k/200k tokens (63%)</text>
+
+  <!-- Legend rows with colored dots -->
+  <!-- System prompt -->
+  <rect x="50" y="80" width="30" height="14" rx="2" fill="#CDD6F4" fill-opacity="0.25"/>
+  <rect x="82" y="80" width="208" height="14" rx="2" fill="#F9E2AF" fill-opacity="0.25"/>
+  <circle cx="348" cy="87" r="5" fill="#CDD6F4"/>
+  <text x="358" y="92" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">System prompt: 3.0k tokens (1.5%)</text>
+
+  <!-- System tools -->
+  <rect x="50" y="100" width="240" height="14" rx="2" fill="#F9E2AF" fill-opacity="0.25"/>
+  <circle cx="348" cy="107" r="5" fill="#F9E2AF"/>
+  <text x="358" y="112" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">System tools: 15.3k tokens (7.6%)</text>
+
+  <!-- Memory files -->
+  <rect x="50" y="120" width="240" height="14" rx="2" fill="#F5A97F" fill-opacity="0.25"/>
+  <circle cx="348" cy="127" r="5" fill="#F5A97F"/>
+  <text x="358" y="132" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">Memory files: 6.8k tokens (3.4%)</text>
+
+  <!-- Skills -->
+  <rect x="50" y="140" width="240" height="14" rx="2" fill="#F9E2AF" fill-opacity="0.15"/>
+  <circle cx="348" cy="147" r="5" fill="#F9E2AF" fill-opacity="0.6"/>
+  <text x="358" y="152" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">Skills: 46 tokens (0.0%)</text>
+
+  <!-- Messages -->
+  <rect x="50" y="160" width="240" height="14" rx="2" fill="#CBA6F7" fill-opacity="0.3"/>
+  <circle cx="348" cy="167" r="5" fill="#CBA6F7"/>
+  <text x="358" y="172" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">Messages: 101.4k tokens (50.7%)</text>
+
+  <!-- Free space -->
+  <rect x="50" y="180" width="150" height="14" rx="2" fill="#45475A"/>
+  <rect x="202" y="180" width="88" height="14" rx="2" fill="#45475A" fill-opacity="0.5"/>
+  <text x="358" y="192" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">Free space: 28k (14.2%)</text>
+
+  <!-- Autocompact buffer -->
+  <rect x="50" y="200" width="240" height="14" rx="2" fill="#585B70" fill-opacity="0.3"/>
+  <rect x="50" y="220" width="240" height="14" rx="2" fill="#585B70" fill-opacity="0.2"/>
+  <rect x="50" y="240" width="180" height="14" rx="2" fill="#585B70" fill-opacity="0.15"/>
+  <text x="358" y="212" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">Autocompact buffer: 45.0k tokens (22.5%)</text>
+
+  <!-- === Memory files section === -->
+  <text y="290" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="13">
+    <tspan x="30" fill="#CDD6F4" font-weight="bold">Memory files</tspan>
+    <tspan fill="#6C7086"> · /memory</tspan>
+  </text>
+  <text x="44" y="312" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12">
+    <tspan fill="#6C7086">└ </tspan><tspan fill="#9399B2">~/.claude/CLAUDE.md: 431 tokens</tspan>
+  </text>
+  <text x="44" y="332" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12">
+    <tspan fill="#6C7086">└ </tspan><tspan fill="#9399B2">CLAUDE.md: 6.4k tokens</tspan>
+  </text>
+
+  <!-- === Skills section === -->
+  <text y="366" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="13">
+    <tspan x="30" fill="#CDD6F4" font-weight="bold">Skills</tspan>
+    <tspan fill="#6C7086"> · /skills</tspan>
+  </text>
+
+  <!-- Project -->
+  <text x="30" y="396" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">Project</text>
+  <text x="44" y="416" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12">
+    <tspan fill="#6C7086">└ </tspan><tspan fill="#9399B2">document-end: 14 tokens</tspan>
+  </text>
+  <text x="44" y="436" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12">
+    <tspan fill="#6C7086">└ </tspan><tspan fill="#9399B2">git-quick: 13 tokens</tspan>
+  </text>
+  <text x="44" y="456" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12">
+    <tspan fill="#6C7086">└ </tspan><tspan fill="#9399B2">document-start: 12 tokens</tspan>
+  </text>
+
+  <!-- User -->
+  <text x="30" y="490" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12" fill="#9399B2">User</text>
+  <text x="44" y="510" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="12">
+    <tspan fill="#6C7086">└ </tspan><tspan fill="#9399B2">cmd-git: 7 tokens</tspan>
+  </text>
+</svg>

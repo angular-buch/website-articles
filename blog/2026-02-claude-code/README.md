@@ -135,33 +135,7 @@ Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für de
 Jetzt wird es konkret: Wie sieht die tägliche Arbeit mit Claude Code aus?
 Am besten zeigt das ein Beispiel:
 
-```
-Du: Erstelle einen BookService, der Bücher über HTTP lädt.
-    Verwende die Resource API und typisiere alles strikt.
-
-Claude Code: Ich werde zunächst die bestehende Projektstruktur analysieren...
-             [Read] src/app/app.config.ts
-             [Read] src/app/shared/book.ts
-
-             Ich sehe, dass du bereits ein Book-Interface hast.
-             Ich erstelle jetzt den Service:
-
-             [Write] src/app/books/book.service.ts
-             + import { Injectable, resource } from '@angular/core';
-             + import { Book } from '../shared/book';
-             + ...
-
-             Soll ich die Änderung übernehmen? [Pfeiltasten + Enter]
-
-Du: [Enter]
-
-Claude Code: Datei erstellt. Soll ich auch Unit Tests generieren?
-
-Du: Ja, mit Vitest.
-
-Claude Code: [Write] src/app/books/book.service.spec.ts
-             ...
-```
+![Claude Code Terminal-Session: Der User gibt einen Prompt ein, Claude liest bestehende Dateien, erstellt einen BookService mit Diff-Vorschau, fragt nach Bestätigung und generiert anschließend Tests.](workflow-chat.svg "Der Workflow in Claude Code: Prompt, Analyse, Code-Vorschlag, Bestätigung – alles im Terminal. (Vereinfachte Darstellung)")
 
 Wie du siehst, ist der Dialog iterativ: Du gibst eine Aufgabe, Claude Code arbeitet, und du steuerst nach.
 
@@ -172,6 +146,8 @@ Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für di
 In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
 
 ![Claude Code zeigt im Terminal einen Diff der geplanten Änderungen an einer Angular-Komponente. Unten fragt der Permission-Dialog: „Do you want to make this edit?" mit den Optionen Yes, Yes für die ganze Session, oder eigene Anweisung.](confirmation-dialog.png "Der Permission-Dialog: Claude Code zeigt die geplanten Änderungen und wartet auf Bestätigung.")
+
+![SVG-Nachbildung des Permission-Dialogs](confirmation-dialog.svg "SVG-Nachbildung zum Vergleich")
 
 Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
 Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
@@ -187,6 +163,8 @@ Für den Anfang brauchst du nur vier Slash-Befehle:
 - **`/cost`** – was hat die Session bisher gekostet?
 
 ![Die Statusleiste von Claude Code zeigt das aktuelle Modell, die Session-Kosten und die bisherige Dauer an.](statusline-cost-tracking.png "Die Statusleiste zeigt Kosten und Dauer der aktuellen Session.")
+
+![SVG-Nachbildung der Kosten-Statusleiste](statusline-cost-tracking.svg "SVG-Nachbildung zum Vergleich")
 
 Bei Problemen hilft **`/doctor`** – der Befehl prüft, ob alles korrekt eingerichtet ist.
 
@@ -239,9 +217,13 @@ Wenn es knapp wird, zeigt Claude Code das in der Statusleiste an:
 
 ![Die Statusleiste zeigt das Modell und einen Fortschrittsbalken mit der prozentualen Auslastung des Kontextfensters.](statusline-context-window-usage.png "Die Statusleiste warnt, wenn das Kontextfenster knapp wird.")
 
+![SVG-Nachbildung der Kontext-Statusleiste](statusline-context-window-usage.svg "SVG-Nachbildung zum Vergleich")
+
 Mit `/context` siehst du genau, wie der verfügbare Platz aufgeteilt ist:
 
 ![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt die Auslastung des Kontextfensters, aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
+
+![SVG-Nachbildung der Kontextanzeige](context-command.svg "SVG-Nachbildung zum Vergleich")
 
 Wenn es eng wird, komprimiert Claude Code den bisherigen Verlauf automatisch durch eine Zusammenfassung (Auto-Compact) – das funktioniert mittlerweile recht zuverlässig.
 Mit `/compact` kannst du das auch manuell auslösen und dabei angeben, was bei der Zusammenfassung nicht verloren gehen soll. Mit `/clear` startest du eine komplett frische Konversation – sinnvoll, wenn du ohnehin zu einer neuen Aufgabe wechselst.
@@ -263,6 +245,7 @@ Ein guter Ausgangspunkt sind die [Custom Prompts and System Instructions](https:
 
 Hier ein stark gekürzter Auszug, um die Idee zu zeigen.
 Tipp: Ich empfehle, die `CLAUDE.md` auf Englisch zu verfassen, weil Claude damit am besten arbeitet.
+Wenn du sehen möchtest, welche Prompts und Regeln ich in meinen eigenen Projekten verwende, [schreib mir gerne](mailto:johannes.hoppe@haushoppe-its.de) – dieser Artikel ist schon lang genug.
 
 ```markdown
 # Angular Best Practices (from angular.dev/ai/develop-with-ai)
@@ -306,16 +289,20 @@ Mit `/memory` kannst du alle gespeicherten Regeln einsehen und bearbeiten.
 
 ![Diagramm: CLAUDE.md und MCP-Server werden beim Session-Start geladen und bleiben in jeder Anfrage erhalten. Skills laden beim Start nur ihre Beschreibungen, der vollständige Inhalt wird erst bei Aufruf geladen.](context-loading.svg "So lädt Claude Code den Kontext: CLAUDE.md und MCP beim Start, Skills on demand.")
 
-Regeln sind statisch – aber Angular entwickelt sich weiter. Für aktuelles Wissen braucht Claude Code Zugriff auf die aktuelle Dokumentation.
+Regeln sind statisch – aber Angular entwickelt sich weiter. Für aktuelles Wissen braucht Claude Code mehr als Custom Prompts und Trainingsdaten.
 
 ### Angular MCP-Server
 
-Angular entwickelt sich schnell – was vor einem Jahr Best Practice war, kann heute überholt sein.
-Der MCP-Server (Model Context Protocol) der Angular CLI schließt diese Lücke: Er gibt Claude Code Zugriff auf aktuelle Dokumentation und Best Practices, direkt von der Quelle.
+Eines der größten Probleme bei AI-Modellen ist veraltetes Trainingswissen.
+Angular entwickelt sich schnell, und was vor einem Jahr Best Practice war, kann heute überholt sein.
+Der MCP-Server (Model Context Protocol) der Angular CLI löst dieses Problem elegant.
+
+MCP ermöglicht es Claude Code, auf aktuelle Angular-Dokumentation und Best Practices zuzugreifen – frisch und direkt von der Quelle.
 
 #### Einrichtung
 
-Die Konfiguration erfolgt in der Datei `.mcp.json` im Projekt-Root:
+Die Konfiguration erfolgt in der Datei `.mcp.json` im Projekt-Root.
+So muss die Datei aussehen – Claude kann sie natürlich auch direkt für dich erstellen:
 
 ```json
 {
@@ -404,6 +391,8 @@ Drücke `Ctrl+D` und starte mit `claude --resume`:
 
 ![Claude Code fragt beim Start, ob der Angular CLI MCP-Server aktiviert werden soll.](mcp-prompt.png "Claude Code erkennt den konfigurierten MCP-Server und fragt nach Bestätigung.")
 
+![SVG-Nachbildung des MCP-Prompts](mcp-prompt.svg "SVG-Nachbildung zum Vergleich")
+
 Jetzt kann es losgehen – mit MCP-Anbindung von Anfang an:
 
 > Erstelle folgende Features für die App:
@@ -425,6 +414,8 @@ Die App steht. Im Alltag sind es aber oft andere Aufgaben, bei denen Claude Code
 #### Build-Fehler beheben
 
 Einer meiner häufigsten Anwendungsfälle: den Build-Fehler direkt an Claude Code weitergeben.
+Idealerweise hat Claude den Build selbst gestartet – dann sieht es das Problem und beginnt in der Regel sofort mit der Lösung.
+Falls nicht, reicht ein kurzer Hinweis:
 
 > Der Build schlägt fehl:
 >
@@ -500,7 +491,7 @@ Es liest deine Codebase, stellt Rückfragen, analysiert die Architektur – und 
 Erst wenn du den Plan freigibst, wird eine einzige Zeile Code geschrieben.
 
 Du aktivierst den Plan Mode mit `Shift+Tab` (zweimal drücken) oder dem Befehl `/plan`.
-Wenn du den Plan abgesegnet hast, wechselst du mit `Shift+Tab` zurück in den normalen Modus und sagst: "Setze den Plan um."
+Sobald der Plan steht, kannst du ihn bestätigen – erst dann beginnt Claude Code mit der Umsetzung.
 
 Warum ist das so wichtig?
 Wie [oben beschrieben](#das-kontext-fenster) ist das Kontext-Fenster begrenzt – bei größeren Aufgaben verliert der Agent ohne Plan schnell den Überblick.
@@ -509,11 +500,10 @@ Selbst wenn du `/compact` ausführst oder der Kontext knapp wird – die Datei b
 Falls Claude nach einem Compact den Faden verliert, reicht ein kurzes "Lies den aktuellen Plan nochmal ein" und er ist wieder auf Kurs.
 
 Mein Workflow sieht deshalb so aus:
-1. **Plan Mode an** (`Shift+Tab` 2x)
+1. **Plan Mode an** (`Shift+Tab` 2x oder `/plan`)
 2. **Aufgabe beschreiben**
 3. **Plan reviewen** und bei Bedarf verfeinern
-4. **Plan Mode aus** (`Shift+Tab`)
-5. **"Setze den Plan um"** – Claude Code arbeitet den Plan ab
+4. **Plan freigeben** – Claude Code setzt den Plan um
 
 #### Thinking nutzen
 
@@ -652,7 +642,7 @@ einfach folgendes eingeben:
 docker sandbox run claude .
 ```
 
-Die [Docker AI Sandbox](https://docs.docker.com/ai/sandboxes/) isoliert Claude Code in einer microVM – das ist eine leichtgewichtige virtuelle Maschine, die stärker isoliert als ein normaler Docker-Container.
+Die [Docker Sandbox](https://docs.docker.com/ai/sandboxes/) isoliert Claude Code in einer microVM – das ist eine leichtgewichtige virtuelle Maschine, die stärker isoliert als ein normaler Docker-Container.
 Während Container sich den Kernel mit dem Host teilen (und [ein Ausbruch daher möglich ist](https://northflank.com/blog/your-containers-arent-isolated-heres-why-thats-a-problem-micro-vms-vmms-and-container-isolation)), hat eine microVM ihren eigenen Kernel – ein AI-Agent kann also selbst mit Root-Rechten nicht aus der Sandbox ausbrechen.
 Du musst dich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umgebungsvariable übergeben), aber danach bleibt die Sandbox bestehen, bis du sie explizit löschst.
 
