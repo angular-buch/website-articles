@@ -30,9 +30,9 @@
     <tspan x="16" fill="#6C7086"> 1 </tspan><tspan fill="#F38BA8">-import { Component, signal } from '@angular/core';</tspan>
   </text>
 
-  <!-- Line 1: added (with highlight on "computed") -->
+  <!-- Line 1: added (with highlight on ", computed") -->
   <rect x="12" y="134" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
-  <rect x="237" y="134" width="55" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.25"/>
+  <rect x="223" y="134" width="69" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.25"/>
   <text y="146" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
     <tspan x="16" fill="#6C7086"> 1 </tspan><tspan fill="#A6E3A1">+import { Component, signal, computed } from '@angular/core';</tspan>
   </text>
@@ -138,25 +138,25 @@
   <!-- Line 18: added -->
   <rect x="12" y="442" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="454" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">18 </tspan><tspan fill="#A6E3A1">+  protected readonly counter = signal(0);</tspan>
+    <tspan x="16" fill="#6C7086">18 </tspan><tspan fill="#A6E3A1">+    protected readonly counter = signal(0);</tspan>
   </text>
 
   <!-- Line 19: added -->
   <rect x="12" y="458" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="470" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">19 </tspan><tspan fill="#A6E3A1">+  protected readonly greeting = computed(() =&gt;</tspan>
+    <tspan x="16" fill="#6C7086">19 </tspan><tspan fill="#A6E3A1">+    protected readonly greeting = computed(() =&gt;</tspan>
   </text>
 
   <!-- Line 20: added -->
   <rect x="12" y="474" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="486" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">20 </tspan><tspan fill="#A6E3A1">+      `Hallo, ${this.title()}! 🦄`</tspan>
+    <tspan x="16" fill="#6C7086">20 </tspan><tspan fill="#A6E3A1">+        `Hallo, ${this.title()}! 🦄`</tspan>
   </text>
 
   <!-- Line 21: added -->
   <rect x="12" y="490" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="502" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">21 </tspan><tspan fill="#A6E3A1">+    );</tspan>
+    <tspan x="16" fill="#6C7086">21 </tspan><tspan fill="#A6E3A1">+      );</tspan>
   </text>
 
   <!-- Line 22: added (empty) -->
@@ -168,19 +168,19 @@
   <!-- Line 23: added -->
   <rect x="12" y="522" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="534" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">23 </tspan><tspan fill="#A6E3A1">+  incrementCounter(): void {</tspan>
+    <tspan x="16" fill="#6C7086">23 </tspan><tspan fill="#A6E3A1">+    incrementCounter(): void {</tspan>
   </text>
 
   <!-- Line 24: added -->
   <rect x="12" y="538" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="550" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">24 </tspan><tspan fill="#A6E3A1">+    this.counter.update(c =&gt; c + 1);</tspan>
+    <tspan x="16" fill="#6C7086">24 </tspan><tspan fill="#A6E3A1">+      this.counter.update(c =&gt; c + 1);</tspan>
   </text>
 
   <!-- Line 25: added -->
   <rect x="12" y="554" width="696" height="16" rx="1" fill="#A6E3A1" fill-opacity="0.08"/>
   <text y="566" font-family="'SF Mono', Menlo, Consolas, 'Courier New', monospace" font-size="11.5">
-    <tspan x="16" fill="#6C7086">25 </tspan><tspan fill="#A6E3A1">+  }</tspan>
+    <tspan x="16" fill="#6C7086">25 </tspan><tspan fill="#A6E3A1">+    }</tspan>
   </text>
 
   <!-- Line 26: unchanged -->
