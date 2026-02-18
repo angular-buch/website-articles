@@ -624,7 +624,7 @@ Für die ernsthafteren Risiken gibt es allerdings eine elegante Lösung.
 ## Docker Sandbox
 
 Wer auf Nummer sicher gehen will, startet Claude Code in einer [Docker Sandbox](https://docs.docker.com/ai/sandboxes/).
-Du brauchst dafür Docker Desktop ab Version 4.58 und mindestens macOS 14 (Sonoma) oder Windows 10/11.
+Du brauchst dafür Docker Desktop ab Version 4.58 und mindestens macOS 14 (Sonoma), Windows 10/11 oder Linux.
 Statt:
 
 ```bash
@@ -649,6 +649,18 @@ Dein Projektverzeichnis wird bidirektional synchronisiert unter dem gleichen abs
 Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/agent/`) und eine eigene Docker-Umgebung – der Agent kann darin Container starten, ohne deine Host-Container zu sehen.
 Wie die Architektur im Detail funktioniert, beschreibt Docker in der [Sandbox-Architektur-Dokumentation](https://docs.docker.com/ai/sandboxes/architecture/).
 Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Du vertraust hier einer Black Box.
+
+## Headless-Modus und CI
+
+Claude Code lässt sich auch non-interaktiv nutzen – ohne Chat, ohne Bestätigungen.
+Mit dem Flag `-p` (für "prompt") gibst du eine Aufgabe direkt auf der Kommandozeile mit:
+
+```bash
+claude -p "Analysiere src/app und liste alle Komponenten ohne Unit Tests auf."
+```
+
+Claude Code führt die Aufgabe aus und gibt das Ergebnis auf `stdout` aus – ideal für Shell-Skripte, Git Hooks oder CI/CD-Pipelines.
+In Kombination mit `--dangerously-skip-permissions` und der Docker Sandbox lässt sich so ein vollständig autonomer Agent in einer isolierten Umgebung betreiben.
 
 ## Fazit
 
