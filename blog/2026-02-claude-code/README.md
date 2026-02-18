@@ -13,7 +13,7 @@ keywords:
   - Anthropic
   - CLI
   - Terminal
-header: header.jpg
+header: claude-code.jpg
 language: de
 ---
 
@@ -124,7 +124,7 @@ Dann probiere etwas Spannenderes:
 Du wirst merken: Das Ergebnis ist erstaunlich gut – und du hast keinen Code selbst geschrieben.
 Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für den eigentlichen Workflow.
 
-## Der Workflow
+## Der Workflow – Ein Chat
 
 Jetzt wird es konkret: Wie sieht die tägliche Arbeit mit Claude Code aus?
 Am besten zeigt das ein konkretes Beispiel:
@@ -177,13 +177,13 @@ Für den Anfang brauchst du nur vier Slash-Befehle:
 - **`/clear`** – frische Session starten
 - **`/compact`** – Kontext komprimieren, wenn die Session lang wird
 - **`/cost`** – was hat die Session bisher gekostet?
-- **`/doctor`** – prüft, ob alles korrekt eingerichtet ist
+
+Bei Problemen hilft **`/doctor`** – der Befehl prüft, ob alles korrekt eingerichtet ist.
 
 Den Rest (es gibt noch viele mehr) lernst du nebenbei kennen – oder du fragst Claude Code einfach danach.
 Updates passieren in der Regel automatisch. Falls nicht, hilft `claude update` auf der Kommandozeile.
 
 Beim Arbeiten reicht es, `Ctrl+C` zum Abbrechen und `Ctrl+D` zum Beenden zu kennen.
-Mit `@` startest du die Dateipfad-Autovervollständigung – praktisch, um schnell auf Dateien zu verweisen.
 Undo geht mit `Ctrl+_` (nicht `Ctrl+Z`!). Wer aus Gewohnheit `Ctrl+Z` drückt, suspendiert Claude Code – dann hilft `fg` in der Shell, um zurückzukehren.
 
 Das sind die Grundlagen.
@@ -206,6 +206,9 @@ Du kannst auch mehrere Dateien referenzieren, um Vergleiche anzustellen oder Mus
 
 > Vergleiche src/app/old/legacy.service.ts mit src/app/new/modern.service.ts. Was sind die Hauptunterschiede? Migriere den Legacy-Service zum modernen Pattern.
 
+In den meisten Fällen findet Claude die relevanten Dateien selbstständig.
+Mit `@` im Prompt kannst du die Dateipfad-Autovervollständigung nutzen, aber nötig ist das selten.
+
 ### Bilder einbinden
 
 Eine besonders praktische Funktion: Claude Code kann auch Bilder analysieren.
@@ -219,12 +222,16 @@ Das ist besonders nützlich, wenn du UI-Mockups in Komponenten umsetzen, Fehlerm
 
 Es gibt allerdings eine technische Einschränkung: Jedes AI-Modell hat ein begrenztes Kontext-Fenster.
 Bei Claude sind das aktuell etwa 200.000 Tokens – eine Menge, aber bei langen Sessions kann es passieren, dass frühere Informationen "vergessen" werden.
-Ein Kontext-Fenster von 1 Million Tokens ist bereits in der Beta-Phase – das wird dieses Problem deutlich entschärfen.
+Was genau ein Kontext-Fenster ist und warum es so wichtig ist, erkläre ich im Detail im Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding#herausforderung-das-kontextfenster).
+Ein Kontext-Fenster von 1 Million Tokens ist bereits in der Beta-Phase – das wird die Arbeit deutlich vereinfachen.
 
-In der Statusleiste von Claude Code siehst du immer, wie voll dein Kontext-Fenster ist.
-Wenn es eng wird, hast du zwei Möglichkeiten:
-Mit `/compact` komprimierst du den bisherigen Verlauf durch eine Zusammenfassung.
-Mit `/clear` startest du eine komplett frische Konversation – das ist sinnvoll, wenn du ohnehin zu einer neuen Aufgabe wechselst.
+Wenn es knapp wird, zeigt Claude Code das in der Statusleiste an.
+Mit `/context` siehst du genau, wie der verfügbare Platz aufgeteilt ist:
+
+![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt die Auslastung des Kontextfensters, aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
+
+Wenn es eng wird, komprimiert Claude Code den bisherigen Verlauf automatisch durch eine Zusammenfassung (Auto-Compact) – das funktioniert mittlerweile recht zuverlässig.
+Mit `/compact` kannst du das auch manuell auslösen und dabei angeben, was bei der Zusammenfassung nicht verloren gehen soll. Mit `/clear` startest du eine komplett frische Konversation – sinnvoll, wenn du ohnehin zu einer neuen Aufgabe wechselst.
 
 Doch Kontext muss nicht nur spontan gegeben werden.
 Viel eleganter ist es, projektspezifische Regeln dauerhaft zu hinterlegen.
@@ -233,14 +240,16 @@ Viel eleganter ist es, projektspezifische Regeln dauerhaft zu hinterlegen.
 
 Claude Code lässt sich projektspezifisch konfigurieren, sodass es von Anfang an weiß, wie dein Projekt strukturiert ist und welchen Konventionen es folgen soll.
 
+### `CLAUDE.md` – Regeln für dein Projekt
+
 Der einfachste Weg: Starte Claude Code in deinem Projekt und tippe `/init`.
 Claude Code analysiert dann die Projektstruktur, erkennt das verwendete Framework, die Test-Konfiguration und die Coding-Konventionen – und generiert daraus eine passende `.claude/CLAUDE.md`.
 
 Du kannst die Datei natürlich auch manuell anlegen oder die generierte Version anpassen.
-Ein guter Ausgangspunkt sind die [offiziellen Angular AI Rules](https://angular.dev/ai/develop-with-ai) – ein umfangreiches Regelwerk, das Best Practices für TypeScript, Standalone Components, Signals, Accessibility und mehr abdeckt.
+Ein guter Ausgangspunkt sind die [Custom Prompts and System Instructions](https://angular.dev/ai/develop-with-ai) von Angular – ein umfangreiches Regelwerk, das Best Practices für TypeScript, Standalone Components, Signals, Accessibility und mehr abdeckt.
 
 Hier ein stark gekürzter Auszug, um die Idee zu zeigen.
-Wichtig: Die CLAUDE.md wird immer auf Englisch verfasst, weil Claude damit am besten arbeitet.
+Wichtig: Die `CLAUDE.md` wird immer auf Englisch verfasst, weil Claude damit am besten arbeitet.
 
 ```markdown
 # Angular Best Practices (from angular.dev/ai/develop-with-ai)
@@ -259,7 +268,7 @@ Wichtig: Die CLAUDE.md wird immer auf Englisch verfasst, weil Claude damit am be
 ```
 
 Neben den allgemeinen Angular-Regeln gehören also auch projektspezifische Informationen in die Datei: Test-Framework, API-Endpunkte, Ordnerstruktur, Konventionen des Teams.
-In der Praxis sind CLAUDE.md-Dateien deutlich umfangreicher als dieses Beispiel.
+In der Praxis sind `CLAUDE.md`-Dateien deutlich umfangreicher als dieses Beispiel.
 Die Datei wird automatisch bei jedem Start geladen, und Claude Code befolgt diese Regeln bei allen Aufgaben.
 
 Es gibt mehrere Orte, an denen du solche Regeln hinterlegen kannst:
@@ -275,16 +284,13 @@ Dateien in übergeordneten Ordnern werden beim Start geladen, Dateien in Unteror
 So kannst du eine `CLAUDE.md` auch in einen Unterordner wie `src/` legen – sie wird geladen, sobald Claude dort Dateien liest.
 Alle gefundenen Regeln werden kombiniert, wobei spezifischere Regeln Vorrang haben.
 
-### Memory – langfristige Erinnerungen
+Du musst die `CLAUDE.md` nicht immer manuell bearbeiten.
+Tippe `#` im Prompt, und du kannst direkt eine Erinnerung hinzufügen – ohne den Workflow zu unterbrechen.
+Oder sag es einfach in natürlicher Sprache:
 
-Neben der CLAUDE.md gibt es noch eine weitere Möglichkeit, Wissen dauerhaft zu speichern: das Memory-Feature.
-Sag einfach in natürlicher Sprache, was sich Claude merken soll:
+> Merke dir: In diesem Projekt verwenden wir Vitest statt Karma.
 
-> Merke dir: In diesem Projekt verwenden wir Vitest statt Karma. RxJS-Operatoren immer einzeln importieren, nie das komplette 'rxjs'-Paket.
-
-Claude Code speichert diese Informationen in Markdown-Dateien, die bei jeder Session automatisch geladen werden.
-Noch schneller geht es mit der `#`-Taste: Tippe `#` im Prompt, und du kannst direkt eine Erinnerung zur CLAUDE.md hinzufügen – ohne den Workflow zu unterbrechen.
-Mit dem Befehl `/memory` kannst du alle gespeicherten Erinnerungen einsehen und bearbeiten.
+Mit `/memory` kannst du alle gespeicherten Regeln einsehen und bearbeiten.
 
 ## Git-Integration
 
@@ -355,9 +361,23 @@ Hier eine Auswahl nützlicher Plugins aus dem [offiziellen Marketplace](https://
 | Integrationen | `figma` | Designs direkt in Claude Code laden |
 | Integrationen | `sentry` | Fehlermonitoring einbinden |
 | Code-Intelligenz | `typescript-lsp` | Typprüfung und Navigation für TypeScript |
+| Autonomie | `ralph-loop` | Iterative Schleifen – Claude arbeitet autonom, bis die Aufgabe erledigt ist |
 
 Nach der Installation stehen die Plugins sofort als Slash-Befehle zur Verfügung, z. B. `/commit-commands:commit`.
 Gerade für den Einstieg ist das praktischer, als jeden Workflow in natürlicher Sprache zu formulieren.
+
+### Ralph Loop – autonome Iteration
+
+Besonders hervorzuheben ist das `ralph-loop`-Plugin, benannt nach Ralph Wiggum aus den Simpsons – der Junge, der einfach weitermacht, egal was passiert.
+Genau das ist das Prinzip: Claude Code arbeitet in einer Schleife an einer Aufgabe und gibt nicht auf, bis sie erledigt ist.
+Nach jedem Durchlauf prüft ein Hook, ob ein definiertes Erfolgskriterium erfüllt wurde.
+Falls nicht, wird der ursprüngliche Prompt erneut eingespeist – und Claude sieht die bisherigen Änderungen im Dateisystem und in der Git-History.
+
+![Diagramm des Ralph Loop: Eine Aufgabe wird an den Agent übergeben, der das Dateisystem modifiziert. Eine Schleife führt zurück zum Agent, bis die Aufgabe erledigt ist oder das Iterationslimit erreicht wurde.](ralph-loop.png "Ralph Loop: Der Agent arbeitet in einer Schleife, bis die Aufgabe erledigt ist.")
+<small>Quelle: [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents/blob/main/examples/ralph_mode/ralph_mode_diagram.png) (MIT-Lizenz)</small>
+
+So lassen sich z. B. TDD-Zyklen, Refactorings oder Migrationen automatisieren.
+Ein `--max-iterations`-Limit schützt dabei vor endlosen Schleifen und unkontrollierten Kosten.
 
 ## Angular MCP-Server
 
@@ -456,7 +476,7 @@ Das Flag `--ai-config=claude` generiert eine passende `CLAUDE.md` für das Proje
 Die `.mcp.json` verbindet Claude Code mit dem Angular MCP-Server – allerdings erst beim nächsten Start.
 Drücke `Ctrl+D` und starte mit `claude --resume`:
 
-![MCP-Server Prompt beim Start von Claude Code](mcp-prompt.png)
+![Claude Code fragt beim Start, ob der Angular CLI MCP-Server aktiviert werden soll.](mcp-prompt.png "Claude Code erkennt den konfigurierten MCP-Server und fragt nach Bestätigung.")
 
 Jetzt kann es losgehen – mit MCP-Anbindung von Anfang an:
 
@@ -555,8 +575,7 @@ Du aktivierst den Plan Mode mit `Shift+Tab` (zweimal drücken) oder dem Befehl `
 Wenn du den Plan abgesegnet hast, wechselst du mit `Shift+Tab` zurück in den normalen Modus und sagst: "Setze den Plan um."
 
 Warum ist das so wichtig?
-Claude Code hat ein begrenztes Kontext-Fenster.
-Wenn du sofort mit der Umsetzung startest, verliert der Agent bei größeren Aufgaben schnell den Überblick.
+Wie [oben beschrieben](#das-kontext-fenster) ist das Kontext-Fenster begrenzt – bei größeren Aufgaben verliert der Agent ohne Plan schnell den Überblick.
 Im Plan Mode strukturiert Claude seine "Gedanken" in einer Markdown-Datei, die auf der Festplatte liegt.
 Selbst wenn du `/compact` ausführst oder der Kontext knapp wird – die Datei bleibt erhalten.
 Falls Claude nach einem Compact den Faden verliert, reicht ein kurzes "Lies den aktuellen Plan nochmal ein" und er ist wieder auf Kurs.
@@ -585,7 +604,7 @@ Hier sind die Schwächen, die du kennen solltest:
 
 - **Halluzinationen:** Claude Code erfindet manchmal APIs oder Funktionen, die es nicht gibt. Besonders bei seltenen Libraries passiert das. Prüfe immer, ob importierte Module existieren.
 
-- **Veraltetes Wissen:** Das Trainings-Wissen hat ein Ablaufdatum. Ohne den Angular MCP-Server generiert Claude Code gerne Code mit veralteten Patterns – etwa `ngOnInit` statt Signal-basiertem Setup.
+- **Veraltetes Wissen:** Das Trainings-Wissen hat ein Ablaufdatum. Dagegen hilft der [Angular MCP-Server](#angular-mcp-server).
 
 - **Große Refactorings:** Bei Änderungen über viele Dateien hinweg verliert Claude Code manchmal den Überblick. Teile komplexe Aufgaben lieber in kleinere Schritte auf.
 
@@ -605,7 +624,8 @@ Für die ernsthafteren Risiken gibt es allerdings eine elegante Lösung.
 
 ## Docker Sandbox
 
-Wer auf Nummer sicher gehen will, startet Claude Code in einer Docker Sandbox.
+Wer auf Nummer sicher gehen will, startet Claude Code in einer [Docker Sandbox](https://docs.docker.com/ai/sandboxes/).
+Du brauchst dafür Docker Desktop ab Version 4.58 und mindestens macOS 14 (Sonoma) oder Windows 10/11.
 Statt:
 
 ```bash
