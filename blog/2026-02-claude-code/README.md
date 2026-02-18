@@ -58,7 +58,9 @@ Anthropic muss sich bei jeder Funktion fragen: Kann der Agent das selbst erkenne
 Oder ist es so häufig gebraucht, dass es einen kurzen Befehl verdient?
 Das Ergebnis ist ein Interface, das überraschend gut funktioniert – gerade weil es so reduziert ist.
 
-Klingt vielversprechend? Dann lass uns mit der Installation beginnen.
+Klingt vielversprechend? Dann lass uns loslegen.
+
+## Loslegen
 
 ## Installation
 
@@ -251,8 +253,6 @@ Viel eleganter ist es, projektspezifische Regeln dauerhaft zu hinterlegen.
 
 Claude Code lässt sich projektspezifisch konfigurieren, sodass es von Anfang an weiß, wie dein Projekt strukturiert ist und welchen Konventionen es folgen soll.
 
-![Diagramm: CLAUDE.md und MCP-Server werden beim Session-Start geladen und bleiben in jeder Anfrage erhalten. Skills laden beim Start nur ihre Beschreibungen, der vollständige Inhalt wird erst bei Aufruf geladen.](context-loading.svg "So lädt Claude Code den Kontext: CLAUDE.md und MCP beim Start, Skills on demand.")
-
 ### `CLAUDE.md` – Regeln für dein Projekt
 
 Der einfachste Weg: Starte Claude Code in deinem Projekt und tippe `/init`.
@@ -304,92 +304,7 @@ Du kannst Claude auch direkt bitten, sich etwas zu merken – einfach in natürl
 
 Mit `/memory` kannst du alle gespeicherten Regeln einsehen und bearbeiten.
 
-## Git-Integration
-
-Ein weiterer Bereich, in dem Claude Code glänzt, ist die Arbeit mit Git.
-Du musst keine Commit-Messages mehr formulieren oder PR-Beschreibungen schreiben – Claude Code kann das für dich übernehmen.
-
-### Commits erstellen
-
-Gib einfach an, dass du einen Commit erstellen möchtest:
-
-> Erstelle einen Commit für die aktuellen Änderungen.
-
-Claude Code führt dann automatisch `git status` und `git diff` aus, analysiert alle Änderungen, schlägt eine passende Commit-Message vor und führt den Commit nach deiner Bestätigung aus.
-
-### Pull Requests
-
-Auch Pull Requests lassen sich so erstellen:
-
-> Erstelle einen Pull Request für diesen Branch.
-
-Claude Code generiert einen PR mit aussagekräftigem Titel, einer Zusammenfassung der Änderungen und einem Test-Plan.
-Voraussetzung ist die GitHub CLI (`gh`), die installiert und authentifiziert sein muss.
-
-### Code Reviews
-
-Und wenn du wissen möchtest, ob deine Änderungen Probleme verursachen könnten:
-
-> Analysiere die Änderungen im aktuellen Branch verglichen mit main. Gibt es potenzielle Probleme?
-
-### Empfehlung: Attribution abschalten
-
-Standardmäßig fügt Claude Code jedem Commit einen Trailer hinzu: `Co-Authored-By: Claude ...` und `🤖 Generated with Claude Code`.
-Das verrät sofort, dass ein AI-Agent mitgearbeitet hat – und das ist aus meiner Sicht unnötig.
-
-In der Datei `~/.claude/settings.json` (global) oder `.claude/settings.json` (pro Projekt) kannst du das abschalten:
-
-```json
-{
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  }
-}
-```
-
-Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
-
-## Plugins
-
-Claude Code lässt sich über ein [Plugin-System](https://code.claude.com/docs/en/discover-plugins) erweitern.
-Im offiziellen Anthropic-Marketplace findest du fertige Plugins, die du direkt installieren kannst – ohne selbst etwas konfigurieren zu müssen.
-
-Tippe `/plugin` und wechsle zum **Discover**-Tab, um die verfügbaren Plugins zu durchsuchen.
-Die Installation geht direkt aus Claude Code:
-
-```
-/plugin install plugin-name@claude-plugins-official
-```
-
-Hier eine Auswahl nützlicher Plugins aus dem [offiziellen Marketplace](https://code.claude.com/docs/en/discover-plugins):
-
-| Kategorie | Plugin | Beschreibung |
-|-----------|--------|-------------|
-| Git-Workflows | `commit-commands` | Commit, Push und PR-Erstellung als Slash-Befehle |
-| Git-Workflows | `pr-review-toolkit` | Spezialisierte Agents für PR-Reviews |
-| Integrationen | `github` | Direkte GitHub-Integration via MCP |
-| Integrationen | `linear`, `asana`, `notion` | Projektmanagement-Tools anbinden |
-| Integrationen | `figma` | Designs direkt in Claude Code laden |
-| Integrationen | `sentry` | Fehlermonitoring einbinden |
-| Code-Intelligenz | `typescript-lsp` | Typprüfung und Navigation für TypeScript |
-| Autonomie | `ralph-loop` | Iterative Schleifen – Claude arbeitet autonom, bis die Aufgabe erledigt ist |
-
-Nach der Installation stehen die Plugins sofort als Slash-Befehle zur Verfügung, z. B. `/commit-commands:commit`.
-Gerade für den Einstieg ist das praktischer, als jeden Workflow in natürlicher Sprache zu formulieren.
-
-### Ralph Loop – autonome Iteration
-
-Besonders hervorzuheben ist das `ralph-loop`-Plugin, benannt nach Ralph Wiggum aus den Simpsons – der Junge, der einfach weitermacht, egal was passiert.
-Genau das ist das Prinzip: Claude Code arbeitet in einer Schleife an einer Aufgabe und gibt nicht auf, bis sie erledigt ist.
-Nach jedem Durchlauf prüft ein Hook, ob ein definiertes Erfolgskriterium erfüllt wurde.
-Falls nicht, wird der ursprüngliche Prompt erneut eingespeist – und Claude sieht die bisherigen Änderungen im Dateisystem und in der Git-History.
-
-![Diagramm des Ralph Loop: Eine Aufgabe wird an den Agent übergeben, der das Dateisystem modifiziert. Eine Schleife führt zurück zum Agent, bis die Aufgabe erledigt ist oder das Iterationslimit erreicht wurde.](ralph-loop.png "Ralph Loop: Der Agent arbeitet in einer Schleife, bis die Aufgabe erledigt ist.")
-<small>Quelle: [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents/blob/main/examples/ralph_mode/ralph_mode_diagram.png) (MIT-Lizenz)</small>
-
-So lassen sich z. B. TDD-Zyklen, Refactorings oder Migrationen automatisieren.
-Ein `--max-iterations`-Limit schützt dabei vor endlosen Schleifen und unkontrollierten Kosten.
+![Diagramm: CLAUDE.md und MCP-Server werden beim Session-Start geladen und bleiben in jeder Anfrage erhalten. Skills laden beim Start nur ihre Beschreibungen, der vollständige Inhalt wird erst bei Aufruf geladen.](context-loading.svg "So lädt Claude Code den Kontext: CLAUDE.md und MCP beim Start, Skills on demand.")
 
 ## Angular MCP-Server
 
@@ -537,7 +452,9 @@ Statt nur Probleme aufzulisten: Claude Code kann sie direkt beheben.
 > Reviewe src/app/cart/ auf Performance-Probleme, Angular Best Practices und potenzielle Bugs. Behebe dann alles, was du findest.
 
 Das Muster ist immer gleich: Beschreibe was du willst, Claude Code liefert.
-Doch die Qualität hängt davon ab, wie du fragst.
+Doch die Qualität hängt davon ab, wie du fragst – und welche Werkzeuge du nutzt.
+
+## Vertiefen
 
 ## Tipps für effektives Arbeiten
 
@@ -605,6 +522,93 @@ Unabhängig vom Plan Mode gibt es noch eine weitere Stellschraube für die Quali
 Dabei führt Claude Code vor jeder Antwort eine interne Reasoning-Schleife durch, in der es sich selbst promptet und das Problem "durchdenkt".
 Es ist standardmäßig aktiv und lässt sich über `/config` ausschalten. Ich lasse es immer an.
 Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
+
+### Git-Integration
+
+Ein weiterer Bereich, in dem Claude Code glänzt, ist die Arbeit mit Git.
+Du musst keine Commit-Messages mehr formulieren oder PR-Beschreibungen schreiben – Claude Code kann das für dich übernehmen.
+
+#### Commits erstellen
+
+Gib einfach an, dass du einen Commit erstellen möchtest:
+
+> Erstelle einen Commit für die aktuellen Änderungen.
+
+Claude Code führt dann automatisch `git status` und `git diff` aus, analysiert alle Änderungen, schlägt eine passende Commit-Message vor und führt den Commit nach deiner Bestätigung aus.
+
+#### Pull Requests
+
+Auch Pull Requests lassen sich so erstellen:
+
+> Erstelle einen Pull Request für diesen Branch.
+
+Claude Code generiert einen PR mit aussagekräftigem Titel, einer Zusammenfassung der Änderungen und einem Test-Plan.
+Voraussetzung ist die GitHub CLI (`gh`), die installiert und authentifiziert sein muss.
+
+#### Code Reviews
+
+Und wenn du wissen möchtest, ob deine Änderungen Probleme verursachen könnten:
+
+> Analysiere die Änderungen im aktuellen Branch verglichen mit main. Gibt es potenzielle Probleme?
+
+#### Empfehlung: Attribution abschalten
+
+Standardmäßig fügt Claude Code jedem Commit einen Trailer hinzu: `Co-Authored-By: Claude ...` und `🤖 Generated with Claude Code`.
+Das verrät sofort, dass ein AI-Agent mitgearbeitet hat – und das ist aus meiner Sicht unnötig.
+
+In der Datei `~/.claude/settings.json` (global) oder `.claude/settings.json` (pro Projekt) kannst du das abschalten:
+
+```json
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}
+```
+
+Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
+
+### Plugins
+
+Claude Code lässt sich über ein [Plugin-System](https://code.claude.com/docs/en/discover-plugins) erweitern.
+Im offiziellen Anthropic-Marketplace findest du fertige Plugins, die du direkt installieren kannst – ohne selbst etwas konfigurieren zu müssen.
+
+Tippe `/plugin` und wechsle zum **Discover**-Tab, um die verfügbaren Plugins zu durchsuchen.
+Die Installation geht direkt aus Claude Code:
+
+```
+/plugin install plugin-name@claude-plugins-official
+```
+
+Hier eine Auswahl nützlicher Plugins aus dem [offiziellen Marketplace](https://code.claude.com/docs/en/discover-plugins):
+
+| Kategorie | Plugin | Beschreibung |
+|-----------|--------|-------------|
+| Git-Workflows | `commit-commands` | Commit, Push und PR-Erstellung als Slash-Befehle |
+| Git-Workflows | `pr-review-toolkit` | Spezialisierte Agents für PR-Reviews |
+| Integrationen | `github` | Direkte GitHub-Integration via MCP |
+| Integrationen | `linear`, `asana`, `notion` | Projektmanagement-Tools anbinden |
+| Integrationen | `figma` | Designs direkt in Claude Code laden |
+| Integrationen | `sentry` | Fehlermonitoring einbinden |
+| Code-Intelligenz | `typescript-lsp` | Typprüfung und Navigation für TypeScript |
+| Autonomie | `ralph-loop` | Iterative Schleifen – Claude arbeitet autonom, bis die Aufgabe erledigt ist |
+
+Nach der Installation stehen die Plugins sofort als Slash-Befehle zur Verfügung, z. B. `/commit-commands:commit`.
+Gerade für den Einstieg ist das praktischer, als jeden Workflow in natürlicher Sprache zu formulieren.
+
+#### Ralph Loop – autonome Iteration
+
+Besonders hervorzuheben ist das `ralph-loop`-Plugin, benannt nach Ralph Wiggum aus den Simpsons – der Junge, der einfach weitermacht, egal was passiert.
+Genau das ist das Prinzip: Claude Code arbeitet in einer Schleife an einer Aufgabe und gibt nicht auf, bis sie erledigt ist.
+Nach jedem Durchlauf prüft ein Hook, ob ein definiertes Erfolgskriterium erfüllt wurde.
+Falls nicht, wird der ursprüngliche Prompt erneut eingespeist – und Claude sieht die bisherigen Änderungen im Dateisystem und in der Git-History.
+
+![Diagramm des Ralph Loop: Eine Aufgabe wird an den Agent übergeben, der das Dateisystem modifiziert. Eine Schleife führt zurück zum Agent, bis die Aufgabe erledigt ist oder das Iterationslimit erreicht wurde.](ralph-loop.png "Ralph Loop: Der Agent arbeitet in einer Schleife, bis die Aufgabe erledigt ist.")
+<small>Quelle: [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents/blob/main/examples/ralph_mode/ralph_mode_diagram.png) (MIT-Lizenz)</small>
+
+So lassen sich z. B. TDD-Zyklen, Refactorings oder Migrationen automatisieren.
+Ein `--max-iterations`-Limit schützt dabei vor endlosen Schleifen und unkontrollierten Kosten.
 
 Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
 Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
