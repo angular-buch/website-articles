@@ -4,6 +4,10 @@ author: Johannes Hoppe
 mail: johannes.hoppe@haushoppe-its.de
 bio: '<a href="https://angular-buch.com"><img src="/assets/img/book-cover-v1m.png" alt="Angular-Buch Cover" style="float: right; margin-top: -60px; margin-right: 30px; max-width: 250px;"></a>Johannes Hoppe ist Trainer, Berater und Entwickler mit Schwerpunkt Angular. Er ist Mitautor des <b>Angular-Buchs</b>, gemeinsam mit Ferdinand Malcher und Danny Koppenhagen. Nach vier erfolgreichen Auflagen haben sie das Buch von Grund auf neu geschrieben – mit moderner Syntax, kompakt und vielen neuen Themen. Das neue Buch erscheint im Mai 2026. Mehr Infos unter <a href="https://angular-buch.com" style="text-decoration: underline;"><b>angular-buch.com</b></a>'
 bioHeading: Über Johannes Hoppe
+author2: Angular.Schule Team
+mail2: team@angular.schule
+bio2: '<a href="https://angular.schule"><img src="https://angular.schule/img/logo-angular-schule-gradient-550.png" alt="Angular.Schule Logo" style="float: right; margin-left: 30px; margin-top: -10px; margin-right: 30px; max-width: 250px;"></a>Du möchtest AI-gestützte Angular-Entwicklung selbst ausprobieren? Besuche Ferdinand Malcher und Johannes Hoppe in unseren Workshops, in denen du Angular praxisnah lernst – inklusive moderner AI-Tools für eine effizientere Entwicklung. Mehr unter <a href="https://angular.schule" style="text-decoration: underline;"><b>angular.schule</b></a>'
+bio2Heading: Über unsere Angular-Workshops
 published: 2026-02-18
 keywords:
   - Angular
