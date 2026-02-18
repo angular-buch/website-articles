@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 720 410" fill="none">
-<rect width="720" height="410" rx="8" fill="#173449"/>
+<rect width="720" height="410" rx="8" fill="#FFFFFF"/>
 
 
-<text x="360" y="32" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#CDD6F4">When features load into context</text>
+<text x="360" y="32" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#1E1E1E">Wann Features in den Kontext geladen werden</text>
 
 
-<text x="144" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#BAC2DE">Session start</text>
-<text x="360" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#BAC2DE">On use</text>
-<text x="600" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#BAC2DE">Isolated</text>
+<text x="144" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#495057">Session-Start</text>
+<text x="360" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#495057">Bei Nutzung</text>
+<text x="600" y="68" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#495057">Isoliert</text>
 
 
-<line x1="252" y1="84" x2="252" y2="336" stroke="#6C7086" stroke-width="1" stroke-dasharray="4 4"/>
-<line x1="480" y1="84" x2="480" y2="336" stroke="#6C7086" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="252" y1="84" x2="252" y2="336" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4 4"/>
+<line x1="480" y1="84" x2="480" y2="336" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4 4"/>
 
 
-<rect x="36" y="90" width="432" height="240" rx="8" fill="#1F4460" fill-opacity="0.5" stroke="#6C7086" stroke-width="1.5"/>
-<text x="252" y="114" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#9399B2">Context window</text>
+<rect x="36" y="90" width="432" height="240" rx="8" fill="#F8F8F8" stroke="#dee2e6" stroke-width="1.5"/>
+<text x="252" y="114" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#6c757d">Kontext-Fenster</text>
 
 
-<rect x="60" y="132" width="168" height="54" rx="4" fill="#45475A"/>
-<text x="144" y="156" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#CDD6F4">CLAUDE.md</text>
-<text x="144" y="174" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Full content, every request</text>
+<rect x="60" y="132" width="168" height="54" rx="4" fill="#8001c6" fill-opacity="0.12" stroke="#8001c6" stroke-width="1"/>
+<text x="144" y="156" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#1E1E1E">CLAUDE.md</text>
+<text x="144" y="174" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Vollständig, bei jeder Anfrage</text>
 
-<rect x="60" y="198" width="168" height="54" rx="4" fill="#CBA6F7" fill-opacity="0.15"/>
-<text x="144" y="222" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#CDD6F4">MCP servers</text>
-<text x="144" y="240" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Tool definitions, every request</text>
+<rect x="60" y="198" width="168" height="54" rx="4" fill="#5C44E4" fill-opacity="0.1" stroke="#5C44E4" stroke-width="1"/>
+<text x="144" y="222" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#1E1E1E">MCP-Server</text>
+<text x="144" y="240" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Tool-Definitionen, bei jeder Anfrage</text>
 
-<rect x="60" y="264" width="168" height="54" rx="4" fill="#A6E3A1" fill-opacity="0.15"/>
-<text x="144" y="286" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#CDD6F4">Skills*</text>
-<text x="144" y="304" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Descriptions (default)</text>
-
-
-<rect x="276" y="132" width="168" height="54" rx="4" fill="#A6E3A1" fill-opacity="0.15" stroke="#A6E3A1" stroke-width="1" stroke-dasharray="3 3"/>
-<text x="360" y="156" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#CDD6F4">Skills</text>
-<text x="360" y="174" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Full content on use</text>
+<rect x="60" y="264" width="168" height="54" rx="4" fill="#E90464" fill-opacity="0.08" stroke="#E90464" stroke-width="1"/>
+<text x="144" y="286" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#1E1E1E">Skills*</text>
+<text x="144" y="304" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Beschreibungen (Standard)</text>
 
 
-<rect x="504" y="132" width="192" height="96" rx="8" fill="#1F4460" fill-opacity="0.5" stroke="#6C7086" stroke-width="1.5"/>
-<text x="600" y="156" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#9399B2">Separate context</text>
-<rect x="522" y="168" width="156" height="48" rx="4" fill="#F5A97F" fill-opacity="0.15"/>
-<text x="600" y="190" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#CDD6F4">Subagents</text>
-<text x="600" y="206" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Fresh, isolated</text>
+<rect x="276" y="132" width="168" height="54" rx="4" fill="#E90464" fill-opacity="0.08" stroke="#E90464" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="360" y="156" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#1E1E1E">Skills</text>
+<text x="360" y="174" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Vollständig bei Aufruf</text>
 
 
-<rect x="504" y="252" width="192" height="66" rx="4" fill="#585B70" fill-opacity="0.4" stroke="#6C7086" stroke-width="1"/>
-<text x="600" y="280" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#BAC2DE">Hooks</text>
-<text x="600" y="298" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Run externally, zero cost</text>
+<rect x="504" y="132" width="192" height="96" rx="8" fill="#F8F8F8" stroke="#dee2e6" stroke-width="1.5"/>
+<text x="600" y="156" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#6c757d">Separater Kontext</text>
+<rect x="522" y="168" width="156" height="48" rx="4" fill="#f11653" fill-opacity="0.08" stroke="#f11653" stroke-width="1"/>
+<text x="600" y="190" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#1E1E1E">Subagenten</text>
+<text x="600" y="206" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Frisch, isoliert</text>
 
 
-<rect x="60" y="350" width="14" height="14" rx="2" fill="#45475A"/>
-<text x="82" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Always in context</text>
-
-<rect x="216" y="350" width="14" height="14" rx="2" fill="#A6E3A1" fill-opacity="0.15" stroke="#A6E3A1" stroke-width="1" stroke-dasharray="2 2"/>
-<text x="238" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Loads on use</text>
-
-<rect x="396" y="350" width="14" height="14" rx="2" fill="#585B70" fill-opacity="0.4" stroke="#6C7086" stroke-width="1"/>
-<text x="418" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#9399B2">Outside main context</text>
+<rect x="504" y="252" width="192" height="66" rx="4" fill="#F8F8F8" stroke="#adb5bd" stroke-width="1"/>
+<text x="600" y="280" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500" fill="#495057">Hooks</text>
+<text x="600" y="298" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Extern, kein Kontext-Verbrauch</text>
 
 
-<text x="60" y="392" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6C7086">*Skills with disableModelInvocation: true load nothing until you invoke them</text>
+<rect x="60" y="350" width="14" height="14" rx="2" fill="#8001c6" fill-opacity="0.12" stroke="#8001c6" stroke-width="1"/>
+<text x="82" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Immer im Kontext</text>
+
+<rect x="216" y="350" width="14" height="14" rx="2" fill="#E90464" fill-opacity="0.08" stroke="#E90464" stroke-width="1" stroke-dasharray="2 2"/>
+<text x="238" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Wird bei Nutzung geladen</text>
+
+<rect x="396" y="350" width="14" height="14" rx="2" fill="#F8F8F8" stroke="#adb5bd" stroke-width="1"/>
+<text x="418" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#6c757d">Außerhalb des Hauptkontexts</text>
+
+
+<text x="60" y="392" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#adb5bd">*Skills mit disableModelInvocation: true laden nichts, bis du sie aufrufst</text>
 
 </svg>

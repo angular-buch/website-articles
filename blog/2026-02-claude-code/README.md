@@ -145,9 +145,7 @@ Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befe
 Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
 In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
 
-![Claude Code zeigt im Terminal einen Diff der geplanten Änderungen an einer Angular-Komponente. Unten fragt der Permission-Dialog: „Do you want to make this edit?" mit den Optionen Yes, Yes für die ganze Session, oder eigene Anweisung.](confirmation-dialog.png "Der Permission-Dialog: Claude Code zeigt die geplanten Änderungen und wartet auf Bestätigung.")
-
-![SVG-Nachbildung des Permission-Dialogs](confirmation-dialog.svg "SVG-Nachbildung zum Vergleich")
+![Claude Code zeigt im Terminal einen Diff der geplanten Änderungen an einer Angular-Komponente. Unten fragt der Permission-Dialog: „Do you want to make this edit?" mit den Optionen Yes, Yes für die ganze Session, oder eigene Anweisung.](confirmation-dialog.svg "Der Permission-Dialog: Claude Code zeigt die geplanten Änderungen und wartet auf Bestätigung.")
 
 Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
 Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
@@ -162,9 +160,7 @@ Für den Anfang brauchst du nur vier Slash-Befehle:
 - **`/compact`** – Kontext komprimieren, wenn die Session lang wird
 - **`/cost`** – was hat die Session bisher gekostet?
 
-![Die Statusleiste von Claude Code zeigt das aktuelle Modell, die Session-Kosten und die bisherige Dauer an.](statusline-cost-tracking.png "Die Statusleiste zeigt Kosten und Dauer der aktuellen Session.")
-
-![SVG-Nachbildung der Kosten-Statusleiste](statusline-cost-tracking.svg "SVG-Nachbildung zum Vergleich")
+![Die Statusleiste von Claude Code zeigt das aktuelle Modell, die Session-Kosten und die bisherige Dauer an.](statusline-cost-tracking.svg "Die Statusleiste zeigt Kosten und Dauer der aktuellen Session.")
 
 Bei Problemen hilft **`/doctor`** – der Befehl prüft, ob alles korrekt eingerichtet ist.
 
@@ -215,15 +211,11 @@ Ein Kontext-Fenster von 1 Million Tokens ist bereits in der Beta-Phase – das w
 
 Wenn es knapp wird, zeigt Claude Code das in der Statusleiste an:
 
-![Die Statusleiste zeigt das Modell und einen Fortschrittsbalken mit der prozentualen Auslastung des Kontextfensters.](statusline-context-window-usage.png "Die Statusleiste warnt, wenn das Kontextfenster knapp wird.")
-
-![SVG-Nachbildung der Kontext-Statusleiste](statusline-context-window-usage.svg "SVG-Nachbildung zum Vergleich")
+![Die Statusleiste zeigt das Modell und einen Fortschrittsbalken mit der prozentualen Auslastung des Kontextfensters.](statusline-context-window-usage.svg "Die Statusleiste warnt, wenn das Kontextfenster knapp wird.")
 
 Mit `/context` siehst du genau, wie der verfügbare Platz aufgeteilt ist:
 
-![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt die Auslastung des Kontextfensters, aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
-
-![SVG-Nachbildung der Kontextanzeige](context-command.svg "SVG-Nachbildung zum Vergleich")
+![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt die Auslastung des Kontextfensters, aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.svg "Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
 
 Wenn es eng wird, komprimiert Claude Code den bisherigen Verlauf automatisch durch eine Zusammenfassung (Auto-Compact) – das funktioniert mittlerweile recht zuverlässig.
 Mit `/compact` kannst du das auch manuell auslösen und dabei angeben, was bei der Zusammenfassung nicht verloren gehen soll. Mit `/clear` startest du eine komplett frische Konversation – sinnvoll, wenn du ohnehin zu einer neuen Aufgabe wechselst.
@@ -389,9 +381,7 @@ Das Flag `--ai-config=claude` generiert eine passende `CLAUDE.md` für das Proje
 Die `.mcp.json` verbindet Claude Code mit dem Angular MCP-Server – allerdings erst beim nächsten Start.
 Drücke `Ctrl+D` und starte mit `claude --resume`:
 
-![Claude Code fragt beim Start, ob der Angular CLI MCP-Server aktiviert werden soll.](mcp-prompt.png "Claude Code erkennt den konfigurierten MCP-Server und fragt nach Bestätigung.")
-
-![SVG-Nachbildung des MCP-Prompts](mcp-prompt.svg "SVG-Nachbildung zum Vergleich")
+![Claude Code fragt beim Start, ob der Angular CLI MCP-Server aktiviert werden soll.](mcp-prompt.svg "Claude Code erkennt den konfigurierten MCP-Server und fragt nach Bestätigung.")
 
 Jetzt kann es losgehen – mit MCP-Anbindung von Anfang an:
 
