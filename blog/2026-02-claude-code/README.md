@@ -24,6 +24,8 @@ Ob du seit Jahren Angular entwickelst oder gerade erst anfängst: Die Einstiegsh
 
 Nach dem Lesen dieses Artikels weißt du, wie du Claude Code installierst, konfigurierst und für Angular-Projekte einsetzt – von der ersten Komponente bis zur CI-Pipeline.
 
+> 🇬🇧 This article is available in English here: [Claude Code: The AI Agent for Angular Developers](https://angular.schule/blog/2026-02-claude-code)
+
 ## Inhalt
 
 [[toc]]
@@ -145,7 +147,7 @@ Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befe
 Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
 In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
 
-![Claude Code zeigt im Terminal einen Diff der geplanten Änderungen an einer Angular-Komponente. Unten fragt der Permission-Dialog: „Do you want to make this edit?" mit den Optionen Yes, Yes für die ganze Session, oder eigene Anweisung.](confirmation-dialog.svg "Der Permission-Dialog: Claude Code zeigt die geplanten Änderungen und wartet auf Bestätigung.")
+![Claude Code zeigt im Terminal einen Diff der geplanten Änderungen an einer Angular-Komponente. Unten fragt der Permission-Dialog: "Do you want to make this edit?" mit den Optionen Yes, Yes für die ganze Session, oder eigene Anweisung.](confirmation-dialog.svg "Der Permission-Dialog: Claude Code zeigt die geplanten Änderungen und wartet auf Bestätigung.")
 
 Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
 Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
