@@ -133,7 +133,7 @@ Sobald du dich mit der Interaktion vertraut gemacht hast, bist du bereit für de
 ### Der Workflow – Ein Chat
 
 Jetzt wird es konkret: Wie sieht die tägliche Arbeit mit Claude Code aus?
-Am besten zeigt das ein konkretes Beispiel:
+Am besten zeigt das ein Beispiel:
 
 ```
 Du: Erstelle einen BookService, der Bücher über HTTP lädt.
@@ -196,8 +196,8 @@ Updates passieren in der Regel automatisch. Falls nicht, hilft `claude update` a
 Beim Arbeiten reicht es, `Ctrl+C` zum Abbrechen und `Ctrl+D` zum Beenden zu kennen.
 Undo geht mit `Ctrl+_` (nicht `Ctrl+Z`!). Wer aus Gewohnheit `Ctrl+Z` drückt, suspendiert Claude Code – dann hilft `fg` in der Shell, um zurückzukehren.
 
-Das sind die Grundlagen.
-Doch die Qualität der Ergebnisse hängt von einem entscheidenden Faktor ab: dem Kontext.
+Die Bedienung ist schnell verinnerlicht.
+Doch die Qualität der Ergebnisse steht und fällt mit einem Faktor: dem Kontext.
 
 ### Kontext ist alles
 
@@ -306,13 +306,12 @@ Mit `/memory` kannst du alle gespeicherten Regeln einsehen und bearbeiten.
 
 ![Diagramm: CLAUDE.md und MCP-Server werden beim Session-Start geladen und bleiben in jeder Anfrage erhalten. Skills laden beim Start nur ihre Beschreibungen, der vollständige Inhalt wird erst bei Aufruf geladen.](context-loading.svg "So lädt Claude Code den Kontext: CLAUDE.md und MCP beim Start, Skills on demand.")
 
+Regeln sind statisch – aber Angular entwickelt sich weiter. Für aktuelles Wissen braucht Claude Code Zugriff auf die aktuelle Dokumentation.
+
 ### Angular MCP-Server
 
-Eines der größten Probleme bei AI-Modellen ist veraltetes Trainingswissen.
-Angular entwickelt sich schnell, und was vor einem Jahr Best Practice war, kann heute überholt sein.
-Der MCP-Server (Model Context Protocol) der Angular CLI löst dieses Problem elegant.
-
-MCP ermöglicht es Claude Code, auf aktuelle Angular-Dokumentation und Best Practices zuzugreifen – frisch und direkt von der Quelle.
+Angular entwickelt sich schnell – was vor einem Jahr Best Practice war, kann heute überholt sein.
+Der MCP-Server (Model Context Protocol) der Angular CLI schließt diese Lücke: Er gibt Claude Code Zugriff auf aktuelle Dokumentation und Best Practices, direkt von der Quelle.
 
 #### Einrichtung
 
@@ -373,7 +372,7 @@ Claude Code ruft dann aktuelle Informationen ab, die möglicherweise neuer sind 
 
 ### Dein erstes Angular-Projekt mit Claude Code
 
-Lass uns all das in einem konkreten Projekt zusammenführen.
+Lass uns das Gelernte in einem konkreten Projekt zusammenführen.
 Wichtig dabei: Der Angular MCP-Server sollte von Anfang an angebunden sein.
 Nur so bekommt Claude Code Zugriff auf aktuelle Best Practices und generiert keinen veralteten Code.
 
@@ -421,8 +420,7 @@ Genau das ist der Punkt: Was früher ein halber Tag Setup war, erledigt Claude C
 
 ### Praktische Beispiele
 
-Nach dem Einstiegsprojekt fragst du dich vielleicht, welche anderen Aufgaben sich mit Claude Code lösen lassen.
-Hier einige Beispiele aus dem Entwickleralltag.
+Die App steht. Im Alltag sind es aber oft andere Aufgaben, bei denen Claude Code seinen Wert zeigt.
 
 #### Build-Fehler beheben
 
@@ -451,10 +449,11 @@ Statt nur Probleme aufzulisten: Claude Code kann sie direkt beheben.
 
 > Reviewe src/app/cart/ auf Performance-Probleme, Angular Best Practices und potenzielle Bugs. Behebe dann alles, was du findest.
 
-Das Muster ist immer gleich: Beschreibe was du willst, Claude Code liefert.
-Doch die Qualität hängt davon ab, wie du fragst – und welche Werkzeuge du nutzt.
+Das Muster ist immer gleich: Beschreibe, was du willst – Claude Code liefert.
 
 ## Vertiefen
+
+Soweit die Einrichtung. Ab hier geht es darum, das Beste aus Claude Code herauszuholen – und seine Grenzen zu kennen.
 
 ### Tipps für effektives Arbeiten
 
@@ -523,10 +522,11 @@ Dabei führt Claude Code vor jeder Antwort eine interne Reasoning-Schleife durch
 Es ist standardmäßig aktiv und lässt sich über `/config` ausschalten. Ich lasse es immer an.
 Achtung: Ohne Max-Abo ist das Budget schnell aufgebraucht.
 
+Plan Mode und Thinking verbessern die Ergebnisse. Aber Claude Code kann auch den Workflow drumherum vereinfachen – zum Beispiel bei Git.
+
 #### Git-Integration
 
-Ein weiterer Bereich, in dem Claude Code glänzt, ist die Arbeit mit Git.
-Du musst keine Commit-Messages mehr formulieren oder PR-Beschreibungen schreiben – Claude Code kann das für dich übernehmen.
+Du musst keine Commit-Messages mehr formulieren oder PR-Beschreibungen schreiben – Claude Code übernimmt das.
 
 ##### Commits erstellen
 
@@ -571,7 +571,7 @@ Damit sehen deine Commits genauso aus wie jeder andere Commit auch.
 
 #### Plugins
 
-Claude Code lässt sich über ein [Plugin-System](https://code.claude.com/docs/en/discover-plugins) erweitern.
+Neben Git lässt sich Claude Code über ein [Plugin-System](https://code.claude.com/docs/en/discover-plugins) erweitern.
 Im offiziellen Anthropic-Marketplace findest du fertige Plugins, die du direkt installieren kannst – ohne selbst etwas konfigurieren zu müssen.
 
 Tippe `/plugin` und wechsle zum **Discover**-Tab, um die verfügbaren Plugins zu durchsuchen.
@@ -610,8 +610,7 @@ Falls nicht, wird der ursprüngliche Prompt erneut eingespeist – und Claude si
 So lassen sich z. B. TDD-Zyklen, Refactorings oder Migrationen automatisieren.
 Ein `--max-iterations`-Limit schützt dabei vor endlosen Schleifen und unkontrollierten Kosten.
 
-Mit diesen Tipps im Hinterkopf wirst du schnell produktiv.
-Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
+Doch bei aller Begeisterung: Claude Code ist nicht perfekt.
 
 ### Wo Claude Code an Grenzen stößt
 
@@ -634,9 +633,8 @@ Doch es gibt auch ernsthaftere Risiken:
 
 - **Datenverlust:** Eine falsch verstandene Anweisung kann Dateien löschen oder überschreiben. Im Dezember 2025 hat Googles AI-Coding-Tool Antigravity (mit Gemini 3 Pro) im autonomen Modus das [gesamte Laufwerk D: eines Entwicklers gelöscht](https://www.theregister.com/2025/12/01/google_antigravity_wipes_d_drive/). Das war nicht Claude Code – aber das Risiko ist grundsätzlich bei jedem AI-Agenten vorhanden, der Shell-Befehle ausführt.
 
-Diese Schwächen und Risiken sind kein Grund, Claude Code nicht zu nutzen.
-Aber sie sind ein Grund, den generierten Code immer zu reviewen.
-Für die ernsthafteren Risiken gibt es allerdings eine elegante Lösung.
+Keine dieser Schwächen ist ein Grund, Claude Code nicht zu nutzen – aber jede ist ein Grund, den generierten Code zu reviewen.
+Gegen die ernsthafteren Risiken hilft eine isolierte Umgebung.
 
 ### Docker Sandbox
 
@@ -666,6 +664,8 @@ Dein Projektverzeichnis wird bidirektional synchronisiert unter dem gleichen abs
 Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/agent/`) und eine eigene Docker-Umgebung – der Agent kann darin Container starten, ohne deine Host-Container zu sehen.
 Wie die Architektur im Detail funktioniert, beschreibt Docker in der [Sandbox-Architektur-Dokumentation](https://docs.docker.com/ai/sandboxes/architecture/).
 Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Du vertraust hier einer Black Box.
+
+Die Sandbox sichert die interaktive Nutzung ab. Doch Claude Code funktioniert auch ganz ohne Chat – vollständig automatisiert.
 
 ### Headless-Modus und CI
 
