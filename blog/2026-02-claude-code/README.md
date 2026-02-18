@@ -249,7 +249,7 @@ Du kannst die Datei natürlich auch manuell anlegen oder die generierte Version 
 Ein guter Ausgangspunkt sind die [Custom Prompts and System Instructions](https://angular.dev/ai/develop-with-ai) von Angular – ein umfangreiches Regelwerk, das Best Practices für TypeScript, Standalone Components, Signals, Accessibility und mehr abdeckt.
 
 Hier ein stark gekürzter Auszug, um die Idee zu zeigen.
-Wichtig: Die `CLAUDE.md` wird immer auf Englisch verfasst, weil Claude damit am besten arbeitet.
+Tipp: Ich empfehle, die `CLAUDE.md` auf Englisch zu verfassen, weil Claude damit am besten arbeitet.
 
 ```markdown
 # Angular Best Practices (from angular.dev/ai/develop-with-ai)
@@ -285,8 +285,7 @@ So kannst du eine `CLAUDE.md` auch in einen Unterordner wie `src/` legen – sie
 Alle gefundenen Regeln werden kombiniert, wobei spezifischere Regeln Vorrang haben.
 
 Du musst die `CLAUDE.md` nicht immer manuell bearbeiten.
-Tippe `#` im Prompt, und du kannst direkt eine Erinnerung hinzufügen – ohne den Workflow zu unterbrechen.
-Oder sag es einfach in natürlicher Sprache:
+Du kannst Claude auch direkt bitten, sich etwas zu merken – einfach in natürlicher Sprache:
 
 > Merke dir: In diesem Projekt verwenden wir Vitest statt Karma.
 
@@ -406,7 +405,7 @@ Die Konfiguration erfolgt in der Datei `.mcp.json` im Projekt-Root:
 
 Mit dieser Konfiguration stehen Claude Code zusätzliche Werkzeuge zur Verfügung:
 
-**Standard-Werkzeuge (immer aktiv):**
+**Standard-Werkzeuge (immer aktiv, unter anderem):**
 
 | Werkzeug | Beschreibung |
 |----------|--------------|
@@ -415,7 +414,7 @@ Mit dieser Konfiguration stehen Claude Code zusätzliche Werkzeuge zur Verfügun
 | `find_examples` | Code-Beispiele für moderne Features |
 | `list_projects` | Identifiziert Apps und Libraries im Workspace |
 
-**Experimentelle Werkzeuge (müssen aktiviert werden):**
+**Experimentelle Werkzeuge (müssen aktiviert werden, unter anderem):**
 
 | Werkzeug | Beschreibung |
 |----------|--------------|
@@ -602,7 +601,7 @@ Aber ich will ehrlich sein: Claude Code ist nicht perfekt.
 Kein Tool ist fehlerfrei, und Transparenz ist mir wichtiger als Hype.
 Hier sind die Schwächen, die du kennen solltest:
 
-- **Halluzinationen:** Claude Code erfindet manchmal APIs oder Funktionen, die es nicht gibt. Besonders bei seltenen Libraries passiert das. Prüfe immer, ob importierte Module existieren.
+- **Halluzinationen:** Claude Code erfindet manchmal APIs oder Funktionen, die es nicht gibt. Besonders bei seltenen Libraries passiert das. Prüfe alle Aussagen – und geh nicht davon aus, dass etwas wirklich nicht geht oder nicht vorhanden ist. Im Zweifel verlange eine Web-Recherche.
 
 - **Veraltetes Wissen:** Das Trainings-Wissen hat ein Ablaufdatum. Dagegen hilft der [Angular MCP-Server](#angular-mcp-server).
 
@@ -632,7 +631,7 @@ Statt:
 claude
 ```
 
-einfach:
+einfach folgendes eingeben:
 
 ```bash
 docker sandbox run claude .
@@ -643,9 +642,11 @@ Während Container sich den Kernel mit dem Host teilen (und [ein Ausbruch daher 
 Du musst dich in der Sandbox einmalig neu einloggen (oder einen API-Key als Umgebungsvariable übergeben), aber danach bleibt die Sandbox bestehen, bis du sie explizit löschst.
 
 Das Beste: Du merkst kaum einen Unterschied zur normalen Arbeit.
-Dein Projektverzeichnis wird bidirektional synchronisiert – kein Volume-Mount, sondern echtes Kopieren unter dem gleichen absoluten Pfad wie auf dem Host.
-Docker liest deine Git-Identität (`user.name` und `user.email`) vom Host und injiziert sie in die Sandbox, sodass Commits korrekt zugeordnet werden.
-Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/agent/`), eigener Docker-Daemon.
+Dein Projektverzeichnis wird bidirektional synchronisiert unter dem gleichen absoluten Pfad wie auf dem Host.
+
+> "This is file synchronization, not volume mounting. Files are copied between host and VM." ([Quelle](https://docs.docker.com/ai/sandboxes/architecture/))
+
+Alles andere ist komplett isoliert: eigenes Dateisystem, eigenes Home (`/home/agent/`) und eine eigene Docker-Umgebung – der Agent kann darin Container starten, ohne deine Host-Container zu sehen.
 Wie die Architektur im Detail funktioniert, beschreibt Docker in der [Sandbox-Architektur-Dokumentation](https://docs.docker.com/ai/sandboxes/architecture/).
 Wichtig zu wissen: Docker Desktop und damit die AI Sandbox ist [keine Open-Source-Software](https://docs.docker.com/subscription/desktop-license/), sondern ein Mix aus Open-Source-Komponenten und proprietärem Code. Nur die Docker Engine selbst ist vollständig Open Source. Die genaue Implementierung der Sandbox-Synchronisation ist daher nicht einsehbar. Du vertraust hier einer Black Box.
 
