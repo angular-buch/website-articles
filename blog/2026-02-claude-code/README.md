@@ -22,6 +22,8 @@ AI-Agenten wie Claude Code haben meinen Workflow grundlegend verändert – ich 
 **In diesem Artikel zeige ich dir, wie das funktioniert.
 Ob du seit Jahren Angular entwickelst oder gerade erst anfängst: Die Einstiegshürde war noch nie so niedrig.**
 
+Nach dem Lesen dieses Artikels weißt du, wie du Claude Code installierst, konfigurierst und für Angular-Projekte einsetzt – von der ersten Komponente bis zur CI-Pipeline.
+
 ## Inhalt
 
 [[toc]]
@@ -38,6 +40,8 @@ Claude Code setzt sich aber an deinen Schreibtisch und erledigt die Arbeit. **Vi
 Konkret heißt das: Claude Code kann deine Dateien lesen und bearbeiten, Shell-Befehle ausführen, im Web nach Informationen suchen und sogar Bilder analysieren.
 Der Agent entscheidet selbstständig, welche Schritte nötig sind, und arbeitet sie nacheinander ab – du siehst dabei immer, was gerade passiert.
 Das klingt nach viel Macht – aber keine Sorge: Du behältst jederzeit die Kontrolle und kannst jeden Schritt bestätigen.
+
+![Die Agentic Loop: Dein Prompt führt dazu, dass Claude Kontext sammelt, Aktionen ausführt, Ergebnisse prüft und den Zyklus wiederholt, bis die Aufgabe erledigt ist.](agentic-loop.svg "Die Agentic Loop: Claude sammelt Kontext, handelt, prüft – und wiederholt den Zyklus bis zum Ergebnis.")
 
 ## Warum ein Terminal?
 
@@ -165,6 +169,8 @@ Im Standardmodus fragt Claude Code vor jeder Dateiänderung und jedem Shell-Befe
 Du siehst einen Diff und wählst mit den Pfeiltasten: einmalig erlauben, für die gesamte Session erlauben oder ablehnen.
 In der Praxis drücke ich meistens einfach nur Enter – das bestätigt die vorausgewählte Option.
 
+![Claude Code zeigt im Terminal einen Diff der geplanten Änderungen an einer Angular-Komponente. Unten fragt der Permission-Dialog: „Do you want to make this edit?" mit den Optionen Yes, Yes für die ganze Session, oder eigene Anweisung.](confirmation-dialog.png "Der Permission-Dialog: Claude Code zeigt die geplanten Änderungen und wartet auf Bestätigung.")
+
 Wenn du dem Ergebnis vertraust – oder dich einfach mal vom Bildschirm abwenden willst, ohne jeden Schritt zu kontrollieren – dann wähle mit den Pfeiltasten die zweite Option: für die gesamte Session erlauben.
 Und für die ganz Mutigen gibt es den **YOLO-Modus** (`--dangerously-skip-permissions`): Hier läuft alles ohne Rückfrage durch.
 Das ist praktisch in isolierten Umgebungen (Container, VMs, CI) – ich persönlich habe ihn noch nie benutzt. Ist mir zu gefährlich.
@@ -177,6 +183,8 @@ Für den Anfang brauchst du nur vier Slash-Befehle:
 - **`/clear`** – frische Session starten
 - **`/compact`** – Kontext komprimieren, wenn die Session lang wird
 - **`/cost`** – was hat die Session bisher gekostet?
+
+![Die Statusleiste von Claude Code zeigt das aktuelle Modell, die Session-Kosten und die bisherige Dauer an.](statusline-cost-tracking.png "Die Statusleiste zeigt Kosten und Dauer der aktuellen Session.")
 
 Bei Problemen hilft **`/doctor`** – der Befehl prüft, ob alles korrekt eingerichtet ist.
 
@@ -225,7 +233,10 @@ Bei Claude sind das aktuell etwa 200.000 Tokens – eine Menge, aber bei langen 
 Was genau ein Kontext-Fenster ist und warum es so wichtig ist, erkläre ich im Detail im Artikel [Agentic Coding: AI-Unterstützung für Angular](../2026-02-agentic-coding#herausforderung-das-kontextfenster).
 Ein Kontext-Fenster von 1 Million Tokens ist bereits in der Beta-Phase – das wird die Arbeit deutlich vereinfachen.
 
-Wenn es knapp wird, zeigt Claude Code das in der Statusleiste an.
+Wenn es knapp wird, zeigt Claude Code das in der Statusleiste an:
+
+![Die Statusleiste zeigt das Modell und einen Fortschrittsbalken mit der prozentualen Auslastung des Kontextfensters.](statusline-context-window-usage.png "Die Statusleiste warnt, wenn das Kontextfenster knapp wird.")
+
 Mit `/context` siehst du genau, wie der verfügbare Platz aufgeteilt ist:
 
 ![Terminal-Ausgabe des /context-Befehls in Claude Code: Die Kontextanzeige zeigt die Auslastung des Kontextfensters, aufgeschlüsselt nach System Prompt, System Tools, Memory Files, Skills, Messages und Free Space.](context-command.png "Der /context-Befehl zeigt die aktuelle Auslastung des Kontextfensters.")
@@ -239,6 +250,8 @@ Viel eleganter ist es, projektspezifische Regeln dauerhaft zu hinterlegen.
 ## Projekt-Konfiguration
 
 Claude Code lässt sich projektspezifisch konfigurieren, sodass es von Anfang an weiß, wie dein Projekt strukturiert ist und welchen Konventionen es folgen soll.
+
+![Diagramm: CLAUDE.md und MCP-Server werden beim Session-Start geladen und bleiben in jeder Anfrage erhalten. Skills laden beim Start nur ihre Beschreibungen, der vollständige Inhalt wird erst bei Aufruf geladen.](context-loading.svg "So lädt Claude Code den Kontext: CLAUDE.md und MCP beim Start, Skills on demand.")
 
 ### `CLAUDE.md` – Regeln für dein Projekt
 
@@ -678,4 +691,4 @@ Der Rest ergibt sich.
 
 <hr>
 
-<small>**Titelbild:** generiert mit Nano Banana Pro (Gemini 3)</small>
+<small>**Titelbild:** generiert mit Adobe Firefly 3</small>
