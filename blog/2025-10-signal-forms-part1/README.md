@@ -236,11 +236,11 @@ This is why we use the spread operator (`...`) to create a new array when adding
 export class RegistrationForm {
   // ...
   protected addEmail(): void {
-    this.registrationForm.email.value.update((items) => [...items, '']);
+    this.registrationForm.email().value.update((items) => [...items, '']);
   }
 
   protected removeEmail(removeIndex: number): void {
-    this.registrationForm.email.value.update((items) =>
+    this.registrationForm.email().value.update((items) =>
       items.filter((_, index) => index !== removeIndex)
     );
   }
