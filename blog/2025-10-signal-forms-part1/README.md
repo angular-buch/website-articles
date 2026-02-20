@@ -160,11 +160,8 @@ The `FormField` directive works directly with all standard HTML form elements li
 Let's start with a basic template that connects some of our form fields: We apply the directive to the HTML element by using the `[formField]` property binding.
 On the right side of the binding, we pass the corresponding `FieldTree` from our form structure.
 
-Notice, that we also use the form attribute `novalidate`: It disables the native browser field validation.
-We will handle validation later by using a form schema.
-
 ```html
-<form (submit)="submitForm()" novalidate>
+<form>
   <div>
     <label for="username">Username</label>
     <input id="username" type="text" [formField]="registrationForm.username" />
@@ -250,42 +247,11 @@ export class RegistrationForm {
 }
 ```
 
-## Basic Form Submission
+## Form Submission
 
 Now that we have connected our form to the template, we want to submit the form data.
-We can simply use the form data and submit them or we can use the more powerful `submit()` function.
+Signal Forms allow us to define the submission logic as part of the form model configuration by passing a third argument to the `form()` function.
 
-Both approaches start with a form submission event handler: In the template, we already used the `(submit)` event binding on the `<form>` element.
-It is necessary to prevent the default form submission behavior by synchronously returning `false` from our `submitForm()` handler method.
-Otherwise, the page will reload on form submission.
-
-### Basic Synchronous Submission
-
-For basic cases where you want to process form data synchronously, you can directly access the current form values:
-
-```typescript
-// ...
-export class RegistrationForm {
-  // ...
-  protected submitForm() {
-    // Access current form data
-    const formData = this.registrationModel();
-    console.log('Form submitted:', formData);
-
-    // Prevent reloading (default browser behavior)
-    return false;
-  }
-}
-```
-
-Since our data model signal is always kept in sync with the form fields, we can access the current form state at any time using `this.registrationModel()`.
-It is also possible to access the form data via `this.registrationForm().value()`, which provides the same result.
-
-This approach is quite simple but not so effective once we want to validate the form data before submitting and when we want to give the user feedback about submission errors which may come from our connected backend service.
-
-### Using the Signal Forms `submit()` Function
-
-For more complex scenarios involving asynchronous operations, loading states, and error handling, Signal Forms provide a dedicated `submit()` function.
 To demonstrate this, we want to simulate a registration process that involves a fake asynchronous operation.
 This service method returns a `Promise` that resolves after a two-second delay, simulating a network request.
 
@@ -304,28 +270,29 @@ export class RegistrationService {
 }
 ```
 
-Back in the form component, we extend our `submitForm()` method to use the service.
-Angular's `submit()` function takes care of managing the submission state, including setting the `submitting` state to `true` during the operation and resetting it afterward.
-To handle the actual submission, it accepts a callback function where we can perform our asynchronous logic.
+### Defining the Submission Action
+
+We define the submission action inline in the `form()` call.
+The second argument is a validation schema – we use an empty `schema(() => {})` for now and will fill it with validation rules later.
+The third argument accepts a `submission` config with an `action` callback.
+This callback receives the form tree and can access the current form values via `form().value`.
 Once we called our service to send the data, we call our own `resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched` by calling `reset()`.
 
 ```typescript
 // ...
-import { /* ... */, submit } from '@angular/forms/signals';
-
 export class RegistrationForm {
   // ...
   readonly #registrationService = inject(RegistrationService);
   // ...
-  protected submitForm() {
-    submit(this.registrationForm, async (form) => {
-      await this.#registrationService.registerUser(form().value());
-      console.log('Registration successful!');
-      this.resetForm();
-    });
-
-    return false;
-  }
+  protected readonly registrationForm = form(this.registrationModel, schema(() => {}), {
+    submission: {
+      action: async (form) => {
+        await this.#registrationService.registerUser(form().value);
+        console.log('Registration successful!');
+        this.resetForm();
+      },
+    },
+  });
 
   protected resetForm() {
     this.registrationModel.set(initialState);
@@ -334,9 +301,61 @@ export class RegistrationForm {
 }
 ```
 
-It is important to know, that the `submit()` function not only sets the `submitting` signal.
-The passed asynchronous callback function is only executed once the form is not in the state `invalid` (we will learn more about validation later on).
-Also, once `submit()` is called, it marks all form fields as `touched`, which es very helpful, if we only show error messages related to a form field when a field has been touched.
+It is important to know that the submission action is only executed once the form is not in the state `invalid` (we will learn more about validation later on).
+Also, once the form is submitted, it marks all form fields as `touched`, which is very helpful if we only show error messages related to a form field when a field has been touched.
+
+Angular offers two ways to trigger the submission: the `FormRoot` directive and the `submit()` function.
+
+### The `FormRoot` Directive
+
+The `FormRoot` directive is the recommended way to trigger form submission.
+We import it from `@angular/forms/signals` and add it to the component's `imports` array.
+
+```typescript
+import { /* ... */, FormRoot } from '@angular/forms/signals';
+
+@Component({
+  // ...
+  imports: [/* ... */, FormRoot],
+  // ...
+})
+```
+
+By binding it to our form model with `[formRoot]="registrationForm"`, it automates the full submission process: It subscribes to the submit event, prevents default browser behavior (page reload), suppresses native validation (`novalidate`), and triggers the submission action defined in the form config.
+There is no need for a separate method or manual `return false`.
+
+### The Manual Way: the `submit()` Function
+
+Alternatively, we can trigger the submission action manually using the `submit()` function.
+When a form is submitted, the `<form>` element emits the native `submit` event.
+We can listen to this event with an event binding and call `submit()` in the handler method.
+
+Additionally, we must prevent the default browser behavior: Without this step, the page would reload on form submission, and the Angular application would restart.
+We return `false` from the handler to suppress this behavior.
+
+```typescript
+import { /* ... */, submit } from '@angular/forms/signals';
+
+@Component({
+  // ...
+  template: `
+    <form (submit)="submitForm()">
+      <!-- ... -->
+      <button type="submit">Register</button>
+    </form>`
+})
+export class RegistrationForm {
+  // ...
+  protected readonly registrationForm = form(this.registrationModel, schema(() => {}), {
+    submission: { action: async (form) => { /* ... */ } },
+  });
+
+  submitForm() {
+    submit(this.registrationForm);
+    return false;
+  }
+}
+```
 
 ### Handling Submission State
 
@@ -345,7 +364,7 @@ When submitting the form we can now see that the value of the `submitting()` sig
 After the asynchronous operation is complete, it switches back to `false`.
 
 ```html
-<form (submit)="submitForm()">
+<form [formRoot]="registrationForm">
   <!-- ... -->
 
   <button
@@ -382,9 +401,9 @@ import {
 } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((path) => {
-  required(path.username, { message: 'Username is required' });
+  required(path.username, { message: 'Username is required.' });
   minLength(path.username, 3, {
-    message: 'A username must be at least 3 characters long',
+    message: 'A username must be at least 3 characters long.',
   });
   // ...
 });
@@ -392,16 +411,19 @@ export const registrationSchema = schema<RegisterFormData>((path) => {
 
 ### Applying the Schema to our Form
 
-To actually use the schema, we pass it as the second parameter to the `form()` function:
+To actually use the schema, we pass it as the second parameter to the `form()` function, replacing the empty dummy schema we used before:
 
 ```typescript
 // ...
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
-  protected readonly registrationForm = form(
-    this.registrationModel,
-    registrationSchema
-  );
+  protected readonly registrationForm = form(this.registrationModel, registrationSchema, {
+    submission: {
+      action: async (form) => {
+        // ...
+      },
+    },
+  });
   // ...
 }
 ```
@@ -433,12 +455,12 @@ A validation schema for our registration form could look like this:
 ```typescript
 export const registrationSchema = schema<RegisterFormData>((path) => {
   // Username validation
-  required(path.username, { message: 'Username is required' });
+  required(path.username, { message: 'Username is required.' });
   minLength(path.username, 3, {
-    message: 'A username must be at least 3 characters long',
+    message: 'A username must be at least 3 characters long.',
   });
   maxLength(path.username, 12, {
-    message: 'A username can be max. 12 characters long',
+    message: 'A username can be max. 12 characters long.',
   });
 
   // Age validation
@@ -481,7 +503,7 @@ These messages can be displayed directly in the template.
 
 To make the error display reusable, we can create a dedicated component for it:
 The component can receive any `FieldTree` and checks for its errors when the field is already marked as touched.
-This is the case, when either the user has entered the field and left it or when we called the `submit()` function for our form which marks all form fields as `touched`.
+This is the case, when either the user has entered the field and left it or when the form is submitted which marks all form fields as `touched`.
 It displays all errors related to the field by iterating over the `errors()` signal.
 
 To get access to the `FieldState`, we have to call the `fieldRef` property twice: Once to get the `FieldTree` from the input signal, and a second time to get the `FieldState` with its reactive properties.

@@ -211,7 +211,7 @@ Finally, we integrate the `IdentityForm` component in our main form template.
 To make things work, we pass the `identity` field tree of our main form to the child component via property binding.
 
 ```html
-<form (submit)="submit()">
+<form [formRoot]="registrationForm">
   <!-- ... -->
   <app-identity-form [identity]="registrationForm.identity" />
   <!-- ... -->

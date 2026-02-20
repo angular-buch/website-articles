@@ -72,8 +72,8 @@ import { FIELD_INFO } from './form-props';
 // ...
 export const formSchema = schema<RegisterFormData>((path) => {
   // Username validation and metadata
-  required(path.username, { message: 'Username is required' });
-  minLength(path.username, 3, { message: 'A username must be at least 3 characters long' });
+  required(path.username, { message: 'Username is required.' });
+  minLength(path.username, 3, { message: 'A username must be at least 3 characters long.' });
   metadata(path.username, FIELD_INFO, () => 'A username must consist of 3-12 characters.');
   // ...
   // Email metadata
