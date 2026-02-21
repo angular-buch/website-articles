@@ -20,7 +20,7 @@ sticky: false
 ---
 
 Angular Signal Forms offer techniques for advanced validation scenarios and schema patterns, which makes them truly powerful for complex form requirements.
-In this article, we will go beyond basic field validation as we covered it in [Part 1](/blog/2025-10-signal-forms-part1/)):
+In this article, we will go beyond basic field validation as we covered it in [Part 1](/blog/2025-10-signal-forms-part1/):
 We will learn about custom schema validation, cross-field validation, conditional validation, asynchronous validation, and how to handle server-side errors gracefully.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.

@@ -24,7 +24,7 @@ sticky: false
 
 
 We covered fundamentals and advanced validation patterns of Signal Forms in [Part 1](/blog/2025-10-signal-forms-part1) and [Part 2](/blog/2025-10-signal-forms-part2) of this blog series.
-In this final part, we'll explore more specialized topics that are relevant for large and modular forms: child forms and custom UI controls.
+In this third part, we'll explore more specialized topics that are relevant for large and modular forms: child forms and custom UI controls.
 Last but not least, we'll have a look at providing a custom `SignalFormsConfig`.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
@@ -41,7 +41,7 @@ Last but not least, we'll have a look at providing a custom `SignalFormsConfig`.
 ## Integrating Child Forms
 
 As forms grow in complexity, it becomes essential to break them down into smaller, reusable components.
-This modular approach not only enhances code maintainability but also allows to reuse form parts across the application.
+This modular approach not only enhances code maintainability but also allows us to reuse form parts across the application.
 
 The architectural idea is straightforward: Instead of defining the entire form in a single component, we create child components that contain specific sections of the HTML form.
 The form and data models still live in the parent component, and the child components receive the relevant parts of the `FieldTree` via property binding.
@@ -178,7 +178,7 @@ We create a new data property `identity` which holds a nested object of type `Ge
 The `initialState` has to be updated accordingly.
 
 ```typescript
-// registrsation-form.ts
+// registration-form.ts
 // ...
 import { GenderIdentity, initialGenderIdentityState } from '../identity-form/identity-form';
 
@@ -196,7 +196,7 @@ const initialState: RegisterFormData = {
 Next, we use the `apply()` function within our main schema to integrate the child schema:
 
 ```typescript
-// registrsation-form.ts
+// registration-form.ts
 import { GenderIdentity, IdentityForm, identitySchema, initialGenderIdentityState } from '../identity-form/identity-form';
 
 export const registrationSchema = schema<RegisterFormData>((path) => {
@@ -228,7 +228,7 @@ Parts of the form are passed to sub components like `IdentityForm`, which bind t
 So far, we've used standard HTML form elements like `<input>`, `<select>`, and `<textarea>` to build our forms.
 However, in real-world applications, we often need form controls that go beyond standard HTML input elements:
 Think of a date picker, a rich text editor, a multi-select dropdown, a counter control, wrappers for third-party component libraries, or custom UI elements that fit specific design requirements.
-This is something that was relatively complicated with Angular' *Reactive Forms* approach using `ControlValueAccessor`.
+This is something that was relatively complicated with Angular's *Reactive Forms* approach using `ControlValueAccessor`.
 
 Signal Forms provide a simple interface that allows us to create custom form components that integrate seamlessly with the Signal Forms ecosystem.
 Our goal is to create a custom component that can be used just like native HTML form elements with the `FormField` directive.

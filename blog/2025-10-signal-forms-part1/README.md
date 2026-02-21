@@ -231,7 +231,7 @@ The `registrationForm.email` field is an array we can iterate over using `@for()
 
 We also add two buttons for adding and removing e-mail input fields.
 In the corresponding methods, we access the `value` signal within the form model.
-The signal's `update()` method allows us to to add or remove items on the `email` array.
+The signal's `update()` method allows us to add or remove items on the `email` array.
 
 Please keep in mind that changes to signal values must be done immutably.
 Instead of directly manipulating the array, we always create a new array with the updated values.
@@ -355,7 +355,7 @@ export class RegistrationForm {
 
 ### The Elegant Way: the `FormRoot` Directive
 
-All these manuel steps can be automated by using the `FormRoot` directive.
+All these manual steps can be automated by using the `FormRoot` directive.
 It is the recommended way to trigger form submission.
 We import it from `@angular/forms/signals` and add it to the component's `imports` array.
 By binding it to our form model with `[formRoot]="registrationForm"`, it automates the full submission process: It subscribes to the submit event, prevents default browser behavior (page reload), suppresses native validation (`novalidate`), and triggers the submission action defined in the form config.

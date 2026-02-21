@@ -253,7 +253,7 @@ export class FieldAriaAttributes<T> {
 }
 ```
 
-We can no remove out method `ariaInvalidState()` from the `RegistrationForm` component.
+We can now remove our method `ariaInvalidState()` from the `RegistrationForm` component.
 Also we remove the manual bindings for `aria-invalid` from the template of the `RegistrationForm` since this and other attributes will now be applied by our directive which manages four key ARIA attributes:
 
 - **`aria-invalid`**: set to `true` when the field has been touched and contains validation errors.
@@ -297,7 +297,7 @@ To make it really accessible we need to pass the ID of the targeting message ele
 
 The directive ensures that your Signal Forms automatically provide excellent accessibility support without requiring manual ARIA attribute management.
 
-You may noticed, we now used our new Directive and Component only in the main `RegistrationForm`.
+You may have noticed, we now used our new Directive and Component only in the main `RegistrationForm`.
 Of course we should also update our child component `IdentityForm`.
 
 ## Demo
