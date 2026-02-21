@@ -353,7 +353,7 @@ export class RegistrationForm {
 ```
 
 
-### The elegant way: the `FormRoot` Directive
+### The Elegant Way: the `FormRoot` Directive
 
 All these manuel steps can be automated by using the `FormRoot` directive.
 It is the recommended way to trigger form submission.
