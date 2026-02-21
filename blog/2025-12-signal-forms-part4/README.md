@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-12-08
-lastModified: 2026-01-08
+lastModified: 2026-02-21
 keywords:
   - Angular
   - Signals
@@ -72,12 +72,12 @@ import { FIELD_INFO } from './form-props';
 // ...
 export const formSchema = schema<RegisterFormData>((path) => {
   // Username validation and metadata
-  required(path.username, { message: 'Username is required' });
-  minLength(path.username, 3, { message: 'A username must be at least 3 characters long' });
+  required(path.username, { message: 'Username is required.' });
+  minLength(path.username, 3, { message: 'A username must be at least 3 characters long.' });
   metadata(path.username, FIELD_INFO, () => 'A username must consist of 3-12 characters.');
   // ...
   // Email metadata
-  metadata(path.email, FIELD_INFO, () => 'Please enter at least one valid e-mail address.');
+  metadata(path.email, FIELD_INFO, () => 'Please enter at least one valid e-mail address');
   // ...
   // Password metadata
   metadata(path.password, FIELD_INFO, () => 'Please enter a password with min 8 characters and a special character.');
@@ -228,16 +228,16 @@ import { FieldTree } from '@angular/forms/signals';
   },
 })
 export class FieldAriaAttributes<T> {
-  readonly field = input.required<FieldTree<T>>();
+  readonly formField = input.required<FieldTree<T>>();
   readonly fieldDescriptionId = input<string>();
 
   readonly ariaInvalid = computed(() => {
-    const state = this.field()();
+    const state = this.formField()();
     return state.touched() && !state.pending() ? state.errors().length > 0 : undefined;
   });
 
   readonly ariaBusy = computed(() => {
-    const state = this.field()();
+    const state = this.formField()();
     return state.pending();
   });
 

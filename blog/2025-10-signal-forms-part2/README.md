@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-15
-lastModified: 2026-01-08
+lastModified: 2026-02-21
 keywords:
   - Angular
   - Signals
@@ -91,7 +91,7 @@ import { /* ... */, applyEach, email } from '@angular/forms/signals';
 
 // ...
 applyEach(path.email, (emailPath) => {
-  email(emailPath, { message: 'E-Mail format is invalid' });
+  email(emailPath, { message: 'E-mail format is invalid.' });
 });
 ```
 
@@ -103,7 +103,7 @@ The validation messages will be displayed in the UI since we included our generi
 <!-- ... -->
 <fieldset>
   <legend>
-    E-Mail Addresses
+    E-mail Addresses
     <button type="button" (click)="addEmail()">+</button>
   </legend>
   <div>
@@ -113,7 +113,7 @@ The validation messages will be displayed in the UI since we included our generi
         <input
           type="email"
           [formField]="emailField"
-          [aria-label]="'E-Mail ' + $index"
+          [aria-label]="'E-mail ' + $index"
           [aria-invalid]="ariaInvalidState(emailField)"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
@@ -144,12 +144,12 @@ import { /* ... */, validate } from '@angular/forms/signals';
 
 export const registrationSchema = schema<RegisterFormData>((path) => {
   // ...
-  // E-Mail validation
+  // e-mail validation
   validate(path.email, (ctx) =>
     !ctx.value().some((e) => e)
       ? {
           kind: 'atLeastOneEmail',
-          message: 'At least one E-Mail address must be added',
+          message: 'At least one e-mail address must be added.',
         }
       : undefined
   );
@@ -164,7 +164,7 @@ To display the error message, we add our `FormError` component below the `@for` 
 <!-- ... -->
 <fieldset>
   <legend>
-    E-Mail Addresses
+    E-mail Addresses
     <button type="button" (click)="addEmail()">+</button>
   </legend>
   <div>
@@ -241,7 +241,7 @@ export const registrationSchema = schema<RegisterFormData>((path) => {
       : {
           field: ctx.fieldTree.pw2, // assign the error to the second password field
           kind: 'confirmationPassword',
-          message: 'The entered password must match with the one specified in "Password" field',
+          message: 'The entered password must match with the one specified in "Password" field.',
         };
   });
 });
@@ -301,7 +301,7 @@ export const registrationSchema = schema<RegisterFormData>((path) => {
         !ctx.value().length
           ? {
               kind: 'noTopicSelected',
-              message: 'Select at least one newsletter topic',
+              message: 'Select at least one newsletter topic.',
             }
           : undefined
       );
@@ -349,7 +349,7 @@ export const registrationSchema = schema<RegisterFormData>((path) => {
   // Check username availability on the server
   validateAsync(path.username, {
     // Reactive parameters for the async operation
-    params: ({ value }) => value(),
+    params: (ctx) => ctx.value(),
 
     // Factory creating a resource for the async call
     factory: (params) => {
@@ -367,7 +367,7 @@ export const registrationSchema = schema<RegisterFormData>((path) => {
       return result
         ? {
             kind: 'userExists',
-            message: 'The username you entered was already taken',
+            message: 'The username you entered was already taken.',
           }
         : undefined;
     },
@@ -478,48 +478,52 @@ Instead, it marks the fields as *hidden*, which we can use in our template to co
 
 While client-side validation catches most errors before submission, server-side validation errors can still occur during form processing.
 Signal Forms provide an elegant way to handle these errors and display them to users with proper field-level feedback.
-When using the `submit()` function, we can return an array of validation errors from the submission callback to assign them to specific fields or to the form itself.
+From the `action` callback in the submission config, we can return an array of validation errors to assign them to specific fields or to the form itself.
 
-The type `ValidationErrorWithField` ensures that each error contains a reference to the field it belongs to.
+The type `WithFieldTree<ValidationError>` ensures that each error contains a reference to the field it belongs to.
 
 ```typescript
-import { /* ... */, ValidationErrorWithField } from '@angular/forms/signals';
+import { /* ... */, WithFieldTree, ValidationError } from '@angular/forms/signals';
 
 export class RegistrationForm {
   // ...
-  protected submitForm() {
-    submit(this.registrationForm, async (form) => {
-      const errors: ValidationErrorWithField[] = [];
+  protected readonly registrationForm = form(
+    this.registrationModel,
+    registrationSchema,
+    {
+      submission: {
+        action: async (form) => {
+          const errors: WithFieldTree<ValidationError>[] = [];
 
-      try {
-        await this.#registrationService.registerUser(form().value);
-        console.log('Registration successful!');
-        this.reset();
-      } catch (e) {
-        // Add server-side errors
-        errors.push(
-          {
-            fieldTree: form, // form-level error
-            kind: 'serverError',
-            message: 'Registration failed. Please try again.',
+          try {
+            await this.#registrationService.registerUser(form().value);
+            console.log('Registration successful!');
+            this.resetForm();
+          } catch (e) {
+            // Add server-side errors
+            errors.push(
+              {
+                fieldTree: form, // form-level error
+                kind: 'serverError',
+                message: 'Registration failed. Please try again.',
+              }
+            );
+
+            // Or assign to specific field
+            errors.push(
+              {
+                fieldTree: form.username,
+                kind: 'serverValidation',
+                message: 'Username is not available.',
+              }
+            );
           }
-        );
 
-        // Or assign to specific field
-        errors.push(
-          {
-            fieldTree: form.username,
-            kind: 'serverValidation',
-            message: 'Username is not available.',
-          }
-        );
-      }
-
-      return errors;
-    });
-
-    return false;
-  }
+          return errors;
+        },
+      },
+    }
+  );
 }
 ```
 
