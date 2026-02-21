@@ -77,7 +77,7 @@ export const formSchema = schema<RegisterFormData>((path) => {
   metadata(path.username, FIELD_INFO, () => 'A username must consist of 3-12 characters.');
   // ...
   // Email metadata
-  metadata(path.email, FIELD_INFO, () => 'Please enter at least one valid e-mail address.');
+  metadata(path.email, FIELD_INFO, () => 'Please enter at least one valid e-mail address');
   // ...
   // Password metadata
   metadata(path.password, FIELD_INFO, () => 'Please enter a password with min 8 characters and a special character.');
@@ -228,16 +228,16 @@ import { FieldTree } from '@angular/forms/signals';
   },
 })
 export class FieldAriaAttributes<T> {
-  readonly field = input.required<FieldTree<T>>();
+  readonly formField = input.required<FieldTree<T>>();
   readonly fieldDescriptionId = input<string>();
 
   readonly ariaInvalid = computed(() => {
-    const state = this.field()();
+    const state = this.formField()();
     return state.touched() && !state.pending() ? state.errors().length > 0 : undefined;
   });
 
   readonly ariaBusy = computed(() => {
-    const state = this.field()();
+    const state = this.formField()();
     return state.pending();
   });
 

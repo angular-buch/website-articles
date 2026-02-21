@@ -92,11 +92,11 @@ export const identitySchema = schema<GenderIdentity>((path) => {
 
   required(path.salutation, {
     when: (ctx) => ctx.valueOf(path.gender) === 'diverse',
-    message: 'Please choose a salutation, when diverse gender selected',
+    message: 'Please choose a salutation, when diverse gender selected.',
   });
   required(path.pronoun, {
     when: (ctx) => ctx.valueOf(path.gender) === 'diverse',
-    message: 'Please choose a pronoun, when diverse gender selected',
+    message: 'Please choose a pronoun, when diverse gender selected.',
   });
 });
 ```
@@ -112,10 +112,10 @@ Finally, we import the `FormField` directive for binding the fields to our form 
 ```typescript
 @Component({
   // ...
-  imports: [Field, FormError]
+  imports: [FormField, FormError]
 })
 export class IdentityForm {
-  readonly identity = model.required<FieldTree<GenderIdentity>>();
+  readonly identity = input.required<FieldTree<GenderIdentity>>();
 
   protected updateSalutationAndPronoun() {
     this.identity().salutation().value.set('');
@@ -316,7 +316,7 @@ To show the current selection state, we can bind to the `checked` property: The 
 For changing the input we call a method `changeInput()` (we create it right after) with the (un)selected name and the native event.
 
 ```html
-<details class="dropdown" [ariaDisabled]="disabled()">
+<details class="dropdown" [aria-disabled]="disabled()">
   <summary>
     {{ label() }}
   </summary>
@@ -384,7 +384,7 @@ Our additional custom inputs `selectOptions` and `label` are set via property bi
   [selectOptions]="['Angular', 'React', 'Vue', 'Svelte']"
   label="Topics (multiple possible):"
 />
-<app-form-error [formField]="registrationForm.newsletterTopics" />
+<app-form-error [fieldRef]="registrationForm.newsletterTopics" />
 <!--- ... -->
 ```
 

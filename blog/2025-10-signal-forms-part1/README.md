@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-13
-lastModified: 2026-01-14
+lastModified: 2026-02-21
 keywords:
   - Angular
   - Signals
@@ -64,7 +64,7 @@ export interface RegisterFormData {
 ```
 
 Next, we create a signal property containing our initial form state.
-In this example, we keep the `initialState` as a separate constant before, so we can re-use it later for resetting the form data after submission.
+In this example, we keep the `initialState` as a separate constant, so we can re-use it later for resetting the form data after submission.
 Of course, it is also possible to define the initial state directly inlined when creating the signal.
 
 ```typescript
@@ -104,21 +104,26 @@ export class RegistrationForm {
 ### Accessing Field Properties
 
 This form model structure allows us to navigate through our form field paths exactly like we would navigate through our data structure.
-Using this object, we can access individual fields and their reactive properties:
+Each nested call returns another `FieldTree` that represents the corresponding part of the form.
+We can call a `FieldTree` as a function to receive a `FieldState` object.
+It provides several reactive properties that we can use in our templates and component logic:
 
 ```typescript
+// FieldTree
+const username = this.registrationForm.username;
+
+// FieldState
+const usernameState = this.registrationForm.username();
+
 // Access field value
-console.log(this.registrationForm.username().value()); // current username value
+console.log(usernameState.value()); // current username value
 
 // Access field states
-console.log(this.registrationForm.username().valid()); // validation status
-console.log(this.registrationForm.username().touched()); // interaction status
-console.log(this.registrationForm.username().errors()); // validation errors
+console.log(usernameState.valid()); // validation status
+console.log(usernameState.touched()); // interaction status
+console.log(usernameState.errors()); // validation errors
 ```
 
-Each nested call returns another `FieldTree` that represents the corresponding part of the form.
-We can call each `FieldTree` as a function to receive a `FieldState` object.
-It provides several reactive properties that we can use in our templates and component logic:
 
 | State             | Type                        | Description                                      |
 | ----------------- | --------------------------- | ------------------------------------------------ |
@@ -132,7 +137,8 @@ It provides several reactive properties that we can use in our templates and com
 | `hidden`          | `Signal<boolean>`           | `true` if the field is semantically hidden       |
 
 It is important to stay aware of the difference between `FieldTree` and `FieldState`:
-While `FieldTree` represents the structure and metadata of the form, `FieldState` provides the current state and value of a specific field.
+`FieldTree` represents the structure of the form and allows us to navigate through the tree of fields.
+`FieldState` provides the current state and value of a specific field.
 Once we call a `FieldTree` as a function, we get a `FieldState` as the result.
 
 ## Connecting Fields to the Template
@@ -196,13 +202,13 @@ The form model automatically synchronizes with the data signal: To read the valu
 ### Working with Arrays
 
 For our email array, we need to handle dynamic addition and removal of fields:
-The `registrationForm.email` field returns an array of `FieldTree` objects that we can iterate over using `@for()`.
+The `registrationForm.email` field is an array we can iterate over using `@for()`.
 
 ```html
 <!-- ... -->
 <fieldset>
   <legend>
-    E-Mail Addresses
+    E-mail Addresses
     <button type="button" (click)="addEmail()">+</button>
   </legend>
   <div>
@@ -212,7 +218,7 @@ The `registrationForm.email` field returns an array of `FieldTree` objects that 
         <input
           type="email"
           [formField]="emailField"
-          [aria-label]="'E-Mail ' + $index"
+          [aria-label]="'E-mail ' + $index"
         />
         <button type="button" (click)="removeEmail($index)">-</button>
       </div>
@@ -223,13 +229,13 @@ The `registrationForm.email` field returns an array of `FieldTree` objects that 
 <!-- ... -->
 ```
 
-As you may have noticed, we also added two buttons for adding and removing e-mail input fields.
+We also add two buttons for adding and removing e-mail input fields.
 In the corresponding methods, we access the `value` signal within the form model.
 The signal's `update()` method allows us to to add or remove items on the `email` array.
 
 Please keep in mind that changes to signal values must be done immutably.
 Instead of directly manipulating the array, we always create a new array with the updated values.
-This is why we use the spread operator (`...`) to create a new array when adding an email and the `filter()` method to create a new array when removing an email.
+This is why we use the spread syntax (`...`) to create a new array when adding an email and the `filter()` method to create a new array when removing an email.
 
 ```typescript
 // ...
@@ -250,7 +256,7 @@ export class RegistrationForm {
 ## Form Submission
 
 Now that we have connected our form to the template, we want to submit the form data.
-Signal Forms allow us to define the submission logic as part of the form model configuration by passing a third argument to the `form()` function.
+Signal Forms directly support this workflow.
 
 To demonstrate this, we want to simulate a registration process that involves a fake asynchronous operation.
 This service method returns a `Promise` that resolves after a two-second delay, simulating a network request.
@@ -276,6 +282,7 @@ We define the submission action inline in the `form()` call.
 The second argument is a validation schema – we use an empty `schema(() => {})` for now and will fill it with validation rules later.
 The third argument accepts a `submission` config with an `action` callback.
 This callback receives the form tree and can access the current form values via `form().value`.
+This function must return a `Promise`, which is why we use the native `async`/`await`.
 Once we called our service to send the data, we call our own `resetForm()` method: It resets the data signal to the initial state and also clears form states like `touched` by calling `reset()`.
 
 ```typescript
@@ -284,15 +291,19 @@ export class RegistrationForm {
   // ...
   readonly #registrationService = inject(RegistrationService);
   // ...
-  protected readonly registrationForm = form(this.registrationModel, schema(() => {}), {
-    submission: {
-      action: async (form) => {
-        await this.#registrationService.registerUser(form().value);
-        console.log('Registration successful!');
-        this.resetForm();
+  protected readonly registrationForm = form(
+    this.registrationModel,
+    schema(() => { /* TODO Schema */ }),
+    {
+      submission: {
+        action: async (form) => {
+          await this.#registrationService.registerUser(form().value);
+          console.log('Registration successful!');
+          this.resetForm();
+        },
       },
-    },
-  });
+    }
+  );
 
   protected resetForm() {
     this.registrationModel.set(initialState);
@@ -301,32 +312,16 @@ export class RegistrationForm {
 }
 ```
 
-It is important to know that the submission action is only executed once the form is not in the state `invalid` (we will learn more about validation later on).
+It is important to know that the submission action is only executed when the form is not in the state `invalid` (we will learn more about validation later on).
 Also, once the form is submitted, it marks all form fields as `touched`, which is very helpful if we only show error messages related to a form field when a field has been touched.
 
-Angular offers two ways to trigger the submission: the `FormRoot` directive and the `submit()` function.
+With the logic defined, we need to trigger it.
+Angular offers two ways to react to form submission: the `submit()` function and the `FormRoot` directive.
 
-### The `FormRoot` Directive
-
-The `FormRoot` directive is the recommended way to trigger form submission.
-We import it from `@angular/forms/signals` and add it to the component's `imports` array.
-
-```typescript
-import { /* ... */, FormRoot } from '@angular/forms/signals';
-
-@Component({
-  // ...
-  imports: [/* ... */, FormRoot],
-  // ...
-})
-```
-
-By binding it to our form model with `[formRoot]="registrationForm"`, it automates the full submission process: It subscribes to the submit event, prevents default browser behavior (page reload), suppresses native validation (`novalidate`), and triggers the submission action defined in the form config.
-There is no need for a separate method or manual `return false`.
 
 ### The Manual Way: the `submit()` Function
 
-Alternatively, we can trigger the submission action manually using the `submit()` function.
+We can trigger the submission action manually using the `submit()` function.
 When a form is submitted, the `<form>` element emits the native `submit` event.
 We can listen to this event with an event binding and call `submit()` in the handler method.
 
@@ -356,6 +351,36 @@ export class RegistrationForm {
   }
 }
 ```
+
+
+### The elegant way: the `FormRoot` Directive
+
+All these manuel steps can be automated by using the `FormRoot` directive.
+It is the recommended way to trigger form submission.
+We import it from `@angular/forms/signals` and add it to the component's `imports` array.
+By binding it to our form model with `[formRoot]="registrationForm"`, it automates the full submission process: It subscribes to the submit event, prevents default browser behavior (page reload), suppresses native validation (`novalidate`), and triggers the submission action defined in the form config.
+There is no need for a separate method or manual `return false`.
+
+```typescript
+import { /* ... */, FormRoot } from '@angular/forms/signals';
+
+@Component({
+  // ...
+  imports: [/* ... */, FormRoot],
+  template: `
+    <form [formRoot]="registrationForm">
+      <!-- ... -->
+      <button type="submit">Register</button>
+    </form>`
+})
+export class RegistrationForm {
+  // ...
+  protected readonly registrationForm = form(this.registrationModel, schema(() => {}), {
+    submission: { action: async (form) => { /* ... */ } },
+  });
+}
+```
+
 
 ### Handling Submission State
 
@@ -411,19 +436,23 @@ export const registrationSchema = schema<RegisterFormData>((path) => {
 
 ### Applying the Schema to our Form
 
-To actually use the schema, we pass it as the second parameter to the `form()` function, replacing the empty dummy schema we used before:
+To actually use the schema, we pass it as the second argument to the `form()` function, replacing the empty dummy schema we used before:
 
 ```typescript
 // ...
 export class RegistrationForm {
   protected readonly registrationModel = signal<RegisterFormData>(initialState);
-  protected readonly registrationForm = form(this.registrationModel, registrationSchema, {
-    submission: {
-      action: async (form) => {
-        // ...
+  protected readonly registrationForm = form(
+    this.registrationModel,
+    registrationSchema, // NEW
+    {
+      submission: {
+        action: async (form) => {
+          // ...
+        },
       },
-    },
-  });
+    }
+  );
   // ...
 }
 ```
