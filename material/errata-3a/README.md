@@ -1,15 +1,8 @@
 ---
-title: "Errata zur 3. Auflage"
-author: Angular Buch Team
-mail: team@angular-buch.com
+title: "Errata zur 3. Auflage (2020)"
 published: 2021-01-25
 lastModified: 2022-06-30
-keywords:
-  - Angular
-  - Errata
-  - Fehlerverzeichnis
-  - 3. Auflage
-language: de
+hidden: true
 ---
 
 In der 3. Auflage unseres Angular-Buchs haben wir alle Kapitel überarbeitet und viele Fehler beseitigt.
@@ -18,7 +11,7 @@ Das war durch wertvolle Hinweise unserer Leserinnen und Leser möglich. Dennoch:
 **Haben Sie Fragen oder Hinweise, oder haben Sie einen Fehler im Buch gefunden?
 Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.com**
 
-> **Dies ist das Errata-Verzeichnis für die 3. Auflage (2020). Wenn Sie die 4. Auflage besitzen, lesen Sie bitte die [Errata zur 4. Auflage](/blog/errata-4a).**
+> **Dies ist das Errata-Verzeichnis für die 3. Auflage (2020). Wenn Sie die 4. Auflage besitzen, lesen Sie bitte die [Errata zur 4. Auflage](/material/errata-4a).**
 
 
 ------

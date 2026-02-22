@@ -1,15 +1,8 @@
 ---
-title: "Errata zur 4. Auflage"
-author: Angular Buch Team
-mail: team@angular-buch.com
+title: "Errata zur 4. Auflage (2023)"
 published: 2023-04-27
 lastModified: 2024-03-22
-keywords:
-  - Angular
-  - Errata
-  - Fehlerverzeichnis
-  - 4. Auflage
-language: de
+hidden: true
 ---
 
 Für die 4. Auflage haben wir das Buch vollständig überarbeitet und viele Fehler beseitigt.
@@ -18,7 +11,7 @@ Das war durch wertvolle Hinweise unserer Leserinnen und Leser möglich. Dennoch:
 **Haben Sie Fragen oder Hinweise, oder haben Sie einen Fehler im Buch gefunden?
 Bitte zögern Sie nicht, und schreiben Sie uns eine E-Mail: team@angular-buch.com**
 
-> **Dies ist das Errata-Verzeichnis für die 4. Auflage (2023). Wenn Sie die ältere 3. Auflage besitzen, lesen Sie bitte die [Errata zur 3. Auflage](/blog/errata-3a).**
+> **Dies ist das Errata-Verzeichnis für die 4. Auflage (2023). Wenn Sie die ältere 3. Auflage besitzen, lesen Sie bitte die [Errata zur 3. Auflage](/material/errata-3a).**
 
 ------
 
