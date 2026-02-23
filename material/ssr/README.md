@@ -236,8 +236,8 @@ const serverConfig: ApplicationConfig = {
 export const config = mergeApplicationConfig(appConfig, serverConfig);
 ```
 
-Die Serverkonfiguration wird mit `mergeApplicationConfig` mit der allgemeinen Konfiguration der Anwendung zusammengeführt.
-Auf diese Weise müssen wir die Provider nicht doppelt definieren.
+Die Serverkonfiguration wird mit `mergeApplicationConfig` mit der allgemeinen Konfiguration der Anwendung aus `app.config.ts` zusammengeführt.
+Auf diese Weise müssen wir die Providers nicht doppelt definieren.
 
 ## Server-Side Rendering (SSR)
 
