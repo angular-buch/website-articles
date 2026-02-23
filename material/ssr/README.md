@@ -1,10 +1,8 @@
 ---
-title: 'Server-Side Rendering mit Angular'
+title: 'Server-Side Rendering (SSR) mit Angular'
 published: 2026-02-23
 lastModified: 2026-02-23
 ---
-
-# Server-Side Rendering (SSR) mit Angular
 
 Single-Page-Anwendungen mit Angular bieten grundsätzlich eine gute Performance:
 Im Gegensatz zu einer herkömmlichen Webanwendung ist der Anwendungscode bereits nach dem Start im Browser verfügbar, und weitere Inhalte werden zur Laufzeit nachgeladen.
