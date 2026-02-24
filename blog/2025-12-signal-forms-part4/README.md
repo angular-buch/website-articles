@@ -319,8 +319,9 @@ We can leverage the `onInvalid` callback in the submission configuration for thi
 
 The `onInvalid` callback is triggered when the user attempts to submit the form while it still contains validation errors.
 We use the `errorSummary()` method to get a list of all current errors across the whole form.
-Each error entry provides access to the associated `fieldTree`, which in turn exposes the `focusBoundControl()` method.
-By calling `focusBoundControl()` on the first error's field, the browser focus is moved directly to the first invalid input element in DOM order.
+Each error entry provides access to the associated `fieldTree`.
+Invoking it as a signal with `fieldTree()` returns the corresponding `FieldState`, which exposes the `focusBoundControl()` method.
+By calling `focusBoundControl()` on the first error's `FieldState`, the browser focus is moved directly to the first invalid input element in DOM order.
 
 At the same time, all invalid fields are automatically marked as touched, so their error messages become visible immediately.
 
