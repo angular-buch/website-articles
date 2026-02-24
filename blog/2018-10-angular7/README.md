@@ -41,12 +41,12 @@ Die neue Angular-Version setzt jetzt auf das neue TypeScript 3.1 und RxJS 6.3.
 Die Version 7 ist geprägt von vielen kleineren Bugfixes und Features, die die Performance von Angular verbessern, allerdings für die meisten Nutzer keine direkt spürbaren Änderungen bringen.
 Beispielsweise fällt der Polyfill `reflect-metadata` weg, da er nur für die JIT-Compilation benötigt wurde.
 
-Überfliegen Sie doch bei Gelegenheit einmal den [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#700-2018-10-18) oder der [Angular CLI](https://github.com/angular/angular-cli/releases/tag/v7.0.1), um ein Gefühl für die aktuellen Änderungen zu bekommen.
+Überfliegen Sie doch bei Gelegenheit einmal den [Changelog von Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md#700-2018-10-18) oder der [Angular CLI](https://github.com/angular/angular-cli/releases/tag/v7.0.1), um ein Gefühl für die aktuellen Änderungen zu bekommen.
 
 ## Und was ist mit Ivy?
 
 Der neue View-Renderer *Ivy* lässt noch auf sich warten.
-Grundlegend ist Ivy bereits verfügbar, allerdings fehlen noch wesentliche Teile für das finale Release. Den aktuellen Fortschritt der Entwicklung können Sie auf der [Implementation Status Page](https://github.com/angular/angular/blob/master/packages/core/src/render3/STATUS.md) einsehen.
+Grundlegend ist Ivy bereits verfügbar, allerdings fehlen noch wesentliche Teile für das finale Release. Den aktuellen Fortschritt der Entwicklung können Sie auf der [Implementation Status Page](https://github.com/angular/angular/blob/main/packages/core/src/render3/STATUS.md) einsehen.
 Nach aktuellen Informationen bringt der neue Renderer *keine Breaking Changes* und kann daher auch in einer Minor-Version von Angular veröffentlicht werden.
 Derzeit rechnen wir mit einem Release bis April 2019.
 

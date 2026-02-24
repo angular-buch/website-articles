@@ -29,7 +29,7 @@ An der öffentlichen API von Angular hat sich so gut wie nichts geändert. Das U
 Die offizielle Ankündigung zum Angular-6-Release finden Sie im
 [Angular-Blog](https://blog.angular.io/version-6-of-angular-now-available-cc56b0efa7a4).
 Für Details zu einzelnen Änderungen lohnt sich außerdem ein Blick in den
-[Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
+[Changelog von Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md).
 
 Beim Update auf Angular 6 hilft der [Angular Update Guide](https://update.angular.io/#5.0:6.0).
 Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit.

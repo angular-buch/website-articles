@@ -20,7 +20,7 @@ Wir stellen in diesem Blogpost wie immer die wichtigsten Neuigkeiten vor.
 Den Code des Beispielprojekts *BookMonkey* aus dem Angular-Buch halten wir stets [auf GitHub](https://github.com/angular-buch/book-monkey4) aktuell.
 
 Die offizielle Mitteilung zum neuen Release finden Sie im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v13-is-now-available-cce66f7bc296).
-Im Changelog von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
+Im Changelog von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md) finden Sie außerdem alle Details zum neuen Release.
 
 
 ## Projekt updaten
@@ -181,7 +181,7 @@ Wir haben ein funktionierendes [Beispiel auf GitHub](https://github.com/angular-
 
 
 Auch die Typisierung bei den Formularen hat sich verbessert. Es wurde ein neuer Typ `FormControlStatus` eingeführt, welcher nun bei `form.status`und `form.statusChanges` zum Einsatz kommt, siehe [Commit](https://github.com/angular/angular/commit/e49fc96ed33c26434a14b80487dd912d8c76cace):
-   
+
 ```ts
 export type FormControlStatus = 'VALID'|'INVALID'|'PENDING'|'DISABLED';
 ```
@@ -193,13 +193,13 @@ export type FormControlStatus = 'VALID'|'INVALID'|'PENDING'|'DISABLED';
 * **deployUrl**: Die Option `deployUrl` für `ng build` ist nun deprecated. Falls Sie ein ähnliches Verhalten wiederherstellen möchten, eignet sich eine Kombination aus dem Parameter `baseHref` und dem InjectionToken `APP_BASE_HREF`.
 * **Event für routerLinkActive:** Die Direktive `routerLinkActive` emittiert das Event `isActiveChange`, wenn sich der Aktivitätsstatus dieses Links ändert. Das kann man nutzen, um weitere Aktionen anzustoßen, wenn ein RouterLink aktiviert oder deaktiviert wird, siehe [Commit](https://github.com/angular/angular/commit/faf9f5a3bc444bb6cbf75916c8022f60e0742bca).
 * **Adobe Fonts Inlining:** Fonts Inlining wurde bisher "out of the box" für Google Fonts unterstützt. Dabei werden beim Build die Font-Dateien heruntergeladen und zusammen mit der gebauten Anwendung abgelegt. Dieses Verfahren wird jetzt auch für Adobe Fonts unterstützt.
-* **loadChildren String Syntax:** Die veraltete String-Syntax für Lazy-Loading mit `loadChildren` wurde entfernt. Die alte Schreibweise ist seit Angular 9 deprecated und sollte ohnehin nicht mehr genutzt werden. 
+* **loadChildren String Syntax:** Die veraltete String-Syntax für Lazy-Loading mit `loadChildren` wurde entfernt. Die alte Schreibweise ist seit Angular 9 deprecated und sollte ohnehin nicht mehr genutzt werden.
 * **Zeitzone für DatePipe:** Die `DatePipe` nutzt ein neues InjectionToken `DATE_PIPE_DEFAULT_TIMEZONE`, mit dem die Zeitzone eingestellt werden kann, siehe [Commit](https://github.com/angular/angular/commit/adf4481211ac0a2eabf560f42ef5193ca550ec98).
 * **min/max-Validatoren mit `null`:** Bei Template-Driven Forms können die Validatoren für `min` und `max` nun auch den Eingabewert `null` verarbeiten. Der Validator wird dadurch deaktiviert. Ein ähnliches Verhalten wird bereits von `minLength` und `maxLength` unterstützt. Siehe [Commit](https://github.com/angular/angular/commit/d9d8f950e90567c79b43eb156b81810a9f3d5c93).
 * **renderModuleFactory entfernt:** Die Funktion `renderModuleFactory`, die im Zusammenhang mit Server-Side Rendering relevant ist, steht nicht mehr zur Verfügung. Stattdessen soll die Funktion `renderModule` genutzt werden.
 
 
-Es hat sich also einiges getan, und es wurden viele Punkte aus der Sektion "In progress" von der Roadmap (Stand: 19.05.2021) abgearbeitet. Als einer der wichtigsten offenen Punkte sind nun noch die optionalen NgModules zu sehen, für die es jüngst eine Befragung der Community gab (siehe [RFC](https://github.com/angular/angular/discussions/43784)). 
+Es hat sich also einiges getan, und es wurden viele Punkte aus der Sektion "In progress" von der Roadmap (Stand: 19.05.2021) abgearbeitet. Als einer der wichtigsten offenen Punkte sind nun noch die optionalen NgModules zu sehen, für die es jüngst eine Befragung der Community gab (siehe [RFC](https://github.com/angular/angular/discussions/43784)).
 Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in der Dokumentation veröffentlicht: [https://angular.io/guide/roadmap](https://angular.io/guide/roadmap).
 
 Wir wünschen Ihnen viel Spaß mit Angular 13!

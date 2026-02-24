@@ -292,7 +292,7 @@ Es ist also nicht länger notwendig, das `static`-Flag für `@ViewChild()` und `
 Wir haben in diesem Artikel nur die wichtigsten Änderungen und Neuigkeiten erwähnt.
 Das neue Major-Release bringt dazu eine Vielzahl von Bugfixes, Optimierungen unter der Haube und kleinere Features, die für die meisten Entwicklerinnen und Entwickler zunächst nicht relevant sind.
 
-Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.
+Eine detaillierte Liste aller Änderungen finden Sie im offiziellen [Changelog von Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md#900-2020-02-06) und [der Angular CLI](https://github.com/angular/angular-cli/releases/tag/v9.0.0) zum Release 9.0.
 
 ### Verbesserte Typprüfung in Templates <a name="template-checks"></a>
 
