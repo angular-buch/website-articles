@@ -82,7 +82,7 @@ Das Communityprojekt [angular-eslint](https://github.com/angular-eslint/angular-
 
 ## Weitere Neuigkeiten
 
-Wir haben bis hierhin nur die wichtigsten Neuerungen aufgeführt. Eine ausführliche Aufstellung aller Änderungen finden Sie im [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
+Wir haben bis hierhin nur die wichtigsten Neuerungen aufgeführt. Eine ausführliche Aufstellung aller Änderungen finden Sie im [Changelog von Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md).
 Folgende Punkte sind zusätzlich erwähnenswert:
 
 - **Font Inlining:** Ab Angular 11 werden eingebundene Google Fonts automatisch heruntergeladen und in die Anwendungsbundles übernommen. Das soll den "First Contentful Paint" verbessern.

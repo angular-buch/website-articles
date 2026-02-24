@@ -26,7 +26,7 @@ Im Fokus des neuen Releases standen vor allem diese drei Themen:
 
 In diesem Blogpost fassen wir wieder die wichtigsten Neuigkeiten zusammen.
 Im englischsprachigen [Angular-Blog](https://blog.angular.io/angular-v15-is-now-available-df7be7f2f4c8) finden Sie außerdem die offizielle Mitteilung des Angular-Teams.
-Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/master/CHANGELOG.md).
+Außerdem empfehlen wir Ihnen einen Blick in die Changelogs von [Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md) und der [Angular CLI](https://github.com/angular/angular-cli/blob/main/CHANGELOG.md).
 
 
 ## Projekt updaten
@@ -86,7 +86,7 @@ Funktionale Interceptors können derzeit nur mit der neuen Funktion `provideHttp
 Voraussichtlich mit Angular 15.1 werden klassenbasierte Guards und Resolver als *deprecated* markiert.
 Wir empfehlen also, den Code in Ihren Projekten auf die neuen Schnittstellen zu migrieren.
 
-In diesem [Twitter-Post von Enea Jahollari](https://twitter.com/Enea_Jahollari/status/1591433703678672896) finden Sie ein gelungenes Beispiel für 
+In diesem [Twitter-Post von Enea Jahollari](https://twitter.com/Enea_Jahollari/status/1591433703678672896) finden Sie ein gelungenes Beispiel für
 das Zusammenspiel von Functional Guard, `inject()`, `CanMatch` und `loadComponent`.
 
 
@@ -117,7 +117,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(
       withInterceptors([myInterceptor]),
-      withInterceptorsFromDi()       
+      withInterceptorsFromDi()
     )
   ]
 });
@@ -282,7 +282,7 @@ Für alle Möglichkeiten der neuen Schnittstelle möchten wir Sie auf die [offiz
 
 ## Image Directive: optimierte Verwendung von Bildern
 
-Die neue Direktive `NgOptimizedImage` ist nun offiziell stabil und kann uneingeschränkt verwendet werden. 
+Die neue Direktive `NgOptimizedImage` ist nun offiziell stabil und kann uneingeschränkt verwendet werden.
 Sie wurde in Angular 14.2 eingeführt und ermöglicht es, das Laden von Bildern zu verbessern, indem sie verschiedene Best Practices durchsetzt.
 Bitte beachten Sie, dass es mit Angular 15 eine Änderung in der finalen API gibt:
 Die Direktive besitzt jetzt Inputs mit den Namen `ngSrc` und `ngSrcset` (statt ursprünglich `rawSrc` und `rawSrcset`).
@@ -293,7 +293,7 @@ Wir können die Klasse entweder über ein NgModule oder in einer Standalone Comp
 
 ```ts
 import { NgOptimizedImage } from '@angular/common';
-    
+
 // einbinden in Standalone Component
 @Component({
   standalone: true
@@ -324,7 +324,7 @@ Vergisst man etwa, die Attribute `width` und `height` für das `img`-Element zu 
 
 > Error: NG02954: The NgOptimizedImage directive (activated on an `<img>` element with the `ngSrc="angular-buch.jpg"`) has detected that these required attributes are missing: "width", "height". Including "width" and "height" attributes will prevent image-related layout shifts. To fix this, include "width" and "height" attributes on the image tag or turn on "fill" mode with the `fill` attribute.
 
-Wir bekommen ebenso eine Warnung, wenn wir versehentlich eine falsche `width` und `height` eintragen. Natürlich gibt die Direktive nicht nur Fehlermeldungen aus. 
+Wir bekommen ebenso eine Warnung, wenn wir versehentlich eine falsche `width` und `height` eintragen. Natürlich gibt die Direktive nicht nur Fehlermeldungen aus.
 Eines der wichtigsten Features ist das "faule" (lazy) Laden von Bildern, sodass die Ladezeiten der einzelnen Routen deutlich verbessert werden können.
 In diesem Beispiel wird keine Priorität angegeben:
 
@@ -374,7 +374,7 @@ In der offiziellen [Dokumentation zur Direktive](https://angular.io/guide/image-
 Ebenso werden dort noch weitere Details zu dem großen Funktionsumfang der Direktive beschrieben.
 
 Probieren Sie die neue Direktive doch gleich einmal aus.
-Wir haben hierfür eine Stackblitz-Demo vorbereitet:  
+Wir haben hierfür eine Stackblitz-Demo vorbereitet:
 **[👉 Demo auf Stackblitz: NgOptimizedImage](https://stackblitz.com/edit/angular-ivy-98yfkn?file=src%2Fapp%2Fapp.component.html)**
 
 

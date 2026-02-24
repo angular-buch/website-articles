@@ -283,7 +283,7 @@ Ich habe den gesamten Quellcode gelesen (ein kompaktes Rust-Projekt mit 12 Quell
 Ergebnis: Der Code ist sauber (geprüft in Version 0.1.4, Commit [`2595cf7`](https://github.com/davidbeesley/claude-chill/tree/2595cf7f89e33381453cb4fba2b8bf8eb26921df)).
 Kein Netzwerkzugriff, keine Dateisystem-Schreibzugriffe (außer optionalem Debug-Logging), kein Zugriff auf sensible Umgebungsvariablen.
 Die Dependencies sind etablierte Rust-Crates: `nix` für POSIX-APIs, `vt100` als Terminal-Emulator, `termwiz` (vom WezTerm-Entwickler) als Escape-Sequence-Parser.
-Der Code ist gut strukturiert, ausführlich getestet und hat eine explizite Whitelist/Blacklist für jede Terminal-Escape-Sequenz.
+Der Code ist gut strukturiert, ausführlich getestet und hat eine explizite Allowlist/Blocklist für jede Terminal-Escape-Sequenz.
 
 **Ein großes Dankeschön an [David Beesley](https://github.com/davidbeesley) für dieses Projekt!**
 
