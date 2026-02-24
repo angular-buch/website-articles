@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-12-08
-lastModified: 2026-02-21
+lastModified: 2026-02-23
 keywords:
   - Angular
   - Signals
@@ -16,6 +16,7 @@ keywords:
   - ARIA
   - a11y
   - accessibility
+  - Focus Handling
 language: en
 header: header-signalforms-part4.jpg
 sticky: false
@@ -203,9 +204,10 @@ To solve this, we want to create a directive that automatically adds appropriate
 
 This directive automatically manages ARIA attributes based on the field's current state.
 With this approach, it replaces also our current solution where we called `[aria-invalid]="ariaInvalidState(...)"`.
-To apply the directive to form field automatically, we set the selector to `[formField]`, so it works together with the existing `FormField` directive.
+We use a dedicated selector `[formFieldAria]` for the directive.
+This way, the directive has its own input binding and can be applied independently alongside the `FormField` directive.
 
-The directive receives the field as an input.
+The directive receives the field via the `formFieldAria` input.
 It also accepts another input with the ID of the HTML element that contains the related messages (info, errors, loading).
 We will need this ID for the attributes `aria-describedby` or `aria-errormessage`, to connect the field with the related messages.
 We link the id with `aria-errormessage` when the field is currently invalid and touched.
@@ -219,7 +221,7 @@ import { computed, Directive, input } from '@angular/core';
 import { FieldTree } from '@angular/forms/signals';
 
 @Directive({
-  selector: '[formField]',
+  selector: '[formFieldAria]',
   host: {
     '[aria-invalid]': 'ariaInvalid()',
     '[aria-busy]': 'ariaBusy()',
@@ -228,16 +230,16 @@ import { FieldTree } from '@angular/forms/signals';
   },
 })
 export class FieldAriaAttributes<T> {
-  readonly formField = input.required<FieldTree<T>>();
+  readonly formFieldAria = input.required<FieldTree<T>>();
   readonly fieldDescriptionId = input<string>();
 
   readonly ariaInvalid = computed(() => {
-    const state = this.formField()();
+    const state = this.formFieldAria()();
     return state.touched() && !state.pending() ? state.errors().length > 0 : undefined;
   });
 
   readonly ariaBusy = computed(() => {
-    const state = this.formField()();
+    const state = this.formFieldAria()();
     return state.pending();
   });
 
@@ -254,6 +256,7 @@ export class FieldAriaAttributes<T> {
 ```
 
 We can now remove our method `ariaInvalidState()` from the `RegistrationForm` component.
+We can now remove our method `ariaInvalidState()` from the `RegistrationForm` component.
 Also we remove the manual bindings for `aria-invalid` from the template of the `RegistrationForm` since this and other attributes will now be applied by our directive which manages four key ARIA attributes:
 
 - **`aria-invalid`**: set to `true` when the field has been touched and contains validation errors.
@@ -263,13 +266,13 @@ Also we remove the manual bindings for `aria-invalid` from the template of the `
 
 ### Using the Directive
 
-The directive works seamlessly with the existing `FormField` directive since we defined the selector to be `[formField]`.
+Since the directive uses its own selector `[formFieldAria]`, we apply it explicitly alongside `[formField]` in the template.
 To use it, we need to import it in our component holding the form in the component's decorator.
 
 ```typescript
 @Component({
   selector: 'app-registration-form',
-  imports: [Field, FormFieldInfo, FieldAriaAttributes, /* other imports */],
+  imports: [FormField, FormFieldInfo, FieldAriaAttributes, /* other imports */],
   // ...
 })
 export class RegistrationForm {
@@ -277,8 +280,8 @@ export class RegistrationForm {
 }
 ```
 
-Basically that's it: The attributes `aria-invalid` and `aria-busy` are automatically set since our directive binds to the existing `[formField]` directive.
-To make it really accessible we need to pass the ID of the targeting message element as the `fieldDescriptionId` input to connect the field with its description element:
+In the template, we add the `[formFieldAria]` binding to each form field alongside the existing `[formField]` directive.
+We also pass the ID of the targeting message element as the `fieldDescriptionId` input to connect the field with its description element:
 
 ```html
 <label>
@@ -286,6 +289,7 @@ To make it really accessible we need to pass the ID of the targeting message ele
   <input
     type="text"
     [formField]="registrationForm.username"
+    [formFieldAria]="registrationForm.username"
     fieldDescriptionId="username-info"
   />
   <app-form-field-info
@@ -299,6 +303,49 @@ The directive ensures that your Signal Forms automatically provide excellent acc
 
 You may have noticed, we now used our new Directive and Component only in the main `RegistrationForm`.
 Of course we should also update our child component `IdentityForm`.
+
+> **Outlook:** Instead of using a separate `[formFieldAria]` selector, we could also combine both directives using Angular's [Directive Composition API](https://angular.dev/guide/directives/directive-composition-api).
+> With `hostDirectives` in the decorator, the `FieldAriaAttributes` directive could automatically include the `FormField` directive, so only a single binding would be needed in the template.
+> We chose the explicit approach here for clarity, but the Directive Composition API is a great alternative for reducing template verbosity.
+
+> 💡 **Tip:** Besides Signal-Forms-specific accessibility features, don't forget about native HTML attributes like `autocomplete`. Setting appropriate `autocomplete` values (e.g. `autocomplete="username"`, `autocomplete="new-password"`) helps browsers and password managers fill in fields automatically. This improves usability for all users and is especially helpful for people with motor impairments or cognitive disabilities.
+
+## Handling Invalid Form Submission
+
+When a user tries to submit an invalid form, we want to provide a good user experience by guiding them to the first field that needs attention.
+We can leverage the `onInvalid` callback in the submission configuration for this purpose.
+
+### Focusing the First Invalid Field
+
+The `onInvalid` callback is triggered when the user attempts to submit the form while it still contains validation errors.
+We use the `errorSummary()` method to get a list of all current errors across the whole form.
+Each error entry provides access to the associated `fieldTree`.
+Invoking it as a function returns the corresponding `FieldState`, which exposes the `focusBoundControl()` method.
+By calling `focusBoundControl()` on the first error's `FieldState`, the browser focus is moved directly to the first invalid input element in DOM order.
+
+At the same time, all invalid fields are automatically marked as touched, so their error messages become visible immediately.
+
+```typescript
+protected readonly registrationForm = form(
+  this.registrationModel,
+  formSchema,
+  {
+    submission: {
+      action: async (form) => {
+        // ... submission logic
+      },
+      onInvalid: (form) => {
+        const errors = form().errorSummary();
+        errors.at(0)?.fieldTree().focusBoundControl();
+      }
+    },
+  }
+);
+```
+
+With this addition, the form becomes much more user-friendly:
+When the user clicks "Register" with invalid data, the focus jumps to the first problematic field and all validation errors are displayed at once.
+Since our `FieldAriaAttributes` directive links each field to its description element via `aria-errormessage`, a screen reader will also read out the associated error message as soon as the field receives focus.
 
 ## Demo
 
@@ -339,6 +386,7 @@ In this four-part series, we've explored the full spectrum of Angular Signal For
 - Assigning and accessing field metadata for enhanced user guidance
 - Creating a unified component for displaying field information, errors, and loading states
 - Building a directive that automatically adds ARIA attributes for better accessibility
+- Handling invalid form submissions by focusing the first invalid field
 
 Signal Forms are the third major approach of form handling in Angular.
 After Template-Driven Forms and Reactive Forms, Signal Forms aim to make form handling more type-safe, reactive, and declarative.
