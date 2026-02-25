@@ -24,6 +24,8 @@ In diesem Artikel betrachten wir verschiedene Varianten, wie wir bei der Nutzung
 
 > ⚠️ **Experimentelles Feature:** Signal Forms sind aktuell ein experimentelles Feature in Angular. Die API kann sich in zukünftigen Releases noch ändern.
 
+<!-- Playground: https://stackblitz.com/edit/angular-signal-forms-submit-a11y -->
+
 ## Inhalt
 
 [[toc]]
@@ -216,7 +218,7 @@ Die Fehlerzusammenfassung wird direkt im Template der Formular-Komponente umgese
     <ul>
       @for (error of registrationForm().errorSummary(); track $index) {
         <li>
-          <a href="#{{ error.fieldTree().boundControl()?.id }}">
+          <a href="#{{ error.fieldTree().formFieldBindings()[0].element.id }}">
             {{ error.message }}
           </a>
         </li>
