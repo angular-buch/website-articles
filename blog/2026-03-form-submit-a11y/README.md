@@ -145,6 +145,8 @@ So kann das Formular gar nicht erst abgesendet werden, wenn Fehler vorliegen.
 </button>
 ```
 
+> 💡 Die Zustände `valid` und `invalid` sind keine exakten Gegenteile. Während einer laufenden asynchronen Validierung befindet sich ein Feld im Zustand `pending` – es gilt dann weder als `valid` noch als `invalid`. In unserem Beispiel verwenden wir keine asynchrone Validierung, sodass wir diesen Sonderfall hier vernachlässigen können.
+
 Die Implementierung ist zwar denkbar einfach und verhindert ungültige Absendungen zuverlässig, bringt aber erhebliche Nachteile mit sich.
 Nutzende erhalten keinerlei Feedback darüber, *warum* der Button deaktiviert ist – besonders für Screenreader-Nutzende ist das frustrierend.
 Bei komplexen Formularen mit vielen Feldern ist nicht ersichtlich, welches Feld den Fehler verursacht, und Nutzende müssen selbst suchen.
