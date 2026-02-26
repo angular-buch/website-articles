@@ -272,7 +272,7 @@ protected readonly registrationForm = form(
 );
 ```
 
-Wenn Nutzende auf "Register" klicken und das Formular ungültig ist, erkennt Signal Forms dies und ruft den `onInvalid`-Callback auf.
+Wenn Nutzende auf "Register" klicken und das Formular ungültig ist, wird das `onInvalid`-Callback aufgerufen.
 Dabei werden alle Felder automatisch als `touched` markiert, sodass `displayError()` für fehlerhafte Felder `true` liefert und die Fehlermeldungen im Template erscheinen.
 Über `errorSummary()` erhalten wir die Liste aller aktuellen Fehler über das gesamte Formular.
 Die Methode `focusBoundControl()` setzt den Browserfokus auf das erste gebundene DOM-Element in DOM-Reihenfolge.
