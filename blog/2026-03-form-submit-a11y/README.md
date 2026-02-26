@@ -159,14 +159,15 @@ Falls man sich dennoch für einen deaktivierten Button entscheidet, sollte man z
 Das geht mit `aria-describedby`:
 
 ```html
+@let isFormInvalid = !registrationForm().valid;
 <button type="submit"
-  [disabled]="!registrationForm().valid()"
-  [aria-describedby]="!registrationForm().valid() ? 'submit-hint' : null"
+  [disabled]="isFormInvalid"
+  [aria-describedby]="isFormInvalid ? 'submit-hint' : null"
 >
   Register
 </button>
 
-@if (!registrationForm().valid()) {
+@if (isFormInvalid) {
   <p id="submit-hint" class="hint">
     Please fill in all required fields correctly to submit the form.
   </p>
