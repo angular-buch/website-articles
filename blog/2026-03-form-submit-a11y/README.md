@@ -159,7 +159,7 @@ Wenn das Formular initial leer ist, ist der Button sofort deaktiviert, ohne dass
 ## Variante 2: deaktivierter Button mit `aria-describedby`
 
 Falls man sich dennoch für einen deaktivierten Button entscheidet, sollte man zumindest einen Hinweis geben, warum der Button nicht klickbar ist.
-Das geht mit `aria-describedby`:
+Das kann mit dem Attribut `aria-describedby` umgesetzt werden: Es gibt an, durch welche anderen HTML-Elemente das Element genauer beschrieben wird.
 
 ```html
 @let isFormInvalid = registrationForm().invalid();
