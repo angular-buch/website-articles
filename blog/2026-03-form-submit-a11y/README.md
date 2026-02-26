@@ -125,8 +125,7 @@ export class RegistrationForm {
 
 Die Hilfsmethode `ariaInvalidState()` liefert `true`, wenn das Feld berührt wurde und Fehler enthält, `false` wenn es berührt und gültig ist, und `undefined` wenn es noch nicht berührt wurde.
 Durch den Wert `undefined` wird das Attribut `aria-invalid` gar nicht erst gesetzt – Screenreader melden also kein Feld als ungültig, bevor es berührt wurde.
-Die zweite Methode `displayError()` ermittelt, ob die Fehlermeldung im Template angezeigt wird.
-Sie liefert `true`, sobald das Feld berührt wurde und Fehler vorliegen.
+Die zweite Methode `displayError()` liefert die erste Fehlermeldung als String, sobald das Feld berührt wurde und Fehler vorliegen – andernfalls einen leeren String.
 Dadurch sehen Nutzende die Fehlermeldungen erst, nachdem sie ein Feld betreten und wieder verlassen haben – oder nachdem ein Submit-Versuch alle Felder als `touched` markiert hat.
 Auch das Attribut `aria-describedby` wird erst dann gesetzt, damit der Screenreader die Fehlermeldung nur vorliest, wenn sie tatsächlich sichtbar ist.
 
@@ -273,7 +272,7 @@ protected readonly registrationForm = form(
 ```
 
 Wenn Nutzende auf "Register" klicken und das Formular ungültig ist, wird das `onInvalid`-Callback aufgerufen.
-Dabei werden alle Felder automatisch als `touched` markiert, sodass `displayError()` für fehlerhafte Felder `true` liefert und die Fehlermeldungen im Template erscheinen.
+Dabei werden alle Felder automatisch als `touched` markiert, sodass `displayError()` für fehlerhafte Felder die Fehlermeldung liefert und die Fehlermeldungen im Template erscheinen.
 Über `errorSummary()` erhalten wir die Liste aller aktuellen Fehler über das gesamte Formular.
 Die Methode `focusBoundControl()` setzt den Browserfokus auf das erste gebundene DOM-Element in DOM-Reihenfolge.
 Wird sie auf einem übergeordneten `FieldState` aufgerufen, etwa auf dem gesamten Formular statt auf einem einzelnen Feld, fokussiert sie das erste Kindelement in DOM-Reihenfolge – das ist besonders bei verschachtelten Formularstrukturen nützlich.
