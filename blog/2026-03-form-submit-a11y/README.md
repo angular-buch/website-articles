@@ -71,7 +71,7 @@ const formSchema = schema<RegisterFormData>((path) => {
         id="field-username"
         [formField]="registrationForm.username"
         [aria-invalid]="ariaInvalidState(registrationForm.username)"
-        [attr.aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
+        [aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
       />
       @if (displayError(registrationForm.username)) {
         <small id="username-hint">
@@ -85,7 +85,7 @@ const formSchema = schema<RegisterFormData>((path) => {
         id="field-email"
         [formField]="registrationForm.email"
         [aria-invalid]="ariaInvalidState(registrationForm.email)"
-        [attr.aria-describedby]="displayError(registrationForm.email) ? 'email-hint' : null"
+        [aria-describedby]="displayError(registrationForm.email) ? 'email-hint' : null"
       />
       @if (displayError(registrationForm.email)) {
         <small id="email-hint">
@@ -158,7 +158,7 @@ Das geht mit `aria-describedby`:
 ```html
 <button type="submit"
   [disabled]="!registrationForm().valid()"
-  [attr.aria-describedby]="!registrationForm().valid() ? 'submit-hint' : null"
+  [aria-describedby]="!registrationForm().valid() ? 'submit-hint' : null"
 >
   Register
 </button>
@@ -199,7 +199,7 @@ Die Fehlerzusammenfassung wird direkt im Template der Formular-Komponente umgese
   <input
     type="text"
     id="field-username"
-    [attr.aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
+    [aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
     [formField]="registrationForm.username"
     [aria-invalid]="ariaInvalidState(registrationForm.username)"
   />
