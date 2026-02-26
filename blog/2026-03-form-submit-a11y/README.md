@@ -194,7 +194,7 @@ Bei dieser Variante bleibt der Submit-Button immer aktiv.
 Nutzende können jederzeit versuchen, das Formular abzusenden.
 Erst beim Klick auf "Register" wird geprüft, ob das Formular gültig ist.
 Nach einem fehlgeschlagenen Submit wird eine Zusammenfassung aller Fehler angezeigt.
-Jeder Eintrag ist ein einfacher `<a href="#field-id">`-Link, der auf die `id` des zugehörigen Eingabefelds verweist.
+Jeder Eintrag ist ein einfacher Link `<a href="#field-id">`, der auf die `id` des zugehörigen Eingabefelds verweist.
 Da `<input>`-Elemente von Natur aus fokussierbar sind, scrollt der Browser beim Klick auf den Link automatisch zum Feld und setzt den Fokus – ganz ohne zusätzliches JavaScript.
 
 Die Fehlerzusammenfassung wird direkt im Template der Formular-Komponente umgesetzt.
