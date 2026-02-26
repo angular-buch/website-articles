@@ -63,32 +63,30 @@ Ist die Anwendung nur für einen Sprachraum bestimmt, z. B. nur innerhalb eines 
 Wollen wir die deutsche Lokalisierung verwenden, können wir das Locale auf den Wert `de` stellen.
 
 Die Einstellung hierfür verbirgt sich in dem InjectionToken `LOCALE_ID`.
-Um das Token mit dem gewünschten Wert zu überschreiben, müssen wir einen Provider registrieren, in der Regel im `AppModule` unter `providers`.
+Um das Token mit dem gewünschten Wert zu überschreiben, müssen wir einen Provider registrieren.
 Zusätzlich muss eine konkrete Sprachdefinition geladen werden.
 Nur so kann Angular wissen, welche spezifischen Regeln für das eingestellte Locale gelten.
-Wir verwenden dafür die Funktion `registerLocaleData()` und führen sie direkt im Konstruktor des `AppModule` aus:
+In einer Standalone-Anwendung registrieren wir den Provider direkt in der `main.ts` bei `bootstrapApplication()`.
+Die Sprachdefinition laden wir über einen globalen Import:
 
 ```typescript
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeDe from '@angular/common/locales/de';
+import '@angular/common/locales/global/de';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { LOCALE_ID } from '@angular/core';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 
-@NgModule({
-  // ...
+bootstrapApplication(AppComponent, {
+  ...appConfig,
   providers: [
+    ...(appConfig.providers || []),
     { provide: LOCALE_ID, useValue: 'de' }
   ]
-})
-export class AppModule {
-  constructor() {
-    registerLocaleData(localeDe);
-  }
-}
+});
 ```
 
-Beachte bitte die "fehlenden" Klammern beim Import der Sprachdefinition `localeDe`.
-Es handelt sich um einen sogenannten *Default Export* ohne Namen.
-Beim Import müssen wir deshalb den Namen selbst vergeben.
+Durch den Import von `@angular/common/locales/global/de` wird die deutsche Sprachdefinition global registriert.
+Angular kennt damit automatisch die spezifischen Regeln für das Locale `de`.
 
 Starten wir nun die Anwendung mit den Änderungen neu, können wir die Auswirkungen direkt erkennen:
 Das Datum wird im deutschsprachigen Format ausgegeben, z. B. `15. Juli 2022`.
@@ -103,31 +101,27 @@ So finden wir unter anderem in der deutschen Sprachdefinition die Namen für die
 Das Token `LOCALE_ID` legt das aktive Locale fest und bestimmt damit die gerade anzuwendende Sprachdefinition.
 Da die Dependency Injection von Angular hierarchisch organisiert ist, kann man bei Bedarf die `LOCALE_ID` auch mit unterschiedlichen Werten bereitstellen und so in definierten Teilen der Applikation unterschiedliche Lokalisierungen einsetzen.
 
-Um die aktuell eingestellte Sprache zu prüfen, können wir das Token `LOCALE_ID` über den Konstruktor injizieren und den Wert ausgeben:
+Um die aktuell eingestellte Sprache zu prüfen, können wir das Token `LOCALE_ID` mit `inject()` injizieren und den Wert ausgeben:
 
 ```typescript
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeDe from '@angular/common/locales/de';
-import localeFr from '@angular/common/locales/fr';
+import { Component, inject, LOCALE_ID } from '@angular/core';
 
-@NgModule({
-  // ...
-  providers: [
-    { provide: LOCALE_ID, useValue: 'de' }
-  ]
-})
-export class AppModule {
-  constructor(@Inject(LOCALE_ID) locale: string) {
+@Component({ /* ... */ })
+export class MyComponent {
+  locale = inject(LOCALE_ID);
 
-    // mehrere Sprachdefinitionen laden
-    registerLocaleData(localeDe);
-    registerLocaleData(localeFr);
-
+  constructor() {
     // Ausgabe: "Current Locale: de"
-    console.log('Current Locale:', locale);
+    console.log('Current Locale:', this.locale);
   }
 }
+```
+
+Sollen mehrere Sprachdefinitionen parallel verfügbar sein, können wir weitere globale Importe hinzufügen:
+
+```typescript
+import '@angular/common/locales/global/de';
+import '@angular/common/locales/global/fr';
 ```
 
 Außerdem können wir das Locale setzen, indem wir die Einstellungen der Angular CLI verwenden.
@@ -159,19 +153,20 @@ Wenn wir die Hilfsfunktionen zur Formatierung im TypeScript-Code nutzen, müssen
 Hier ist es empfehlenswert, direkt das global eingestellte Locale aus dem Token `LOCALE_ID` zu verwenden:
 
 ```typescript
-import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, inject, LOCALE_ID } from '@angular/core';
 import { formatDate, formatCurrency,
   formatPercent, formatNumber } from '@angular/common';
 
 @Component({ /* ... */ })
-export class MyComponent  {
+export class MyComponent {
+  #locale = inject(LOCALE_ID);
   myDate = new Date();
 
-  constructor(@Inject(LOCALE_ID) private locale: string) {
-    formatDate(this.myDate, 'longDate', this.locale);
-    formatNumber(13.674566, this.locale, '1.2-3');
-    formatCurrency(2.456, this.locale, 'EUR', 'EUR');
-    formatPercent(0.77, this.locale);
+  constructor() {
+    formatDate(this.myDate, 'longDate', this.#locale);
+    formatNumber(13.674566, this.#locale, '1.2-3');
+    formatCurrency(2.456, this.#locale, 'EUR', 'EUR');
+    formatPercent(0.77, this.#locale);
   }
 }
 ```
@@ -263,14 +258,16 @@ In der `AppComponent` setzen wir das Attribut `i18n` für alle Links und Buttons
   <a ... i18n="nav books">Books</a>
   <a ... i18n="nav admin">Administration</a>
   <div class="actions">
-    <button class="green"
-      (click)="auth.login()"
-      *ngIf="!auth.isAuthenticated"
-      i18n="login">Login</button>
-    <button class="red"
-      (click)="auth.logout()"
-      *ngIf="auth.isAuthenticated"
-      i18n="logout">Logout</button>
+    @if (!auth.isAuthenticated) {
+      <button class="green"
+        (click)="auth.login()"
+        i18n="login">Login</button>
+    }
+    @if (auth.isAuthenticated) {
+      <button class="red"
+        (click)="auth.logout()"
+        i18n="logout">Logout</button>
+    }
   </div>
 </nav>
 <!-- ... -->
@@ -349,14 +346,16 @@ Im BookMonkey sieht eine Vergabe von festen IDs in der `AppComponent` wie folgt 
   <a ... i18n="nav books@@AppComponentBooks">Books</a>
   <a ... i18n="nav admin@@AppComponentAdmin">Administration</a>
   <div class="actions">
-    <button class="green"
-      (click)="auth.login()"
-      *ngIf="!auth.isAuthenticated"
-      i18n="login@@AppComponentLogin">Login</button>
-    <button class="red"
-      (click)="auth.logout()"
-      *ngIf="auth.isAuthenticated"
-      i18n="logout@@AppComponentLogout">Logout</button>
+    @if (!auth.isAuthenticated) {
+      <button class="green"
+        (click)="auth.login()"
+        i18n="login@@AppComponentLogin">Login</button>
+    }
+    @if (auth.isAuthenticated) {
+      <button class="red"
+        (click)="auth.logout()"
+        i18n="logout@@AppComponentLogout">Logout</button>
+    }
   </div>
 </nav>
 <!-- ... -->
@@ -510,19 +509,20 @@ Wir finden die gebauten Apps im Ordner `dist`:
 ```
 dist/
   book-monkey/
-    de/
-    en-US/
+    browser/
+      de/
+      en-US/
 ```
 
 Das momentane Ergebnis können wir überprüfen, indem wir mit einem einfachen Webserver die verschiedenen Varianten ausprobieren.
 In diesem Beispiel verwenden wir das Paket `http-server`, mit dem wir einen lokalen Webserver starten können:
 
 ```bash
-cd dist/book-monkey
+cd dist/book-monkey/browser
 npx http-server
 ```
 
-Mit diesem Aufruf starten wir den Webserver direkt im Ordner `dist/book-monkey`, sodass alle erstellten Unterordner aufgerufen werden können.
+Mit diesem Aufruf starten wir den Webserver direkt im Ordner `dist/book-monkey/browser`, sodass alle erstellten Unterordner aufgerufen werden können.
 Öffnen wir danach die URL `http://localhost:8080/de/` im Browser, sehen wir die deutschsprachige Variante der Anwendung.
 Beim Build wurden bereits passend dazu die Basisadresse und die Sprache der Webseite angepasst:
 
@@ -633,7 +633,7 @@ Zu diesem Zweck legen wir eine neue Konfiguration im Abschnitt `build` mit dem N
 Hier setzen wir lediglich `localize` auf den Wert `de`.
 Anschließend müssen wir festlegen, dass für den Entwicklungsserver diese neue Build-Konfiguration verwendet werden soll.
 Dafür fügen wir im Abschnitt `serve` unter `configurations` einen neuen Block `development-de` ein.
-Dort verweisen wir im `browserTarget` auf die Build-Konfigurationen für `development` und die zuvor hinzugefügte Konfiguration `locale-de`.
+Dort verweisen wir im `buildTarget` auf die Build-Konfigurationen für `development` und die zuvor hinzugefügte Konfiguration `locale-de`.
 Die Reihenfolge ist hierbei entscheidend, da weiter rechts angegebene Optionen die vorherigen überschreiben.
 
 ```json
@@ -656,7 +656,7 @@ Die Reihenfolge ist hierbei entscheidend, da weiter rechts angegebene Optionen d
           "configurations": {
             // ...
             "development-de": {
-              "browserTarget": "book-monkey:build:development,locale-de"
+              "buildTarget": "book-monkey:build:development,locale-de"
             }
           }
         },
@@ -699,11 +699,11 @@ Deshalb ist es naheliegend, die Übersetzungen als JSON bereitzustellen.
 Wir können die geladenen Texte dann sofort weiterverarbeiten, ohne das Format konvertieren zu müssen.
 
 Beim Extrahieren wählen wir dazu das Format `json` aus.
-Außerdem legen wir die erzeugte Datei im Verzeichnis `src/assets` mit dem Namen `messages.de.json` ab.
+Außerdem legen wir die erzeugte Datei im Verzeichnis `public` mit dem Namen `messages.de.json` ab.
 Nur so ist es möglich, dass die Datei später zur Laufzeit mittels HTTP heruntergeladen werden kann.
 
 ```bash
-ng extract-i18n --format=json --output-path=src/assets --out-file=messages.de.json
+ng extract-i18n --format=json --output-path=public --out-file=messages.de.json
 ```
 
 Im Anschluss übersetzen wir die einzelnen Texte: Die Datei `messages.de.json` enthält danach alle deutschsprachigen Übersetzungen für die Anwendung.
@@ -717,7 +717,7 @@ Das betrifft insbesondere die verschiedenen Abschnitte mit `localize` und die Ko
 ### Übersetzungen zur Laufzeit laden
 
 Das Laden der Übersetzungen muss noch vor dem Bootstrapping-Prozess passieren, also bevor die Anwendung überhaupt gestartet wird.
-Deshalb müssen wir den Code in der Datei `main.ts` unterbringen, bevor wir die Methode `bootstrapModule()` aufrufen.
+Deshalb müssen wir den Code in der Datei `main.ts` unterbringen, bevor wir `bootstrapApplication()` aufrufen.
 Hier legen wir uns eine neue Funktion `setupLocale()` an.
 Sie soll alle Schritte erledigen, die vor dem Start der Anwendung notwendig sind:
 
@@ -734,7 +734,7 @@ Die Anwendung ist allerdings noch nicht gestartet, und die Dependency Injection 
 Wir greifen daher auf die native Funktion `fetch()` zurück, mit der wir ebenso HTTP-Requests verarbeiten können.
 
 An `fetch()` übergeben wir als URL den Pfad zur Datei `messages.de.json`.
-Sie wird als statisches Asset mit ausgeliefert, da sie sich im Verzeichnis `assets` befindet.
+Sie wird als statisches Asset mit ausgeliefert, da sie sich im Verzeichnis `public` befindet.
 Der Aufruf liefert eine Promise zurück, die wir nun sehr elegant mit `await` auflösen können.
 Es handelt sich um eine asynchrone Operation, sie sieht aber im Code synchron aus.
 
@@ -748,7 +748,9 @@ Wir rufen `loadTranslations()` auf, nachdem wir die Daten aus der JSON-Datei gel
 
 ```typescript
 import { loadTranslations } from '@angular/localize';
-// ...
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 
 async function setupLocale() {
   const response = await fetch('messages.de.json');
@@ -757,20 +759,18 @@ async function setupLocale() {
 }
 
 setupLocale().then(() => {
-  platformBrowserDynamic()
-    .bootstrapModule(AppModule)
-    .catch(err => console.error(err));
+  bootstrapApplication(AppComponent, appConfig);
 });
 ```
 
 Bisher hatten wir das Paket `@angular/localize` stets nur zur Build-Zeit genutzt.
 Wenn wir nun allerdings die Funktion `loadTranslations()` verwenden, wird das Paket ein Teil des produktiven Quellcodes.
 Wir sollten deshalb in der Datei `package.json` den Eintrag für `@angular/localize` aus dem Abschnitt `devDependencies` nach `dependencies` verschieben.
-Wissen wir schon vorher, dass wir das Paket zur Laufzeit verwenden wollen, können wir bei der Installation die Option `useAtRuntime` angeben.
+Wissen wir schon vorher, dass wir das Paket zur Laufzeit verwenden wollen, können wir bei der Installation die Option `--use-at-runtime` angeben.
 Das Paket wird dann automatisch im Abschnitt `dependencies` eingetragen.
 
 ```bash
-ng add @angular/localize --useAtRuntime
+ng add @angular/localize --use-at-runtime
 ```
 
 ### Locale beim Bootstrapping setzen
@@ -784,28 +784,31 @@ Die Grundlagen hierfür haben wir bereits im Abschnitt zur Lokalisierung kenneng
 Nachdem die Übersetzungen geladen wurden, wollen wir die Funktion `registerLocaleData()` verwenden, um das Locale in der Anwendung bekannt zu machen.
 
 Außerdem müssen wir das InjectionToken `LOCALE_ID` setzen.
-An die Funktion `platformBrowserDynamic()` können wir dazu als Parameter ein Array mit Providers übergeben.
+Die Providers können wir direkt beim Aufruf von `bootstrapApplication()` übergeben.
 Hier notieren wir einen Provider, der das Token mit dem Wert `de` beschreibt.
 
 ```typescript
-import localeDe from '@angular/common/locales/de';
-import { registerLocaleData } from '@angular/common';
-import { enableProdMode, LOCALE_ID } from '@angular/core';
-// ...
+import '@angular/common/locales/global/de';
+import { loadTranslations } from '@angular/localize';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { LOCALE_ID } from '@angular/core';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 
 async function setupLocale() {
   const response = await fetch('messages.de.json');
   const result = await response.json();
   loadTranslations(result.translations);
-  registerLocaleData(localeDe);
 }
 
 setupLocale().then(() => {
-  platformBrowserDynamic([
-    { provide: LOCALE_ID, useValue: 'de' }
-  ])
-    .bootstrapModule(AppModule)
-    .catch(err => console.error(err));
+  bootstrapApplication(AppComponent, {
+    ...appConfig,
+    providers: [
+      ...(appConfig.providers || []),
+      { provide: LOCALE_ID, useValue: 'de' }
+    ]
+  });
 });
 ```
 
@@ -867,16 +870,17 @@ async function setupLocale() {
   const response = await fetch('messages.de.json');
   const result = await response.json();
   loadTranslations(result.translations);
-  registerLocaleData(localeDe);
   return 'de';
 }
 
 setupLocale().then(localeValue => {
-  platformBrowserDynamic([
-    { provide: LOCALE_ID, useValue: localeValue }
-  ])
-    .bootstrapModule(AppModule)
-    .catch(err => console.error(err));
+  bootstrapApplication(AppComponent, {
+    ...appConfig,
+    providers: [
+      ...(appConfig.providers || []),
+      { provide: LOCALE_ID, useValue: localeValue }
+    ]
+  });
 });
 ```
 
@@ -892,13 +896,35 @@ Statt einem statischen Import können wir deshalb auch ein dynamisches Import-St
 ```typescript
 async function setupLocale() {
   // ...
-  const localeDe = await import('@angular/common/locales/de');
-  registerLocaleData(localeDe.default);
+  await import('@angular/common/locales/global/de');
   return 'de';
 }
 ```
 
 ![Sprachwechsel zur Laufzeit: der BookMonkey auf Deutsch](./bm-german.png)
+
+
+## i18n mit Server-Side Rendering (SSR)
+
+Wenn wir unsere Anwendung mit Server-Side Rendering und `outputMode: "server"` betreiben (siehe unser [Material-Artikel zu SSR](/ssr)), kann Angular die Sprachweiterleitung automatisch übernehmen.
+Der Server wertet den `Accept-Language`-Header des Browsers aus und leitet die Anfrage an die passende Sprachvariante weiter.
+Eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist dann nicht mehr notwendig.
+
+## Deployment: Unterverzeichnisse mit `subPath` anpassen
+
+Standardmäßig werden die lokalisierten Varianten in Unterverzeichnissen abgelegt, die dem Locale-Namen entsprechen (z. B. `/de/`, `/en-US/`).
+Mit der Option `subPath` in der Locale-Konfiguration können wir den Namen des Unterverzeichnisses anpassen:
+
+```json
+"locales": {
+  "de": {
+    "translation": "messages.de.xlf",
+    "subPath": "deutsch"
+  }
+}
+```
+
+In diesem Beispiel wird die deutsche Variante unter `/deutsch/` statt unter `/de/` ausgeliefert.
 
 
 ## Technische Einschränkungen
