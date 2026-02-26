@@ -299,7 +299,7 @@ Außerdem erreichen Nutzende die weiteren fehlerhaften Felder vom fokussierten F
 
 Für barrierefreie Formulare empfehlen wir die Varianten 3 oder 4.
 Der Submit-Button sollte nicht dauerhaft deaktiviert werden, damit Nutzende jederzeit versuchen können, das Formular abzusenden.
-Über den `onInvalid`-Callback lässt sich gezielt auf ungültige Absendeversuche reagieren.
+Über das Callback `onInvalid` lässt sich gezielt auf ungültige Absendeversuche reagieren.
 Variante 4 – den Fokus auf das erste fehlerhafte Feld setzen – ist mit Signal Forms in wenigen Zeilen umgesetzt und eine gute Standardlösung.
 Bei Formularen mit vielen Feldern lohnt sich zusätzlich eine Fehlerzusammenfassung (Variante 3), die alle Fehler auflistet und mit den Feldern verlinkt.
 Gerade bei komplexen oder langen Formularen empfiehlt es sich, beide Ansätze zu kombinieren: Die Fehlerzusammenfassung gibt den Überblick, der Fokus auf das erste Feld führt Nutzende direkt zum Problem.
