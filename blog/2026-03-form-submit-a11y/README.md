@@ -138,6 +138,7 @@ Dafür gibt es mehrere Strategien, die wir im Folgenden detailliert betrachten.
 
 Die einfachste Variante ist, den Submit-Button zu deaktivieren, solange das Formular ungültig ist.
 So kann das Formular gar nicht erst abgesendet werden, wenn Fehler vorliegen.
+Dafür können wir den Zustand `invalid()` verwenden, der auf dem `FieldState` des obersten Formularknotens bereitgestellt wird.
 
 ```html
 <button type="submit" [disabled]="registrationForm().invalid()">
