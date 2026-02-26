@@ -276,7 +276,7 @@ Wenn Nutzende auf "Register" klicken und das Formular ungültig ist, erkennt Sig
 Dabei werden alle Felder automatisch als `touched` markiert, sodass `displayError()` für fehlerhafte Felder `true` liefert und die Fehlermeldungen im Template erscheinen.
 Über `errorSummary()` erhalten wir die Liste aller aktuellen Fehler über das gesamte Formular.
 Die Methode `focusBoundControl()` setzt den Browserfokus auf das erste gebundene DOM-Element in DOM-Reihenfolge.
-Wird sie auf einem übergeordneten `FieldTree` aufgerufen, etwa auf dem gesamten Formular statt auf einem einzelnen Feld, fokussiert sie das erste Kindelement in DOM-Reihenfolge – das ist besonders bei verschachtelten Formularstrukturen nützlich.
+Wird sie auf einem übergeordneten `FieldState` aufgerufen, etwa auf dem gesamten Formular statt auf einem einzelnen Feld, fokussiert sie das erste Kindelement in DOM-Reihenfolge – das ist besonders bei verschachtelten Formularstrukturen nützlich.
 
 Der große Vorteil: Nutzende werden direkt zum Problem geführt, und der Screenreader liest die Fehlermeldung des fokussierten Felds automatisch vor, denn das fokussierte Feld ist über `aria-describedby` mit seiner Fehlermeldung verknüpft.
 Der Submit-Button bleibt immer aktiv, und der Implementierungsaufwand ist gering.
