@@ -182,7 +182,7 @@ Allerdings bleibt der Button weiterhin deaktiviert, sodass die grundsätzlichen 
 Nutzende erfahren außerdem nicht, *welche* Felder konkret fehlerhaft sind.
 
 > Diese Variante ist eine Verbesserung gegenüber Variante 1, löst aber das Grundproblem nicht: Nutzende werden nicht aktiv zu den fehlerhaften Feldern geführt.
-> Die Variante ist für sehr simple Formulare mit wenigen und klar erkenntlichen Eingabefeldern unter Umständen akzeptabel (z. B. Login mit Benutzername / Passwort).
+> Die Variante ist für sehr simple Formulare mit wenigen und klar erkenntlichen Eingabefeldern unter Umständen akzeptabel (z. B. Login mit Anmeldename und Passwort).
 
 ## Variante 3: Fehlerzusammenfassung (Error Summary)
 
