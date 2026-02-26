@@ -128,7 +128,7 @@ Durch den Wert `undefined` wird das Attribut `aria-invalid` gar nicht erst geset
 Die zweite Methode `displayError()` steuert, ob die Fehlermeldung im Template angezeigt wird.
 Sie liefert `true`, sobald das Feld berührt wurde und Fehler vorliegen.
 Dadurch sehen Nutzende die Fehlermeldungen erst, nachdem sie ein Feld betreten und wieder verlassen haben – oder nachdem ein Submit-Versuch alle Felder als `touched` markiert hat.
-Auch das `aria-describedby`-Attribut wird erst dann gesetzt, damit der Screenreader die Fehlermeldung nur vorliest, wenn sie tatsächlich sichtbar ist.
+Auch das Attribut `aria-describedby` wird erst dann gesetzt, damit der Screenreader die Fehlermeldung nur vorliest, wenn sie tatsächlich sichtbar ist.
 
 Die zentrale Frage lautet: **Was passiert, wenn Nutzende versuchen auf "Register" zu klicken und das Formular ungültig ist?**
 
