@@ -243,7 +243,7 @@ Da die Zusammenfassung mit `role="alert"` ausgezeichnet ist, wird sie von Screen
 Nutzende erhalten so einen vollständigen Überblick über alle Fehler und können per Klick direkt zum jeweiligen Feld navigieren.
 Der einzige Nachteil ist etwas mehr Template-Code, und die Zusammenfassung wird erst nach dem Submit-Versuch angezeigt, nicht bei jeder Feldänderung.
 
-## Variante 4: Fokussieren des ersten ungültigen Feldes
+## Variante 4: Fokussieren des ersten ungültigen Felds
 
 Diese Variante nutzt den `onInvalid`-Callback der Submission-Konfiguration von Signal Forms.
 Wenn das Formular ungültig ist, wird der Fokus automatisch auf das erste fehlerhafte Feld gesetzt.
