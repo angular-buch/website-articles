@@ -246,9 +246,11 @@ Außerdem wird die Zusammenfassung erst nach dem Submit-Versuch angezeigt, nicht
 
 ## Variante 4: Fokussieren des ersten ungültigen Felds
 
-Diese Variante nutzt den `onInvalid`-Callback der Submission-Konfiguration von Signal Forms.
-Wenn das Formular ungültig ist, wird der Fokus automatisch auf das erste fehlerhafte Feld gesetzt.
-Gleichzeitig werden alle Felder als `touched` markiert, sodass die Fehlermeldungen sichtbar werden.
+Diese Variante nutzt das `onInvalid`-Callback in der Submission-Konfiguration von Signal Forms.
+Die Funktion wird ausgeführt, wenn das Formular ungültig abgeschickt wird.
+Außerdem werden alle Felder automatisch als `touched` markiert, sodass die Fehlermeldungen sichtbar werden.
+
+Wir verwenden `onInvalid`, um den Fokus auf das erste fehlerhafte Feld zu setzen.
 
 Auch hier bleibt der Submit-Button immer aktiv.
 
