@@ -152,7 +152,7 @@ Die Implementierung ist zwar denkbar einfach und verhindert ungültige Absendung
 Nutzende erhalten keinerlei Feedback darüber, *warum* der Button deaktiviert ist – besonders für Screenreader-Nutzende ist das frustrierend.
 Bei komplexen Formularen mit vielen Feldern ist nicht ersichtlich, welches Feld den Fehler verursacht, und Nutzende müssen selbst suchen.
 Deaktivierte Buttons werden in den meisten Browsern nicht fokussiert, sodass Tastaturnutzende den Button gar nicht erst erreichen.
-Wenn das Formular initial leer ist, ist der Button sofort deaktiviert, ohne dass der Grund dafür erkennbar wäre.
+Wenn das Formular initial leer ist, ist der Button sofort deaktiviert, ohne dass der Grund dafür erkennbar ist.
 
 > **Empfehlung:** Diese Variante ist nicht empfehlenswert und wir wollen hiervon abraten. Die [WCAG-Richtlinien](https://www.w3.org/WAI/WCAG21/Understanding/error-identification.html) fordern, dass Fehler identifiziert und beschrieben werden. Ein deaktivierter Button allein erfüllt diese Anforderung nicht.
 
