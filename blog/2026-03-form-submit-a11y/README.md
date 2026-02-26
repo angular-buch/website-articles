@@ -124,7 +124,7 @@ export class RegistrationForm {
 ```
 
 Die Hilfsmethode `ariaInvalidState()` liefert `true`, wenn das Feld berührt wurde und Fehler enthält, `false` wenn es berührt und gültig ist, und `undefined` wenn es noch nicht berührt wurde.
-Durch `undefined` wird das Attribut `aria-invalid` gar nicht erst gesetzt – Screenreader melden also kein Feld als ungültig, bevor es berührt wurde.
+Durch den Wert `undefined` wird das Attribut `aria-invalid` gar nicht erst gesetzt – Screenreader melden also kein Feld als ungültig, bevor es berührt wurde.
 Die zweite Methode `displayError()` steuert, ob die Fehlermeldung im Template angezeigt wird.
 Sie liefert `true`, sobald das Feld berührt wurde und Fehler vorliegen.
 Dadurch sehen Nutzende die Fehlermeldungen erst, nachdem sie ein Feld betreten und wieder verlassen haben – oder nachdem ein Submit-Versuch alle Felder als `touched` markiert hat.
