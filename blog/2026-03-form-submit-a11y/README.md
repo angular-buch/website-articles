@@ -1,5 +1,5 @@
 ---
-title: 'Barrierefreiheit in Formularen -- Daten versenden'
+title: 'Barrierefreiheit in Formularen: Daten versenden'
 author: Angular Buch Team
 mail: team@angular-buch.com
 published: 2026-03-01
@@ -14,7 +14,7 @@ keywords:
   - accessibility
   - Focus Handling
 language: de
-header: todo.jpg
+header: a11y-submit.jpg
 sticky: false
 ---
 
