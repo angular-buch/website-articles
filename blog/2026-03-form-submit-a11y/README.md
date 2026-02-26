@@ -55,9 +55,14 @@ interface RegisterFormData {
 }
 
 const formSchema = schema<RegisterFormData>((path) => {
-  required(path.username, { message: 'Benutzername ist erforderlich.' });
-  minLength(path.username, 3, { message: 'Mindestens 3 Zeichen.' });
-  required(path.email, { message: 'E-Mail ist erforderlich.' });
+  required(path.username, { message: 'Username is required.' });
+  minLength(path.username, 3, {
+    message: 'Username must have at least 3 characters.',
+  });
+  required(path.email, { message: 'Email address is required.' });
+  email(path.email, {
+    message: 'Email address must be valid (e. g. user@exmaple.org).',
+  });
 });
 
 @Component({
@@ -73,10 +78,9 @@ const formSchema = schema<RegisterFormData>((path) => {
         [aria-invalid]="ariaInvalidState(registrationForm.username)"
         [aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
       />
-      @if (displayError(registrationForm.username)) {
-        <small id="username-hint">
-          Der Benutzername muss mindestens 3 Zeichen haben.
-        </small>
+      @let usernameError = displayError(registrationForm.username);
+      @if (usernameError) {
+        <small id="username-hint">{{ usernameError }}</small>
       }
 
       <label for="field-email">E-Mail</label>
@@ -87,10 +91,9 @@ const formSchema = schema<RegisterFormData>((path) => {
         [aria-invalid]="ariaInvalidState(registrationForm.email)"
         [aria-describedby]="displayError(registrationForm.email) ? 'email-hint' : null"
       />
-      @if (displayError(registrationForm.email)) {
-        <small id="email-hint">
-          Die E-Mail-Adresse muss angegeben werden.
-        </small>
+      @let emailError = displayError(registrationForm.email);
+      @if (emailError) {
+        <small id="email-hint">{{ emailError }}</small>
       }
 
       <button type="submit">Register</button>
@@ -108,14 +111,14 @@ export class RegistrationForm {
     formSchema,
   );
 
+  protected displayError(field: FieldTree<unknown>) {
+    return (field().touched() && field().errors().at(0)?.message) || '';
+  }
+
   protected ariaInvalidState(field: FieldTree<unknown>): boolean | undefined {
     return field().touched() && !field().pending()
       ? field().errors().length > 0
       : undefined;
-  }
-
-  protected displayError(field: FieldTree<unknown>): boolean {
-    return field().touched() && field().errors().length > 0;
   }
 }
 ```
@@ -165,7 +168,7 @@ Das geht mit `aria-describedby`:
 
 @if (!registrationForm().valid()) {
   <p id="submit-hint" class="hint">
-    Bitte fülle alle Pflichtfelder korrekt aus, um das Formular abzusenden.
+    Please fill in all required fields correctly to submit the form.
   </p>
 }
 ```
@@ -199,24 +202,23 @@ Die Fehlerzusammenfassung wird direkt im Template der Formular-Komponente umgese
   <input
     type="text"
     id="field-username"
-    [aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
     [formField]="registrationForm.username"
     [aria-invalid]="ariaInvalidState(registrationForm.username)"
+    [aria-describedby]="displayError(registrationForm.username) ? 'username-hint' : null"
   />
   @if (displayError(registrationForm.username)) {
     <p id="username-hint">
-      Der Benutzername muss mindestens 3 Zeichen haben.
+      Username with at least 3 characters is required.
     </p>
   }
 
-  <!-- ... weitere Felder ... -->
+  <!-- ... more fields ... -->
 
   <button type="submit">Register</button>
 </form>
 
 <div role="alert">
   @if (registrationForm().errorSummary().length) {
-    <h2>Es gibt Fehler im Formular</h2>
     <ul>
       @for (error of registrationForm().errorSummary(); track $index) {
         <li>
@@ -252,7 +254,7 @@ protected readonly registrationForm = form(
   {
     submission: {
       action: async (form) => {
-        // ... Absende-Logik
+        // ... submit logic
       },
       onInvalid: (form) => {
         const errors = form().errorSummary();
