@@ -303,6 +303,6 @@ Der Submit-Button sollte nicht dauerhaft deaktiviert werden, damit Nutzende jede
 Variante 4 – den Fokus auf das erste fehlerhafte Feld setzen – ist mit Signal Forms in wenigen Zeilen umgesetzt und eine gute Standardlösung.
 Bei Formularen mit vielen Feldern lohnt sich zusätzlich eine Fehlerzusammenfassung (Variante 3), die alle Fehler auflistet und mit den Feldern verlinkt.
 Gerade bei komplexen oder langen Formularen empfiehlt es sich, beide Ansätze zu kombinieren: Die Fehlerzusammenfassung gibt den Überblick, der Fokus auf das erste Feld führt Nutzende direkt zum Problem.
-ARIA-Attribute sollten konsequent eingesetzt werden – `aria-describedby` verknüpft Felder mit ihren Hinweisen, `aria-invalid` markiert fehlerhafte Felder, und `role="alert"` sorgt dafür, dass Screenreader Änderungen sofort vorlesen.
+ARIA-Attribute sollten konsequent eingesetzt werden: `aria-describedby` verknüpft Felder mit ihren Hinweisen, `aria-invalid` markiert fehlerhafte Felder, und `role="alert"` sorgt dafür, dass Screenreader Änderungen sofort vorlesen.
 
 Die Kombination aus `onInvalid`, `errorSummary()`, `focusBoundControl()` und einfachen ARIA-Attributen macht Signal Forms zu einem starken Werkzeug für barrierefreie Formulare in Angular.
