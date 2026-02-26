@@ -39,7 +39,7 @@ Für die Barrierefreiheit nutzen wir die Attribute `aria-invalid` und `aria-desc
 Die folgende Komponente zeigt das Grundgerüst.
 Zu jedem Eingabefeld zeigen wir eine Fehlermeldung an, die beschreibt, welche Eingabe erwartet wird.
 Diese Meldung wird erst sichtbar, nachdem das Feld berührt wurde – also wenn Nutzende es betreten und wieder verlassen haben oder wenn ein Submit-Versuch stattgefunden hat.
-Wir verknüpfen die Meldung über das `aria-describedby`-Attribut mit dem Eingabefeld.
+Wir verknüpfen die Meldung mit dem Eingabefeld, indem wir das Attribut `aria-describedby` verwenden.
 So liest der Screenreader die Fehlermeldung automatisch vor, sobald das Eingabefeld fokussiert wird.
 
 ```typescript
