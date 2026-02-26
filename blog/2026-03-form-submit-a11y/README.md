@@ -198,7 +198,7 @@ Jeder Eintrag ist ein einfacher Link `<a href="#field-id">`, der auf die `id` de
 Da `<input>`-Elemente von Natur aus fokussierbar sind, scrollt der Browser beim Klick auf den Link automatisch zum Feld und setzt den Fokus – ganz ohne zusätzliches JavaScript.
 
 Die Fehlerzusammenfassung wird direkt im Template der Formular-Komponente umgesetzt.
-Über `errorSummary()` erhalten wir die Liste aller aktuellen Fehler:
+Über `errorSummary()` erhalten wir die Liste aller aktuellen Fehler und können mit `@for` darüber iterieren:
 
 ```html
 <form [formRoot]="registrationForm">
