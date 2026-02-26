@@ -305,3 +305,6 @@ Gerade bei komplexen oder langen Formularen empfiehlt es sich, beide Ansätze zu
 ARIA-Attribute sollten konsequent eingesetzt werden: `aria-describedby` verknüpft Felder mit ihren Hinweisen, `aria-invalid` markiert fehlerhafte Felder, und `role="alert"` sorgt dafür, dass Screenreader Änderungen sofort vorlesen.
 
 Die Kombination aus `onInvalid`, `errorSummary()`, `focusBoundControl()` und einfachen ARIA-Attributen macht Signal Forms zu einem starken Werkzeug für barrierefreie Formulare in Angular.
+
+<hr>
+<small>**Titelbild:** generiert mit Adobe Firefly (Nano Banana Pro)</small>
