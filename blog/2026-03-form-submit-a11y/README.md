@@ -155,7 +155,7 @@ Wenn das Formular initial leer ist, ist der Button sofort deaktiviert, ohne dass
 
 > **Empfehlung:** Diese Variante ist nicht empfehlenswert und wir wollen hiervon abraten. Die [WCAG-Richtlinien](https://www.w3.org/WAI/WCAG21/Understanding/error-identification.html) fordern, dass Fehler identifiziert und beschrieben werden. Ein deaktivierter Button allein erfüllt diese Anforderung nicht.
 
-## Variante 2: Deaktivierter Button mit `aria-describedby`
+## Variante 2: deaktivierter Button mit `aria-describedby`
 
 Falls man sich dennoch für einen deaktivierten Button entscheidet, sollte man zumindest einen Hinweis geben, warum der Button nicht klickbar ist.
 Das geht mit `aria-describedby`:
