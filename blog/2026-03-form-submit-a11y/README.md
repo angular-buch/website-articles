@@ -140,12 +140,12 @@ Die einfachste Variante ist, den Submit-Button zu deaktivieren, solange das Form
 So kann das Formular gar nicht erst abgesendet werden, wenn Fehler vorliegen.
 
 ```html
-<button type="submit" [disabled]="!registrationForm().valid()">
+<button type="submit" [disabled]="registrationForm().invalid()">
   Register
 </button>
 ```
 
-> 💡 Die Zustände `valid` und `invalid` sind keine exakten Gegenteile. Während einer laufenden asynchronen Validierung befindet sich ein Feld im Zustand `pending` – es gilt dann weder als `valid` noch als `invalid`. In unserem Beispiel verwenden wir keine asynchrone Validierung, sodass wir diesen Sonderfall hier vernachlässigen können.
+> 💡 Die Zustände `valid` und `invalid` sind keine exakten Gegenteile. `invalid()` liefert `true`, sobald Validierungsfehler vorliegen, unabhängig davon, ob noch asynchrone Validierungen ausstehen. `valid()` liefert hingegen nur `true`, wenn keine Fehler vorliegen *und* keine Validierung mehr aussteht (`pending`). Während einer laufenden asynchronen Validierung ist also `invalid()` bereits `false` (keine Fehler bekannt), aber `valid()` ebenfalls noch `false` (weil noch Ergebnisse ausstehen). In unserem Beispiel verwenden wir keine asynchrone Validierung, sodass wir diesen Sonderfall hier vernachlässigen können.
 
 Die Implementierung ist zwar denkbar einfach und verhindert ungültige Absendungen zuverlässig, bringt aber erhebliche Nachteile mit sich.
 Nutzende erhalten keinerlei Feedback darüber, *warum* der Button deaktiviert ist – besonders für Screenreader-Nutzende ist das frustrierend.
@@ -161,7 +161,7 @@ Falls man sich dennoch für einen deaktivierten Button entscheidet, sollte man z
 Das geht mit `aria-describedby`:
 
 ```html
-@let isFormInvalid = !registrationForm().valid;
+@let isFormInvalid = registrationForm().invalid();
 <button type="submit"
   [disabled]="isFormInvalid"
   [aria-describedby]="isFormInvalid ? 'submit-hint' : null"
