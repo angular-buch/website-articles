@@ -274,9 +274,8 @@ Dabei werden alle Felder automatisch als `touched` markiert, sodass `displayErro
 Über `errorSummary()` erhalten wir die Liste aller aktuellen Fehler über das gesamte Formular.
 Die Methode `focusBoundControl()` setzt den Browserfokus auf das erste gebundene DOM-Element in DOM-Reihenfolge.
 Wird sie auf einem übergeordneten `FieldTree` aufgerufen, etwa auf dem gesamten Formular statt auf einem einzelnen Feld, fokussiert sie das erste Kindelement in DOM-Reihenfolge – das ist besonders bei verschachtelten Formularstrukturen nützlich.
-Da das fokussierte Feld über `aria-describedby` mit seiner Fehlermeldung verknüpft ist, liest der Screenreader die Meldung automatisch vor.
 
-Der große Vorteil: Nutzende werden direkt zum Problem geführt, und der Screenreader liest die Fehlermeldung des fokussierten Felds automatisch vor.
+Der große Vorteil: Nutzende werden direkt zum Problem geführt, und der Screenreader liest die Fehlermeldung des fokussierten Felds automatisch vor, denn das fokussierte Feld ist über `aria-describedby` mit seiner Fehlermeldung verknüpft.
 Der Submit-Button bleibt immer aktiv, und der Implementierungsaufwand ist gering.
 Allerdings sehen Nutzende nur den *ersten* Fehler im Fokus. Weitere Fehler sind zwar sichtbar (weil alle Felder als `touched` markiert werden), aber es gibt keinen zusammenfassenden Überblick.
 Dieses Problem lässt sich jedoch abmildern: Wenn die Fehlermeldungen der einzelnen Felder mit `role="alert"` als ARIA-Live-Regionen ausgezeichnet werden, sagt der Screenreader auch die übrigen Fehlermeldungen an, sobald sie im DOM erscheinen – obwohl nur das erste Feld fokussiert wird.
