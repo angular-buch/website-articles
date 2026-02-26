@@ -254,9 +254,23 @@ In der `App`-Komponente setzen wir das Attribut `i18n` für alle Navigationslink
 
 ```html
 <nav>
-  <a ... i18n="nav home">Home</a>
-  <a ... i18n="nav books">Books</a>
-  <a ... i18n="nav admin">Admin</a>
+  <ul>
+    <li>
+      <a routerLink="/home" routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        i18n="nav home">Home</a>
+    </li>
+    <li>
+      <a routerLink="/books" routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        i18n="nav books">Books</a>
+    </li>
+    <li>
+      <a routerLink="/admin" routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        i18n="nav admin">Admin</a>
+    </li>
+  </ul>
 </nav>
 <!-- ... -->
 ```
@@ -270,12 +284,12 @@ An dieser Stelle sollten wir mithilfe der *meaning* darauf hinweisen, wofür die
 
 ```html
 <input type="search"
-  aria-label="Search"
-  i18n-aria-label="search input ARIA label|input search"
+  [value]="searchTerm()"
+  (input)="searchTerm.set($event.target.value)"
   placeholder="Search"
   i18n-placeholder="search input placeholder"
-  #searchInput
-  (input)="input$.next(searchInput.value)">
+  aria-label="Search"
+  i18n-aria-label="search input ARIA label|input search">
 <!-- ... -->
 ```
 
@@ -299,13 +313,14 @@ In unserem BookManager können wir `$localize` zum Beispiel in der `BookDetailsP
 Hier wollen wir die Bestätigungsmeldung übersetzen, die beim Löschen eines Buchs angezeigt wird:
 
 ```typescript
-deleteBook() {
+removeBook() {
   const confirmed = confirm(
     $localize`:confirm delete|delete confirmation:Delete book?`
   );
   if (confirmed) {
-    this.bookStore.delete(this.book.isbn);
-    this.router.navigateByUrl('/books');
+    this.#bookStore.remove(this.isbn()).subscribe(() => {
+      this.#router.navigateByUrl('/books');
+    });
   }
 }
 ```
@@ -329,9 +344,23 @@ Im BookManager sieht eine Vergabe von festen IDs in der `App`-Komponente wie fol
 
 ```html
 <nav>
-  <a ... i18n="nav home@@AppHome">Home</a>
-  <a ... i18n="nav books@@AppBooks">Books</a>
-  <a ... i18n="nav admin@@AppAdmin">Admin</a>
+  <ul>
+    <li>
+      <a routerLink="/home" routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        i18n="nav home@@AppHome">Home</a>
+    </li>
+    <li>
+      <a routerLink="/books" routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        i18n="nav books@@AppBooks">Books</a>
+    </li>
+    <li>
+      <a routerLink="/admin" routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        i18n="nav admin@@AppAdmin">Admin</a>
+    </li>
+  </ul>
 </nav>
 <!-- ... -->
 ```
