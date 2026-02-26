@@ -34,7 +34,7 @@ In diesem Artikel betrachten wir verschiedene Varianten, wie wir bei der Nutzung
 
 Wir verwenden als Grundlage ein einfaches Registrierungsformular mit Signal Forms.
 Die Fehlermeldungen werden mit Standard-HTML und Angular Control Flow (`@if`) umgesetzt.
-Für die Barrierefreiheit nutzen wir `aria-invalid` und `aria-describedby`.
+Für die Barrierefreiheit nutzen wir die Attribute `aria-invalid` und `aria-describedby`.
 
 Die folgende Komponente zeigt das Grundgerüst.
 Zu jedem Eingabefeld zeigen wir eine Fehlermeldung an, die beschreibt, welche Eingabe erwartet wird.
