@@ -73,10 +73,10 @@ Die Sprachdefinition laden wir über einen globalen Import:
 import '@angular/common/locales/global/de';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { LOCALE_ID } from '@angular/core';
-import { AppComponent } from './app/app.component';
+import { App } from './app/app';
 import { appConfig } from './app/app.config';
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   ...appConfig,
   providers: [
     ...(appConfig.providers || []),
@@ -250,42 +250,30 @@ Steht kein DOM-Element zur Verfügung, so können wir die Markierung auch mit ei
 </ng-container>
 ```
 
-In der `AppComponent` setzen wir das Attribut `i18n` für alle Links und Buttons:
+In der `App`-Komponente setzen wir das Attribut `i18n` für alle Navigationslinks:
 
 ```html
 <nav>
   <a ... i18n="nav home">Home</a>
   <a ... i18n="nav books">Books</a>
-  <a ... i18n="nav admin">Administration</a>
-  <div class="actions">
-    @if (!auth.isAuthenticated) {
-      <button class="green"
-        (click)="auth.login()"
-        i18n="login">Login</button>
-    }
-    @if (auth.isAuthenticated) {
-      <button class="red"
-        (click)="auth.logout()"
-        i18n="logout">Logout</button>
-    }
-  </div>
+  <a ... i18n="nav admin">Admin</a>
 </nav>
 <!-- ... -->
 ```
 
 Übersetzbare Inhalte kommen nicht nur im Text eines HTML-Dokuments vor, sondern auch in Attributen der Elemente können Nachrichten hinterlegt sein.
 Um ein Attribut wie `title` oder `placeholder` zu markieren, schreiben wir entsprechend `i18n-title` bzw. `i18n-placeholder`.
-Ein gutes Beispiel hierfür finden wir in der `SearchComponent`:
+Ein gutes Beispiel hierfür finden wir in der `BooksOverviewPage`:
 Hier nutzen wir auf dem Suchfeld ein ARIA-Attribut, um eine Beschreibung zu setzen.
 Wir benötigen hier also das zusätzliche Attribut `i18n-aria-label`.
 An dieser Stelle sollten wir mithilfe der *meaning* darauf hinweisen, wofür diese Übersetzung genau dient.
 
 ```html
 <input type="search"
-  autocomplete="off"
   aria-label="Search"
   i18n-aria-label="search input ARIA label|input search"
-  [class.loading]="isLoading"
+  placeholder="Search"
+  i18n-placeholder="search input placeholder"
   #searchInput
   (input)="input$.next(searchInput.value)">
 <!-- ... -->
@@ -307,18 +295,17 @@ const hallo = $localize`:meaning|description:Hallo Welt`;
 console.log(hallo); // Ausgabe: Hallo Welt
 ```
 
-In unserem BookMonkey können wir `$localize` zum Beispiel im `AuthGuard` nutzen.
-Hier wollen wir die Nachricht übersetzen, die angezeigt wird, wenn wir nicht eingeloggt sind:
+In unserem BookManager können wir `$localize` zum Beispiel in der `BookDetailsPage` nutzen.
+Hier wollen wir die Bestätigungsmeldung übersetzen, die beim Löschen eines Buchs angezeigt wird:
 
 ```typescript
-canActivate(): boolean | UrlTree {
-  if (this.authService.isAuthenticated) {
-    return true;
-  } else {
-    const msg = $localize
-      `:alert message when not logged in:Not logged in!`;
-    window.alert(msg);
-    return this.router.parseUrl('/home');
+deleteBook() {
+  const confirmed = confirm(
+    $localize`:confirm delete|delete confirmation:Delete book?`
+  );
+  if (confirmed) {
+    this.bookStore.delete(this.book.isbn);
+    this.router.navigateByUrl('/books');
   }
 }
 ```
@@ -338,40 +325,29 @@ Um das Dilemma zu beheben, können wir eine feste ID vergeben.
 Dazu setzen wir zwei `@`-Zeichen und notieren dahinter die eigene feste ID.
 Dieser Weg funktioniert gleichermaßen im `i18n`-Attribut und bei der Verwendung von `$localize`.
 
-Im BookMonkey sieht eine Vergabe von festen IDs in der `AppComponent` wie folgt aus:
+Im BookManager sieht eine Vergabe von festen IDs in der `App`-Komponente wie folgt aus:
 
 ```html
 <nav>
-  <a ... i18n="nav home@@AppComponentHome">Home</a>
-  <a ... i18n="nav books@@AppComponentBooks">Books</a>
-  <a ... i18n="nav admin@@AppComponentAdmin">Administration</a>
-  <div class="actions">
-    @if (!auth.isAuthenticated) {
-      <button class="green"
-        (click)="auth.login()"
-        i18n="login@@AppComponentLogin">Login</button>
-    }
-    @if (auth.isAuthenticated) {
-      <button class="red"
-        (click)="auth.logout()"
-        i18n="logout@@AppComponentLogout">Logout</button>
-    }
-  </div>
+  <a ... i18n="nav home@@AppHome">Home</a>
+  <a ... i18n="nav books@@AppBooks">Books</a>
+  <a ... i18n="nav admin@@AppAdmin">Admin</a>
 </nav>
 <!-- ... -->
 ```
 
-Das Attribut `i18n-aria-label` in der `SearchComponent` kann so definiert werden:
+Das Attribut `i18n-aria-label` in der `BooksOverviewPage` kann so definiert werden:
 
 ```html
-i18n-aria-label="search input ARIA label|input search@@SearchComponentInput"
+i18n-aria-label="search input ARIA label|input search@@BooksOverviewSearch"
 ```
 
-Im TypeScript-Code für den `AuthGuard` können wir ebenso eine feste ID vergeben:
+Im TypeScript-Code für die `BookDetailsPage` können wir ebenso eine feste ID vergeben:
 
 ```typescript
-const msg = $localize
-  `:alert message when not logged in@@AuthGuardAlert:Not logged in!`;
+const confirmed = confirm(
+  $localize`:confirm delete|delete confirmation@@BookDetailsDeleteConfirm:Delete book?`
+);
 ```
 
 ### Nachrichten extrahieren und übersetzen
@@ -433,13 +409,13 @@ Die Startzeit wird nicht durch das dynamische Nachladen der Übersetzungen verl�
 Zunächst müssen wir die bestehenden Konfigurationen der App finden, die sich in der Datei `angular.json` verstecken.
 Direkt in der Konfiguration des Projekts können wir einen neuen Unterpunkt `i18n` hinzufügen.
 Mit dem Eintrag `sourceLocale` können wir dort zunächst das Standard-Locale definieren -- also die Sprache, die unsere Anwendung trägt, wenn wir nicht explizit eine andere auswählen.
-Im BookMonkey verwenden wir bisher per Default das Locale `en-US`, also sollten wir hier auch diesen Wert einsetzen.
+Im BookManager verwenden wir bisher per Default das Locale `en-US`, also sollten wir hier auch diesen Wert einsetzen.
 
 ```json
 {
   // ...
   "projects": {
-    "book-monkey": {
+    "book-manager": {
       "i18n": {
         "sourceLocale": "en-US"
       }
@@ -461,7 +437,7 @@ Konkret verwenden wir die übersetzte Datei `messages.de.xlf`, die wir im Hauptv
 {
   // ...
   "projects": {
-    "book-monkey": {
+    "book-manager": {
       "i18n": {
         "sourceLocale": "en-US",
         "locales": {
@@ -482,7 +458,7 @@ Dazu fügen wir in den Optionen zum Projekt den Eintrag `localize` hinzu:
 {
   // ...
   "projects": {
-    "book-monkey": {
+    "book-manager": {
       "architect": {
         "build": {
           "options": {
@@ -508,7 +484,7 @@ Wir finden die gebauten Apps im Ordner `dist`:
 
 ```
 dist/
-  book-monkey/
+  book-manager/
     browser/
       de/
       en-US/
@@ -518,11 +494,11 @@ Das momentane Ergebnis können wir überprüfen, indem wir mit einem einfachen W
 In diesem Beispiel verwenden wir das Paket `http-server`, mit dem wir einen lokalen Webserver starten können:
 
 ```bash
-cd dist/book-monkey/browser
+cd dist/book-manager/browser
 npx http-server
 ```
 
-Mit diesem Aufruf starten wir den Webserver direkt im Ordner `dist/book-monkey/browser`, sodass alle erstellten Unterordner aufgerufen werden können.
+Mit diesem Aufruf starten wir den Webserver direkt im Ordner `dist/book-manager/browser`, sodass alle erstellten Unterordner aufgerufen werden können.
 Öffnen wir danach die URL `http://localhost:8080/de/` im Browser, sehen wir die deutschsprachige Variante der Anwendung.
 Beim Build wurden bereits passend dazu die Basisadresse und die Sprache der Webseite angepasst:
 
@@ -561,7 +537,7 @@ Wollen wir also nur die deutsche Variante der Anwendung ausprobieren, tragen wir
 {
   // ...
   "projects": {
-    "book-monkey": {
+    "book-manager": {
       "architect": {
         "build": {
           "options": {
@@ -604,7 +580,7 @@ Danach können wir die Anwendung wieder wie gewohnt mit `ng serve` starten.
 {
   // ...
   "projects": {
-    "book-monkey": {
+    "book-manager": {
       "architect": {
         "build": {
           "options": {
@@ -640,7 +616,7 @@ Die Reihenfolge ist hierbei entscheidend, da weiter rechts angegebene Optionen d
 {
   // ...
   "projects": {
-    "book-monkey": {
+    "book-manager": {
       "architect": {
         "build": {
           // ...
@@ -656,7 +632,7 @@ Die Reihenfolge ist hierbei entscheidend, da weiter rechts angegebene Optionen d
           "configurations": {
             // ...
             "development-de": {
-              "buildTarget": "book-monkey:build:development,locale-de"
+              "buildTarget": "book-manager:build:development,locale-de"
             }
           }
         },
@@ -667,7 +643,7 @@ Die Reihenfolge ist hierbei entscheidend, da weiter rechts angegebene Optionen d
 }
 ```
 
-Im Anschluss können wir beim Start des Entwicklungsservers die neue Konfiguration auswählen und sehen den BookMonkey in deutscher Sprache:
+Im Anschluss können wir beim Start des Entwicklungsservers die neue Konfiguration auswählen und sehen den BookManager in deutscher Sprache:
 
 ```bash
 ng serve --configuration=development-de
@@ -749,7 +725,7 @@ Wir rufen `loadTranslations()` auf, nachdem wir die Daten aus der JSON-Datei gel
 ```typescript
 import { loadTranslations } from '@angular/localize';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
+import { App } from './app/app';
 import { appConfig } from './app/app.config';
 
 async function setupLocale() {
@@ -759,7 +735,7 @@ async function setupLocale() {
 }
 
 setupLocale().then(() => {
-  bootstrapApplication(AppComponent, appConfig);
+  bootstrapApplication(App, appConfig);
 });
 ```
 
@@ -792,7 +768,7 @@ import '@angular/common/locales/global/de';
 import { loadTranslations } from '@angular/localize';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { LOCALE_ID } from '@angular/core';
-import { AppComponent } from './app/app.component';
+import { App } from './app/app';
 import { appConfig } from './app/app.config';
 
 async function setupLocale() {
@@ -802,7 +778,7 @@ async function setupLocale() {
 }
 
 setupLocale().then(() => {
-  bootstrapApplication(AppComponent, {
+  bootstrapApplication(App, {
     ...appConfig,
     providers: [
       ...(appConfig.providers || []),
@@ -820,14 +796,14 @@ Auf der aktuellen Grundlage können wir nun einen einfachen Sprachwechsel implem
 Dafür müssen wir die gewählte Sprache speichern und beim Start entscheiden, welche Sprachdatei geladen wird.
 Zur Speicherung der Auswahl eignet sich zum Beispiel der LocalStorage des Browsers.
 
-Damit die Sprache in der Oberfläche umgeschaltet werden kann, erstellen wir in der `AppComponent` eine Methode `changeLocale()`:
+Damit die Sprache in der Oberfläche umgeschaltet werden kann, erstellen wir in der `App`-Komponente eine Methode `changeLocale()`:
 Ihre Aufgabe ist es, die gewählte Sprache im Browser zu speichern und dann die Anwendung neuzuladen.
 Das Neuladen ist notwendig, damit die Routine zum Laden der Übersetzungen in der Datei `main.ts` erneut ausgeführt wird.
 Es ist nicht möglich, die Sprache in der laufenden Anwendung zu wechseln.
 
 ```typescript
 @Component({ /* ... */ })
-export class AppComponent {
+export class App {
   // ...
   changeLocale(targetLang: string) {
     localStorage.setItem('locale', targetLang);
@@ -874,7 +850,7 @@ async function setupLocale() {
 }
 
 setupLocale().then(localeValue => {
-  bootstrapApplication(AppComponent, {
+  bootstrapApplication(App, {
     ...appConfig,
     providers: [
       ...(appConfig.providers || []),
@@ -900,8 +876,6 @@ async function setupLocale() {
   return 'de';
 }
 ```
-
-![Sprachwechsel zur Laufzeit: der BookMonkey auf Deutsch](./bm-german.png)
 
 
 ## i18n mit Server-Side Rendering (SSR)
