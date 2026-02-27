@@ -174,16 +174,8 @@ export class MyComponent {
 
 ## Internationalisierung (i18n): Die Anwendung übersetzen
 
-### Was bedeutet Internationalisierung?
-
-In der Fachwelt versteht man unter *Internationalisierung* die Anpassung von Software für mehrere Sprachen und Kulturen.
-Prinzipiell kann man unter den Begriffen i18n und l10n viele Aufgaben zusammenfassen:
-Texte sollten mehrsprachig vorliegen, und Datums- und Zeitformate, Formatierungen von Zahlen und Zeitzonen müssen beachtet werden.
-Bei einigen Dingen müssen wir bei der Entwicklung selbst die richtigen Weichen im Code stellen, etwa bei der Gestaltung und Auswahl der Inhalte.
-Im vorhergehenden Abschnitt zur Lokalisierung haben wir einige dieser Aspekte bereits betrachtet und haben das Token `LOCALE_ID` kennengelernt.
-
+Im vorhergehenden Abschnitt zur Lokalisierung haben wir betrachtet, wie wir Formate für ein einzelnes Locale anpassen.
 Nun geht es darum, die Anwendung mehrsprachig anzubieten.
-Die grundlegenden Aufgaben für eine solche Internationalisierung sind in Angular schon vorbereitet.
 Bei der Übersetzung von Texten hilft uns das i18n-Tooling der Angular CLI.
 
 Dafür müssen wir zunächst alle Texte in der Anwendung markieren.
@@ -786,7 +778,7 @@ Navigieren wir aber beispielsweise zur Buchdetailseite, sehen wir, dass die Form
 
 Um dieses Problem zu beheben, müssen wir das passende Locale für unsere Sprache setzen.
 Die Grundlagen hierfür haben wir bereits im Abschnitt zur Lokalisierung kennengelernt.
-Nachdem die Übersetzungen geladen wurden, wollen wir die Funktion `registerLocaleData()` verwenden, um das Locale in der Anwendung bekannt zu machen.
+Nachdem die Übersetzungen geladen wurden, laden wir die deutsche Sprachdefinition über einen globalen Import, um das Locale in der Anwendung bekannt zu machen.
 
 Außerdem müssen wir das InjectionToken `LOCALE_ID` setzen.
 Die Providers können wir direkt beim Aufruf von `bootstrapApplication()` übergeben.
