@@ -25,7 +25,7 @@ Die neue Version bringt einige wenige Breaking Changes mit sich, die aber wie ü
 
 Die offizielle Ankündigung zum neuen Release mit allen Features finden Sie im [Angular-Blog](https://blog.angular.io/angular-v12-is-now-available-32ed51fbfd49).
 
-Für alle Leser unseres Buchs haben wir einen **[ausführlichen Blogartikel zum Update auf Angular 12 und neuer](/blog/2022-06-bm4-update)** geschrieben, in dem wir alle nötigen Änderungen am Beispielprojekt BookMonkey auflisten. 
+Für alle Leser unseres Buchs haben wir einen **[ausführlichen Blogartikel zum Update auf Angular 12 und neuer](/blog/2022-06-bm4-update)** geschrieben, in dem wir alle nötigen Änderungen am Beispielprojekt BookMonkey auflisten.
 
 ## Update auf Angular 12
 
@@ -84,7 +84,7 @@ ng build --configuration=development
 ng serve
 ```
 
-Bestehende Angular-Projekte sind von den neuen Standardwerten zunächst nicht direkt betroffen. Es findet keine automatische Migration der Konfiguration (siehe `angular.json`) statt. 
+Bestehende Angular-Projekte sind von den neuen Standardwerten zunächst nicht direkt betroffen. Es findet keine automatische Migration der Konfiguration (siehe `angular.json`) statt.
 Bei Bedarf können die Konfigurationen nach dem regulären Update ebenfalls migriert werden:
 
 ```bash
@@ -171,16 +171,16 @@ Diese Änderung ist für Sie vor allem interessant, wenn Sie Bibliotheken mit An
 
 Angular 12 wird die letzte Major-Version mit Support für den Internet Explorer 11 sein. Dadurch kann Angular von Altlasten bereinigt werden und in Zukunft auf modernere Web-APIs zurückzugreifen, die nur in aktuellen Browsern unterstützt werden.
 
-Microsoft hat seit geraumer Zeit den Internet Explorer abgekündigt und dessen Weiterentwicklung zugunsten des neuen Browsers [Edge](https://www.microsoft.com/de-de/edge) eingestellt. Ab dem 15. Juni 2022 wird der Internet Explorer dann von Microsoft endgültig ["in Rente geschickt"](https://github.com/angular/angular/issues/41840). Wir begrüßen daher die Entscheidung des Angular-Teams sehr, die Unterstützung für den veralteten Internet Explorer ebenso einzustellen. Zuvor wurde die Entscheidung mit der Community über einen [RFC](https://github.com/angular/angular/issues/41840) diskutiert. 
+Microsoft hat seit geraumer Zeit den Internet Explorer abgekündigt und dessen Weiterentwicklung zugunsten des neuen Browsers [Edge](https://www.microsoft.com/de-de/edge) eingestellt. Ab dem 15. Juni 2022 wird der Internet Explorer dann von Microsoft endgültig ["in Rente geschickt"](https://github.com/angular/angular/issues/41840). Wir begrüßen daher die Entscheidung des Angular-Teams sehr, die Unterstützung für den veralteten Internet Explorer ebenso einzustellen. Zuvor wurde die Entscheidung mit der Community über einen [RFC](https://github.com/angular/angular/issues/41840) diskutiert.
 
 ## Weitere Neuigkeiten
 
-Wir haben bis hierhin nur die wichtigsten Neuerungen aufgeführt. Eine ausführliche Aufstellung aller Änderungen finden Sie im [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
+Wir haben bis hierhin nur die wichtigsten Neuerungen aufgeführt. Eine ausführliche Aufstellung aller Änderungen finden Sie im [Changelog von Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md).
 Folgende Punkte sind zusätzlich erwähnenswert:
 
 - **Webpack 5:** Unter der Haube verwendet Angular nun Webpack 5 als Build- und Bundling-Tool. Damit wird das neue Feature der [Module Federation](https://www.angulararchitects.io/en/aktuelles/the-microfrontend-revolution-part-2-module-federation-with-angular/) auch im Zusammenhang mit Angular unterstützt.
 - **Validatoren `min`/`max`:** Verwendet man auf einem Input die Attribute `min` und `max` werden dadurch nun automatisch passende Validatoren aktiv. Bisher mussten diese Validatoren manuell auf das FormControl angewendet werden. Siehe [PR #39063](https://github.com/angular/angular/pull/39063)
-- **`emitEvent` für Formulare:** Einige weitere Methoden auf FormControl, FormArray und FormGroup besitzen jetzt auch die Einstellung `emitEvent`. Damit kann konfiguriert werden, ob die Methode ein Event im Datenstrom `valueChanges` emittiert oder nicht. Neu ist diese Option zum Beispiel bei `FormArray.clear()`, `FormArray.removeAt()` oder `FormGroup.addControl()`. Siehe [PR #31031](https://github.com/angular/angular/pull/31031) 
+- **`emitEvent` für Formulare:** Einige weitere Methoden auf FormControl, FormArray und FormGroup besitzen jetzt auch die Einstellung `emitEvent`. Damit kann konfiguriert werden, ob die Methode ein Event im Datenstrom `valueChanges` emittiert oder nicht. Neu ist diese Option zum Beispiel bei `FormArray.clear()`, `FormArray.removeAt()` oder `FormGroup.addControl()`. Siehe [PR #31031](https://github.com/angular/angular/pull/31031)
 - **Inline SASS/SCSS:** Es ist nun auch möglich, in den Inline-Styles eine Komponente SASS oder SCSS zu verwenden. Vorher konnte hier nur reines CSS notiert werden.
 - **App-Initializer mit Observables:** Mit dem [`APP_INITIALIZER`](https://angular.io/api/core/APP_INITIALIZER) können Funktionen bereitgestellt werden, die beim Start der App ausgeführt werden. Bisher musste eine solche Funktion immer eine Promise zurückgeben. Nun ist es auch möglich, hier ein Observable zu returnen.
 - **i18n Legacy Message IDs**: Seit Angular 11 wird für die autogenerierten IDs bei i18n ein neues Format genutzt. Mit dem neuen Release werden Migrationsskripte und eine [Anleitung zur Migration](https://angular.io/guide/migration-legacy-message-id) bereitgestellt, um das neue Format in der Anwendung zu nutzen.
@@ -193,7 +193,7 @@ Die Roadmap für die zukünftige Entwicklung von Angular wird regelmäßig in de
 Wir wünschen Ihnen viel Spaß mit Angular 12!
 Haben Sie Fragen zur neuen Version, zum Update oder zu Angular? Schreiben Sie uns!
 
-**Viel Spaß wünschen  
+**Viel Spaß wünschen
 Danny, Ferdinand und Johannes**
 
 <small>**Titelbild:** Antelope Island State Park, Utah, USA, April 2018. Foto von Ferdinand Malcher</small>

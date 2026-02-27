@@ -15,7 +15,7 @@ isUpdatePost: true
 Angular 5 ist da! Anfang November 2017 erschien die neue Major-Version von Angular und bringt einige Neuerungen mit sich. Die gute Nachricht: Ihre alten Projekte mit Angular 4 sind weiterhin lauffähig – nur an einigen wenigen Stellen müssen Kleinigkeiten angepasst werden.
 
 Die offizielle Ankündigung zum Angular-5-Release finden Sie im [Angular-Blog](https://blog.angular.io/version-5-0-0-of-angular-now-available-37e414935ced).
-Für Details zu einzelnen Änderungen lohnt sich außerdem ein Blick in den [Changelog von Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md).
+Für Details zu einzelnen Änderungen lohnt sich außerdem ein Blick in den [Changelog von Angular](https://github.com/angular/angular/blob/main/CHANGELOG.md).
 Beim Update auf Angular 5 hilft der [Angular Update Guide](https://update.angular.io/#4.0:5.0). Das Tool stellt eine Checkliste und die passenden Befehle für das Update bereit.
 
 **Auch für die Leser unseres Angular-Buchs hat sich nicht viel geändert!**
@@ -81,7 +81,7 @@ Damit ändern sich allerdings folgende Feinheiten:
 
 ## HttpClient
 
-Mit [Angular 4.3](https://github.com/angular/angular/blob/master/CHANGELOG.md#430-2017-07-14) wurde der neue `HttpClient` eingeführt – und löst damit das `HttpModule` ab, das wir Kapitel 10.1 im Angular-Buch beschrieben haben.
+Mit [Angular 4.3](https://github.com/angular/angular/blob/main/CHANGELOG.md#430-2017-07-14) wurde der neue `HttpClient` eingeführt – und löst damit das `HttpModule` ab, das wir Kapitel 10.1 im Angular-Buch beschrieben haben.
 Der neue `HttpClient` wird weitgehend gleich verwendet, allerdings entfällt ein wesentlicher Schritt: die manuelle Umwandlung von JSON mit `res.json()`.
 
 Außerdem bietet der `HttpClient` zusätzliche Features wie verbesserte Typisierung und die Möglichkeit, auf tieferer Ebene manuell in HTTP-Requests einzugreifen.
