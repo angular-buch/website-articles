@@ -923,6 +923,6 @@ Dafür haben wir den Vorteil, dass wir keine Einbußen bei der Performance in Ka
 Zur Laufzeit ist die Sprache immer schon festgelegt, und es müssen keine zusätzlichen Ressourcen dafür beansprucht werden.
 
 Wenn du die Anwendung beim Sprachwechsel auf keinen Fall neu laden willst, kannst du die mitgelieferten Ansätze von Angular nicht verwenden.
-Wir empfehlen dann, auf eine externe Bibliothek zurückzugreifen, z. B. [Transloco](https://github.com/jsverse/transloco), [ngx-translate](https://github.com/ngx-translate/core) oder [Angular l10n](https://github.com/robisim74/angular-l10n).
+Wir empfehlen dann, auf eine externe Bibliothek zurückzugreifen, z. B. [Transloco](https://github.com/jsverse/transloco) oder [ngx-translate](https://github.com/ngx-translate/core).
 Beachte bei solchen externen Lösungen allerdings immer, dass die Übersetzungen dynamisch zur Laufzeit mithilfe von Bindings ausgewertet werden.
 Dieser Ansatz kann niemals so performant sein wie eine Anwendung, die gezielt für eine Sprache gebaut wurde bzw. bei der die Übersetzungen vor dem Start der Anwendung geladen wurden.
