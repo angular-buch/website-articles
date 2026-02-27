@@ -1,17 +1,8 @@
 ---
-title: '[WIP] Internationalisierung (i18n) mit Angular'
+title: 'Internationalisierung (i18n) mit Angular'
 published: 2026-02-25
 lastModified: 2026-02-25
-hidden: false
 ---
-
-> **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Im Buch haben wir auf das Thema Internationalisierung verzichtet, um den Umfang kompakt zu halten.
-> In diesem Artikel zeigen wir, wie du deine Angular-Anwendung lokalisieren und internationalisieren kannst.
-
----
-
-# Internationalisierung (i18n) mit Angular
 
 Wir leben in einer globalisierten und vernetzten Welt, und Anwendungen im Internet können von einer Vielzahl von Menschen genutzt werden.
 Deshalb müssen wir Möglichkeiten finden, die Software in verschiedenen Sprachen anzubieten.
