@@ -35,7 +35,7 @@ Hier geht es zusätzlich darum, die Texte der Anwendung in mehreren Sprachen vor
 Prinzipiell kann man unter den Begriffen i18n und l10n viele Aufgaben zusammenfassen:
 Neben Texten und Formaten gilt es auch, Währungen, Zeitzonen und Schreibrichtungen nicht zu vergessen.
 Weiterhin werden unter anderem Farben und Bilder in verschiedenen Kulturkreisen unterschiedlich interpretiert.
-Eines wird hier schnell klar: Eine Anwendung für mehrere Länder auszurichten ist eine große Aufgabe.
+Eines wird hier schnell klar: Eine Anwendung für mehrere Länder auszurichten, ist eine große Aufgabe.
 
 Wir wollen in diesem Artikel zunächst betrachten, wie wir die Anwendung für einen spezifischen Sprachraum lokalisieren.
 Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt werden.
@@ -668,7 +668,7 @@ Wir haben bis hierhin gelernt, wie wir die Anwendung für verschiedene Sprachen 
 Die Texte werden beim Build fest in die Anwendung eingebaut und können nur verändert werden, indem die App erneut kompiliert wird.
 
 Für mehr Flexibilität können wir einen alternativen Weg wählen:
-Wir laden die Sprachdefinitionen beim Start der Anwendung über einen HTTP-Aufruf.
+Wir laden die Übersetzungen beim Start der Anwendung über einen HTTP-Aufruf.
 So benötigen wir lediglich einen einzigen Build-Vorgang, denn die Texte werden zur Laufzeit in die Anwendung geladen.
 Ein großer Vorteil hierbei ist, dass wir die Texte anpassen können, ohne einen erneuten Build-Prozess durchzuführen.
 
@@ -879,7 +879,7 @@ Sollen mehrere Sprachen unterstützt werden, ist eine differenziertere Fallunter
 Außerdem kannst du die Sprachvoreinstellung des Browsers abfragen und verwenden, sofern keine andere Sprache gewählt wurde.
 
 Wenn mehrere Sprachen unterstützt werden, kann es außerdem sinnvoll sein, nur die jeweils benötigte Sprachdefinition zu importieren.
-Statt einem statischen Import können wir deshalb auch ein dynamisches Import-Statement verwenden:
+Statt eines statischen Imports können wir deshalb auch ein dynamisches Import-Statement verwenden:
 
 ```typescript
 async function setupLocale() {
