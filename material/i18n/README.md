@@ -1,7 +1,7 @@
 ---
 title: 'Internationalisierung (i18n) mit Angular'
-published: 2026-02-25
-lastModified: 2026-02-25
+published: 2026-03-02
+lastModified: 2026-03-02
 ---
 
 In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung in mehreren Sprachvariationen bauen und ausliefern können.
