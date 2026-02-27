@@ -4,19 +4,21 @@ published: 2026-02-25
 lastModified: 2026-02-25
 ---
 
-Wir leben in einer globalisierten und vernetzten Welt, und Anwendungen im Internet können von einer Vielzahl von Menschen genutzt werden.
-Deshalb müssen wir Möglichkeiten finden, die Software in verschiedenen Sprachen anzubieten.
-Die Übersetzung der Texte wollen wir jedoch möglichst zentral halten:
-Zum einen können wir so schnell Anpassungen an den Texten vornehmen, zum anderen ist es damit auch möglich, die Übersetzung an speziell ausgebildete Personen oder Dienstleister auszulagern.
-
 In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung in mehreren Sprachvariationen bauen und ausliefern können.
 Dabei betrachten wir zunächst die Lokalisierung (l10n) für ein einzelnes Locale und anschließend die vollständige Internationalisierung (i18n) mit dem Übersetzungstooling der Angular CLI.
+
+Anwendungen im Internet werden von Menschen aus verschiedenen Sprachräumen genutzt.
+Deshalb müssen wir die Software in mehreren Sprachen anbieten können -- und die Übersetzung der Texte möglichst zentral halten, damit Anpassungen schnell möglich sind und die Arbeit an Übersetzer ausgelagert werden kann.
+Angular bringt dafür ein eigenes i18n-Tooling mit, das uns bei Extraktion, Übersetzung und Auslieferung unterstützt.
+
+## Inhalt
+
+[[toc]]
 
 
 ## Lokalisierung vs. Internationalisierung
 
-Bei der Konzeption einer Anwendung müssen wir klären: Wo befindet sich die Zielgruppe, die unsere Anwendung bedient?
-Die Antwort auf diese Frage kann sehr unterschiedlich ausfallen.
+Bevor wir loslegen, klären wir zwei zentrale Begriffe.
 
 Unter **Lokalisierung** (kurz: **l10n**) versteht man die Anpassung einer Anwendung für einen spezifischen Sprachraum (*Locale*).
 Dazu gehören:
@@ -191,7 +193,7 @@ Folgende Schritte sind immer notwendig:
 4. Übersetzung abspeichern
 5. Das übersetzte Projekt bauen bzw. Übersetzungen laden
 
-![Der Prozess bei der Übersetzung der Anwendung](./process.svg)
+![Der Prozess bei der Übersetzung der Anwendung](./process.svg "Der Prozess bei der Übersetzung der Anwendung")
 
 > **Hinweis:** Angular berücksichtigt bei der Internationalisierung bereits wichtige Aspekte der Barrierefreiheit.
 > So werden zum Beispiel die aktuelle Sprache im Attribut `lang` und die Textflussrichtung im Attribut `dir` des `<html>`-Tags automatisch gesetzt.
@@ -399,15 +401,10 @@ Danach existieren also zwei dieser Dateien: `messages.de.xlf` mit den deutschspr
 
 ## Übersetzung während des Build-Prozesses
 
-An dieser Stelle trennen sich die Wege, denn wir müssen entscheiden, ob wir die Übersetzungen zur Build- oder Laufzeit in die Anwendung laden.
-Beide Varianten haben Vor- und Nachteile:
-Wir können die Anwendung direkt beim Build in mehreren Sprachen erzeugen.
-Damit erhalten wir mehrere gebaute Varianten in jeweils einer Sprache.
-Da dann keine Übersetzungen während der Laufzeit geladen werden müssen, ist unsere Anwendung sofort einsatzbereit.
-Ein Nachteil dieses Ansatzes ist jedoch, dass wir die übersetzten Texte nach dem Build nicht mehr bearbeiten oder austauschen können.
-Die Übersetzungen sind somit fester Bestandteil des Quellcodes der gebauten Anwendung.
-Weiterhin müssen wir etwas mehr Wartezeit beim Build der Anwendung in verschiedenen Sprachvarianten in Kauf nehmen.
-Wir wollen uns zunächst diesen Ansatz genauer ansehen.
+Wir beginnen mit dem ersten der beiden Ansätze: Die Anwendung wird direkt beim Build in mehreren Sprachen erzeugt.
+Das Ergebnis sind mehrere gebaute Varianten in jeweils einer Sprache.
+Da keine Übersetzungen zur Laufzeit geladen werden müssen, ist die Anwendung sofort einsatzbereit.
+Ein Nachteil ist jedoch, dass die Texte nach dem Build nicht mehr angepasst werden können -- sie sind fester Bestandteil des Quellcodes.
 
 ### Die App mit Übersetzungen bauen
 
@@ -889,6 +886,9 @@ async function setupLocale() {
 }
 ```
 
+Damit haben wir alle wesentlichen Varianten der Laufzeit-Übersetzung kennengelernt.
+Zum Abschluss werfen wir noch einen Blick auf zwei weiterführende Themen: SSR und Deployment.
+
 
 ## i18n mit Server-Side Rendering (SSR)
 
@@ -898,7 +898,7 @@ Eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist dann nich
 
 ## Deployment: Unterverzeichnisse mit `subPath` anpassen
 
-Standardmäßig werden die lokalisierten Varianten in Unterverzeichnissen abgelegt, die dem Locale-Namen entsprechen (z. B. `/de/`, `/en-US/`).
+Unabhängig davon, ob wir die Übersetzungen beim Build oder zur Laufzeit laden: Beim Deployment werden die lokalisierten Varianten standardmäßig in Unterverzeichnissen abgelegt, die dem Locale-Namen entsprechen (z. B. `/de/`, `/en-US/`).
 Mit der Option `subPath` in der Locale-Konfiguration können wir den Namen des Unterverzeichnisses anpassen:
 
 ```json
@@ -915,7 +915,7 @@ In diesem Beispiel wird die deutsche Variante unter `/deutsch/` statt unter `/de
 
 ## Technische Einschränkungen
 
-Im letzten Abschnitt wurde besonders eine technische Einschränkung deutlich:
+Bei beiden vorgestellten Ansätzen wurde eine technische Einschränkung deutlich:
 Wir können nur jeweils eine einzelne Sprache laden.
 Dazu können wir entweder eine speziell dafür gebaute Anwendung erzeugen, oder wir können die Sprache einmalig vor dem Start der App laden und festlegen.
 Ein Wechsel zur Laufzeit ist mit den Bordmitteln von Angular nicht möglich -- zum Laden einer Sprache muss immer die App gewechselt bzw. die Seite neu geladen werden.
@@ -923,6 +923,6 @@ Dafür haben wir den Vorteil, dass wir keine Einbußen bei der Performance in Ka
 Zur Laufzeit ist die Sprache immer schon festgelegt, und es müssen keine zusätzlichen Ressourcen dafür beansprucht werden.
 
 Wenn du die Anwendung beim Sprachwechsel auf keinen Fall neu laden willst, kannst du die mitgelieferten Ansätze von Angular nicht verwenden.
-Wir empfehlen dann, auf eine externe Bibliothek zurückzugreifen, z. B. [Transloco](https://jsverse.github.io/transloco/).
+Wir empfehlen dann, auf eine externe Bibliothek zurückzugreifen, z. B. [Transloco](https://github.com/jsverse/transloco), [ngx-translate](https://github.com/ngx-translate/core) oder [Angular l10n](https://github.com/robisim74/angular-l10n).
 Beachte bei solchen externen Lösungen allerdings immer, dass die Übersetzungen dynamisch zur Laufzeit mithilfe von Bindings ausgewertet werden.
 Dieser Ansatz kann niemals so performant sein wie eine Anwendung, die gezielt für eine Sprache gebaut wurde bzw. bei der die Übersetzungen vor dem Start der Anwendung geladen wurden.
