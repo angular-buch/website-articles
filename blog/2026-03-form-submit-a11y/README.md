@@ -307,4 +307,5 @@ ARIA-Attribute sollten konsequent eingesetzt werden: `aria-describedby` verknüp
 Die Kombination aus `onInvalid`, `errorSummary()`, `focusBoundControl()` und einfachen ARIA-Attributen macht Signal Forms zu einem starken Werkzeug für barrierefreie Formulare in Angular.
 
 <hr>
+
 <small>**Titelbild:** generiert mit Adobe Firefly (Nano Banana Pro)</small>
