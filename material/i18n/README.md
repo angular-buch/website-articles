@@ -1,5 +1,5 @@
 ---
-title: 'Internationalisierung (i18n) mit Angular'
+title: 'Lokalisierung (l10n) und Internationalisierung (i18n) mit Angular'
 published: 2026-03-02
 lastModified: 2026-03-02
 ---
@@ -18,7 +18,7 @@ Angular bringt dafür ein eigenes i18n-Tooling mit, das uns bei Extraktion, Übe
 
 ## Lokalisierung vs. Internationalisierung
 
-Bevor wir loslegen, klären wir zwei zentrale Begriffe.
+Bevor wir loslegen, werfen wir einen kurzen Blick auf zwei zentrale Begriffe.
 
 Unter **Lokalisierung** (kurz: **l10n**) versteht man die Anpassung einer Anwendung für einen spezifischen Sprachraum (*Locale*).
 Dazu gehören:
@@ -119,7 +119,7 @@ import '@angular/common/locales/global/fr';
 
 Außerdem können wir das Locale setzen, indem wir die Einstellungen der Angular CLI verwenden.
 Das ist besonders dann interessant, wenn wir beim Build festlegen wollen, für welche Sprache die Anwendung erzeugt werden soll.
-Die passenden Optionen stellen wir im nachfolgenden Abschnitt zur Internationalisierung genauer vor.
+Die passenden Optionen stellen wir im Abschnitt [Übersetzung während des Build-Prozesses](#übersetzung-während-des-build-prozesses) genauer vor.
 Wenn wir das Locale beim Build bestimmen, wird praktischerweise bereits die dazu passende Sprachdefinition automatisch geladen.
 Ein manueller Aufruf von `registerLocaleData()` ist dann nicht mehr notwendig.
 
@@ -143,7 +143,7 @@ Damit die Formatierung funktioniert, muss das angegebene Locale bereits in der A
 ### Format-Funktionen im TypeScript-Code
 
 Wenn wir die Hilfsfunktionen zur Formatierung im TypeScript-Code nutzen, müssen wir immer auch ein Locale angeben.
-Hier ist es empfehlenswert, direkt das global eingestellte Locale aus dem Token `LOCALE_ID` zu verwenden:
+Dazu verwenden wir das global eingestellte Locale aus dem Token `LOCALE_ID`:
 
 ```typescript
 import { Component, inject, LOCALE_ID } from '@angular/core';
@@ -294,6 +294,12 @@ const hallo = $localize`:meaning|description:Hallo Welt`;
 console.log(hallo); // Ausgabe: Hallo Welt
 ```
 
+Da `$localize` ein Tagged Template String ist, können wir auch Ausdrücke interpolieren:
+
+```typescript
+const greeting = $localize`:personal greeting:Hello, ${name}!`;
+```
+
 In unserem BookManager können wir `$localize` zum Beispiel in der `BookDetailsPage` nutzen.
 Hier wollen wir die Bestätigungsmeldung übersetzen, die beim Löschen eines Buchs angezeigt wird:
 
@@ -310,18 +316,53 @@ removeBook() {
 }
 ```
 
+### Pluralisierung und ICU-Ausdrücke
+
+Nicht alle Texte lassen sich 1:1 übersetzen -- manchmal hängt die korrekte Formulierung von einem konkreten Wert ab.
+Angular unterstützt dafür die sogenannte ICU Message Syntax (*International Components for Unicode*).
+Ein ICU-Ausdruck besteht aus einer Komponenten-Property, einem ICU-Typ (z. B. `plural` oder `select`) und den zugehörigen Varianten, eingeschlossen in geschweifte Klammern.
+
+Ein typisches Beispiel: Wir wollen die Anzahl der gefundenen Bücher anzeigen -- und dabei zwischen Singular und Plural unterscheiden.
+Ein ICU-Ausdruck steht direkt im Textinhalt eines Elements, das mit `i18n` markiert ist.
+Für die Pluralisierung verwenden wir den Typ `plural`:
+
+```html
+<p i18n>
+  {count, plural,
+    =0 {Keine Bücher gefunden.}
+    =1 {Ein Buch gefunden.}
+    other {{{count}} Bücher gefunden.}
+  }
+</p>
+```
+
+Dabei ist `count` eine Property der Komponente.
+Die geschweiften Klammern um `{{count}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular -- die äußeren Klammern gehören zur ICU-Syntax.
+
+Neben `plural` unterstützt Angular auch den Typ `select`, mit dem wir anhand eines Strings verschiedene Varianten ausgeben können:
+
+```html
+<p i18n>
+  {role, select,
+    admin {Willkommen, Administrator!}
+    other {Willkommen!}
+  }
+</p>
+```
+
+Beide ICU-Ausdrücke werden vom Extraktionstool erkannt und in die Übersetzungsdatei aufgenommen.
+Die übersetzende Person kann die Varianten dann unabhängig voneinander übersetzen.
+
 ### Feste IDs vergeben
 
 Wenn wir im nächsten Schritt das Extraktionstool der Angular CLI verwenden, finden wir in der erzeugten Datei zu jedem Eintrag eine automatisch generierte ID.
-Solange sich das Element im Template nicht ändert, wird bei jeder Extraktion dieselbe ID generiert.
-Die ID bleibt auch gleich, wenn wir das Element in eine andere Komponente verschieben oder an einer anderen Stelle platzieren.
-Sie ändert sich hingegen, wenn wir den Text anpassen.
-Bei einer Änderung wird allerdings eine gänzlich andere Nummer erzeugt.
-Dies erhöht den Wartungsaufwand, da im Übersetzungsprogramm ein völlig neuer Eintrag erscheint und der alte entsprechend entfernt werden muss.
-Auf der anderen Seite kann eine dynamische ID gerade dann hilfreich sein, wenn die Arbeit der Übersetzung von Dritten vorgenommen wird.
-Diese können so leicht erkennen, dass sich etwas am Element geändert hat und somit eine erneute Übersetzung notwendig ist.
+<!-- Siehe Angular-Quellcode: https://github.com/angular/angular/blob/main/packages/compiler/src/i18n/digest.ts, Funktion computeDecimalDigest() und computeMsgId() -->
+Diese IDs werden aus dem Inhalt des i18n-Blocks berechnet: Der gesamte Textinhalt und die HTML-Struktur innerhalb des Elements werden in eine String-Repräsentation überführt und daraus ein Hash gebildet.
+Jede inhaltliche oder strukturelle Änderung am Element erzeugt damit eine andere ID.
+Das Übersetzungstool verliert dann den Bezug zur bisherigen Übersetzung, und der Eintrag muss erneut übersetzt werden.
+Die automatisch generierten IDs sind deshalb nur eine Notlösung: Wir sollten immer davon ausgehen, dass sich Texte im Laufe der Entwicklung noch ändern werden.
 
-Um das Dilemma zu beheben, können wir eine feste ID vergeben.
+Deshalb empfehlen wir, immer feste IDs zu vergeben.
 Dazu setzen wir zwei `@`-Zeichen und notieren dahinter die eigene feste ID.
 Dieser Weg funktioniert gleichermaßen im `i18n`-Attribut und bei der Verwendung von `$localize`.
 
@@ -487,6 +528,9 @@ Anschließend können wir einen Build mit den festgelegten Einstellungen starten
 ```bash
 ng build
 ```
+
+Fehlt eine Übersetzung in der Datei, gibt Angular beim Build standardmäßig eine Warnung aus.
+Mit der Option `--missing-translation=error` können wir den Build stattdessen abbrechen lassen.
 
 Haben wir die Einstellung `localize` auf `true` gesetzt, werden nun alle verfügbaren Varianten der Anwendung gebaut.
 Wir finden die gebauten Apps im Ordner `dist`:
@@ -670,7 +714,7 @@ So benötigen wir lediglich einen einzigen Build-Vorgang, denn die Texte werden 
 Ein großer Vorteil hierbei ist, dass wir die Texte anpassen können, ohne einen erneuten Build-Prozess durchzuführen.
 
 Die Übersetzungen werden geladen, bevor die Anwendung das Bootstrapping durchführt.
-Beim Aufruf der Anwendung müssen wir also eine kurze Verzögerung in Kauf nehmen, die allerdings im Vergleich zum restlichen heruntergeladenen Code verkraftbar ist.
+Beim Aufruf der Anwendung müssen wir also eine kurze Verzögerung in Kauf nehmen, die allerdings im Vergleich zum restlichen heruntergeladenen Code kaum ins Gewicht fällt.
 Ist die Sprache einmal gewählt, verhält sich die Anwendung genau so, als hätten wir sie mit dieser Sprache gebaut.
 
 ### Texte im JSON-Format extrahieren
@@ -892,9 +936,31 @@ Zum Abschluss werfen wir noch einen Blick auf zwei weiterführende Themen: SSR u
 
 ## i18n mit Server-Side Rendering (SSR)
 
-Wenn wir unsere Anwendung mit Server-Side Rendering und `outputMode: "server"` betreiben (siehe unser [Material-Artikel zu SSR](/ssr)), kann Angular die Sprachweiterleitung automatisch übernehmen.
-Der Server wertet den `Accept-Language`-Header des Browsers aus und leitet die Anfrage an die passende Sprachvariante weiter.
-Eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist dann nicht mehr notwendig.
+Wenn wir unsere Anwendung mit Server-Side Rendering betreiben (siehe unser [Material-Artikel zu SSR](/ssr)), gibt es einige Besonderheiten im Zusammenspiel mit i18n.
+
+### Separate Server-Bundles pro Locale
+
+Beim Build-Zeit-Ansatz mit `localize: true` und `outputMode: "server"` erzeugt Angular pro Locale einen eigenen Server-Bundle.
+Die `AngularAppEngine` routet eingehende Anfragen anhand des URL-Pfads automatisch an den passenden Bundle weiter -- ein Aufruf von `/de/books` wird vom deutschen Server-Bundle bedient, `/en-US/books` vom englischen.
+
+### Automatische Sprachweiterleitung
+
+Ruft ein Nutzer die Wurzel-URL `/` auf, wertet Angular den `Accept-Language`-Header des Browsers aus und leitet mit einem HTTP-302-Redirect an die passende Sprachvariante weiter.
+Diese Weiterleitung funktioniert nur mit `outputMode: "server"` und ist dort automatisch aktiv -- eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist nicht notwendig.
+Ohne SSR muss die Weiterleitung hingegen manuell im Webserver eingerichtet werden.
+
+### Hydration mit i18n-Blöcken
+
+Damit die Hydration für i18n-Blöcke korrekt funktioniert, muss das Feature explizit aktiviert werden:
+
+```typescript
+import { provideClientHydration, withI18nSupport } from '@angular/platform-browser';
+
+// in der App-Konfiguration:
+provideClientHydration(withI18nSupport())
+```
+
+Ohne `withI18nSupport()` werden Elemente mit i18n-Attributen bei der Hydration übersprungen und komplett neu gerendert.
 
 ## Deployment: Unterverzeichnisse mit `subPath` anpassen
 
