@@ -14,7 +14,7 @@ Bis die Anwendung überhaupt vom Server heruntergeladen ist, vergeht Zeit.
 Das fällt insbesondere bei einer langsamen Internetverbindung ins Gewicht.
 Währenddessen sehen wir lediglich eine leere Seite.
 
-In diesem Kapitel geht es darum, eine Angular-Anwendung bereits auf dem Server zu rendern und so an den Client auszuliefern.
+In diesem Artikel geht es darum, eine Angular-Anwendung bereits auf dem Server zu rendern und so an den Client auszuliefern.
 Das bringt Verbesserungen in der wahrgenommenen Performance und optimiert die Seite besser für Suchmaschinen.
 
 ## Single-Page-Anwendungen, Suchmaschinen und Start-Performance
