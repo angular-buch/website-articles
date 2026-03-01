@@ -285,6 +285,19 @@ Wir können die Anwendung also wie gewohnt mit `ng serve` starten und gleichzeit
 ng serve
 ```
 
+### HTTP Transfer Cache
+
+Wenn die Anwendung auf dem Server gerendert wird, werden auch HTTP-Anfragen mit dem `HttpClient` durchgeführt.
+Zum Beispiel könnte der Browser eine Seite anfordern, die eine Liste von Büchern anzeigt.
+Diese Bücher werden beim Server-Side Rendering wie üblich geladen, sodass die Anwendung mit den korrekten Inhalten vorgerendert werden kann.
+Wenn die Anwendung danach im Browser startet, müsste der HTTP-Request aber theoretisch erneut durchgeführt werden.
+Um diese Redundanz zu vermeiden, besitzt der `HttpClient` einen Cache.
+
+HTTP-Antworten, die beim Server-Side Rendering empfangen wurden, werden serialisiert und als Teil des initialen HTML-Dokuments an den Browser übertragen.
+Im Browser prüft der `HttpClient`, ob für die Anfrage bereits Daten im Cache vorliegen, und verwendet sie, anstatt einen neuen Request zu stellen.
+Der Cache gilt nur so lange, bis die Anwendung im Browser fertig geladen wurde und stabil ist.
+
+
 ## Pre-Rendering (SSG)
 
 Wir haben gesehen, wie Server-Side Rendering funktioniert.
