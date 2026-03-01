@@ -8,7 +8,7 @@ In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung in mehreren Sp
 Dabei betrachten wir zunächst die Lokalisierung (l10n) für ein einzelnes Locale und anschließend die vollständige Internationalisierung (i18n) mit dem Übersetzungstooling der Angular CLI.
 
 Anwendungen im Internet werden von Menschen aus verschiedenen Sprachräumen genutzt.
-Deshalb müssen wir die Software in mehreren Sprachen anbieten können -- und die Übersetzung der Texte möglichst zentral halten, damit Anpassungen schnell möglich sind und die Arbeit an Übersetzer ausgelagert werden kann.
+Deshalb müssen wir die Software in mehreren Sprachen anbieten können — und die Übersetzung der Texte möglichst zentral halten, damit Anpassungen schnell möglich sind und die Arbeit an Übersetzer ausgelagert werden kann.
 Angular bringt dafür ein eigenes i18n-Tooling mit, das uns bei Extraktion, Übersetzung und Auslieferung unterstützt.
 
 ## Inhalt
@@ -28,14 +28,14 @@ Dazu gehören:
 - Darstellung von Währungen
 - Schreibrichtung
 
-Das Wort *localization* besteht aus 10 Buchstaben zwischen dem ersten Buchstaben *l* und dem letzten Buchstaben *n* -- daher die Abkürzung l10n.
+Das Wort *localization* besteht aus 10 Buchstaben zwischen dem ersten Buchstaben *l* und dem letzten Buchstaben *n* — daher die Abkürzung l10n.
 Zum Beispiel wird als Dezimaltrennzeichen im deutschsprachigen Raum ein Komma verwendet, im Englischen hingegen ein Punkt.
 
 Unter **Internationalisierung** (kurz: **i18n**) versteht man die weitergehende Anpassung für mehrere Sprachen und Kulturen.
 Das Wort *internationalization* besteht aus 18 Buchstaben zwischen *i* und *n*.
 Hier geht es zusätzlich darum, die Texte der Anwendung in mehreren Sprachen vorzuhalten und bei Bedarf die richtige Sprache zu laden.
-Prinzipiell kann man unter den Begriffen i18n und l10n viele Aufgaben zusammenfassen:
-Neben Texten und Formaten gilt es auch, Währungen, Zeitzonen und Schreibrichtungen nicht zu vergessen.
+Prinzipiell kann man unter den Begriffen i18n und l10n viele Aufgaben zusammenfassen.
+Neben Texten und Formaten müssen auch Währungen, Zeitzonen und Schreibrichtungen berücksichtigt werden.
 Weiterhin werden unter anderem Farben und Bilder in verschiedenen Kulturkreisen unterschiedlich interpretiert.
 Eines wird hier schnell klar: Eine Anwendung für mehrere Länder auszurichten, ist eine große Aufgabe.
 
@@ -318,11 +318,11 @@ removeBook() {
 
 ### Pluralisierung und ICU-Ausdrücke
 
-Nicht alle Texte lassen sich 1:1 übersetzen -- manchmal hängt die korrekte Formulierung von einem konkreten Wert ab.
+Nicht alle Texte lassen sich 1:1 übersetzen — manchmal hängt die korrekte Formulierung von einem konkreten Wert ab.
 Angular unterstützt dafür die sogenannte ICU Message Syntax (*International Components for Unicode*).
 Ein ICU-Ausdruck besteht aus einer Komponenten-Property, einem ICU-Typ (z. B. `plural` oder `select`) und den zugehörigen Varianten, eingeschlossen in geschweifte Klammern.
 
-Ein typisches Beispiel: Wir wollen die Anzahl der gefundenen Bücher anzeigen -- und dabei zwischen Singular und Plural unterscheiden.
+Ein typisches Beispiel: Wir wollen die Anzahl der gefundenen Bücher anzeigen — und dabei zwischen Singular und Plural unterscheiden.
 Ein ICU-Ausdruck steht direkt im Textinhalt eines Elements, das mit `i18n` markiert ist.
 Für die Pluralisierung verwenden wir den Typ `plural`:
 
@@ -337,7 +337,7 @@ Für die Pluralisierung verwenden wir den Typ `plural`:
 ```
 
 Dabei ist `count` eine Property der Komponente.
-Die geschweiften Klammern um `{{count}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular -- die äußeren Klammern gehören zur ICU-Syntax.
+Die geschweiften Klammern um `{{count}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular — die äußeren Klammern gehören zur ICU-Syntax.
 
 Neben `plural` unterstützt Angular auch den Typ `select`, mit dem wir anhand eines Strings verschiedene Varianten ausgeben können:
 
@@ -445,20 +445,20 @@ Danach existieren also zwei dieser Dateien: `messages.de.xlf` mit den deutschspr
 Wir beginnen mit dem ersten der beiden Ansätze: Die Anwendung wird direkt beim Build in mehreren Sprachen erzeugt.
 Das Ergebnis sind mehrere gebaute Varianten in jeweils einer Sprache.
 Da keine Übersetzungen zur Laufzeit geladen werden müssen, ist die Anwendung sofort einsatzbereit.
-Ein Nachteil ist jedoch, dass die Texte nach dem Build nicht mehr angepasst werden können -- sie sind fester Bestandteil des Quellcodes.
+Ein Nachteil ist jedoch, dass die Texte nach dem Build nicht mehr angepasst werden können — sie sind fester Bestandteil des Quellcodes.
 
 ### Die App mit Übersetzungen bauen
 
 Wir haben bereits alle Nachrichten markiert, extrahiert und übersetzt.
-Die Datei mit den übersetzten Nachrichten liegt ebenfalls im Projekt -- und nun muss die Anwendung nur noch gebaut werden!
+Die Datei mit den übersetzten Nachrichten liegt ebenfalls im Projekt — und nun muss die Anwendung nur noch gebaut werden.
 
 Der empfohlene Weg ist, dass die Anwendung für jedes Locale separat kompiliert wird.
 Das Ergebnis ist eine kleine, schnelle und sofort einsatzbereite App mit einer einzigen eingebauten Sprache.
 Die Startzeit wird nicht durch das dynamische Nachladen der Übersetzungen verlängert.
 
-Zunächst müssen wir die bestehenden Konfigurationen der App finden, die sich in der Datei `angular.json` verstecken.
+Zunächst müssen wir die bestehenden Konfigurationen der App finden, die in der Datei `angular.json` definiert sind.
 Direkt in der Konfiguration des Projekts können wir einen neuen Unterpunkt `i18n` hinzufügen.
-Mit dem Eintrag `sourceLocale` können wir dort zunächst das Standard-Locale definieren -- also die Sprache, die unsere Anwendung trägt, wenn wir nicht explizit eine andere auswählen.
+Mit dem Eintrag `sourceLocale` können wir dort zunächst das Standard-Locale definieren — also die Sprache, in der unsere Anwendung entwickelt wurde, wenn wir nicht explizit eine andere auswählen.
 Im BookManager verwenden wir bisher per Default das Locale `en-US`, also sollten wir hier auch diesen Wert einsetzen.
 
 ```json
@@ -575,7 +575,7 @@ An unhandled exception occurred: The development server
 only supports localizing a single locale per build.
 ```
 
-Die Fehlermeldung klärt uns über das Dilemma auf: Der Entwicklungswebserver ist nicht darauf ausgelegt, mehrere lokalisierte Varianten gleichzeitig zu bedienen.
+Die Fehlermeldung sagt es bereits: Der Entwicklungswebserver ist nicht darauf ausgelegt, mehrere lokalisierte Varianten gleichzeitig zu bedienen.
 Um das Problem zu lösen, betrachten wir die Option `localize` etwas näher, denn hier können wir verschiedene Werte angeben:
 
 | Wert | Beschreibung |
@@ -608,13 +608,13 @@ Wollen wir also nur die deutsche Variante der Anwendung ausprobieren, tragen wir
 Anschließend können wir mit `ng serve` die Anwendung mit der jeweiligen Übersetzung starten.
 Der Webserver funktioniert wieder und liefert die Anwendung wie gewohnt ohne ein Unterverzeichnis aus.
 
-Es wäre allerdings sehr unvorteilhaft, wenn wir ständig die Konfigurationsdatei ändern müssten, um verschiedene Sprachen auszuprobieren.
+Es wäre allerdings unpraktisch, wenn wir ständig die Konfigurationsdatei ändern müssten, um verschiedene Sprachen auszuprobieren.
 Deshalb schauen wir uns im folgenden Abschnitt an, wie wir einzelne Konfigurationen für die jeweiligen Locales erstellen.
 
 ### Übersetzte Apps mit unterschiedlichen Konfigurationen bauen
 
 Der Entwicklungswebserver unterstützt nur ein einziges Locale.
-Das ist aber nicht weiter tragisch, denn sehr häufig wollen wir für eine Variante der Anwendung sowieso nicht nur das Locale und die Übersetzungsdatei austauschen, sondern weitere Einstellungen setzen.
+Das ist aber kein Problem, denn sehr häufig wollen wir für eine Variante der Anwendung sowieso nicht nur das Locale und die Übersetzungsdatei austauschen, sondern weitere Einstellungen setzen.
 Zum Beispiel wollen wir bei einer fortgeschrittenen App auch die statischen Assets austauschen und andere Umgebungseinstellungen setzen.
 Um das zu realisieren, verwenden wir unterschiedliche Konfigurationen.
 
@@ -764,8 +764,7 @@ Wir greifen daher auf die native Funktion `fetch()` zurück, mit der wir ebenso 
 
 An `fetch()` übergeben wir als URL den Pfad zur Datei `messages.de.json`.
 Sie wird als statisches Asset mit ausgeliefert, da sie sich im Verzeichnis `public` befindet.
-Der Aufruf liefert eine Promise zurück, die wir nun sehr elegant mit `await` auflösen können.
-Es handelt sich um eine asynchrone Operation, sie sieht aber im Code synchron aus.
+Der Aufruf liefert eine Promise zurück, die wir mit `await` auflösen.
 
 Nachdem die Response eingetroffen ist, verwenden wir die Methode `json()`, um die Antwort von JSON in ein echtes JavaScript-Objekt umzuwandeln.
 Auch hier erhalten wir eine Promise, die wir mithilfe von `await` auflösen.
@@ -850,7 +849,7 @@ Dafür müssen wir die gewählte Sprache speichern und beim Start entscheiden, w
 Zur Speicherung der Auswahl eignet sich zum Beispiel der LocalStorage des Browsers.
 
 Damit die Sprache in der Oberfläche umgeschaltet werden kann, erstellen wir in der `App`-Komponente eine Methode `changeLocale()`:
-Ihre Aufgabe ist es, die gewählte Sprache im Browser zu speichern und dann die Anwendung neuzuladen.
+Ihre Aufgabe ist es, die gewählte Sprache im Browser zu speichern und dann die Anwendung neu zu laden.
 Das Neuladen ist notwendig, damit die Routine zum Laden der Übersetzungen in der Datei `main.ts` erneut ausgeführt wird.
 Es ist nicht möglich, die Sprache in der laufenden Anwendung zu wechseln.
 
@@ -880,7 +879,7 @@ So ist es möglich, die Sprache zwischen Deutsch und Englisch zu wechseln.
 <!-- ... -->
 ```
 
-Die gewählte Sprache wird nun im Browser gespeichert -- jetzt müssen wir diese Entscheidung beim Start der Anwendung in der Datei `main.ts` berücksichtigen!
+Die gewählte Sprache wird nun im Browser gespeichert — jetzt müssen wir diese Entscheidung beim Start der Anwendung in der Datei `main.ts` berücksichtigen.
 
 Unsere Funktion `setupLocale()` soll dazu als Rückgabewert die gewählte Sprache liefern.
 Diese Information können wir dann beim Bootstrapping verwenden, um den Provider für die `LOCALE_ID` zu setzen.
@@ -941,12 +940,12 @@ Wenn wir unsere Anwendung mit Server-Side Rendering betreiben (siehe unser [Mate
 ### Separate Server-Bundles pro Locale
 
 Beim Build-Zeit-Ansatz mit `localize: true` und `outputMode: "server"` erzeugt Angular pro Locale einen eigenen Server-Bundle.
-Die `AngularAppEngine` routet eingehende Anfragen anhand des URL-Pfads automatisch an den passenden Bundle weiter -- ein Aufruf von `/de/books` wird vom deutschen Server-Bundle bedient, `/en-US/books` vom englischen.
+Die `AngularAppEngine` routet eingehende Anfragen anhand des URL-Pfads automatisch an das passende Bundle weiter — ein Aufruf von `/de/books` wird vom deutschen Server-Bundle bedient, `/en-US/books` vom englischen.
 
 ### Automatische Sprachweiterleitung
 
 Ruft ein Nutzer die Wurzel-URL `/` auf, wertet Angular den `Accept-Language`-Header des Browsers aus und leitet mit einem HTTP-302-Redirect an die passende Sprachvariante weiter.
-Diese Weiterleitung funktioniert nur mit `outputMode: "server"` und ist dort automatisch aktiv -- eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist nicht notwendig.
+Diese Weiterleitung funktioniert nur mit `outputMode: "server"` und ist dort automatisch aktiv — eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist nicht notwendig.
 Ohne SSR muss die Weiterleitung hingegen manuell im Webserver eingerichtet werden.
 
 ### Hydration mit i18n-Blöcken
@@ -984,7 +983,7 @@ In diesem Beispiel wird die deutsche Variante unter `/deutsch/` statt unter `/de
 Bei beiden vorgestellten Ansätzen wurde eine technische Einschränkung deutlich:
 Wir können nur jeweils eine einzelne Sprache laden.
 Dazu können wir entweder eine speziell dafür gebaute Anwendung erzeugen, oder wir können die Sprache einmalig vor dem Start der App laden und festlegen.
-Ein Wechsel zur Laufzeit ist mit den Bordmitteln von Angular nicht möglich -- zum Laden einer Sprache muss immer die App gewechselt bzw. die Seite neu geladen werden.
+Ein Wechsel zur Laufzeit ist mit den Bordmitteln von Angular nicht möglich — zum Laden einer Sprache muss immer die App gewechselt bzw. die Seite neu geladen werden.
 Dafür haben wir den Vorteil, dass wir keine Einbußen bei der Performance in Kauf nehmen müssen.
 Zur Laufzeit ist die Sprache immer schon festgelegt, und es müssen keine zusätzlichen Ressourcen dafür beansprucht werden.
 
