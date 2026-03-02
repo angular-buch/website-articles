@@ -301,7 +301,7 @@ Hier kommt die Funktion `$localize` zum Einsatz.
 Sie ist bereits global verfügbar und muss deshalb nicht im Code importiert werden.
 
 `$localize` wird als *Tagged Template String* verwendet.
-Dabei verwendet man einen Template-String mit Backticks, der mit dem Namen einer Funktion eingeleitet wird.
+Dazu notiert man einen Template-String mit Backticks, der mit dem Namen einer Funktion eingeleitet wird.
 Diese Funktion wird aufgerufen, und der Template-String wird als Argument übergeben.
 Auch hier können wir wieder *description* und *meaning* angeben, indem wir zwei Doppelpunkte vor dem Standardtext setzen.
 
