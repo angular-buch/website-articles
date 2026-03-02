@@ -46,7 +46,7 @@ Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt 
 ## Lokalisierung (l10n): Die Anwendung für ein Locale einrichten
 
 Viele eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
-Im Buch haben wir die `DatePipe`, `DecimalPipe`, `CurrencyPipe` und `PercentPipe` bereits ausführlich besprochen — der Vollständigkeit halber fassen wir sie hier noch einmal zusammen.
+Im Buch haben wir die `DatePipe`, `DecimalPipe`, `CurrencyPipe` und `PercentPipe` bereits ausführlich besprochen — der Vollständigkeit halber erwähnen wir sie hier noch einmal.
 Ohne weitere Konfiguration ist automatisch das Locale `en-US` gesetzt, also US-amerikanisches Englisch.
 Die `DatePipe` verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `Jul 15, 2026, 8:45:04 PM`.
 Auch die `DecimalPipe` zur Zahlformatierung, die `CurrencyPipe` zur Anzeige von Währungen und die `PercentPipe` zur Prozentformatierung richten sich nach dem eingestellten Locale.
@@ -134,7 +134,7 @@ Außerdem können wir das Locale setzen, indem wir die Einstellungen der Angular
 Das ist besonders dann interessant, wenn wir beim Build festlegen wollen, für welche Sprache die Anwendung erzeugt werden soll.
 Die passenden Optionen stellen wir im Abschnitt [Übersetzung während des Build-Prozesses](#übersetzung-während-des-build-prozesses) genauer vor.
 Wenn wir das Locale beim Build bestimmen, wird praktischerweise bereits die dazu passende Sprachdefinition automatisch geladen.
-Ein manueller Aufruf von `registerLocaleData()` ist dann nicht mehr notwendig.
+Ein manueller Import der Sprachdefinition (`registerLocaleData()`) ist dann nicht mehr notwendig.
 
 ### Pipes mit einem spezifischen Locale nutzen
 
@@ -739,8 +739,7 @@ Ist die Sprache einmal gewählt, verhält sich die Anwendung genau so, als hätt
 
 ### Texte im JSON-Format extrahieren
 
-Unabhängig davon, ob wir die Übersetzungen beim Build oder zur Laufzeit laden möchten: Die ersten Schritte sind für beide Ansätze identisch.
-Wir markieren zunächst die zu übersetzenden Nachrichten im Template und in den TypeScript-Klassen.
+Unabhängig vom gewählten Ansatz markieren wir zunächst die zu übersetzenden Nachrichten im Template und in den TypeScript-Klassen, wie im Abschnitt zum Übersetzungsprozess beschrieben.
 Danach müssen wir die markierten Texte extrahieren.
 
 Angular erwartet die Texte in Form von Schlüssel-Wert-Paaren in einem einfachen JavaScript-Objekt.
@@ -960,7 +959,7 @@ Wenn wir unsere Anwendung mit Server-Side Rendering betreiben (siehe unseren [On
 
 ### Separate Server-Bundles pro Locale
 
-Beim Build-Zeit-Ansatz mit `localize: true` und `outputMode: "server"` erzeugt Angular pro Locale einen eigenen Server-Bundle.
+Beim Build-Zeit-Ansatz mit `localize: true` und `outputMode: "server"` erzeugt Angular pro Locale ein eigenes Server-Bundle.
 Die `AngularAppEngine` routet eingehende Anfragen anhand des URL-Pfads automatisch an das passende Bundle weiter — ein Aufruf von `/de/books` wird vom deutschen Server-Bundle bedient, `/en-US/books` vom englischen.
 
 ### Automatische Sprachweiterleitung
