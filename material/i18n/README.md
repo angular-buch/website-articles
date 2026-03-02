@@ -294,7 +294,7 @@ An dieser Stelle sollten wir mithilfe der *meaning* darauf hinweisen, wofür die
 <!-- ... -->
 ```
 
-### Nachrichten im TypeScript-Code mit $localize markieren
+### Nachrichten im TypeScript-Code mit `$localize` markieren
 
 Übersetzbare Texte können nicht nur im HTML-Template stehen, sondern auch der TypeScript-Code kann Strings beinhalten, die wir bei der Internationalisierung berücksichtigen müssen.
 Hier kommt die Funktion `$localize` zum Einsatz.
