@@ -953,9 +953,10 @@ async function setupLocale() {
 Die Übersetzung zur Laufzeit bietet maximale Flexibilität: Ein einziger Build genügt, und die Texte können jederzeit ausgetauscht werden. Dafür nehmen wir eine kurze Ladezeit beim Start in Kauf, und wir müssen das Laden und den Sprachwechsel selbst implementieren.
 
 
+<a name="ssr"></a>
 ## i18n mit Server-Side Rendering (SSR)
 
-Wenn wir unsere Anwendung mit Server-Side Rendering betreiben (siehe unser [Material-Artikel zu SSR](/ssr)), gibt es einige Besonderheiten im Zusammenspiel mit i18n.
+Wenn wir unsere Anwendung mit Server-Side Rendering betreiben (siehe unseren [Online-Artikel zu SSR](/material/ssr)), gibt es einige Besonderheiten im Zusammenspiel mit i18n.
 
 ### Separate Server-Bundles pro Locale
 
