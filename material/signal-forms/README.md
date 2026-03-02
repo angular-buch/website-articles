@@ -2,7 +2,7 @@
 title: 'Updates zu Signal Forms'
 published: 2026-02-06
 lastModified: 2026-02-06
-hidden: false
+hidden: true
 ---
 
 > **Hinweis:** Dieser Artikel ist Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
