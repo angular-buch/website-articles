@@ -352,7 +352,7 @@ Für die Pluralisierung verwenden wir den Typ `plural`:
 </p>
 ```
 
-Dabei ist `count` eine Property der Komponente.
+Dabei ist `count` ein Property der Komponente.
 Die geschweiften Klammern um `{{count}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular — die äußeren Klammern gehören zur ICU-Syntax.
 
 Neben `plural` unterstützt Angular auch den Typ `select`, mit dem wir anhand eines Strings verschiedene Varianten ausgeben können:
