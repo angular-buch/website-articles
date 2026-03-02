@@ -546,7 +546,7 @@ bootstrapApplication(App, {
 ```
 
 Wenn du deine Anwendung mehrsprachig ausliefern möchtest, muss das Feature `withI18nSupport()` explizit aktiviert werden, damit die Hydration für i18n-Blöcke korrekt funktioniert.
-Mehr dazu erfährst du in unserem [Material-Artikel zu i18n](/material/i18n#ssr).
+Mehr dazu erfährst du in unserem [Artikel zu i18n](/material/i18n#ssr).
 
 ### Hydration überprüfen
 
