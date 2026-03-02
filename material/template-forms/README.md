@@ -2,7 +2,7 @@
 title: '[WIP] Formulare mit Template-Driven Forms'
 published: 2026-02-10
 lastModified: 2026-02-05
-hidden: false
+hidden: true
 ---
 
 > **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
