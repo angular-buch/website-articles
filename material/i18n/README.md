@@ -46,10 +46,10 @@ Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt 
 ## Lokalisierung (l10n): Die Anwendung für ein Locale einrichten
 
 Viele eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
-Im Buch haben wir die `DatePipe`, `DecimalPipe`, `CurrencyPipe` und `PercentPipe` bereits ausführlich besprochen — der Vollständigkeit halber erwähnen wir sie hier noch einmal.
+Im Buch haben wir die DatePipe, DecimalPipe, CurrencyPipe und PercentPipe bereits ausführlich besprochen — der Vollständigkeit halber erwähnen wir sie hier noch einmal.
 Ohne weitere Konfiguration ist automatisch das Locale `en-US` gesetzt, also US-amerikanisches Englisch.
-Die `DatePipe` verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `Jul 15, 2026, 8:45:04 PM`.
-Auch die `DecimalPipe` zur Zahlformatierung, die `CurrencyPipe` zur Anzeige von Währungen und die `PercentPipe` zur Prozentformatierung richten sich nach dem eingestellten Locale.
+Die DatePipe verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `Jul 15, 2026, 8:45:04 PM`.
+Auch die DecimalPipe zur Zahlformatierung, die CurrencyPipe zur Anzeige von Währungen und die PercentPipe zur Prozentformatierung richten sich nach dem eingestellten Locale.
 
 ### Locale einstellen
 
@@ -88,7 +88,7 @@ bootstrapApplication(App, appConfig);
 Durch den Import von `@angular/common/locales/global/de` wird die deutsche Sprachdefinition global registriert.
 Angular kennt damit automatisch die spezifischen Regeln für das Locale `de`.
 
-Im BookManager verwenden wir die `DatePipe` z. B. in der Buchdetailseite:
+Im BookManager verwenden wir die DatePipe z. B. in der Buchdetailseite:
 
 ```html
 {{ b.createdAt | date:'medium' }}
@@ -155,7 +155,7 @@ Damit die Formatierung funktioniert, muss das angegebene Locale bereits in der A
 
 ### Format-Funktionen im TypeScript-Code
 
-Im Gegensatz zu den Pipes wie `DatePipe` oder `DecimalPipe`, die das Locale automatisch über Dependency Injection beziehen, sind die Hilfsfunktionen `formatDate`, `formatNumber`, `formatCurrency` und `formatPercent` reine Utility-Funktionen ohne DI.
+Im Gegensatz zu den Pipes wie DatePipe oder DecimalPipe, die das Locale automatisch über Dependency Injection beziehen, sind die Hilfsfunktionen `formatDate`, `formatNumber`, `formatCurrency` und `formatPercent` reine Utility-Funktionen ohne DI.
 Das Locale muss daher immer explizit als Parameter übergeben werden.
 Dazu injecten wir das Token `LOCALE_ID` und reichen den Wert an die Funktion durch:
 
@@ -243,7 +243,7 @@ Beide Angaben sind optional.
 <h1 i18n="description">Salut!</h1>
 ```
 
-Steht kein DOM-Element zur Verfügung, so können wir die Markierung auch mit einem `<ng-container>` vornehmen:
+Steht kein DOM-Element zur Verfügung, auf dem wir das Attribut `i18n` setzen könnten, können wir die Markierung mit einem `<ng-container>` vornehmen. Angular rendert dieses Element nicht im DOM — es erzeugt also kein zusätzliches HTML-Element, sondern dient ausschließlich als Hilfskonstrukt für die Übersetzung:
 
 ```html
 <ng-container i18n="meaning|description">
