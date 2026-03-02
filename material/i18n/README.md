@@ -46,9 +46,10 @@ Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt 
 ## Lokalisierung (l10n): Die Anwendung für ein Locale einrichten
 
 Viele eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
+Im Buch haben wir die `DatePipe`, `DecimalPipe`, `CurrencyPipe` und `PercentPipe` bereits ausführlich besprochen — der Vollständigkeit halber fassen wir sie hier noch einmal zusammen.
 Ohne weitere Konfiguration ist automatisch das Locale `en-US` gesetzt, also US-amerikanisches Englisch.
-Die DatePipe verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `July 15, 2026`.
-Auch die DecimalPipe zur Zahlformatierung und die CurrencyPipe zur Anzeige von Währungen richten sich nach dem eingestellten Locale.
+Die `DatePipe` verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `Jul 15, 2026, 8:45:04 PM`.
+Auch die `DecimalPipe` zur Zahlformatierung, die `CurrencyPipe` zur Anzeige von Währungen und die `PercentPipe` zur Prozentformatierung richten sich nach dem eingestellten Locale.
 
 ### Locale einstellen
 
@@ -59,30 +60,42 @@ Die Einstellung hierfür verbirgt sich in dem InjectionToken `LOCALE_ID`.
 Um das Token mit dem gewünschten Wert zu überschreiben, müssen wir einen Provider registrieren.
 Zusätzlich muss eine konkrete Sprachdefinition geladen werden.
 Nur so kann Angular wissen, welche spezifischen Regeln für das eingestellte Locale gelten.
-In einer Standalone-Anwendung registrieren wir den Provider direkt in der `main.ts` bei `bootstrapApplication()`.
-Die Sprachdefinition laden wir über einen globalen Import:
+Den Provider registrieren wir in der Datei `app.config.ts`:
+
+```typescript
+import { ApplicationConfig, LOCALE_ID } from '@angular/core';
+// ...
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    { provide: LOCALE_ID, useValue: 'de' }
+  ]
+};
+```
+
+Die Sprachdefinition laden wir über einen globalen Import in der `main.ts`:
 
 ```typescript
 import '@angular/common/locales/global/de';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { LOCALE_ID } from '@angular/core';
-import { App } from './app/app';
 import { appConfig } from './app/app.config';
+import { App } from './app/app';
 
-bootstrapApplication(App, {
-  ...appConfig,
-  providers: [
-    ...(appConfig.providers || []),
-    { provide: LOCALE_ID, useValue: 'de' }
-  ]
-});
+bootstrapApplication(App, appConfig);
 ```
 
 Durch den Import von `@angular/common/locales/global/de` wird die deutsche Sprachdefinition global registriert.
 Angular kennt damit automatisch die spezifischen Regeln für das Locale `de`.
 
+Im BookManager verwenden wir die `DatePipe` z. B. in der Buchdetailseite:
+
+```html
+{{ b.createdAt | date:'medium' }}
+```
+
 Starten wir nun die Anwendung mit den Änderungen neu, können wir die Auswirkungen direkt erkennen:
-Das Datum wird im deutschsprachigen Format ausgegeben, z. B. `15. Juli 2026`.
+Das Datum wird im deutschsprachigen Format ausgegeben, z. B. `15.07.2026, 20:45:04` statt `Jul 15, 2026, 8:45:04 PM`.
 
 Das Locale und die Sprachdefinition bilden eine Einheit.
 Mit der Einstellung `LOCALE_ID` legen wir fest, welche spezifischen Formatierungsoptionen wir für Datumsangaben, Zahlen- und Währungsformate wünschen.
@@ -142,8 +155,9 @@ Damit die Formatierung funktioniert, muss das angegebene Locale bereits in der A
 
 ### Format-Funktionen im TypeScript-Code
 
-Wenn wir die Hilfsfunktionen zur Formatierung im TypeScript-Code nutzen, müssen wir immer auch ein Locale angeben.
-Dazu verwenden wir das global eingestellte Locale aus dem Token `LOCALE_ID`:
+Im Gegensatz zu den Pipes wie `DatePipe` oder `DecimalPipe`, die das Locale automatisch über Dependency Injection beziehen, sind die Hilfsfunktionen `formatDate`, `formatNumber`, `formatCurrency` und `formatPercent` reine Utility-Funktionen ohne DI.
+Das Locale muss daher immer explizit als Parameter übergeben werden.
+Dazu injecten wir das Token `LOCALE_ID` und reichen den Wert an die Funktion durch:
 
 ```typescript
 import { Component, inject, LOCALE_ID } from '@angular/core';
@@ -168,6 +182,8 @@ export class MyComponent {
 ## Internationalisierung (i18n): Die Anwendung übersetzen
 
 Im vorhergehenden Abschnitt zur Lokalisierung haben wir betrachtet, wie wir Formate für ein einzelnes Locale anpassen.
+Damit sind Datumsangaben, Zahlen und Währungen bereits korrekt formatiert — aber die eigentlichen Texte der Anwendung werden noch nicht übersetzt.
+Buttons, Überschriften, Hinweistexte und Fehlermeldungen erscheinen weiterhin in der Ursprungssprache.
 Nun geht es darum, die Anwendung mehrsprachig anzubieten.
 Bei der Übersetzung von Texten hilft uns das i18n-Tooling der Angular CLI.
 
@@ -442,8 +458,9 @@ Danach existieren also zwei dieser Dateien: `messages.de.xlf` mit den deutschspr
 
 ## Übersetzung während des Build-Prozesses
 
+Wie bereits erwähnt, bietet Angular zwei Wege, um die übersetzten Texte in die Anwendung zu integrieren: zur **Build-Zeit** oder zur **Laufzeit**.
 Wir beginnen mit dem ersten der beiden Ansätze: Die Anwendung wird direkt beim Build in mehreren Sprachen erzeugt.
-Das Ergebnis sind mehrere gebaute Varianten in jeweils einer Sprache.
+Das Ergebnis sind mehrere gebaute Varianten der gesamten Angular-Anwendung in jeweils einer Sprache.
 Da keine Übersetzungen zur Laufzeit geladen werden müssen, ist die Anwendung sofort einsatzbereit.
 Ein Nachteil ist jedoch, dass die Texte nach dem Build nicht mehr angepasst werden können — sie sind fester Bestandteil des Quellcodes.
 
@@ -701,6 +718,10 @@ Im Anschluss können wir beim Start des Entwicklungsservers die neue Konfigurati
 ng serve --configuration=development-de
 ```
 
+### Fazit: Build-Zeit-Übersetzung
+
+Die Übersetzung zur Build-Zeit ist der einfachste und performanteste Ansatz: Jede Sprachvariante wird als eigenständige Anwendung gebaut und ist sofort einsatzbereit. Dafür müssen wir bei jeder Textänderung einen neuen Build erstellen, und die Anzahl der Varianten wächst mit jeder unterstützten Sprache.
+
 
 ## Übersetzung zur Laufzeit
 
@@ -811,8 +832,7 @@ Die Grundlagen hierfür haben wir bereits im Abschnitt zur Lokalisierung kenneng
 Nachdem die Übersetzungen geladen wurden, laden wir die deutsche Sprachdefinition über einen globalen Import, um das Locale in der Anwendung bekannt zu machen.
 
 Außerdem müssen wir das InjectionToken `LOCALE_ID` setzen.
-Die Providers können wir direkt beim Aufruf von `bootstrapApplication()` übergeben.
-Hier notieren wir einen Provider, der das Token mit dem Wert `de` beschreibt.
+Da der Wert erst zur Laufzeit feststeht, erweitern wir die bestehende `appConfig` direkt in der `main.ts`:
 
 ```typescript
 import '@angular/common/locales/global/de';
@@ -928,8 +948,9 @@ async function setupLocale() {
 }
 ```
 
-Damit haben wir alle wesentlichen Varianten der Laufzeit-Übersetzung kennengelernt.
-Zum Abschluss werfen wir noch einen Blick auf zwei weiterführende Themen: SSR und Deployment.
+### Fazit: Laufzeit-Übersetzung
+
+Die Übersetzung zur Laufzeit bietet maximale Flexibilität: Ein einziger Build genügt, und die Texte können jederzeit ausgetauscht werden. Dafür nehmen wir eine kurze Ladezeit beim Start in Kauf, und wir müssen das Laden und den Sprachwechsel selbst implementieren.
 
 
 ## i18n mit Server-Side Rendering (SSR)
