@@ -1,7 +1,7 @@
 ---
 title: 'Server-Side Rendering (SSR) mit Angular'
 published: 2026-02-23
-lastModified: 2026-02-23
+lastModified: 2026-03-02
 ---
 
 Single-Page-Anwendungen mit Angular bieten grundsätzlich eine gute Performance:
@@ -14,7 +14,7 @@ Bis die Anwendung überhaupt vom Server heruntergeladen ist, vergeht Zeit.
 Das fällt insbesondere bei einer langsamen Internetverbindung ins Gewicht.
 Währenddessen sehen wir lediglich eine leere Seite.
 
-In diesem Kapitel geht es darum, eine Angular-Anwendung bereits auf dem Server zu rendern und so an den Client auszuliefern.
+In diesem Artikel geht es darum, eine Angular-Anwendung bereits auf dem Server zu rendern und so an den Client auszuliefern.
 Das bringt Verbesserungen in der wahrgenommenen Performance und optimiert die Seite besser für Suchmaschinen.
 
 ## Single-Page-Anwendungen, Suchmaschinen und Start-Performance
@@ -284,6 +284,19 @@ Wir können die Anwendung also wie gewohnt mit `ng serve` starten und gleichzeit
 ```bash
 ng serve
 ```
+
+### HTTP Transfer Cache
+
+Wenn die Anwendung auf dem Server gerendert wird, werden auch HTTP-Anfragen mit dem `HttpClient` durchgeführt.
+Zum Beispiel könnte der Browser eine Seite anfordern, die eine Liste von Büchern anzeigt.
+Diese Bücher werden beim Server-Side Rendering wie üblich geladen, sodass die Anwendung mit den korrekten Inhalten vorgerendert werden kann.
+Wenn die Anwendung danach im Browser startet, müsste der HTTP-Request aber theoretisch erneut durchgeführt werden.
+Um diese Redundanz zu vermeiden, besitzt der `HttpClient` einen Cache.
+
+HTTP-Antworten, die beim Server-Side Rendering empfangen wurden, werden serialisiert und als Teil des initialen HTML-Dokuments an den Browser übertragen.
+Im Browser prüft der `HttpClient`, ob für die Anfrage bereits Daten im Cache vorliegen, und verwendet sie, anstatt einen neuen Request zu stellen.
+Der Cache gilt nur so lange, bis die Anwendung im Browser fertig geladen wurde und stabil ist.
+
 
 ## Pre-Rendering (SSG)
 
