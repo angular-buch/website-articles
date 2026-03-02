@@ -130,11 +130,38 @@ import '@angular/common/locales/global/de';
 import '@angular/common/locales/global/fr';
 ```
 
-Außerdem können wir das Locale setzen, indem wir die Einstellungen der Angular CLI verwenden.
-Das ist besonders dann interessant, wenn wir beim Build festlegen wollen, für welche Sprache die Anwendung erzeugt werden soll.
-Die passenden Optionen stellen wir im Abschnitt [Übersetzung während des Build-Prozesses](#übersetzung-während-des-build-prozesses) genauer vor.
-Wenn wir das Locale beim Build bestimmen, wird praktischerweise bereits die dazu passende Sprachdefinition automatisch geladen.
-Ein manueller Import der Sprachdefinition (`registerLocaleData()`) ist dann nicht mehr notwendig.
+### Alternative: Locale über die Build-Konfiguration setzen
+
+Alternativ zum manuellen Provider können wir das Locale auch direkt in der Datei `angular.json` konfigurieren.
+Mit dem Eintrag `sourceLocale` im Abschnitt `i18n` des Projekts setzen wir das Standard-Locale:
+
+```json
+{
+  "projects": {
+    "book-manager": {
+      "i18n": {
+        "sourceLocale": "de"
+      }
+      // ...
+    }
+  }
+}
+```
+
+Der Wert von `sourceLocale` kann entweder ein einfacher String sein oder ein Objekt mit den Eigenschaften `code` und `baseHref` bzw. `subPath`.
+Die Objekt-Variante ist nützlich, wenn die Ausgangssprache beim Build unter einem bestimmten Pfad bereitgestellt werden soll:
+
+```json
+"sourceLocale": {
+  "code": "de",
+  "baseHref": "/de/"
+}
+```
+
+Durch die Angabe von `sourceLocale` wird das InjectionToken `LOCALE_ID` beim Build automatisch auf den konfigurierten Wert gesetzt.
+Auch die passende Sprachdefinition wird automatisch geladen — der manuelle Provider in der `app.config.ts` und der Import in der `main.ts` sind damit nicht mehr notwendig.
+In dieser einfachen Form unterstützt `sourceLocale` allerdings nur ein einzelnes Locale.
+Wie wir mehrere Sprachen über die `angular.json` konfigurieren und die Anwendung in verschiedenen Sprachvarianten bauen können, zeigen wir im Abschnitt [Übersetzung während des Build-Prozesses](#übersetzung-während-des-build-prozesses).
 
 ### Pipes mit einem spezifischen Locale nutzen
 
@@ -473,10 +500,9 @@ Der empfohlene Weg ist, dass die Anwendung für jedes Locale separat kompiliert 
 Das Ergebnis ist eine kleine, schnelle und sofort einsatzbereite App mit einer einzigen eingebauten Sprache.
 Die Startzeit wird nicht durch das dynamische Nachladen der Übersetzungen verlängert.
 
-Zunächst müssen wir die bestehenden Konfigurationen der App finden, die in der Datei `angular.json` definiert sind.
-Direkt in der Konfiguration des Projekts können wir einen neuen Unterpunkt `i18n` hinzufügen.
-Mit dem Eintrag `sourceLocale` können wir dort zunächst das Standard-Locale definieren — also die Sprache, in der unsere Anwendung entwickelt wurde, wenn wir nicht explizit eine andere auswählen.
-Im BookManager verwenden wir bisher per Default das Locale `en-US`, also sollten wir hier auch diesen Wert einsetzen.
+Zunächst konfigurieren wir das Standard-Locale in der `angular.json`.
+Den Eintrag `sourceLocale` im Abschnitt `i18n` haben wir [weiter oben](#alternative-locale-über-die-build-konfiguration-setzen) bereits kennengelernt — er setzt das InjectionToken `LOCALE_ID` und lädt die passende Sprachdefinition automatisch.
+Im BookManager verwenden wir als Ausgangssprache `en-US`:
 
 ```json
 {
@@ -491,10 +517,6 @@ Im BookManager verwenden wir bisher per Default das Locale `en-US`, also sollten
   }
 }
 ```
-
-Durch diese Angabe wird das InjectionToken `LOCALE_ID` beim Build explizit auf den Wert `en-US` gesetzt.
-Die passende Sprachdefinition wird durch diese Einstellung praktischerweise automatisch geladen, ein manueller Aufruf von `registerLocaleData()` ist nicht mehr notwendig.
-Falls deine Anwendung also noch einen entsprechenden Provider oder den Aufruf von `registerLocaleData()` enthält, kannst du diese Zeilen nun entfernen.
 
 Wollen wir weitere Sprachen anbieten, können wir diese mit dem Eintrag `locales` unter dem Abschnitt `i18n` definieren.
 Wir geben dazu pro Locale die gewünschte Übersetzungsdatei an, die bei der Übersetzung erzeugt wurde.
