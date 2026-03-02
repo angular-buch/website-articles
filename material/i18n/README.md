@@ -4,7 +4,7 @@ published: 2026-03-02
 lastModified: 2026-03-02
 ---
 
-In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung in mehreren Sprachvariationen bauen und ausliefern können.
+In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung für verschiedene Sprachräume lokalisieren und in mehreren Sprachen ausliefern können.
 Dabei betrachten wir zunächst die Lokalisierung (l10n) für ein einzelnes Locale und anschließend die vollständige Internationalisierung (i18n) mit dem Übersetzungstooling der Angular CLI.
 
 Anwendungen im Internet werden von Menschen aus verschiedenen Sprachräumen genutzt.
@@ -47,7 +47,7 @@ Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt 
 
 Viele eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
 Ohne weitere Konfiguration ist automatisch das Locale `en-US` gesetzt, also US-amerikanisches Englisch.
-Die DatePipe verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `July 15, 2022`.
+Die DatePipe verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `July 15, 2026`.
 Auch die DecimalPipe zur Zahlformatierung und die CurrencyPipe zur Anzeige von Währungen richten sich nach dem eingestellten Locale.
 
 ### Locale einstellen
@@ -82,7 +82,7 @@ Durch den Import von `@angular/common/locales/global/de` wird die deutsche Sprac
 Angular kennt damit automatisch die spezifischen Regeln für das Locale `de`.
 
 Starten wir nun die Anwendung mit den Änderungen neu, können wir die Auswirkungen direkt erkennen:
-Das Datum wird im deutschsprachigen Format ausgegeben, z. B. `15. Juli 2022`.
+Das Datum wird im deutschsprachigen Format ausgegeben, z. B. `15. Juli 2026`.
 
 Das Locale und die Sprachdefinition bilden eine Einheit.
 Mit der Einstellung `LOCALE_ID` legen wir fest, welche spezifischen Formatierungsoptionen wir für Datumsangaben, Zahlen- und Währungsformate wünschen.
@@ -131,7 +131,7 @@ Damit die Formatierung funktioniert, muss das angegebene Locale bereits in der A
 
 ```html
 <p>{{ myDate | date: 'longDate':'+0200':'de' }}</p>
-<!-- Ausgabe: 7. August 2023 -->
+<!-- Ausgabe: 7. August 2026 -->
 <p>{{ 13.674566 | number: '1.2-3':'de' }}</p>
 <!-- Ausgabe: 13,675 -->
 <p>{{ 2.456 | currency: 'EUR':'EUR':'1.2-2':'de' }}</p>
@@ -530,7 +530,14 @@ ng build
 ```
 
 Fehlt eine Übersetzung in der Datei, gibt Angular beim Build standardmäßig eine Warnung aus.
-Mit der Option `--missing-translation=error` können wir den Build stattdessen abbrechen lassen.
+Mit der Option `i18nMissingTranslation` in der `angular.json` können wir das Verhalten anpassen und den Build stattdessen abbrechen lassen:
+
+```json
+"options": {
+  "localize": true,
+  "i18nMissingTranslation": "error"
+}
+```
 
 Haben wir die Einstellung `localize` auf `true` gesetzt, werden nun alle verfügbaren Varianten der Anwendung gebaut.
 Wir finden die gebauten Apps im Ordner `dist`:
@@ -566,16 +573,8 @@ Beim Build wurden bereits passend dazu die Basisadresse und die Sprache der Webs
 
 Wir können jetzt mehrere übersetzte Varianten einer Anwendung erstellen.
 Mit dieser Konfiguration stoßen wir allerdings auf ein Problem:
-Wir erhalten eine Fehlermeldung, wenn wir den Entwicklungswebserver mit mehreren konfigurierten Locales und der aktivierten Option `localize` starten:
-
-```
-ng serve
-
-An unhandled exception occurred: The development server
-only supports localizing a single locale per build.
-```
-
-Die Fehlermeldung sagt es bereits: Der Entwicklungswebserver ist nicht darauf ausgelegt, mehrere lokalisierte Varianten gleichzeitig zu bedienen.
+Der Entwicklungswebserver (`ng serve`) unterstützt nur ein einzelnes Locale pro Build.
+Sind mehrere Locales konfiguriert und `localize` ist auf `true` gesetzt, wird die Lokalisierung beim Entwicklungsserver deaktiviert oder der Start schlägt fehl.
 Um das Problem zu lösen, betrachten wir die Option `localize` etwas näher, denn hier können wir verschiedene Werte angeben:
 
 | Wert | Beschreibung |
@@ -986,6 +985,9 @@ Dazu können wir entweder eine speziell dafür gebaute Anwendung erzeugen, oder 
 Ein Wechsel zur Laufzeit ist mit den Bordmitteln von Angular nicht möglich — zum Laden einer Sprache muss immer die App gewechselt bzw. die Seite neu geladen werden.
 Dafür haben wir den Vorteil, dass wir keine Einbußen bei der Performance in Kauf nehmen müssen.
 Zur Laufzeit ist die Sprache immer schon festgelegt, und es müssen keine zusätzlichen Ressourcen dafür beansprucht werden.
+
+Eine weitere Einschränkung betrifft dynamische Inhalte: Das i18n-Tooling von Angular übersetzt ausschließlich statische Texte in Templates und im TypeScript-Code.
+Inhalte, die zur Laufzeit von einer API geladen werden, können damit nicht übersetzt werden — hier muss entweder die API selbst die Texte in der richtigen Sprache liefern, oder wir müssen im Code eine eigene Logik dafür bereitstellen.
 
 Wenn du die Anwendung beim Sprachwechsel auf keinen Fall neu laden willst, kannst du die mitgelieferten Ansätze von Angular nicht verwenden.
 Wir empfehlen dann, auf eine externe Bibliothek zurückzugreifen, z. B. [Transloco](https://github.com/jsverse/transloco) oder [ngx-translate](https://github.com/ngx-translate/core).
