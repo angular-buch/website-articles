@@ -210,7 +210,7 @@ export class MyComponent {
 ```
 
 
-## Internationalisierung (i18n): Die Anwendung übersetzen
+## Internationalisierung (i18n): die Anwendung übersetzen
 
 Im vorhergehenden Abschnitt zur Lokalisierung haben wir betrachtet, wie wir Formate für ein einzelnes Locale anpassen.
 Damit sind Datumsangaben, Zahlen und Währungen bereits korrekt formatiert — aber die eigentlichen Texte der Anwendung werden noch nicht übersetzt.
