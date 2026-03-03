@@ -789,7 +789,8 @@ Das betrifft insbesondere die verschiedenen Abschnitte mit `localize` und die Ko
 
 ### Übersetzungen zur Laufzeit laden
 
-Das Laden der Übersetzungen muss noch vor dem Bootstrapping-Prozess passieren, also bevor die Anwendung überhaupt gestartet wird.
+Jetzt betrachten wir die zweite Variante: Statt die Übersetzungen beim Build einzubauen, laden wir sie zur Laufzeit.
+Dafür müssen die Übersetzungen verfügbar sein, bevor die Anwendung startet — damit Angular die Texte beim Bootstrapping direkt austauschen kann.
 Deshalb müssen wir den Code in der Datei `main.ts` unterbringen, bevor wir `bootstrapApplication()` aufrufen.
 Hier legen wir uns eine neue Funktion `setupLocale()` an.
 Sie soll alle Schritte erledigen, die vor dem Start der Anwendung notwendig sind:
