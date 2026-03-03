@@ -1063,3 +1063,11 @@ Wenn du die Anwendung beim Sprachwechsel auf keinen Fall neu laden willst, kanns
 Wir empfehlen dann, auf eine externe Bibliothek zurückzugreifen, z. B. [Transloco](https://github.com/jsverse/transloco) oder [ngx-translate](https://github.com/ngx-translate/core).
 Beachte bei solchen externen Lösungen allerdings immer, dass die Übersetzungen dynamisch zur Laufzeit mithilfe von Bindings ausgewertet werden.
 Dieser Ansatz kann niemals so performant sein wie eine Anwendung, die gezielt für eine Sprache gebaut wurde bzw. bei der die Übersetzungen vor dem Start der Anwendung geladen wurden.
+
+## Fazit
+
+Angular liefert ein ausgereiftes Tooling für Lokalisierung und Internationalisierung mit.
+In diesem Artikel haben wir den gesamten Weg kennengelernt: von der Lokalisierung für ein einzelnes Locale über die Extraktion und Übersetzung von Texten bis hin zur mehrsprachigen Auslieferung — sowohl zur Build-Zeit als auch zur Laufzeit.
+Wir können jetzt eine Angular-Anwendung vollständig internationalisieren, ohne auf externe Bibliotheken angewiesen zu sein.
+Das i18n-Tooling der Angular CLI übernimmt dabei die schwere Arbeit: Es extrahiert die Texte, erzeugt Übersetzungsdateien und baut die lokalisierten Varianten automatisch.
+Wir wünschen viel Erfolg bei der Bereitstellung eurer Anwendung für eine internationale Zielgruppe!
