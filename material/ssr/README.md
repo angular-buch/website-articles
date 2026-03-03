@@ -17,6 +17,11 @@ Währenddessen sehen wir lediglich eine leere Seite.
 In diesem Artikel geht es darum, eine Angular-Anwendung bereits auf dem Server zu rendern und so an den Client auszuliefern.
 Das bringt Verbesserungen in der wahrgenommenen Performance und optimiert die Seite besser für Suchmaschinen.
 
+## Inhalt
+
+[[toc]]
+
+
 ## Single-Page-Anwendungen, Suchmaschinen und Start-Performance
 
 Die Basis einer Angular-Anwendung ist eine einzige leere HTML-Seite.
