@@ -242,9 +242,6 @@ Folgende Schritte sind immer notwendig:
 
 ![Der Prozess bei der Übersetzung der Anwendung](./process.svg "Der Prozess bei der Übersetzung der Anwendung")
 
-> **Hinweis:** Angular berücksichtigt bei der Internationalisierung bereits wichtige Aspekte der Barrierefreiheit.
-> So werden zum Beispiel die aktuelle Sprache im Attribut `lang` und die Textflussrichtung im Attribut `dir` des `<html>`-Tags automatisch gesetzt.
-
 ### Projekt vorbereiten
 
 Um die Angular-Features zur Internationalisierung zu nutzen, installieren wir das Paket `@angular/localize`:
@@ -401,7 +398,12 @@ Die Bezeichnungen `few` und `many` sind dabei leicht irreführend: Sie beschreib
 Im Polnischen etwa gilt `few` für Zahlen mit den Endziffern 2–4 (außer 12–14), im Arabischen für 3–10.
 Deutsch und Englisch verwenden lediglich `one` und `other` — die übrigen Kategorien existieren für diese Sprachen nicht.
 Die Kategorie `other` ist der Fallback und muss immer angegeben werden. Nicht zutreffende Kategorien werden stillschweigend ignoriert — solange `other` vorhanden ist, kann es nicht zu einem Laufzeitfehler kommen.
-Das bedeutet konkret: Für Deutsch greifen nur `one` und `other`. Kategorien wie `two`, `few` oder `many` müssen wir für die deutsche Ausgangssprache gar nicht definieren. Beim Übersetzen in andere Sprachen kann die übersetzende Person aber zusätzliche Kategorien ergänzen, falls die Zielsprache sie benötigt.
+
+Im Idealfall definieren wir im Quelltext alle Kategorien, die für eine der Zielsprachen relevant sein könnten.
+Das Übersetzungsteam muss dann aber nur diejenigen Kategorien übersetzen, die in der jeweiligen Zielsprache auch tatsächlich greifen.
+Für eine deutsche Übersetzung reicht es aus, `one` und `other` zu übersetzen — `two`, `few` und `many` werden hier nie ausgewertet.
+Für eine arabische Übersetzung hingegen sollten alle sechs Kategorien berücksichtigt werden.
+Exakte Werte wie `=0` oder `=2` funktionieren unabhängig vom Locale immer und können zusätzlich zu den benannten Kategorien verwendet werden.
 
 #### `select`: Auswahl anhand von String-Werten
 
@@ -628,9 +630,20 @@ Beim Build wurden bereits passend dazu die Basisadresse und die Sprache der Webs
 
 ```html
 <!doctype html>
-<html lang="de">
+<html lang="de" dir="ltr">
 <head>
   <base href="/de/">
+```
+
+Die Angular CLI setzt beim Build automatisch das Attribut `lang` auf die aktuelle Sprache und `dir` auf die passende Textflussrichtung (z. B. `rtl` für Arabisch oder Hebräisch).
+Das ist ein wichtiger Aspekt der Barrierefreiheit, den wir beim Build-Zeit-Ansatz nicht manuell umsetzen müssen.
+Beim Laufzeit-Ansatz hingegen werden diese Attribute nicht automatisch gesetzt.
+Angular bietet dafür auch keinen fertigen Service an (anders als z. B. den `Title`-Service für den Seitentitel).
+Wir müssen die Attribute daher manuell über die DOM-API setzen:
+
+```typescript
+document.documentElement.lang = 'de';
+document.documentElement.dir = 'ltr';
 ```
 
 ### Entwicklungsserver mit einzelnem Locale
