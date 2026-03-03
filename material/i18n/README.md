@@ -42,7 +42,7 @@ Neben Texten und Formaten müssen auch Währungen, Zeitzonen und Schreibrichtung
 Weiterhin werden unter anderem Farben und Bilder in verschiedenen Kulturkreisen unterschiedlich interpretiert.
 Eines wird hier schnell klar: Eine Anwendung für mehrere Länder auszurichten, ist eine große Aufgabe.
 
-Wir wollen in diesem Artikel zunächst betrachten, wie wir die Anwendung für einen spezifischen Sprachraum lokalisieren.
+Wir wollen in diesem Artikel zunächst betrachten, wie wir die Anwendung für einen spezifischen Sprachraum (im folgenden _Locale_) lokalisieren.
 Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt werden.
 
 
