@@ -1,17 +1,17 @@
 ---
-title: '[WIP] Interceptors: HTTP-Requests abfangen und transformieren'
-published: 2026-02-10
-lastModified: 2026-02-05
-hidden: true
+title: 'Interceptors: HTTP-Requests abfangen und transformieren'
+published: 2026-03-03
+lastModified: 2026-03-03
 ---
 
-> **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Im Buch behandeln wir den **`HttpClient`** von Angular sowie die **Resource API** mit der **`httpResource()`**.
-> Interceptors fungieren als übergreifende Middleware und sie erlauben es HTTP Calls zentral sowohl vor dem Aufruf als auch beim Empfang der Antwort zu modifizieren.
+In diesem Artikel geht es um *Interceptors* — ein Feature des Angular-`HttpClient`, mit dem sich HTTP-Requests und -Responses zentral abfangen und transformieren lassen.
+So können wir zum Beispiel Authentifizierungs-Header automatisch setzen, Fehler global abfangen oder die HTTP-Kommunikation loggen — ohne jeden einzelnen Request manuell anpassen zu müssen.
+Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interceptors, bevor wir am Beispiel einer Authentifizierung mit OAuth 2 und OpenID Connect ein praxisnahes Einsatzszenario umsetzen.
 
----
+## Inhalt
 
-Der `HttpClient` bietet ein weiteres nützliches Feature für die Arbeit mit Serverschnittstellen: *Interceptors*.
+[[toc]]
+
 Interceptors fungieren als Middleware für die gesamte HTTP-Kommunikation.
 Das bedeutet, dass ein Interceptor für alle HTTP-Abfragen und -Antworten ausgeführt wird und damit an globaler Stelle Entscheidungen und Umwandlungen vornehmen kann.
 Mithilfe von Interceptors kannst du zum Beispiel zusätzliche HTTP-Header setzen, Fehler abfangen oder Funktionen ausführen, ohne sie für jeden HTTP-Aufruf separat implementieren zu müssen.
@@ -54,7 +54,7 @@ export const myInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-Um funktionale Interceptors zu registrieren, verwenden wir die Funktion `provideHttpClient()` zusammen mit `withInterceptors()`:
+Um Interceptors zu registrieren, verwenden wir die Funktion `provideHttpClient()` zusammen mit `withInterceptors()`:
 
 ```typescript
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -172,7 +172,7 @@ const booksResource = httpResource<Book[]>(() => '/api/books');
 ```
 
 Wenn du also einen Auth-Interceptor konfiguriert hast, der ein Bearer-Token hinzufügt, wird dieses Token auch bei allen Requests über `httpResource()` automatisch mitgesendet.
-Das gleiche gilt für Logging-Interceptors, Error-Handler und alle anderen Interceptors.
+Dasselbe gilt für Logging-Interceptors, Error-Handler und alle anderen Interceptors.
 
 ## OAuth 2 und OpenID Connect
 
@@ -247,8 +247,7 @@ Hierfür wollen wir einen eigenen Service implementieren.
 Dieser Ansatz ist vergleichbar mit etablierten Bibliotheken.
 Sie stellen hierfür unter anderem folgende oder ähnliche Funktionen zur Verfügung:
 
-- `isAuthenticated$`: ein Observable, das den aktuellen Status der Authentifizierung reaktiv ausgibt
-- `isAuthenticated`: Boolean, das den Authentifizierungsstatus synchron bereitstellt
+- `isAuthenticated`: ein Signal, das den aktuellen Status der Authentifizierung reaktiv bereitstellt
 - `login()`: Methode zum Einloggen
 - `logout()`: Methode zum Ausloggen
 
@@ -333,12 +332,10 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Was haben wir gelernt?
+## Fazit
 
-- Interceptors modifizieren HTTP-Anfragen auf globaler Ebene und requestübergreifend.
-- Mit Interceptors lassen sich auch die Antworten vom Server verarbeiten, bevor sie im Service eintreffen.
-- Ein funktionaler Interceptor ist eine Funktion vom Typ `HttpInterceptorFn`, die den Request und eine Handler-Funktion erhält.
-- Interceptors werden mit `provideHttpClient(withInterceptors([...]))` registriert.
-- Mehrere Interceptors werden beim Request nach dem Muster A → B → C abgearbeitet. Bei der Serverantwort werden die Observables in umgekehrter Reihenfolge durchlaufen (C → B → A).
-- Interceptors sollten nur genutzt werden, wenn du für *alle* Requests bestimmte Aktionen durchführen willst. Verwende Interceptors nicht, wenn du für einen *einzelnen* Request spezielle Header oder andere Optionen setzen möchtest.
-- `httpResource()` nutzt intern den `HttpClient`, daher werden alle konfigurierten Interceptors automatisch auch für `httpResource()` angewendet.
+Interceptors sind ein mächtiges Werkzeug, um die HTTP-Kommunikation einer Angular-Anwendung zentral zu steuern.
+Statt in jedem Service einzeln Header zu setzen, Fehler abzufangen oder Requests zu loggen, erledigt ein Interceptor diese Aufgaben an einer einzigen Stelle — für alle HTTP-Anfragen gleichermaßen.
+Interceptors mit `HttpInterceptorFn` sind leichtgewichtig, einfach zu testen und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
+Da auch `httpResource()` intern den `HttpClient` verwendet, profitieren alle HTTP-Zugriffe automatisch von den konfigurierten Interceptors.
+Beachte dabei: Interceptors eignen sich für globale Aufgaben. Wenn du nur für einen einzelnen Request spezielle Header oder Optionen setzen möchtest, ist der direkte Weg über den `HttpClient` der bessere Ansatz.
