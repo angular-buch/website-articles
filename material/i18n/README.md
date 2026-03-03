@@ -186,7 +186,7 @@ Damit die Formatierung funktioniert, muss das angegebene Locale bereits in der A
 
 ### Format-Funktionen im TypeScript-Code
 
-Im Gegensatz zu den Pipes wie DatePipe oder DecimalPipe, die das Locale automatisch über Dependency Injection beziehen, sind die Hilfsfunktionen `formatDate`, `formatNumber`, `formatCurrency` und `formatPercent` reine Utility-Funktionen ohne DI.
+Im Gegensatz zu den Pipes wie DatePipe oder DecimalPipe, die das Locale automatisch über Dependency Injection beziehen, sind die Hilfsfunktionen `formatDate()`, `formatNumber()`, `formatCurrency()` und `formatPercent()` reine Utility-Funktionen ohne DI.
 Das Locale muss daher immer explizit als Parameter übergeben werden.
 Dazu injecten wir das Token `LOCALE_ID` und reichen den Wert an die Funktion durch:
 
