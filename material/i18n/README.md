@@ -253,7 +253,9 @@ Um die Angular-Features zur Internationalisierung zu nutzen, installieren wir da
 ng add @angular/localize
 ```
 
-Zusätzlich zur Installation wird das Paket in der Anwendung bekannt gemacht.
+Der Befehl `ng add` installiert nicht nur das Paket, sondern passt auch die Projektkonfiguration an:
+Er ergänzt `@angular/localize` in den TypeScript-Konfigurationsdateien (`tsconfig.app.json` und `tsconfig.spec.json`) unter `types` und fügt in der Datei `main.ts` eine Typreferenz hinzu (`/// <reference types="@angular/localize" />`).
+Damit steht die Funktion `$localize` global zur Verfügung, die Angular intern für die Übersetzung verwendet.
 Nun können wir als Nächstes die Texte in der Anwendung für die Übersetzung markieren.
 
 ### Nachrichten im HTML mit dem i18n-Attribut markieren
@@ -366,36 +368,52 @@ removeBook() {
 ### Pluralisierung und ICU-Ausdrücke
 
 Nicht alle Texte lassen sich 1:1 übersetzen — manchmal hängt die korrekte Formulierung von einem konkreten Wert ab.
-Angular unterstützt dafür die sogenannte ICU Message Syntax (*International Components for Unicode*).
-Ein ICU-Ausdruck besteht aus einem Komponenten-Property, einem ICU-Typ (z. B. `plural` oder `select`) und den zugehörigen Varianten, eingeschlossen in geschweifte Klammern.
+Angular unterstützt dafür die sogenannte [ICU Message Syntax](https://unicode-org.github.io/icu/userguide/format_parse/messages) (*International Components for Unicode*).
+Ein ICU-Ausdruck besteht aus einem Ausdruck (z. B. einem Signal), einem ICU-Typ und den zugehörigen Varianten, eingeschlossen in geschweifte Klammern:
 
-Ein typisches Beispiel: Wir wollen die Anzahl der gefundenen Bücher anzeigen — und dabei zwischen Singular und Plural unterscheiden.
+```
+{ ausdruck, typ, varianten }
+```
+
+Angular unterstützt die beiden wichtigsten ICU-Typen: `plural` und `select`.
 Ein ICU-Ausdruck steht direkt im Textinhalt eines Elements, das mit `i18n` markiert ist.
-Für die Pluralisierung verwenden wir den Typ `plural`:
+
+#### `plural`: Pluralisierung anhand von Zahlwerten
+
+Mit `plural` unterscheiden wir Textbausteine anhand eines numerischen Werts:
 
 ```html
 <p i18n>
-  {count, plural,
+  {count(), plural,
     =0 {Keine Bücher gefunden.}
     =1 {Ein Buch gefunden.}
-    other {{{count}} Bücher gefunden.}
+    other {{{count()}} Bücher gefunden.}
   }
 </p>
 ```
 
-Dabei ist `count` ein Property der Komponente.
-Die geschweiften Klammern um `{{count}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular — die äußeren Klammern gehören zur ICU-Syntax.
+Dabei ist `count` ein Signal der Komponente.
+Die geschweiften Klammern um `{{count()}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular — die äußeren Klammern gehören zur ICU-Syntax.
 
-Neben `plural` unterstützt Angular auch den Typ `select`, mit dem wir anhand eines Strings verschiedene Varianten ausgeben können:
+Neben exakten Werten wie `=0` oder `=1` definiert die ICU-Spezifikation auch benannte Kategorien: `zero`, `one`, `two`, `few`, `many` und `other`.
+Welche dieser Kategorien tatsächlich greifen, hängt vom eingestellten Locale ab — verschiedene Sprachen haben unterschiedliche Pluralregeln.
+Die Kategorie `other` ist der Fallback und muss immer angegeben werden.
+
+#### `select`: Auswahl anhand von String-Werten
+
+Mit `select` wählen wir eine Variante anhand eines Strings aus.
+Angular vergleicht den Wert des Ausdrucks mit den angegebenen Schlüsseln und gibt den passenden Text aus:
 
 ```html
 <p i18n>
-  {role, select,
+  {role(), select,
     admin {Willkommen, Administrator!}
     other {Willkommen!}
   }
 </p>
 ```
+
+Auch hier dient `other` als Fallback, wenn keiner der Schlüssel passt.
 
 Beide ICU-Ausdrücke werden vom Extraktionstool erkannt und in die Übersetzungsdatei aufgenommen.
 Die übersetzende Person kann die Varianten dann unabhängig voneinander übersetzen.
