@@ -46,7 +46,7 @@ Wir wollen in diesem Artikel zunächst betrachten, wie wir die Anwendung für ei
 Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt werden.
 
 
-## Lokalisierung (l10n): Die Anwendung für ein Locale einrichten
+## Lokalisierung (l10n): die Anwendung für ein Locale einrichten
 
 Einige eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
 Im Buch haben wir die DatePipe, DecimalPipe, CurrencyPipe und PercentPipe bereits ausführlich besprochen.
