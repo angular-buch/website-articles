@@ -35,7 +35,7 @@ Zum Beispiel wird als Dezimaltrennzeichen im deutschsprachigen Raum ein Komma ve
 Unter **Internationalisierung** (kurz: **i18n**) versteht man die weitergehende Anpassung für mehrere Sprachen und Kulturen.
 Hier geht es zusätzlich darum, die Texte der Anwendung in mehreren Sprachen vorzuhalten und bei Bedarf die richtige Sprache zu laden.
 
-> 💡 Übrigens: Die Bezeichnungen l10n und i18n sind sogenannte Numeronyme. Dabei wird die Anzahl der Buchstaben zwischen dem ersten und letzten Buchstaben eines Wortes durch eine Zahl ersetzt – bei localization sind es 10, bei internationalization 18.
+> 💡 Übrigens: Die Bezeichnungen l10n und i18n sind sogenannte Numeronyme. Dabei wird die Anzahl der Buchstaben zwischen dem ersten und letzten Buchstaben eines Worts durch eine Zahl ersetzt – bei "localization" sind es 10, bei "internationalization" 18.
 
 Prinzipiell kann man unter den Begriffen i18n und l10n viele Aufgaben zusammenfassen.
 Neben Texten und Formaten müssen auch Währungen, Zeitzonen und Schreibrichtungen berücksichtigt werden.
