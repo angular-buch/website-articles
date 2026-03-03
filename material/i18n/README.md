@@ -424,7 +424,7 @@ Auch hier dient `other` als Fallback, wenn keiner der Schlüssel passt.
 Beide ICU-Ausdrücke werden vom Extraktionstool erkannt und in die Übersetzungsdatei aufgenommen.
 Die übersetzende Person kann die Varianten dann unabhängig voneinander übersetzen.
 
-> **Hinweis:** ICU-Ausdrücke stehen nur in Templates zur Verfügung. In TypeScript-Code bietet `$localize` keine Unterstützung für ICU. Wird eine Pluralisierung im Code benötigt, kann die Browser-API `Intl.PluralRules` verwendet werden.
+> **Hinweis:** ICU-Ausdrücke stehen nur in Templates zur Verfügung. In TypeScript-Code bietet `$localize` keine Unterstützung für ICU. Wird eine Pluralisierung im Code benötigt, kann die Browser-API [`Intl.PluralRules`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules) verwendet werden.
 
 ### Feste IDs vergeben
 
