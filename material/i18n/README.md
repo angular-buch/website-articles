@@ -7,8 +7,10 @@ lastModified: 2026-03-02
 In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung für verschiedene Sprachräume lokalisieren und in mehreren Sprachen ausliefern können.
 Dabei betrachten wir zunächst die Lokalisierung (l10n) für ein einzelnes Locale und anschließend die vollständige Internationalisierung (i18n) mit dem Übersetzungstooling der Angular CLI.
 
-Anwendungen im Internet werden von Menschen aus verschiedenen Sprachräumen genutzt.
-Deshalb müssen wir die Software in mehreren Sprachen anbieten können — und die Übersetzung der Texte möglichst zentral halten, damit Anpassungen schnell möglich sind und die Arbeit an Übersetzer ausgelagert werden kann.
+Anwendungen werden häufig von Menschen aus unterschiedlichen Sprachräumen genutzt.
+Das gilt sowohl für öffentlich zugängliche als auch für unternehmensintern Systeme.
+Abhängig von Zielgruppe und Einsatzkontext kann es daher sinnvoll sein, die Software mehrsprachig anzubieten.
+Dabei wollen wir in der Regel Übersetzungen zentral verwalten, um Anpassungen effizient durchführen zu können oder sogar die Arbeit an spezielle Übersetzer auszulagern.
 Angular bringt dafür ein eigenes i18n-Tooling mit, das uns bei Extraktion, Übersetzung und Auslieferung unterstützt.
 
 ## Inhalt
