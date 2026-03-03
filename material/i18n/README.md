@@ -396,8 +396,11 @@ Dabei ist `count` ein Signal der Komponente.
 Die geschweiften Klammern um `{{count()}}` innerhalb der `other`-Variante sind die gewohnte Interpolation von Angular — die äußeren Klammern gehören zur ICU-Syntax.
 
 Neben exakten Werten wie `=0` oder `=1` definiert die ICU-Spezifikation auch benannte Kategorien: `zero`, `one`, `two`, `few`, `many` und `other`.
-Welche dieser Kategorien tatsächlich greifen, hängt vom eingestellten Locale ab — verschiedene Sprachen haben unterschiedliche Pluralregeln.
-Die Kategorie `other` ist der Fallback und muss immer angegeben werden.
+Welche dieser Kategorien tatsächlich greifen, wird durch die [CLDR Plural Rules](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html) festgelegt und hängt vom eingestellten Locale ab.
+Die Bezeichnungen `few` und `many` sind dabei leicht irreführend: Sie beschreiben keine Größenordnungen, sondern sprachspezifische grammatische Kategorien.
+Im Polnischen etwa gilt `few` für Zahlen mit den Endziffern 2–4 (außer 12–14), im Arabischen für 3–10.
+Deutsch und Englisch verwenden lediglich `one` und `other` — die übrigen Kategorien existieren für diese Sprachen nicht.
+Die Kategorie `other` ist der Fallback und muss immer angegeben werden. Nicht zutreffende Kategorien werden stillschweigend ignoriert — solange `other` vorhanden ist, kann es nicht zu einem Laufzeitfehler kommen.
 
 #### `select`: Auswahl anhand von String-Werten
 
