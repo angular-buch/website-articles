@@ -8,7 +8,7 @@ In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung für verschied
 Dabei betrachten wir zunächst die Lokalisierung (l10n) für ein einzelnes Locale und anschließend die vollständige Internationalisierung (i18n) mit dem Übersetzungstooling der Angular CLI.
 
 Anwendungen werden häufig von Menschen aus unterschiedlichen Sprachräumen genutzt.
-Das gilt sowohl für öffentlich zugängliche als auch für unternehmensintern Systeme.
+Das gilt für öffentlich zugängliche und unternehmensinterne Systeme gleichermaßen.
 Abhängig von Zielgruppe und Einsatzkontext kann es daher sinnvoll sein, die Software mehrsprachig anzubieten.
 Dabei wollen wir in der Regel Übersetzungen zentral verwalten, um Anpassungen effizient durchführen zu können oder sogar die Arbeit an ein Übersetzungsteam auszulagern.
 Angular bringt dafür ein eigenes i18n-Tooling mit, das uns bei Extraktion, Übersetzung und Auslieferung unterstützt.
