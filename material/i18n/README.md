@@ -48,7 +48,7 @@ Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt 
 
 ## Lokalisierung (l10n): Die Anwendung für ein Locale einrichten
 
-Viele eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
+Einige eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
 Im Buch haben wir die DatePipe, DecimalPipe, CurrencyPipe und PercentPipe bereits ausführlich besprochen — der Vollständigkeit halber erwähnen wir sie hier noch einmal.
 Wie wir dort gesehen haben, lassen sich die Pipes individuell mit einem Locale konfigurieren. In der Regel wollen wir die Sprache aber zentral für die gesamte Anwendung festlegen.
 Ohne weitere Konfiguration ist automatisch das Locale `en-US` gesetzt, also US-amerikanisches Englisch.
