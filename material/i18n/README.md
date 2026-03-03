@@ -586,11 +586,11 @@ Haben wir die Einstellung `localize` auf `true` gesetzt, werden nun alle verfüg
 Wir finden die gebauten Apps im Ordner `dist`:
 
 ```
-dist/
-  book-manager/
-    browser/
-      de/
-      en-US/
+dist
+└─ book-manager
+   └─ browser
+      ├─ de
+      └─ en-US
 ```
 
 Das momentane Ergebnis können wir überprüfen, indem wir mit einem einfachen Webserver die verschiedenen Varianten ausprobieren.
