@@ -1,7 +1,7 @@
 ---
 title: 'Lokalisierung (l10n) und Internationalisierung (i18n) mit Angular'
 published: 2026-03-02
-lastModified: 2026-03-02
+lastModified: 2026-03-03
 ---
 
 In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung für verschiedene Sprachräume lokalisieren und in mehreren Sprachen ausliefern können.
@@ -10,7 +10,7 @@ Dabei betrachten wir zunächst die Lokalisierung (l10n) für ein einzelnes Local
 Anwendungen werden häufig von Menschen aus unterschiedlichen Sprachräumen genutzt.
 Das gilt sowohl für öffentlich zugängliche als auch für unternehmensintern Systeme.
 Abhängig von Zielgruppe und Einsatzkontext kann es daher sinnvoll sein, die Software mehrsprachig anzubieten.
-Dabei wollen wir in der Regel Übersetzungen zentral verwalten, um Anpassungen effizient durchführen zu können oder sogar die Arbeit an spezielle Übersetzer auszulagern.
+Dabei wollen wir in der Regel Übersetzungen zentral verwalten, um Anpassungen effizient durchführen zu können oder sogar die Arbeit an ein Übersetzungsteam auszulagern.
 Angular bringt dafür ein eigenes i18n-Tooling mit, das uns bei Extraktion, Übersetzung und Auslieferung unterstützt.
 
 ## Inhalt
@@ -50,6 +50,7 @@ Danach lernen wir, wie mehrsprachige Anwendungen für mehrere Locales umgesetzt 
 
 Viele eingebaute Pipes von Angular benötigen Informationen zur Lokalisierung, um die Daten korrekt zu formatieren.
 Im Buch haben wir die DatePipe, DecimalPipe, CurrencyPipe und PercentPipe bereits ausführlich besprochen — der Vollständigkeit halber erwähnen wir sie hier noch einmal.
+Wie wir dort gesehen haben, lassen sich die Pipes individuell mit einem Locale konfigurieren. In der Regel wollen wir die Sprache aber zentral für die gesamte Anwendung festlegen.
 Ohne weitere Konfiguration ist automatisch das Locale `en-US` gesetzt, also US-amerikanisches Englisch.
 Die DatePipe verwendet für die Datumsformatierung damit stets die englischen Formate, z. B. `Jul 15, 2026, 8:45:04 PM`.
 Auch die DecimalPipe zur Zahlformatierung, die CurrencyPipe zur Anzeige von Währungen und die PercentPipe zur Prozentformatierung richten sich nach dem eingestellten Locale.
@@ -596,11 +597,10 @@ Das momentane Ergebnis können wir überprüfen, indem wir mit einem einfachen W
 In diesem Beispiel verwenden wir das Paket `http-server`, mit dem wir einen lokalen Webserver starten können:
 
 ```bash
-cd dist/book-manager/browser
-npx http-server
+npx http-server dist/book-manager/browser
 ```
 
-Mit diesem Aufruf starten wir den Webserver direkt im Ordner `dist/book-manager/browser`, sodass alle erstellten Unterordner aufgerufen werden können.
+Mit diesem Aufruf starten wir den Webserver für den Ordner `dist/book-manager/browser`, sodass alle erstellten Unterordner aufgerufen werden können.
 Öffnen wir danach die URL `http://localhost:8080/de/` im Browser, sehen wir die deutschsprachige Variante der Anwendung.
 Beim Build wurden bereits passend dazu die Basisadresse und die Sprache der Webseite angepasst:
 
@@ -888,8 +888,16 @@ Nun wird neben den deutschsprachigen Texten auch die deutsche Lokalisierung verw
 ### Die Sprache wechseln
 
 Auf der aktuellen Grundlage können wir nun einen einfachen Sprachwechsel implementieren.
-Dafür müssen wir die gewählte Sprache speichern und beim Start entscheiden, welche Sprachdatei geladen wird.
-Zur Speicherung der Auswahl eignet sich zum Beispiel der LocalStorage des Browsers.
+Dafür müssen wir die gewählte Sprache persistieren und beim Start entscheiden, welche Sprachdatei geladen wird.
+Je nach Architektur der Anwendung bieten sich dafür unterschiedliche Mechanismen an:
+
+- **`localStorage`**: Die einfachste Lösung im Browser — die Sprachauswahl wird lokal gespeichert und steht beim nächsten Seitenaufruf sofort zur Verfügung. Auf dem Server (SSR) ist `localStorage` allerdings nicht verfügbar (mehr dazu später im Artikel).
+- **Session oder Identity-Token**: Verfügt die Anwendung über ein Session-Management oder eine Authentifizierung, kann die Sprachpräferenz im Nutzerprofil oder in der Session hinterlegt werden. Dieser Ansatz funktioniert sowohl im Browser als auch auf dem Server.
+- **`Accept-Language`-Header**: Der Browser sendet bei jeder Anfrage einen Header mit den im Browser eingestellten Sprachen. Dieser kann als Fallback dienen, wenn keine explizite Auswahl vorliegt.
+- **Cookies**: Cookies werden bei jedem HTTP-Request an den Server gesendet und könnten die Sprachauswahl transportieren. Allerdings bringen Cookies zahlreiche Nachteile mit sich: Sie erhöhen die Größe jedes Requests, erfordern besondere Sicherheitsmaßnahmen (z. B. `HttpOnly`, `Secure`, `SameSite`) und unterliegen strengen datenschutzrechtlichen Anforderungen. In der Regel sind die anderen genannten Ansätze vorzuziehen.
+
+Im Folgenden verwenden wir exemplarisch `localStorage` — die einfachste Variante für eine rein clientseitige Anwendung.
+Dies ist keine generelle Handlungsempfehlung: Für das jeweilige Projekt können die anderen Ansätze besser geeignet sein, insbesondere wenn Server-Side Rendering zum Einsatz kommt.
 
 Damit die Sprache in der Oberfläche umgeschaltet werden kann, erstellen wir in der `App`-Komponente eine Methode `changeLocale()`:
 Ihre Aufgabe ist es, die gewählte Sprache im Browser zu speichern und dann die Anwendung neu zu laden.
@@ -906,6 +914,11 @@ export class App {
   }
 }
 ```
+
+> **Hinweis:** Bei Anwendungen mit Server-Side Rendering (SSR) ist zu beachten, dass `localStorage` und `location` Browser-APIs sind, die in Node.js nicht zur Verfügung stehen.
+> Eine Verwendung auf dem Server würde zu einem Laufzeitfehler führen.
+> Die Methode `changeLocale()` wird hier ausschließlich durch ein Click-Event ausgelöst und ist daher unkritisch — Events finden nur im Browser statt.
+> Auf die Besonderheiten beim Zusammenspiel mit SSR gehen wir weiter unten noch einmal ein.
 
 Im Template der Komponente erzeugen wir zwei Buttons, um die Methode `changeLocale()` aufzurufen.
 So ist es möglich, die Sprache zwischen Deutsch und Englisch zu wechseln.
@@ -989,7 +1002,7 @@ Die `AngularAppEngine` routet eingehende Anfragen anhand des URL-Pfads automatis
 
 ### Automatische Sprachweiterleitung
 
-Ruft ein Nutzer die Wurzel-URL `/` auf, wertet Angular den `Accept-Language`-Header des Browsers aus und leitet mit einem HTTP-302-Redirect an die passende Sprachvariante weiter.
+Ruft jemand die Wurzel-URL `/` auf, wertet Angular den `Accept-Language`-Header des Browsers aus und leitet mit einem HTTP-302-Redirect an die passende Sprachvariante weiter.
 Diese Weiterleitung funktioniert nur mit `outputMode: "server"` und ist dort automatisch aktiv — eine manuelle Konfiguration im Webserver (z. B. Nginx oder Apache) ist nicht notwendig.
 Ohne SSR muss die Weiterleitung hingegen manuell im Webserver eingerichtet werden.
 
@@ -1006,9 +1019,19 @@ provideClientHydration(withI18nSupport())
 
 Ohne `withI18nSupport()` werden Elemente mit i18n-Attributen bei der Hydration übersprungen und komplett neu gerendert.
 
+### Laufzeit-Übersetzung und SSR: Sprachauswahl auf dem Server
+
+Beim Laufzeit-Ansatz haben wir die Sprachauswahl exemplarisch im `localStorage` gespeichert.
+Auf dem Server steht `localStorage` jedoch nicht zur Verfügung. Es handelt sich um eine reine Browser-API, die in Node.js nicht existiert.
+Anders als beim Build-Zeit-Ansatz existieren beim Laufzeit-Ansatz auch keine sprachspezifischen URL-Pfade wie `/de/` oder `/en/` — das Locale lässt sich also nicht aus der URL ableiten.
+
+Kommt Server-Side Rendering zum Einsatz, sollte deshalb einer der im [Abschnitt zum Sprachwechsel](#die-sprache-wechseln) genannten servertauglichen Ansätze gewählt werden, etwa Session-basierte Speicherung oder die Auswertung des `Accept-Language`-Headers.
+Eine pauschale Lösung gibt es hier nicht — die Wahl hängt davon ab, wie die Anwendung generell Daten persistiert und welche Infrastruktur zur Verfügung steht.
+Am unkompliziertesten ist es in der Praxis, die Sprache bereits zur Build-Zeit festzulegen und so den Build-Zeit-Ansatz mit SSR zu kombinieren.
+
 ## Deployment: Unterverzeichnisse mit `subPath` anpassen
 
-Unabhängig davon, ob wir die Übersetzungen beim Build oder zur Laufzeit laden: Beim Deployment werden die lokalisierten Varianten standardmäßig in Unterverzeichnissen abgelegt, die dem Locale-Namen entsprechen (z. B. `/de/`, `/en-US/`).
+Beim Build-Zeit-Ansatz werden die lokalisierten Varianten standardmäßig in Unterverzeichnissen abgelegt, die dem Locale-Namen entsprechen (z. B. `/de/`, `/en-US/`).
 Mit der Option `subPath` in der Locale-Konfiguration können wir den Namen des Unterverzeichnisses anpassen:
 
 ```json
