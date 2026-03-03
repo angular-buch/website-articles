@@ -367,7 +367,7 @@ removeBook() {
 
 Nicht alle Texte lassen sich 1:1 übersetzen — manchmal hängt die korrekte Formulierung von einem konkreten Wert ab.
 Angular unterstützt dafür die sogenannte ICU Message Syntax (*International Components for Unicode*).
-Ein ICU-Ausdruck besteht aus einer Komponenten-Property, einem ICU-Typ (z. B. `plural` oder `select`) und den zugehörigen Varianten, eingeschlossen in geschweifte Klammern.
+Ein ICU-Ausdruck besteht aus einem Komponenten-Property, einem ICU-Typ (z. B. `plural` oder `select`) und den zugehörigen Varianten, eingeschlossen in geschweifte Klammern.
 
 Ein typisches Beispiel: Wir wollen die Anzahl der gefundenen Bücher anzeigen — und dabei zwischen Singular und Plural unterscheiden.
 Ein ICU-Ausdruck steht direkt im Textinhalt eines Elements, das mit `i18n` markiert ist.
