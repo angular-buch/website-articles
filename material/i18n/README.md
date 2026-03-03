@@ -401,6 +401,7 @@ Die Bezeichnungen `few` und `many` sind dabei leicht irreführend: Sie beschreib
 Im Polnischen etwa gilt `few` für Zahlen mit den Endziffern 2–4 (außer 12–14), im Arabischen für 3–10.
 Deutsch und Englisch verwenden lediglich `one` und `other` — die übrigen Kategorien existieren für diese Sprachen nicht.
 Die Kategorie `other` ist der Fallback und muss immer angegeben werden. Nicht zutreffende Kategorien werden stillschweigend ignoriert — solange `other` vorhanden ist, kann es nicht zu einem Laufzeitfehler kommen.
+Das bedeutet konkret: Für Deutsch greifen nur `one` und `other`. Kategorien wie `two`, `few` oder `many` müssen wir für die deutsche Ausgangssprache gar nicht definieren. Beim Übersetzen in andere Sprachen kann die übersetzende Person aber zusätzliche Kategorien ergänzen, falls die Zielsprache sie benötigt.
 
 #### `select`: Auswahl anhand von String-Werten
 
