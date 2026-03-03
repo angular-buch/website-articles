@@ -424,6 +424,8 @@ Auch hier dient `other` als Fallback, wenn keiner der Schlüssel passt.
 Beide ICU-Ausdrücke werden vom Extraktionstool erkannt und in die Übersetzungsdatei aufgenommen.
 Die übersetzende Person kann die Varianten dann unabhängig voneinander übersetzen.
 
+> **Hinweis:** ICU-Ausdrücke stehen nur in Templates zur Verfügung. In TypeScript-Code bietet `$localize` keine Unterstützung für ICU. Wird eine Pluralisierung im Code benötigt, kann die Browser-API `Intl.PluralRules` verwendet werden.
+
 ### Feste IDs vergeben
 
 Wenn wir im nächsten Schritt das Extraktionstool der Angular CLI verwenden, finden wir in der erzeugten Datei zu jedem Eintrag eine automatisch generierte ID.
