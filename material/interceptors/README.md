@@ -14,10 +14,8 @@ Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interc
 
 Interceptors fungieren als Middleware für die gesamte HTTP-Kommunikation.
 Das bedeutet, dass ein Interceptor für alle HTTP-Abfragen und -Antworten ausgeführt wird und damit an globaler Stelle Entscheidungen und Umwandlungen vornehmen kann.
-Mithilfe von Interceptors kannst du zum Beispiel zusätzliche HTTP-Header setzen, Fehler abfangen oder Funktionen ausführen, ohne sie für jeden HTTP-Aufruf separat implementieren zu müssen.
-
 Ein Interceptor wird global installiert und kann für jeden HTTP-Request und die Response entscheiden, ob und wie sie behandelt werden.
-Diese Behandlung kann unter anderem sein:
+Typische Einsatzgebiete sind unter anderem:
 
 - Sicherheitsfunktionen, z. B. Authentifizierung über ein Access Token, das mit jedem Request im Header übermittelt werden muss
 - Hinzufügen zusätzlicher Headerfelder, z. B. für Caching
@@ -40,7 +38,7 @@ Bei einem HTTP-Request werden die Interceptors von vorn nach hinten abgearbeitet
 
 ## Interceptors anlegen
 
-Interceptors werden in der Regel als einfache Funktion implementiert.
+Interceptors werden als einfache Funktion implementiert.
 Angular stellt dafür den Typ `HttpInterceptorFn` bereit.
 Du erhältst den Request und eine Funktion vom Typ `HttpHandlerFn`, an die du den veränderten Request übergibst.
 Wenn du Services anfordern möchtest, kannst du die Funktion `inject()` nutzen, da der Interceptor stets in einem Injection Context ausgeführt wird.
@@ -167,9 +165,11 @@ Das bedeutet, dass alle konfigurierten Interceptors automatisch auch für `httpR
 ```typescript
 import { httpResource } from '@angular/common/http';
 
-// Dieser Request durchläuft alle registrierten Interceptors
+// In einer Komponente oder einem Service:
 const booksResource = httpResource<Book[]>(() => '/api/books');
 ```
+
+Beachte, dass `httpResource()` einen Injection Context benötigt. Der Aufruf darf also nicht an einer beliebigen Stelle im Code stehen, sondern muss z. B. in einer Komponente oder einem Service erfolgen. Alternativ kann mit `runInInjectionContext()` ein solcher Kontext manuell erzeugt werden.
 
 Wenn du also einen Auth-Interceptor konfiguriert hast, der ein Bearer-Token hinzufügt, wird dieses Token auch bei allen Requests über `httpResource()` automatisch mitgesendet.
 Dasselbe gilt für Logging-Interceptors, Error-Handler und alle anderen Interceptors.
@@ -183,10 +183,8 @@ In der Regel wird dieser Vorgang durch den Austausch von Authentifizierungstoken
 Nach dem Login senden wir mit jedem Request an die Web-API ein Access Token, das die Berechtigung der nutzenden Person bestätigt.
 Dies ist ein klassischer Anwendungsfall für einen Interceptor, denn er ermöglicht es, das Token automatisch mit jedem Request einzufügen.
 
-Wir möchten dir an dieser Stelle dazu raten, eine Authentifizierungslösung nie selbst zu entwickeln.
-Das Risiko, dabei einen Fehler zu machen, ist sehr hoch, und selbst wenn du Erfahrung in diesem Bereich hast, solltest du das Rad nicht neu erfinden.
-Spezialisierte Anbieter bieten hier Lösungen, die seit Jahren etabliert sind und stets an die neuesten Sicherheitsanforderungen angepasst werden.
-Greife deshalb bitte immer auf etablierte Lösungen und Identity Provider zurück.
+**Wir möchten dir an dieser Stelle dazu raten, eine Authentifizierungslösung nie selbst zu entwickeln.
+Etablierte Anbieter und Identity Provider bieten Lösungen, die seit Jahren erprobt sind und stets an die neuesten Sicherheitsanforderungen angepasst werden.**
 
 Weit verbreitete Industriestandards zur Autorisierung sind *OAuth 2* und das darauf aufsetzende Authentifizierungsframework *OpenID Connect (OIDC)*.
 
@@ -207,7 +205,7 @@ Diese Challenge wird dann im Request übertragen.
 
 Nach dem erfolgreichen Login empfängt der Client lediglich einen *Authorization Code* vom Authorization Server.
 Dieser Code ist noch kein gültiges Token, sondern muss zunächst „eingetauscht" werden:
-Dafür sendet der Client den Authorization Code zusammen mit dem Verifier in einem asynchronen HTTP-Request (AJAX) an den Authorization Server.
+Dafür sendet der Client den Authorization Code zusammen mit dem Verifier in einem HTTP-Request an den Authorization Server.
 Dieser kann jetzt prüfen, ob der Verifier zum zuvor ausgestellten Authorization Code passt.
 Ist die Prüfung erfolgreich, stellt der Authorization Server schließlich an den Client das Access Token und das Identity Token aus.
 Damit kann der Client nun den Resource Server abfragen, der wiederum prüft, ob das Access Token valide ist.
@@ -243,13 +241,13 @@ Eines haben aber alle Methoden gemeinsam: Sie erfordern, dass spezielle Informat
 
 Um mit jedem Request über einen Interceptor entsprechende Informationen mitzusenden, benötigen wir zunächst eine zentrale Stelle in der Anwendung, die die Authentifizierung vollzieht und Informationen über den aktuellen Status ausgibt.
 
-Hierfür wollen wir einen eigenen Service implementieren.
-Dieser Ansatz ist vergleichbar mit etablierten Bibliotheken.
-Sie stellen hierfür unter anderem folgende oder ähnliche Funktionen zur Verfügung:
+Etablierte Bibliotheken stellen hierfür unter anderem folgende oder ähnliche Funktionen zur Verfügung:
 
 - `isAuthenticated`: ein Signal, das den aktuellen Status der Authentifizierung reaktiv bereitstellt
 - `login()`: Methode zum Einloggen
 - `logout()`: Methode zum Ausloggen
+
+Diesen Ansatz wollen wir mit einem eigenen Service nachbilden.
 
 ```typescript
 // auth.service.ts
@@ -277,6 +275,13 @@ Um in jede API-Anfrage einen Token zur Authentifizierung einzubauen, wollen wir 
 Das hat den Vorteil, dass wir nicht bei jedem einzelnen HTTP-Request einen entsprechenden Header mit dem Token setzen müssen.
 Sobald der Interceptor aktiv ist, wird er auf alle HTTP-Requests angewendet.
 
+Zur Authentifizierung am Server wollen wir ein Bearer-Token einsetzen.
+Ein solches Token muss üblicherweise zuvor von einem Authentifizierungsserver ausgestellt werden.
+Die konkrete Implementierung hängt stark vom Projekt und von den zu nutzenden Endpunkten ab.
+Uns geht es an dieser Stelle vor allem darum, zu zeigen, wie ein solches Token in den Request eingebaut werden kann.
+Wir nutzen deshalb den statischen String `1234567890`, den wir als Bearer-Token senden.
+Das bedeutet, dass das Token im Headerfeld `Authorization` mit dem Präfix `Bearer` übermittelt werden muss.
+
 ```typescript
 // auth.interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -298,13 +303,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req);
 };
 ```
-
-Zur Authentifizierung am Server wollen wir ein Bearer-Token einsetzen.
-Ein solches Token muss üblicherweise zuvor von einem Authentifizierungsserver ausgestellt werden.
-Die konkrete Implementierung hängt stark vom Projekt und von den zu nutzenden Endpunkten ab.
-Uns geht es an dieser Stelle vor allem darum, zu zeigen, wie ein solches Token in den Request eingebaut werden kann.
-Wir nutzen deshalb den statischen String `1234567890`, den wir als Bearer-Token senden.
-Das bedeutet, dass das Token im Headerfeld `Authorization` mit dem Präfix `Bearer` übermittelt werden muss.
 
 An dieser Stelle treffen wir eine Fallunterscheidung:
 Liefert der `AuthService` im Property `isAuthenticated` den Wert `true`, wollen wir ein zusätzliches Headerfeld im Request setzen.
@@ -334,8 +332,8 @@ export const appConfig: ApplicationConfig = {
 
 ## Fazit
 
-Interceptors sind ein mächtiges Werkzeug, um die HTTP-Kommunikation einer Angular-Anwendung zentral zu steuern.
+Interceptors sind ein zentrales Werkzeug, um die HTTP-Kommunikation einer Angular-Anwendung zu steuern.
 Statt in jedem Service einzeln Header zu setzen, Fehler abzufangen oder Requests zu loggen, erledigt ein Interceptor diese Aufgaben an einer einzigen Stelle — für alle HTTP-Anfragen gleichermaßen.
-Interceptors mit `HttpInterceptorFn` sind leichtgewichtig, einfach zu testen und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
+Interceptors mit `HttpInterceptorFn` sind leichtgewichtig und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
 Da auch `httpResource()` intern den `HttpClient` verwendet, profitieren alle HTTP-Zugriffe automatisch von den konfigurierten Interceptors.
 Beachte dabei: Interceptors eignen sich für globale Aufgaben. Wenn du nur für einen einzelnen Request spezielle Header oder Optionen setzen möchtest, ist der direkte Weg über den `HttpClient` der bessere Ansatz.
