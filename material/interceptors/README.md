@@ -4,7 +4,7 @@ published: 2026-03-03
 lastModified: 2026-03-04
 ---
 
-In diesem Artikel geht es um *Interceptors*. Damit lassen sich HTTP-Requests und -Responses in Angular zentral erfassen und transformieren.
+In diesem Artikel geht es um *Interceptors* in Angular. Damit lassen sich HTTP-Requests und -Responses zentral erfassen und transformieren.
 So können wir zum Beispiel Authentifizierungs-Header automatisch setzen, Fehler global behandeln oder die HTTP-Kommunikation loggen, ohne jeden einzelnen Request manuell anpassen zu müssen.
 Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interceptors, bevor wir am Beispiel einer Authentifizierung mit OAuth 2 und OpenID Connect ein praxisnahes Einsatzszenario umsetzen.
 
@@ -36,7 +36,13 @@ Bei einem HTTP-Request werden die Interceptors in der angegebenen Reihenfolge ab
 
 ![Diagramm: Ein HTTP-Request fließt vom Client durch drei Interceptors A, B und C zum Server. Die Response nimmt den umgekehrten Weg zurück.](./interceptor-flow.svg "Abarbeitung von Interceptors: Request und Response durchlaufen die Interceptor-Kette in entgegengesetzter Reihenfolge.")
 
-## Interceptors anlegen
+## Interceptors entwickeln und einsetzen
+
+Interceptors bestehen aus wenig Code, bieten aber viele Möglichkeiten.
+Wir schauen uns an, wie wir Interceptors anlegen, den Request und die Response verarbeiten und die Interceptors in unsere Anwendung einbinden.
+Außerdem klären wir, wie wir Interceptors gezielt steuern und welche Resource-APIs von Interceptors profitieren.
+
+### Interceptors anlegen
 
 Interceptors werden als einfache Funktion implementiert.
 Angular stellt dafür den Typ `HttpInterceptorFn` bereit.
@@ -68,7 +74,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Den Request manipulieren
+### Den Request manipulieren
 
 Die Interceptor-Funktion wird für jeden ausgehenden HTTP-Request ausgeführt.
 Bevor wir den Request auf die Reise schicken, können wir den Inhalt manipulieren.
@@ -93,7 +99,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-## Die Response verarbeiten
+### Die Response verarbeiten
 
 Der HttpClient arbeitet intern mit Observables aus der Bibliothek RxJS.
 Jeder Interceptor gibt ein Observable zurück: Es verarbeitet den Request und gibt die HTTP-Antworten aus, die vom Server eintreffen.
@@ -130,8 +136,9 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 > Es ist wichtig, dass das Observable, das du aus dem Interceptor zurückgibst, immer completet wird.
 > Ist der Datenstrom nie zu Ende, so wird auch der ursprüngliche Aufruf des HttpClient niemals beendet.
 
-## Interceptors einbinden
+### Interceptors einbinden
 
+Der Interceptor ist geschrieben, jetzt müssen wir ihn aber noch registrieren. Sonst passiert nichts.
 Interceptors werden als Provider über die Dependency Injection von Angular bereitgestellt.
 Wir registrieren sie mit `provideHttpClient()` und `withInterceptors()`.
 
@@ -157,10 +164,146 @@ export const appConfig: ApplicationConfig = {
 Die Reihenfolge der Interceptors im Array bestimmt die Ausführungsreihenfolge:
 Bei einem Request werden sie in der angegebenen Reihenfolge abgearbeitet, bei der Response in umgekehrter Reihenfolge.
 
-## Interceptors mit httpResource
+### Interceptors gezielt steuern
+
+In der Praxis kommunizieren Angular-Anwendungen häufig mit mehreren APIs gleichzeitig.
+Ein Auth-Interceptor, der ein Bearer-Token an jeden Request anhängt, kann dann zum Problem werden — denn nicht jede API erwartet dasselbe Token oder überhaupt eine Authentifizierung.
+Angular bietet unter anderem folgende Mechanismen, um Interceptors gezielt zu steuern.
+
+#### 1. Prüfung im Interceptor selbst
+
+Die einfachste Lösung ist eine Bedingung direkt im Interceptor.
+Wir prüfen z. B. die URL des Requests und entscheiden anhand dessen, ob der Interceptor eingreifen soll.
+Requests, die nicht zur eigenen API gehören, werden unverändert weitergeleitet:
+
+```typescript
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  if (!req.url.startsWith('/api/')) {
+    return next(req);
+  }
+  // Token nur für eigene API anhängen
+  // ...
+};
+```
+
+#### 2. Prüfung mit `HttpContextToken`
+
+Ein [`HttpContextToken`](https://angular.dev/api/common/http/HttpContextToken) ist ein typisierter Schlüssel, mit dem wir Metadaten an einen einzelnen HTTP-Request anhängen können.
+Wir können damit beliebige Informationen bereitstellen, vor allem auch die Information, ob ein Interceptor eingreifen soll oder nicht.
+Dazu definieren wir einen Token mit einem Standardwert.
+In unserem Beispiel legt die Funktion `() => true` fest, dass der Interceptor per Default für alle Requests aktiv ist.
+Im Interceptor prüfen wir den Token und greifen nur ein, wenn er auf `true` steht:
+
+```typescript
+import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
+
+export const NEEDS_AUTH = new HttpContextToken<boolean>(() => true);
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  if (!req.context.get(NEEDS_AUTH)) {
+    return next(req);
+  }
+
+  const modifiedReq = req.clone({
+    setHeaders: { 'Authorization': 'Bearer my-token' }
+  });
+  return next(modifiedReq);
+};
+```
+
+Einzelne Requests können sich von der Authentifizierung abmelden, indem sie den Token auf `false` setzen.
+Anders als die übrigen Eigenschaften eines `HttpRequest` ist der `HttpContext` veränderlich (mutable) — ein Interceptor kann den Kontext also auch zur Laufzeit anpassen.
+Mehr dazu in der Angular-Dokumentation unter [Request and response metadata](https://angular.dev/guide/http/interceptors#request-and-response-metadata).
+
+```typescript
+import { HttpContext } from '@angular/common/http';
+import { NEEDS_AUTH } from './auth.interceptor';
+
+// Dieser Request braucht keine Authentifizierung
+http.get('/api/public/status', {
+  context: new HttpContext().set(NEEDS_AUTH, false)
+});
+```
+
+#### 3. Route-spezifische Interceptors
+
+Es liegt nahe, `provideHttpClient()` einfach mehrfach auf Root-Ebene aufzurufen, um verschiedene Interceptor-Konfigurationen für verschiedene APIs zu definieren. Das funktioniert jedoch nicht wie erwartet: Ein zweiter Aufruf von `provideHttpClient()` überschreibt die Konfiguration des ersten.
+
+Wir können uns aber zunutze machen, dass Routen in Angular eigene Provider haben können.
+So können wir in einer Route mit eigenem `providers`-Array einen eigenen `provideHttpClient` mit zusätzlichen Interceptors registrieren.
+Damit erhält dieser Bereich der Anwendung einen eigenen HttpClient mit einer unabhängigen Interceptor-Konfiguration.
+
+```typescript
+// admin.routes.ts
+export const ADMIN_ROUTES: Routes = [
+  {
+    path: '',
+    component: AdminDashboardComponent,
+    providers: [
+      provideHttpClient(
+        withInterceptors([adminAuthInterceptor]),
+        withRequestsMadeViaParent() // bei Bedarf
+      )
+    ]
+  }
+];
+```
+
+In diesem Beispiel durchlaufen Requests aus dem Admin-Bereich den `adminAuthInterceptor`.
+Requests aus anderen Teilen der Anwendung sind davon nicht betroffen.
+Die Option [`withRequestsMadeViaParent()`](https://angular.dev/api/common/http/withRequestsMadeViaParent) ist optional: Nur wenn wir sie angeben, durchlaufen die Requests anschließend auch die Interceptors der übergeordneten Ebene. Ohne diese Option arbeitet der HttpClient der Route vollständig unabhängig.
+<!-- Reihenfolge: Child-Interceptors zuerst, dann Parent-Interceptors. Siehe Angular-Test: https://github.com/angular/angular/blob/main/packages/common/http/test/provider_spec.ts (Test: "should include interceptors from both parent and child contexts", assertiert 'child,parent') -->
+
+#### 4. Wiederverwendbarer URL-Filter mit Factory-Funktion
+
+Da ein Interceptor nur eine Funktion ist, haben wir volle Flexibilität bei der Gestaltung.
+Wir können das Filtern auf eine URL auch als wiederverwendbare Factory-Funktion umsetzen.
+In unserem Beispiel nennen wir sie `withUrlFilter()`: Sie nimmt ein URL-Präfix und einen beliebigen Interceptor entgegen und gibt einen neuen Interceptor zurück, der nur für passende URLs aktiv wird.
+Das konkrete Filterkriterium kann je nach Anwendungsfall frei gestaltet werden — ob nach URL, HTTP-Methode oder anderen Eigenschaften des Requests.
+
+```typescript
+function withUrlFilter(
+  urlPattern: string,
+  interceptor: HttpInterceptorFn
+): HttpInterceptorFn {
+  return (req, next) => {
+    if (!req.url.startsWith(urlPattern)) {
+      return next(req);
+    }
+    return interceptor(req, next);
+  };
+}
+```
+
+Bei der Registrierung können wir so gezielt festlegen, welcher Interceptor für welche API zuständig ist:
+
+```typescript
+provideHttpClient(
+  withInterceptors([
+    withUrlFilter('/api/', authInterceptor),
+    loggingInterceptor
+  ])
+)
+```
+
+### Interceptors mit den Resource-APIs
+
+Angular bietet mit `resource()`, `rxResource()` und `httpResource()` verschiedene Signal-basierte APIs an, mit denen wir asynchron Daten von einem Server laden können.
+Ob Interceptors dabei greifen, hängt von der darunterliegenden Technologie ab — nicht alle Resource-Varianten nutzen den HttpClient.
 
 Die Funktion `httpResource()` nutzt intern den HttpClient, um HTTP-Requests durchzuführen.
 Das bedeutet, dass alle konfigurierten Interceptors automatisch auch für `httpResource()` angewendet werden.
+Die Funktion `resource()` basiert auf Promises und nutzt nicht den HttpClient — Interceptors werden hier also nicht ausgeführt!
+Bei `rxResource()` hängt es davon ab, wie der zugrunde liegende Service implementiert ist: Verwendet der Service intern den HttpClient, greifen die Interceptors. Wird stattdessen z. B. die native Fetch API oder eine andere Datenquelle genutzt, sind keine Interceptors aktiv.
+
+| | `resource` | `rxResource` | `httpResource` |
+|---|---|---|---|
+| **Basiert auf** | Promise | Observable | HttpClient |
+| **Interceptors** | ❌ | (✅)* | ✅ |
+
+<small>*\* nur wenn im Service intern der HttpClient verwendet wird*</small>
+
+Wenn wir also einen Auth-Interceptor konfiguriert haben, der ein Bearer-Token hinzufügt, wird dieses Token bei `httpResource()` automatisch mitgesendet:
 
 ```typescript
 import { httpResource } from '@angular/common/http';
@@ -169,10 +312,21 @@ import { httpResource } from '@angular/common/http';
 const booksResource = httpResource<Book[]>(() => '/api/books');
 ```
 
-Beachte, dass `httpResource()` einen Injection Context benötigt. Der Aufruf darf also nicht an einer beliebigen Stelle im Code stehen, sondern muss z. B. in einer Komponente oder einem Service erfolgen. Alternativ kann mit `runInInjectionContext()` ein solcher Kontext manuell erzeugt werden.
+Auch bei `rxResource()` greifen Interceptors, sofern der Service den HttpClient nutzt:
 
-Wenn wir also einen Auth-Interceptor konfiguriert haben, der ein Bearer-Token hinzufügt, wird dieses Token auch bei allen Requests über `httpResource()` automatisch mitgesendet.
-Dasselbe gilt für Logging-Interceptors, Error-Handler und alle anderen Interceptors.
+```typescript
+import { rxResource } from '@angular/core/rxjs-interop';
+import { inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+// In einer Komponente oder einem Service:
+const http = inject(HttpClient);
+const booksResource = rxResource({
+  loader: () => http.get<Book[]>('/api/books')
+});
+```
+
+Beachte, dass die Resource-APIs einen Injection Context benötigen. Der Aufruf darf also nicht an einer beliebigen Stelle im Code stehen, sondern muss z. B. in einer Komponente oder einem Service erfolgen. Alternativ kann mit `runInInjectionContext()` ein solcher Kontext manuell erzeugt werden.
 
 ## Praxisbeispiel: API-Aufrufe mit Credentials anreichern
 
@@ -333,21 +487,45 @@ Für Angular möchten wir die beiden folgenden Bibliotheken empfehlen:
 
 Beide sind von der OpenID Foundation zertifiziert und bieten komfortable Schnittstellen, um die Flows von OAuth 2 und OIDC in eine Angular-Anwendung zu integrieren.
 
-## Interceptors im Angular-Ökosystem
+## Weitere Interceptors im Angular-Ökosystem
 
-Nicht nur für Authentifizierung — viele Bibliotheken aus dem Angular-Ökosystem nutzen Interceptors als Integrationspunkt.
-Hier eine Auswahl:
+Viele Standardfälle müssen wir gar nicht selbst implementieren.
+Zahlreiche Bibliotheken aus dem Angular-Ökosystem nutzen Interceptors als Integrationspunkt, um sich nahtlos in die HTTP-Kommunikation einer Anwendung einzuklinken.
 
-**Authentifizierung:** Bibliotheken wie [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc), [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client), [@azure/msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js) (Azure AD / Entra ID), [@auth0/auth0-angular](https://github.com/auth0/auth0-angular) und [keycloak-angular](https://github.com/mauriciovigolo/keycloak-angular) bringen eigene Interceptors mit, die den gesamten Token-Lifecycle verwalten: Login, Token-Erneuerung und das automatische Anhängen des Access Tokens an jeden Request.
+### Authentifizierung
 
-**Ladeindikator:** Bibliotheken wie [ngx-progressbar](https://github.com/MurhafSousli/ngx-progressbar), [@ngx-loading-bar/http-client](https://github.com/aitboudad/ngx-loading-bar) und [ng-http-loader](https://github.com/mpalourdio/ng-http-loader) nutzen Interceptors, um bei laufenden HTTP-Requests automatisch einen Fortschrittsbalken oder Spinner anzuzeigen.
+Für die Authentifizierung stellen zahlreiche Bibliotheken eigene Interceptors bereit, die den gesamten Token-Lifecycle verwalten: Login, Token-Erneuerung und das automatische Anhängen des Access Tokens an jeden Request.
 
-**Caching:** Die Bibliothek [@ngneat/cashew](https://github.com/ngneat/cashew) stellt einen Interceptor bereit, der HTTP-Responses cacht und bei wiederholten Requests direkt aus dem Cache ausliefert.
+- [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc)
+- [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
+- [@azure/msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js) (Azure AD / Entra ID)
+- [@auth0/auth0-angular](https://github.com/auth0/auth0-angular)
+- [keycloak-angular](https://github.com/mauriciovigolo/keycloak-angular)
+
+### Ladeindikator
+
+Einige Bibliotheken nutzen Interceptors, um bei laufenden HTTP-Requests automatisch einen Fortschrittsbalken oder Spinner anzuzeigen.
+So erhalten wir ohne eigenen Code ein visuelles Feedback für alle HTTP-Anfragen.
+
+- [ngx-progressbar](https://github.com/MurhafSousli/ngx-progressbar)
+- [@ngx-loading-bar/http-client](https://github.com/aitboudad/ngx-loading-bar)
+- [ng-http-loader](https://github.com/mpalourdio/ng-http-loader)
+
+### Caching
+
+Auch für das Caching von HTTP-Responses gibt es eine Lösung auf Basis von Interceptors.
+Damit können wiederholte Requests direkt aus dem Cache ausgeliefert werden, ohne den Server erneut zu kontaktieren.
+
+- [@ngneat/cashew](https://github.com/ngneat/cashew)
 
 ## Fazit
 
+In diesem Artikel haben wir den gesamten Weg kennengelernt: von der Funktionsweise über die Implementierung und gezielte Steuerung bis hin zum Einsatz in der Praxis mit OAuth 2 und OpenID Connect.
 Interceptors sind ein zentrales Werkzeug, um die HTTP-Kommunikation einer Angular-Anwendung zu steuern.
 Statt in jedem Service einzeln Header zu setzen, Fehler zu behandeln oder Requests zu loggen, erledigt ein Interceptor diese Aufgaben an einer einzigen Stelle, für alle HTTP-Anfragen gleichermaßen.
-Interceptors mit `HttpInterceptorFn` sind leichtgewichtig und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
+Interceptors sind leichtgewichtig und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
 Da auch `httpResource()` intern den HttpClient verwendet, profitieren alle HTTP-Zugriffe automatisch von den konfigurierten Interceptors.
-Beachte dabei: Interceptors eignen sich für globale Aufgaben. Wenn du nur für einen einzelnen Request spezielle Header oder Optionen setzen möchtest, ist der direkte Weg über den HttpClient der bessere Ansatz.
+Mit `HttpContextToken` und `withRequestsMadeViaParent()` haben wir gesehen, wie sich Interceptors auch gezielt steuern lassen — und mit einer eigenen Factory-Funktion können wir das Filtern auf bestimmte URLs elegant und wiederverwendbar umsetzen.
+
+Falls du noch keine Interceptors im Einsatz hast, probiere dieses Werkzeug doch einmal aus und verschlanke deinen Code damit.
+**Wir wünschen viel Spaß beim Ausprobieren!**
