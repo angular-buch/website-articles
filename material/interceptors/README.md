@@ -229,7 +229,7 @@ http.get('/api/public/status', {
 
 Es liegt nahe, `provideHttpClient()` einfach mehrfach auf Root-Ebene aufzurufen, um verschiedene Interceptor-Konfigurationen für verschiedene APIs zu definieren. Das funktioniert jedoch nicht wie erwartet: Ein zweiter Aufruf von `provideHttpClient()` überschreibt die Konfiguration des ersten.
 
-Wir können uns aber zunutze machen, dass Routen in Angular eigene Provider haben können.
+Wir können uns aber zunutze machen, dass Routen in Angular eigene Providers haben können.
 So können wir in einer Route mit eigenem `providers`-Array einen eigenen `provideHttpClient` mit zusätzlichen Interceptors registrieren.
 Damit erhält dieser Bereich der Anwendung einen eigenen HttpClient mit einer unabhängigen Interceptor-Konfiguration.
 
