@@ -235,7 +235,7 @@ Damit erhält dieser Bereich der Anwendung einen eigenen HttpClient mit einer un
 
 ```typescript
 // admin.routes.ts
-export const ADMIN_ROUTES: Routes = [
+export const adminRoutes: Routes = [
   {
     path: '',
     component: AdminDashboard,
