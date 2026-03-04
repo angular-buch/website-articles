@@ -21,7 +21,7 @@ Typische Einsatzgebiete sind unter anderem:
 - Hinzufügen zusätzlicher Headerfelder, z. B. für Caching
 - Logging von Request und Response
 - Anzeige von Zustandsinformationen zum Request (z. B., ob eine HTTP-Anfrage noch aktiv ist oder nicht)
-- globales Abfangen und Behandeln von Fehlern bei einer HTTP-Anfrage, z. B. mit `catchError()`
+- globales Erfassen und Behandeln von Fehlern bei einer HTTP-Anfrage, z. B. mit `catchError()`
 
 ## Funktionsweise der Interceptors
 
