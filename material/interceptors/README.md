@@ -238,7 +238,7 @@ Damit erhält dieser Bereich der Anwendung einen eigenen HttpClient mit einer un
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
-    component: AdminDashboardComponent,
+    component: AdminDashboard,
     providers: [
       provideHttpClient(
         withInterceptors([adminAuthInterceptor]),
