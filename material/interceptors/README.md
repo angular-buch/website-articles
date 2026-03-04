@@ -1,7 +1,7 @@
 ---
 title: 'Interceptors: HTTP-Requests erfassen und transformieren'
 published: 2026-03-03
-lastModified: 2026-03-03
+lastModified: 2026-03-04
 ---
 
 In diesem Artikel geht es um *Interceptors*. Damit lassen sich HTTP-Requests und -Responses in Angular zentral erfassen und transformieren.
@@ -13,7 +13,7 @@ Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interc
 [[toc]]
 
 Interceptors fungieren als Middleware, also als Zwischenschicht, für die gesamte HTTP-Kommunikation.
-Interceptors werden global installiert und für alle HTTP-Abfragen und -Antworten ausgeführt.
+Sie werden global installiert und für alle HTTP-Abfragen und -Antworten ausgeführt.
 So lassen sich Requests und Responses an zentraler Stelle verarbeiten und verändern.
 Typische Einsatzgebiete sind unter anderem:
 
@@ -55,6 +55,7 @@ export const myInterceptor: HttpInterceptorFn = (req, next) => {
 Um Interceptors zu registrieren, verwenden wir die Funktion `provideHttpClient()` zusammen mit `withInterceptors()`:
 
 ```typescript
+import { ApplicationConfig } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { myInterceptor } from './my-interceptor';
 
@@ -173,55 +174,6 @@ Beachte, dass `httpResource()` einen Injection Context benötigt. Der Aufruf dar
 Wenn du also einen Auth-Interceptor konfiguriert hast, der ein Bearer-Token hinzufügt, wird dieses Token auch bei allen Requests über `httpResource()` automatisch mitgesendet.
 Dasselbe gilt für Logging-Interceptors, Error-Handler und alle anderen Interceptors.
 
-## OAuth 2 und OpenID Connect
-
-Egal ob du eine unternehmensinterne oder eine öffentliche Webanwendung entwickelst, die im Internet erreichbar ist:
-In vielen Fällen benötigt die Anwendung einen Login, um Authentifizierung und Autorisierung zu realisieren.
-
-In der Regel wird dieser Vorgang durch den Austausch von Authentifizierungstokens realisiert.
-Nach dem Login senden wir mit jedem Request an die Web-API ein Access Token, das die Berechtigung der nutzenden Person bestätigt.
-Dies ist ein klassischer Anwendungsfall für einen Interceptor, denn er ermöglicht es, das Token automatisch mit jedem Request einzufügen.
-
-**Wir möchten dir an dieser Stelle dazu raten, eine Authentifizierungslösung nie selbst zu entwickeln.
-Etablierte Anbieter und Identity Provider bieten Lösungen, die seit Jahren erprobt sind und stets an die neuesten Sicherheitsanforderungen angepasst werden.**
-
-Weit verbreitete Industriestandards zur Autorisierung sind *OAuth 2* und das darauf aufsetzende Authentifizierungsframework *OpenID Connect (OIDC)*.
-
-- **OAuth 2** ist ein Standard zur Autorisierung von API-Zugriffen im Web.
-- **OpenID Connect (OIDC)** ist eine Erweiterung von OAuth 2, die alle notwendigen Funktionen für Login und Single Sign-On (SSO) etabliert.
-
-Die Datenflüsse in einer Anwendung mit OAuth 2 und OIDC können in verschiedenen *Flows* realisiert werden.
-
-### Authorization Code Flow
-
-Mit der Verbreitung von OAuth 2 und OIDC wurde kontinuierlich an noch sichereren Möglichkeiten der Authentifizierung gearbeitet.
-Ein Ergebnis dieser Arbeit ist der nun empfohlene *Authorization Code Flow*.
-
-Der Flow verwendet die Erweiterung *PKCE (Proof Key for Code Exchange)*, die sicherstellt, dass beim Austausch des Access Tokens keine sensiblen Informationen bei potenziellen Angriffen abgefangen werden können.
-Dafür sendet der Client mit der Umleitung zum Authorization Server einen Hashwert mit.
-Der Client generiert zunächst einen Zufallsstring (den sogenannten *Verifier*) und leitet daraus eine *Code Challenge* ab.
-Diese Challenge wird dann im Request übertragen.
-
-Nach dem erfolgreichen Login empfängt der Client lediglich einen *Authorization Code* vom Authorization Server.
-Dieser Code ist noch kein gültiges Token, sondern muss zunächst „eingetauscht" werden:
-Dafür sendet der Client den Authorization Code zusammen mit dem Verifier in einem HTTP-Request an den Authorization Server.
-Dieser kann jetzt prüfen, ob der Verifier zum zuvor ausgestellten Authorization Code passt.
-Ist die Prüfung erfolgreich, stellt der Authorization Server schließlich an den Client das Access Token und das Identity Token aus.
-Damit kann der Client nun den Resource Server abfragen, der wiederum prüft, ob das Access Token valide ist.
-
-Durch den zusätzlichen Schritt und den flüchtigen Authorization Code kann sichergestellt werden, dass das Token während des Datenaustauschs nicht gestohlen werden kann, denn nur der Client kennt den verwendeten Verifier.
-
-### OpenID Connect und Angular
-
-Um den empfohlenen Authorization Code Flow fehlerfrei zu implementieren, ist es notwendig, die Spezifikationen sehr genau zu studieren.
-Damit das Fehlerrisiko gering bleibt, solltest du eine etablierte Bibliothek verwenden, um die Datenflüsse für die Autorisierung und Authentifizierung korrekt abzubilden.
-Für Angular möchten wir die beiden folgenden Bibliotheken empfehlen:
-
-- [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
-- [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc)
-
-Beide sind von der OpenID Foundation zertifiziert und bieten komfortable Schnittstellen, um die Flows von OAuth 2 und OIDC in eine Angular-Anwendung zu integrieren.
-
 ## Praxisbeispiel: API-Aufrufe mit Credentials anreichern
 
 Viele APIs erfordern eine Authentifizierung, um Daten lesen oder bearbeiten zu können.
@@ -329,6 +281,68 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 ```
+
+## OAuth 2 und OpenID Connect
+
+Unser Praxisbeispiel zeigt das grundlegende Prinzip, wie ein Token mit jedem Request gesendet werden kann.
+In einer echten Anwendung wird das Token jedoch nicht hart codiert, sondern dynamisch von einem Authorization Server bezogen und muss regelmäßig erneuert werden.
+
+**Wir möchten dir an dieser Stelle dazu raten, eine Authentifizierungslösung nie selbst zu entwickeln.
+Etablierte Anbieter und Identity Provider bieten Lösungen, die seit Jahren erprobt sind und stets an die neuesten Sicherheitsanforderungen angepasst werden.**
+
+Egal ob du eine unternehmensinterne oder eine öffentliche Webanwendung entwickelst, die im Internet erreichbar ist:
+In vielen Fällen benötigt die Anwendung einen Login, um Authentifizierung und Autorisierung zu realisieren.
+In der Regel wird dieser Vorgang durch den Austausch von Authentifizierungstokens umgesetzt.
+Nach dem Login senden wir mit jedem Request an die Web-API ein Access Token, das die Berechtigung der nutzenden Person bestätigt.
+Dies ist ein klassischer Anwendungsfall für einen Interceptor, denn er ermöglicht es, das Token automatisch mit jedem Request einzufügen.
+
+Weit verbreitete Industriestandards zur Autorisierung sind *OAuth 2* und das darauf aufsetzende Authentifizierungsframework *OpenID Connect (OIDC)*.
+
+- **OAuth 2** ist ein Standard zur Autorisierung von API-Zugriffen im Web.
+- **OpenID Connect (OIDC)** ist eine Erweiterung von OAuth 2, die alle notwendigen Funktionen für Login und Single Sign-On (SSO) etabliert.
+
+Die Datenflüsse in einer Anwendung mit OAuth 2 und OIDC können in verschiedenen *Flows* realisiert werden.
+
+### Authorization Code Flow
+
+Mit der Verbreitung von OAuth 2 und OIDC wurde kontinuierlich an noch sichereren Möglichkeiten der Authentifizierung gearbeitet.
+Ein Ergebnis dieser Arbeit ist der nun empfohlene *Authorization Code Flow*.
+
+Der Flow verwendet die Erweiterung *PKCE (Proof Key for Code Exchange)*, die sicherstellt, dass beim Austausch des Access Tokens keine sensiblen Informationen bei potenziellen Angriffen abgefangen werden können.
+Dafür sendet der Client mit der Umleitung zum Authorization Server einen Hashwert mit.
+Der Client generiert zunächst einen Zufallsstring (den sogenannten *Verifier*) und leitet daraus eine *Code Challenge* ab.
+Diese Challenge wird dann im Request übertragen.
+
+Nach dem erfolgreichen Login empfängt der Client lediglich einen *Authorization Code* vom Authorization Server.
+Dieser Code ist noch kein gültiges Token, sondern muss zunächst „eingetauscht" werden:
+Dafür sendet der Client den Authorization Code zusammen mit dem Verifier in einem HTTP-Request an den Authorization Server.
+Dieser kann jetzt prüfen, ob der Verifier zum zuvor ausgestellten Authorization Code passt.
+Ist die Prüfung erfolgreich, stellt der Authorization Server schließlich an den Client das Access Token und das Identity Token aus.
+Damit kann der Client nun den Resource Server abfragen, der wiederum prüft, ob das Access Token valide ist.
+
+Durch den zusätzlichen Schritt und den flüchtigen Authorization Code kann sichergestellt werden, dass das Token während des Datenaustauschs nicht gestohlen werden kann, denn nur der Client kennt den verwendeten Verifier.
+
+### OpenID Connect und Angular
+
+Um den empfohlenen Authorization Code Flow fehlerfrei zu implementieren, ist es notwendig, die Spezifikationen sehr genau zu studieren.
+Damit das Fehlerrisiko gering bleibt, solltest du eine etablierte Bibliothek verwenden, um die Datenflüsse für die Autorisierung und Authentifizierung korrekt abzubilden.
+Für Angular möchten wir die beiden folgenden Bibliotheken empfehlen:
+
+- [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
+- [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc)
+
+Beide sind von der OpenID Foundation zertifiziert und bieten komfortable Schnittstellen, um die Flows von OAuth 2 und OIDC in eine Angular-Anwendung zu integrieren.
+
+## Interceptors im Angular-Ökosystem
+
+Nicht nur für Authentifizierung — viele Bibliotheken aus dem Angular-Ökosystem nutzen Interceptors als Integrationspunkt.
+Hier eine Auswahl:
+
+**Authentifizierung:** Bibliotheken wie [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc), [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client), [@azure/msal-angular](https://github.com/AzureAD/microsoft-authentication-library-for-js) (Azure AD / Entra ID), [@auth0/auth0-angular](https://github.com/auth0/auth0-angular) und [keycloak-angular](https://github.com/mauriciovigolo/keycloak-angular) bringen eigene Interceptors mit, die den gesamten Token-Lifecycle verwalten: Login, Token-Erneuerung und das automatische Anhängen des Access Tokens an jeden Request.
+
+**Ladeindikator:** Bibliotheken wie [ngx-progressbar](https://github.com/MurhafSousli/ngx-progressbar), [@ngx-loading-bar/http-client](https://github.com/aitboudad/ngx-loading-bar) und [ng-http-loader](https://github.com/mpalourdio/ng-http-loader) nutzen Interceptors, um bei laufenden HTTP-Requests automatisch einen Fortschrittsbalken oder Spinner anzuzeigen.
+
+**Caching:** Die Bibliothek [@ngneat/cashew](https://github.com/ngneat/cashew) stellt einen Interceptor bereit, der HTTP-Responses cacht und bei wiederholten Requests direkt aus dem Cache ausliefert.
 
 ## Fazit
 
