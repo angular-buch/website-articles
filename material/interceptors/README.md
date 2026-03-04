@@ -1,11 +1,11 @@
 ---
-title: 'Interceptors: HTTP-Requests abfangen und transformieren'
+title: 'Interceptors: HTTP-Requests erfassen und transformieren'
 published: 2026-03-03
 lastModified: 2026-03-03
 ---
 
-In diesem Artikel geht es um *Interceptors* — ein Feature des Angular-`HttpClient`, mit dem sich HTTP-Requests und -Responses zentral abfangen und transformieren lassen.
-So können wir zum Beispiel Authentifizierungs-Header automatisch setzen, Fehler global abfangen oder die HTTP-Kommunikation loggen — ohne jeden einzelnen Request manuell anpassen zu müssen.
+In diesem Artikel geht es um *Interceptors*. Damit lassen sich HTTP-Requests und -Responses in Angular zentral erfassen und transformieren.
+So können wir zum Beispiel Authentifizierungs-Header automatisch setzen, Fehler global behandeln oder die HTTP-Kommunikation loggen, ohne jeden einzelnen Request manuell anpassen zu müssen.
 Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interceptors, bevor wir am Beispiel einer Authentifizierung mit OAuth 2 und OpenID Connect ein praxisnahes Einsatzszenario umsetzen.
 
 ## Inhalt
@@ -13,7 +13,7 @@ Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interc
 [[toc]]
 
 Interceptors fungieren als Middleware für die gesamte HTTP-Kommunikation.
-Das bedeutet, dass ein Interceptor für alle HTTP-Abfragen und -Antworten ausgeführt wird und damit an globaler Stelle Entscheidungen und Umwandlungen vornehmen kann.
+Ein Interceptor wird für alle HTTP-Abfragen und -Antworten ausgeführt und kann so an zentraler Stelle Entscheidungen treffen und Inhalte verändern.
 Ein Interceptor wird global installiert und kann für jeden HTTP-Request und die Response entscheiden, ob und wie sie behandelt werden.
 Typische Einsatzgebiete sind unter anderem:
 
@@ -41,7 +41,7 @@ Bei einem HTTP-Request werden die Interceptors von vorn nach hinten abgearbeitet
 Interceptors werden als einfache Funktion implementiert.
 Angular stellt dafür den Typ `HttpInterceptorFn` bereit.
 Du erhältst den Request und eine Funktion vom Typ `HttpHandlerFn`, an die du den veränderten Request übergibst.
-Wenn du Services anfordern möchtest, kannst du die Funktion `inject()` nutzen, da der Interceptor stets in einem Injection Context ausgeführt wird.
+Um auf Services zuzugreifen, kannst du `inject()` nutzen, da der Interceptor in einem Injection Context ausgeführt wird.
 
 ```typescript
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -98,7 +98,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 Jeder Interceptor gibt ein Observable zurück: Es verarbeitet den Request und gibt die HTTP-Antworten aus, die vom Server eintreffen.
 Du kannst dieses Observable nutzen, um mit den eintreffenden Daten zu arbeiten.
-Zum Beispiel kannst du auf diese Weise Fehler abfangen, die Antworten loggen oder sogar den Inhalt manipulieren.
+Zum Beispiel kannst du auf diese Weise Fehler behandeln, die Antworten loggen oder sogar den Inhalt manipulieren.
 
 Um alle eingehenden Responses zu loggen, kannst du den Operator `tap()` verwenden.
 Er lässt den Inhalt des Observables unverändert, und du kannst sowohl die erfolgreiche Serverantwort als auch fehlgeschlagene Requests auf der Konsole ausgeben.
@@ -239,7 +239,7 @@ Eines haben aber alle Methoden gemeinsam: Sie erfordern, dass spezielle Informat
 
 ### Service zur Authentifizierung
 
-Um mit jedem Request über einen Interceptor entsprechende Informationen mitzusenden, benötigen wir zunächst eine zentrale Stelle in der Anwendung, die die Authentifizierung vollzieht und Informationen über den aktuellen Status ausgibt.
+Zunächst benötigen wir eine zentrale Stelle in der Anwendung, die die Authentifizierung verwaltet und den aktuellen Status bereitstellt.
 
 Etablierte Bibliotheken stellen hierfür unter anderem folgende oder ähnliche Funktionen zur Verfügung:
 
@@ -333,7 +333,7 @@ export const appConfig: ApplicationConfig = {
 ## Fazit
 
 Interceptors sind ein zentrales Werkzeug, um die HTTP-Kommunikation einer Angular-Anwendung zu steuern.
-Statt in jedem Service einzeln Header zu setzen, Fehler abzufangen oder Requests zu loggen, erledigt ein Interceptor diese Aufgaben an einer einzigen Stelle — für alle HTTP-Anfragen gleichermaßen.
+Statt in jedem Service einzeln Header zu setzen, Fehler zu behandeln oder Requests zu loggen, erledigt ein Interceptor diese Aufgaben an einer einzigen Stelle, für alle HTTP-Anfragen gleichermaßen.
 Interceptors mit `HttpInterceptorFn` sind leichtgewichtig und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
 Da auch `httpResource()` intern den `HttpClient` verwendet, profitieren alle HTTP-Zugriffe automatisch von den konfigurierten Interceptors.
 Beachte dabei: Interceptors eignen sich für globale Aufgaben. Wenn du nur für einen einzelnen Request spezielle Header oder Optionen setzen möchtest, ist der direkte Weg über den `HttpClient` der bessere Ansatz.
