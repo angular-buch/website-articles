@@ -12,9 +12,9 @@ Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interc
 
 [[toc]]
 
-Interceptors fungieren als Middleware für die gesamte HTTP-Kommunikation.
-Ein Interceptor wird für alle HTTP-Abfragen und -Antworten ausgeführt und kann so an zentraler Stelle Entscheidungen treffen und Inhalte verändern.
-Ein Interceptor wird global installiert und kann für jeden HTTP-Request und die Response entscheiden, ob und wie sie behandelt werden.
+Interceptors fungieren als Middleware, also als Zwischenschicht, für die gesamte HTTP-Kommunikation.
+Interceptors werden global installiert und für alle HTTP-Abfragen und -Antworten ausgeführt.
+So lassen sich Requests und Responses an zentraler Stelle verarbeiten und verändern.
 Typische Einsatzgebiete sind unter anderem:
 
 - Sicherheitsfunktionen, z. B. Authentifizierung über ein Access Token, das mit jedem Request im Header übermittelt werden muss
@@ -73,11 +73,9 @@ Die Interceptor-Funktion wird für jeden ausgehenden HTTP-Request ausgeführt.
 Bevor du den Request auf die Reise schickst, kannst du den Inhalt manipulieren.
 Zum Beispiel kannst du einen Interceptor entwickeln, der bestimmte Headerfelder in jeden Request einfügt.
 
-Dafür musst du den originalen Request zunächst klonen.
-Dieser Schritt ist wichtig, denn das Request-Objekt ist unveränderlich: Du kannst es nicht direkt manipulieren, sondern musst immer eine Kopie mit den Änderungen erzeugen.
-Verwende dazu die Methode `clone()` und übergib direkt die gewünschten Änderungen:
-Mit der Eigenschaft `setHeaders` kannst du neue HTTP-Headerfelder hinzufügen.
-Zum Schluss rufst du `next()` auf und übermittelst den neuen, veränderten Request an den nächsten HTTP-Handler.
+Das Request-Objekt ist unveränderlich. Um es zu modifizieren, erzeugen wir mit `clone()` eine Kopie und übergeben die gewünschten Änderungen.
+Mit `setHeaders` lassen sich z. B. neue Headerfelder hinzufügen.
+Den veränderten Request übergeben wir dann mit `next()` an den nächsten Handler.
 
 ```typescript
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -96,6 +94,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 ## Die Response verarbeiten
 
+Der HttpClient arbeitet intern mit Observables aus der Bibliothek RxJS.
 Jeder Interceptor gibt ein Observable zurück: Es verarbeitet den Request und gibt die HTTP-Antworten aus, die vom Server eintreffen.
 Du kannst dieses Observable nutzen, um mit den eintreffenden Daten zu arbeiten.
 Zum Beispiel kannst du auf diese Weise Fehler behandeln, die Antworten loggen oder sogar den Inhalt manipulieren.
@@ -128,12 +127,12 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 > **Wichtig:** Das HTTP-Observable muss completen!
 > Die HTTP-Kommunikation über die Interceptors wird mithilfe von Observables realisiert.
 > Es ist wichtig, dass das Observable, das du aus dem Interceptor zurückgibst, immer completet wird.
-> Ist der Datenstrom nie zu Ende, so wird auch der ursprüngliche Aufruf des `HttpClient` niemals beendet.
+> Ist der Datenstrom nie zu Ende, so wird auch der ursprüngliche Aufruf des HttpClient niemals beendet.
 
 ## Interceptors einbinden
 
-Interceptors werden über die Dependency Injection von Angular als Providers bereitgestellt.
-Damit der `HttpClient` weiß, welche Interceptors ausgeführt werden sollen, nutzt du die Funktion `provideHttpClient()` zusammen mit `withInterceptors()`.
+Interceptors werden als Provider über die Dependency Injection von Angular bereitgestellt.
+Wir registrieren sie mit `provideHttpClient()` und `withInterceptors()`.
 
 ```typescript
 // app.config.ts
@@ -159,7 +158,7 @@ Bei einem Request werden sie von vorn nach hinten abgearbeitet, bei der Response
 
 ## Interceptors mit httpResource
 
-Die Funktion `httpResource()` nutzt intern den `HttpClient`, um HTTP-Requests durchzuführen.
+Die Funktion `httpResource()` nutzt intern den HttpClient, um HTTP-Requests durchzuführen.
 Das bedeutet, dass alle konfigurierten Interceptors automatisch auch für `httpResource()` angewendet werden.
 
 ```typescript
@@ -225,8 +224,9 @@ Beide sind von der OpenID Foundation zertifiziert und bieten komfortable Schnitt
 
 ## Praxisbeispiel: API-Aufrufe mit Credentials anreichern
 
-Um sicherzustellen, dass die nutzende Person berechtigt ist, Daten von der API zu lesen und später auch zu bearbeiten, soll eine Authentifizierung mit jedem Request erfolgen.
-Wir wollen einen Interceptor implementieren, der ein Token an die Web-API übermittelt.
+Viele APIs erfordern eine Authentifizierung, um Daten lesen oder bearbeiten zu können.
+Wir wollen exemplarisch einen Interceptor implementieren, der ein Token mit jedem Request an eine Web-API sendet.
+Das Token ist dabei hart codiert, um die Implementierung zu vereinfachen.
 
 Die Authentifizierungsverfahren können dabei ganz unterschiedlich ausfallen, unter anderem:
 
@@ -305,7 +305,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 ```
 
 An dieser Stelle treffen wir eine Fallunterscheidung:
-Liefert der `AuthService` im Property `isAuthenticated` den Wert `true`, wollen wir ein zusätzliches Headerfeld im Request setzen.
+Liefert der AuthService im Property `isAuthenticated` den Wert `true`, wollen wir ein zusätzliches Headerfeld im Request setzen.
 Wir verwenden die Methode `clone()` und setzen den Header `Authorization`.
 Danach übergeben wir den Request an den Handler, damit er zum nächsten Interceptor bzw. zum Server gesendet wird.
 Falls `isAuthenticated` den Wert `false` besitzt, reichen wir den originalen Request unverändert weiter.
@@ -335,5 +335,5 @@ export const appConfig: ApplicationConfig = {
 Interceptors sind ein zentrales Werkzeug, um die HTTP-Kommunikation einer Angular-Anwendung zu steuern.
 Statt in jedem Service einzeln Header zu setzen, Fehler zu behandeln oder Requests zu loggen, erledigt ein Interceptor diese Aufgaben an einer einzigen Stelle, für alle HTTP-Anfragen gleichermaßen.
 Interceptors mit `HttpInterceptorFn` sind leichtgewichtig und lassen sich über `provideHttpClient(withInterceptors([...]))` flexibel zusammenstellen.
-Da auch `httpResource()` intern den `HttpClient` verwendet, profitieren alle HTTP-Zugriffe automatisch von den konfigurierten Interceptors.
-Beachte dabei: Interceptors eignen sich für globale Aufgaben. Wenn du nur für einen einzelnen Request spezielle Header oder Optionen setzen möchtest, ist der direkte Weg über den `HttpClient` der bessere Ansatz.
+Da auch `httpResource()` intern den HttpClient verwendet, profitieren alle HTTP-Zugriffe automatisch von den konfigurierten Interceptors.
+Beachte dabei: Interceptors eignen sich für globale Aufgaben. Wenn du nur für einen einzelnen Request spezielle Header oder Optionen setzen möchtest, ist der direkte Weg über den HttpClient der bessere Ansatz.
