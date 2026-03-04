@@ -25,23 +25,23 @@ Typische Einsatzgebiete sind unter anderem:
 
 ## Funktionsweise der Interceptors
 
-Bindest du einen Interceptor in die Anwendung ein, so wird er bei jedem HTTP-Request aktiv:
+Binden wir einen Interceptor in die Anwendung ein, so wird er bei jedem HTTP-Request aktiv:
 Der Request läuft zunächst durch den Interceptor und kann dort verändert werden.
 Anschließend wird der Request über das Netzwerk zum Server übermittelt.
 Die Antwort vom Server wird ebenfalls im Interceptor verarbeitet, bevor sie beim Aufrufenden eintrifft.
 
 In einer Anwendung können mehrere Interceptors registriert werden.
 Sie werden als Array hinterlegt, also mit einer definierten Reihenfolge.
-Bei einem HTTP-Request werden die Interceptors von vorn nach hinten abgearbeitet, bei der HTTP-Response umgekehrt – von hinten nach vorn.
+Bei einem HTTP-Request werden die Interceptors in der angegebenen Reihenfolge abgearbeitet, bei der HTTP-Response in umgekehrter Reihenfolge.
 
-![Abarbeitung von Interceptors](./interceptor-flow.svg)
+![Diagramm: Ein HTTP-Request fließt vom Client durch drei Interceptors A, B und C zum Server. Die Response nimmt den umgekehrten Weg zurück.](./interceptor-flow.svg "Abarbeitung von Interceptors: Request und Response durchlaufen die Interceptor-Kette in entgegengesetzter Reihenfolge.")
 
 ## Interceptors anlegen
 
 Interceptors werden als einfache Funktion implementiert.
 Angular stellt dafür den Typ `HttpInterceptorFn` bereit.
-Du erhältst den Request und eine Funktion vom Typ `HttpHandlerFn`, an die du den veränderten Request übergibst.
-Um auf Services zuzugreifen, kannst du `inject()` nutzen, da der Interceptor in einem Injection Context ausgeführt wird.
+Wir erhalten den Request und eine Funktion vom Typ `HttpHandlerFn`, an die wir den veränderten Request übergeben.
+Um auf Services zuzugreifen, können wir `inject()` nutzen, da der Interceptor in einem Injection Context ausgeführt wird.
 
 ```typescript
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -71,8 +71,8 @@ export const appConfig: ApplicationConfig = {
 ## Den Request manipulieren
 
 Die Interceptor-Funktion wird für jeden ausgehenden HTTP-Request ausgeführt.
-Bevor du den Request auf die Reise schickst, kannst du den Inhalt manipulieren.
-Zum Beispiel kannst du einen Interceptor entwickeln, der bestimmte Headerfelder in jeden Request einfügt.
+Bevor wir den Request auf die Reise schicken, können wir den Inhalt manipulieren.
+Zum Beispiel können wir einen Interceptor entwickeln, der bestimmte Headerfelder in jeden Request einfügt.
 
 Das Request-Objekt ist unveränderlich. Um es zu modifizieren, erzeugen wir mit `clone()` eine Kopie und übergeben die gewünschten Änderungen.
 Mit `setHeaders` lassen sich z. B. neue Headerfelder hinzufügen.
@@ -97,11 +97,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 Der HttpClient arbeitet intern mit Observables aus der Bibliothek RxJS.
 Jeder Interceptor gibt ein Observable zurück: Es verarbeitet den Request und gibt die HTTP-Antworten aus, die vom Server eintreffen.
-Du kannst dieses Observable nutzen, um mit den eintreffenden Daten zu arbeiten.
-Zum Beispiel kannst du auf diese Weise Fehler behandeln, die Antworten loggen oder sogar den Inhalt manipulieren.
+Wir können dieses Observable nutzen, um mit den eintreffenden Daten zu arbeiten.
+Zum Beispiel können wir auf diese Weise Fehler behandeln, die Antworten loggen oder sogar den Inhalt manipulieren.
 
-Um alle eingehenden Responses zu loggen, kannst du den Operator `tap()` verwenden.
-Er lässt den Inhalt des Observables unverändert, und du kannst sowohl die erfolgreiche Serverantwort als auch fehlgeschlagene Requests auf der Konsole ausgeben.
+Um alle eingehenden Responses zu loggen, können wir den Operator `tap()` verwenden.
+Er lässt den Inhalt des Observables unverändert, und wir können sowohl die erfolgreiche Serverantwort als auch fehlgeschlagene Requests auf der Konsole ausgeben.
 
 ```typescript
 import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
@@ -155,7 +155,7 @@ export const appConfig: ApplicationConfig = {
 ```
 
 Die Reihenfolge der Interceptors im Array bestimmt die Ausführungsreihenfolge:
-Bei einem Request werden sie von vorn nach hinten abgearbeitet, bei der Response umgekehrt.
+Bei einem Request werden sie in der angegebenen Reihenfolge abgearbeitet, bei der Response in umgekehrter Reihenfolge.
 
 ## Interceptors mit httpResource
 
@@ -171,7 +171,7 @@ const booksResource = httpResource<Book[]>(() => '/api/books');
 
 Beachte, dass `httpResource()` einen Injection Context benötigt. Der Aufruf darf also nicht an einer beliebigen Stelle im Code stehen, sondern muss z. B. in einer Komponente oder einem Service erfolgen. Alternativ kann mit `runInInjectionContext()` ein solcher Kontext manuell erzeugt werden.
 
-Wenn du also einen Auth-Interceptor konfiguriert hast, der ein Bearer-Token hinzufügt, wird dieses Token auch bei allen Requests über `httpResource()` automatisch mitgesendet.
+Wenn wir also einen Auth-Interceptor konfiguriert haben, der ein Bearer-Token hinzufügt, wird dieses Token auch bei allen Requests über `httpResource()` automatisch mitgesendet.
 Dasselbe gilt für Logging-Interceptors, Error-Handler und alle anderen Interceptors.
 
 ## Praxisbeispiel: API-Aufrufe mit Credentials anreichern
@@ -290,7 +290,7 @@ In einer echten Anwendung wird das Token jedoch nicht hart codiert, sondern dyna
 **Wir möchten dir an dieser Stelle dazu raten, eine Authentifizierungslösung nie selbst zu entwickeln.
 Etablierte Anbieter und Identity Provider bieten Lösungen, die seit Jahren erprobt sind und stets an die neuesten Sicherheitsanforderungen angepasst werden.**
 
-Egal ob du eine unternehmensinterne oder eine öffentliche Webanwendung entwickelst, die im Internet erreichbar ist:
+Egal ob wir eine unternehmensinterne oder eine öffentliche Webanwendung entwickeln, die im Internet erreichbar ist:
 In vielen Fällen benötigt die Anwendung einen Login, um Authentifizierung und Autorisierung zu realisieren.
 In der Regel wird dieser Vorgang durch den Austausch von Authentifizierungstokens umgesetzt.
 Nach dem Login senden wir mit jedem Request an die Web-API ein Access Token, das die Berechtigung der nutzenden Person bestätigt.
@@ -325,7 +325,7 @@ Durch den zusätzlichen Schritt und den flüchtigen Authorization Code kann sich
 ### OpenID Connect und Angular
 
 Um den empfohlenen Authorization Code Flow fehlerfrei zu implementieren, ist es notwendig, die Spezifikationen sehr genau zu studieren.
-Damit das Fehlerrisiko gering bleibt, solltest du eine etablierte Bibliothek verwenden, um die Datenflüsse für die Autorisierung und Authentifizierung korrekt abzubilden.
+Damit das Fehlerrisiko gering bleibt, sollten wir eine etablierte Bibliothek verwenden, um die Datenflüsse für die Autorisierung und Authentifizierung korrekt abzubilden.
 Für Angular möchten wir die beiden folgenden Bibliotheken empfehlen:
 
 - [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
