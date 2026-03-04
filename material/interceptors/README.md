@@ -139,7 +139,7 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
 ### Interceptors einbinden
 
 Der Interceptor ist geschrieben, jetzt müssen wir ihn aber noch registrieren. Sonst passiert nichts.
-Interceptors werden als Provider über die Dependency Injection von Angular bereitgestellt.
+Interceptors werden über die Dependency Injection von Angular registriert.
 Wir registrieren sie mit `provideHttpClient()` und `withInterceptors()`.
 
 ```typescript
