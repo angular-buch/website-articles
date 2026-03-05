@@ -293,15 +293,14 @@ Ob Interceptors dabei greifen, hängt von der darunterliegenden Technologie ab �
 
 Die Funktion `httpResource()` nutzt intern den HttpClient, um HTTP-Requests durchzuführen.
 Das bedeutet, dass alle konfigurierten Interceptors automatisch auch für `httpResource()` angewendet werden.
-Die Funktion `resource()` basiert auf Promises und nutzt nicht den HttpClient — Interceptors werden hier also nicht ausgeführt!
-Bei `rxResource()` hängt es davon ab, wie der zugrunde liegende Service implementiert ist: Verwendet der Service intern den HttpClient, greifen die Interceptors. Wird stattdessen z. B. die native Fetch API oder eine andere Datenquelle genutzt, sind keine Interceptors aktiv.
+Die Funktionen `resource()` und `rxResource()` nutzen nicht zwingend den HttpClient — sie arbeiten mit Promises bzw. Observables und können auch andere Datenquellen wie z. B. die native Fetch API verwenden. Interceptors greifen hier also nicht automatisch.
 
 | | `resource` | `rxResource` | `httpResource` |
 |---|---|---|---|
 | **Basiert auf** | Promise | Observable | HttpClient |
-| **Interceptors** | ❌ | (✅)* | ✅ |
+| **Interceptors** | ❌ | ❌ | ✅ |
 
-<small>*\* nur wenn im Service intern der HttpClient verwendet wird*</small>
+Um bei `resource()` oder `rxResource()` von Interceptors zu profitieren, muss in der Ladelogik der HttpClient verwendet werden.
 
 Wenn wir also einen Auth-Interceptor konfiguriert haben, der ein Bearer-Token hinzufügt, wird dieses Token bei `httpResource()` automatisch mitgesendet:
 
