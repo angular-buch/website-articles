@@ -311,7 +311,7 @@ import { httpResource } from '@angular/common/http';
 const booksResource = httpResource<Book[]>(() => '/api/books');
 ```
 
-Auch bei `rxResource()` greifen Interceptors, sofern der Service den HttpClient nutzt:
+Auch bei `rxResource()` greifen Interceptors, sofern wir den HttpClient für die Ladelogik verwenden:
 
 ```typescript
 import { rxResource } from '@angular/core/rxjs-interop';
