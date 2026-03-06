@@ -1,6 +1,6 @@
 ---
 title: 'Interceptors: HTTP-Requests erfassen und transformieren'
-published: 2026-03-03
+published: 2026-03-06
 lastModified: 2026-03-06
 ---
 
