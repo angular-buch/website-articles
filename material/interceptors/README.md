@@ -1,7 +1,7 @@
 ---
 title: 'Interceptors: HTTP-Requests erfassen und transformieren'
 published: 2026-03-03
-lastModified: 2026-03-04
+lastModified: 2026-03-06
 ---
 
 In diesem Artikel geht es um *Interceptors* in Angular. Damit lassen sich HTTP-Requests und -Responses zentral erfassen und transformieren.
