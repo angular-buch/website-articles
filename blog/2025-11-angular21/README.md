@@ -15,7 +15,7 @@ keywords:
   - Karma
 language: de
 header: angular21.jpg
-sticky: true
+sticky: false
 isUpdatePost: true
 ---
 
