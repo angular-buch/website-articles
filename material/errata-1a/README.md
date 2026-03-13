@@ -8,7 +8,7 @@ hidden: true
 Trotz größter Sorgfalt ist ein gedrucktes Buch niemals fehlerfrei.
 Auch in der 1. Auflage (erschienen im Mai 2026) hat sich der Fehlerteufel eingeschlichen.
 
-**hast du Fragen oder Hinweise, oder hast du einen Fehler im Buch gefunden?
+**Hast du Fragen oder Hinweise, oder hast du einen Fehler im Buch gefunden?
 Bitte zögere nicht, und schreib uns eine E-Mail: [team@angular-buch.com](mailto:team@angular-buch.com)**
 
 > **Dies ist das Errata-Verzeichnis für die 1. Auflage (2026). Wenn du eine ältere Ausgabe besitzt, schau bitte in die Materialien zu den Vorausgaben.**
