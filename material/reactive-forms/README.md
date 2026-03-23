@@ -25,7 +25,7 @@ Wir gehen allerdings davon aus, dass die neuen Signal Forms diesen Platz einnehm
 Mit Reactive Forms speichern wir in der Komponentenklasse ein Formularmodell.
 Es beschreibt alles, was Angular rund um das Formular weiß: Daten, Validierungsregeln und Zustände.
 Dieses Formularmodell verknüpfen wir dann mit den Feldern im HTML, indem wir Direktiven verwenden.
-Mit Reactive Forms wird also ein großer Teil der Formularlogik in der TypeScript-Klasse erledigt, während im HTML nur die Datenbindungen hergestellt weerden.
+Mit Reactive Forms wird also ein großer Teil der Formularlogik in der TypeScript-Klasse erledigt, während im HTML nur die Datenbindungen hergestellt werden.
 
 Um Reactive Forms verwenden zu können, benötigen wir das `ReactiveFormsModule` aus `@angular/forms` als Komponentenimport.
 Das Modul enthält die notwendigen Direktiven, die wir im Template verwenden werden.
@@ -121,7 +121,7 @@ new FormGroup({
 ```
 
 Grundsätzlich kann ein Formular so jede Struktur annehmen.
-Praktisch besteht es aber auf oberster Ebene aber meist meist aus einer `FormGroup`, in der sich die Felder aufspannen.
+Praktisch besteht es auf oberster Ebene aber meist aus einer `FormGroup`, in der sich die Felder aufspannen.
 
 ### FormRecord
 
@@ -386,7 +386,7 @@ new FormControl('', {
 
 Geben wir mehrere Validatoren an, werden sie in dieser Reihenfolge ausgeführt.
 Trotzdem generieren nicht immer alle Validatoren einen Fehler: `minLength` und `maxLength` ignorieren beispielsweise einen leeren Eingabewert.
-`minLength` also erst dann aktiv, wenn überhaupt ein Wert eingegeben wurde und `required` nicht mehr anschlägt.
+`minLength` wird also erst dann aktiv, wenn überhaupt ein Wert eingegeben wurde und `required` nicht mehr anschlägt.
 
 ## Formularzustand verarbeiten
 
@@ -480,7 +480,7 @@ Das ist schlecht für die Usability und baut Bedienungsbarrieren auf.
 
 Stattdessen gilt es als gute Praxis, den Zustand beim Absenden zu überprüfen.
 Ist das Formular ungültig, brechen wir den Vorgang ab.
-Außerdem können wir dann alls Felder als `touched` markieren, sodass die zugehörigen Fehlermeldungen sichtbar werden.
+Außerdem können wir dann alle Felder als `touched` markieren, sodass die zugehörigen Fehlermeldungen sichtbar werden.
 
 ```typescript
 submitForm() {
@@ -589,7 +589,7 @@ Ein praktischer Anwendungsfall ist die Typeahead-Suche, bei der die Formulareing
 ## Empfehlung: Signal Forms
 
 Reactive Forms sind eine gute Wahl für komplexe Formulare mit dynamischen Anforderungen oder verschachtelten Daten.
-Gleichzeitig ist dieser Ansatz aber nicht kompatibel mit Signals und integriert sich so nicht mehr gut in den modernen Strukturen von Angular.
+Gleichzeitig ist dieser Ansatz aber nicht kompatibel mit Signals und integriert sich so nicht mehr gut in die modernen Strukturen von Angular.
 Wir empfehlen deshalb, den neuen Ansatz **Signal Forms** zu verwenden.
 
 Reactive Forms wird allerdings noch einige Jahre Bestand haben: Viele Projekte setzen auf dieses Modell, und es wird noch einige Zeit dauern, bis das letzte Projekt zu Signal Forms migriert wurde.
