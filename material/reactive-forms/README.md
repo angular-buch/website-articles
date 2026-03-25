@@ -16,7 +16,7 @@ Im Angular-Buch findest du dazu drei ausführliche Kapitel.
 Template-Driven Forms sind der älteste Ansatz, der vor allem für kleine Formulare lohnenswert war.
 
 Reactive Forms gelten noch immer als Standard für die Formularverarbeitung in Angular und werden in vielen Projekten eingesetzt.
-Wir gehen allerdings davon aus, dass die neuen Signal Forms diesen Platz einnehmen werden, sobald das Paket offiziell veröffentlicht wird.
+Wir gehen allerdings davon aus, dass die neuen Signal Forms diesen Platz einnehmen werden, sobald das Paket **stable** ist.
 
 
 ## Reactive Forms
