@@ -591,5 +591,8 @@ Reactive Forms sind eine gute Wahl für komplexe Formulare mit dynamischen Anfor
 Gleichzeitig ist dieser Ansatz aber nicht kompatibel mit Signals und integriert sich so nicht mehr gut in die modernen Strukturen von Angular.
 Wir empfehlen deshalb, den neuen Ansatz **Signal Forms** zu verwenden.
 
+Für die Migration von Reactive Forms zu Signal Forms bietet Angular einige Werkzeuge an, siehe [Dokumentation](https://angular.dev/guide/forms/signals/migration).
+Die beiden Ansätze können im Hybridbetrieb eingesetzt werden, um schrittweise zu migrieren.
+
 Reactive Forms wird allerdings noch einige Jahre Bestand haben: Viele Projekte setzen auf dieses Modell, und es wird noch einige Zeit dauern, bis die letzte Anwendung zu Signal Forms migriert wurde.
 Reactive Forms ist deshalb ein lohnenswerter Ansatz für Projekte, die noch mit einer älteren Angular-Version (vor Angular 22) arbeiten, oder wenn eine Migration auf Signal Forms (noch) nicht möglich ist.
