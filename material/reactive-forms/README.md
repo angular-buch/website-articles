@@ -13,7 +13,7 @@ In diesem Artikel stellen wir den Ansatz im Detail vor.
 
 Angular bietet insgesamt drei Ansätze für die Formularverarbeitung an: **Template-Driven Forms**, **Reactive Forms** und **Signal Forms**.
 Signal Forms ist die moderne Lösung, die Ende 2025 mit Angular 21 als Experimental-Version eingeführt wurde.
-Im Angular-Buch findest du dazu drei ausführliche Kapitel.
+Im Angular-Buch findest du zu den modernen Signal Forms mehrere ausführliche Kapitel.
 
 Template-Driven Forms sind der älteste Ansatz, der vor allem für kleine Formulare lohnenswert war.
 
