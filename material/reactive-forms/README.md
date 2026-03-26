@@ -8,7 +8,6 @@ Formulare gehören zu den zentralen Bausteinen jeder Webanwendung.
 Angular bietet mit **Reactive Forms** einen bewährten Ansatz, um sie strukturiert und typsicher zu verarbeiten. 
 Die Lösung ist seit jeher fester Bestandteil von Angular und wird in vielen produktiven Anwendungen eingesetzt.
 In diesem Artikel stellen wir den Ansatz im Detail vor.
-Die Lösung existiert seit den frühen Versionen von Angular und wird breitflächig in vielen produktiven Anwendungen eingesetzt.
 
 ## Formulare in Angular
 
