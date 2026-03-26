@@ -586,7 +586,7 @@ Ein praktischer Anwendungsfall ist die Typeahead-Suche, bei der die Formulareing
 ## Empfehlung: Signal Forms
 
 Reactive Forms sind eine gute Wahl für komplexe Formulare mit dynamischen Anforderungen oder verschachtelten Daten.
-Gleichzeitig ist dieser Ansatz aber nicht kompatibel mit Signals und integriert sich so nicht mehr gut in die modernen Strukturen von Angular.
+Gleichzeitig setzt dieser Ansatz aber auf einfache Propertys und Observables und fügt sich damit nicht mehr nahtlos in die Signal-basierte Architektur von Angular ein.
 Wir empfehlen deshalb, den neuen Ansatz **Signal Forms** zu verwenden.
 
 Für die Migration von Reactive Forms zu Signal Forms bietet Angular einige Werkzeuge an, siehe [Dokumentation](https://angular.dev/guide/forms/signals/migration).
