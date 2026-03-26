@@ -200,7 +200,6 @@ Bitte beachte, dass diese Eigenschaften keine Signals sind, sondern einfache Pro
 
 
 ### Komplexes Formularmodell
-
 Mit den vier Bausteinen können wir in der Komponente ein komplexes Formularmodell definieren.
 
 So können wir z. B. ein Formular für die Registrierung erstellen:
