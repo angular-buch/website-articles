@@ -489,7 +489,6 @@ submitForm() {
 }
 ```
 
-
 ## Formular zurücksetzen
 
 Nachdem das Formular erfolgreich abgeschickt wurde, können wir alle Felder auf ihren Ausgangszustand zurücksetzen.
