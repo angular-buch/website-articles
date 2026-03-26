@@ -429,9 +429,19 @@ Um z. B. im Template eine Meldung abhängig vom Zustand anzuzeigen, können wir 
 Wie in einer guten Familie kennen also die Elternelemente immer den Zustand ihrer Kinder, und der Zustand wird nach oben vererbt.
 Ist z. B. ein einzelnes `FormControl` im Zustand `invalid`, so ist auch die gesamte umgebende `FormGroup` ungültig.
 
-## Formular abschicken
+## Felder deaktivieren
 
-Um das Formular abzuschicken, benötigen wir zunächst einen Button vom Typ `submit`.
+Um ein Feld zu deaktivieren, verwenden wir die Methode `disable()` direkt auf dem `FormControl`.
+Das HTML-Attribut `disabled` im Template sollten wir dafür nicht verwenden, denn Angular verwaltet den Zustand intern.
+Mit `enable()` aktivieren wir das Control wieder.
+Ein deaktiviertes Control kann nicht mehr bedient werden und wird bei der Validierung ignoriert.
+Enthält eine `FormGroup` ein deaktiviertes Control, ist der Wert im Property `value` nicht mehr enthalten.
+Mit `getRawValue()` erhalten wir dagegen alle Werte, auch die deaktivierter Controls – siehe dazu auch der folgende Abschnitt.
+
+
+## Formular absenden
+
+Um das Formular abzusenden, benötigen wir zunächst einen Button vom Typ `submit`.
 Er muss sich innerhalb des `<form>`-Elements befinden.
 Wird das Formular schließlich in der Oberfläche abgeschickt, so wird ein passendes Event ausgelöst: `ngSubmit`.
 Dieses Event können wir abonnieren und eine Methode ausführen:
@@ -447,9 +457,7 @@ In der Komponentenklasse müssen wir die Eingabewerte aus dem Formular weiterver
 Die Klasse `AbstractControl` – und damit auch `FormGroup`, `FormArray` und `FormControl` – bietet dazu zwei Möglichkeiten.
 
 Das Property `value` beinhaltet die Werte des Formulars, bei einer `FormGroup` ist das ein Objekt mit allen erfassten Daten.
-Dabei sind allerdings nur die aktivierten Controls enthalten:
-Verwenden wir die Methode `disable()`, um ein Control zu deaktivieren, kann das Formularfeld nicht mehr bedient werden.
-Das führt auch dazu, dass der Wert in `value` nicht mehr enthalten ist.
+Dabei sind allerdings nur die aktivierten Controls enthalten.
 Da theoretisch jedes Control zur Laufzeit deaktiviert werden kann, ist der Typ von `value` mit `Partial` definiert: `Partial` lockert die Typisierung eines Objekts, indem alle Eigenschaften optional gesetzt werden.
 
 Arbeiten wir mit einem festgelegten Datenmodell wie einem `Book`, ist es unpraktisch, dass alle Felder optional sind. Der erfasste Formularwert ist so nicht mit dem Datenmodell kompatibel.
@@ -540,6 +548,9 @@ this.registerForm.patchValue({
 
 Wollen wir den Wert für ein einzelnes `FormControl` setzen, das nur einen String erfasst, ist die Bedeutung der beiden Methoden gleich. Wir empfehlen dir, in diesem Fall `setValue()` zu verwenden.
 Der Unterschied ist nur bei `FormGroup`, `FormArray` und `FormRecord` interessant.
+
+
+
 
 ## Änderungen überwachen
 
