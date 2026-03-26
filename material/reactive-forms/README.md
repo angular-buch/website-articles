@@ -1,7 +1,7 @@
 ---
 title: 'Formulare mit Reactive Forms'
-published: 2026-03-23
-lastModified: 2026-03-23
+published: 2026-03-26
+lastModified: 2026-03-26
 ---
 
 Formulare gehören zu den zentralen Bausteinen jeder Webanwendung.
