@@ -576,7 +576,7 @@ Ein praktischer Anwendungsfall ist die Typeahead-Suche, bei der die Formulareing
 - Die Bausteine können verschachtelt werden. Am Anfang steht fast immer eine `FormGroup`, jedes logische Formularfeld erhält ein `FormControl`.
 - Der Typ eines Controls wird durch den eingegebenen Startwert ermittelt. Zusätzlich ist immer `null` als möglicher Wert enthalten.
 - Ein `FormControl` kann mit der Option `nonNullable` erstellt werden. Dadurch wird der Typ `null` verboten. Wir empfehlen, `nonNullable` immer auf `true` zu setzen.
-- Um das Template mit dem Formularmodell zu verknüpfen, setzen wir die Direktive `[formGroup]="myForm"` bzw. `[formArray]="myForm"` ein.
+- Um das Template mit dem Formularmodell zu verknüpfen, setzen wir die Direktive `[formGroup]="myFormGroup"` bzw. `[formArray]="myFormArray"` ein.
 - Die Direktive `[formControl]` stellt eine typsichere Verknüpfung zu einem Control her. Wir empfehlen diesen Ansatz gegenüber `formControlName`.
 - Validatoren werden bei der Initialisierung der Controls angegeben.
 - Die Klasse `Validators` stellt einige eingebaute Validatoren bereit: `required`, `requiredTrue`, `min`, `max`, `minLength`, `maxLength`, `pattern` und `email`.
