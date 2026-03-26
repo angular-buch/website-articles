@@ -464,7 +464,6 @@ submitForm() {
 In der Praxis empfehlen wir dir, `getRawValue()` zu verwenden.
 Falls du Controls zur Laufzeit deaktivieren möchtest, kann es sinnvoll sein, `value` zu nutzen, um die deaktivierten Felder nicht zu berücksichtigen.
 
-
 ## Absenden verhindern
 
 Das Formular lässt sich immer absenden, auch wenn es ungültig ist.
