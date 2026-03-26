@@ -1,30 +1,32 @@
 ---
-title: '[WIP] Formulare mit Reactive Forms'
-published: 2026-02-10
-lastModified: 2026-02-05
-hidden: true
+title: 'Formulare mit Reactive Forms'
+published: 2026-03-23
+lastModified: 2026-03-23
 ---
 
-> **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Im Buch behandeln wir **Signal Forms** – den neuesten Ansatz zur Formularverarbeitung in Angular.
-> Template-Driven Forms und Reactive Forms sind weiterhin vollständig unterstützt und in vielen Projekten im Einsatz.
->
-> Dieser Artikel behandelt **Reactive Forms**.
-> Wenn du dich für den templatebasierten Ansatz interessierst, schau dir unseren Artikel zu [Template-Driven Forms](/template-forms) an.
+Formulare gehören zu den zentralen Bausteinen jeder Webanwendung.
+Angular bietet mit **Reactive Forms** einen bewährten Ansatz, um sie strukturiert und typsicher zu verarbeiten. 
+Die Lösung ist seit jeher fester Bestandteil von Angular und wird in vielen produktiven Anwendungen eingesetzt.
+In diesem Artikel stellen wir den Ansatz im Detail vor.
 
----
+## Formulare in Angular
 
-Angular bietet drei Ansätze für die Formularverarbeitung: **Template-Driven Forms**, **Reactive Forms** und **Signal Forms**.
-Reactive Forms eignen sich dort, wo wir nicht auf Signal Forms setzen können besonders für komplexe Formulare mit dynamischen Anforderungen.
-Das Formularmodell wird dabei vollständig in der Komponentenklasse definiert und bietet strikte Typisierung.
+Angular bietet insgesamt drei Ansätze für die Formularverarbeitung an: **Template-Driven Forms**, **Reactive Forms** und **Signal Forms**.
+Signal Forms ist die moderne Lösung, die Ende 2025 mit Angular 21 als Experimental-Version eingeführt wurde.
+Im Angular-Buch findest du zu den modernen Signal Forms mehrere ausführliche Kapitel.
+
+Template-Driven Forms sind der älteste Ansatz, der vor allem für kleine Formulare lohnenswert war.
+
+Reactive Forms gelten noch immer als Standard für die Formularverarbeitung in Angular und werden in vielen Projekten eingesetzt.
+Wir gehen allerdings davon aus, dass die neuen Signal Forms diesen Platz einnehmen werden, sobald die API **stable** ist.
+
 
 ## Reactive Forms
 
-Bei Reactive Forms speichern wir in der Komponentenklasse ein komplexes Formularmodell.
-Es beschreibt alles, was Angular rund um das Formular weiß:
-Das sind nicht nur die Daten, sondern auch Validierungsregeln und Zustände.
-Wir definieren also zunächst in der Klasse das Formularmodell und verknüpfen es dann mit den Feldern im HTML.
-Mit Reactive Forms wird also ein großer Teil der Formularlogik in der TypeScript-Klasse erledigt.
+Mit Reactive Forms speichern wir in der Komponentenklasse ein Formularmodell.
+Es beschreibt alles, was Angular rund um das Formular weiß: Daten, Validierungsregeln und Zustände.
+Dieses Formularmodell verknüpfen wir dann mit den Feldern im HTML, indem wir Direktiven verwenden.
+Mit Reactive Forms wird also ein großer Teil der Formularlogik in der TypeScript-Klasse erledigt, während im HTML nur die Datenbindungen hergestellt werden.
 
 Um Reactive Forms verwenden zu können, benötigen wir das `ReactiveFormsModule` aus `@angular/forms` als Komponentenimport.
 Das Modul enthält die notwendigen Direktiven, die wir im Template verwenden werden.
@@ -43,9 +45,8 @@ export class MyComponent { }
 
 Die Grundidee der Reactive Forms ist, dass das komplette Modell des Formulars in der Komponentenklasse angesiedelt wird.
 Dazu gehören neben den reinen Eingabedaten auch die gesamten logischen Controls mit ihren Zuständen, Validierungsregeln und Werten.
-Diese Idee gibt uns die nötige Flexibilität für große Formularanwendungen.
 
-Im ersten Schritt müssen wir uns dazu überlegen, wie das Formular strukturiert ist, um ein entsprechendes Datenmodell aufzubauen.
+Im ersten Schritt müssen wir uns dazu überlegen, wie das Formular strukturiert ist, um ein entsprechendes Formularmodell aufzubauen.
 Dazu stehen uns vier Bausteine zur Verfügung: `FormControl`, `FormGroup`, `FormArray` und `FormRecord`.
 
 ### FormControl
@@ -63,7 +64,7 @@ new FormControl(5);     // FormControl<number | null>
 new FormControl(true);  // FormControl<boolean | null>
 ```
 
-Wir sehen, dass jedoch auch bei der Definition eines Startwerts der Typ `null` immer inkludiert ist.
+Der Wert des Controls kann immer `null` annehmen, auch wenn ein Startwert gegeben ist.
 Der Hintergrund: Ein Control kann mithilfe der Methode `reset()` zurückgesetzt werden.
 Beim Zurücksetzen wird traditionell der Wert `null` verwendet – und ist deshalb immer auch im Typ des Controls enthalten.
 
@@ -87,18 +88,16 @@ new FormControl<string | null>(null);
 // FormControl<string | null>
 ```
 
-Wir empfehlen dir, die Option `nonNullable` für jedes Control auf `true` zu setzen.
+Wir empfehlen, die Option `nonNullable` für jedes Control auf `true` zu setzen.
 Das vereinfacht die Arbeit mit den erzeugten Daten, weil die Typen den tatsächlichen Eingabewert widerspiegeln.
 
 ### FormGroup
 
 Da ein Formular nur selten aus einem einzigen Feld besteht, können wir eine Menge von `FormControl`s in einem *Objekt* zusammenfassen: einer `FormGroup`.
-Tatsächlich übergeben wir bei der Initialisierung ein Objekt an die `FormGroup`.
-Jedes Control erhält in diesem Objekt einen Namen, anhand dessen wir das Feld später identifizieren können.
+Bei der Initialisierung übergeben wir an die `FormGroup` ein Objekt mit mehreren Controls.
 
-Ein Formular besteht auf oberster Ebene meist aus einer `FormGroup` (Seit Angular 21.0.0 kann jedoch auch ein `FormArray` auf oberster Ebene verwendet werden).
-Übrigens kannst du in einer solchen `FormGroup` nicht nur `FormControl`s zusammenfassen, sondern auch weitere `FormGroup`s (und `FormArray`s und `FormRecord`s).
-Du kannst deine Formulare also hierarchisch aufbauen – so wie es für deine komplexe Anwendung nötig ist.
+Das können nicht nur `FormControl`s sein, sondern auch weitere `FormGroup`s (und `FormArray`s und `FormRecord`s).
+Wir können das Formular also hierarchisch aufbauen – so wie es für den Anwendungsfall notwendig ist.
 Die Blätter dieses Baums sind allerdings immer einzelne `FormControl`s.
 
 Der Typ der `FormGroup` wird anhand der enthaltenen `FormControl`s ermittelt.
@@ -108,8 +107,8 @@ new FormGroup({
   username: new FormControl('', { nonNullable: true }),
   password: new FormGroup({
     pw: new FormControl('', { nonNullable: true }),
-    pwConfirm: new FormControl('', { nonNullable: true })
-  })
+    pwConfirm: new FormControl('', { nonNullable: true }),
+  }),
 });
 
 // Typ der erfassten Daten:
@@ -121,6 +120,9 @@ new FormGroup({
 //   };
 // }
 ```
+
+Grundsätzlich kann ein Formular so jede Struktur annehmen.
+Praktisch besteht es auf oberster Ebene aber meist aus einer `FormGroup`, in der sich die Felder aufspannen.
 
 ### FormRecord
 
@@ -151,7 +153,7 @@ Ein `FormRecord` sollte deshalb gezielt eingesetzt werden, wenn eine `FormGroup`
 Der vierte Baustein für Reactive Forms ist das `FormArray`.
 Damit können wir mehrere Teile des Formulars in einer *Liste* zusammenfassen.
 Ein solches Array ist sinnvoll, um eine unbestimmte Anzahl von Einträgen zu erfassen, z. B. Produkte einer Bestellung, Stichwörter oder mehrere Autoren zu einem Buch.
-In einem `FormArray` können nicht nur `FormControl`s zusammengefasst werden, sondern auch `FormGroup`, `FormArray` oder `FormRecord`.
+In einem `FormArray` können nicht nur `FormControl`s zusammengefasst werden, sondern jedes beliebige Control wie `FormGroup`, `FormArray` oder `FormRecord`.
 
 Das `FormArray` besitzt Methoden, die denen eines echten Arrays aus JavaScript nachempfunden sind.
 Zum Beispiel können wir mit der Methode `push()` weitere Controls am Ende anfügen.
@@ -196,13 +198,14 @@ Neben den spezifischen Schnittstellen besitzen also alle vier Bausteine die glei
 | `valueChanges` | Änderungen am Wert überwachen (Observable) |
 | `statusChanges` | Status des Controls überwachen (Observable) |
 
-### Komplexes Formularmodell
+Bitte beachte, dass diese Eigenschaften keine Signals sind, sondern einfache Propertys.
 
+### Komplexes Formularmodell
 Mit den vier Bausteinen können wir in der Komponente ein komplexes Formularmodell definieren.
 
 So können wir z. B. ein Formular für die Registrierung erstellen:
 
-- Den Benutzernamen können wir als einfaches Textfeld abbilden.
+- Den Anmeldenamen können wir als einfaches Textfeld abbilden.
 - Das Passwort und die Bestätigung des Passworts können wir zusammenhängend in einer Gruppe abfragen.
 - Mehrere E-Mail-Adressen können wir in einer Liste erfassen.
 
@@ -211,7 +214,7 @@ Diese `FormGroup` legen wir direkt in einem Property der Komponentenklasse ab.
 Wir empfehlen dir, für jedes Feld die Option `nonNullable` zu setzen.
 
 ```typescript
-registerForm = new FormGroup({
+protected readonly registerForm = new FormGroup({
   username: new FormControl('', { nonNullable: true }),
   password: new FormGroup({
     pw: new FormControl('', { nonNullable: true }),
@@ -223,7 +226,7 @@ registerForm = new FormGroup({
 });
 ```
 
-In der `FormGroup` können wir ein einfaches Feld für den `username` direkt mit einem `FormControl` anlegen.
+In der `FormGroup` können wir ein einfaches Feld für `username` direkt mit einem `FormControl` anlegen.
 Für die Passworteingabe erzeugen wir eine verschachtelte `FormGroup`, die zwei separate Controls für das Passwort und die Bestätigung des Passworts beinhaltet. Diese Gruppierung hat den Vorteil, dass wir die Controls später zusammen validieren können.
 Die E-Mail-Adressen sollen in einer Liste abgefragt werden.
 Wir fassen also mehrere `FormControl`s in einem `FormArray` zusammen.
@@ -235,15 +238,14 @@ Anschließend müssen wir die Formularfelder aus dem Template mit den Controls a
 
 Im ersten Schritt definieren wir auf dem umschließenden `<form>`-Element, für welche `FormGroup` dieses Formular verantwortlich ist.
 Dafür existiert die Direktive `formGroup`, an die wir direkt unser gesamtes Formularmodell übergeben können.
-
-> Seit Angular 21.0.0 ist es auch möglich auf oberster Ebene ein Formularmodell, welches mit einem FormArray erzeugt wurde mit der Direktive `formArray` zu verknüpfen.
+Seit Angular 21.0 gibt es außerdem die Direktive `formArray`, um ein einzelnes `FormArray` mit der Wurzel des Formulars zu verknüpfen.
 
 ```html
 <form [formGroup]="registerForm">
   <!-- Formularfelder -->
 </form>
 
-<!-- Ab Angular 21.0.0 geht auch: -->
+<!-- Ab Angular 21.0 auch möglich: -->
 <form [formArray]="myFormArray">
   <!-- Formularfelder -->
 </form>
@@ -260,8 +262,10 @@ Dazu setzen wir die Direktive `formControlName` ein und übergeben den Namen als
 Unsere `FormGroup` besitzt das Feld `username`, also können wir das HTML wie folgt aufbauen:
 
 ```html
-<label for="username">Username</label>
-<input id="username" formControlName="username">
+<form [formGroup]="registerForm">
+  <label for="username">Username</label>
+  <input id="username" formControlName="username">
+</form>
 ```
 
 > **`formControlName`:** Binde dieses Input-Feld an das Control mit dem Namen `username` aus der `FormGroup` im Property `registerForm`.
@@ -282,8 +286,10 @@ Diese Referenz wird direkt im Editor ausgewertet. Beim Tippen profitieren wir vo
 Wir empfehlen diese typsichere Variante ganz klar gegenüber der losen Kopplung mit dem Control-Namen.
 
 ```html
-<label for="username">Username</label>
-<input id="username" [formControl]="registerForm.controls.username">
+<form [formGroup]="registerForm">
+  <label for="username">Username</label>
+  <input id="username" [formControl]="registerForm.controls.username">
+</form>
 ```
 
 > **`formControl`:** Binde dieses Input-Feld an das Control aus `registerForm.controls.username`.
@@ -294,15 +300,18 @@ Die hierarchische Struktur des Formularmodells findet sich auch in der Hierarchi
 Um die Ausdrücke im Template kurz und lesbar zu halten, können wir eine lokale Variable mit `@let` verwenden.
 
 ```html
-<fieldset [formGroup]="registerForm.controls.password">
-  @let pwGroup = registerForm.controls.password;
+<form [formGroup]="registerForm">
+  <!-- ... -->
+  <fieldset [formGroup]="registerForm.controls.password">
+    @let pwGroup = registerForm.controls.password;
 
-  <label for="pw">Password</label>
-  <input id="pw" type="password" [formControl]="pwGroup.controls.pw">
+    <label for="pw">Password</label>
+    <input id="pw" type="password" [formControl]="pwGroup.controls.pw">
 
-  <label for="pwConfirm">Confirm Password</label>
-  <input id="pwConfirm" type="password" [formControl]="pwGroup.controls.pwConfirm">
-</fieldset>
+    <label for="pwConfirm">Confirm Password</label>
+    <input id="pwConfirm" type="password" [formControl]="pwGroup.controls.pwConfirm">
+  </fieldset>
+</form>
 ```
 
 Für die Liste der E-Mail-Adressen wird es etwas aufwendiger.
@@ -313,8 +322,9 @@ Stattdessen nutzen wir `@for` und iterieren über die Controls aus dem `FormArra
 Auf dem `FormArray` liefert das Property `controls` schließlich ein Array mit allen enthaltenen Controls.
 
 ```html
-<fieldset [formArray]="registerForm.controls.emails">
-  @for (emailCtrl of registerForm.controls.emails.controls; track $index) {
+@let emailsArray = registerForm.controls.emails;
+<fieldset [formArray]="emailsArray">
+  @for (emailCtrl of emailsArray.controls; track $index) {
     <label [attr.for]="'email-' + $index">E-Mail {{ $index + 1 }}</label>
     <input [id]="'email-' + $index" type="email" [formControl]="emailCtrl">
   }
@@ -356,7 +366,7 @@ Welchen der beiden Wege wir verwenden, hängt davon ab, ob wir andere Optionen s
 In beiden Fällen können wir entweder einen einzigen Validator angeben oder ein Array von Validatorfunktionen notieren.
 
 Bitte beachte, dass die Validatoren `required` und `email` direkt auf die Validatorfunktion referenzieren und deshalb ohne Funktionsklammern angegeben werden.
-`minLength` und `maxLength` hingegen sind Factory-Funktionen, die erst nach dem Aufruf eine Validatorfunktion zurückgeben.
+`minLength` und `maxLength` hingegen sind Factory-Funktionen, die erst beim Aufruf eine Validatorfunktion zurückgeben.
 Das klingt kompliziert, macht es aber erst möglich, Argumente an einen Validator zu übergeben.
 
 ```typescript
@@ -375,7 +385,7 @@ new FormControl('', {
 
 Geben wir mehrere Validatoren an, werden sie in dieser Reihenfolge ausgeführt.
 Trotzdem generieren nicht immer alle Validatoren einen Fehler: `minLength` und `maxLength` ignorieren beispielsweise einen leeren Eingabewert.
-Kombiniert mit `required` wird `minLength` also erst dann aktiv, wenn überhaupt ein Wert eingegeben wurde und `required` nicht mehr anschlägt.
+`minLength` wird also erst dann aktiv, wenn überhaupt ein Wert eingegeben wurde und `required` nicht mehr anschlägt.
 
 ## Formularzustand verarbeiten
 
@@ -391,8 +401,9 @@ Zusätzlich drückt der Zustand `pending` aus, dass eine asynchrone Validierung 
 
 Die Zustände werden automatisch als CSS-Klassen auf die Formularfelder im Template angewendet.
 Wir können diese Klassen also nutzen, um die Felder passend zu ihrem Zustand zu stylen.
-Die Felder erhalten einen roten Rand, wenn das Control gleichzeitig `invalid` und `touched` ist.
+Im folgenden Beispiel erhalten die Felder einen roten Rand, wenn das Control gleichzeitig `invalid` und `touched` ist.
 Diese Kombination ist sinnvoll, damit der Fehlerzustand erst angezeigt wird, nachdem wir mit dem Formular interagiert haben.
+Bitte beachte im Sinne der Barrierefreiheit, dass wir zusätzlich zur farblichen Unterscheidung noch andere visuelle Elemente verwenden sollten, um den Fehler hervorzuheben.
 
 ```css
 input.ng-invalid.ng-touched {
@@ -405,13 +416,12 @@ input.ng-valid.ng-touched {
 ```
 
 Um den Formularzustand programmatisch zu verarbeiten, benötigen wir Zugriff auf das `FormControl`.
-Dadurch dass das Formularmodell in der Komponentenklasse liegt, können wir direkt mit den Controls interagieren.
-Der Zugriff auf das passende Control erfolgt nach der Initialisierung der `FormGroup` über das Property `controls`.
 Um z. B. im Template eine Meldung abhängig vom Zustand anzuzeigen, können wir so vorgehen:
 
 ```html
-@if (registerForm.controls.username.invalid && registerForm.controls.username.touched) {
-  <div class="error">Username is required</div>
+@let usernameControl = registerForm.controls.username;
+@if (usernameControl.invalid && usernameControl.touched) {
+  <div class="error">Username is required.</div>
 }
 ```
 
@@ -419,9 +429,19 @@ Um z. B. im Template eine Meldung abhängig vom Zustand anzuzeigen, können wir 
 Wie in einer guten Familie kennen also die Elternelemente immer den Zustand ihrer Kinder, und der Zustand wird nach oben vererbt.
 Ist z. B. ein einzelnes `FormControl` im Zustand `invalid`, so ist auch die gesamte umgebende `FormGroup` ungültig.
 
-## Formular abschicken
+## Felder deaktivieren
 
-Um das Formular abzuschicken, benötigen wir zunächst einen Button vom Typ `submit`.
+Um ein Feld zu deaktivieren, verwenden wir die Methode `disable()` direkt auf dem `FormControl`.
+Das HTML-Attribut `disabled` im Template sollten wir dafür nicht verwenden, denn Angular verwaltet den Zustand intern.
+Mit `enable()` aktivieren wir das Control wieder.
+Ein deaktiviertes Control kann nicht mehr bedient werden und wird bei der Validierung ignoriert.
+Enthält eine `FormGroup` ein deaktiviertes Control, ist der Wert im Property `value` nicht mehr enthalten.
+Mit `getRawValue()` erhalten wir dagegen alle Werte, auch die deaktivierter Controls – siehe dazu auch der folgende Abschnitt.
+
+
+## Formular absenden
+
+Um das Formular abzusenden, benötigen wir zunächst einen Button vom Typ `submit`.
 Er muss sich innerhalb des `<form>`-Elements befinden.
 Wird das Formular schließlich in der Oberfläche abgeschickt, so wird ein passendes Event ausgelöst: `ngSubmit`.
 Dieses Event können wir abonnieren und eine Methode ausführen:
@@ -429,17 +449,15 @@ Dieses Event können wir abonnieren und eine Methode ausführen:
 ```html
 <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
   <!-- Formularfelder -->
-  <button type="submit" [disabled]="registerForm.invalid">Submit</button>
+  <button type="submit">Submit</button>
 </form>
 ```
 
 In der Komponentenklasse müssen wir die Eingabewerte aus dem Formular weiterverarbeiten.
-Die Klasse `AbstractControl` – und damit auch jede `FormGroup`, `FormArray` und `FormControl` – bietet dazu zwei Möglichkeiten.
+Die Klasse `AbstractControl` – und damit auch `FormGroup`, `FormArray` und `FormControl` – bietet dazu zwei Möglichkeiten.
 
 Das Property `value` beinhaltet die Werte des Formulars, bei einer `FormGroup` ist das ein Objekt mit allen erfassten Daten.
-Dabei sind allerdings nur die aktivierten Controls enthalten:
-Verwenden wir die Methode `disable()`, um ein Control zu deaktivieren, kann das Formularfeld nicht mehr bedient werden.
-Das führt auch dazu, dass der Wert in `value` nicht mehr enthalten ist.
+Dabei sind allerdings nur die aktivierten Controls enthalten.
 Da theoretisch jedes Control zur Laufzeit deaktiviert werden kann, ist der Typ von `value` mit `Partial` definiert: `Partial` lockert die Typisierung eines Objekts, indem alle Eigenschaften optional gesetzt werden.
 
 Arbeiten wir mit einem festgelegten Datenmodell wie einem `Book`, ist es unpraktisch, dass alle Felder optional sind. Der erfasste Formularwert ist so nicht mit dem Datenmodell kompatibel.
@@ -455,6 +473,31 @@ submitForm() {
 
 In der Praxis empfehlen wir dir, `getRawValue()` zu verwenden.
 Falls du Controls zur Laufzeit deaktivieren möchtest, kann es sinnvoll sein, `value` zu nutzen, um die deaktivierten Felder nicht zu berücksichtigen.
+
+## Absenden verhindern
+
+Das Formular lässt sich immer absenden, auch wenn es ungültig ist.
+So lassen sich also ungültige Eingaben speichern – und das ist möglicherweise nicht gewollt.
+
+In unserem Blogartikel ["Barrierefreiheit in Formularen: Daten versenden"](https://angular-buch.com/blog/2026-03-form-submit-a11y) diskutieren wir verschiedene Aspekte rund um das Absenden von Formularen.
+Dabei betonen wir vor allem, dass ein Submit-Button nicht deaktiviert werden sollte, um das Absenden zu verhindern.
+Ein deaktivierter Button gibt keine Auskunft darüber, warum er nicht geklickt werden kann.
+Das ist schlecht für die Usability und baut Bedienungsbarrieren auf.
+
+Stattdessen gilt es als gute Praxis, den Zustand beim Absenden zu überprüfen.
+Ist das Formular ungültig, brechen wir den Vorgang ab.
+Außerdem können wir dann alle Felder als `touched` markieren, sodass die zugehörigen Fehlermeldungen sichtbar werden.
+
+```typescript
+submitForm() {
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
+    return;
+  }
+
+  // Absenden ausführen …
+}
+```
 
 ## Formular zurücksetzen
 
@@ -506,6 +549,9 @@ this.registerForm.patchValue({
 Wollen wir den Wert für ein einzelnes `FormControl` setzen, das nur einen String erfasst, ist die Bedeutung der beiden Methoden gleich. Wir empfehlen dir, in diesem Fall `setValue()` zu verwenden.
 Der Unterschied ist nur bei `FormGroup`, `FormArray` und `FormRecord` interessant.
 
+
+
+
 ## Änderungen überwachen
 
 Stell dir einmal einen komplexen Anwendungsfall vor:
@@ -541,13 +587,21 @@ Ein praktischer Anwendungsfall ist die Typeahead-Suche, bei der die Formulareing
 - Die Bausteine können verschachtelt werden. Am Anfang steht fast immer eine `FormGroup`, jedes logische Formularfeld erhält ein `FormControl`.
 - Der Typ eines Controls wird durch den eingegebenen Startwert ermittelt. Zusätzlich ist immer `null` als möglicher Wert enthalten.
 - Ein `FormControl` kann mit der Option `nonNullable` erstellt werden. Dadurch wird der Typ `null` verboten. Wir empfehlen, `nonNullable` immer auf `true` zu setzen.
-- Um das Template mit dem Formularmodell zu verknüpfen, setzen wir die Direktive `[formGroup]="myForm"` bzw. `[formArray]="myForm"` ein.
+- Um das Template mit dem Formularmodell zu verknüpfen, setzen wir die Direktive `[formGroup]="myFormGroup"` bzw. `[formArray]="myFormArray"` ein.
 - Die Direktive `[formControl]` stellt eine typsichere Verknüpfung zu einem Control her. Wir empfehlen diesen Ansatz gegenüber `formControlName`.
 - Validatoren werden bei der Initialisierung der Controls angegeben.
 - Die Klasse `Validators` stellt einige eingebaute Validatoren bereit: `required`, `requiredTrue`, `min`, `max`, `minLength`, `maxLength`, `pattern` und `email`.
 - Die Propertys `valueChanges` und `statusChanges` auf jedem Control geben Auskunft über Wert- und Statusänderungen.
 - Um Controls zu deaktivieren, nutzen wir nicht das Attribut `disabled` im Template, sondern die Methoden `disable()` und `enable()` auf den Controls.
 
-## Empfehlung
+## Empfehlung: Signal Forms
 
-Wir empfehlen nach Möglichkeit in modernen Angular Anwendungen stets auf Signal Forms zu setzen wie du sie im Buch kennengelernt hast. Reactive Forms sind eine gute Wahl für komplexe Formulare mit dynamischen Anforderungen oder verschachtelten Strukturen – insbesondere in Projekten, die noch mit einer älteren Angular Version (vor Angular 22) arbeiten oder wo eine Migration auf Signal Forms (noch) nicht möglich ist.
+Reactive Forms sind eine gute Wahl für komplexe Formulare mit dynamischen Anforderungen oder verschachtelten Daten.
+Gleichzeitig setzt dieser Ansatz aber auf einfache Propertys und Observables und fügt sich damit nicht mehr nahtlos in die Signal-basierte Architektur von Angular ein.
+Wir empfehlen deshalb, den neuen Ansatz **Signal Forms** zu verwenden.
+
+Für die Migration von Reactive Forms zu Signal Forms bietet Angular einige Werkzeuge an, siehe [Dokumentation](https://angular.dev/guide/forms/signals/migration).
+Die beiden Ansätze können im Hybridbetrieb eingesetzt werden, um schrittweise zu migrieren.
+
+Reactive Forms wird allerdings noch einige Jahre Bestand haben: Viele Projekte setzen auf dieses Modell, und es wird noch einige Zeit dauern, bis die letzte Anwendung zu Signal Forms migriert wurde.
+Reactive Forms ist deshalb ein lohnenswerter Ansatz für Projekte, die noch mit einer älteren Angular-Version (vor Angular 22) arbeiten, oder wenn eine Migration auf Signal Forms (noch) nicht möglich ist.
