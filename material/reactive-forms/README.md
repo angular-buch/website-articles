@@ -444,7 +444,7 @@ Dieses Event können wir abonnieren und eine Methode ausführen:
 ```
 
 In der Komponentenklasse müssen wir die Eingabewerte aus dem Formular weiterverarbeiten.
-Die Klasse `AbstractControl` – und damit auch jede `FormGroup`, `FormArray` und `FormControl` – bietet dazu zwei Möglichkeiten.
+Die Klasse `AbstractControl` – und damit auch `FormGroup`, `FormArray` und `FormControl` – bietet dazu zwei Möglichkeiten.
 
 Das Property `value` beinhaltet die Werte des Formulars, bei einer `FormGroup` ist das ein Objekt mit allen erfassten Daten.
 Dabei sind allerdings nur die aktivierten Controls enthalten:
