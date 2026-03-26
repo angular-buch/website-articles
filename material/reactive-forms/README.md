@@ -198,7 +198,6 @@ Neben den spezifischen Schnittstellen besitzen also alle vier Bausteine die glei
 
 Bitte beachte, dass diese Eigenschaften keine Signals sind, sondern einfache Propertys.
 
-
 ### Komplexes Formularmodell
 Mit den vier Bausteinen können wir in der Komponente ein komplexes Formularmodell definieren.
 
