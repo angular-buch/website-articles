@@ -20,7 +20,7 @@ sticky: false
 
 Angular introduces Signal Forms with Version [21.0.0](https://github.com/angular/angular/releases/tag/21.0.0), an experimental but promising approach to form handling that leverages Angular's reactive Signal primitive.
 This new API offers a declarative way to build forms with full control over the data model and built-in schema validation.
-In this first part of our four-part series, we'll cover the fundamentals you need to get started with Signal Forms.
+In this first part of our five-part series, we'll cover the fundamentals you need to get started with Signal Forms.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
@@ -32,6 +32,7 @@ In this first part of our four-part series, we'll cover the fundamentals you nee
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
 - [Part 4: Metadata and Accessibility Handling](/blog/2025-12-signal-forms-part4)
+- [Part 5: Migration and Compatibility](/blog/2026-04-signal-forms-part5)
 
 ## What Makes Signal Forms Different
 
@@ -587,6 +588,8 @@ Signal Forms provide a modern and powerful way to handle forms in Angular applic
 Getting started is straightforward and simple: Create a signal, derive the form structure and connect it to the template using the `FormField` directive.
 With schema-based validation, we can define all validation rules in a clear and reusable way.
 
+## What's Next?
+
 In this first part, we've covered the fundamentals of Signal Forms:
 
 - Setting up data models and field structures
@@ -595,11 +598,13 @@ In this first part, we've covered the fundamentals of Signal Forms:
 - Schema-based validation with built-in validators
 - Displaying validation errors
 
-In **Part 2**, we'll dive deeper into advanced validation scenarios, including custom validation functions, cross-field validation, asynchronous validation, and handling server-side errors.
+In **[Part 2](/blog/2025-10-signal-forms-part2)**, we'll dive deeper into advanced validation scenarios, including custom validation functions, cross-field validation, asynchronous validation, and handling server-side errors.
 
-In **Part 3**, we'll dig into modularization and customization by using child forms and building custom UI controls that integrate seamlessly with Signal Forms. Also we'll have a look at how to provide a custom `SignalFormsConfig`.
+In **[Part 3](/blog/2025-10-signal-forms-part3)**, we'll dig into modularization and customization by using child forms and building custom UI controls that integrate seamlessly with Signal Forms. Also we'll have a look at how to provide a custom `SignalFormsConfig`.
 
-In **Part 4**, we'll explore field metadata and we'll create a directive which adds accessibility features that help create more inclusive and user-friendly forms.
+In **[Part 4](/blog/2025-12-signal-forms-part4)**, we'll explore field metadata and we'll create a directive which adds accessibility features that help create more inclusive and user-friendly forms.
+
+In **[Part 5](/blog/2026-04-signal-forms-part5)**, we'll look at migration strategies and how `FormUiControl` makes custom form controls compatible with all three form approaches.
 
 Ready to continue? Check out [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)!
 
