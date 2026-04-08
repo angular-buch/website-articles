@@ -5,10 +5,6 @@ lastModified: 2026-02-06
 hidden: true
 ---
 
-> **Hinweis:** Dieser Artikel ist Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Dort behandeln wir ausführlich die neuen **Signal Forms**.
-
----
 
 Im Angular-Buch behandeln wir ausführlich Angulars neuesten Ansatz zur Formularverarbeitung: Signal Forms.
 Zum Zeitpunkt der Veröffentlichung galt die Implementierung als *experimental*.
