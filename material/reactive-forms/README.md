@@ -9,6 +9,10 @@ Angular bietet mit **Reactive Forms** einen bewährten Ansatz, um sie strukturie
 Die Lösung ist seit jeher fester Bestandteil von Angular und wird in vielen produktiven Anwendungen eingesetzt.
 In diesem Artikel stellen wir den Ansatz im Detail vor.
 
+## Inhalt
+
+[[toc]]
+
 ## Formulare in Angular
 
 Angular bietet insgesamt drei Ansätze für die Formularverarbeitung an: **Template-Driven Forms**, **Reactive Forms** und **Signal Forms**.
