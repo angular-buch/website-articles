@@ -1,29 +1,35 @@
 ---
-title: '[WIP] Formulare mit Template-Driven Forms'
-published: 2026-02-10
-lastModified: 2026-02-05
-hidden: true
+title: 'Formulare mit Template-Driven Forms'
+published: 2026-04-08
+lastModified: 2026-04-08
 ---
 
-> **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Im Buch behandeln wir **Signal Forms** – den neuesten Ansatz zur Formularverarbeitung in Angular.
-> Template-Driven Forms und Reactive Forms sind weiterhin vollständig unterstützt und in vielen Projekten im Einsatz.
->
-> Dieser Artikel behandelt **Template-Driven Forms**.
-> Wenn du dich für den modellbasierten Ansatz interessierst, schau dir unseren Artikel zu [Reactive Forms](/reactive-forms) an.
+Formulare gehören zu den zentralen Bausteinen jeder Webanwendung.
+Mit den älteren **Template-Driven Forms** bietet Angular einen Ansatz, bei dem die Formularlogik direkt im Template definiert wird.
+Dieser Artikel stellt den Ansatz im Detail vor.
 
----
+## Inhalt
 
-Angular bietet drei Ansätze für die Formularverarbeitung: **Template-Driven Forms**, **Reactive Forms** und **Signal Forms**.
-Template-Driven Forms sind der älteste Ansatz und eignen sich besonders für einfache Formulare - insbesondere in Anwendungen, die noch mit einer älteren Angular Version (vor Angular 22) arbeiten.
-Die Formularlogik wird dabei vollständig im Template mit der Direktive `ngModel` abgebildet.
+[[toc]]
+
+## Formulare in Angular
+
+Angular bietet insgesamt drei Ansätze für die Formularverarbeitung an: **Template-Driven Forms**, **Reactive Forms** und **Signal Forms**.
+Signal Forms ist die moderne Lösung, die Ende 2025 mit Angular 21 als Experimental-Version eingeführt wurde.
+Im Angular-Buch findest du zu den modernen Signal Forms mehrere ausführliche Kapitel.
+
+Template-Driven Forms sind der älteste der drei Ansätze.
+Sie eignen sich vor allem für überschaubare Formulare, bei denen die gesamte Formularlogik bequem im Template mit der Direktive `ngModel` abgebildet werden kann.
+
+Reactive Forms waren lange der De-facto-Standard für Formulare in Angular.
+Wenn du dich für diesen Ansatz interessierst, schau dir unseren [Artikel zu Reactive Forms](/reactive-forms) an.
 
 ## Template-Driven Forms einrichten
 
 Damit wir Template-Driven Forms in der Anwendung einsetzen können, müssen wir alle nötigen Bausteine an Bord holen.
 Angular bündelt sie in einem Modul mit dem Namen `FormsModule`.
 Darin befinden sich unter anderem die Direktiven, die wir später in den Templates einsetzen.
-Wir importieren das `FormsModule` in der Komponente, in dem sich unser Formular befinden soll.
+Wir importieren das `FormsModule` in der Komponente, in der sich unser Formular befinden soll.
 
 ```typescript
 import { FormsModule } from '@angular/forms';
@@ -38,12 +44,12 @@ export class MyForm { }
 ## Datenmodell in der Komponente
 
 Bevor wir das HTML-Markup für das Formular bauen, planen wir zunächst, welche Daten erfasst werden müssen.
-Diese Daten müssen in der Komponentenklasse vorliegen, am besten als zusammenhängendes Objekt in einem Property der Klasse.
+Diese Daten müssen in der Komponentenklasse vorliegen, am besten als zusammenhängendes Objekt in einem Signal.
 Das Objekt enthält immer konkrete Daten: Bei der Initialisierung sind das die Default-Werte; sobald etwas eingetippt wurde, finden wir diese Eingaben in dem Objekt.
 
 ```typescript
 @Component({ /* ... */ })
-export class SimpleFormComponent {
+export class MyForm {
   protected formData = signal({
     username: '',
     password: ''
@@ -55,8 +61,7 @@ export class SimpleFormComponent {
 
 Im Template der Komponente legen wir uns nun ein HTML-Formular mit einem `<form>`-Tag an.
 Darin befinden sich die Formularfelder, z. B. einfache oder mehrzeilige Textfelder, Checkboxen, Dropdowns oder Passwortfelder.
-Diese Formularfelder sollten natürlich zu dem Datenmodell aus der Komponente passen.
-Außerdem sollten wir einen Submit-Button anlegen, um das Formular abzusenden.
+Diese Formularfelder sollten zu dem Datenmodell aus der Komponente passen.
 
 Jedes Formularfeld muss ein `name`-Attribut besitzen, damit Angular die Felder identifizieren kann.
 
@@ -98,6 +103,11 @@ Wir setzen `ngModel` ein und verknüpfen jedes unserer Formularfelder im Templat
 ```
 
 Die Daten zwischen Formularfeldern und Komponente werden nun stets synchronisiert.
+Zum Ausprobieren können wir den Wert des Signals `formData` im Template anzeigen, indem wir die `JsonPipe` verwenden:
+
+```html
+<pre>{{ formData() | json }}</pre>
+```
 
 ## Eingaben validieren
 
@@ -118,9 +128,7 @@ Sie werden als Attribute auf den Formularfeldern eingesetzt.
 Setzen wir diese Validatoren ein, kümmert sich Angular automatisch im Hintergrund darum, den eingegebenen Wert gegen diese Regeln zu prüfen.
 Die Zustände des Formulars werden stets aktualisiert, sodass wir sofort ein visuelles Feedback zur Eingabe anzeigen können.
 
-Wenn die Regeln für die Validierung komplexer sind, lassen sie sich nicht mit einem einzigen Validator abdecken.
-Deshalb können wir beliebig viele Validatoren auf ein Control setzen.
-Das Passwortfeld aus unserem Beispiel kann beispielsweise folgende Regeln besitzen:
+Das Passwortfeld aus unserem Beispiel könnte die folgenden Regeln besitzen:
 
 - muss ausgefüllt sein
 - muss mindestens 8 Zeichen enthalten
@@ -145,7 +153,7 @@ Wir haben auf jedem Formularfeld die Direktive `ngModel` verwendet.
 Was trivial aussieht, erledigt im Hintergrund eine Menge wichtiger Schritte, um das Formular zu verwalten.
 Für jedes Feld wird automatisch ein Objekt initialisiert, das den Zustand der Formularfelder kontrolliert.
 
-Ein Feld kann sechs unterschiedliche Zustände besitzen, die sich nach drei Fragestellungen richten:
+Den Zustand können wir über verschiedene Zustandsflags auslesen:
 
 | Zustand | ja | nein |
 |---------|-----|------|
@@ -195,11 +203,11 @@ So können wir z. B. eine Meldung abhängig vom Formularzustand anzeigen.
 Sobald das Formular mit dem Submit-Button abgeschickt wird, wollen wir die Eingaben verarbeiten und z. B. zum Server schicken.
 
 Dazu benötigen wir als Erstes eine Methode in der Komponente, die ausgeführt wird, sobald das Formular abgeschickt wird.
-Hier können wir auf das Objekt `formData` zugreifen und diese Werte weiterverarbeiten, denn Angular hat durch das Two-Way Binding stets das Formular und das Datenmodell synchron gehalten.
+Hier können wir auf das Signal `formData` zugreifen und diese Werte weiterverarbeiten, denn Angular hat durch das Two-Way Binding stets das Formular und das Datenmodell synchron gehalten.
 
 ```typescript
 @Component({ /* ... */ })
-export class SimpleFormComponent {
+export class MyForm {
   protected formData = signal({
     username: '',
     password: ''
@@ -229,9 +237,9 @@ Nachdem die Daten abgeschickt wurden, besitzt das Formular noch immer die letzte
 Wenn das Formular direkt verwendet werden soll, um weitere Daten zu erfassen, fehlt noch ein wichtiger Schritt:
 Wir müssen alle Zustände und Werte zurücksetzen.
 
-Angular initialisiert auf jedem `<form>`-Tag eine Direktive mit dem Namen `NgForm`.
+Verwenden wir Template-Driven Forms, initialisiert Angular auf jedem `<form>`-Tag eine Direktive mit dem Namen `NgForm`.
 Das passiert vollautomatisch, ohne dass wir im Template zusätzlichen Code schreiben müssen.
-Zugriff auf dieses `NgForm` erhalten wir wieder mit einer Elementreferenz, die diesmal allerdings auf `ngForm` verweist.
+Zugriff auf dieses `NgForm` erhalten wir wieder mit einer Elementreferenz:
 
 ```html
 <form (ngSubmit)="submitForm()" #form="ngForm">
@@ -242,8 +250,8 @@ Zugriff auf dieses `NgForm` erhalten wir wieder mit einer Elementreferenz, die d
 
 Auf diesem Objekt existiert unter anderem die Methode `reset()`.
 Damit wir diese Methode aufrufen können, benötigen wir allerdings in der Komponentenklasse Zugriff auf diese Elementreferenz.
-An dieser Stelle können wir eine weitere Funktion von Angular nutzen `viewChild()`.
-Damit können wir aus der Komponentenklasse heraus auf eine Elementreferenz im Template zugreifen.
+Dafür können wir die Funktion `viewChild()` einsetzen:
+Von der Komponentenklasse aus greifen wir auf eine Elementreferenz im Template zu.
 Den Wert erhalten wir als Signal.
 
 Das Argument der Funktion ist dabei der Name der Elementreferenz aus dem Template.
@@ -255,7 +263,7 @@ import { /* ... */, viewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 @Component({ /* ... */ })
-export class SimpleFormComponent {
+export class MyForm {
   readonly form = viewChild<NgForm>('form');
 
   protected formData = signal({
@@ -264,7 +272,7 @@ export class SimpleFormComponent {
   });
 
   submitForm() {
-    console.log(this.formData);
+    console.log(this.formData());
     // Daten weiterverarbeiten
 
     // Formular zurücksetzen
@@ -275,7 +283,7 @@ export class SimpleFormComponent {
 ```
 
 Bitte bedenke, dass auch die Daten zurückgesetzt werden müssen.
-Das Signal, in dem der Formularwert steht (im vorherigen Beispiel: `formData()`), muss also mit dem Startzustand überschrieben werden, damit die Inhalte zurückgesetzt werden.
+Das Signal, in dem der Formularwert steht, muss also mit dem Startzustand überschrieben werden, damit die Inhalte zurückgesetzt werden.
 
 Das `NgForm`-Objekt können wir übrigens für viele weitere Zwecke verwenden.
 Beispielsweise kennt das Objekt immer alle Zustände seiner Formularfelder, sodass wir komplexere Validierungsregeln umsetzen können.
@@ -287,10 +295,12 @@ Beispielsweise kennt das Objekt immer alle Zustände seiner Formularfelder, soda
 - Das Two-Way Binding mit `[(ngModel)]` bindet ein Formularfeld an ein Property der Komponente. Die Daten werden in beide Richtungen synchronisiert.
 - Wird das Formular mit einem Submit-Button abgeschickt, wird das Event `ngSubmit` ausgelöst. Wir können das Event auf dem `<form>`-Element abonnieren: `(ngSubmit)="submitForm()"`.
 - Angular bringt einige eingebaute Validatoren mit: `required`, `min`, `max`, `minlength`, `maxlength`, `pattern` und `email`. Sie werden als Attribute auf den Formularfeldern eingesetzt.
-- Für die sechs Zustände eines Formulars werden automatisch CSS-Klassen gesetzt.
+- Für die Zustände eines Formularfelds werden automatisch CSS-Klassen mit dem Präfix `ng-` gesetzt.
 - Mit Elementreferenzen können wir auf die Instanzen von `ngModel` und `ngForm` zugreifen, um die Zustände direkt auszulesen.
-- Mit `viewChild('myForm')` können wir in der Komponentenklasse auf eine Elementreferenz im Template zugreifen. Damit können wir z. B. ein Formular zurücksetzen oder die Zustände auslesen.
+- Mit `viewChild('form')` können wir in der Komponentenklasse auf eine Elementreferenz im Template zugreifen. Damit können wir z. B. ein Formular zurücksetzen oder die Zustände auslesen.
 
 ## Empfehlung
 
-Wir empfehlen nach Möglichkeit in modernen Angular Anwendungen stets auf Signal Forms zu setzen wie du sie im Buch kennengelernt hast. Template Driven Forms solltest du nur in Projekten einzusetzen, in denen eine Migration auf eine moderne Angular Version ab Angular 22 (noch) nicht möglich ist und wo kein komplexes Eingabeformular benötigt wird.
+Template-Driven Forms werden nach wie vor vollständig vom Framework unterstützt.
+Sie eignen sich besonders für einfache Formulare, bei denen die Logik überschaubar bleibt.
+Für komplexere Szenarien empfehlen wir [Reactive Forms](/reactive-forms) oder – sobald die API stabil ist – die modernen **Signal Forms**, die wir im Angular-Buch ausführlich behandeln.
