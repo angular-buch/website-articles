@@ -20,6 +20,7 @@ Signal Forms ist die moderne Lösung, die Ende 2025 mit Angular 21 als Experimen
 Im Angular-Buch findest du zu den modernen Signal Forms mehrere ausführliche Kapitel.
 
 Template-Driven Forms sind der älteste Ansatz, der vor allem für kleine Formulare lohnenswert war.
+Wenn du dich dafür interessierst, schau dir unseren [Artikel zu Template-Driven Forms](/template-forms) an.
 
 Reactive Forms gelten noch immer als Standard für die Formularverarbeitung in Angular und werden in vielen Projekten eingesetzt.
 Wir gehen allerdings davon aus, dass die neuen Signal Forms diesen Platz einnehmen werden, sobald die API **stable** ist.
