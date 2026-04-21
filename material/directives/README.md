@@ -462,7 +462,7 @@ Statt beide Direktiven jedes Mal einzeln zu verwenden, können wir sie in einer 
 export class InteractiveElementDirective {}
 ```
 
-Diese zusammengesetzte Direktive können wir nun in den Template unserer Komponenten verwenden oder auch wiederum als Host-Direktive einsetzen:
+Diese zusammengesetzte Direktive können wir nun in den Templates unserer Komponenten verwenden oder auch wiederum als Host-Direktive einsetzen:
 
 ```typescript
 @Directive({
