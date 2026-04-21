@@ -14,31 +14,26 @@ TypeScript baut auf JavaScript auf und ergänzt es um ein statisches Typsystem.
 
 Wenn du schon Erfahrung mit modernem JavaScript oder TypeScript hast, kannst du diesen Crashkurs überspringen.
 
-TypeScript greift die aktuellen ECMAScript-Standards auf und integriert zusätzliche Features, unter anderem ein statisches Typsystem.
-Das bedeutet praktisch, dass die Typen von Variablen, Funktionsparametern und Klassen-Propertys direkt im Code aufgeschrieben werden.
-So erhalten wir schon während der Entwicklung eine gute Unterstützung im Editor und können unsere Software typsicher entwickeln.
-Autovervollständigung, Typprüfungen und Rename Refactoring sind nur einige der Vorteile, die sich aus einem statischen Typsystem ergeben.
-
-Jedes Programm, das in JavaScript geschrieben wurde, funktioniert auch in TypeScript.
-Dein bestehendes Wissen zu JavaScript bleibt also weiterhin anwendbar.
-
 ## TypeScript einsetzen
 
+TypeScript ist ein Open-Source-Projekt von Microsoft und basiert auf den aktuellen ECMAScript-Standards.
+Die Sprache ist ein *Superset* von JavaScript: Jede JavaScript-Syntax ist auch in TypeScript gültig.
+Allerdings ist TypeScript deutlich strenger als reines JavaScript.
+Der Compiler prüft zusätzlich die Typen und lehnt Code ab, der in JavaScript noch durchgelaufen wäre.
+In Angular-Projekten sind diese Prüfungen standardmäßig aktiviert (*strict mode*).
+Nur wenn wir die Einstellungen gezielt lockern, nähert sich TypeScript dem Verhalten von reinem JavaScript an.
+
 TypeScript ist nicht direkt im Browser lauffähig.
-Deshalb wird der TypeScript-Code vor der Auslieferung wieder in JavaScript umgewandelt.
+Deshalb wird der Code vor der Auslieferung wieder in JavaScript umgewandelt.
 Für diesen Prozess ist der TypeScript-Compiler verantwortlich.
 Man spricht dabei auch von *Transpilierung*, weil der Code lediglich in eine andere Sprache übertragen wird.
 
 Die statische Typisierung geht bei diesem Schritt verloren.
-Das bedeutet, dass das Programm zur Laufzeit keine Typen mehr besitzt, denn es ist ein reines JavaScript-Programm.
-Durch die Typunterstützung bei der Entwicklung und beim Build können allerdings schon die meisten Fehler erkannt und vermieden werden.
-
-TypeScript ist als Open-Source-Projekt bei der Firma Microsoft entstanden.
-Durch die Typisierung können Fehler bereits zur Entwicklungszeit erkannt werden.
-Außerdem können Tools den Code genauer analysieren.
-Dies ermöglicht Komfortfunktionen wie automatische Vervollständigung, Navigation zwischen Methoden und Klassen, eine solide Refactoring-Unterstützung und automatische Dokumentation in der Entwicklungsumgebung.
+Zur Laufzeit ist das Programm ein reines JavaScript-Programm ohne Typinformationen.
+Durch die Typprüfungen bei der Entwicklung und beim Build können viele Fehler aber schon frühzeitig erkannt werden.
 
 Die meisten modernen IDEs wie Visual Studio Code oder IntelliJ/WebStorm unterstützen TypeScript nativ und ohne zusätzliche Plug-ins.
+Neben der Fehlerprüfung profitieren wir dabei auch von Komfortfunktionen wie Autovervollständigung, Navigation zwischen Methoden und Klassen sowie einer soliden Refactoring-Unterstützung.
 In einem Angular-Projekt ist der TypeScript-Compiler außerdem schon vollständig konfiguriert, sodass wir sofort mit der Entwicklung beginnen können.
 
 ## Variablen: `const`, `let` und `var`
@@ -622,10 +617,7 @@ console.log(zero ?? 'fallback'); // 0
 
 ## Konfiguration
 
-Um TypeScript-Code in Node.js oder im Browser ausführen zu können, muss dieser zunächst in JavaScript umgewandelt werden.
-Diese Aufgabe übernimmt der *Transpiler*.
-
-Die Konfiguration wird in der Datei `tsconfig.json` hinterlegt.
+Die Konfiguration des TypeScript-Compilers wird in der Datei `tsconfig.json` hinterlegt.
 Die wohl wichtigste Einstellung ist das `target`: Diese Option gibt an, in welche Version von JavaScript das Programm transpiliert werden soll.
 
 In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert.
