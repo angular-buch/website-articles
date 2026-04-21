@@ -452,7 +452,7 @@ Host-Direktiven können nicht nur auf Komponenten, sondern auch auf andere Direk
 Dadurch lassen sich Verhaltensweisen transitiv aggregieren: Wir können mehrere kleine Direktiven zu einer größeren zusammensetzen und diese dann wiederum als Host-Direktive verwenden.
 
 Nehmen wir an, wir wollen die `ToggleOnClickDirective` und die `TooltipDirective` häufig gemeinsam einsetzen.
-Statt beide Direktiven jedes Mal einzeln als Host-Direktiven zu deklarieren, können wir sie in einer neuen Direktive bündeln:
+Statt beide Direktiven jedes Mal einzeln zu verwenden, können wir sie in einer neuen Direktive bündeln:
 
 ```typescript
 @Directive({
