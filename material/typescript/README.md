@@ -5,18 +5,14 @@ lastModified: 2026-02-05
 hidden: true
 ---
 
-> **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Im Buch setzen wir durchgehend auf **TypeScript** für die Entwicklung mit Angular.
-> Dieses Kapitel bietet eine Einführung in die wichtigsten Sprachfeatures.
->
-> Wenn du bereits Erfahrung mit TypeScript hast, kannst du dieses Kapitel überspringen.
-> Viele Konzepte werden wir auch im Verlauf des Buchs praktisch kennenlernen.
+Für die Entwicklung mit Angular verwenden wir die Programmiersprache **TypeScript**.
+Dieser Artikel richtet sich an alle, die mit modernem JavaScript und TypeScript noch nicht vertraut sind.
+Wir gehen die wichtigsten Sprachfeatures Schritt für Schritt durch und legen damit das Fundament für die Arbeit mit Angular.
 
----
+Keine Angst, du musst keine vollständig neue Sprache erlernen.
+TypeScript baut auf JavaScript auf und ergänzt es um ein statisches Typsystem.
 
-Für die Entwicklung mit Angular verwenden wir die Programmiersprache *TypeScript*.
-Für Entwickler:innen, die bisher noch nicht mit TypeScript entwickelt haben, wollen wir hier einen kurzen Einstieg geben.
-Keine Angst – du musst keine vollständig neue Sprache erlernen, um mit Angular arbeiten zu können, denn TypeScript ist eine Obermenge von JavaScript.
+Wenn du schon Erfahrung mit modernem JavaScript oder TypeScript hast, kannst du diesen Crashkurs überspringen.
 
 TypeScript greift die aktuellen ECMAScript-Standards auf und integriert zusätzliche Features, unter anderem ein statisches Typsystem.
 Das bedeutet praktisch, dass die Typen von Variablen, Funktionsparametern und Klassen-Propertys direkt im Code aufgeschrieben werden.
@@ -45,9 +41,6 @@ Dies ermöglicht Komfortfunktionen wie automatische Vervollständigung, Navigati
 Die meisten modernen IDEs wie Visual Studio Code oder IntelliJ/WebStorm unterstützen TypeScript nativ und ohne zusätzliche Plug-ins.
 In einem Angular-Projekt ist der TypeScript-Compiler außerdem schon vollständig konfiguriert, sodass wir sofort mit der Entwicklung beginnen können.
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: nein, ist mittlerweile Basiswissen und hat erst einmal auch nichts direkt mit TS zu tun -->
-<!--
 ## Variablen: `const`, `let` und `var`
 
 Ursprünglich wurden Variablen in JavaScript mit dem Schlüsselwort `var` eingeleitet.
@@ -112,7 +105,6 @@ Als Faustregel kannst du dir Folgendes merken:
 - Nutze zunächst immer `const`.
 - Willst du den Wert später im Programm verändern, wähle `let`.
 - Nutze nicht `var`, denn du wirst es nicht benötigen.
--->
 
 ## Die wichtigsten Basistypen
 
@@ -339,9 +331,6 @@ class Document implements Printable {
 }
 ```
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: sollte mittlerweile Standard sein und kann raus -->
-<!--
 ## Template-Strings
 
 Mit einem normalen String in einfachen Anführungszeichen ist es nicht möglich, einen Text über mehrere Zeilen anzugeben.
@@ -359,11 +348,7 @@ Die aktuelle Version ist ${version}.`;
 ```
 
 Wir werden Template-Strings vor allem nutzen, um URLs mit Parametern zusammenzubauen.
--->
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: sollte mittlerweile Standard sein und kann raus -->
-<!--
 ## Arrow Functions
 
 Eine *Arrow-Funktion* ist eine Kurzschreibweise für eine normale `function()` in JavaScript.
@@ -413,11 +398,7 @@ class Counter {
   }
 }
 ```
--->
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: haben wir im Buch und ist auch nicht spezifisch für TS, kann als raus -->
-<!--
 ## Immutability
 
 In JavaScript werden Objekte und Arrays stets nur als Referenzen auf eine zugehörige Speicherstelle gespeichert.
@@ -437,11 +418,7 @@ Wir behandeln ein Objekt oder Array als *unveränderlich* (engl. *immutable*) un
 Hierfür nutzen wir in der Regel die Spread-Syntax.
 
 > **Merke:** Objekte und Arrays sollten nie direkt verändert werden. Stattdessen sollte immer eine Kopie mit neuer Referenz erzeugt werden, die die gewünschten Änderungen enthält.
--->
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: haben wir im Buch und brauchen wir hier nicht. Auch nicht TS spezifisch -->
-<!--
 ## Spread-Syntax und Rest-Parameter
 
 In JavaScript können wir eine Syntax mit drei Punkten verwenden (`...`).
@@ -498,7 +475,6 @@ function sum(...numbers: number[]): number {
 
 console.log(sum(1, 2, 3, 4)); // 10
 ```
--->
 
 ## Private Eigenschaften von Klassen
 
@@ -584,9 +560,6 @@ const title = signal('Angular'); // Signal<string>
 const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
 ```
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: haben wir schon im Buch und ist kein TS -->
-<!--
 ## Promises und `async`/`await`
 
 Eine *Promise* ist ein natives Objekt in JavaScript, das einen asynchronen Vorgang repräsentiert.
@@ -607,7 +580,6 @@ async function loadData() {
   console.log(data);
 }
 ```
--->
 
 ## Weitere Features
 
