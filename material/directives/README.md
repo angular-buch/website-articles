@@ -292,60 +292,6 @@ Ein Host Binding ist diesem Weg deutlich vorzuziehen, denn der Weg über das `El
 
 Vermeide also, wenn möglich, das `ElementRef` und nutze die Schnittstellen von Angular.
 
-### Komponenten und Direktiven anfordern
-
-Wir können in einer Direktive oder Komponente eine beliebige andere Direktive oder Komponente anfordern, die weiter oben im Baum aktiv ist.
-Wir erhalten so eine Instanz der Klasse und können darauf Methoden ausführen, Propertys lesen usw.
-
-Man kann dieses Feature einsetzen, um eine Direktive zu bauen, die eine bestehende Komponente erweitert.
-Dazu konstruieren wir ein Szenario:
-Wir verwenden eine Tabellenkomponente aus einer Drittanbieterbibliothek, deren Implementierung wir nicht beeinflussen können.
-Die Komponente besitzt ein Input-Property `data`, über das wir die anzuzeigenden Daten übergeben können.
-Das Output `rowClick` gibt ein Event aus, sobald eine Tabellenzeile angeklickt wird.
-
-```html
-<mighty-table
-  [data]="myData()"
-  (rowClick)="handleClickedRow($event)"></mighty-table>
-```
-
-Die Beschaffung der Daten und das Handling für die angeklickte Tabellenzeile wollen wir in einem eigenen Service `MyDataService` durchführen.
-Um die beiden Teile zu verbinden, müssen wir in unserer eigenen Komponente den Service injizieren, die Daten an die Tabelle übergeben und das Event abonnieren.
-Diese Verdrahtung müssen wir immer wieder manuell vornehmen, wenn wir die Tabelle zusammen mit dem Service nutzen wollen.
-Um die Verbindung wiederverwendbar zu machen, können wir deshalb eine Direktive entwickeln!
-Wir setzen sie direkt auf dem Host-Element der Tabelle ein, und die Direktive verbindet den Service und die Komponente:
-
-```html
-<mighty-table tableAdapter></mighty-table>
-```
-
-Um mit der Tabelle zu kommunizieren, fordert die Direktive die Komponente an, auf deren Host-Element sie sich befindet.
-Außerdem injiziert sie den Service, und nun können wir beide Welten miteinander verbinden:
-
-```typescript
-@Directive({ selector: '[tableAdapter]' })
-export class TableAdapterDirective {
-  private table = inject(MightyTableComponent);
-  private service = inject(MyDataService);
-
-  constructor() {
-    // Daten an die Tabelle übergeben
-    this.service.getData().subscribe(data => {
-      this.table.data = data;
-    });
-
-    // Events aus der Tabelle verarbeiten
-    this.table.rowClick.subscribe(row => {
-      this.service.handleClickedRow(row);
-    });
-  }
-}
-```
-
-Direktiven und Komponenten können also aus dem darüberliegenden Baum die Instanzen von anderen Direktiven und Komponenten anfordern.
-Bitte verwende das Feature sparsam! Normalerweise sollten verwandte Komponenten über Bindings miteinander kommunizieren.
-Der beschriebene Weg ist dann zu empfehlen, wenn wir die Funktionalität von existierenden Bausteinen erweitern wollen.
-
 ## Komposition mit Host-Direktiven
 
 Um eine Direktive auf ein Element anzuwenden, nutzen wir üblicherweise im Template das HTML-Attribut, das zum Selektor der Direktive passt.
