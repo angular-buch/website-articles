@@ -101,6 +101,196 @@ Als Faustregel kannst du dir Folgendes merken:
 - Willst du den Wert später im Programm verändern, wähle `let`.
 - Nutze nicht `var`, denn du wirst es nicht benötigen.
 
+## Template-Strings
+
+Mit einem normalen String in einfachen Anführungszeichen ist es nicht möglich, einen Text über mehrere Zeilen anzugeben.
+Ein *Template-String* wird mit schrägen `` ` ``Hochkommata`` ` `` (*Backtick*) eingeleitet und beendet, nicht mit Anführungszeichen.
+Der String kann sich über mehrere Zeilen erstrecken.
+
+Mit Template-Strings können wir außerdem Ausdrücke direkt in einen String einbetten:
+
+```typescript
+const name = 'Angular';
+const version = 21;
+
+const message = `Willkommen bei ${name}!
+Die aktuelle Version ist ${version}.`;
+```
+
+Wir werden Template-Strings vor allem nutzen, um URLs mit Parametern zusammenzubauen.
+
+## Arrow Functions
+
+Eine *Arrow-Funktion* ist eine Kurzschreibweise für eine normale `function()` in JavaScript.
+Auch die Bezeichnung *Lambda-Ausdruck* ist verbreitet.
+
+Die Definition einer anonymen Funktion verkürzt sich damit elegant zu einem Pfeil `=>`.
+Besitzt die Funktion genau einen Parameter ohne Typ, können die runden Klammern auf der linken Seite weggelassen werden.
+Auch die geschweiften Klammern auf der rechten Seite können eingespart werden:
+Lässt man die Klammern weg, ist das Ergebnis des rechtsseitigen Ausdrucks der Rückgabewert für die Funktion.
+
+```typescript
+// Diese vier Definitionen sind gleichwertig:
+const fn1 = function(x: number) { return x * 2; };
+const fn2 = (x: number) => { return x * 2; };
+const fn3 = (x: number) => x * 2;
+const fn4 = x => x * 2; // Nur ohne Typangabe
+```
+
+Das folgende Beispiel zeigt, wie wir alle geraden Zahlen aus einer Liste ermitteln können:
+
+```typescript
+const numbers = [1, 2, 3, 4, 5, 6];
+
+// Herkömmliche Funktion
+const even1 = numbers.filter(function(n) {
+  return n % 2 === 0;
+});
+
+// Arrow-Funktion – wesentlich kompakter
+const even2 = numbers.filter(n => n % 2 === 0);
+```
+
+Ein weiterer Vorteil der Arrow-Funktion ist, dass sie keinen eigenen `this`-Kontext besitzt.
+Das ist besonders dann interessant, wenn wir die Funktion innerhalb einer Klasse verwenden und mit `this` auf die Instanz der Klasse zugreifen möchten.
+Mit Arrow-Funktionen wird die Variable `this` aus dem übergeordneten Kontext verwendet.
+
+```typescript
+class Counter {
+  count = 0;
+
+  increment() {
+    // Arrow-Funktion: this zeigt auf die Klasseninstanz
+    setTimeout(() => {
+      this.count++;
+      console.log(this.count);
+    }, 1000);
+  }
+}
+```
+
+## Spread-Syntax und Rest-Parameter
+
+In JavaScript können wir eine Syntax mit drei Punkten verwenden (`...`).
+Diese Schreibweise hat zwei Bedeutungen, je nachdem, wo sie eingesetzt wird:
+Die *Spread-Syntax* breitet Elemente aus, während *Rest-Parameter* übrige Argumente einsammeln.
+
+### Objekteigenschaften kopieren
+
+Mit der Spread-Syntax können wir Objekte klonen und dabei Eigenschaften überschreiben:
+
+```typescript
+const book = { title: 'Angular', year: 2023 };
+const copy = { ...book, year: 2026 };
+
+console.log(book.year); // 2023 – Original unverändert
+console.log(copy.year); // 2026 – Kopie mit neuem Wert
+```
+
+Bitte beachte, dass diese Idee nur für *Plain Objects* funktioniert und nur eine flache Kopie (*Shallow Copy*) erzeugt.
+Tiefere Zweige eines Objekts müssen einzeln geklont werden.
+Wird diese Aufgabe zu kompliziert, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt.
+
+### Array-Elemente kopieren
+
+Die Spread-Syntax funktioniert ähnlich auch für Arrays:
+
+```typescript
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+
+const copy = [...arr1];
+const combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
+```
+
+### Funktionsargumente übergeben
+
+Wollen wir die Elemente eines Arrays einzeln als Argumente an eine Funktion übergeben, können wir die Spread-Syntax nutzen:
+
+```typescript
+const numbers = [1, 2, 3];
+console.log(Math.max(...numbers)); // 3
+```
+
+### Funktionsargumente einsammeln
+
+In einem anderen Kontext haben die drei Punkte eine andere Bedeutung:
+Erhält eine Funktion mehrere Argumente, so können wir diese elegant in einem Array erfassen.
+Ein solcher Parameter heißt *Rest-Parameter*.
+
+```typescript
+function sum(...numbers: number[]): number {
+  return numbers.reduce((a, b) => a + b, 0);
+}
+
+console.log(sum(1, 2, 3, 4)); // 10
+```
+
+## Immutability
+
+In JavaScript werden Objekte und Arrays stets nur als Referenzen auf eine zugehörige Speicherstelle gespeichert.
+Ändern wir also die Inhalte direkt im Objekt, so ändert sich die Referenz nicht!
+Das bedeutet auch, dass bei Zuweisung eines Objekts zu einer Variable lediglich ein Verweis auf das ursprüngliche Objekt erzeugt wird.
+
+```typescript
+const book = { title: 'Angular', year: 2023 };
+const copy = book;
+copy.year = 2024;
+
+console.log(book.year); // 2024 – auch das Original wurde geändert!
+```
+
+Um gut wartbaren Code zu erhalten, dürfen wir niemals die Werte eines Objekts oder Arrays direkt verändern.
+Wir behandeln ein Objekt oder Array als *unveränderlich* (engl. *immutable*) und erzeugen bei einer Änderung immer eine Kopie.
+Hierfür nutzen wir in der Regel die Spread-Syntax.
+
+> **Merke:** Objekte und Arrays sollten nie direkt verändert werden. Stattdessen sollte immer eine Kopie mit neuer Referenz erzeugt werden, die die gewünschten Änderungen enthält.
+
+## Optional Chaining
+
+Optional Chaining ermöglicht einen sicheren Zugriff auf verschachtelte Objekte:
+
+```typescript
+const user = { address: { city: 'Berlin' } };
+const city = user?.address?.city; // 'Berlin'
+const zip = user?.address?.zip; // undefined (kein Fehler)
+```
+
+## Nullish Coalescing
+
+Nullish Coalescing erlaubt die einfache Zuweisung von Rückfallwerten:
+
+```typescript
+const value = null;
+const result = value ?? 'default'; // 'default'
+
+// Unterschied zu ||
+const zero = 0;
+console.log(zero || 'fallback'); // 'fallback'
+console.log(zero ?? 'fallback'); // 0
+```
+
+## Promises und `async`/`await`
+
+Eine *Promise* ist ein natives Objekt in JavaScript, das einen asynchronen Vorgang repräsentiert.
+Sie liefert entweder einen Wert zurück, wenn die Operation erfolgreich war, oder einen Fehler, wenn die Ausführung fehlgeschlagen ist.
+
+Mit den Schlüsselwörtern `async` und `await` können wir asynchronen Code schreiben, der wie synchroner Code aussieht.
+
+```typescript
+// Mit then()
+fetch('/api/data')
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+// Mit async/await
+async function loadData() {
+  const response = await fetch('/api/data');
+  const data = await response.json();
+  console.log(data);
+}
+```
+
 ## Die wichtigsten Basistypen
 
 Die starke Typisierung ermöglicht es, die Schnittstellen der Software genau zu beschreiben.
@@ -170,6 +360,75 @@ if (typeof value === 'string') {
 
 Praktisch solltest du es vermeiden, `any` zu verwenden, denn dieser Typ ist fast immer ein Indiz dafür, dass Unklarheit über die Typisierung herrscht.
 Willst du die konkrete Belegung einer Variable absichtlich im Unklaren lassen, ist `unknown` die bessere Wahl.
+
+## Union Types
+
+Mit Union Types können wir zusammengesetzte Typen beschreiben:
+
+```typescript
+function format(value: string | number): string {
+  if (typeof value === 'string') {
+    return value.toUpperCase();
+  }
+  return value.toFixed(2);
+}
+```
+
+## Interfaces
+
+Um die Typisierung in unserem Programmcode konsequent umzusetzen, stellt TypeScript sogenannte *Interfaces* bereit.
+Interfaces dienen dazu, die typisierte Struktur eines Objekts zu definieren, nicht jedoch die Werte.
+Optionale Eigenschaften werden durch ein Fragezeichen-Symbol gekennzeichnet.
+
+```typescript
+interface User {
+  firstname: string;
+  lastname: string;
+  age?: number;
+}
+
+const user: User = {
+  firstname: 'Max',
+  lastname: 'Mustermann'
+};
+```
+
+Fügen wir dem Objekt eine zusätzliche Eigenschaft hinzu oder hat eine der Eigenschaften nicht den Typ, der im Interface definiert wurde, so erhalten wir einen Fehler.
+
+### Interface für Klassen
+
+Interfaces können auch dafür verwendet werden, die Struktur einer Klasse vorzugeben.
+Dafür wird nach dem Klassennamen das Schlüsselwort `implements` angefügt.
+
+```typescript
+interface Printable {
+  print(): void;
+}
+
+class Document implements Printable {
+  print(): void {
+    console.log('Printing...');
+  }
+}
+```
+
+## Generic Types
+
+Mit *Generics* können wir Typparameter für Klassen und Funktionen definieren.
+Sie sind ein wichtiges Konzept in TypeScript, um wiederverwendbare und flexible Funktionen zu erstellen.
+
+```typescript
+interface Book {
+  title: string;
+}
+
+// Generischer Typ wird automatisch erkannt
+const count = signal(0); // Signal<number>
+const title = signal('Angular'); // Signal<string>
+
+// Bei Objekten muss der Typ explizit angegeben werden
+const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
+```
 
 ## Klassen
 
@@ -288,189 +547,6 @@ class PowerUser extends User {
 
 Mit `super()` kann der Konstruktor der Basisklasse ausgeführt werden.
 
-## Interfaces
-
-Um die Typisierung in unserem Programmcode konsequent umzusetzen, stellt TypeScript sogenannte *Interfaces* bereit.
-Interfaces dienen dazu, die typisierte Struktur eines Objekts zu definieren, nicht jedoch die Werte.
-Optionale Eigenschaften werden durch ein Fragezeichen-Symbol gekennzeichnet.
-
-```typescript
-interface User {
-  firstname: string;
-  lastname: string;
-  age?: number;
-}
-
-const user: User = {
-  firstname: 'Max',
-  lastname: 'Mustermann'
-};
-```
-
-Fügen wir dem Objekt eine zusätzliche Eigenschaft hinzu oder hat eine der Eigenschaften nicht den Typ, der im Interface definiert wurde, so erhalten wir einen Fehler.
-
-### Interface für Klassen
-
-Interfaces können auch dafür verwendet werden, die Struktur einer Klasse vorzugeben.
-Dafür wird nach dem Klassennamen das Schlüsselwort `implements` angefügt.
-
-```typescript
-interface Printable {
-  print(): void;
-}
-
-class Document implements Printable {
-  print(): void {
-    console.log('Printing...');
-  }
-}
-```
-
-## Template-Strings
-
-Mit einem normalen String in einfachen Anführungszeichen ist es nicht möglich, einen Text über mehrere Zeilen anzugeben.
-Ein *Template-String* wird mit schrägen `` ` ``Hochkommata`` ` `` (*Backtick*) eingeleitet und beendet, nicht mit Anführungszeichen.
-Der String kann sich über mehrere Zeilen erstrecken.
-
-Mit Template-Strings können wir außerdem Ausdrücke direkt in einen String einbetten:
-
-```typescript
-const name = 'Angular';
-const version = 21;
-
-const message = `Willkommen bei ${name}!
-Die aktuelle Version ist ${version}.`;
-```
-
-Wir werden Template-Strings vor allem nutzen, um URLs mit Parametern zusammenzubauen.
-
-## Arrow Functions
-
-Eine *Arrow-Funktion* ist eine Kurzschreibweise für eine normale `function()` in JavaScript.
-Auch die Bezeichnung *Lambda-Ausdruck* ist verbreitet.
-
-Die Definition einer anonymen Funktion verkürzt sich damit elegant zu einem Pfeil `=>`.
-Besitzt die Funktion genau einen Parameter ohne Typ, können die runden Klammern auf der linken Seite weggelassen werden.
-Auch die geschweiften Klammern auf der rechten Seite können eingespart werden:
-Lässt man die Klammern weg, ist das Ergebnis des rechtsseitigen Ausdrucks der Rückgabewert für die Funktion.
-
-```typescript
-// Diese vier Definitionen sind gleichwertig:
-const fn1 = function(x: number) { return x * 2; };
-const fn2 = (x: number) => { return x * 2; };
-const fn3 = (x: number) => x * 2;
-const fn4 = x => x * 2; // Nur ohne Typangabe
-```
-
-Das folgende Beispiel zeigt, wie wir alle geraden Zahlen aus einer Liste ermitteln können:
-
-```typescript
-const numbers = [1, 2, 3, 4, 5, 6];
-
-// Herkömmliche Funktion
-const even1 = numbers.filter(function(n) {
-  return n % 2 === 0;
-});
-
-// Arrow-Funktion – wesentlich kompakter
-const even2 = numbers.filter(n => n % 2 === 0);
-```
-
-Ein weiterer Vorteil der Arrow-Funktion ist, dass sie keinen eigenen `this`-Kontext besitzt.
-Das ist besonders dann interessant, wenn wir die Funktion innerhalb einer Klasse verwenden und mit `this` auf die Instanz der Klasse zugreifen möchten.
-Mit Arrow-Funktionen wird die Variable `this` aus dem übergeordneten Kontext verwendet.
-
-```typescript
-class Counter {
-  count = 0;
-
-  increment() {
-    // Arrow-Funktion: this zeigt auf die Klasseninstanz
-    setTimeout(() => {
-      this.count++;
-      console.log(this.count);
-    }, 1000);
-  }
-}
-```
-
-## Immutability
-
-In JavaScript werden Objekte und Arrays stets nur als Referenzen auf eine zugehörige Speicherstelle gespeichert.
-Ändern wir also die Inhalte direkt im Objekt, so ändert sich die Referenz nicht!
-Das bedeutet auch, dass bei Zuweisung eines Objekts zu einer Variable lediglich ein Verweis auf das ursprüngliche Objekt erzeugt wird.
-
-```typescript
-const book = { title: 'Angular', year: 2023 };
-const copy = book;
-copy.year = 2024;
-
-console.log(book.year); // 2024 – auch das Original wurde geändert!
-```
-
-Um gut wartbaren Code zu erhalten, dürfen wir niemals die Werte eines Objekts oder Arrays direkt verändern.
-Wir behandeln ein Objekt oder Array als *unveränderlich* (engl. *immutable*) und erzeugen bei einer Änderung immer eine Kopie.
-Hierfür nutzen wir in der Regel die Spread-Syntax.
-
-> **Merke:** Objekte und Arrays sollten nie direkt verändert werden. Stattdessen sollte immer eine Kopie mit neuer Referenz erzeugt werden, die die gewünschten Änderungen enthält.
-
-## Spread-Syntax und Rest-Parameter
-
-In JavaScript können wir eine Syntax mit drei Punkten verwenden (`...`).
-Diese Schreibweise hat zwei Bedeutungen, je nachdem, wo sie eingesetzt wird:
-Die *Spread-Syntax* breitet Elemente aus, während *Rest-Parameter* übrige Argumente einsammeln.
-
-### Objekteigenschaften kopieren
-
-Mit der Spread-Syntax können wir Objekte klonen und dabei Eigenschaften überschreiben:
-
-```typescript
-const book = { title: 'Angular', year: 2023 };
-const copy = { ...book, year: 2026 };
-
-console.log(book.year); // 2023 – Original unverändert
-console.log(copy.year); // 2026 – Kopie mit neuem Wert
-```
-
-Bitte beachte, dass diese Idee nur für *Plain Objects* funktioniert und nur eine flache Kopie (*Shallow Copy*) erzeugt.
-Tiefere Zweige eines Objekts müssen einzeln geklont werden.
-Wird diese Aufgabe zu kompliziert, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt.
-
-### Array-Elemente kopieren
-
-Die Spread-Syntax funktioniert ähnlich auch für Arrays:
-
-```typescript
-const arr1 = [1, 2, 3];
-const arr2 = [4, 5, 6];
-
-const copy = [...arr1];
-const combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
-```
-
-### Funktionsargumente übergeben
-
-Wollen wir die Elemente eines Arrays einzeln als Argumente an eine Funktion übergeben, können wir die Spread-Syntax nutzen:
-
-```typescript
-const numbers = [1, 2, 3];
-console.log(Math.max(...numbers)); // 3
-```
-
-### Funktionsargumente einsammeln
-
-In einem anderen Kontext haben die drei Punkte eine andere Bedeutung:
-Erhält eine Funktion mehrere Argumente, so können wir diese elegant in einem Array erfassen.
-Ein solcher Parameter heißt *Rest-Parameter*.
-
-```typescript
-function sum(...numbers: number[]): number {
-  return numbers.reduce((a, b) => a + b, 0);
-}
-
-console.log(sum(1, 2, 3, 4)); // 10
-```
-
 ## Private Eigenschaften von Klassen
 
 Mit *Private Class Fields* in JavaScript können wir Datenkapselung in Klassen realisieren.
@@ -537,84 +613,6 @@ Angular nutzt dieses Sprachkonzept, um Klassen eine Semantik zu geben:
 Durch den Decorator `@Component()` wird diese Klasse als Komponente behandelt.
 Alle Decorators von Angular sind Funktionen, daher darf man die Funktionsklammern bei der Verwendung nicht vergessen.
 
-## Generic Types
-
-Mit *Generics* können wir Typparameter für Klassen und Funktionen definieren.
-Sie sind ein wichtiges Konzept in TypeScript, um wiederverwendbare und flexible Funktionen zu erstellen.
-
-```typescript
-interface Book {
-  title: string;
-}
-
-// Generischer Typ wird automatisch erkannt
-const count = signal(0); // Signal<number>
-const title = signal('Angular'); // Signal<string>
-
-// Bei Objekten muss der Typ explizit angegeben werden
-const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
-```
-
-## Promises und `async`/`await`
-
-Eine *Promise* ist ein natives Objekt in JavaScript, das einen asynchronen Vorgang repräsentiert.
-Sie liefert entweder einen Wert zurück, wenn die Operation erfolgreich war, oder einen Fehler, wenn die Ausführung fehlgeschlagen ist.
-
-Mit den Schlüsselwörtern `async` und `await` können wir asynchronen Code schreiben, der wie synchroner Code aussieht.
-
-```typescript
-// Mit then()
-fetch('/api/data')
-  .then(response => response.json())
-  .then(data => console.log(data));
-
-// Mit async/await
-async function loadData() {
-  const response = await fetch('/api/data');
-  const data = await response.json();
-  console.log(data);
-}
-```
-
-## Weitere Features
-
-### Union Types
-
-Mit Union Types können wir zusammengesetzte Typen beschreiben:
-
-```typescript
-function format(value: string | number): string {
-  if (typeof value === 'string') {
-    return value.toUpperCase();
-  }
-  return value.toFixed(2);
-}
-```
-
-### Optional Chaining
-
-Optional Chaining ermöglicht einen sicheren Zugriff auf verschachtelte Objekte:
-
-```typescript
-const user = { address: { city: 'Berlin' } };
-const city = user?.address?.city; // 'Berlin'
-const zip = user?.address?.zip; // undefined (kein Fehler)
-```
-
-### Nullish Coalescing
-
-Nullish Coalescing erlaubt die einfache Zuweisung von Rückfallwerten:
-
-```typescript
-const value = null;
-const result = value ?? 'default'; // 'default'
-
-// Unterschied zu ||
-const zero = 0;
-console.log(zero || 'fallback'); // 'fallback'
-console.log(zero ?? 'fallback'); // 0
-```
-
 ## Konfiguration
 
 Die Konfiguration des TypeScript-Compilers wird in der Datei `tsconfig.json` hinterlegt.
@@ -624,11 +622,10 @@ In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript 
 
 ## Zusammenfassung
 
-TypeScript erweitert den JavaScript-Sprachstandard um viele Features, die wir bereits aus etablierten Sprachen wie C# oder Java kennen.
-Dadurch fällt auch der Umstieg von einer anderen objektorientierten Sprache nicht schwer.
-Auch wenn du bisher mit reinem JavaScript entwickelt hast, ist der Umstieg auf TypeScript keine große Hürde, weil alle bekannten Features aus JavaScript weiterhin verwendet werden können.
+Mit diesem Crashkurs haben wir die wichtigsten Bausteine von TypeScript kennengelernt: moderne Sprachfeatures aus JavaScript wie `const`/`let`, Arrow Functions und die Spread-Syntax, dazu das Typsystem von TypeScript mit Interfaces, Union Types und Generics, und schließlich die Objektorientierung mit Klassen und Property Modifiers.
 
-Mit der Typisierung und Objektorientierung können wir die Schnittstellen unserer Software klar definieren.
-Der Editor kann uns bei der Arbeit mit TypeScript effizient unterstützen und schon zur Entwicklungszeit auf Fehler hinweisen.
+TypeScript ist strenger als JavaScript – und genau das macht die Sprache so wertvoll.
+Die Typprüfung im Compiler und die Unterstützung durch die IDE helfen uns, Fehler früh zu erkennen und Software wartbar zu entwickeln.
 
-Damit unsere Anwendung später auch in jedem Browser lauffähig ist, wird TypeScript vor der Auslieferung immer in reines JavaScript umgewandelt.
+In einem Angular-Projekt ist TypeScript bereits vollständig konfiguriert, sodass wir sofort loslegen können.
+Dieser Artikel hat das Fundament gelegt – im Angular-Buch bauen wir darauf auf und wenden die Features praktisch an.
