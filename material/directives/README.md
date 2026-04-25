@@ -1,7 +1,7 @@
 ---
 title: 'Direktiven: Logik für DOM-Elemente'
-published: 2026-04-24
-lastModified: 2026-04-24
+published: 2026-04-25
+lastModified: 2026-04-25
 ---
 
 In diesem Artikel geht es um *Direktiven* in Angular.
