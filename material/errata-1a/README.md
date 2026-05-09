@@ -1,7 +1,7 @@
 ---
 title: "Errata zur 1. Auflage (2026)"
 published: 2026-03-13
-lastModified: 2026-03-13
+lastModified: 2026-05-09
 hidden: true
 ---
 
@@ -16,7 +16,48 @@ Bitte zögere nicht, und schreib uns eine E-Mail: [team@angular-buch.com](mailto
 ------
 
 
-### 22.3 HttpResource testen: `useFactory` nicht notwendig
+## 11 ff. Services: Decorator `@Service()` statt `@Injectable()`
+
+Mit Angular 22 wurde der neue Decorator `@Service()` eingeführt.
+Er ist die moderne und ergonomische Alternative zum etablierten Decorator `@Injectable()` mit der Einstellung `providedIn: 'root'`.
+Der Aufruf kann also direkt ersetzt werden:
+
+```ts
+// VORHER
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BookStore {}
+```
+
+```ts
+// NACHHER
+import { Service } from '@angular/core';
+
+@Service()
+export class BookStore {}
+```
+
+Die Angular CLI generiert Services mit `ng generate service` nun ebenfalls mit dem neuen Decorator.
+Im Buch ist jedoch noch der ältere Decorator `@Injectable()` abgedruckt. Den [Code auf GitHub](https://github.com/angular-buch/book-manager1) haben wir entsprechend aktualisiert.
+
+Um beim Generieren den älteren Decorator zu erhalten, können wir das Flag `--injectable` verwenden.
+Der Decorator `@Injectable()` wird also zunächst nicht abgeschafft, sodass bestehende Anwendungen nicht sofort migriert werden müssen.
+
+```bash
+# mit Decorator `@Injectable()`
+ng g service book-store --injectable
+
+# mit Decorator `@Service()`
+ng g service book-store
+```
+
+
+
+
+## 22.3 HttpResource testen: `useFactory` nicht notwendig
 
 In Abschnitt 22.3 beschreiben wir, wie HTTP-Requests mit `httpResource()` getestet werden können.
 Im darunter liegenden Unterabschnitt "Resource mocken" erläutern wir: Um ein Resource-Objekt im Test zu erzeugen, müssen wir `useFactory` einsetzen, denn die Resource benötigt einen Injection Context.
