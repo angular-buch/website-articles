@@ -1,7 +1,7 @@
 ---
 title: "Errata zur 1. Auflage (2026)"
 published: 2026-03-13
-lastModified: 2026-03-13
+lastModified: 2026-05-09
 hidden: true
 ---
 
