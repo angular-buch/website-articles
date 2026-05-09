@@ -30,6 +30,50 @@ Die folgenden Versionen von TypeScript und Node.js sind für Angular 21 notwendi
 Ausführliche Infos zu den unterstützten Versionen findest du in der [Angular-Dokumentation](https://angular.dev/reference/versions).
 
 
+## Der neue Decorator `@Service()`
+
+Mit Angular 22 wurde der neue Decorator `@Service()` eingeführt.
+Er ist die moderne und ergonomische Alternative zum etablierten Decorator `@Injectable()` mit der Einstellung `providedIn: 'root'`.
+
+Da das Klassennamen-Suffix `Service` [mit Angular 20 weggefallen ist](/blog/2025-05-angular20), ist der neue Decorator aus unserer Sicht eine sinnvolle Ergänzung.
+So ist auf den ersten Blick erkennbar, dass es sich bei einer Klasse um einen Service handelt.
+
+Der Decorator kann in den meisten Fällen direkt ersetzt werden:
+
+```ts
+// VORHER
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BookStore {}
+```
+
+```ts
+// NACHHER
+import { Service } from '@angular/core';
+
+@Service()
+export class BookStore {}
+```
+
+Die Angular CLI generiert Services mit `ng generate service` nun ebenfalls standardmäßig mit dem neuen Decorator.
+Um beim Generieren den älteren Decorator `@Injectable()` zu erhalten, können wir das Flag `--injectable` verwenden.
+
+```bash
+# mit Decorator `@Service()`
+ng g service book-store
+
+# mit Decorator `@Injectable()`
+ng g service book-store --injectable
+```
+
+Der Decorator `@Injectable()` wird also zunächst nicht abgeschafft, sodass bestehende Anwendungen nicht sofort migriert werden müssen.
+Wir empfehlen dennoch, neue Services sofort mit dem neuen Decorator auszustatten.
+
+
+
 
 ## Sonstiges
 
