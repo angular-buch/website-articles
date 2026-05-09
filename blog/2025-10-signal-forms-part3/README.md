@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-20
-lastModified: 2026-02-21
+lastModified: 2026-04-01
 keywords:
   - Angular
   - Signals
@@ -283,12 +283,12 @@ The inputs `label` and `selectOptions` receive the label for the form control an
 
 ```typescript
 import { Component, effect, input, model } from '@angular/core';
-import { FormValueControl, ValidationError, WithOptionalField } from '@angular/forms/signals';
+import { FormValueControl, ValidationError } from '@angular/forms/signals';
 
 @Component({ /* ... */ })
 export class Multiselect implements FormValueControl<string[]> {
   readonly value = model<string[]>([]);
-  readonly errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+  readonly errors = input<readonly ValidationError[]>([]);
   readonly disabled = input<boolean>(false);
 
   readonly selectOptions = input.required<string[]>();

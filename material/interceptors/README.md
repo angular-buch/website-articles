@@ -12,6 +12,8 @@ Dabei betrachten wir zunächst die Funktionsweise und Implementierung von Interc
 
 [[toc]]
 
+## Interceptors
+
 Interceptors fungieren als Middleware, also als Zwischenschicht, für die gesamte HTTP-Kommunikation.
 Sie werden global installiert und für alle HTTP-Abfragen und -Antworten ausgeführt.
 So lassen sich Requests und Responses an zentraler Stelle verarbeiten und verändern.
