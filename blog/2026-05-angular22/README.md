@@ -69,7 +69,8 @@ ng g service book-store
 ng g service book-store --injectable
 ```
 
-Der Decorator `@Injectable()` wird also zunächst nicht abgeschafft, sodass bestehende Anwendungen nicht sofort migriert werden müssen.
+Der neue `@Service()` Decorator sieht keine Konfigurationsmöglichkeiten vor, daher wird für spezielle Fälle (etwa `providedIn: 'platform'`) weiterhin `@Injectable()` benötigt.
+Wir müssen demzufolge nicht befürchten, dass `@Injectable()` in naher Zukunft "deprecated" wird.
 Wir empfehlen dennoch, neue Services mit dem neuen Decorator auszustatten – die Syntax ist kürzer und es sieht auch ein wenig schicker aus.
 
 
