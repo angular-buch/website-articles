@@ -27,6 +27,34 @@ TypeScript ist nicht direkt im Browser lauffähig.
 Deshalb wird der Code vor der Auslieferung wieder in JavaScript umgewandelt.
 Für diesen Prozess ist der TypeScript-Compiler verantwortlich.
 Man spricht dabei auch von *Transpilierung*, weil der Code lediglich in eine andere Sprache übertragen wird.
+Konkret bedeutet das: Die Typangaben werden beim Transpilieren entfernt.
+
+```typescript
+// TypeScript-Quellcode:
+let age: number = 30;
+
+// Nach der Transpilierung (JavaScript):
+let age = 30;
+```
+
+Darüber hinaus kennt TypeScript eine Reihe von eigenen Syntaxen, die beim Transpilieren in äquivalenten JavaScript-Code aufgelöst werden.
+Ein Beispiel dafür ist die Konstruktor-Kurzschreibweise:
+
+```typescript
+// TypeScript-Kurzschreibweise im Konstruktor:
+class User {
+  constructor(public name: string) {}
+}
+
+// Nach der Transpilierung (JavaScript):
+class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
+```
+
+Diese Schreibweise schauen wir uns später im Abschnitt zu Klassen genauer an.
 
 Die statische Typisierung geht bei diesem Schritt verloren.
 Zur Laufzeit ist das Programm ein reines JavaScript-Programm ohne Typinformationen.
@@ -36,47 +64,15 @@ Die meisten modernen IDEs wie Visual Studio Code oder IntelliJ/WebStorm unterst�
 Neben der Fehlerprüfung profitieren wir dabei auch von Komfortfunktionen wie Autovervollständigung, Navigation zwischen Methoden und Klassen sowie einer soliden Refactoring-Unterstützung.
 In einem Angular-Projekt ist der TypeScript-Compiler außerdem schon vollständig konfiguriert, sodass wir sofort mit der Entwicklung beginnen können.
 
-## Variablen: `const`, `let` und `var`
+## Variablen: `const` und `let`
 
-Ursprünglich wurden Variablen in JavaScript mit dem Schlüsselwort `var` eingeleitet.
-Das funktioniert noch immer, allerdings kamen mit ECMAScript 2015 die neuen Variablenarten `let` und `const` hinzu.
-
-### Die schmerzhafte `var`-heit
-
-Mit dem Schlüsselwort `var` eingeleitete Variablen sind jeweils in der Funktion gültig, in der sie auch deklariert wurden – und zwar überall.
-Variablen mit `var` „fressen" sich durch alle Blöcke hindurch und sind in der *gesamten* Funktion und in allen darin verschachtelten Blöcken und Funktionen verfügbar.
-
-```typescript
-function example() {
-  if (true) {
-    var x = 10;
-  }
-  console.log(x); // 10 – x ist hier verfügbar!
-}
-```
-
-Diese Eigenschaft führt in der Praxis schnell zu Kollisionen von Variablen aus verschiedenen Programmteilen.
-
-### Blockgebundene Variablen mit `let`
-
-Mit Einführung von ECMAScript 2015 hielt der Variablentyp `let` Einzug in die Webentwicklung.
-Damit lassen sich blockgebundene Variablen definieren.
-Sie sind nicht in der gesamten Funktion gültig, sondern lediglich innerhalb des Blocks, in dem sie definiert wurden.
-
-```typescript
-for (let i = 0; i < 10; i++) {
-  // i ist nur hier gültig
-}
-// console.log(i); // Fehler: i ist nicht definiert
-```
+In JavaScript und TypeScript deklarieren wir Variablen mit den Schlüsselwörtern `const` und `let`.
+Beide wurden mit ECMAScript 2015 eingeführt und unterscheiden sich darin, ob sich der Wert nach der Initialisierung noch ändern lässt.
 
 ### Konstanten mit `const`
 
-Variablen, die mit `var` oder `let` eingeleitet werden, lassen sich jederzeit überschreiben.
-Häufig ändert sich der Wert einer Variable allerdings nach der Initialisierung nicht mehr.
-Für solche Fälle gibt es Konstanten.
-Sie werden mit dem Schlüsselwort `const` eingeleitet.
-Wird eine Konstante einmal festgelegt, so lässt sich der Wert nicht mehr überschreiben.
+Variablen, deren Wert sich nach der Initialisierung nicht mehr ändern soll, deklarieren wir mit `const`.
+In der Praxis ist das der häufigste Fall — wir empfehlen, eine Variable zunächst immer mit `const` zu deklarieren.
 
 ```typescript
 const name = 'Angular';
@@ -93,13 +89,22 @@ book.title = 'Angular Buch'; // Das funktioniert!
 // book = { title: 'Neues Buch' }; // Fehler: Zuweisung nicht möglich
 ```
 
-### Wann nutze ich welche?
+### Variablen mit `let`
 
-Als Faustregel kannst du dir Folgendes merken:
+Soll sich der Wert einer Variable während des Programmablaufs ändern, deklarieren wir sie mit `let`.
+Mit `let` deklarierte Variablen sind blockgebunden: Sie gelten nur innerhalb des Blocks, in dem sie deklariert wurden — typischerweise zwischen geschweiften Klammern wie einer Schleife oder einem `if`-Block.
 
-- Nutze zunächst immer `const`.
-- Willst du den Wert später im Programm verändern, wähle `let`.
-- Nutze nicht `var`, denn du wirst es nicht benötigen.
+```typescript
+for (let i = 0; i < 10; i++) {
+  // i ist nur hier gültig
+}
+// console.log(i); // Fehler: i ist nicht definiert
+```
+
+### Hinweis: das alte `var`
+
+In älterem JavaScript-Code begegnet uns noch das Schlüsselwort `var`, das vor ECMAScript 2015 die einzige Möglichkeit war, eine Variable zu deklarieren.
+Im modernen Alltag benötigen wir es nicht mehr — wir verwenden ausschließlich `const` und `let`.
 
 ## Template-Strings
 
@@ -118,6 +123,17 @@ Die aktuelle Version ist ${version}.`;
 ```
 
 Wir werden Template-Strings vor allem nutzen, um URLs mit Parametern zusammenzubauen.
+Genau für ein solches Szenario setzen wir Template-Strings auch im Angular-Buch ein, etwa um in einem Service die API-URL zusammenzubauen:
+
+```typescript
+// Vereinfacht aus Listing 20.1:
+const apiUrl = 'https://api1.angular-buch.com';
+const url = `${apiUrl}/books`;
+// 'https://api1.angular-buch.com/books'
+```
+
+Im Buch arbeiten wir an dieser Stelle bereits mit dem Angular-`HttpClient` und Observables.
+Für den Moment ist hier nur wichtig, dass der Template-String die Basis-URL mit dem Pfad `/books` zu einer vollständigen URL kombiniert.
 
 ## Arrow Functions
 
@@ -134,7 +150,7 @@ Lässt man die Klammern weg, ist das Ergebnis des rechtsseitigen Ausdrucks der R
 const fn1 = function(x: number) { return x * 2; };
 const fn2 = (x: number) => { return x * 2; };
 const fn3 = (x: number) => x * 2;
-const fn4 = x => x * 2; // Nur ohne Typangabe
+const fn4 = x => x * 2; // Klammern weglassen geht nur, wenn kein Typ notiert wird
 ```
 
 Das folgende Beispiel zeigt, wie wir alle geraden Zahlen aus einer Liste ermitteln können:
@@ -151,23 +167,67 @@ const even1 = numbers.filter(function(n) {
 const even2 = numbers.filter(n => n % 2 === 0);
 ```
 
-Ein weiterer Vorteil der Arrow-Funktion ist, dass sie keinen eigenen `this`-Kontext besitzt.
-Das ist besonders dann interessant, wenn wir die Funktion innerhalb einer Klasse verwenden und mit `this` auf die Instanz der Klasse zugreifen möchten.
-Mit Arrow-Funktionen wird die Variable `this` aus dem übergeordneten Kontext verwendet.
+### Der `this`-Kontext
+
+In JavaScript bezieht sich `this` innerhalb einer Methode normalerweise auf die Klasseninstanz, zu der die Methode gehört.
+Bei einer klassischen Funktion mit dem Schlüsselwort `function` ändert sich dieser Bezug allerdings je nach Aufrufkontext — und das führt schnell zu Fehlern.
+
+Im folgenden Beispiel kennt die Funktion in `setTimeout` die Klasseninstanz nicht mehr:
 
 ```typescript
 class Counter {
   count = 0;
 
   increment() {
-    // Arrow-Funktion: this zeigt auf die Klasseninstanz
-    setTimeout(() => {
-      this.count++;
-      console.log(this.count);
+    setTimeout(function() {
+      this.count++; // Fehler: this ist hier nicht der Counter!
     }, 1000);
   }
 }
 ```
+
+Genau dieses Problem lösen Arrow-Funktionen: Sie besitzen keinen eigenen `this`-Kontext, sondern übernehmen `this` aus dem umgebenden Code.
+Mit einer Arrow-Funktion in `setTimeout` zeigt `this` weiterhin auf die Klasseninstanz:
+
+```typescript
+class Counter {
+  count = 0;
+
+  increment() {
+    setTimeout(() => {
+      this.count++;
+      console.log(this.count); // OK: this zeigt auf den Counter
+    }, 1000);
+  }
+}
+```
+
+## Immutability
+
+In JavaScript werden Objekte und Arrays stets nur als Referenzen auf eine zugehörige Speicherstelle gespeichert.
+Ändern wir also die Inhalte direkt im Objekt, so ändert sich die Referenz nicht!
+Das bedeutet auch, dass bei Zuweisung eines Objekts zu einer Variable lediglich ein Verweis auf das ursprüngliche Objekt erzeugt wird.
+
+```typescript
+const book = { title: 'Angular', year: 2023 };
+const copy = book;
+copy.year = 2024;
+
+console.log(book.year); // 2024 – auch das Original wurde geändert!
+```
+
+Um gut wartbaren Code zu erhalten, dürfen wir niemals die Werte eines Objekts oder Arrays direkt verändern.
+Wir behandeln ein Objekt oder Array als *unveränderlich* (engl. *immutable*) und erzeugen bei einer Änderung immer eine Kopie.
+Hierfür nutzen wir in der Regel die Spread-Syntax:
+
+```typescript
+const book = { title: 'Angular', year: 2023 };
+const updated = { ...book, year: 2026 }; // Kopie mit neuem Wert
+```
+
+> **Merke:** Objekte und Arrays sollten nie direkt verändert werden. Stattdessen sollte immer eine Kopie mit neuer Referenz erzeugt werden, die die gewünschten Änderungen enthält.
+
+Wie die Spread-Syntax genau funktioniert, schauen wir uns jetzt an.
 
 ## Spread-Syntax und Rest-Parameter
 
@@ -226,39 +286,32 @@ function sum(...numbers: number[]): number {
 console.log(sum(1, 2, 3, 4)); // 10
 ```
 
-## Immutability
-
-In JavaScript werden Objekte und Arrays stets nur als Referenzen auf eine zugehörige Speicherstelle gespeichert.
-Ändern wir also die Inhalte direkt im Objekt, so ändert sich die Referenz nicht!
-Das bedeutet auch, dass bei Zuweisung eines Objekts zu einer Variable lediglich ein Verweis auf das ursprüngliche Objekt erzeugt wird.
-
-```typescript
-const book = { title: 'Angular', year: 2023 };
-const copy = book;
-copy.year = 2024;
-
-console.log(book.year); // 2024 – auch das Original wurde geändert!
-```
-
-Um gut wartbaren Code zu erhalten, dürfen wir niemals die Werte eines Objekts oder Arrays direkt verändern.
-Wir behandeln ein Objekt oder Array als *unveränderlich* (engl. *immutable*) und erzeugen bei einer Änderung immer eine Kopie.
-Hierfür nutzen wir in der Regel die Spread-Syntax.
-
-> **Merke:** Objekte und Arrays sollten nie direkt verändert werden. Stattdessen sollte immer eine Kopie mit neuer Referenz erzeugt werden, die die gewünschten Änderungen enthält.
-
 ## Optional Chaining
 
-Optional Chaining ermöglicht einen sicheren Zugriff auf verschachtelte Objekte:
+Wenn ein verschachteltes Objekt eine optionale Eigenschaft hat, könnte der Zugriff darauf fehlschlagen — TypeScript warnt uns davor:
 
 ```typescript
-const user = { address: { city: 'Berlin' } };
-const city = user?.address?.city; // 'Berlin'
-const zip = user?.address?.zip; // undefined (kein Fehler)
+type User = {
+  address: { city: string } | undefined;
+};
+
+const user: User = { address: undefined };
+const city = user.address.city;
+// Fehler: 'user.address' ist möglicherweise 'undefined'
+```
+
+Mit Optional Chaining können wir solche Zugriffe absichern.
+Der `?.`-Operator liefert `undefined`, wenn die linke Seite nicht existiert, statt einen Fehler zu werfen:
+
+```typescript
+const user: User = { address: undefined };
+const city = user.address?.city; // string | undefined
 ```
 
 ## Nullish Coalescing
 
-Nullish Coalescing erlaubt die einfache Zuweisung von Rückfallwerten:
+Als *nullish* gelten in JavaScript die Werte `null` und `undefined`.
+Der `??`-Operator (Nullish Coalescing) liefert einen Rückfallwert, wenn der linke Wert nullish ist:
 
 ```typescript
 const value = null;
@@ -271,6 +324,10 @@ console.log(zero ?? 'fallback'); // 0
 ```
 
 ## Promises und `async`/`await`
+
+Manche Vorgänge brauchen Zeit — zum Beispiel ein Netzwerk-Aufruf an einen Server.
+JavaScript wartet darauf nicht, sondern führt den restlichen Code weiter aus und meldet sich später mit dem Ergebnis.
+Solche Vorgänge nennt man *asynchron*.
 
 Eine *Promise* ist ein natives Objekt in JavaScript, das einen asynchronen Vorgang repräsentiert.
 Sie liefert entweder einen Wert zurück, wenn die Operation erfolgreich war, oder einen Fehler, wenn die Ausführung fehlgeschlagen ist.
@@ -293,7 +350,7 @@ async function loadData() {
 
 ## Die wichtigsten Basistypen
 
-Die starke Typisierung ermöglicht es, die Schnittstellen der Software genau zu beschreiben.
+Die starke Typisierung ermöglicht es, die Datenstrukturen unserer Anwendung präzise zu beschreiben.
 So können schon während der Entwicklung hilfreiche Informationen und Warnungen bereitgestellt werden, wenn die API nicht korrekt verwendet wird.
 
 ### Primitive Typen: Zahlen, Zeichenketten und boolesche Werte
@@ -361,6 +418,19 @@ if (typeof value === 'string') {
 Praktisch solltest du es vermeiden, `any` zu verwenden, denn dieser Typ ist fast immer ein Indiz dafür, dass Unklarheit über die Typisierung herrscht.
 Willst du die konkrete Belegung einer Variable absichtlich im Unklaren lassen, ist `unknown` die bessere Wahl.
 
+In der Praxis begegnet uns `unknown` vor allem in `catch`-Blöcken.
+Da ein Fehler von beliebigem Typ sein kann, ist die `error`-Variable standardmäßig als `unknown` typisiert:
+
+```typescript
+try {
+  // riskante Operation
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}
+```
+
 ## Union Types
 
 Mit Union Types können wir zusammengesetzte Typen beschreiben:
@@ -372,6 +442,16 @@ function format(value: string | number): string {
   }
   return value.toFixed(2);
 }
+```
+
+Häufig kombinieren wir auch mehrere String-Literale zu einem Union Type, um eine begrenzte Auswahl an Werten festzulegen:
+
+```typescript
+type Status = 'loading' | 'success' | 'error';
+
+let currentStatus: Status = 'loading';
+currentStatus = 'success'; // OK
+// currentStatus = 'pending'; // Fehler: 'pending' ist nicht zulässig
 ```
 
 ## Interfaces
@@ -417,6 +497,21 @@ class Document implements Printable {
 Mit *Generics* können wir Typparameter für Klassen und Funktionen definieren.
 Sie sind ein wichtiges Konzept in TypeScript, um wiederverwendbare und flexible Funktionen zu erstellen.
 
+Im einfachsten Fall definieren wir eine Funktion mit einem Typparameter `T`, der beim Aufruf automatisch ermittelt wird:
+
+```typescript
+// Eine generische Funktion mit Typparameter T
+function first<T>(arr: T[]): T {
+  return arr[0];
+}
+
+const firstBook = first(['Angular', 'React']); // string
+const firstNumber = first([1, 2, 3]);          // number
+```
+
+Auch im Angular-Ökosystem begegnen uns Generics häufig.
+Die Funktion `signal()` (mehr dazu im Buch) erzeugt einen reaktiven Wert mit generischem Typ:
+
 ```typescript
 interface Book {
   title: string;
@@ -449,7 +544,7 @@ class User {
 }
 ```
 
-Klassen besitzen drei wesentliche Bestandteile: Eigenschaften, Methoden und eine besondere Methode – den Konstruktor.
+Klassen bestehen aus mehreren Bausteinen, die wir uns der Reihe nach anschauen.
 
 ### Eigenschaften/Propertys
 
@@ -481,23 +576,29 @@ Der Typ `void` sagt aus, dass eine Methode keinen Rückgabewert besitzt.
 
 ### Getter und Setter
 
-Mit den Schlüsselwörtern `get` und `set` können wir Methoden verstecken, indem eine Eigenschaft an diese gebunden wird.
+Mit den Schlüsselwörtern `get` und `set` können wir Methoden so definieren, dass sie wie Eigenschaften gelesen oder geschrieben werden.
+Statt `person.getAge()` schreibt man dann einfach `person.age`.
 
 ```typescript
 class Person {
-  #birthYear: number;
+  private birthYear: number;
 
   constructor(birthYear: number) {
-    this.#birthYear = birthYear;
+    this.birthYear = birthYear;
   }
 
   get age(): number {
-    return new Date().getFullYear() - this.#birthYear;
+    return new Date().getFullYear() - this.birthYear;
+  }
+
+  set age(value: number) {
+    this.birthYear = new Date().getFullYear() - value;
   }
 }
 
 const person = new Person(1990);
-console.log(person.age); // Berechnet das Alter
+console.log(person.age); // Getter: berechnet das Alter
+person.age = 25;          // Setter: passt das Geburtsjahr an
 ```
 
 ### Konstruktor
@@ -572,6 +673,7 @@ const user = new User('secret');
 In TypeScript existiert außerdem der Access Modifier `private`, der die Sichtbarkeit einschränkt.
 Der Schutz ist allerdings zur Laufzeit nicht garantiert, da TypeScript zu JavaScript umgewandelt wird.
 Wir empfehlen die moderne JavaScript-Variante mit `#`.
+In bestehenden Angular-Projekten ist `private` allerdings noch weit verbreitet und ebenfalls eine gültige Wahl.
 
 ## Property Modifiers: `readonly` und `protected`
 
@@ -599,6 +701,7 @@ Für Angular-Projekte empfehlen wir folgende Konventionen:
 ## Decorators
 
 Mit Decorators können wir Klassen, Methoden und Eigenschaften dekorieren und damit Metadaten hinzufügen.
+Metadaten sind zusätzliche Informationen über eine Klasse oder Methode — sie beschreiben sie, sind aber nicht Teil ihrer eigentlichen Logik.
 Man erkennt einen Decorator am `@`-Zeichen zu Beginn des Namens.
 
 ```typescript
@@ -613,12 +716,16 @@ Angular nutzt dieses Sprachkonzept, um Klassen eine Semantik zu geben:
 Durch den Decorator `@Component()` wird diese Klasse als Komponente behandelt.
 Alle Decorators von Angular sind Funktionen, daher darf man die Funktionsklammern bei der Verwendung nicht vergessen.
 
+Angular bringt eine Reihe von Decorators mit, darunter `@Component`, `@Directive`, `@Pipe` und `@Service`.
+Sie unterscheiden Klassen nach ihrer Aufgabe innerhalb der Anwendung.
+
 ## Konfiguration
 
 Die Konfiguration des TypeScript-Compilers wird in der Datei `tsconfig.json` hinterlegt.
-Die wohl wichtigste Einstellung ist das `target`: Diese Option gibt an, in welche Version von JavaScript das Programm transpiliert werden soll.
+Eine zentrale Einstellung ist `strict`: Mit `strict: true` werden alle strengen Typprüfungen aktiviert (siehe oben).
+Eine weitere wichtige Option ist `target` — sie legt fest, in welche Version von JavaScript der Code transpiliert werden soll.
 
-In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert.
+In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert — `strict` ist standardmäßig aktiviert.
 
 ## Zusammenfassung
 
