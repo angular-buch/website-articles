@@ -46,14 +46,14 @@ Ein Beispiel dafür ist die Konstruktor-Kurzschreibweise:
 
 ```typescript
 // TypeScript-Kurzschreibweise im Konstruktor:
-class User {
-  constructor(public name: string) {}
+class Book {
+  constructor(public title: string) {}
 }
 
 // Nach der Transpilierung (JavaScript):
-class User {
-  constructor(name) {
-    this.name = name;
+class Book {
+  constructor(title) {
+    this.title = title;
   }
 }
 ```
@@ -109,6 +109,89 @@ for (let i = 0; i < 10; i++) {
 
 In älterem JavaScript-Code begegnet uns noch das Schlüsselwort `var`, das vor ECMAScript 2015 die einzige Möglichkeit war, eine Variable zu deklarieren.
 Im modernen Alltag benötigen wir es nicht mehr — wir verwenden ausschließlich `const` und `let`.
+
+## Die wichtigsten Basistypen
+
+Die starke Typisierung ermöglicht es, die Datenstrukturen unserer Anwendung präzise zu beschreiben.
+So können schon während der Entwicklung hilfreiche Informationen und Warnungen bereitgestellt werden, wenn die API nicht korrekt verwendet wird.
+
+### Primitive Typen: Zahlen, Zeichenketten und boolesche Werte
+
+Die wichtigsten primitiven Typen in TypeScript sind `number`, `string` und `boolean`.
+Der Typ `number` legt den Wert einer Variable auf eine Ganz- oder Kommazahl fest.
+Zeichenketten werden mithilfe des Datentyps `string` definiert.
+Wenn eine Variable logische Wahrheitswerte (`true` oder `false`) annehmen soll, verwenden wir den Typ `boolean`.
+
+Ein Typ wird immer mit einem Doppelpunkt hinter dem Variablennamen deklariert.
+Wenn der Typ bereits aus dem Wert eindeutig bestimmbar ist, müssen wir diese Information nicht zwingend notieren.
+TypeScript ermittelt den passenden Typ automatisch – man spricht von *Typinferenz*.
+
+```typescript
+let age: number = 30;
+let name: string = 'Angular';
+let isActive: boolean = true;
+
+// Typinferenz: Typ wird automatisch erkannt
+let count = 42; // number
+let title = 'Buch'; // string
+```
+
+### Typisierte Arrays
+
+In JavaScript ist es möglich, ein Array mit verschiedenen Typen zu befüllen.
+Mit TypeScript können Arrays typisiert werden, sodass nur Elemente eines festgelegten Typs zulässig sind.
+
+```typescript
+const numbers: number[] = [1, 2, 3];
+const names: string[] = ['Angular', 'React', 'Vue'];
+
+// Alternative Schreibweise mit Generic
+const items: Array<number> = [1, 2, 3];
+```
+
+### Beliebige Werte mit `any` und `unknown`
+
+Eine mit `any` oder `unknown` typisierte Variable kann immer beliebige Werte mit beliebigen Typen annehmen.
+
+```typescript
+let flexible: any = 'text';
+flexible = 42;
+flexible = true;
+```
+
+Diese beiden Basistypen haben jedoch einen wichtigen Unterschied:
+Der Wert einer mit `any` typisierten Variable kann zu jeder anderen Variable zugewiesen werden.
+`any` wird übrigens auch immer als Standardtyp verwendet, wenn wir eine Variable nicht explizit typisieren und der Typ von TypeScript nicht automatisch ermittelt werden kann.
+
+Der Typ `unknown` schafft Abhilfe.
+Eine solche Variable kann ebenfalls beliebige Werte mit jedem Typ annehmen.
+Allerdings kann der Wert einer `unknown`-Variable nur dann einer anderen Variable zugewiesen werden, wenn diese auch den Typ `unknown` oder `any` trägt.
+Um den Wert einer mit `unknown` typisierten Variable dennoch zuweisen zu können, müssen wir mithilfe von `typeof` eine Typprüfung vornehmen.
+
+```typescript
+let value: unknown = 'hello';
+
+// Typprüfung erforderlich
+if (typeof value === 'string') {
+  const text: string = value; // Jetzt erlaubt
+}
+```
+
+Praktisch solltest du es vermeiden, `any` zu verwenden, denn dieser Typ ist fast immer ein Indiz dafür, dass Unklarheit über die Typisierung herrscht.
+Willst du die konkrete Belegung einer Variable absichtlich im Unklaren lassen, ist `unknown` die bessere Wahl.
+
+In der Praxis begegnet uns `unknown` vor allem in `catch`-Blöcken.
+Da ein Fehler von beliebigem Typ sein kann, ist die `error`-Variable standardmäßig als `unknown` typisiert:
+
+```typescript
+try {
+  // riskante Operation
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}
+```
 
 ## Template-Strings
 
@@ -224,21 +307,21 @@ TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise, 
 Wenn wir in der Methodensignatur des Konstruktors für das Argument einen Zugriffsmodifizierer wie `public` oder `private` verwenden, so wird das zugehörige Property automatisch deklariert und initialisiert.
 
 ```typescript
-class User {
+class Point {
   constructor(
-    public firstname: string,
-    public lastname: string
+    public x: number,
+    public y: number
   ) {}
 }
 
 // Entspricht:
-class UserLong {
-  public firstname: string;
-  public lastname: string;
+class PointLong {
+  public x: number;
+  public y: number;
 
-  constructor(firstname: string, lastname: string) {
-    this.firstname = firstname;
-    this.lastname = lastname;
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
   }
 }
 ```
@@ -249,12 +332,12 @@ Die Funktionalität einer Klasse kann auf andere Klassen übertragen werden.
 Mit dem Schlüsselwort `extends` kann eine Klasse von einer anderen erben.
 
 ```typescript
-class User {
+class Animal {
   constructor(public name: string) {}
 }
 
-class PowerUser extends User {
-  constructor(name: string, public permissions: string[]) {
+class Dog extends Animal {
+  constructor(name: string, public breed: string) {
     super(name);
   }
 }
@@ -268,20 +351,20 @@ Mit *Private Class Fields* in JavaScript können wir Datenkapselung in Klassen r
 Ein privates Feld wird durch ein vorangestelltes `#`-Symbol definiert und ist nur innerhalb der Klasse zugänglich.
 
 ```typescript
-class User {
-  #password: string;
+class BankAccount {
+  #balance: number;
 
-  constructor(password: string) {
-    this.#password = password;
+  constructor(balance: number) {
+    this.#balance = balance;
   }
 
-  checkPassword(input: string): boolean {
-    return this.#password === input;
+  isEnoughFor(amount: number): boolean {
+    return this.#balance >= amount;
   }
 }
 
-const user = new User('secret');
-// user.#password; // Fehler: Zugriff nicht möglich
+const account = new BankAccount(1000);
+// account.#balance; // Fehler: Zugriff nicht möglich
 ```
 
 In TypeScript existiert außerdem der Access Modifier `private`, der die Sichtbarkeit einschränkt.
@@ -522,89 +605,6 @@ async function loadData() {
   const response = await fetch('/api/data');
   const data = await response.json();
   console.log(data);
-}
-```
-
-## Die wichtigsten Basistypen
-
-Die starke Typisierung ermöglicht es, die Datenstrukturen unserer Anwendung präzise zu beschreiben.
-So können schon während der Entwicklung hilfreiche Informationen und Warnungen bereitgestellt werden, wenn die API nicht korrekt verwendet wird.
-
-### Primitive Typen: Zahlen, Zeichenketten und boolesche Werte
-
-Die wichtigsten primitiven Typen in TypeScript sind `number`, `string` und `boolean`.
-Der Typ `number` legt den Wert einer Variable auf eine Ganz- oder Kommazahl fest.
-Zeichenketten werden mithilfe des Datentyps `string` definiert.
-Wenn eine Variable logische Wahrheitswerte (`true` oder `false`) annehmen soll, verwenden wir den Typ `boolean`.
-
-Ein Typ wird immer mit einem Doppelpunkt hinter dem Variablennamen deklariert.
-Wenn der Typ bereits aus dem Wert eindeutig bestimmbar ist, müssen wir diese Information nicht zwingend notieren.
-TypeScript ermittelt den passenden Typ automatisch – man spricht von *Typinferenz*.
-
-```typescript
-let age: number = 30;
-let name: string = 'Angular';
-let isActive: boolean = true;
-
-// Typinferenz: Typ wird automatisch erkannt
-let count = 42; // number
-let title = 'Buch'; // string
-```
-
-### Typisierte Arrays
-
-In JavaScript ist es möglich, ein Array mit verschiedenen Typen zu befüllen.
-Mit TypeScript können Arrays typisiert werden, sodass nur Elemente eines festgelegten Typs zulässig sind.
-
-```typescript
-const numbers: number[] = [1, 2, 3];
-const names: string[] = ['Angular', 'React', 'Vue'];
-
-// Alternative Schreibweise mit Generic
-const items: Array<number> = [1, 2, 3];
-```
-
-### Beliebige Werte mit `any` und `unknown`
-
-Eine mit `any` oder `unknown` typisierte Variable kann immer beliebige Werte mit beliebigen Typen annehmen.
-
-```typescript
-let flexible: any = 'text';
-flexible = 42;
-flexible = true;
-```
-
-Diese beiden Basistypen haben jedoch einen wichtigen Unterschied:
-Der Wert einer mit `any` typisierten Variable kann zu jeder anderen Variable zugewiesen werden.
-`any` wird übrigens auch immer als Standardtyp verwendet, wenn wir eine Variable nicht explizit typisieren und der Typ von TypeScript nicht automatisch ermittelt werden kann.
-
-Der Typ `unknown` schafft Abhilfe.
-Eine solche Variable kann ebenfalls beliebige Werte mit jedem Typ annehmen.
-Allerdings kann der Wert einer `unknown`-Variable nur dann einer anderen Variable zugewiesen werden, wenn diese auch den Typ `unknown` oder `any` trägt.
-Um den Wert einer mit `unknown` typisierten Variable dennoch zuweisen zu können, müssen wir mithilfe von `typeof` eine Typprüfung vornehmen.
-
-```typescript
-let value: unknown = 'hello';
-
-// Typprüfung erforderlich
-if (typeof value === 'string') {
-  const text: string = value; // Jetzt erlaubt
-}
-```
-
-Praktisch solltest du es vermeiden, `any` zu verwenden, denn dieser Typ ist fast immer ein Indiz dafür, dass Unklarheit über die Typisierung herrscht.
-Willst du die konkrete Belegung einer Variable absichtlich im Unklaren lassen, ist `unknown` die bessere Wahl.
-
-In der Praxis begegnet uns `unknown` vor allem in `catch`-Blöcken.
-Da ein Fehler von beliebigem Typ sein kann, ist die `error`-Variable standardmäßig als `unknown` typisiert:
-
-```typescript
-try {
-  // riskante Operation
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log(error.message);
-  }
 }
 ```
 
