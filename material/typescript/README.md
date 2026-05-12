@@ -60,7 +60,6 @@ class Book {
 
 Diese Schreibweise schauen wir uns später im Abschnitt zu Klassen genauer an.
 
-Die Typinformationen werden bei diesem Schritt entfernt.
 Zur Laufzeit ist das Programm ein reines JavaScript-Programm ohne Typen.
 Durch die Typprüfungen bei der Entwicklung und beim Build können viele Fehler aber schon frühzeitig erkannt werden.
 
@@ -248,7 +247,7 @@ Klassen bestehen aus mehreren Bausteinen, die wir uns der Reihe nach anschauen.
 ### Eigenschaften/Propertys
 
 Eigenschaften (engl. *properties*) erweitern eine Klasseninstanz mit zusätzlichen Informationen.
-Propertys können mit Zugriffsmodifizierern wie `public`, `private` oder `protected` versehen werden, die die Sichtbarkeit einschränken.
+Propertys können mit Zugriffsmodifizierern wie `public`, `private` oder `protected` versehen werden, um die Sichtbarkeit zu steuern.
 Lässt man die Angabe eines Zugriffsmodifizierers weg, so ist die Eigenschaft immer `public`.
 
 Daneben gibt es weitere Modifier:
@@ -257,7 +256,7 @@ Daneben gibt es weitere Modifier:
 - `static` macht eine Eigenschaft zur Klasse statt zur Instanz zugehörig. Sie wird dann direkt über den Klassennamen aufgerufen, ohne dass eine Instanz erzeugt werden muss.
 
 Ein Property kann als optional deklariert werden, indem wir ein Fragezeichen setzen.
-Jedes Property einer Klasse muss immer entweder sofort einen Wert besitzen oder als optional markiert werden.
+Jedes Property einer Klasse muss entweder sofort einen Wert besitzen, im Konstruktor zugewiesen werden oder als optional markiert sein.
 
 ### Methoden
 
@@ -659,7 +658,8 @@ currentStatus = 'success'; // OK
 ## Interfaces
 
 Um die Typisierung in unserem Programmcode konsequent umzusetzen, stellt TypeScript sogenannte *Interfaces* bereit.
-Interfaces dienen dazu, die typisierte Struktur eines Objekts zu definieren, nicht jedoch die Werte.
+Interfaces beschreiben, welche Eigenschaften ein Objekt haben muss und welchen Typ diese Eigenschaften haben.
+Konkrete Werte legen sie nicht fest.
 Optionale Eigenschaften werden durch ein Fragezeichen-Symbol gekennzeichnet.
 
 ```typescript
