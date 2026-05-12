@@ -76,7 +76,7 @@ Beide wurden mit ECMAScript 2015 eingeführt und unterscheiden sich darin, ob si
 ### Konstanten mit `const`
 
 Variablen, deren Wert sich nach der Initialisierung nicht mehr ändern soll, deklarieren wir mit `const`.
-In der Praxis ist das der häufigste Fall — wir empfehlen, eine Variable zunächst immer mit `const` zu deklarieren.
+In der Praxis ist das der häufigste Fall. Wir empfehlen, eine Variable zunächst immer mit `const` zu deklarieren.
 
 ```typescript
 const name = 'Angular';
@@ -96,7 +96,7 @@ book.title = 'Angular Buch'; // Das funktioniert!
 ### Variablen mit `let`
 
 Soll sich der Wert einer Variable während des Programmablaufs ändern, deklarieren wir sie mit `let`.
-Mit `let` deklarierte Variablen sind blockgebunden: Sie gelten nur innerhalb des Blocks, in dem sie deklariert wurden — typischerweise zwischen geschweiften Klammern wie einer Schleife oder einem `if`-Block.
+Mit `let` deklarierte Variablen sind blockgebunden: Sie gelten nur innerhalb des Blocks, in dem sie deklariert wurden, also typischerweise zwischen geschweiften Klammern wie einer Schleife oder einem `if`-Block.
 
 ```typescript
 for (let i = 0; i < 10; i++) {
@@ -108,7 +108,7 @@ for (let i = 0; i < 10; i++) {
 ### Hinweis: das alte `var`
 
 In älterem JavaScript-Code begegnet uns noch das Schlüsselwort `var`, das vor ECMAScript 2015 die einzige Möglichkeit war, eine Variable zu deklarieren.
-Im modernen Alltag benötigen wir es nicht mehr — wir verwenden ausschließlich `const` und `let`.
+Im modernen Alltag benötigen wir es nicht mehr. Wir verwenden ausschließlich `const` und `let`.
 
 ## Die wichtigsten Basistypen
 
@@ -124,7 +124,7 @@ Wenn eine Variable logische Wahrheitswerte (`true` oder `false`) annehmen soll, 
 
 Ein Typ wird immer mit einem Doppelpunkt hinter dem Variablennamen deklariert.
 Wenn der Typ bereits aus dem Wert eindeutig bestimmbar ist, müssen wir diese Information nicht zwingend notieren.
-TypeScript ermittelt den passenden Typ automatisch – man spricht von *Typinferenz*.
+TypeScript ermittelt den passenden Typ automatisch. Man spricht von *Typinferenz*.
 
 ```typescript
 let age: number = 30;
@@ -227,6 +227,7 @@ Für den Moment ist hier nur wichtig, dass der Template-String die Basis-URL mit
 
 Um eine Klasse zu beschreiben, verwenden wir in JavaScript und TypeScript das Schlüsselwort `class`.
 Mit Klassen können einfache Datenobjekte oder auch komplexe objektorientierte Logik abgebildet werden.
+Ein konkretes Objekt einer Klasse nennen wir eine *Instanz*.
 
 ```typescript
 class User {
@@ -407,7 +408,8 @@ Für Angular-Projekte empfehlen wir folgende Konventionen:
 
 ## Arrow Functions
 
-Eine *Arrow-Funktion* ist eine kompaktere Schreibweise für eine Funktion in JavaScript — mit einem wichtigen Unterschied beim `this`-Kontext, den wir gleich noch sehen.
+Eine *Arrow-Funktion* ist eine kompaktere Schreibweise für eine Funktion in JavaScript.
+Sie hat allerdings einen wichtigen Unterschied beim `this`-Kontext, den wir gleich noch sehen.
 
 Die Definition einer anonymen Funktion verkürzt sich damit elegant zu einem Pfeil `=>`.
 Besitzt die Funktion genau einen Parameter ohne Typ, können die runden Klammern auf der linken Seite weggelassen werden.
@@ -432,14 +434,15 @@ const even1 = numbers.filter(function(n) {
   return n % 2 === 0;
 });
 
-// Arrow-Funktion – wesentlich kompakter
+// Arrow-Funktion, wesentlich kompakter
 const even2 = numbers.filter(n => n % 2 === 0);
 ```
 
 ### Der `this`-Kontext
 
 In JavaScript bezieht sich `this` innerhalb einer Methode normalerweise auf die Klasseninstanz, zu der die Methode gehört.
-Bei einer klassischen Funktion mit dem Schlüsselwort `function` ändert sich dieser Bezug allerdings je nach Aufrufkontext — und das führt schnell zu Fehlern.
+Bei einer klassischen Funktion mit dem Schlüsselwort `function` ändert sich dieser Bezug allerdings je nach Aufrufkontext.
+Das führt schnell zu Fehlern.
 
 Im folgenden Beispiel kennt die Funktion in `setTimeout` die Klasseninstanz nicht mehr:
 
@@ -482,7 +485,7 @@ const book = { title: 'Angular', year: 2023 };
 const copy = book;
 copy.year = 2024;
 
-console.log(book.year); // 2024 – auch das Original wurde geändert!
+console.log(book.year); // 2024, auch das Original wurde geändert!
 ```
 
 Um gut wartbaren Code zu erhalten, dürfen wir niemals die Werte eines Objekts oder Arrays direkt verändern.
@@ -512,13 +515,25 @@ Mit der Spread-Syntax können wir Objekte klonen und dabei Eigenschaften übersc
 const book = { title: 'Angular', year: 2023 };
 const copy = { ...book, year: 2026 };
 
-console.log(book.year); // 2023 – Original unverändert
-console.log(copy.year); // 2026 – Kopie mit neuem Wert
+console.log(book.year); // 2023, Original unverändert
+console.log(copy.year); // 2026, Kopie mit neuem Wert
 ```
 
 Bitte beachte, dass diese Idee nur für *Plain Objects* funktioniert und nur eine flache Kopie (*Shallow Copy*) erzeugt.
-Tiefere Zweige eines Objekts müssen einzeln geklont werden.
-Wird diese Aufgabe zu kompliziert, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt.
+Verschachtelte Objekte werden zwischen Original und Kopie geteilt:
+
+```typescript
+const book = {
+  title: 'Angular',
+  author: { name: 'Hoppe' }
+};
+
+const copy = { ...book };
+copy.author.name = 'Mustermann';
+console.log(book.author.name); // 'Mustermann', das verschachtelte Objekt wurde geteilt!
+```
+
+Wird das zum Problem, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt und damit auch alle verschachtelten Objekte kopiert.
 
 ### Array-Elemente kopieren
 
@@ -557,7 +572,8 @@ console.log(sum(1, 2, 3, 4)); // 10
 
 ## Optional Chaining
 
-Wenn ein verschachteltes Objekt eine optionale Eigenschaft hat, könnte der Zugriff darauf fehlschlagen — TypeScript warnt uns davor:
+Wenn ein verschachteltes Objekt eine optionale Eigenschaft hat, könnte der Zugriff darauf fehlschlagen.
+TypeScript warnt uns davor:
 
 ```typescript
 type User = {
@@ -593,7 +609,7 @@ console.log(zero ?? 'fallback'); // 0
 
 ## Promises und `async`/`await`
 
-Manche Vorgänge brauchen Zeit — zum Beispiel ein Netzwerk-Aufruf an einen Server.
+Manche Vorgänge brauchen Zeit, zum Beispiel ein Netzwerk-Aufruf an einen Server.
 JavaScript wartet darauf nicht, sondern führt den restlichen Code weiter aus und meldet sich später mit dem Ergebnis.
 Solche Vorgänge nennt man *asynchron*.
 
@@ -618,7 +634,7 @@ async function loadData() {
 
 ## Union Types
 
-Ein *Union Type* ist die Vereinigung mehrerer möglicher Typen — eine Variable kann dann einen Wert von einem dieser Typen annehmen.
+Ein *Union Type* ist die Vereinigung mehrerer möglicher Typen. Eine Variable kann dann einen Wert von einem dieser Typen annehmen.
 Mit dem `|`-Operator notieren wir die Alternativen:
 
 ```typescript
@@ -714,7 +730,7 @@ const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
 ## Decorators
 
 Mit Decorators können wir Klassen, Methoden und Eigenschaften dekorieren und damit Metadaten hinzufügen.
-Metadaten sind zusätzliche Informationen über eine Klasse oder Methode — sie beschreiben sie, sind aber nicht Teil ihrer eigentlichen Logik.
+Metadaten sind zusätzliche Informationen über eine Klasse oder Methode. Sie beschreiben sie, sind aber nicht Teil ihrer eigentlichen Logik.
 Man erkennt einen Decorator am `@`-Zeichen zu Beginn des Namens.
 
 ```typescript
@@ -736,15 +752,15 @@ Sie unterscheiden Klassen nach ihrer Aufgabe innerhalb der Anwendung.
 
 Die Konfiguration des TypeScript-Compilers wird in der Datei `tsconfig.json` hinterlegt.
 Eine zentrale Einstellung ist `strict`: Mit `strict: true` werden alle strengen Typprüfungen aktiviert (siehe oben).
-Eine weitere wichtige Option ist `target` — sie legt fest, in welche Version von JavaScript der Code transpiliert werden soll.
+Eine weitere wichtige Option ist `target`. Sie legt fest, in welche Version von JavaScript der Code transpiliert werden soll.
 
-In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert — `strict` ist standardmäßig aktiviert.
+In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert. `strict` ist standardmäßig aktiviert.
 
 ## Zusammenfassung
 
 Mit diesem Crashkurs haben wir die wichtigsten Bausteine von TypeScript kennengelernt: moderne Sprachfeatures aus JavaScript wie `const`/`let`, Arrow Functions und die Spread-Syntax, dazu das Typsystem von TypeScript mit Interfaces, Union Types und Generics, und schließlich die Objektorientierung mit Klassen und Property Modifiers.
 
-TypeScript ist strenger als JavaScript – und genau das macht die Sprache so wertvoll.
+TypeScript ist strenger als JavaScript, und genau das macht die Sprache so wertvoll.
 Die Typprüfung im Compiler und die Unterstützung durch die IDE helfen uns, Fehler früh zu erkennen und Software wartbar zu entwickeln.
 
 ## Fazit
