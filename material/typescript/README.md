@@ -60,8 +60,8 @@ class Book {
 
 Diese Schreibweise schauen wir uns später im Abschnitt zu Klassen genauer an.
 
-Die statische Typisierung geht bei diesem Schritt verloren.
-Zur Laufzeit ist das Programm ein reines JavaScript-Programm ohne Typinformationen.
+Die Typinformationen werden bei diesem Schritt entfernt.
+Zur Laufzeit ist das Programm ein reines JavaScript-Programm ohne Typen.
 Durch die Typprüfungen bei der Entwicklung und beim Build können viele Fehler aber schon frühzeitig erkannt werden.
 
 Die meisten modernen IDEs wie Visual Studio Code oder IntelliJ/WebStorm unterstützen TypeScript nativ und ohne zusätzliche Plug-ins.
@@ -161,9 +161,9 @@ flexible = true;
 
 Diese beiden Basistypen haben jedoch einen wichtigen Unterschied:
 Der Wert einer mit `any` typisierten Variable kann zu jeder anderen Variable zugewiesen werden.
-`any` wird übrigens auch immer als Standardtyp verwendet, wenn wir eine Variable nicht explizit typisieren und der Typ von TypeScript nicht automatisch ermittelt werden kann.
+Ohne strict mode wird `any` außerdem als Standardtyp verwendet, wenn TypeScript den Typ nicht automatisch ermitteln kann. In Angular-Projekten (strict mode aktiv) führt das zu einem Compiler-Fehler.
 
-Der Typ `unknown` schafft Abhilfe.
+Im Gegensatz dazu ist `unknown` typsicherer.
 Eine solche Variable kann ebenfalls beliebige Werte mit jedem Typ annehmen.
 Allerdings kann der Wert einer `unknown`-Variable nur dann einer anderen Variable zugewiesen werden, wenn diese auch den Typ `unknown` oder `any` trägt.
 Um den Wert einer mit `unknown` typisierten Variable dennoch zuweisen zu können, müssen wir mithilfe von `typeof` eine Typprüfung vornehmen.
@@ -178,7 +178,8 @@ if (typeof value === 'string') {
 ```
 
 Praktisch solltest du es vermeiden, `any` zu verwenden, denn dieser Typ ist fast immer ein Indiz dafür, dass Unklarheit über die Typisierung herrscht.
-Willst du die konkrete Belegung einer Variable absichtlich im Unklaren lassen, ist `unknown` die bessere Wahl.
+Aber auch `unknown` ist nur ein Notnagel: Wann immer möglich, sollten wir den konkreten Typ angeben.
+Erst wenn das wirklich nicht geht, ist `unknown` die bessere Wahl als `any`.
 
 In der Praxis begegnet uns `unknown` vor allem in `catch`-Blöcken.
 Da ein Fehler von beliebigem Typ sein kann, ist die `error`-Variable standardmäßig als `unknown` typisiert:
@@ -246,15 +247,20 @@ Klassen bestehen aus mehreren Bausteinen, die wir uns der Reihe nach anschauen.
 ### Eigenschaften/Propertys
 
 Eigenschaften (engl. *properties*) erweitern eine Klasseninstanz mit zusätzlichen Informationen.
-Propertys können mit den Zugriffsmodifizierern `public`, `private`, `static`, `protected` oder `readonly` versehen werden.
+Propertys können mit Zugriffsmodifizierern wie `public`, `private` oder `protected` versehen werden, die die Sichtbarkeit einschränken.
 Lässt man die Angabe eines Zugriffsmodifizierers weg, so ist die Eigenschaft immer `public`.
+
+Daneben gibt es weitere Modifier:
+
+- `readonly` verhindert Änderungen nach der Initialisierung. Dazu kommen wir noch.
+- `static` macht eine Eigenschaft zur Klasse statt zur Instanz zugehörig. Sie wird dann direkt über den Klassennamen aufgerufen, ohne dass eine Instanz erzeugt werden muss.
 
 Ein Property kann als optional deklariert werden, indem wir ein Fragezeichen setzen.
 Jedes Property einer Klasse muss immer entweder sofort einen Wert besitzen oder als optional markiert werden.
 
 ### Methoden
 
-Methoden sind die Funktionen einer Klasse und erweitern die Klasse mit Logik.
+Methoden sind die Funktionen einer Klasse und enthalten ihre Logik.
 Wir können die Methodensignatur präzisieren, indem wir Typen für die Argumente und den Rückgabewert angeben.
 
 ```typescript
@@ -300,8 +306,8 @@ person.age = 25;          // Setter: passt das Geburtsjahr an
 
 ### Konstruktor
 
-Der Konstruktor ist eine besondere Methode, die bei der Instanziierung einer Klasse aufgerufen wird.
-Er muss immer den Namen `constructor()` tragen.
+Der Konstruktor ist eine besondere Methode, die beim Erzeugen einer neuen Instanz aufgerufen wird.
+Er heißt immer `constructor`.
 
 TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise, die wir bereits ganz am Anfang im Transpilier-Beispiel kurz gesehen haben.
 Wenn wir in der Methodensignatur des Konstruktors für das Argument einen Zugriffsmodifizierer wie `public` oder `private` verwenden, so wird das zugehörige Property automatisch deklariert und initialisiert.
@@ -374,7 +380,7 @@ In bestehenden Angular-Projekten ist `private` allerdings noch weit verbreitet u
 
 ## Property Modifiers: `readonly` und `protected`
 
-TypeScript stellt uns eine Reihe von *Property Modifiers* zur Verfügung:
+TypeScript stellt uns eine Reihe von *Property Modifiers* zur Verfügung, mit denen wir das Verhalten von Eigenschaften präzisieren können.
 
 Der Modifier `protected` sorgt für eine eingeschränkte Sichtbarkeit.
 Ein Protected Property ist nicht von außen sichtbar, sondern kann nur innerhalb derselben Klasse und in vererbten Kindklassen verwendet werden.
@@ -383,9 +389,13 @@ Dazu gehört auch das Template einer Angular-Komponente.
 Mit `readonly` können wir sicherstellen, dass eine Eigenschaft nach der Initialisierung nicht mehr verändert werden kann.
 
 ```typescript
-class Config {
-  readonly apiUrl = 'https://api.example.com';
-  protected secret = '12345';
+class Task {
+  readonly id: string;
+  protected isCompleted = false;
+
+  constructor(id: string) {
+    this.id = id;
+  }
 }
 ```
 
@@ -397,8 +407,7 @@ Für Angular-Projekte empfehlen wir folgende Konventionen:
 
 ## Arrow Functions
 
-Eine *Arrow-Funktion* ist eine Kurzschreibweise für eine normale `function()` in JavaScript.
-Auch die Bezeichnung *Lambda-Ausdruck* ist verbreitet.
+Eine *Arrow-Funktion* ist eine kompaktere Schreibweise für eine Funktion in JavaScript — mit einem wichtigen Unterschied beim `this`-Kontext, den wir gleich noch sehen.
 
 Die Definition einer anonymen Funktion verkürzt sich damit elegant zu einem Pfeil `=>`.
 Besitzt die Funktion genau einen Parameter ohne Typ, können die runden Klammern auf der linken Seite weggelassen werden.
@@ -564,7 +573,6 @@ Mit Optional Chaining können wir solche Zugriffe absichern.
 Der `?.`-Operator liefert `undefined`, wenn die linke Seite nicht existiert, statt einen Fehler zu werfen:
 
 ```typescript
-const user: User = { address: undefined };
 const city = user.address?.city; // string | undefined
 ```
 
@@ -610,7 +618,8 @@ async function loadData() {
 
 ## Union Types
 
-Mit Union Types können wir zusammengesetzte Typen beschreiben:
+Ein *Union Type* ist die Vereinigung mehrerer möglicher Typen — eine Variable kann dann einen Wert von einem dieser Typen annehmen.
+Mit dem `|`-Operator notieren wir die Alternativen:
 
 ```typescript
 function format(value: string | number): string {
