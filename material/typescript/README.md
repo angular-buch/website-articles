@@ -1,7 +1,7 @@
 ---
 title: 'Einführung in TypeScript'
 published: 2026-02-10
-lastModified: 2026-02-05
+lastModified: 2026-04-22
 hidden: true
 ---
 
@@ -13,6 +13,10 @@ Keine Angst, du musst keine vollständig neue Sprache erlernen.
 TypeScript baut auf JavaScript auf und ergänzt es um ein statisches Typsystem.
 
 Wenn du schon Erfahrung mit modernem JavaScript oder TypeScript hast, kannst du diesen Crashkurs überspringen.
+
+## Inhalt
+
+[[toc]]
 
 ## TypeScript einsetzen
 
@@ -134,6 +138,179 @@ const url = `${apiUrl}/books`;
 
 Im Buch arbeiten wir an dieser Stelle bereits mit dem Angular-`HttpClient` und Observables.
 Für den Moment ist hier nur wichtig, dass der Template-String die Basis-URL mit dem Pfad `/books` zu einer vollständigen URL kombiniert.
+
+## Klassen
+
+Um eine Klasse zu beschreiben, verwenden wir in JavaScript und TypeScript das Schlüsselwort `class`.
+Mit Klassen können einfache Datenobjekte oder auch komplexe objektorientierte Logik abgebildet werden.
+
+```typescript
+class User {
+  firstname?: string;
+  lastname: string;
+  age = 0;
+  isAdmin: boolean;
+
+  constructor(lastname: string) {
+    this.lastname = lastname;
+    this.isAdmin = false;
+  }
+}
+```
+
+Klassen bestehen aus mehreren Bausteinen, die wir uns der Reihe nach anschauen.
+
+### Eigenschaften/Propertys
+
+Eigenschaften (engl. *properties*) erweitern eine Klasseninstanz mit zusätzlichen Informationen.
+Propertys können mit den Zugriffsmodifizierern `public`, `private`, `static`, `protected` oder `readonly` versehen werden.
+Lässt man die Angabe eines Zugriffsmodifizierers weg, so ist die Eigenschaft immer `public`.
+
+Ein Property kann als optional deklariert werden, indem wir ein Fragezeichen setzen.
+Jedes Property einer Klasse muss immer entweder sofort einen Wert besitzen oder als optional markiert werden.
+
+### Methoden
+
+Methoden sind die Funktionen einer Klasse und erweitern die Klasse mit Logik.
+Wir können die Methodensignatur präzisieren, indem wir Typen für die Argumente und den Rückgabewert angeben.
+
+```typescript
+class Calculator {
+  add(a: number, b: number): number {
+    return a + b;
+  }
+
+  log(message: string): void {
+    console.log(message);
+  }
+}
+```
+
+Der Typ `void` sagt aus, dass eine Methode keinen Rückgabewert besitzt.
+
+### Getter und Setter
+
+Mit den Schlüsselwörtern `get` und `set` können wir Methoden so definieren, dass sie wie Eigenschaften gelesen oder geschrieben werden.
+Statt `person.getAge()` schreibt man dann einfach `person.age`.
+
+```typescript
+class Person {
+  private birthYear: number;
+
+  constructor(birthYear: number) {
+    this.birthYear = birthYear;
+  }
+
+  get age(): number {
+    return new Date().getFullYear() - this.birthYear;
+  }
+
+  set age(value: number) {
+    this.birthYear = new Date().getFullYear() - value;
+  }
+}
+
+const person = new Person(1990);
+console.log(person.age); // Getter: berechnet das Alter
+person.age = 25;          // Setter: passt das Geburtsjahr an
+```
+
+### Konstruktor
+
+Der Konstruktor ist eine besondere Methode, die bei der Instanziierung einer Klasse aufgerufen wird.
+Er muss immer den Namen `constructor()` tragen.
+
+TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise, die wir bereits ganz am Anfang im Transpilier-Beispiel kurz gesehen haben.
+Wenn wir in der Methodensignatur des Konstruktors für das Argument einen Zugriffsmodifizierer wie `public` oder `private` verwenden, so wird das zugehörige Property automatisch deklariert und initialisiert.
+
+```typescript
+class User {
+  constructor(
+    public firstname: string,
+    public lastname: string
+  ) {}
+}
+
+// Entspricht:
+class UserLong {
+  public firstname: string;
+  public lastname: string;
+
+  constructor(firstname: string, lastname: string) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+  }
+}
+```
+
+### Vererbung
+
+Die Funktionalität einer Klasse kann auf andere Klassen übertragen werden.
+Mit dem Schlüsselwort `extends` kann eine Klasse von einer anderen erben.
+
+```typescript
+class User {
+  constructor(public name: string) {}
+}
+
+class PowerUser extends User {
+  constructor(name: string, public permissions: string[]) {
+    super(name);
+  }
+}
+```
+
+Mit `super()` kann der Konstruktor der Basisklasse ausgeführt werden.
+
+## Private Eigenschaften von Klassen
+
+Mit *Private Class Fields* in JavaScript können wir Datenkapselung in Klassen realisieren.
+Ein privates Feld wird durch ein vorangestelltes `#`-Symbol definiert und ist nur innerhalb der Klasse zugänglich.
+
+```typescript
+class User {
+  #password: string;
+
+  constructor(password: string) {
+    this.#password = password;
+  }
+
+  checkPassword(input: string): boolean {
+    return this.#password === input;
+  }
+}
+
+const user = new User('secret');
+// user.#password; // Fehler: Zugriff nicht möglich
+```
+
+In TypeScript existiert außerdem der Access Modifier `private`, der die Sichtbarkeit einschränkt.
+Der Schutz ist allerdings zur Laufzeit nicht garantiert, da TypeScript zu JavaScript umgewandelt wird.
+Wir empfehlen die moderne JavaScript-Variante mit `#`.
+In bestehenden Angular-Projekten ist `private` allerdings noch weit verbreitet und ebenfalls eine gültige Wahl.
+
+## Property Modifiers: `readonly` und `protected`
+
+TypeScript stellt uns eine Reihe von *Property Modifiers* zur Verfügung:
+
+Der Modifier `protected` sorgt für eine eingeschränkte Sichtbarkeit.
+Ein Protected Property ist nicht von außen sichtbar, sondern kann nur innerhalb derselben Klasse und in vererbten Kindklassen verwendet werden.
+Dazu gehört auch das Template einer Angular-Komponente.
+
+Mit `readonly` können wir sicherstellen, dass eine Eigenschaft nach der Initialisierung nicht mehr verändert werden kann.
+
+```typescript
+class Config {
+  readonly apiUrl = 'https://api.example.com';
+  protected secret = '12345';
+}
+```
+
+Für Angular-Projekte empfehlen wir folgende Konventionen:
+
+- Propertys und Methoden, die nur innerhalb der Klasse verwendet werden, werden als privat markiert.
+- Propertys, die im Template einer Komponente genutzt werden, werden mit `protected` gekennzeichnet.
+- Propertys, die von Angular verwaltet werden, werden auf `readonly` gesetzt (z. B. `input()`, `output()`, `model()`).
 
 ## Arrow Functions
 
@@ -525,179 +702,6 @@ const title = signal('Angular'); // Signal<string>
 const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
 ```
 
-## Klassen
-
-Um eine Klasse zu beschreiben, verwenden wir in JavaScript und TypeScript das Schlüsselwort `class`.
-Mit Klassen können einfache Datenobjekte oder auch komplexe objektorientierte Logik abgebildet werden.
-
-```typescript
-class User {
-  firstname?: string;
-  lastname: string;
-  age = 0;
-  isAdmin: boolean;
-
-  constructor(lastname: string) {
-    this.lastname = lastname;
-    this.isAdmin = false;
-  }
-}
-```
-
-Klassen bestehen aus mehreren Bausteinen, die wir uns der Reihe nach anschauen.
-
-### Eigenschaften/Propertys
-
-Eigenschaften (engl. *properties*) erweitern eine Klasseninstanz mit zusätzlichen Informationen.
-Propertys können mit den Zugriffsmodifizierern `public`, `private`, `static`, `protected` oder `readonly` versehen werden.
-Lässt man die Angabe eines Zugriffsmodifizierers weg, so ist die Eigenschaft immer `public`.
-
-Ein Property kann als optional deklariert werden, indem wir ein Fragezeichen setzen.
-Jedes Property einer Klasse muss immer entweder sofort einen Wert besitzen oder als optional markiert werden.
-
-### Methoden
-
-Methoden sind die Funktionen einer Klasse und erweitern die Klasse mit Logik.
-Wir können die Methodensignatur präzisieren, indem wir Typen für die Argumente und den Rückgabewert angeben.
-
-```typescript
-class Calculator {
-  add(a: number, b: number): number {
-    return a + b;
-  }
-
-  log(message: string): void {
-    console.log(message);
-  }
-}
-```
-
-Der Typ `void` sagt aus, dass eine Methode keinen Rückgabewert besitzt.
-
-### Getter und Setter
-
-Mit den Schlüsselwörtern `get` und `set` können wir Methoden so definieren, dass sie wie Eigenschaften gelesen oder geschrieben werden.
-Statt `person.getAge()` schreibt man dann einfach `person.age`.
-
-```typescript
-class Person {
-  private birthYear: number;
-
-  constructor(birthYear: number) {
-    this.birthYear = birthYear;
-  }
-
-  get age(): number {
-    return new Date().getFullYear() - this.birthYear;
-  }
-
-  set age(value: number) {
-    this.birthYear = new Date().getFullYear() - value;
-  }
-}
-
-const person = new Person(1990);
-console.log(person.age); // Getter: berechnet das Alter
-person.age = 25;          // Setter: passt das Geburtsjahr an
-```
-
-### Konstruktor
-
-Der Konstruktor ist eine besondere Methode, die bei der Instanziierung einer Klasse aufgerufen wird.
-Er muss immer den Namen `constructor()` tragen.
-
-TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise:
-Wenn wir in der Methodensignatur des Konstruktors für das Argument einen Zugriffsmodifizierer wie `public` oder `private` verwenden, so wird das zugehörige Property automatisch deklariert und initialisiert.
-
-```typescript
-class User {
-  constructor(
-    public firstname: string,
-    public lastname: string
-  ) {}
-}
-
-// Entspricht:
-class UserLong {
-  public firstname: string;
-  public lastname: string;
-
-  constructor(firstname: string, lastname: string) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-  }
-}
-```
-
-### Vererbung
-
-Die Funktionalität einer Klasse kann auf andere Klassen übertragen werden.
-Mit dem Schlüsselwort `extends` kann eine Klasse von einer anderen erben.
-
-```typescript
-class User {
-  constructor(public name: string) {}
-}
-
-class PowerUser extends User {
-  constructor(name: string, public permissions: string[]) {
-    super(name);
-  }
-}
-```
-
-Mit `super()` kann der Konstruktor der Basisklasse ausgeführt werden.
-
-## Private Eigenschaften von Klassen
-
-Mit *Private Class Fields* in JavaScript können wir Datenkapselung in Klassen realisieren.
-Ein privates Feld wird durch ein vorangestelltes `#`-Symbol definiert und ist nur innerhalb der Klasse zugänglich.
-
-```typescript
-class User {
-  #password: string;
-
-  constructor(password: string) {
-    this.#password = password;
-  }
-
-  checkPassword(input: string): boolean {
-    return this.#password === input;
-  }
-}
-
-const user = new User('secret');
-// user.#password; // Fehler: Zugriff nicht möglich
-```
-
-In TypeScript existiert außerdem der Access Modifier `private`, der die Sichtbarkeit einschränkt.
-Der Schutz ist allerdings zur Laufzeit nicht garantiert, da TypeScript zu JavaScript umgewandelt wird.
-Wir empfehlen die moderne JavaScript-Variante mit `#`.
-In bestehenden Angular-Projekten ist `private` allerdings noch weit verbreitet und ebenfalls eine gültige Wahl.
-
-## Property Modifiers: `readonly` und `protected`
-
-TypeScript stellt uns eine Reihe von *Property Modifiers* zur Verfügung:
-
-Der Modifier `protected` sorgt für eine eingeschränkte Sichtbarkeit.
-Ein Protected Property ist nicht von außen sichtbar, sondern kann nur innerhalb derselben Klasse und in vererbten Kindklassen verwendet werden.
-Dazu gehört auch das Template einer Angular-Komponente.
-
-Mit `readonly` können wir sicherstellen, dass eine Eigenschaft nach der Initialisierung nicht mehr verändert werden kann.
-
-```typescript
-class Config {
-  readonly apiUrl = 'https://api.example.com';
-  protected secret = '12345';
-}
-```
-
-Für Angular-Projekte empfehlen wir folgende Konventionen:
-
-- Propertys und Methoden, die nur innerhalb der Klasse verwendet werden, werden als privat markiert.
-- Propertys, die im Template einer Komponente genutzt werden, werden mit `protected` gekennzeichnet.
-- Propertys, die von Angular verwaltet werden, werden auf `readonly` gesetzt (z. B. `input()`, `output()`, `model()`).
-
 ## Decorators
 
 Mit Decorators können wir Klassen, Methoden und Eigenschaften dekorieren und damit Metadaten hinzufügen.
@@ -734,5 +738,10 @@ Mit diesem Crashkurs haben wir die wichtigsten Bausteine von TypeScript kennenge
 TypeScript ist strenger als JavaScript – und genau das macht die Sprache so wertvoll.
 Die Typprüfung im Compiler und die Unterstützung durch die IDE helfen uns, Fehler früh zu erkennen und Software wartbar zu entwickeln.
 
-In einem Angular-Projekt ist TypeScript bereits vollständig konfiguriert, sodass wir sofort loslegen können.
-Dieser Artikel hat das Fundament gelegt – im Angular-Buch bauen wir darauf auf und wenden die Features praktisch an.
+## Fazit
+
+Wenn du diesen Artikel durchgearbeitet hast, steht der Entwicklung moderner Angular-Anwendungen nichts mehr im Wege.
+TypeScript kennt zwar noch viele weitere praktische Konstrukte, aber eine solide Angular-Anwendung benötigt nicht zwingend alle.
+Mit dem hier gelernten Werkzeugkasten bist du startklar.
+
+Viel Spaß mit TypeScript und Angular!
