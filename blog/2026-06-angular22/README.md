@@ -147,7 +147,11 @@ Das `FetchBackend` unterstützt **keine Upload-Progress-Events**.
 Wer in seiner Anwendung mit `reportProgress: true` den Fortschritt von Datei-Uploads tracken möchte, muss bei den betroffenen Requests explizit auf das XHR-Backend zurückwechseln.
 
 ```ts
-// TODO: Codebeispiel für Opt-out auf XHR mit `withXhr()` (oder vergleichbarer Funktion, in den Release Notes prüfen)
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withXhr())
+  ]
+};
 ```
 
 
