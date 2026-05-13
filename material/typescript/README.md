@@ -688,7 +688,7 @@ interface Printable {
 
 class Document implements Printable {
   print(): void {
-    console.log('Printing...');
+    console.log('Printing ...');
   }
 }
 ```
