@@ -767,7 +767,7 @@ Man erkennt einen Decorator am `@`-Zeichen zu Beginn des Namens.
   selector: 'app-root',
   template: '<h1>Hello</h1>'
 })
-export class AppComponent {}
+export class App {}
 ```
 
 Angular nutzt dieses Sprachkonzept, um Klassen eine Semantik zu geben:
