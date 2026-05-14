@@ -1,7 +1,7 @@
 ---
 title: 'Einführung in TypeScript'
-published: 2026-02-10
-lastModified: 2026-04-22
+published: 2026-05-14
+lastModified: 2026-05-14
 ---
 
 Für die Entwicklung mit Angular verwenden wir die Programmiersprache **TypeScript**.
@@ -10,8 +10,6 @@ Wir gehen die wichtigsten Sprachfeatures Schritt für Schritt durch und legen da
 
 Keine Angst, du musst keine vollständig neue Sprache erlernen.
 TypeScript baut auf JavaScript auf und ergänzt es um ein statisches Typsystem.
-
-Wenn du schon Erfahrung mit modernem JavaScript oder TypeScript hast, kannst du diesen Crashkurs überspringen.
 
 ## Inhalt
 
@@ -108,6 +106,36 @@ for (let i = 0; i < 10; i++) {
 In älterem JavaScript-Code begegnet uns noch das Schlüsselwort `var`, das vor ECMAScript 2015 die einzige Möglichkeit war, eine Variable zu deklarieren.
 Im modernen Alltag benötigen wir es nicht mehr. Wir verwenden ausschließlich `const` und `let`.
 
+## Module: Import und Export
+
+In den Anfängen von JavaScript war es eine Herausforderung, eine größere Codebasis zu verwalten: Funktionen mit demselben Namen aus verschiedenen Skripten haben sich gegenseitig überschrieben.
+Zum Glück sind diese Zeiten längst vorbei.
+JavaScript und damit auch TypeScript kennt heute *Module*. Jede Datei bildet ein eigenes Modul und isoliert den darin enthaltenen Code. Kollisionen sind damit nicht mehr möglich.
+
+Wenn etwas außerhalb des Moduls verfügbar sein soll, müssen wir das explizit angeben. Dafür dient das Schlüsselwort `export`. Das Gegenstück dazu heißt `import`:
+
+```typescript
+// book.ts
+export interface Book {
+  title: string;
+}
+
+export const defaultBook: Book = {
+  title: 'Angular'
+};
+```
+
+In einer anderen Datei können wir diese Bausteine importieren:
+
+```typescript
+// app.ts
+import { Book, defaultBook } from './book';
+
+const myBook: Book = defaultBook;
+```
+
+In Angular-Projekten begegnen uns Imports ständig: von eingebauten Modulen wie `@angular/core`, von eigenen Services oder Komponenten.
+
 ## Die wichtigsten Basistypen
 
 Die starke Typisierung ermöglicht es, die Datenstrukturen unserer Anwendung präzise zu beschreiben.
@@ -184,7 +212,7 @@ Da ein Fehler von beliebigem Typ sein kann, ist die `error`-Variable standardmä
 
 ```typescript
 try {
-  // riskante Operation
+  // Operation, die fehlschlagen kann
 } catch (error: unknown) {
   if (error instanceof Error) {
     console.log(error.message);
@@ -202,7 +230,7 @@ Mit Template-Strings können wir außerdem Ausdrücke direkt in einen String ein
 
 ```typescript
 const name = 'Angular';
-const version = 21;
+const version = 22;
 
 const message = `Willkommen bei ${name}!
 Die aktuelle Version ist ${version}.`;
@@ -300,13 +328,13 @@ class Person {
 
 const person = new Person(1990);
 console.log(person.age); // Getter: berechnet das Alter
-person.age = 25;          // Setter: passt das Geburtsjahr an
+person.age = 25;         // Setter: passt das Geburtsjahr an
 ```
 
 ### Konstruktor
 
 Der Konstruktor ist eine besondere Methode, die beim Erzeugen einer neuen Instanz aufgerufen wird.
-Er heißt immer `constructor`.
+Sie heißt immer `constructor`.
 
 TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise, die wir bereits ganz am Anfang im Transpilier-Beispiel kurz gesehen haben.
 Wenn wir in der Methodensignatur des Konstruktors für das Argument einen Zugriffsmodifizierer wie `public` oder `private` verwenden, so wird das zugehörige Property automatisch deklariert und initialisiert.
@@ -518,7 +546,7 @@ console.log(copy.year); // 2026, Kopie mit neuem Wert
 ```
 
 Bitte beachte, dass diese Idee nur für *Plain Objects* funktioniert und nur eine flache Kopie (*Shallow Copy*) erzeugt.
-Verschachtelte Objekte werden zwischen Original und Kopie geteilt:
+Original und Kopie verweisen weiterhin auf dasselbe verschachtelte Objekt:
 
 ```typescript
 const book = {
@@ -528,10 +556,11 @@ const book = {
 
 const copy = { ...book };
 copy.author.name = 'Mustermann';
-console.log(book.author.name); // 'Mustermann', das verschachtelte Objekt wurde geteilt!
+console.log(book.author.name); // 'Mustermann', Original und Kopie zeigen auf dasselbe Objekt!
 ```
 
 Wird das zum Problem, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt und damit auch alle verschachtelten Objekte kopiert.
+Alle Konsumenten der Objekte erhalten damit aber eine neue Objektreferenz, obwohl sich an den Inhalten ggf. gar nichts geändert hat. `structuredClone()` ist deshalb in der Regel eine Notlösung, wenn die Spread-Syntax zu kompliziert wird.
 
 ### Array-Elemente kopieren
 
@@ -593,7 +622,8 @@ const city = user.address?.city; // string | undefined
 ## Nullish Coalescing
 
 Als *nullish* gelten in JavaScript die Werte `null` und `undefined`.
-Der `??`-Operator (Nullish Coalescing) liefert einen Rückfallwert, wenn der linke Wert nullish ist:
+Der `??`-Operator (Nullish Coalescing) liefert einen Rückfallwert, wenn der linke Wert nullish ist.
+Im Gegensatz dazu reagiert der `||`-Operator (OR) auf alle *Falsy Values*, darunter auch `0` und leerer String.
 
 ```typescript
 const value = null;
@@ -688,7 +718,7 @@ interface Printable {
 
 class Document implements Printable {
   print(): void {
-    console.log('Printing ...');
+    console.log('Printing …');
   }
 }
 ```
@@ -711,7 +741,7 @@ const firstNumber = first([1, 2, 3]);          // number
 ```
 
 Auch im Angular-Ökosystem begegnen uns Generics häufig.
-Die Funktion `signal()` (mehr dazu im Buch) erzeugt einen reaktiven Wert mit generischem Typ:
+Die Funktion `signal()` (mehr dazu im Buch) erzeugt ein Objekt, das einen reaktiven Wert mit generischem Typ hält:
 
 ```typescript
 interface Book {
@@ -753,7 +783,8 @@ Die Konfiguration des TypeScript-Compilers wird in der Datei `tsconfig.json` hin
 Eine zentrale Einstellung ist `strict`: Mit `strict: true` werden alle strengen Typprüfungen aktiviert (siehe oben).
 Eine weitere wichtige Option ist `target`. Sie legt fest, in welche Version von JavaScript der Code transpiliert werden soll.
 
-In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert. `strict` ist standardmäßig aktiviert.
+In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert.
+In modernen Angular-Projekten ist der strict mode immer aktiv.
 
 ## Zusammenfassung
 
