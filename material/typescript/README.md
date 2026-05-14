@@ -21,7 +21,7 @@ TypeScript ist ein Open-Source-Projekt von Microsoft und basiert auf den aktuell
 Die Sprache ist ein *Superset* von JavaScript: Jede JavaScript-Syntax ist auch in TypeScript gültig.
 Allerdings ist TypeScript deutlich strenger als reines JavaScript.
 Der Compiler prüft zusätzlich die Typen und lehnt Code ab, der in JavaScript noch durchgelaufen wäre.
-In Angular-Projekten sind diese Prüfungen standardmäßig aktiviert (*strict mode*).
+In Angular-Projekten sind diese Prüfungen standardmäßig aktiviert (*Strict Mode*).
 Nur wenn wir die Einstellungen gezielt lockern, nähert sich TypeScript dem Verhalten von reinem JavaScript an.
 
 TypeScript ist nicht direkt im Browser lauffähig.
