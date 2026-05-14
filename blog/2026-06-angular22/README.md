@@ -17,6 +17,9 @@ keywords:
   - Service Decorator
   - injectAsync
   - WebMCP
+  - Angular ARIA
+  - Vitest
+  - Webpack
 language: de
 header: angular22.jpg
 sticky: true
@@ -26,8 +29,9 @@ isUpdatePost: true
 
 Mit Beginn des Monats Juni gibt es Neuigkeiten aus der Angular-Welt: **Angular 22** ist da!
 Dieses Release zieht viele Konzepte, die in den letzten Versionen reifen durften, über die Ziellinie:
-**Signal Forms** und die **Resource API** sind stable, der `HttpClient` setzt nun standardmäßig auf die moderne Fetch-API und ein neuer `@Service()`-Decorator stellt eine vereinfachte Version vom bisherigen `@Injectable()` dar.
+**Signal Forms**, die **Resource API** und das Paket **`@angular/aria`** sind stable, der `HttpClient` setzt nun standardmäßig auf die moderne Fetch-API und ein neuer `@Service()`-Decorator stellt eine vereinfachte Version vom bisherigen `@Injectable()` dar.
 Hinzu kommen einige spannende neue Bausteine wie `injectAsync()`, `debounced()` und eine erste Integration für **WebMCP**.
+Auf der Werkzeug-Seite werden die alten Webpack-basierten Builder als veraltet markiert, und die Angular CLI bringt einen neuen Migrationspfad von `fakeAsync` auf die Fake Timers von Vitest mit.
 
 Im [Angular-Blog](TODO) findest du die offiziellen Informationen zum neuen Release.
 Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng update` verwenden, siehe [Angular Update Guide](https://angular.dev/update-guide).
@@ -124,20 +128,37 @@ Wir haben die Idee der Resource API bereits in einem ausführlichen Blogpost vor
 Mit der Stabilisierung in Angular 22 ist das dort beschriebene Vorgehen offiziell der empfohlene Weg, um in Komponenten signal-basiert Daten zu laden.
 
 
+## Angular ARIA ist stable
+
+Auch das mit Angular 21 eingeführte Paket [`@angular/aria`](https://angular.dev/guide/aria/overview) hat den Schritt aus der Developer Preview heraus geschafft und ist mit Angular 22 **stable**.
+Das Paket bietet eine Sammlung von Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) umsetzen – von Accordion über Combobox bis hin zu Tabs und Tree.
+Tastaturinteraktionen, ARIA-Attribute, Fokus-Management und Screen-Reader-Unterstützung sind dabei bereits eingebaut.
+Wir liefern lediglich die HTML-Struktur, das Styling und die fachliche Logik.
+
+Mit dem Sprung zu stable können wir die Direktiven nun bedenkenlos in produktiven Anwendungen einsetzen.
+Die Installation erfolgt wie gewohnt über die Angular CLI:
+
+```bash
+ng add @angular/aria
+```
+
+
 ## HttpClient: Fetch-API ist jetzt der Default
 
 Der `HttpClient` hat eine kleine, aber wirkungsvolle Veränderung erfahren:
 Mit Angular 22 ist die **Fetch-API** der neue Standard.
 Bisher musste die Fetch-Variante explizit über `withFetch()` aktiviert werden – andernfalls verwendete der `HttpClient` das ältere `XMLHttpRequest`.
-Nun wird `FetchBackend` automatisch verwendet, und der Aufruf `provideHttpClient()` reicht ohne weitere Argumente aus.
+Nun wird `FetchBackend` automatisch verwendet, ganz ohne zusätzliche Konfiguration.
+
+Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, reicht es, den `HttpClient` per `inject()` in unseren Komponenten und Services zu nutzen.
+Ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig – Fetch funktioniert ab Angular 22 ganz von allein.
 
 ```ts
-// Reicht aus – Fetch ist jetzt Default
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient()
-  ]
-};
+@Service()
+export class BookStore {
+  // HttpClient ist out of the box verfügbar – mit Fetch als Default
+  private http = inject(HttpClient);
+}
 ```
 
 Die Vorteile: bessere Kompatibilität mit Server-Side Rendering, eine moderne Browser-API und ein etwas schlankeres Bundle, weil der XHR-Pfad nicht mehr standardmäßig benötigt wird.
@@ -145,6 +166,7 @@ Die Vorteile: bessere Kompatibilität mit Server-Side Rendering, eine moderne Br
 Allerdings ist diese Umstellung ein Breaking Change, der eine wichtige Einschränkung mit sich bringt:
 Das `FetchBackend` unterstützt **keine Upload-Progress-Events**.
 Wer in seiner Anwendung mit `reportProgress: true` den Fortschritt von Datei-Uploads tracken möchte, muss bei den betroffenen Requests explizit auf das XHR-Backend zurückwechseln.
+Dafür rufen wir `provideHttpClient()` weiterhin manuell auf und konfigurieren das XHR-Backend:
 
 ```ts
 export const appConfig: ApplicationConfig = {
@@ -359,6 +381,39 @@ protected readonly bookForm = form(this.bookData, bookFormSchema, {
 
 Wie der Name verrät, ist diese Schnittstelle noch experimentell.
 Die genaue Form der API kann sich also noch ändern – wir behalten das Thema im Auge und werden hier in Kürze einen ausführlichen Blogpost dazu veröffentlichen.
+
+
+## Deprecation der Webpack-basierten Builder
+
+Auf der Werkzeug-Seite zieht das Angular-Team einen weiteren Schlussstrich:
+Die alten **Webpack-basierten Builder** (`@angular-devkit/build-angular:browser` und `@angular-devkit/build-angular:dev-server`) sind mit Angular 22 offiziell als **deprecated** markiert.
+
+Schon seit einigen Versionen ist der esbuild-basierte `application`-Builder der Standard für neue Projekte – er ist deutlich schneller, unterstützt SSR direkt und integriert sich nahtlos in den Vitest-Test-Runner.
+Wer noch auf einer Webpack-Konfiguration unterwegs ist, sollte spätestens jetzt die Migration zum neuen Builder einplanen.
+Die Angular CLI stellt dafür ein passendes Migrationsskript bereit, das die `angular.json` automatisch umstellt:
+
+```bash
+ng update @angular/cli --name use-application-builder
+```
+
+Eine Entfernung der Webpack-Builder ist in einem der kommenden Major-Releases geplant.
+
+
+## fakeAsync zu Vitest Fake Timers migrieren
+
+Mit Angular 21 wurde Vitest zum neuen Standard-Test-Runner.
+Wer bestehende Tests migriert, stößt früher oder später auf eine Stolperfalle:
+Die altbekannten Helfer `fakeAsync()` und `tick()` aus `@angular/core/testing` basieren auf Zone.js und passen nicht mehr ohne Weiteres zum neuen, zonenlosen Setup.
+Vitest bringt mit den **Fake Timers** ein eigenes, modernes Konzept zur Steuerung von Zeit in Tests mit.
+
+Mit Angular 22 stellt die Angular CLI ein Schematic bereit, das Tests automatisch von `fakeAsync`/`tick` auf die Fake Timers von Vitest umstellt:
+
+```bash
+ng generate @schematics/angular:fake-async-to-vitest-fake-timers
+```
+
+Das Schematic ersetzt die `fakeAsync`-Wrapper durch `vi.useFakeTimers()`, übersetzt `tick(...)` in `vi.advanceTimersByTime(...)` und kümmert sich um die zugehörigen Imports.
+In unserem [Vitest-Migrationsleitfaden](/blog/2025-11-zu-vitest-migrieren#asynchronit%C3%A4t-ohne-zonejs-mit-vitest-timer) haben wir die verschiedenen Vitest-Timer-APIs ausführlich erklärt und zeigen auch, in welchen Fällen das Schematic an seine Grenzen stößt.
 
 
 ## Sonstiges
