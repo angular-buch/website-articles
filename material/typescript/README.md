@@ -784,7 +784,7 @@ Eine zentrale Einstellung ist `strict`: Mit `strict: true` werden alle strengen 
 Eine weitere wichtige Option ist `target`. Sie legt fest, in welche Version von JavaScript der Code transpiliert werden soll.
 
 In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert.
-In modernen Angular-Projekten ist der strict mode immer aktiv.
+In modernen Angular-Projekten ist der Strict Mode immer aktiv.
 
 ## Zusammenfassung
 
