@@ -1,94 +1,78 @@
 ---
 title: 'Einführung in TypeScript'
-published: 2026-02-10
-lastModified: 2026-02-05
-hidden: true
+published: 2026-05-14
+lastModified: 2026-05-14
 ---
 
-> **Hinweis:** Dieser Artikel ist ein Zusatzmaterial zum [Angular-Buch](https://angular-buch.com).
-> Im Buch setzen wir durchgehend auf **TypeScript** für die Entwicklung mit Angular.
-> Dieses Kapitel bietet eine Einführung in die wichtigsten Sprachfeatures.
->
-> Wenn du bereits Erfahrung mit TypeScript hast, kannst du dieses Kapitel überspringen.
-> Viele Konzepte werden wir auch im Verlauf des Buchs praktisch kennenlernen.
+Für die Entwicklung mit Angular verwenden wir die Programmiersprache **TypeScript**.
+Dieser Artikel richtet sich an alle, die mit modernem JavaScript und TypeScript noch nicht vertraut sind.
+Wir gehen die wichtigsten Sprachfeatures Schritt für Schritt durch und legen damit das Fundament für die Arbeit mit Angular.
 
----
+Keine Angst, du musst keine vollständig neue Sprache erlernen.
+TypeScript baut auf JavaScript auf und ergänzt es um ein statisches Typsystem.
 
-Für die Entwicklung mit Angular verwenden wir die Programmiersprache *TypeScript*.
-Für Entwickler:innen, die bisher noch nicht mit TypeScript entwickelt haben, wollen wir hier einen kurzen Einstieg geben.
-Keine Angst – du musst keine vollständig neue Sprache erlernen, um mit Angular arbeiten zu können, denn TypeScript ist eine Obermenge von JavaScript.
+## Inhalt
 
-TypeScript greift die aktuellen ECMAScript-Standards auf und integriert zusätzliche Features, unter anderem ein statisches Typsystem.
-Das bedeutet praktisch, dass die Typen von Variablen, Funktionsparametern und Klassen-Propertys direkt im Code aufgeschrieben werden.
-So erhalten wir schon während der Entwicklung eine gute Unterstützung im Editor und können unsere Software typsicher entwickeln.
-Autovervollständigung, Typprüfungen und Rename Refactoring sind nur einige der Vorteile, die sich aus einem statischen Typsystem ergeben.
-
-Jedes Programm, das in JavaScript geschrieben wurde, funktioniert auch in TypeScript.
-Dein bestehendes Wissen zu JavaScript bleibt also weiterhin anwendbar.
+[[toc]]
 
 ## TypeScript einsetzen
 
+TypeScript ist ein Open-Source-Projekt von Microsoft und basiert auf den aktuellen ECMAScript-Standards.
+Die Sprache ist ein *Superset* von JavaScript: Jede JavaScript-Syntax ist auch in TypeScript gültig.
+Allerdings ist TypeScript deutlich strenger als reines JavaScript.
+Der Compiler prüft zusätzlich die Typen und lehnt Code ab, der in JavaScript noch durchgelaufen wäre.
+In Angular-Projekten sind diese Prüfungen standardmäßig aktiviert (*Strict Mode*).
+Nur wenn wir die Einstellungen gezielt lockern, nähert sich TypeScript dem Verhalten von reinem JavaScript an.
+
 TypeScript ist nicht direkt im Browser lauffähig.
-Deshalb wird der TypeScript-Code vor der Auslieferung wieder in JavaScript umgewandelt.
+Deshalb wird der Code vor der Auslieferung wieder in JavaScript umgewandelt.
 Für diesen Prozess ist der TypeScript-Compiler verantwortlich.
 Man spricht dabei auch von *Transpilierung*, weil der Code lediglich in eine andere Sprache übertragen wird.
+Konkret bedeutet das: Die Typangaben werden beim Transpilieren entfernt.
 
-Die statische Typisierung geht bei diesem Schritt verloren.
-Das bedeutet, dass das Programm zur Laufzeit keine Typen mehr besitzt, denn es ist ein reines JavaScript-Programm.
-Durch die Typunterstützung bei der Entwicklung und beim Build können allerdings schon die meisten Fehler erkannt und vermieden werden.
+```typescript
+// TypeScript-Quellcode:
+let age: number = 30;
 
-TypeScript ist als Open-Source-Projekt bei der Firma Microsoft entstanden.
-Durch die Typisierung können Fehler bereits zur Entwicklungszeit erkannt werden.
-Außerdem können Tools den Code genauer analysieren.
-Dies ermöglicht Komfortfunktionen wie automatische Vervollständigung, Navigation zwischen Methoden und Klassen, eine solide Refactoring-Unterstützung und automatische Dokumentation in der Entwicklungsumgebung.
+// Nach der Transpilierung (JavaScript):
+let age = 30;
+```
+
+Darüber hinaus kennt TypeScript eine Reihe von eigenen Syntaxen, die beim Transpilieren in äquivalenten JavaScript-Code aufgelöst werden.
+Ein Beispiel dafür ist die Konstruktor-Kurzschreibweise:
+
+```typescript
+// TypeScript-Kurzschreibweise im Konstruktor:
+class Book {
+  constructor(public title: string) {}
+}
+
+// Nach der Transpilierung (JavaScript):
+class Book {
+  constructor(title) {
+    this.title = title;
+  }
+}
+```
+
+Diese Schreibweise schauen wir uns später im Abschnitt zu Klassen genauer an.
+
+Zur Laufzeit ist das Programm ein reines JavaScript-Programm ohne Typen.
+Durch die Typprüfungen bei der Entwicklung und beim Build können viele Fehler aber schon frühzeitig erkannt werden.
 
 Die meisten modernen IDEs wie Visual Studio Code oder IntelliJ/WebStorm unterstützen TypeScript nativ und ohne zusätzliche Plug-ins.
+Neben der Fehlerprüfung profitieren wir dabei auch von Komfortfunktionen wie Autovervollständigung, Navigation zwischen Methoden und Klassen sowie einer soliden Refactoring-Unterstützung.
 In einem Angular-Projekt ist der TypeScript-Compiler außerdem schon vollständig konfiguriert, sodass wir sofort mit der Entwicklung beginnen können.
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: nein, ist mittlerweile Basiswissen und hat erst einmal auch nichts direkt mit TS zu tun -->
-<!--
-## Variablen: `const`, `let` und `var`
+## Variablen: `const` und `let`
 
-Ursprünglich wurden Variablen in JavaScript mit dem Schlüsselwort `var` eingeleitet.
-Das funktioniert noch immer, allerdings kamen mit ECMAScript 2015 die neuen Variablenarten `let` und `const` hinzu.
-
-### Die schmerzhafte `var`-heit
-
-Mit dem Schlüsselwort `var` eingeleitete Variablen sind jeweils in der Funktion gültig, in der sie auch deklariert wurden – und zwar überall.
-Variablen mit `var` „fressen" sich durch alle Blöcke hindurch und sind in der *gesamten* Funktion und in allen darin verschachtelten Blöcken und Funktionen verfügbar.
-
-```typescript
-function example() {
-  if (true) {
-    var x = 10;
-  }
-  console.log(x); // 10 – x ist hier verfügbar!
-}
-```
-
-Diese Eigenschaft führt in der Praxis schnell zu Kollisionen von Variablen aus verschiedenen Programmteilen.
-
-### Blockgebundene Variablen mit `let`
-
-Mit Einführung von ECMAScript 2015 hielt der Variablentyp `let` Einzug in die Webentwicklung.
-Damit lassen sich blockgebundene Variablen definieren.
-Sie sind nicht in der gesamten Funktion gültig, sondern lediglich innerhalb des Blocks, in dem sie definiert wurden.
-
-```typescript
-for (let i = 0; i < 10; i++) {
-  // i ist nur hier gültig
-}
-// console.log(i); // Fehler: i ist nicht definiert
-```
+In JavaScript und TypeScript deklarieren wir Variablen mit den Schlüsselwörtern `const` und `let`.
+Beide wurden mit ECMAScript 2015 eingeführt und unterscheiden sich darin, ob sich der Wert nach der Initialisierung noch ändern lässt.
 
 ### Konstanten mit `const`
 
-Variablen, die mit `var` oder `let` eingeleitet werden, lassen sich jederzeit überschreiben.
-Häufig ändert sich der Wert einer Variable allerdings nach der Initialisierung nicht mehr.
-Für solche Fälle gibt es Konstanten.
-Sie werden mit dem Schlüsselwort `const` eingeleitet.
-Wird eine Konstante einmal festgelegt, so lässt sich der Wert nicht mehr überschreiben.
+Variablen, deren Wert sich nach der Initialisierung nicht mehr ändern soll, deklarieren wir mit `const`.
+In der Praxis ist das der häufigste Fall. Wir empfehlen, eine Variable zunächst immer mit `const` zu deklarieren.
 
 ```typescript
 const name = 'Angular';
@@ -105,18 +89,56 @@ book.title = 'Angular Buch'; // Das funktioniert!
 // book = { title: 'Neues Buch' }; // Fehler: Zuweisung nicht möglich
 ```
 
-### Wann nutze ich welche?
+### Variablen mit `let`
 
-Als Faustregel kannst du dir Folgendes merken:
+Soll sich der Wert einer Variable während des Programmablaufs ändern, deklarieren wir sie mit `let`.
+Mit `let` deklarierte Variablen sind blockgebunden: Sie gelten nur innerhalb des Blocks, in dem sie deklariert wurden, also typischerweise zwischen geschweiften Klammern wie einer Schleife oder einem `if`-Block.
 
-- Nutze zunächst immer `const`.
-- Willst du den Wert später im Programm verändern, wähle `let`.
-- Nutze nicht `var`, denn du wirst es nicht benötigen.
--->
+```typescript
+for (let i = 0; i < 10; i++) {
+  // i ist nur hier gültig
+}
+// console.log(i); // Fehler: i ist nicht definiert
+```
+
+### Hinweis: das alte `var`
+
+In älterem JavaScript-Code begegnet uns noch das Schlüsselwort `var`, das vor ECMAScript 2015 die einzige Möglichkeit war, eine Variable zu deklarieren.
+Im modernen Alltag benötigen wir es nicht mehr. Wir verwenden ausschließlich `const` und `let`.
+
+## Module: Import und Export
+
+In den Anfängen von JavaScript war es eine Herausforderung, eine größere Codebasis zu verwalten: Funktionen mit demselben Namen aus verschiedenen Skripten haben sich gegenseitig überschrieben.
+Zum Glück sind diese Zeiten längst vorbei.
+JavaScript und damit auch TypeScript kennt heute *Module*. Jede Datei bildet ein eigenes Modul und isoliert den darin enthaltenen Code. Kollisionen sind damit nicht mehr möglich.
+
+Wenn etwas außerhalb des Moduls verfügbar sein soll, müssen wir das explizit angeben. Dafür dient das Schlüsselwort `export`. Das Gegenstück dazu heißt `import`:
+
+```typescript
+// book.ts
+export interface Book {
+  title: string;
+}
+
+export const defaultBook: Book = {
+  title: 'Angular'
+};
+```
+
+In einer anderen Datei können wir diese Bausteine importieren:
+
+```typescript
+// app.ts
+import { Book, defaultBook } from './book';
+
+const myBook: Book = defaultBook;
+```
+
+In Angular-Projekten begegnen uns Imports ständig: von eingebauten Modulen wie `@angular/core`, von eigenen Services oder Komponenten.
 
 ## Die wichtigsten Basistypen
 
-Die starke Typisierung ermöglicht es, die Schnittstellen der Software genau zu beschreiben.
+Die starke Typisierung ermöglicht es, die Datenstrukturen unserer Anwendung präzise zu beschreiben.
 So können schon während der Entwicklung hilfreiche Informationen und Warnungen bereitgestellt werden, wenn die API nicht korrekt verwendet wird.
 
 ### Primitive Typen: Zahlen, Zeichenketten und boolesche Werte
@@ -128,7 +150,7 @@ Wenn eine Variable logische Wahrheitswerte (`true` oder `false`) annehmen soll, 
 
 Ein Typ wird immer mit einem Doppelpunkt hinter dem Variablennamen deklariert.
 Wenn der Typ bereits aus dem Wert eindeutig bestimmbar ist, müssen wir diese Information nicht zwingend notieren.
-TypeScript ermittelt den passenden Typ automatisch – man spricht von *Typinferenz*.
+TypeScript ermittelt den passenden Typ automatisch. Man spricht von *Typinferenz*.
 
 ```typescript
 let age: number = 30;
@@ -165,9 +187,9 @@ flexible = true;
 
 Diese beiden Basistypen haben jedoch einen wichtigen Unterschied:
 Der Wert einer mit `any` typisierten Variable kann zu jeder anderen Variable zugewiesen werden.
-`any` wird übrigens auch immer als Standardtyp verwendet, wenn wir eine Variable nicht explizit typisieren und der Typ von TypeScript nicht automatisch ermittelt werden kann.
+Ohne strict mode wird `any` außerdem als Standardtyp verwendet, wenn TypeScript den Typ nicht automatisch ermitteln kann. In Angular-Projekten (strict mode aktiv) führt das zu einem Compiler-Fehler.
 
-Der Typ `unknown` schafft Abhilfe.
+Im Gegensatz dazu ist `unknown` typsicherer.
 Eine solche Variable kann ebenfalls beliebige Werte mit jedem Typ annehmen.
 Allerdings kann der Wert einer `unknown`-Variable nur dann einer anderen Variable zugewiesen werden, wenn diese auch den Typ `unknown` oder `any` trägt.
 Um den Wert einer mit `unknown` typisierten Variable dennoch zuweisen zu können, müssen wir mithilfe von `typeof` eine Typprüfung vornehmen.
@@ -182,12 +204,56 @@ if (typeof value === 'string') {
 ```
 
 Praktisch solltest du es vermeiden, `any` zu verwenden, denn dieser Typ ist fast immer ein Indiz dafür, dass Unklarheit über die Typisierung herrscht.
-Willst du die konkrete Belegung einer Variable absichtlich im Unklaren lassen, ist `unknown` die bessere Wahl.
+Aber auch `unknown` ist nur ein Notnagel: Wann immer möglich, sollten wir den konkreten Typ angeben.
+Erst wenn das wirklich nicht geht, ist `unknown` die bessere Wahl als `any`.
+
+In der Praxis begegnet uns `unknown` vor allem in `catch`-Blöcken.
+Da ein Fehler von beliebigem Typ sein kann, ist die `error`-Variable standardmäßig als `unknown` typisiert:
+
+```typescript
+try {
+  // Operation, die fehlschlagen kann
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}
+```
+
+## Template-Strings
+
+Mit einem normalen String in einfachen Anführungszeichen ist es nicht möglich, einen Text über mehrere Zeilen anzugeben.
+Ein *Template-String* wird mit schrägen `` ` ``Hochkommata`` ` `` (*Backtick*) eingeleitet und beendet, nicht mit Anführungszeichen.
+Der String kann sich über mehrere Zeilen erstrecken.
+
+Mit Template-Strings können wir außerdem Ausdrücke direkt in einen String einbetten:
+
+```typescript
+const name = 'Angular';
+const version = 22;
+
+const message = `Willkommen bei ${name}!
+Die aktuelle Version ist ${version}.`;
+```
+
+Wir werden Template-Strings vor allem nutzen, um URLs mit Parametern zusammenzubauen.
+Genau für ein solches Szenario setzen wir Template-Strings auch im Angular-Buch ein, etwa um in einem Service die API-URL zusammenzubauen:
+
+```typescript
+// Vereinfacht aus Listing 20.1:
+const apiUrl = 'https://api1.angular-buch.com';
+const url = `${apiUrl}/books`;
+// 'https://api1.angular-buch.com/books'
+```
+
+Im Buch arbeiten wir an dieser Stelle bereits mit dem Angular-`HttpClient` und Observables.
+Für den Moment ist hier nur wichtig, dass der Template-String die Basis-URL mit dem Pfad `/books` zu einer vollständigen URL kombiniert.
 
 ## Klassen
 
 Um eine Klasse zu beschreiben, verwenden wir in JavaScript und TypeScript das Schlüsselwort `class`.
 Mit Klassen können einfache Datenobjekte oder auch komplexe objektorientierte Logik abgebildet werden.
+Ein konkretes Objekt einer Klasse nennen wir eine *Instanz*.
 
 ```typescript
 class User {
@@ -203,20 +269,25 @@ class User {
 }
 ```
 
-Klassen besitzen drei wesentliche Bestandteile: Eigenschaften, Methoden und eine besondere Methode – den Konstruktor.
+Klassen bestehen aus mehreren Bausteinen, die wir uns der Reihe nach anschauen.
 
 ### Eigenschaften/Propertys
 
 Eigenschaften (engl. *properties*) erweitern eine Klasseninstanz mit zusätzlichen Informationen.
-Propertys können mit den Zugriffsmodifizierern `public`, `private`, `static`, `protected` oder `readonly` versehen werden.
+Propertys können mit Zugriffsmodifizierern wie `public`, `private` oder `protected` versehen werden, um die Sichtbarkeit zu steuern.
 Lässt man die Angabe eines Zugriffsmodifizierers weg, so ist die Eigenschaft immer `public`.
 
+Daneben gibt es weitere Modifier:
+
+- `readonly` verhindert Änderungen nach der Initialisierung. Dazu kommen wir noch.
+- `static` macht eine Eigenschaft zur Klasse statt zur Instanz zugehörig. Sie wird dann direkt über den Klassennamen aufgerufen, ohne dass eine Instanz erzeugt werden muss.
+
 Ein Property kann als optional deklariert werden, indem wir ein Fragezeichen setzen.
-Jedes Property einer Klasse muss immer entweder sofort einen Wert besitzen oder als optional markiert werden.
+Jedes Property einer Klasse muss entweder sofort einen Wert besitzen, im Konstruktor zugewiesen werden oder als optional markiert sein.
 
 ### Methoden
 
-Methoden sind die Funktionen einer Klasse und erweitern die Klasse mit Logik.
+Methoden sind die Funktionen einer Klasse und enthalten ihre Logik.
 Wir können die Methodensignatur präzisieren, indem wir Typen für die Argumente und den Rückgabewert angeben.
 
 ```typescript
@@ -235,49 +306,55 @@ Der Typ `void` sagt aus, dass eine Methode keinen Rückgabewert besitzt.
 
 ### Getter und Setter
 
-Mit den Schlüsselwörtern `get` und `set` können wir Methoden verstecken, indem eine Eigenschaft an diese gebunden wird.
+Mit den Schlüsselwörtern `get` und `set` können wir Methoden so definieren, dass sie wie Eigenschaften gelesen oder geschrieben werden.
+Statt `person.getAge()` schreibt man dann einfach `person.age`.
 
 ```typescript
 class Person {
-  #birthYear: number;
+  private birthYear: number;
 
   constructor(birthYear: number) {
-    this.#birthYear = birthYear;
+    this.birthYear = birthYear;
   }
 
   get age(): number {
-    return new Date().getFullYear() - this.#birthYear;
+    return new Date().getFullYear() - this.birthYear;
+  }
+
+  set age(value: number) {
+    this.birthYear = new Date().getFullYear() - value;
   }
 }
 
 const person = new Person(1990);
-console.log(person.age); // Berechnet das Alter
+console.log(person.age); // Getter: berechnet das Alter
+person.age = 25;         // Setter: passt das Geburtsjahr an
 ```
 
 ### Konstruktor
 
-Der Konstruktor ist eine besondere Methode, die bei der Instanziierung einer Klasse aufgerufen wird.
-Er muss immer den Namen `constructor()` tragen.
+Der Konstruktor ist eine besondere Methode, die beim Erzeugen einer neuen Instanz aufgerufen wird.
+Sie heißt immer `constructor`.
 
-TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise:
+TypeScript bietet für die Initialisierung von Propertys eine Kurzschreibweise, die wir bereits ganz am Anfang im Transpilier-Beispiel kurz gesehen haben.
 Wenn wir in der Methodensignatur des Konstruktors für das Argument einen Zugriffsmodifizierer wie `public` oder `private` verwenden, so wird das zugehörige Property automatisch deklariert und initialisiert.
 
 ```typescript
-class User {
+class Point {
   constructor(
-    public firstname: string,
-    public lastname: string
+    public x: number,
+    public y: number
   ) {}
 }
 
 // Entspricht:
-class UserLong {
-  public firstname: string;
-  public lastname: string;
+class PointLong {
+  public x: number;
+  public y: number;
 
-  constructor(firstname: string, lastname: string) {
-    this.firstname = firstname;
-    this.lastname = lastname;
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
   }
 }
 ```
@@ -288,12 +365,12 @@ Die Funktionalität einer Klasse kann auf andere Klassen übertragen werden.
 Mit dem Schlüsselwort `extends` kann eine Klasse von einer anderen erben.
 
 ```typescript
-class User {
+class Animal {
   constructor(public name: string) {}
 }
 
-class PowerUser extends User {
-  constructor(name: string, public permissions: string[]) {
+class Dog extends Animal {
+  constructor(name: string, public breed: string) {
     super(name);
   }
 }
@@ -301,73 +378,64 @@ class PowerUser extends User {
 
 Mit `super()` kann der Konstruktor der Basisklasse ausgeführt werden.
 
-## Interfaces
+## Private Eigenschaften von Klassen
 
-Um die Typisierung in unserem Programmcode konsequent umzusetzen, stellt TypeScript sogenannte *Interfaces* bereit.
-Interfaces dienen dazu, die typisierte Struktur eines Objekts zu definieren, nicht jedoch die Werte.
-Optionale Eigenschaften werden durch ein Fragezeichen-Symbol gekennzeichnet.
+Mit *Private Class Fields* in JavaScript können wir Datenkapselung in Klassen realisieren.
+Ein privates Feld wird durch ein vorangestelltes `#`-Symbol definiert und ist nur innerhalb der Klasse zugänglich.
 
 ```typescript
-interface User {
-  firstname: string;
-  lastname: string;
-  age?: number;
+class BankAccount {
+  #balance: number;
+
+  constructor(balance: number) {
+    this.#balance = balance;
+  }
+
+  isEnoughFor(amount: number): boolean {
+    return this.#balance >= amount;
+  }
 }
 
-const user: User = {
-  firstname: 'Max',
-  lastname: 'Mustermann'
-};
+const account = new BankAccount(1000);
+// account.#balance; // Fehler: Zugriff nicht möglich
 ```
 
-Fügen wir dem Objekt eine zusätzliche Eigenschaft hinzu oder hat eine der Eigenschaften nicht den Typ, der im Interface definiert wurde, so erhalten wir einen Fehler.
+In TypeScript existiert außerdem der Access Modifier `private`, der die Sichtbarkeit einschränkt.
+Der Schutz ist allerdings zur Laufzeit nicht garantiert, da TypeScript zu JavaScript umgewandelt wird.
+Wir empfehlen die moderne JavaScript-Variante mit `#`.
+In bestehenden Angular-Projekten ist `private` allerdings noch weit verbreitet und ebenfalls eine gültige Wahl.
 
-### Interface für Klassen
+## Property Modifiers: `readonly` und `protected`
 
-Interfaces können auch dafür verwendet werden, die Struktur einer Klasse vorzugeben.
-Dafür wird nach dem Klassennamen das Schlüsselwort `implements` angefügt.
+TypeScript stellt uns eine Reihe von *Property Modifiers* zur Verfügung, mit denen wir das Verhalten von Eigenschaften präzisieren können.
+
+Der Modifier `protected` sorgt für eine eingeschränkte Sichtbarkeit.
+Ein Protected Property ist nicht von außen sichtbar, sondern kann nur innerhalb derselben Klasse und in vererbten Kindklassen verwendet werden.
+Dazu gehört auch das Template einer Angular-Komponente.
+
+Mit `readonly` können wir sicherstellen, dass eine Eigenschaft nach der Initialisierung nicht mehr verändert werden kann.
 
 ```typescript
-interface Printable {
-  print(): void;
-}
+class Task {
+  readonly id: string;
+  protected isCompleted = false;
 
-class Document implements Printable {
-  print(): void {
-    console.log('Printing...');
+  constructor(id: string) {
+    this.id = id;
   }
 }
 ```
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: sollte mittlerweile Standard sein und kann raus -->
-<!--
-## Template-Strings
+Für Angular-Projekte empfehlen wir folgende Konventionen:
 
-Mit einem normalen String in einfachen Anführungszeichen ist es nicht möglich, einen Text über mehrere Zeilen anzugeben.
-Ein *Template-String* wird mit schrägen `` ` ``Hochkommata`` ` `` (*Backtick*) eingeleitet und beendet, nicht mit Anführungszeichen.
-Der String kann sich über mehrere Zeilen erstrecken.
+- Propertys und Methoden, die nur innerhalb der Klasse verwendet werden, werden als privat markiert.
+- Propertys, die im Template einer Komponente genutzt werden, werden mit `protected` gekennzeichnet.
+- Propertys, die von Angular verwaltet werden, werden auf `readonly` gesetzt (z. B. `input()`, `output()`, `model()`).
 
-Mit Template-Strings können wir außerdem Ausdrücke direkt in einen String einbetten:
-
-```typescript
-const name = 'Angular';
-const version = 21;
-
-const message = `Willkommen bei ${name}!
-Die aktuelle Version ist ${version}.`;
-```
-
-Wir werden Template-Strings vor allem nutzen, um URLs mit Parametern zusammenzubauen.
--->
-
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: sollte mittlerweile Standard sein und kann raus -->
-<!--
 ## Arrow Functions
 
-Eine *Arrow-Funktion* ist eine Kurzschreibweise für eine normale `function()` in JavaScript.
-Auch die Bezeichnung *Lambda-Ausdruck* ist verbreitet.
+Eine *Arrow-Funktion* ist eine kompaktere Schreibweise für eine Funktion in JavaScript.
+Sie hat allerdings einen wichtigen Unterschied beim `this`-Kontext, den wir gleich noch sehen.
 
 Die Definition einer anonymen Funktion verkürzt sich damit elegant zu einem Pfeil `=>`.
 Besitzt die Funktion genau einen Parameter ohne Typ, können die runden Klammern auf der linken Seite weggelassen werden.
@@ -379,7 +447,7 @@ Lässt man die Klammern weg, ist das Ergebnis des rechtsseitigen Ausdrucks der R
 const fn1 = function(x: number) { return x * 2; };
 const fn2 = (x: number) => { return x * 2; };
 const fn3 = (x: number) => x * 2;
-const fn4 = x => x * 2; // Nur ohne Typangabe
+const fn4 = x => x * 2; // Klammern weglassen geht nur, wenn kein Typ notiert wird
 ```
 
 Das folgende Beispiel zeigt, wie wir alle geraden Zahlen aus einer Liste ermitteln können:
@@ -392,32 +460,46 @@ const even1 = numbers.filter(function(n) {
   return n % 2 === 0;
 });
 
-// Arrow-Funktion – wesentlich kompakter
+// Arrow-Funktion, wesentlich kompakter
 const even2 = numbers.filter(n => n % 2 === 0);
 ```
 
-Ein weiterer Vorteil der Arrow-Funktion ist, dass sie keinen eigenen `this`-Kontext besitzt.
-Das ist besonders dann interessant, wenn wir die Funktion innerhalb einer Klasse verwenden und mit `this` auf die Instanz der Klasse zugreifen möchten.
-Mit Arrow-Funktionen wird die Variable `this` aus dem übergeordneten Kontext verwendet.
+### Der `this`-Kontext
+
+In JavaScript bezieht sich `this` innerhalb einer Methode normalerweise auf die Klasseninstanz, zu der die Methode gehört.
+Bei einer klassischen Funktion mit dem Schlüsselwort `function` ändert sich dieser Bezug allerdings je nach Aufrufkontext.
+Das führt schnell zu Fehlern.
+
+Im folgenden Beispiel kennt die Funktion in `setTimeout` die Klasseninstanz nicht mehr:
 
 ```typescript
 class Counter {
   count = 0;
 
   increment() {
-    // Arrow-Funktion: this zeigt auf die Klasseninstanz
-    setTimeout(() => {
-      this.count++;
-      console.log(this.count);
+    setTimeout(function() {
+      this.count++; // Fehler: this ist hier nicht der Counter!
     }, 1000);
   }
 }
 ```
--->
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: haben wir im Buch und ist auch nicht spezifisch für TS, kann als raus -->
-<!--
+Genau dieses Problem lösen Arrow-Funktionen: Sie besitzen keinen eigenen `this`-Kontext, sondern übernehmen `this` aus dem umgebenden Code.
+Mit einer Arrow-Funktion in `setTimeout` zeigt `this` weiterhin auf die Klasseninstanz:
+
+```typescript
+class Counter {
+  count = 0;
+
+  increment() {
+    setTimeout(() => {
+      this.count++;
+      console.log(this.count); // OK: this zeigt auf den Counter
+    }, 1000);
+  }
+}
+```
+
 ## Immutability
 
 In JavaScript werden Objekte und Arrays stets nur als Referenzen auf eine zugehörige Speicherstelle gespeichert.
@@ -429,19 +511,22 @@ const book = { title: 'Angular', year: 2023 };
 const copy = book;
 copy.year = 2024;
 
-console.log(book.year); // 2024 – auch das Original wurde geändert!
+console.log(book.year); // 2024, auch das Original wurde geändert!
 ```
 
 Um gut wartbaren Code zu erhalten, dürfen wir niemals die Werte eines Objekts oder Arrays direkt verändern.
 Wir behandeln ein Objekt oder Array als *unveränderlich* (engl. *immutable*) und erzeugen bei einer Änderung immer eine Kopie.
-Hierfür nutzen wir in der Regel die Spread-Syntax.
+Hierfür nutzen wir in der Regel die Spread-Syntax:
+
+```typescript
+const book = { title: 'Angular', year: 2023 };
+const updated = { ...book, year: 2026 }; // Kopie mit neuem Wert
+```
 
 > **Merke:** Objekte und Arrays sollten nie direkt verändert werden. Stattdessen sollte immer eine Kopie mit neuer Referenz erzeugt werden, die die gewünschten Änderungen enthält.
--->
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: haben wir im Buch und brauchen wir hier nicht. Auch nicht TS spezifisch -->
-<!--
+Wie die Spread-Syntax genau funktioniert, schauen wir uns jetzt an.
+
 ## Spread-Syntax und Rest-Parameter
 
 In JavaScript können wir eine Syntax mit drei Punkten verwenden (`...`).
@@ -456,13 +541,26 @@ Mit der Spread-Syntax können wir Objekte klonen und dabei Eigenschaften übersc
 const book = { title: 'Angular', year: 2023 };
 const copy = { ...book, year: 2026 };
 
-console.log(book.year); // 2023 – Original unverändert
-console.log(copy.year); // 2026 – Kopie mit neuem Wert
+console.log(book.year); // 2023, Original unverändert
+console.log(copy.year); // 2026, Kopie mit neuem Wert
 ```
 
 Bitte beachte, dass diese Idee nur für *Plain Objects* funktioniert und nur eine flache Kopie (*Shallow Copy*) erzeugt.
-Tiefere Zweige eines Objekts müssen einzeln geklont werden.
-Wird diese Aufgabe zu kompliziert, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt.
+Original und Kopie verweisen weiterhin auf dasselbe verschachtelte Objekt:
+
+```typescript
+const book = {
+  title: 'Angular',
+  author: { name: 'Hoppe' }
+};
+
+const copy = { ...book };
+copy.author.name = 'Mustermann';
+console.log(book.author.name); // 'Mustermann', Original und Kopie zeigen auf dasselbe Objekt!
+```
+
+Wird das zum Problem, können wir die native Funktion `structuredClone()` verwenden, die eine *Deep Copy* erzeugt und damit auch alle verschachtelten Objekte kopiert.
+Alle Konsumenten der Objekte erhalten damit aber eine neue Objektreferenz, obwohl sich an den Inhalten ggf. gar nichts geändert hat. `structuredClone()` ist deshalb in der Regel eine Notlösung, wenn die Spread-Syntax zu kompliziert wird.
 
 ### Array-Elemente kopieren
 
@@ -498,96 +596,50 @@ function sum(...numbers: number[]): number {
 
 console.log(sum(1, 2, 3, 4)); // 10
 ```
--->
 
-## Private Eigenschaften von Klassen
+## Optional Chaining
 
-Mit *Private Class Fields* in JavaScript können wir Datenkapselung in Klassen realisieren.
-Ein privates Feld wird durch ein vorangestelltes `#`-Symbol definiert und ist nur innerhalb der Klasse zugänglich.
-
-```typescript
-class User {
-  #password: string;
-
-  constructor(password: string) {
-    this.#password = password;
-  }
-
-  checkPassword(input: string): boolean {
-    return this.#password === input;
-  }
-}
-
-const user = new User('secret');
-// user.#password; // Fehler: Zugriff nicht möglich
-```
-
-In TypeScript existiert außerdem der Access Modifier `private`, der die Sichtbarkeit einschränkt.
-Der Schutz ist allerdings zur Laufzeit nicht garantiert, da TypeScript zu JavaScript umgewandelt wird.
-Wir empfehlen die moderne JavaScript-Variante mit `#`.
-
-## Property Modifiers: `readonly` und `protected`
-
-TypeScript stellt uns eine Reihe von *Property Modifiers* zur Verfügung:
-
-Der Modifier `protected` sorgt für eine eingeschränkte Sichtbarkeit.
-Ein Protected Property ist nicht von außen sichtbar, sondern kann nur innerhalb derselben Klasse und in vererbten Kindklassen verwendet werden.
-Dazu gehört auch das Template einer Angular-Komponente.
-
-Mit `readonly` können wir sicherstellen, dass eine Eigenschaft nach der Initialisierung nicht mehr verändert werden kann.
+Wenn ein verschachteltes Objekt eine optionale Eigenschaft hat, könnte der Zugriff darauf fehlschlagen.
+TypeScript warnt uns davor:
 
 ```typescript
-class Config {
-  readonly apiUrl = 'https://api.example.com';
-  protected secret = '12345';
-}
+type User = {
+  address: { city: string } | undefined;
+};
+
+const user: User = { address: undefined };
+const city = user.address.city;
+// Fehler: 'user.address' ist möglicherweise 'undefined'
 ```
 
-Für Angular-Projekte empfehlen wir folgende Konventionen:
-
-- Propertys und Methoden, die nur innerhalb der Klasse verwendet werden, werden als privat markiert.
-- Propertys, die im Template einer Komponente genutzt werden, werden mit `protected` gekennzeichnet.
-- Propertys, die von Angular verwaltet werden, werden auf `readonly` gesetzt (z. B. `input()`, `output()`, `model()`).
-
-## Decorators
-
-Mit Decorators können wir Klassen, Methoden und Eigenschaften dekorieren und damit Metadaten hinzufügen.
-Man erkennt einen Decorator am `@`-Zeichen zu Beginn des Namens.
+Mit Optional Chaining können wir solche Zugriffe absichern.
+Der `?.`-Operator liefert `undefined`, wenn die linke Seite nicht existiert, statt einen Fehler zu werfen:
 
 ```typescript
-@Component({
-  selector: 'app-root',
-  template: '<h1>Hello</h1>'
-})
-class AppComponent {}
+const city = user.address?.city; // string | undefined
 ```
 
-Angular nutzt dieses Sprachkonzept, um Klassen eine Semantik zu geben:
-Durch den Decorator `@Component()` wird diese Klasse als Komponente behandelt.
-Alle Decorators von Angular sind Funktionen, daher darf man die Funktionsklammern bei der Verwendung nicht vergessen.
+## Nullish Coalescing
 
-## Generic Types
-
-Mit *Generics* können wir Typparameter für Klassen und Funktionen definieren.
-Sie sind ein wichtiges Konzept in TypeScript, um wiederverwendbare und flexible Funktionen zu erstellen.
+Als *nullish* gelten in JavaScript die Werte `null` und `undefined`.
+Der `??`-Operator (Nullish Coalescing) liefert einen Rückfallwert, wenn der linke Wert nullish ist.
+Im Gegensatz dazu reagiert der `||`-Operator (OR) auf alle *Falsy Values*, darunter auch `0` und leerer String.
 
 ```typescript
-interface Book {
-  title: string;
-}
+const value = null;
+const result = value ?? 'default'; // 'default'
 
-// Generischer Typ wird automatisch erkannt
-const count = signal(0); // Signal<number>
-const title = signal('Angular'); // Signal<string>
-
-// Bei Objekten muss der Typ explizit angegeben werden
-const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
+// Unterschied zu ||
+const zero = 0;
+console.log(zero || 'fallback'); // 'fallback'
+console.log(zero ?? 'fallback'); // 0
 ```
 
-<!-- TODO: klären, ob wir das drin haben wollen -->
-<!-- Danny: haben wir schon im Buch und ist kein TS -->
-<!--
 ## Promises und `async`/`await`
+
+Manche Vorgänge brauchen Zeit, zum Beispiel ein Netzwerk-Aufruf an einen Server.
+JavaScript wartet darauf nicht, sondern führt den restlichen Code weiter aus und meldet sich später mit dem Ergebnis.
+Solche Vorgänge nennt man *asynchron*.
 
 Eine *Promise* ist ein natives Objekt in JavaScript, das einen asynchronen Vorgang repräsentiert.
 Sie liefert entweder einen Wert zurück, wenn die Operation erfolgreich war, oder einen Fehler, wenn die Ausführung fehlgeschlagen ist.
@@ -607,13 +659,11 @@ async function loadData() {
   console.log(data);
 }
 ```
--->
 
-## Weitere Features
+## Union Types
 
-### Union Types
-
-Mit Union Types können wir zusammengesetzte Typen beschreiben:
+Ein *Union Type* ist die Vereinigung mehrerer möglicher Typen. Eine Variable kann dann einen Wert von einem dieser Typen annehmen.
+Mit dem `|`-Operator notieren wir die Alternativen:
 
 ```typescript
 function format(value: string | number): string {
@@ -624,47 +674,129 @@ function format(value: string | number): string {
 }
 ```
 
-### Optional Chaining
-
-Optional Chaining ermöglicht einen sicheren Zugriff auf verschachtelte Objekte:
+Häufig kombinieren wir auch mehrere String-Literale zu einem Union Type, um eine begrenzte Auswahl an Werten festzulegen:
 
 ```typescript
-const user = { address: { city: 'Berlin' } };
-const city = user?.address?.city; // 'Berlin'
-const zip = user?.address?.zip; // undefined (kein Fehler)
+type Status = 'loading' | 'success' | 'error';
+
+let currentStatus: Status = 'loading';
+currentStatus = 'success'; // OK
+// currentStatus = 'pending'; // Fehler: 'pending' ist nicht zulässig
 ```
 
-### Nullish Coalescing
+## Interfaces
 
-Nullish Coalescing erlaubt die einfache Zuweisung von Rückfallwerten:
+Um die Typisierung in unserem Programmcode konsequent umzusetzen, stellt TypeScript sogenannte *Interfaces* bereit.
+Interfaces beschreiben, welche Eigenschaften ein Objekt haben muss und welchen Typ diese Eigenschaften haben.
+Konkrete Werte legen sie nicht fest.
+Optionale Eigenschaften werden durch ein Fragezeichen-Symbol gekennzeichnet.
 
 ```typescript
-const value = null;
-const result = value ?? 'default'; // 'default'
+interface User {
+  firstname: string;
+  lastname: string;
+  age?: number;
+}
 
-// Unterschied zu ||
-const zero = 0;
-console.log(zero || 'fallback'); // 'fallback'
-console.log(zero ?? 'fallback'); // 0
+const user: User = {
+  firstname: 'Max',
+  lastname: 'Mustermann'
+};
 ```
+
+Fügen wir dem Objekt eine zusätzliche Eigenschaft hinzu oder hat eine der Eigenschaften nicht den Typ, der im Interface definiert wurde, so erhalten wir einen Fehler.
+
+### Interface für Klassen
+
+Interfaces können auch dafür verwendet werden, die Struktur einer Klasse vorzugeben.
+Dafür wird nach dem Klassennamen das Schlüsselwort `implements` angefügt.
+
+```typescript
+interface Printable {
+  print(): void;
+}
+
+class Document implements Printable {
+  print(): void {
+    console.log('Printing …');
+  }
+}
+```
+
+## Generic Types
+
+Mit *Generics* können wir Typparameter für Klassen und Funktionen definieren.
+Sie sind ein wichtiges Konzept in TypeScript, um wiederverwendbare und flexible Funktionen zu erstellen.
+
+Im einfachsten Fall definieren wir eine Funktion mit einem Typparameter `T`, der beim Aufruf automatisch ermittelt wird:
+
+```typescript
+// Eine generische Funktion mit Typparameter T
+function first<T>(arr: T[]): T {
+  return arr[0];
+}
+
+const firstBook = first(['Angular', 'React']); // string
+const firstNumber = first([1, 2, 3]);          // number
+```
+
+Auch im Angular-Ökosystem begegnen uns Generics häufig.
+Die Funktion `signal()` (mehr dazu im Buch) erzeugt ein Objekt, das einen reaktiven Wert mit generischem Typ hält:
+
+```typescript
+interface Book {
+  title: string;
+}
+
+// Generischer Typ wird automatisch erkannt
+const count = signal(0); // Signal<number>
+const title = signal('Angular'); // Signal<string>
+
+// Bei Objekten muss der Typ explizit angegeben werden
+const book = signal<Book>({ title: 'Angular' }); // Signal<Book>
+```
+
+## Decorators
+
+Mit Decorators können wir Klassen, Methoden und Eigenschaften dekorieren und damit Metadaten hinzufügen.
+Metadaten sind zusätzliche Informationen über eine Klasse oder Methode. Sie beschreiben sie, sind aber nicht Teil ihrer eigentlichen Logik.
+Man erkennt einen Decorator am `@`-Zeichen zu Beginn des Namens.
+
+```typescript
+@Component({
+  selector: 'app-root',
+  template: '<h1>Hello</h1>'
+})
+export class App {}
+```
+
+Angular nutzt dieses Sprachkonzept, um Klassen eine Semantik zu geben:
+Durch den Decorator `@Component()` wird diese Klasse als Komponente behandelt.
+Alle Decorators von Angular sind Funktionen, daher darf man die Funktionsklammern bei der Verwendung nicht vergessen.
+
+Angular bringt eine Reihe von Decorators mit, darunter `@Component`, `@Directive`, `@Pipe` und `@Service`.
+Sie unterscheiden Klassen nach ihrer Aufgabe innerhalb der Anwendung.
 
 ## Konfiguration
 
-Um TypeScript-Code in Node.js oder im Browser ausführen zu können, muss dieser zunächst in JavaScript umgewandelt werden.
-Diese Aufgabe übernimmt der *Transpiler*.
-
-Die Konfiguration wird in der Datei `tsconfig.json` hinterlegt.
-Die wohl wichtigste Einstellung ist das `target`: Diese Option gibt an, in welche Version von JavaScript das Programm transpiliert werden soll.
+Die Konfiguration des TypeScript-Compilers wird in der Datei `tsconfig.json` hinterlegt.
+Eine zentrale Einstellung ist `strict`: Mit `strict: true` werden alle strengen Typprüfungen aktiviert (siehe oben).
+Eine weitere wichtige Option ist `target`. Sie legt fest, in welche Version von JavaScript der Code transpiliert werden soll.
 
 In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert.
+In modernen Angular-Projekten ist der Strict Mode immer aktiv.
 
 ## Zusammenfassung
 
-TypeScript erweitert den JavaScript-Sprachstandard um viele Features, die wir bereits aus etablierten Sprachen wie C# oder Java kennen.
-Dadurch fällt auch der Umstieg von einer anderen objektorientierten Sprache nicht schwer.
-Auch wenn du bisher mit reinem JavaScript entwickelt hast, ist der Umstieg auf TypeScript keine große Hürde, weil alle bekannten Features aus JavaScript weiterhin verwendet werden können.
+Mit diesem Crashkurs haben wir die wichtigsten Bausteine von TypeScript kennengelernt: moderne Sprachfeatures aus JavaScript wie `const`/`let`, Arrow Functions und die Spread-Syntax, dazu das Typsystem von TypeScript mit Interfaces, Union Types und Generics, und schließlich die Objektorientierung mit Klassen und Property Modifiers.
 
-Mit der Typisierung und Objektorientierung können wir die Schnittstellen unserer Software klar definieren.
-Der Editor kann uns bei der Arbeit mit TypeScript effizient unterstützen und schon zur Entwicklungszeit auf Fehler hinweisen.
+TypeScript ist strenger als JavaScript, und genau das macht die Sprache so wertvoll.
+Die Typprüfung im Compiler und die Unterstützung durch die IDE helfen uns, Fehler früh zu erkennen und Software wartbar zu entwickeln.
 
-Damit unsere Anwendung später auch in jedem Browser lauffähig ist, wird TypeScript vor der Auslieferung immer in reines JavaScript umgewandelt.
+## Fazit
+
+Wenn du diesen Artikel durchgearbeitet hast, steht der Entwicklung moderner Angular-Anwendungen nichts mehr im Wege.
+TypeScript kennt zwar noch viele weitere praktische Konstrukte, aber eine solide Angular-Anwendung benötigt nicht zwingend alle.
+Mit dem hier gelernten Werkzeugkasten bist du startklar.
+
+Viel Spaß mit TypeScript und Angular!
