@@ -1,7 +1,7 @@
 ---
 title: "Errata zur 1. Auflage (2026)"
 published: 2026-03-13
-lastModified: 2026-05-09
+lastModified: 2026-05-15
 hidden: true
 ---
 
@@ -23,7 +23,7 @@ Er ist die moderne und ergonomische Alternative zum etablierten Decorator `@Inje
 Der Aufruf kann also direkt ersetzt werden:
 
 ```ts
-// VORHER
+// VORHER (im Buch abgedruckt)
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -96,3 +96,25 @@ Die abgedruckte Variante mit `useFactory` ist dennoch nicht falsch und kann weit
 ```
 
 
+
+## 25.5.8 Logik für Schema-Funktionen
+
+Im Theoriekapitel zu Signal Forms erläutern wir die Funktionen `disabled()`, `hidden()` und `readonly()`.
+Dabei erklären wir auch, dass im zweiten Argument eine Logikfunktion übergeben werden kann.
+
+Die Signatur der Schemafunktionen wurde kurz vor dem finalen Release von Angular 22 noch einmal angepasst.
+Die Logik wird nun in der Option `when` notiert.
+Diese Änderung ist sinnvoll, weil andere Schemafunktionen ebenfalls ein `when`-Callback unterstützen.
+Im Buch ist allerdings noch die alte Schnittstelle abgedruckt.
+
+```ts
+// ❌ VORHER (im Buch abgedruckt)
+disabled(path.password, (ctx) => !ctx.valueOf(path.username));
+disabled(path.password, (ctx) => !ctx.valueOf(path.username) ? 'Username is empty.' : false);
+
+// ✅ NACHHER
+disabled(path.password, { when: (ctx) => !ctx.valueOf(path.username) });
+disabled(path.password, {
+  when: (ctx) => !ctx.valueOf(path.username) ? 'Username is empty.' : false
+});
+```
