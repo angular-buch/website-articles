@@ -23,62 +23,10 @@ Die Komponente ist dabei sofort sichtbar, und wir können einen Ladeindikator an
 Als Alternative bietet der Router sogenannte *Resolvers* an, um Daten schon vor dem Start der Komponente asynchron vorzuladen.
 Wir geben also die Verantwortung für das Laden der Daten an den Router ab, und die Daten sind in der Komponente sofort und synchron verfügbar.
 
-
-## Das UX-Problem mit Resolvers
-
-Resolvers sind einfach zu verwenden – aber sie haben ein grundlegendes Problem:
-Der Router wartet auf die asynchrone Operation, bevor die Route aktiviert wird.
-
-Stell dir einen langsamen HTTP-Request vor.
-Nach dem Klick auf einen Link startet der Request, aber die Navigation wird erst abgeschlossen, wenn die Antwort eintrifft.
-Dauert der Request 5 Sekunden, dauert auch die Navigation 5 Sekunden.
-In dieser Zeit sieht der User keine Reaktion – und klickt womöglich mehrfach auf den Link.
-
-Dieses Verhalten widerspricht der Grundidee einer Single-Page-Anwendung:
-Eine SPA sollte immer schnell reagieren und die Daten zur Laufzeit nachladen.
-Mit Resolvers kehren wir zum Verhalten einer klassischen serverseitig gerenderten Seite zurück: Klick, warten, weiter.
-
-### Die bessere Alternative: Daten direkt in der Komponente laden
-
-Ohne Resolvers wird die Komponente sofort angezeigt, und die Daten werden im Hintergrund geladen.
-Während der Ladezeit können wir einen Ladeindikator oder Platzhalter-Elemente (Ghost Elements) anzeigen.
-Die Navigation ist sofort abgeschlossen, und der User erhält unmittelbares Feedback.
-
-Mit der `resource()`-API oder `httpResource()` geht das besonders elegant:
-
-```typescript
-@Component({ /* ... */ })
-export class MyComponent {
-  private service = inject(BookStoreService);
-  booksResource = this.service.getAllAsResource();
-}
-```
-
-Alternativ können wir Observables mit `toSignal()` in ein Signal umwandeln und im Template nutzen:
-
-```typescript
-@Component({
-  template: `
-    @if (books().length) {
-      <app-book-list [books]="books()" />
-    } @else {
-      <p>Laden...</p>
-    }
-  `,
-})
-export class MyComponent {
-  books = toSignal(inject(BookStoreService).getAll(), { initialValue: [] });
-}
-```
-
-In beiden Fällen ist die Komponente sofort sichtbar, und die Daten werden asynchron nachgeladen.
-Das ist fast immer die bessere Wahl gegenüber einem Resolver.
-
 ## Einen Resolver definieren
 
 Ein Resolver wird als Funktion mit dem Typ `ResolveFn<T>` definiert.
 Der generische Typparameter `T` gibt an, welchen Datentyp das Ergebnis besitzt.
-Die Funktion muss ein Observable, eine Promise oder einen direkten Wert zurückliefern.
 
 Als Argumente erhält die Funktion die aktuelle Route in Form eines `ActivatedRouteSnapshot` und den Zustand des Routers als `RouterStateSnapshot`.
 Wir können also z. B. Routenparameter auslesen und diese bei der Datenabfrage verarbeiten.
@@ -90,8 +38,18 @@ Der Rückgabetyp der Funktion ist `T | Observable<T> | Promise<T>`.
 Wir können also ein Observable zurückgeben, eine Promise (z. B. wenn wir einen bestehenden Promise-basierten Loader wiederverwenden) oder auch einen synchronen Wert.
 Letzteres ist besonders interessant, wenn wir z. B. bereits geladene Daten aus einem Service direkt verteilen wollen, ohne eine asynchrone Operation auszulösen.
 
-Das folgende Beispiel zeigt einen Resolver, der eine Buchliste mithilfe des Service `BookStore` bereitstellt:
+Das folgende Beispiel zeigt einen Resolver, der eine Buchliste mithilfe des `BookStore` bereitstellt:
 
+```typescript
+import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
+
+export const booksResolver: ResolveFn<Book[]> =
+  (route, state) => {
+    const service = inject(BookStore);
+    return service.getAll();
+  };
+```
 
 Um eine Resolver-Funktion zu generieren, können wir die Angular CLI nutzen:
 
@@ -192,7 +150,7 @@ import { catchError, of } from 'rxjs';
 
 export const booksResolver: ResolveFn<Book[] | RedirectCommand> =
   (route, state) => {
-    const service = inject(BookStoreService);
+    const service = inject(BookStore);
     const router = inject(Router);
 
     return service.getAll().pipe(
@@ -302,19 +260,60 @@ import { Router } from '@angular/router';
   `,
 })
 export class App {
- #router = inject(Router);
-  protected readonly isNavigating = computed(() => !!this.#router.currentNavigation());
+  private router = inject(Router);
+  isNavigating = computed(() => !!this.router.currentNavigation());
 }
 ```
 
-## Best Practices
+## Das UX-Problem mit Resolvers
 
-- **Resolvers sparsam verwenden:** Der Router wartet auf die asynchrone Operation und lädt die Komponente erst, wenn das Ergebnis vorliegt. Das widerspricht dem gewohnten Verhalten einer Single-Page-Anwendung, die schnell reagiert und die Daten zur Laufzeit nachlädt.
-- **Keine regulären Nutzdaten laden:** HTTP-Requests können eine längere Zeit in Anspruch nehmen. Nutze stattdessen den herkömmlichen Weg und lade die Daten direkt in den Komponenten.
-- **Fehler behandeln:** Fange Fehler im Resolver ab, um eine schlechte User Experience zu vermeiden.
-- **Caching nutzen:** Speichere aufgelöste Daten zentral (z. B. in einem Service oder Store), damit sie nicht doppelt geladen werden müssen.
-- **Ladeindikator anzeigen:** Da die Navigation blockiert wird, solltest du dem User visuelles Feedback geben.
-- **Nur für besondere Fälle:** Resolvers sollten nur eingesetzt werden, wenn Daten unbedingt beim Start der Komponente benötigt werden und der Router aus gutem Grund den weiteren Ablauf verzögern soll.
+Resolvers sind einfach zu verwenden – aber sie haben ein grundlegendes Problem:
+Der Router wartet auf die asynchrone Operation, bevor die Route aktiviert wird.
+
+Stell dir einen langsamen HTTP-Request vor.
+Nach dem Klick auf einen Link startet der Request, aber die Navigation wird erst abgeschlossen, wenn die Antwort eintrifft.
+Dauert der Request 5 Sekunden, dauert auch die Navigation 5 Sekunden.
+In dieser Zeit sieht der User keine Reaktion – und klickt womöglich mehrfach auf den Link.
+
+Dieses Verhalten widerspricht der Grundidee einer Single-Page-Anwendung:
+Eine SPA sollte immer schnell reagieren und die Daten zur Laufzeit nachladen.
+Mit Resolvers kehren wir zum Verhalten einer klassischen serverseitig gerenderten Seite zurück: Klick, warten, weiter.
+
+### Die bessere Alternative: Daten direkt in der Komponente laden
+
+Ohne Resolvers wird die Komponente sofort angezeigt, und die Daten werden im Hintergrund geladen.
+Während der Ladezeit können wir einen Ladeindikator oder Platzhalter-Elemente (Ghost Elements) anzeigen.
+Die Navigation ist sofort abgeschlossen, und der User erhält unmittelbares Feedback.
+
+Mit der `resource()`-API oder `httpResource()` geht das besonders elegant:
+
+```typescript
+@Component({ /* ... */ })
+export class MyComponent {
+  private service = inject(BookStore);
+  booksResource = this.service.getAllAsResource();
+}
+```
+
+Alternativ können wir Observables mit `toSignal()` in ein Signal umwandeln und im Template nutzen:
+
+```typescript
+@Component({
+  template: `
+    @if (books().length) {
+      <app-book-list [books]="books()" />
+    } @else {
+      <p>Laden...</p>
+    }
+  `,
+})
+export class MyComponent {
+  books = toSignal(inject(BookStore).getAll(), { initialValue: [] });
+}
+```
+
+In beiden Fällen ist die Komponente sofort sichtbar, und die Daten werden asynchron nachgeladen.
+Das ist fast immer die bessere Wahl gegenüber einem Resolver.
 
 ## Wann sind Resolvers sinnvoll?
 
@@ -326,15 +325,15 @@ Wenn die Daten bereits im Speicher liegen und kein HTTP-Request mehr nötig ist,
 Ein Beispiel: Wir haben einen `ConfigService`, der die Konfiguration beim Start der Anwendung einmalig lädt und anschließend aus dem Cache liefert:
 
 ```typescript
-import { inject, Service } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { shareReplay } from 'rxjs';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class ConfigService {
- #http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-  readonly config$ = this.#http.get<AppConfig>('/api/config').pipe(
+  config$ = this.http.get<AppConfig>('/api/config').pipe(
     shareReplay(1)
   );
 }
