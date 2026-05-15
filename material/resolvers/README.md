@@ -84,7 +84,11 @@ Als Argumente erhält die Funktion die aktuelle Route in Form eines `ActivatedRo
 Wir können also z. B. Routenparameter auslesen und diese bei der Datenabfrage verarbeiten.
 
 Alle Abhängigkeiten fordern wir mithilfe von `inject()` an.
-Das Observable mit dem Ergebnis geben wir direkt aus der Funktion zurück – um die Subscription kümmert sich der Router automatisch.
+Den Rückgabewert geben wir direkt aus der Funktion zurück – um die Subscription bzw. das Auflösen kümmert sich der Router automatisch.
+
+Der Rückgabetyp der Funktion ist `T | Observable<T> | Promise<T>`.
+Wir können also ein Observable zurückgeben, eine Promise (z. B. wenn wir einen bestehenden Promise-basierten Loader wiederverwenden) oder auch einen synchronen Wert.
+Letzteres ist besonders interessant, wenn wir z. B. bereits geladene Daten aus einem Service direkt verteilen wollen, ohne eine asynchrone Operation auszulösen.
 
 Das folgende Beispiel zeigt einen Resolver, der eine Buchliste mithilfe des Service `BookStore` bereitstellt:
 
