@@ -170,7 +170,9 @@ export class MyComponent {
 }
 ```
 
-Dieser Ansatz ist typsicherer und eleganter, weil wir die `ActivatedRoute` nicht injizieren müssen.
+Dieser Ansatz ist eleganter, weil wir die `ActivatedRoute` nicht injizieren müssen.
+Allerdings ist er nicht wirklich typsicher: Der Compiler prüft nicht, ob der Typ des Inputs mit dem Rückgabetyp des Resolvers übereinstimmt.
+Wir könnten im Input einen völlig anderen Typ angeben – das fällt erst zur Laufzeit auf.
 
 ## Fehlerbehandlung
 
