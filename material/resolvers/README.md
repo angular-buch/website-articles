@@ -54,20 +54,20 @@ export class MyComponent {
 }
 ```
 
-Alternativ können wir Observables mit der `AsyncPipe` direkt im Template auflösen:
+Alternativ können wir Observables mit `toSignal()` in ein Signal umwandeln und im Template nutzen:
 
 ```typescript
 @Component({
   template: `
-    @if (books$ | async; as books) {
-      <app-book-list [books]="books" />
+    @if (books().length) {
+      <app-book-list [books]="books()" />
     } @else {
       <p>Laden...</p>
     }
   `,
 })
 export class MyComponent {
-  books$ = inject(BookStoreService).getAll();
+  books = toSignal(inject(BookStoreService).getAll(), { initialValue: [] });
 }
 ```
 
