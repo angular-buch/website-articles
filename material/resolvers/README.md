@@ -25,6 +25,56 @@ Wir geben also die Verantwortung für das Laden der Daten an den Router ab, und 
 > Ein Resolver wartet auf die Daten, bevor die Komponente geladen wird. Das kann die User Experience beeinträchtigen, weil die Navigation blockiert wird.
 > Der herkömmliche Weg, Daten direkt in der Komponente zu laden, ist fast immer die bessere Wahl.
 
+## Das UX-Problem mit Resolvers
+
+Resolvers sind einfach zu verwenden – aber sie haben ein grundlegendes Problem:
+Der Router wartet auf die asynchrone Operation, bevor die Route aktiviert wird.
+
+Stell dir einen langsamen HTTP-Request vor.
+Nach dem Klick auf einen Link startet der Request, aber die Navigation wird erst abgeschlossen, wenn die Antwort eintrifft.
+Dauert der Request 5 Sekunden, dauert auch die Navigation 5 Sekunden.
+In dieser Zeit sieht der User keine Reaktion – und klickt womöglich mehrfach auf den Link.
+
+Dieses Verhalten widerspricht der Grundidee einer Single-Page-Anwendung:
+Eine SPA sollte immer schnell reagieren und die Daten zur Laufzeit nachladen.
+Mit Resolvers kehren wir zum Verhalten einer klassischen serverseitig gerenderten Seite zurück: Klick, warten, weiter.
+
+### Die bessere Alternative: Daten direkt in der Komponente laden
+
+Ohne Resolvers wird die Komponente sofort angezeigt, und die Daten werden im Hintergrund geladen.
+Während der Ladezeit können wir einen Ladeindikator oder Platzhalter-Elemente (Ghost Elements) anzeigen.
+Die Navigation ist sofort abgeschlossen, und der User erhält unmittelbares Feedback.
+
+Mit der `resource()`-API oder `httpResource()` geht das besonders elegant:
+
+```typescript
+@Component({ /* ... */ })
+export class MyComponent {
+  private service = inject(BookStoreService);
+  booksResource = this.service.getAllAsResource();
+}
+```
+
+Alternativ können wir Observables mit der `AsyncPipe` direkt im Template auflösen:
+
+```typescript
+@Component({
+  template: `
+    @if (books$ | async; as books) {
+      <app-book-list [books]="books" />
+    } @else {
+      <p>Laden...</p>
+    }
+  `,
+})
+export class MyComponent {
+  books$ = inject(BookStoreService).getAll();
+}
+```
+
+In beiden Fällen ist die Komponente sofort sichtbar, und die Daten werden asynchron nachgeladen.
+Das ist fast immer die bessere Wahl gegenüber einem Resolver.
+
 ## Einen Resolver definieren
 
 Ein Resolver wird als Funktion mit dem Typ `ResolveFn<T>` definiert.
@@ -269,6 +319,51 @@ export class App {
 - **Caching nutzen:** Speichere aufgelöste Daten zentral (z. B. in einem Service oder Store), damit sie nicht doppelt geladen werden müssen.
 - **Ladeindikator anzeigen:** Da die Navigation blockiert wird, solltest du dem User visuelles Feedback geben.
 - **Nur für besondere Fälle:** Resolvers sollten nur eingesetzt werden, wenn Daten unbedingt beim Start der Komponente benötigt werden und der Router aus gutem Grund den weiteren Ablauf verzögern soll.
+
+## Wann sind Resolvers sinnvoll?
+
+Angesichts der beschriebenen UX-Probleme stellt sich die Frage: Gibt es überhaupt einen guten Anwendungsfall für Resolvers?
+
+Ein valider Einsatz ist das Vorladen von Daten, die *sofort* verfügbar sind – z. B. gecachte Konfigurationsobjekte.
+Wenn die Daten bereits im Speicher liegen und kein HTTP-Request mehr nötig ist, blockiert der Resolver die Navigation nicht spürbar.
+
+Ein Beispiel: Wir haben einen `ConfigService`, der die Konfiguration beim Start der Anwendung einmalig lädt und anschließend aus dem Cache liefert:
+
+```typescript
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { shareReplay } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class ConfigService {
+  private http = inject(HttpClient);
+
+  config$ = this.http.get<AppConfig>('/api/config').pipe(
+    shareReplay(1)
+  );
+}
+```
+
+Der zugehörige Resolver gibt einfach das gecachte Observable zurück:
+
+```typescript
+export const configResolver: ResolveFn<AppConfig> =
+  () => inject(ConfigService).config$;
+```
+
+Beim ersten Aufruf wird der HTTP-Request ausgeführt.
+Bei allen weiteren Navigationen liefert `shareReplay` das Ergebnis sofort aus dem Cache – die Navigation wird also nicht verzögert.
+
+Aber auch hier gilt: Wir könnten den `ConfigService` genauso gut direkt in der Komponente injizieren und das `config$`-Observable dort nutzen.
+Ein Resolver ist also selbst in diesem Fall nicht zwingend notwendig.
+
+## Empfehlung
+
+Resolvers sind ein nützliches Werkzeug im Angular-Router, aber die Anwendungsfälle sind selten.
+Für die allermeisten Szenarien ist der reaktive Ansatz – Daten direkt in der Komponente laden und mit `resource()`, `httpResource()` oder der `AsyncPipe` verarbeiten – die bessere Wahl.
+
+Wenn du Resolvers in deiner Codebasis hast und sie gut funktionieren: prima!
+Wenn du überlegst, Resolvers neu einzuführen, prüfe zuerst, ob ein reaktiver Ansatz nicht einfacher und benutzerfreundlicher ist.
 
 ## Zusammenfassung
 
