@@ -15,15 +15,14 @@ Außerdem diskutieren wir, wann Resolvers sinnvoll sind – und wann nicht.
 ## Motivation
 
 Asynchrone Operationen wie HTTP-Requests lösen wir in Angular üblicherweise direkt in der Komponente auf.
-Mithilfe der `resource()`-API laden wir Daten reaktiv, oder wir nutzen die `AsyncPipe`, um Observables direkt im Template zu verarbeiten.
+Dafür gibt es verschiedene Möglichkeiten:
+Wir können die moderne Resource API einsetzen oder den `HttpClient` direkt verwenden und subscriben.
+Die Funktion `toSignal()` und die AsyncPipe helfen uns bei der Arbeit mit Observables.
 Die Komponente ist dabei sofort sichtbar, und wir können einen Ladeindikator anzeigen, während die Daten eintreffen.
 
 Als Alternative bietet der Router sogenannte *Resolvers* an, um Daten schon vor dem Start der Komponente asynchron vorzuladen.
 Wir geben also die Verantwortung für das Laden der Daten an den Router ab, und die Daten sind in der Komponente sofort und synchron verfügbar.
 
-> **Achtung:** Trotz dieser scheinbaren Vorteile solltest du dieses Feature mit Sorgfalt verwenden!
-> Ein Resolver wartet auf die Daten, bevor die Komponente geladen wird. Das kann die User Experience beeinträchtigen, weil die Navigation blockiert wird.
-> Der herkömmliche Weg, Daten direkt in der Komponente zu laden, ist fast immer die bessere Wahl.
 
 ## Das UX-Problem mit Resolvers
 
@@ -87,18 +86,8 @@ Wir können also z. B. Routenparameter auslesen und diese bei der Datenabfrage v
 Alle Abhängigkeiten fordern wir mithilfe von `inject()` an.
 Das Observable mit dem Ergebnis geben wir direkt aus der Funktion zurück – um die Subscription kümmert sich der Router automatisch.
 
-Das folgende Beispiel zeigt einen Resolver, der eine Buchliste mithilfe des `BookStoreService` bereitstellt:
+Das folgende Beispiel zeigt einen Resolver, der eine Buchliste mithilfe des Service `BookStore` bereitstellt:
 
-```typescript
-import { inject } from '@angular/core';
-import { ResolveFn } from '@angular/router';
-
-export const booksResolver: ResolveFn<Book[]> =
-  (route, state) => {
-    const service = inject(BookStoreService);
-    return service.getAll();
-  };
-```
 
 Um eine Resolver-Funktion zu generieren, können wir die Angular CLI nutzen:
 
@@ -187,7 +176,8 @@ Deshalb sollten wir Fehler in Resolvers immer behandeln.
 
 ### Fehler direkt im Resolver abfangen
 
-Wir können im Resolver selbst mit `catchError` arbeiten und bei einem Fehler z. B. eine Weiterleitung auslösen:
+Wenn der Resolver mit Observables arbeitet, können wir mit dem RxJS-Operator `catchError` arbeiten und bei einem Fehler z. B. eine Weiterleitung auslösen.
+Dazu kann der Resolver ein `RedirectCommand` zurückgeben.
 
 ```typescript
 import { inject } from '@angular/core';
@@ -208,7 +198,7 @@ export const booksResolver: ResolveFn<Book[] | RedirectCommand> =
   };
 ```
 
-### Zentrale Fehlerbehandlung mit withNavigationErrorHandler
+### Zentrale Fehlerbehandlung mit `withNavigationErrorHandler()`
 
 Alternativ können wir einen zentralen Error-Handler für alle Navigationsfehler registrieren:
 
@@ -231,7 +221,7 @@ Im Kapitel zum Routing haben wir gezeigt, wie wir den Titel der Seite in der Rou
 Dabei haben wir stets einen statischen Titel übergeben.
 
 Wollen wir den Seitentitel hingegen dynamisch setzen, können wir einen Resolver verwenden.
-Das zurückgegebene Observable muss dafür zu einem String auflösen.
+Der Resolver muss dafür zu einem String auflösen.
 Zum Beispiel können wir den Buchtitel anhand der ISBN aus dem Routenparameter ermitteln:
 
 ```typescript
@@ -240,7 +230,7 @@ import { ResolveFn } from '@angular/router';
 
 export const bookTitleResolver: ResolveFn<string> =
   (route, state) => {
-    const service = inject(BookStoreService);
+    const service = inject(BookStore);
 
     const isbn = route.paramMap.get('isbn')!;
     return service.getTitleByISBN(isbn);
@@ -253,7 +243,7 @@ Das Observable wird automatisch vom Router aufgelöst, und der Seitentitel wird 
 ```typescript
 {
   path: 'books/:isbn',
-  component: BookDetailsComponent,
+  component: BookDetailsPage,
   title: bookTitleResolver
 }
 ```
@@ -273,7 +263,7 @@ provideRouter([
     children: [
       {
         path: 'posts',
-        component: UserPosts,
+        component: UserPostsPage,
         resolve: {
           posts: (route: ActivatedRouteSnapshot) => {
             const postService = inject(PostService);
@@ -287,7 +277,7 @@ provideRouter([
 ]);
 ```
 
-## Ladeindikator während der Navigation
+## Ladeindikator während der Navigation anzeigen
 
 Da Resolvers die Navigation blockieren, kann es sinnvoll sein, einen globalen Ladeindikator anzuzeigen.
 Dazu können wir den Navigationszustand des Routers überwachen:
@@ -300,14 +290,14 @@ import { Router } from '@angular/router';
   selector: 'app-root',
   template: `
     @if (isNavigating()) {
-      <div class="loading-bar">Laden...</div>
+      <div class="loading-bar">Wird geladen …</div>
     }
     <router-outlet />
   `,
 })
 export class App {
-  private router = inject(Router);
-  isNavigating = computed(() => !!this.router.currentNavigation());
+ #router = inject(Router);
+  protected readonly isNavigating = computed(() => !!this.#router.currentNavigation());
 }
 ```
 
@@ -330,15 +320,15 @@ Wenn die Daten bereits im Speicher liegen und kein HTTP-Request mehr nötig ist,
 Ein Beispiel: Wir haben einen `ConfigService`, der die Konfiguration beim Start der Anwendung einmalig lädt und anschließend aus dem Cache liefert:
 
 ```typescript
-import { Injectable, inject } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { shareReplay } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ConfigService {
-  private http = inject(HttpClient);
+ #http = inject(HttpClient);
 
-  config$ = this.http.get<AppConfig>('/api/config').pipe(
+  readonly config$ = this.#http.get<AppConfig>('/api/config').pipe(
     shareReplay(1)
   );
 }
@@ -352,7 +342,7 @@ export const configResolver: ResolveFn<AppConfig> =
 ```
 
 Beim ersten Aufruf wird der HTTP-Request ausgeführt.
-Bei allen weiteren Navigationen liefert `shareReplay` das Ergebnis sofort aus dem Cache – die Navigation wird also nicht verzögert.
+Bei allen weiteren Navigationen liefert der Operator `shareReplay()` das Ergebnis sofort aus dem Cache – die Navigation wird also nicht verzögert.
 
 Aber auch hier gilt: Wir könnten den `ConfigService` genauso gut direkt in der Komponente injizieren und das `config$`-Observable dort nutzen.
 Ein Resolver ist also selbst in diesem Fall nicht zwingend notwendig.
@@ -360,7 +350,7 @@ Ein Resolver ist also selbst in diesem Fall nicht zwingend notwendig.
 ## Empfehlung
 
 Resolvers sind ein nützliches Werkzeug im Angular-Router, aber die Anwendungsfälle sind selten.
-Für die allermeisten Szenarien ist der reaktive Ansatz – Daten direkt in der Komponente laden und mit `resource()`, `httpResource()` oder der `AsyncPipe` verarbeiten – die bessere Wahl.
+Für die allermeisten Szenarien ist der reaktive Ansatz – Daten direkt in der Komponente laden und mit `resource()`, `httpResource()` oder `toSignal()` verarbeiten – die bessere Wahl.
 
 Wenn du Resolvers in deiner Codebasis hast und sie gut funktionieren: prima!
 Wenn du überlegst, Resolvers neu einzuführen, prüfe zuerst, ob ein reaktiver Ansatz nicht einfacher und benutzerfreundlicher ist.
@@ -373,4 +363,4 @@ Wenn du überlegst, Resolvers neu einzuführen, prüfe zuerst, ob ein reaktiver 
 - Die aufgelösten Daten können über `ActivatedRoute` oder über Component Input Binding (`withComponentInputBinding()`) abgerufen werden.
 - Für den dynamischen Seitentitel kann ein Resolver im Property `title` der Route angegeben werden.
 - Resolvers blockieren die Navigation. Deshalb sollten sie sparsam und nur für essenzielle Daten eingesetzt werden.
-- Fehler in Resolvers sollten immer behandelt werden, z. B. mit `catchError` oder `withNavigationErrorHandler`.
+- Fehler in Resolvers sollten immer behandelt werden, z. B. mit `catchError()` oder `withNavigationErrorHandler()`.
