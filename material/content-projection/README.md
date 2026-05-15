@@ -16,18 +16,18 @@ In diesem Artikel erklären wir das Konzept im Detail und zeigen, wie du es in d
 ## Was ist Content Projection?
 
 Wer bereits mit anderen Frameworks wie Vue.js, Svelte oder mit Web Components gearbeitet hat, kennt dieses Konzept vielleicht unter dem Begriff **Slot**.
-Der Name stammt vom nativen [`<slot>`-Element](https://developer.mozilla.org/docs/Web/HTML/Element/slot) aus der Web-Components-Spezifikation.
+Der Name stammt vom nativen [`<slot>`-Element](https://developer.mozilla.org/docs/Web/HTML/Element/slot) aus der Spezifikation für Web Components.
 In Angular heißt das Konzept _Content Projection_ (früher auch _Transclusion_ genannt) und funktioniert über das spezielle Element `<ng-content>`.
 
 Die Grundidee: Wenn wir eine Komponente verwenden, können wir zwischen dem öffnenden und schließenden Tag beliebige Inhalte notieren.
-Diese Inhalte werden als **Content** der Komponente bezeichnet.
+Diese Inhalte werden als _Content_ der Komponente bezeichnet.
 Die Komponente entscheidet dann in ihrem eigenen Template, _wo_ dieser Content dargestellt wird.
 
 ## Content einer Komponente
 
 Um Komponenten in unsere Templates einzubinden, erstellen wir ein Host-Element, das zum Selektor der Komponente passt.
-Üblicherweise notieren wir dieses Element ohne weiteren Inhalt zwischen dem öffnenden und schließenden Tag.
-Geben wir dort Inhalte an, sind sie zunächst nicht sichtbar, denn das Element wird vollständig mit dem Template der Komponente gefüllt.
+Üblicherweise notieren wir dieses Element ohne weiteren Inhalt zwischen dem öffnenden und schließenden Tag – oder wir verwenden sogar ein Self-Closing Tag..
+Geben wir hingegen dort Inhalte an, sind sie zunächst nicht sichtbar, denn das Element wird vollständig mit dem Template der Komponente gefüllt.
 Der Beispieltext `Lorem ipsum dolor` wird im folgenden Beispiel also nicht dargestellt:
 
 ```html
@@ -44,7 +44,7 @@ Verwenden wir den Platzhalter `<ng-content>` im Template unserer Komponente, wir
 
 ```typescript
 @Component({
-  selector: "custom-card",
+  selector: 'custom-card',
   template: `
     <div class="card-shadow">
       <ng-content />
@@ -87,7 +87,7 @@ Auch Direktiven, Styles oder beliebige Attribute können nicht auf `<ng-content>
 
 ## Multi-Slot Projection
 
-Um mehrere Abschnitte gezielt an verschiedene Stellen im Template einzusetzen, unterstützt Angular die sogenannte **Multi-Slot Projection**.
+Um mehrere Abschnitte gezielt an verschiedenen Stellen im Template einzusetzen, unterstützt Angular die sogenannte **Multi-Slot Projection**.
 Der Platzhalter `<ng-content>` erhält dafür das Attribut `select`, in dem ein CSS-Selektor angegeben wird.
 Damit können wir einzelne Elemente aus dem Content gezielt "herausziehen" und an verschiedenen Stellen platzieren.
 
@@ -142,7 +142,7 @@ Wenn eine Komponente kein `<ng-content>` ohne `select`-Attribut enthält, werden
 
 Seit Angular 18 können wir für `<ng-content>` einen **Fallback-Inhalt** definieren.
 Wird kein passender Content von außen übergeben, zeigt Angular stattdessen den Fallback an.
-Dazu notieren wir den Fallback-Inhalt einfach als Kindelement von `<ng-content>`:
+Dazu notieren wir den Fallback-Inhalt als Kindelement von `<ng-content>`:
 
 ```html
 <!-- Template der Komponente -->
@@ -199,14 +199,14 @@ So können wir semantisch korrekte HTML-Elemente verwenden und trotzdem die Proj
 
 > **Hinweis:** `ngProjectAs` unterstützt nur statische Werte und kann nicht an dynamische Ausdrücke gebunden werden.
 
-## Praxisbeispiel: Eine Card-Komponente
+## Praxisbeispiel: eine Card-Komponente
 
 Fassen wir das Gelernte in einem vollständigen Beispiel zusammen.
 Wir erstellen eine wiederverwendbare Card-Komponente mit Header, Body und Footer:
 
 ```typescript
 @Component({
-  selector: "app-card",
+  selector: 'app-card',
   template: `
     <article class="card">
       <header class="card-header">
@@ -242,7 +242,7 @@ Wir erstellen eine wiederverwendbare Card-Komponente mit Header, Body und Footer
     }
   `,
 })
-export class CardComponent {}
+export class Card {}
 ```
 
 Die Verwendung sieht dann so aus:
