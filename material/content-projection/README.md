@@ -87,7 +87,7 @@ Auch Direktiven, Styles oder beliebige Attribute können nicht auf `<ng-content>
 
 ## Multi-Slot Projection
 
-Um mehrere Abschnitte gezielt an verschiedenen Stellen im Template einzusetzen, unterstützt Angular die sogenannte **Multi-Slot Projection**.
+Um mehrere Abschnitte gezielt an verschiedenen Stellen im Template einzusetzen, unterstützt Angular die sogenannte _Multi-Slot Projection_.
 Der Platzhalter `<ng-content>` erhält dafür das Attribut `select`, in dem ein CSS-Selektor angegeben wird.
 Damit können wir einzelne Elemente aus dem Content gezielt "herausziehen" und an verschiedenen Stellen platzieren.
 
