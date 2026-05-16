@@ -140,7 +140,7 @@ Wenn eine Komponente kein `<ng-content>` ohne `select`-Attribut enthält, werden
 
 ## Fallback Content
 
-Seit Angular 18 können wir für `<ng-content>` einen **Fallback-Inhalt** definieren.
+Seit Angular 18 können wir für `<ng-content>` einen _Fallback-Inhalt_ definieren.
 Wird kein passender Content von außen übergeben, zeigt Angular stattdessen den Fallback an.
 Dazu notieren wir den Fallback-Inhalt als Kindelement von `<ng-content>`:
 
