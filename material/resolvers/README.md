@@ -46,10 +46,17 @@ import { ResolveFn } from '@angular/router';
 
 export const booksResolver: ResolveFn<Book[]> =
   (route, state) => {
-    const service = inject(BookStore);
-    return service.getAll();
+    const store = inject(BookStore);
+    return store.getAll();
   };
 ```
+
+Geben wir aus dem Resolver ein Observable zurück, wird der Datenstrom automatisch subscribt, und der Resolver kümmert sich um die Auflösung der asynchronen Operation.
+Wichtig ist aber, dass ein Resolver immer nur zu *genau einem* Ergebnis auflöst.
+Bei einem Observable mit mehreren Elementen wird nur das erste Ergebnis ausgegeben.
+
+
+## Resolver anlegen
 
 Um eine Resolver-Funktion zu generieren, können wir die Angular CLI nutzen:
 
@@ -66,45 +73,45 @@ Unter diesem Namen rufen wir die Daten anschließend in der Komponente ab.
 
 ```typescript
 {
-  path: 'mypath',
-  component: MyComponent,
+  path: 'books',
+  component: DashboardPage,
   resolve: {
     books: booksResolver
   }
 }
 ```
 
-Sobald die Route aufgerufen wird, erstellt der Router automatisch eine Subscription auf das Observable, und die Daten werden abgerufen und gespeichert.
-Erst dann wird die Komponente geladen.
-Der Router wartet also, bis die asynchrone Operation abgeschlossen ist!
+Sobald die Route aufgerufen wird, wird der Resolver ausgeführt, und die Daten werden in den Metadaten der Route gespeichert.
+Erst danach wird die Komponente geladen, und die Daten stehen sofort beim Start der Komponente bereit.
+Bei asynchronen Operationen ist hier aber besondere Vorsicht geboten: Der Router wartet, bis die Operation abgeschlossen ist! Der tatsächliche Routenwechsel wird also durch den Resolver verzögert.
 
-## Auf die Daten in der Komponente zugreifen
+## Daten auslesen
 
-Es gibt zwei Wege, um in der Komponente auf die aufgelösten Daten zuzugreifen.
+Nachdem Daten durch Resolver bereitgestellt wurden, gibt es zwei Wege, um in der Komponente damit zu arbeiten.
+Grundlegend werden die Daten über den gleichen Kanal bereitgestellt wie statische [`data`, die wir direkt in der Route notieren](https://angular.dev/api/router/Route#data).
 
 ### Ansatz 1: ActivatedRoute
 
-Die aufgelösten Daten sind über `ActivatedRoute` verfügbar.
-Das Property `data` auf der Route enthält ein Observable, das die Daten aller Resolvers bereitstellt.
-Die Schlüssel entsprechen den Namen, die wir im `resolve`-Objekt der Routenkonfiguration festgelegt haben.
+Die aufgelösten Daten sind über den Service `ActivatedRoute` verfügbar.
+Das Objekt liefert die Daten wahlweise als Observable `data` oder synchron über den Snapshot in `snapshot.data`.
+Da ein Resolver immer nur ein einziges Ergebnis liefert, ist der reaktive Weg hier nicht notwendig, und wir können die bereitgestellten Daten direkt aus dem Snapshot lesen.
+
+Die Schlüssel im Objekt entsprechen den Namen, die wir im `resolve`-Objekt der Routenkonfiguration festgelegt haben.
 
 ```typescript
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({ /* ... */ })
-export class MyComponent {
-  private route = inject(ActivatedRoute);
-  private data = toSignal(this.route.data);
-
-  books = computed(() => this.data()?.books as Book[]);
+export class DashboardPage {
+  #route = inject(ActivatedRoute);
+  protected books = this.#route.snapshot.data['books'] as Book[];
 }
 ```
 
 ### Ansatz 2: Component Input Binding (empfohlen)
 
-Seit Angular 16 gibt es die Möglichkeit, aufgelöste Daten direkt als Inputs an die Komponente zu übergeben.
+Mit dem Component Input Binding können wir Routenparameter und Data als Inputs in gerouteten Komponenten empfangen.
 Dazu muss `withComponentInputBinding()` bei der Router-Konfiguration aktiviert sein:
 
 ```typescript
@@ -123,13 +130,14 @@ In der Komponente definieren wir dann einen Input, dessen Name dem Schlüssel au
 import { Component, input } from '@angular/core';
 
 @Component({ /* ... */ })
-export class MyComponent {
-  books = input.required<Book[]>();
+export class DashboardPage {
+  readonly books = input.required<Book[]>();
 }
 ```
 
+Beim Start der Komponente werden die geladenen Daten sofort im Input zur Verfügung gestellt.
 Dieser Ansatz ist eleganter, weil wir die `ActivatedRoute` nicht injizieren müssen.
-Wir könnten im Input einen völlig anderen Typ angeben – das fällt erst zur Laufzeit auf.
+Außerdem ist diese Komponente einfacher zu testen: Anstatt einen Service auszumocken, müssen wir lediglich in der Testumgebung die benötigten Daten per Input bereitstellen.
 
 ## Fehlerbehandlung
 
@@ -139,7 +147,7 @@ Deshalb sollten wir Fehler in Resolvers immer behandeln.
 
 ### Fehler direkt im Resolver abfangen
 
-Wenn der Resolver mit Observables arbeitet, können wir mit dem RxJS-Operator `catchError` arbeiten und bei einem Fehler z. B. eine Weiterleitung auslösen.
+Wenn der Resolver mit Observables arbeitet, können wir mit dem RxJS-Operator `catchError()` arbeiten und bei einem Fehler z. B. eine Weiterleitung auslösen.
 Dazu kann der Resolver ein `RedirectCommand` zurückgeben.
 
 ```typescript
@@ -149,10 +157,10 @@ import { catchError, of } from 'rxjs';
 
 export const booksResolver: ResolveFn<Book[] | RedirectCommand> =
   (route, state) => {
-    const service = inject(BookStore);
+    const store = inject(BookStore);
     const router = inject(Router);
 
-    return service.getAll().pipe(
+    return store.getAll().pipe(
       catchError(error => {
         console.error('Failed to load books:', error);
         return of(new RedirectCommand(router.parseUrl('/error')));
@@ -193,10 +201,10 @@ import { ResolveFn } from '@angular/router';
 
 export const bookTitleResolver: ResolveFn<string> =
   (route, state) => {
-    const service = inject(BookStore);
+    const store = inject(BookStore);
 
     const isbn = route.paramMap.get('isbn')!;
-    return service.getTitleByISBN(isbn);
+    return store.getTitleByISBN(isbn);
   };
 ```
 
@@ -219,7 +227,7 @@ Resolvers werden von der Elternroute zur Kindroute ausgeführt.
 Wenn eine Elternroute einen Resolver definiert, sind die aufgelösten Daten in Kind-Resolvers verfügbar:
 
 ```typescript
-provideRouter([
+export const routes: Routes = [
   {
     path: 'users/:id',
     resolve: { user: userResolver },
@@ -237,13 +245,19 @@ provideRouter([
       },
     ],
   },
-]);
+];
 ```
+
+Übrigens: In diesem Codebeispiel haben wir den Resolver *inline* direkt in der Route definiert.
+Üblicherweise wird ein Resolver in einer separaten Funktion notiert.
+Für sehr kurze Logik, die nur einmalig verwendet wird, kann hingegen die hier gezeigte Schreibweise sinnvoll sein.
+
 
 ## Ladeindikator während der Navigation anzeigen
 
-Da Resolvers die Navigation blockieren, kann es sinnvoll sein, einen globalen Ladeindikator anzuzeigen.
-Dazu können wir den Navigationszustand des Routers überwachen:
+Da Resolvers bei asynchronen Operationen die Navigation blockieren, kann es sinnvoll sein, einen globalen Ladeindikator anzuzeigen.
+Dazu können wir den Navigationszustand des Routers überwachen.
+Das Signal `currentNavigation` enthält immer Informationen über die laufende Navigation – oder `null`, wenn der Router nicht navigiert.
 
 ```typescript
 import { Component, inject, computed } from '@angular/core';
@@ -259,8 +273,8 @@ import { Router } from '@angular/router';
   `,
 })
 export class App {
-  private router = inject(Router);
-  isNavigating = computed(() => !!this.router.currentNavigation());
+  #router = inject(Router);
+  protected readonly isNavigating = computed(() => !!this.#router.currentNavigation());
 }
 ```
 
@@ -276,21 +290,21 @@ In dieser Zeit sieht der User keine Reaktion – und klickt womöglich mehrfach 
 
 Dieses Verhalten widerspricht der Grundidee einer Single-Page-Anwendung:
 Eine SPA sollte immer schnell reagieren und die Daten zur Laufzeit nachladen.
-Mit Resolvers kehren wir zum Verhalten einer klassischen serverseitig gerenderten Seite zurück: Klick, warten, weiter.
+Mit asynchronen Operationen in Resolvers kehren wir zum Verhalten einer klassischen serverseitig gerenderten Seite zurück: Klick, warten, weiter.
 
-### Die bessere Alternative: Daten direkt in der Komponente laden
+### Die Alternative: Daten direkt in der Komponente laden
 
 Ohne Resolvers wird die Komponente sofort angezeigt, und die Daten werden im Hintergrund geladen.
 Während der Ladezeit können wir einen Ladeindikator oder Platzhalter-Elemente (Ghost Elements) anzeigen.
 Die Navigation ist sofort abgeschlossen, und der User erhält unmittelbares Feedback.
 
-Mit der `resource()`-API oder `httpResource()` geht das besonders elegant:
+Mit der Resource API geht das besonders elegant:
 
 ```typescript
 @Component({ /* ... */ })
-export class MyComponent {
-  private service = inject(BookStore);
-  booksResource = this.service.getAllAsResource();
+export class DashboardPage {
+  #store = inject(BookStore);
+  booksResource = this.#store.getAllAsResource();
 }
 ```
 
@@ -302,17 +316,18 @@ Alternativ können wir Observables mit `toSignal()` in ein Signal umwandeln und 
     @if (books().length) {
       <app-book-list [books]="books()" />
     } @else {
-      <p>Laden...</p>
+      <p>Laden …</p>
     }
   `,
 })
-export class MyComponent {
-  books = toSignal(inject(BookStore).getAll(), { initialValue: [] });
+export class DashboardPage {
+  protected readonly books = toSignal(inject(BookStore).getAll(), { initialValue: [] });
 }
 ```
 
 In beiden Fällen ist die Komponente sofort sichtbar, und die Daten werden asynchron nachgeladen.
-Das ist fast immer die bessere Wahl gegenüber einem Resolver.
+Das ist häufig die bessere Wahl gegenüber einem Resolver.
+
 
 ## Wann sind Resolvers sinnvoll?
 
@@ -330,9 +345,9 @@ import { shareReplay } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-  private http = inject(HttpClient);
+  #http = inject(HttpClient);
 
-  config$ = this.http.get<AppConfig>('/api/config').pipe(
+  readonly config$ = this.#http.get<AppConfig>('/api/config').pipe(
     shareReplay(1)
   );
 }
@@ -348,7 +363,7 @@ export const configResolver: ResolveFn<AppConfig> =
 Beim ersten Aufruf wird der HTTP-Request ausgeführt.
 Bei allen weiteren Navigationen liefert der Operator `shareReplay()` das Ergebnis sofort aus dem Cache – die Navigation wird also nicht verzögert.
 
-Aber auch hier gilt: Wir könnten den `ConfigService` genauso gut direkt in der Komponente injizieren und das `config$`-Observable dort nutzen.
+Aber auch hier gilt: Wir könnten den `ConfigService` genauso gut direkt in der Komponente injizieren und das Observable `config$` dort nutzen.
 Ein Resolver ist also selbst in diesem Fall nicht zwingend notwendig.
 
 ## Empfehlung
