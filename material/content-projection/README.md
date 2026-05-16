@@ -26,7 +26,7 @@ Die Komponente entscheidet dann in ihrem eigenen Template, _wo_ dieser Content d
 ## Content einer Komponente
 
 Um Komponenten in unsere Templates einzubinden, erstellen wir ein Host-Element, das zum Selektor der Komponente passt.
-Üblicherweise notieren wir dieses Element ohne weiteren Inhalt zwischen dem öffnenden und schließenden Tag – oder wir verwenden sogar ein Self-Closing Tag..
+Üblicherweise notieren wir dieses Element ohne weiteren Inhalt zwischen dem öffnenden und schließenden Tag – oder wir verwenden sogar ein Self-Closing Tag.
 Geben wir hingegen dort Inhalte an, sind sie zunächst nicht sichtbar, denn das Element wird vollständig mit dem Template der Komponente gefüllt.
 Der Beispieltext `Lorem ipsum dolor` wird im folgenden Beispiel also nicht dargestellt:
 
