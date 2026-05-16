@@ -15,7 +15,7 @@ In diesem Artikel erklären wir das Konzept im Detail und zeigen, wie du es in d
 
 ## Was ist Content Projection?
 
-Wer bereits mit anderen Frameworks wie Vue.js, Svelte oder mit Web Components gearbeitet hat, kennt dieses Konzept vielleicht unter dem Begriff **Slot**.
+Wer bereits mit anderen Frameworks wie Vue.js, Svelte oder mit Web Components gearbeitet hat, kennt dieses Konzept vielleicht unter dem Begriff _Slot_.
 Der Name stammt vom nativen [`<slot>`-Element](https://developer.mozilla.org/docs/Web/HTML/Element/slot) aus der Spezifikation für Web Components.
 In Angular heißt das Konzept _Content Projection_ (früher auch _Transclusion_ genannt) und funktioniert über das spezielle Element `<ng-content>`.
 
