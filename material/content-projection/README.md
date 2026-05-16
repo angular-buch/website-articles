@@ -116,7 +116,7 @@ Im Template der Komponente können wir nun einzelne Teile des Contents gezielt a
 </div>
 ```
 
-Im `select`-Attribut können wir die gleichen CSS-Selektoren verwenden wie bei [Komponentenselektoren](https://angular.dev/guide/components/selectors).
+Im `select`-Attribut können wir die gleichen CSS-Selektoren verwenden wie bei [Selektoren von Komponenten](https://angular.dev/guide/components/selectors).
 Wir können auch mehrere Selektoren kombinieren (z. B. `select="a,button"`), um mehrere Elemente in denselben Slot zu projizieren.
 
 Jedes Element aus dem Content kann nur **genau einmal** eingesetzt werden.
