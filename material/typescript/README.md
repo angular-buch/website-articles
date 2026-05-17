@@ -787,16 +787,14 @@ Eine weitere wichtige Option ist `target`. Sie legt fest, in welche Version von 
 In einem Angular-Projekt müssen wir uns über die Konfiguration von TypeScript nur wenige Gedanken machen, denn die Einstellungen sind bereits mit sinnvollen Werten vordefiniert.
 In modernen Angular-Projekten ist der Strict Mode immer aktiv.
 
-## Zusammenfassung
+## Fazit
 
 Mit diesem Crashkurs haben wir die wichtigsten Bausteine von TypeScript kennengelernt: moderne Sprachfeatures aus JavaScript wie `const`/`let`, Arrow Functions und die Spread-Syntax, dazu das Typsystem von TypeScript mit Interfaces, Union Types und Generics, und schließlich die Objektorientierung mit Klassen und Property Modifiers.
 
 TypeScript ist strenger als JavaScript, und genau das macht die Sprache so wertvoll.
 Die Typprüfung im Compiler und die Unterstützung durch die IDE helfen uns, Fehler früh zu erkennen und Software wartbar zu entwickeln.
 
-## Fazit
-
-Wenn du diesen Artikel durchgearbeitet hast, steht der Entwicklung moderner Angular-Anwendungen nichts mehr im Wege.
+Wenn du den Artikel durchgearbeitet hast, steht der Entwicklung moderner Angular-Anwendungen nichts mehr im Wege.
 TypeScript kennt zwar noch viele weitere praktische Konstrukte, aber eine solide Angular-Anwendung benötigt nicht zwingend alle.
 Mit dem hier gelernten Werkzeugkasten bist du startklar.
 
