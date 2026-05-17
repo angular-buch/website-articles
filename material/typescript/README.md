@@ -2,6 +2,7 @@
 title: 'Einführung in TypeScript'
 published: 2026-05-14
 lastModified: 2026-05-14
+sortKey: 1
 ---
 
 Für die Entwicklung mit Angular verwenden wir die Programmiersprache **TypeScript**.

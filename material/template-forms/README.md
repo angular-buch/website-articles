@@ -2,6 +2,7 @@
 title: 'Formulare mit Template-Driven Forms'
 published: 2026-04-08
 lastModified: 2026-04-08
+sortKey: 6
 ---
 
 Formulare gehören zu den zentralen Bausteinen jeder Webanwendung.

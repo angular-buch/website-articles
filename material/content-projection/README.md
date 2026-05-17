@@ -2,6 +2,7 @@
 title: "Content Projection: Inhalte an Komponenten übergeben"
 published: 2026-05-15
 lastModified: 2026-05-15
+sortKey: 3
 ---
 
 Wenn wir eine Komponente in unser Template einbinden, notieren wir sie üblicherweise ohne weiteren Inhalt zwischen dem öffnenden und schließenden Tag.
