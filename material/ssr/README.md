@@ -2,7 +2,7 @@
 title: 'Server-Side Rendering (SSR) mit Angular'
 published: 2026-02-23
 lastModified: 2026-03-02
-sortKey: 7
+sortKey: 30
 ---
 
 Single-Page-Anwendungen mit Angular bieten grundsätzlich eine gute Performance:

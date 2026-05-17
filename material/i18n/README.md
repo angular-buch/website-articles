@@ -2,7 +2,7 @@
 title: 'Lokalisierung (l10n) und Internationalisierung (i18n) mit Angular'
 published: 2026-03-02
 lastModified: 2026-03-03
-sortKey: 8
+sortKey: 40
 ---
 
 In diesem Artikel geht es darum, wie wir unsere Angular-Anwendung für verschiedene Sprachräume lokalisieren und in mehreren Sprachen ausliefern können.

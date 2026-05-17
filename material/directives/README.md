@@ -2,7 +2,7 @@
 title: 'Direktiven: Logik für DOM-Elemente'
 published: 2026-04-25
 lastModified: 2026-04-25
-sortKey: 2
+sortKey: 5
 ---
 
 In diesem Artikel geht es um *Direktiven* in Angular.

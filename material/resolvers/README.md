@@ -2,6 +2,7 @@
 title: 'Resolvers: Daten beim Routing vorladen'
 published: 2026-05-17
 lastModified: 2026-05-17
+sortKey: 11
 ---
 
 Der Angular-Router bietet mit *Resolvers* die Möglichkeit, Daten asynchron vorzuladen, bevor eine Komponente aktiviert wird.
