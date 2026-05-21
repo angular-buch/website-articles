@@ -343,44 +343,147 @@ So bleibt das Initial-Bundle schlank, und die Nutzer:innen müssen trotzdem nich
 ## WebMCP: KI-Agenten in Web-Apps integrieren
 
 Ein Thema, das uns in den nächsten Jahren noch intensiv begleiten wird, ist die Integration von KI-Agenten in unsere Anwendungen.
-Mit dem aufkommenden Webstandard **[WebMCP](https://github.com/MiguelsPizza/WebMCP)** lässt sich aus einer Webseite heraus dem Browser – und damit angeschlossenen KI-Agenten – ein Set von **Tools** zur Verfügung stellen.
-
-Tools werden über die neue Browser-API `navigator.modelContext.registerTool()` registriert.
-Externe Agenten wie Claude, ChatGPT-Erweiterungen oder Gemini können diese Tools entdecken und auf Wunsch der Nutzer:innen aufrufen.
+Mit dem aufkommenden Webstandard **[WebMCP](https://github.com/webmachinelearning/webmcp)** (Web Model Context Protocol) lässt sich aus einer Webseite heraus dem Browser – und damit angeschlossenen KI-Agenten – ein Set von **Tools** zur Verfügung stellen.
+Statt dass ein Agent die DOM-Struktur einer Seite analysieren und Klicks simulieren muss, kann eine Web-App ihre Funktionalität als strukturierte Tools deklarieren.
+Externe Agenten wie Gemini, Claude oder ChatGPT-Erweiterungen können diese Tools entdecken und auf Wunsch der Nutzer:innen aufrufen.
 Damit verschmelzen Web-App und Agent: Aktionen, die sonst über die UI ausgeführt werden, können auch direkt aus einem Chat-Kontext heraus ausgelöst werden.
 
-Angular 22 bringt dafür erste Bausteine mit, um diese Welt sauber an die Komponenten- und Service-Architektur anzudocken:
+Angular 22 bringt experimentelle Unterstützung für WebMCP mit und dockt das Konzept sauber an die bestehende Komponenten- und Service-Architektur an.
+Tools lassen sich auf drei Ebenen registrieren:
 
-- Tools können direkt in Services oder Komponenten definiert und über die Dependency Injection bereitgestellt werden.
-- Das Lifecycle-Handling übernimmt Angular: Tools werden automatisch wieder abgemeldet, wenn die zugehörige Komponente zerstört wird.
+- **Global** für die gesamte Anwendung (über `provideExperimentalWebMcpTools()` in der App-Config)
+- **Pro Route** (über `provideExperimentalWebMcpTools()` in den Route-Providers)
+- **In Services** (über `declareExperimentalWebMcpTool()` im Injection Context)
 
-```ts
-// TODO: konkretes Codebeispiel und Quelle prüfen (Doku/PR-Link), sobald die offizielle Doku verfügbar ist
-```
+Angular übernimmt dabei das Lifecycle-Handling: Tools werden automatisch wieder abgemeldet, wenn der zugehörige Injector zerstört wird.
+Wichtig ist, dass Tool-Namen eindeutig sein müssen – eine doppelte Registrierung führt zu einem Laufzeitfehler.
 
-### Signal Forms: `experimentalWebMcpTool`
-
-Besonders charmant ist die Brücke zwischen Signal Forms und WebMCP:
-Mit der Funktion **`experimentalWebMcpTool`** lässt sich ein Formular deklarativ als WebMCP-Tool registrieren.
-Angular leitet das JSON-Schema automatisch aus der Form-Definition ab – inklusive aller Validierungsregeln.
-
-Damit kann ein KI-Agent ein Formular stellvertretend "ausfüllen", ohne dass wir per Hand ein eigenes Tool definieren müssen.
-Praktische Anwendungsfälle gibt es viele: Eine Buchsuche, eine Buchung oder eine strukturierte Datenerfassung, die der Agent im Auftrag der Nutzer:innen vornimmt.
+Ein einfaches Beispiel für ein globales Tool:
 
 ```ts
-// TODO: Beispielcode aus offizieller Doku prüfen / einfügen
-import { form, schema, experimentalWebMcpTool } from '@angular/forms/signals';
+import { provideExperimentalWebMcpTools, Service, inject } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 
-protected readonly bookForm = form(this.bookData, bookFormSchema, {
-  webMcpTool: experimentalWebMcpTool({
-    name: 'create-book',
-    description: 'Legt ein neues Buch im System an.',
-  }),
+@Service()
+class BookStore {
+  search(query: string) { /* ... */ }
+}
+
+bootstrapApplication(AppRoot, {
+  providers: [
+    provideExperimentalWebMcpTools([{
+      name: 'searchBooks',
+      description: 'Searches the book catalog.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: 'Search keywords.' }
+        },
+        required: ['query'],
+        additionalProperties: false,
+      },
+      execute: ({ query }) => {
+        const store = inject(BookStore);
+        return { content: [{ type: 'text', text: store.search(query) }] };
+      },
+    }]),
+  ],
 });
 ```
 
-Wie der Name verrät, ist diese Schnittstelle noch experimentell.
-Die genaue Form der API kann sich also noch ändern – wir behalten das Thema im Auge und werden hier in Kürze einen ausführlichen Blogpost dazu veröffentlichen.
+Der `execute`-Callback wird im Injection Context des zugehörigen Injectors ausgeführt – wir können also direkt `inject()` verwenden, um auf Services zuzugreifen.
+
+### Signal Forms als WebMCP-Tools
+
+Besonders charmant ist die Brücke zwischen Signal Forms und WebMCP:
+Mit der Option `experimentalWebMcpTool` in der `form()`-Funktion lässt sich ein Formular deklarativ als WebMCP-Tool registrieren.
+Angular leitet das JSON-Schema automatisch aus dem initialen Wert des Form-Models ab – inklusive aller hinterlegter Validierungen.
+Damit kann ein KI-Agent ein Formular stellvertretend "ausfüllen" und absenden, ohne dass wir per Hand ein eigenes Tool mit JSON-Schema definieren müssen.
+
+Um das Feature zu aktivieren, registrieren wir zunächst den Provider `provideExperimentalWebMcpForms()`:
+
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideExperimentalWebMcpForms } from '@angular/forms/signals';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideExperimentalWebMcpForms()
+  ]
+};
+```
+
+Anschließend können wir ein Signal Form als WebMCP-Tool deklarieren, indem wir die Option `experimentalWebMcpTool` mit einem Namen und einer Beschreibung übergeben:
+
+```ts
+import { Component, signal } from '@angular/core';
+import { form, required, minLength, FormField } from '@angular/forms/signals';
+
+@Component({/* ... */})
+export class BookCreatePage {
+  readonly #bookFormData = signal({
+    isbn: '',
+    title: '',
+    subtitle: '',
+    authors: [''],
+    description: '',
+    imageUrl: '',
+  });
+
+  protected readonly bookForm = form(
+    this.#bookFormData,
+    (path) => {
+      required(path.title, { message: 'Title is required.' });
+      // ... weitere Validierungen
+    },
+    {
+      experimentalWebMcpTool: {
+        name: 'createBook',
+        description: 'Create a new book',
+      },
+      submission: {
+        action: async (bookForm) => {
+          // Formular absenden ...
+        }
+      }
+    }
+  );
+}
+```
+
+Angular generiert daraus ein WebMCP-Tool, dessen JSON-Schema die Felder des Formular-Modells mit ihren Validierungsregeln enthält.
+Wenn der Agent das Tool aufruft, validiert Angular die Eingaben gegen die definierten Regeln und gibt eventuelle Fehler zurück – der Agent kann sich also selbst korrigieren und es erneut versuchen.
+
+### Testen im Browser
+
+Um WebMCP lokal zu testen, muss das experimentelle Feature im Browser aktiviert werden.
+In Chrome geht das über das Flag:
+
+```text
+chrome://flags/#enable-webmcp-testing
+```
+
+Anschließend steht die Testing-API `navigator.modelContextTesting` in der Browser-Konsole zur Verfügung.
+Damit lässt sich ein registriertes Tool manuell in der Browser-Konsole aufrufen:
+
+```js
+const result = await navigator.modelContextTesting.executeTool(
+  'createBook',
+  JSON.stringify({
+    title: 'Web MCP',
+    isbn: '9871234567890',
+    description: 'A brand new book about Web MCP',
+    authors: ['Claude Opus 4.6'],
+    imageUrl: 'https://picsum.photos/200'
+  })
+);
+console.log(JSON.parse(result));
+```
+
+Wie der Name "experimental" verrät, ist diese Schnittstelle noch nicht stabil.
+Die WebMCP-Spezifikation selbst befindet sich in einem frühen Stadium und wird aktiv weiterentwickelt – die Angular-APIs können sich daher auch außerhalb von Major-Releases ändern.
+
+Alle Details zur WebMCP-Integration in Angular findest du im offiziellen [Angular WebMCP Guide](https://angular.dev/ai/webmcp).
 
 
 ## Deprecation der Webpack-basierten Builder
