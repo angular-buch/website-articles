@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-15
-lastModified: 2026-02-21
+lastModified: 2026-05-21
 keywords:
   - Angular
   - Signals
@@ -321,7 +321,7 @@ To simulate an asynchronous server call, we extend our `RegistrationService` wit
 If the username is `johndoe`, we consider it taken, and the operation resolves to `true`.
 
 ```typescript
-@Injectable({ providedIn: 'root' })
+@Service()
 export class RegistrationService {
   checkUserExists(username: string) {
     return new Promise<boolean>((resolve) => {
