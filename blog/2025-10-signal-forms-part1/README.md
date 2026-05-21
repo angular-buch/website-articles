@@ -5,7 +5,7 @@ mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
 mail2: mail@fmalcher.de
 published: 2025-10-13
-lastModified: 2026-02-21
+lastModified: 2026-05-21
 keywords:
   - Angular
   - Signals
@@ -262,9 +262,9 @@ To demonstrate this, we want to simulate a registration process that involves a 
 This service method returns a `Promise` that resolves after a two-second delay, simulating a network request.
 
 ```typescript
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class RegistrationService {
   registerUser(registrationData: Record<string, any>) {
     return new Promise((resolve) => {

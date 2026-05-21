@@ -1,7 +1,7 @@
 ---
 title: 'Resolvers: Daten beim Routing vorladen'
 published: 2026-05-17
-lastModified: 2026-05-17
+lastModified: 2026-05-21
 sortKey: 11
 ---
 
@@ -340,11 +340,11 @@ Wenn die Daten bereits im Speicher liegen und kein HTTP-Request mehr nötig ist,
 Ein Beispiel: Wir haben einen `ConfigService`, der die Konfiguration beim Start der Anwendung einmalig lädt und anschließend aus dem Cache liefert:
 
 ```typescript
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { shareReplay } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class ConfigService {
   #http = inject(HttpClient);
 

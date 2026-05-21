@@ -1,7 +1,7 @@
 ---
 title: 'Interceptors: HTTP-Requests erfassen und transformieren'
 published: 2026-03-06
-lastModified: 2026-03-06
+lastModified: 2026-05-21
 sortKey: 10
 ---
 
@@ -359,9 +359,9 @@ Diesen Ansatz wollen wir mit einem eigenen Service nachbilden.
 
 ```typescript
 // auth.service.ts
-import { Injectable, signal } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AuthService {
   private _isAuthenticated = signal(true);
 
