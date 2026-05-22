@@ -217,10 +217,9 @@ Eine kleine, aber im Alltag sehr nützliche Verbesserung betrifft die Templates:
 Angular 22 erlaubt nun **Kommentare innerhalb von Template-Elementen** – zusätzlich zu den klassischen HTML-Kommentaren `<!-- ... -->`.
 
 Bisher konnte man Attribute, Inputs oder Event-Bindings in einem mehrzeiligen Element-Tag nicht einfach auskommentieren oder mit einer kurzen Notiz versehen.
-Jetzt akzeptiert der Template-Parser auch JavaScript-typische Kommentare im Stil `// ...` für einzelne Zeilen sowie `/* ... */` für mehrzeilige Kommentare – direkt zwischen den Attributen.
+Jetzt akzeptiert der Template-Parser auch JavaScript-typische Kommentare im Stil `// ...` für einzelne Zeilen sowie `/* ... */` für mehrzeilige Kommentare direkt zwischen den Attributen.
 
 ```html
-<!-- BooksOverviewPage component template -->
 <app-book-card
   // Pass a book as input
   [book]="b"
@@ -231,9 +230,9 @@ Jetzt akzeptiert der Template-Parser auch JavaScript-typische Kommentare im Stil
 
 ## Debounced Signals
 
-Mit Angular 22 zieht eine neue experimentelle Funktion in `@angular/core` ein: **`debounced()`**.
-Sie ermöglicht es, ein Signal zu *entprellen*, also seinen Wert erst nach einer kurzen Wartezeit weiterzureichen.
-Das ist ein Klassiker bei Such-Eingabefeldern: Während die Nutzer:innen tippen, soll nicht nach jedem Tastendruck eine Anfrage abgeschickt werden – sondern erst, wenn die Eingabe zur Ruhe gekommen ist.
+Im neuen Release wurde die experimentelle Funktion **`debounced()`** vorgestellt.
+Damit können wir ein Signal *entprellen*, sodass es seinen Wert erst nach einer kurzen Wartezeit ausgibt.
+Das ist ein Klassiker bei Such-Eingabefeldern: Während der Eingabe soll nicht nach jedem Tastendruck eine Anfrage abgeschickt werden, sondern erst, wenn die Eingabe zur Ruhe gekommen ist.
 
 Bisher war dieses Muster fest in der Welt von RxJS verankert: Man musste das Signal mit `toObservable()` in einen Observable umwandeln, `debounceTime()` verwenden und das Ergebnis mit `toSignal()` zurückkonvertieren.
 Mit `debounced()` geht das nun ohne Umwege direkt in der Signal-Welt.
@@ -243,10 +242,10 @@ import { debounced, resource, signal } from '@angular/core';
 
 @Component({/* ... */})
 export class Search {
-  query = signal('');
-  debouncedQuery = debounced(this.query, 300);
+  protected readonly query = signal('');
+  protected readonly debouncedQuery = debounced(this.query, 300);
 
-  results = resource({
+  protected readonly results = resource({
     params: () => this.debouncedQuery.value(),
     loader: ({ params }) => fetchResults(params),
   });
@@ -255,11 +254,13 @@ export class Search {
 
 Die Funktion `debounced()` liefert eine `Resource` zurück, deren Wert erst nach Ablauf der angegebenen Wartezeit (in Millisekunden) aktualisiert wird.
 Während des Wartens hat die Resource den Status `loading`, danach `resolved`.
-Statt einer festen Millisekundenzahl kann auch eine eigene Wait-Funktion übergeben werden, die ein `Promise<void>` zurückgibt – damit lassen sich z. B. unterschiedliche Wartezeiten je nach Eingabelänge realisieren.
+Statt einer festen Millisekundenzahl kann auch eine eigene Wait-Funktion übergeben werden, die ein `Promise<void>` zurückgibt.
+Damit lassen sich z. B. unterschiedliche Wartezeiten je nach Eingabelänge realisieren.
 
 Wichtig: `debounced()` muss in einem Injection Context aufgerufen werden, damit Angular die zugehörigen Timer beim Zerstören des Injectors automatisch aufräumen kann.
 
-In den Signal Forms gibt es zusätzlich die verwandte Funktion `debounce()`, mit der sich asynchrone Validatoren entprellen lassen – etwa, um nicht bei jedem Tastendruck eine Server-seitige Eindeutigkeitsprüfung anzustoßen.
+In Signal Forms gibt es zusätzlich die verwandte Schema-Funktion `debounce()`, mit der sich asynchrone Validatoren entprellen lassen.
+Dieses Hilfsmittel können wir z. B. einsetzen, um nicht bei jedem Tastendruck eine serverseitige Eindeutigkeitsprüfung anzustoßen.
 
 
 ## Der neue Decorator `@Service()`
