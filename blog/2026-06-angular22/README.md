@@ -320,41 +320,41 @@ Wichtig: `debounced()` muss in einem Injection Context aufgerufen werden, damit 
 In Signal Forms gibt es zusätzlich die verwandte Schema-Funktion `debounce()`, mit der sich asynchrone Validatoren entprellen lassen.
 Dieses Hilfsmittel können wir z. B. einsetzen, um nicht bei jedem Tastendruck eine serverseitige Eindeutigkeitsprüfung anzustoßen.
 
+
 ## `injectAsync()`: Services lazy laden
 
-Ein weiteres neues Werkzeug im Bereich Dependency Injection ist die Funktion **`injectAsync()`** aus `@angular/core`.
+Ein weiteres neues Werkzeug im Bereich Dependency Injection ist die Funktion **`injectAsync()`**.
 Damit lassen sich Services und ihre Abhängigkeiten **lazy laden**, ohne dass sie im initialen Bundle der Anwendung landen.
 
 Bisher war das Pattern für lazy geladene Services umständlich:
 Man musste den `Injector` per `inject()` holen, den Service dynamisch importieren und das Ergebnis selbst über `Injector.get()` auflösen und cachen.
 Mit `injectAsync()` übernimmt Angular all diese Schritte automatisch.
 Die Funktion bekommt einen Loader übergeben, der die Service-Klasse über einen dynamischen `import()` zurückgibt.
-Beim ersten Aufruf des zurückgegebenen Promise wird der Service geladen, durch die DI aufgelöst und für nachfolgende Aufrufe gecacht.
+Um den Service zu verwenden, müssen wir selbst die Promise verarbeiten, die von der Funktion ausgegeben wird, z. B. mit `async`/`await`.
+Beim Aufruf wird die Klasse durch die Dependency Injection aufgelöst und für nachfolgende Aufrufe gecacht.
 
 ```ts
 import { Component, injectAsync, onIdle, signal } from '@angular/core';
 
-@Component({/* ... */})
+@Component({ /* ... */ })
 export class PostEditor {
-  protected readonly content = signal('');
-
-  private markdownService = injectAsync(
-    () => import('../markdown.service').then(m => m.MarkdownService),
+  #markdownParser = injectAsync(
+    () => import('../markdown-parser').then(m => m.MarkdownParser),
     { prefetch: onIdle }
   );
 
   async preview() {
-    const svc = await this.markdownService();
+    const svc = await this.#markdownParser();
     // ...
   }
 }
 ```
 
-Der Vorteil ist greifbar: Schwere Abhängigkeiten – etwa Markdown-Parser, Charting-Bibliotheken oder PDF-Renderer – tauchen nicht mehr im Initial-Bundle auf.
+Schwere Abhängigkeiten wie Markdown-Parser, Charting-Bibliotheken oder PDF-Renderer tauchen so nicht mehr im Initial-Bundle auf.
 Sie werden erst dann nachgeladen, wenn die jeweilige Funktion aufgerufen wird.
 
 Optional kann eine **Prefetch-Strategie** angegeben werden.
-Mit `prefetch: onIdle` lädt Angular die Abhängigkeit ruhig im Hintergrund, sobald der Browser idle ist.
+Mit `prefetch: onIdle` lädt Angular die Abhängigkeit im Hintergrund, sobald der Browser idle ist.
 So bleibt das Initial-Bundle schlank, und die Nutzer:innen müssen trotzdem nicht warten, wenn sie das Feature später aufrufen – die Datei ist dann bereits im Cache.
 
 
