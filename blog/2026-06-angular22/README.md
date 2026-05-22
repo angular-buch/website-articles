@@ -153,21 +153,19 @@ ng add @angular/aria
 ```
 
 
-## HttpClient: Fetch-API ist jetzt der Default
+## HttpClient: Fetch API ist jetzt der Default
 
-Der `HttpClient` hat eine kleine, aber wirkungsvolle Veränderung erfahren:
-Mit Angular 22 ist die **Fetch-API** der neue Standard.
-Bisher musste die Fetch-Variante explizit über `withFetch()` aktiviert werden – andernfalls verwendete der `HttpClient` das ältere `XMLHttpRequest`.
-Nun wird `FetchBackend` automatisch verwendet, ganz ohne zusätzliche Konfiguration.
+Der `HttpClient` nutzt nun unter der Haube standardmäßig die moderne Fetch API des Browsers.
+Bisher musste Fetch explizit über `withFetch()` aktiviert werden, ansonsten verwendete der `HttpClient` das ältere `XMLHttpRequest`.
 
-Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, reicht es, den `HttpClient` per `inject()` in unseren Komponenten und Services zu nutzen.
-Ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig – Fetch funktioniert ab Angular 22 ganz von allein.
+Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, müssen wir für die EInrichtung nichts weiter tun: Wir können den `HttpClient` direkt per `inject()` in der Anwendung nutzen.
+Fetch funktioniert ab Angular 22 ganz von allein, und ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig.
 
 ```ts
 @Service()
 export class BookStore {
   // HttpClient ist out of the box verfügbar – mit Fetch als Default
-  private http = inject(HttpClient);
+  #http = inject(HttpClient);
 }
 ```
 
