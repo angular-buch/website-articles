@@ -371,12 +371,13 @@ Wir haben dem Thema einen eigenen ausführlichen Artikel gewidmet:
 [**WebMCP: KI-Agenten in Angular-Apps integrieren**](/blog/2026-05-webmcp)
 
 
-## Deprecation der Webpack-basierten Builder
+## Webpack-basierte Builder sind deprecated
 
 Auf der Werkzeug-Seite zieht das Angular-Team einen weiteren Schlussstrich:
 Die alten **Webpack-basierten Builder** (`@angular-devkit/build-angular:browser` und `@angular-devkit/build-angular:dev-server`) sind mit Angular 22 offiziell als **deprecated** markiert.
 
-Schon seit einigen Versionen ist der esbuild-basierte `application`-Builder der Standard für neue Projekte – er ist deutlich schneller, unterstützt SSR direkt und integriert sich nahtlos in den Vitest-Test-Runner.
+Schon seit einigen Versionen ist der esbuild-basierte `application`-Builder der Standard für neue Projekte.
+Er ist deutlich schneller, unterstützt SSR direkt und integriert sich nahtlos in den Vitest-Test-Runner.
 Wer noch auf einer Webpack-Konfiguration unterwegs ist, sollte spätestens jetzt die Migration zum neuen Builder einplanen.
 Die Angular CLI stellt dafür ein passendes Migrationsskript bereit, das die `angular.json` automatisch umstellt:
 
