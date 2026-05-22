@@ -30,7 +30,7 @@ Es gibt wieder Neuigkeiten aus der Angular-Welt: **Angular 22** ist da!
 Dieses Release zieht viele Konzepte über die Ziellinie:
 **Signal Forms**, **Resource API** und **`@angular/aria`** sind stable.
 Der `HttpClient` setzt nun standardmäßig auf die moderne Fetch API, und es wurde ein neuer `@Service()`-Decorator eingeführt.
-Diese und einige weietre Neuerungen stellen wir in diesem Blogpost vor.
+Diese und einige weitere Neuerungen stellen wir in diesem Blogpost vor.
 
 <!-- Im [Angular-Blog](TODO) findest du die offiziellen Informationen zum neuen Release.-->
 Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng update` verwenden, siehe [Angular Update Guide](https://angular.dev/update-guide).
@@ -64,7 +64,7 @@ Damit hat Angular einen ganz neuen Ansatz für die Verarbeitung von Formularen i
 Die Grundidee: Die Formulardaten werden in einem Signal gespeichert, das von uns verwaltet wird.
 Aus dieser Datenstruktur leitet Angular automatisch die Formularstruktur ab.
 Validierungsregeln werden über eine schemabasierte API mit Funktionen wie `required()`, `minLength()` oder `validate()` deklariert.
-Für die Datenbindung kommt im Template kommt nur noch eine einzige Direktive zum Einsatz: `[formField]`.
+Für die Datenbindung kommt im Template nur noch eine einzige Direktive zum Einsatz: `[formField]`.
 
 ```ts
 import { schema, form, FormField, required, minLength } from '@angular/forms/signals';
@@ -241,7 +241,7 @@ Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komp
 Der `HttpClient` nutzt nun unter der Haube standardmäßig die moderne Fetch API des Browsers.
 Bisher musste Fetch explizit über `withFetch()` aktiviert werden, ansonsten verwendete der `HttpClient` das ältere `XMLHttpRequest`.
 
-Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, müssen wir für die EInrichtung nichts weiter tun: Wir können den `HttpClient` direkt per `inject()` in der Anwendung nutzen.
+Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, müssen wir für die Einrichtung nichts weiter tun: Wir können den `HttpClient` direkt per `inject()` in der Anwendung nutzen.
 Fetch funktioniert ab Angular 22 ganz von allein, und ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig.
 
 ```ts
@@ -292,7 +292,7 @@ Im neuen Release wurde die experimentelle Funktion **`debounced()`** vorgestellt
 Damit können wir ein Signal *entprellen*, sodass es seinen Wert erst nach einer kurzen Wartezeit ausgibt.
 Das ist ein Klassiker bei Such-Eingabefeldern: Während der Eingabe soll nicht nach jedem Tastendruck eine Anfrage abgeschickt werden, sondern erst, wenn die Eingabe zur Ruhe gekommen ist.
 
-Bisher war dieses Muster fest in der Welt von RxJS verankert: Man musste das Signal mit `toObservable()` in einen Observable umwandeln, `debounceTime()` verwenden und das Ergebnis mit `toSignal()` zurückkonvertieren.
+Bisher war dieses Muster fest in der Welt von RxJS verankert: Man musste das Signal mit `toObservable()` in ein Observable umwandeln, `debounceTime()` verwenden und das Ergebnis mit `toSignal()` zurückkonvertieren.
 Mit `debounced()` geht das nun ohne Umwege direkt in der Signal-Welt.
 
 ```ts
