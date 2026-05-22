@@ -388,7 +388,7 @@ ng update @angular/cli --name use-application-builder
 Eine Entfernung der Webpack-Builder ist in einem der kommenden Major-Releases geplant.
 
 
-## fakeAsync zu Vitest Fake Timers migrieren
+## Testing: `fakeAsync` zu Vitest Fake Timers migrieren
 
 Mit Angular 21 wurde Vitest zum neuen Standard-Test-Runner.
 Wer bestehende Tests migriert, stößt früher oder später auf eine Stolperfalle:
