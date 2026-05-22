@@ -233,7 +233,7 @@ Wer schon konsequent auf Signals setzt, muss in seinen eigenen Komponenten in de
 
 Besondere Vorsicht ist bei eigenen Bibliotheken gefragt:
 Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komponenten sich auf das alte Verhalten verlassen – die `changeDetection`-Property explizit auf `ChangeDetectionStrategy.Eager` setzen, damit nichts unerwartet bricht.
-
+`Eager` ist der neue Name für die alte Strategie `Default`.
 
 
 ## HttpClient: Fetch API ist jetzt der Default
