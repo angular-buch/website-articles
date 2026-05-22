@@ -1,7 +1,7 @@
 ---
 title: 'Guards: Routen absichern'
-published: 2026-05-17
-lastModified: 2026-05-17
+published: 2026-05-23
+lastModified: 2026-05-23
 ---
 
 Normalerweise kann jede Route einer Angular-Anwendung uneingeschränkt betreten und wieder verlassen werden.
