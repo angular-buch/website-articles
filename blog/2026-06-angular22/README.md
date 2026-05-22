@@ -61,10 +61,10 @@ Das [Beispielprojekt "BookManager"](https://bm1.angular-buch.com) aus dem Buch l
 Mit Angular 21 wurden die *Signal Forms* als experimentelles Feature eingeführt – jetzt, ein halbes Jahr später, sind sie offiziell **stabil**.
 Damit hat Angular einen ganz neuen Ansatz für die Verarbeitung von Formularen im Werkzeugkasten, der konsequent auf Signals setzt.
 
-Die Grundidee ist denkbar einfach: Die Formulardaten werden als ganz normales Signal geführt.
-Aus dieser Datenstruktur leitet Angular automatisch die Form-Struktur ab.
-Validierungsregeln werden über eine schemabasierte API mit Funktionen wie `schema()`, `required()` oder `minLength()` deklariert.
-Im Template kommt nur noch eine einzige Direktive zum Einsatz: `[formField]`.
+Die Grundidee: Die Formulardaten werden in einem Signal gespeichert, das von uns verwaltet wird.
+Aus dieser Datenstruktur leitet Angular automatisch die Formularstruktur ab.
+Validierungsregeln werden über eine schemabasierte API mit Funktionen wie `required()`, `minLength()` oder `validate()` deklariert.
+Für die Datenbindung kommt im Template kommt nur noch eine einzige Direktive zum Einsatz: `[formField]`.
 
 ```ts
 import { schema, form, FormField, required, minLength } from '@angular/forms/signals';
@@ -87,7 +87,7 @@ export class BookForm {
 }
 ```
 
-Mit der Stabilisierung sind die APIs und Konzepte nun verlässlich – der Einsatz in Produktion ist offiziell empfohlen.
+Die Schnittstellen und Konzepte sind stabil, und der Einsatz in Produktion wird offiziell empfohlen.
 Wir gehen davon aus, dass *Reactive Forms* und *Template-Driven Forms* perspektivisch durch Signal Forms abgelöst werden.
 Bestehende Reactive Forms müssen aber nicht über Bord geworfen werden:
 Über die Compat-Schicht `@angular/forms/signals/compat` lassen sich beide Welten miteinander verzahnen.
@@ -99,6 +99,8 @@ In den letzten Monaten haben wir uns intensiv mit Signal Forms beschäftigt und 
 - [**Part 2: Advanced Validation and Schema Patterns**](/blog/2025-10-signal-forms-part2)
 - [**Part 3: Child Forms and Custom UI Controls**](/blog/2025-10-signal-forms-part3)
 - [**Part 4: Metadata and Accessibility Handling**](/blog/2025-12-signal-forms-part4)
+
+Auch in unserem neuen Angular-Buch findest du drei ausführliche Kapitel zu Signal Forms.
 
 
 ## Resource API ist stable
