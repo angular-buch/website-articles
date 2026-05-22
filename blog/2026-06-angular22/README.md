@@ -139,12 +139,13 @@ Für schreibende Operationen wird allerdings weiterhin der `HttpClient` eingeset
 
 ## Angular ARIA ist stable
 
-Auch das mit Angular 21 eingeführte Paket [`@angular/aria`](https://angular.dev/guide/aria/overview) hat den Schritt aus der Developer Preview heraus geschafft und ist mit Angular 22 **stable**.
-Das Paket bietet eine Sammlung von Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) umsetzen – von Accordion über Combobox bis hin zu Tabs und Tree.
+Das Paket [`@angular/aria`](https://angular.dev/guide/aria/overview) bietet eine Sammlung von Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) umsetzen – von Accordion über Combobox bis hin zu Tabs und Tree.
 Tastaturinteraktionen, ARIA-Attribute, Fokus-Management und Screen-Reader-Unterstützung sind dabei bereits eingebaut.
 Wir liefern lediglich die HTML-Struktur, das Styling und die fachliche Logik.
 
-Mit dem Sprung zu stable können wir die Direktiven nun bedenkenlos in produktiven Anwendungen einsetzen.
+
+Das neue Paket gilt ab Angular 22 ebenfalls als **stable**.
+Wir können die Direktiven nun also bedenkenlos in produktiven Anwendungen einsetzen.
 Die Installation erfolgt wie gewohnt über die Angular CLI:
 
 ```bash
