@@ -98,7 +98,7 @@ class BookStore {
   search(query: string) { /* ... */ }
 }
 
-bootstrapApplication(AppRoot, {
+bootstrapApplication(App, {
   providers: [
     provideExperimentalWebMcpTools([{
       name: 'searchBooks',
@@ -140,7 +140,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./dashboard-page').then(m => m.DashboardPage),
     providers: [
       provideExperimentalWebMcpTools([{
         name: 'exportDashboardReports',
