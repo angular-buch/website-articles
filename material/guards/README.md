@@ -55,15 +55,15 @@ Die Guards werden als Array aufgelistet, denn es können auch mehrere Guards fü
 In diesem Fall werden sie der Reihe nach durchlaufen.
 
 ```typescript
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'foo',
-    component: FooComponent,
+    component: FooPage,
     canActivate: [myActivateGuard]
   },
   {
     path: 'bar',
-    component: BarComponent,
+    component: BarPage
     canDeactivate: [leaveGuard]
   }
 ];
@@ -114,7 +114,7 @@ export const myActivateGuard: CanActivateFn =
   };
 ```
 
-### Umleitung mit UrlTree
+### Umleitung mit `UrlTree`
 
 Wenn eine Navigation nicht erlaubt ist, kann es sinnvoll sein, stattdessen zu einer anderen Route umzuleiten.
 Dafür können wir aus dem Guard ein Objekt vom Typ `UrlTree` zurückgeben.
@@ -139,7 +139,7 @@ export const myActivateGuard: CanActivateFn = () => {
 
 Alternativ können wir einen `UrlTree` auch mit der Methode `Router.createUrlTree()` erzeugen.
 Hier übergeben wir ein Array von Routensegmenten.
-Außerdem können wir im zweiten Argument ein Objekt mit weiteren Optionen notieren, z. B. den Bezugspunkt für eine relative URL:
+Außerdem können wir im zweiten Argument ein Objekt mit weiteren Optionen notieren, z. B. den Bezugspunkt für eine relative URL.
 
 ```typescript
 import { inject } from '@angular/core';
@@ -174,7 +174,7 @@ export const myActivateGuard: CanActivateFn = () => {
 };
 ```
 
-### Warum UrlTree statt Router.navigate()?
+### Warum `UrlTree` statt `Router.navigate()`?
 
 Theoretisch könnten wir aus dem Guard heraus auch direkt die Methode `Router.navigate()` aufrufen, um zu einer anderen Route zu wechseln.
 Praktisch hat der `UrlTree` (bzw. das `RedirectCommand`) allerdings einen entscheidenden Vorteil, wenn mehrere Guards aktiv sind, die asynchron arbeiten.
@@ -379,7 +379,9 @@ Wenn wir die Basisroute für das Lazy Loading mit dem Guard sichern, sind auch a
 
 In einer produktiven Anwendung erhalten wir den Status der Authentifizierung möglicherweise nicht synchron.
 Unser `AuthService` bietet die Information zusätzlich über ein Observable an.
-In diesem Fall können wir den Guard asynchron implementieren:
+In diesem Fall können wir den Guard asynchron implementieren.
+Er gibt dann ein Observable oder eine Promise zurück.
+Der Router wartet auf die asynchrone Operation und entscheidet dann mit dem Ergebnis, ob und wie die Navigation ausgeführt wird.
 
 ```typescript
 import { inject } from '@angular/core';
@@ -404,7 +406,7 @@ export const authGuard: CanActivateFn = () => {
 
 Es ist wichtig, dass wir die Länge des Datenstroms mithilfe von `take(1)` begrenzen: Wir sind nur an einem einzigen Wert interessiert, nicht an allen danach folgenden.
 
-## Diskussion: Den richtigen Guard-Typ wählen
+## Diskussion: den richtigen Guard-Typ wählen
 
 Die Wahl des Guard-Typs hängt davon ab, *wann* die Prüfung stattfinden soll:
 
@@ -426,7 +428,7 @@ Gibt einer der Guards `false` oder einen `UrlTree` zurück, wird die Navigation 
 const routes: Routes = [
   {
     path: 'admin',
-    component: AdminComponent,
+    component: AdminPage,
     canActivate: [authGuard, adminRoleGuard]
   },
 ];
