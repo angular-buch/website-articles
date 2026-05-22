@@ -105,18 +105,15 @@ Auch in unserem neuen Angular-Buch findest du drei ausführliche Kapitel zu Sign
 
 ## Resource API ist stable
 
-Die zweite große Neuerung betrifft das Laden asynchroner Daten:
-Die **Resource API** ist mit Angular 22 stabil.
-Konkret betrifft das die Funktionen `resource()` und `rxResource()` aus `@angular/core` sowie `httpResource()` aus `@angular/common/http`.
-
+Die Resource API wird mit Angular 22 ebenfalls als *stable* markiert!
 Eine Resource repräsentiert einen asynchron geladenen Datensatz.
-Sie liefert nicht nur den geladenen Wert, sondern auch reaktive Statusinformationen wie `isLoading`, `error` und `value` – jeweils als Signal.
-Damit lässt sich der gesamte Datenladeprozess elegant in Komponenten abbilden, ohne sich um Subscriptions oder manuelles State-Management kümmern zu müssen.
+Sie liefert nicht nur den geladenen Wert, sondern auch reaktive Statusinformationen wie `isLoading`, `error` und `value`, jeweils als Signal.
+Damit lässt sich der gesamte Prozess zum Laden von Daten elegant abbilden, ohne sich um Subscriptions oder manuelles State-Management kümmern zu müssen.
 
 Die drei Varianten unterscheiden sich in ihrem Loader:
 
-- `resource()` arbeitet mit Promise-basierten Loadern.
-- `rxResource()` ist die Brücke zur RxJS-Welt: Hier liefert der Loader einen Observable.
+- `resource()` arbeitet mit einem Promise-basierten Loader.
+- `rxResource()` ist die Brücke zur RxJS-Welt: Die Resource verarbeitet ein Observable.
 - `httpResource()` ist die HTTP-spezifische Variante. Sie nutzt unter der Haube den `HttpClient` und unterstützt damit auch alle HTTP-Interceptors.
 
 ```ts
@@ -124,18 +121,20 @@ import { httpResource } from '@angular/common/http';
 
 @Service()
 export class BookStore {
-  selectedIsbn = signal<string | null>(null);
+  readonly selectedIsbn = signal<string | null>(null);
 
-  book = httpResource<Book>(() => {
+  readonly book = httpResource<Book>(() => {
     const isbn = this.selectedIsbn();
     return isbn ? `/api/books/${isbn}` : undefined;
   });
 }
 ```
 
-Wir haben die Idee der Resource API bereits in einem ausführlichen Blogpost vorgestellt:
+Wir haben die Resource API bereits in einem ausführlichen Blogpost vorgestellt:
 [**Reactive Angular: Daten laden mit der Resource API**](/blog/2024-10-resource-api).
 Mit der Stabilisierung in Angular 22 ist das dort beschriebene Vorgehen offiziell der empfohlene Weg, um in Komponenten signal-basiert Daten zu laden.
+
+Für schreibende Operationen wird allerdings weiterhin der `HttpClient` eingesetzt. Eine Resource eignet sich nur, um Daten zu laden, die als Signals bereitgestellt werden.
 
 
 ## Angular ARIA ist stable
