@@ -23,7 +23,6 @@ keywords:
 language: de
 header: angular22.jpg
 sticky: true
-hidden: true
 isUpdatePost: true
 ---
 
@@ -404,4 +403,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<small>**Titelbild:** TODO. Foto von Ferdinand Malcher</small>
+<small>**Titelbild:** Joshua Tree National Park, Kalifornien, USA, 2019. Foto von Ferdinand Malcher</small>
