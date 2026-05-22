@@ -21,17 +21,52 @@ header: webmcp.jpg
 
 Die Integration von KI-Agenten in Web-Anwendungen wird in den nächsten Jahren ein zentrales Thema.
 Mit dem aufkommenden Webstandard **WebMCP** (Web Model Context Protocol) können Webseiten dem Browser – und damit angeschlossenen KI-Agenten – strukturierte **Tools** zur Verfügung stellen.
+Heute müssen Agenten den DOM parsen, den Accessibility Tree auswerten oder Screenshots analysieren – das ist langsam, fehleranfällig und anfällig für Prompt-Injection-Angriffe.
+WebMCP bietet einen besseren Weg: Die Webseite deklariert ihre Fähigkeiten, und der Agent ruft sie direkt auf.
+
 Angular bringt ab Version 22 experimentelle Unterstützung für WebMCP mit.
 In diesem Artikel zeigen wir, wie das Ganze funktioniert und wie wir es in unseren Angular-Anwendungen einsetzen können.
 
 ## Was ist WebMCP?
 
 [WebMCP](https://github.com/webmachinelearning/webmcp) ist ein neuer Webstandard, der von der [W3C Web Machine Learning Community Group](https://www.w3.org/community/webmachinelearning/) entwickelt wird.
-Die Idee: Statt dass ein KI-Agent die DOM-Struktur einer Seite analysieren und Klicks simulieren muss, kann eine Web-App ihre Funktionalität als strukturierte Tools deklarieren.
+Die Idee: Statt dass ein KI-Agent die DOM-Struktur einer Seite analysieren, den Accessibility Tree parsen oder Screenshots auswerten muss, kann eine Web-App ihre Funktionalität als strukturierte Tools deklarieren.
 Externe Agenten wie Gemini, Claude oder ChatGPT-Erweiterungen können diese Tools entdecken und auf Wunsch der Nutzer:innen aufrufen.
 
-Damit verschmelzen Web-App und Agent: Aktionen, die sonst über die UI ausgeführt werden, können auch direkt aus einem Chat-Kontext heraus ausgelöst werden.
-Praktische Anwendungsfälle gibt es viele – von der Buchsuche über Formularerfassung bis hin zu komplexen Buchungsprozessen.
+Der Unterschied ist drastisch: Wo ein Agent heute über 40 DOM-Knoten parsen muss, um ein Formular zum Anlegen eines Buchs zu verstehen, reichen mit WebMCP ein oder zwei deklarierte Tools, die direkt aufgerufen werden – schneller, zuverlässiger und mit weniger Token-Verbrauch.
+
+> Eine eindrucksvolle Visualisierung dieses Unterschieds bietet die [WebMCP-Demo von Sarah Drasner](https://webmcp-demo-sdras.netlify.app/).
+> Dort wird dasselbe Widget einmal per DOM-Scraping und einmal per WebMCP-Tools gesteuert – der Unterschied ist sofort sichtbar.
+
+### Wie funktioniert WebMCP?
+
+Der Ablauf lässt sich in drei Schritte zusammenfassen:
+
+1. **Die Webseite registriert Tools:** Auf jeder Seite können Aktionen deklariert werden, die ein Agent ausführen darf. Jedes Tool hat einen Namen, eine Beschreibung und ein JSON-Schema für die erwarteten Parameter.
+2. **Der Browser exponiert die Tools:** Ein WebMCP-fähiger Browser (oder eine Browser-Extension) sammelt die registrierten Tools und stellt sie dem angeschlossenen Agenten zur Verfügung.
+3. **Der Agent ruft statt zu raten:** Der Agent sieht einen klaren Vertrag, liefert strukturierte Argumente – und unser Code erledigt den Rest. Die Nutzer:innen behalten dabei die Kontrolle über Berechtigungen und Bestätigungen.
+
+### Zwei APIs: Imperativ und Deklarativ
+
+Die WebMCP-Spezifikation definiert zwei Wege, um Tools zu registrieren:
+
+- **Imperative API:** Tools werden per JavaScript über `navigator.modelContext.registerTool()` registriert. Das ist der Weg, den Angular unter der Haube nutzt.
+- **Deklarative API:** Für einfache Formulare reichen HTML-Attribute wie `toolname`, `tooldescription` und `toolparamdescription` direkt am `<form>`-Element – ganz ohne JavaScript.
+
+```html
+<!-- Deklarative API: Formular als WebMCP-Tool per HTML-Attribute -->
+<form toolname="createBook"
+      tooldescription="Create a new book in the catalog"
+      toolautosubmit>
+  <input name="title" toolparamdescription="Book title" required>
+  <input name="isbn" toolparamdescription="ISBN (13 digits)" required>
+  <textarea name="description" toolparamdescription="Book description"></textarea>
+  <button type="submit">Create</button>
+</form>
+```
+
+Für Angular-Anwendungen ist die imperative API relevanter, weil Angular die Tool-Registrierung in seine DI- und Lifecycle-Mechanismen integriert.
+Die deklarative API ist aber ein guter Einstieg für einfache Seiten ohne Framework.
 
 > **Wichtig:** Die WebMCP-Spezifikation befindet sich noch in einem frühen Stadium.
 > Die APIs sind experimentell und können sich auch außerhalb von Major-Releases ändern.
@@ -281,6 +316,18 @@ const result = await navigator.modelContextTesting.executeTool(
 );
 console.log(JSON.parse(result));
 ```
+
+### Chrome Extension für WebMCP
+
+Zusätzlich gibt es eine [WebMCP Chrome Extension](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd), die das Debugging deutlich erleichtert.
+Mit der Extension können wir:
+
+- Sehen, welche Tools auf einer Seite registriert sind (über die `navigator.modelContext`-API)
+- Tools manuell aufrufen und die Ergebnisse inspizieren
+- Prüfen, ob das JSON-Schema korrekt definiert ist
+- Per natürlicher Sprache mit dem Agenten interagieren und testen, ob er die richtigen Tools erkennt und aufruft
+
+### Unit-Tests
 
 Für automatisierte Unit-Tests empfiehlt die Angular-Dokumentation das Paket [`@mcp-b/webmcp-polyfill`](https://www.npmjs.com/package/@mcp-b/webmcp-polyfill) als Mock-Implementierung der Browser-API.
 
