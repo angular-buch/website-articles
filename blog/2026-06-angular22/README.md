@@ -362,10 +362,10 @@ So bleibt das Initial-Bundle schlank, und die Nutzer:innen müssen trotzdem nich
 
 Angular 22 bringt experimentelle Unterstützung für **[WebMCP](https://github.com/webmachinelearning/webmcp)** (Web Model Context Protocol) mit.
 Dieser aufkommende Webstandard ermöglicht es, aus einer Web-App heraus strukturierte Tools für KI-Agenten im Browser bereitzustellen.
-Statt DOM-Scraping und simulierten Klicks können Agenten wie Gemini oder Claude die deklarierten Tools direkt aufrufen – etwa um ein Formular auszufüllen oder eine Suche auszulösen.
+Statt DOM-Scraping und simulierten Klicks können Agenten wie Claude oder Gemini die deklarierten Tools direkt aufrufen, z. B. um ein Formular auszufüllen oder eine Suche auszulösen.
 
 Angular dockt WebMCP sauber an die bestehende Architektur an: Tools lassen sich global, pro Route oder in Services und Komponenten registrieren.
-Besonders elegant ist die Brücke zu Signal Forms: Mit der Option `experimentalWebMcpTool` in der `form()`-Funktion wird ein Formular automatisch als WebMCP-Tool exponiert – inklusive JSON-Schema und Validierung.
+Besonders elegant ist die Brücke zu Signal Forms: Mit der Option `experimentalWebMcpTool` in der Funktion `form()` wird ein Formular automatisch als WebMCP-Tool exponiert, inklusive JSON-Schema und Validierung.
 
 Wir haben dem Thema einen eigenen ausführlichen Artikel gewidmet:
 [**WebMCP: KI-Agenten in Angular-Apps integrieren**](/blog/2026-05-webmcp)
