@@ -348,4 +348,4 @@ Ferdinand, Danny und Johannes**
 
 <hr>
 
-<small>**Titelbild:** TODO. Foto von TODO</small>
+<small>**Titelbild:** generiert mit Adobe Firefly, bearbeitet</small>
