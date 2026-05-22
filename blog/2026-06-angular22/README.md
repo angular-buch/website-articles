@@ -47,6 +47,15 @@ Die folgenden Versionen von TypeScript und Node.js sind für Angular 22 notwendi
 Ausführliche Infos zu den unterstützten Versionen findest du in der [Angular-Dokumentation](https://angular.dev/reference/versions).
 
 
+## Unser neues Angular-Buch
+
+Ende Mai 2026 erschien unser neues Angular-Buch im Handel! In der neuen 1. Auflage vermitteln wir einen fundierten praktischen Einstieg in Angular.
+Das Buch basiert auf der neuen Major-Version Angular 22 und ist auch für folgende Versionen geeignet.
+Unter anderem behandeln wir ausführlich die neuen Signal Forms und die Resource API.
+
+Das [Beispielprojekt "BookManager"](https://bm1.angular-buch.com) aus dem Buch läuft ebenfalls aktuell auf Angular 22.
+
+
 ## Signal Forms sind stable
 
 Mit Angular 21 wurden die *Signal Forms* als experimentelles Feature eingeführt – jetzt, ein halbes Jahr später, sind sie offiziell **stabil**.
