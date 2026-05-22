@@ -153,114 +153,6 @@ ng add @angular/aria
 ```
 
 
-## HttpClient: Fetch API ist jetzt der Default
-
-Der `HttpClient` nutzt nun unter der Haube standardmäßig die moderne Fetch API des Browsers.
-Bisher musste Fetch explizit über `withFetch()` aktiviert werden, ansonsten verwendete der `HttpClient` das ältere `XMLHttpRequest`.
-
-Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, müssen wir für die EInrichtung nichts weiter tun: Wir können den `HttpClient` direkt per `inject()` in der Anwendung nutzen.
-Fetch funktioniert ab Angular 22 ganz von allein, und ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig.
-
-```ts
-@Service()
-export class BookStore {
-  // HttpClient ist out of the box verfügbar – mit Fetch als Default
-  #http = inject(HttpClient);
-}
-```
-
-Die Vorteile: bessere Kompatibilität mit Server-Side Rendering, eine moderne Browser-API und ein etwas schlankeres Bundle, weil der XHR-Pfad nicht mehr standardmäßig benötigt wird.
-
-Allerdings ist diese Umstellung ein Breaking Change, der eine wichtige Einschränkung mit sich bringt:
-Das `FetchBackend` unterstützt **keine Upload-Progress-Events**.
-Wer in seiner Anwendung mit `reportProgress: true` den Fortschritt von Datei-Uploads tracken möchte, muss bei den betroffenen Requests explizit auf das XHR-Backend zurückwechseln.
-Dafür rufen wir `provideHttpClient()` weiterhin manuell auf und konfigurieren das XHR-Backend:
-
-```ts
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(withXhr())
-  ]
-};
-```
-
-
-## ChangeDetection.OnPush ist jetzt Default
-
-Mit Angular 22 wird ein weiterer großer Schritt in Richtung Performance gegangen:
-**`ChangeDetectionStrategy.OnPush` ist nun die Standard-Strategie** für alle Komponenten.
-Dies basiert auf dem [RFC zum Thema](https://github.com/angular/angular/discussions/66779), an dem die Community lange mitdiskutiert hat.
-
-Komponenten, in denen das Property `changeDetection` nicht explizit gesetzt wurde, verwenden jetzt automatisch die Strategie `OnPush`.
-Damit setzt das Angular-Team konsequent den eingeschlagenen Weg fort:
-Mit Angular 21 wurde Zoneless Change Detection zum Standard, Signals sind seit Längerem das zentrale Reaktivitätsprimitiv, und nun ist auch die granulare Change Detection per Default aktiv.
-Das Ergebnis ist eine bessere Performance "out of the box", weil unnötige Durchläufe der Change Detection vermieden werden.
-
-Wenn deine Anwendung schon durchgehend auf Signals basiert, sollte die Umstellung kein Problem sein.
-Schon seit einigen Jahren wird empfohlen, `OnPush` einzusetzen, sodass viele Projekte bereits gut darauf abgestimmt sind.
-
-Für ältere Anwendungen hat die Migration allerdings Stolperfallen:
-Komponenten, die ihren View-Status über direkte Property-Zuweisungen aus einer Subscription heraus aktualisieren, ohne zusätzlich `markForCheck()` aufzurufen, können stillschweigend "einfrieren".
-Die Daten kommen an, aber die Anzeige im Template aktualisiert sich nicht, weil Angular nicht mehr automatisch erkennt, dass eine Aktualisierung nötig ist.
-
-Die saubere Lösung ist, Subscriptions auf Signals umzustellen, beispielsweise mit `toSignal()`.
-Alternativ kann man explizit `markForCheck()` aufrufen oder den Wert über die AsyncPipe in das Template binden.
-Wer schon konsequent auf Signals setzt, muss in seinen eigenen Komponenten in der Regel gar nichts anpassen.
-
-Besondere Vorsicht ist bei eigenen Bibliotheken gefragt:
-Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komponenten sich auf das alte Verhalten verlassen – die `changeDetection`-Property explizit auf `ChangeDetectionStrategy.Eager` setzen, damit nichts unerwartet bricht.
-
-
-## HTML-Kommentare in Angular-Templates
-
-Eine kleine, aber im Alltag sehr nützliche Verbesserung betrifft die Templates:
-Angular 22 erlaubt nun **Kommentare innerhalb von Template-Elementen** – zusätzlich zu den klassischen HTML-Kommentaren `<!-- ... -->`.
-
-Bisher konnte man Attribute, Inputs oder Event-Bindings in einem mehrzeiligen Element-Tag nicht einfach auskommentieren oder mit einer kurzen Notiz versehen.
-Jetzt akzeptiert der Template-Parser auch JavaScript-typische Kommentare im Stil `// ...` für einzelne Zeilen sowie `/* ... */` für mehrzeilige Kommentare direkt zwischen den Attributen.
-
-```html
-<app-book-card
-  // Pass a book as input
-  [book]="b"
-  /* Process received 'like' event */
-  (like)="addLikedBook($event)"
-/>
-```
-
-## Debounced Signals
-
-Im neuen Release wurde die experimentelle Funktion **`debounced()`** vorgestellt.
-Damit können wir ein Signal *entprellen*, sodass es seinen Wert erst nach einer kurzen Wartezeit ausgibt.
-Das ist ein Klassiker bei Such-Eingabefeldern: Während der Eingabe soll nicht nach jedem Tastendruck eine Anfrage abgeschickt werden, sondern erst, wenn die Eingabe zur Ruhe gekommen ist.
-
-Bisher war dieses Muster fest in der Welt von RxJS verankert: Man musste das Signal mit `toObservable()` in einen Observable umwandeln, `debounceTime()` verwenden und das Ergebnis mit `toSignal()` zurückkonvertieren.
-Mit `debounced()` geht das nun ohne Umwege direkt in der Signal-Welt.
-
-```ts
-import { debounced, resource, signal } from '@angular/core';
-
-@Component({/* ... */})
-export class Search {
-  protected readonly query = signal('');
-  protected readonly debouncedQuery = debounced(this.query, 300);
-
-  protected readonly results = resource({
-    params: () => this.debouncedQuery.value(),
-    loader: ({ params }) => fetchResults(params),
-  });
-}
-```
-
-Die Funktion `debounced()` liefert eine `Resource` zurück, deren Wert erst nach Ablauf der angegebenen Wartezeit (in Millisekunden) aktualisiert wird.
-Während des Wartens hat die Resource den Status `loading`, danach `resolved`.
-Statt einer festen Millisekundenzahl kann auch eine eigene Wait-Funktion übergeben werden, die ein `Promise<void>` zurückgibt.
-Damit lassen sich z. B. unterschiedliche Wartezeiten je nach Eingabelänge realisieren.
-
-Wichtig: `debounced()` muss in einem Injection Context aufgerufen werden, damit Angular die zugehörigen Timer beim Zerstören des Injectors automatisch aufräumen kann.
-
-In Signal Forms gibt es zusätzlich die verwandte Schema-Funktion `debounce()`, mit der sich asynchrone Validatoren entprellen lassen.
-Dieses Hilfsmittel können wir z. B. einsetzen, um nicht bei jedem Tastendruck eine serverseitige Eindeutigkeitsprüfung anzustoßen.
 
 
 ## Der neue Decorator `@Service()`
@@ -313,6 +205,120 @@ Wir empfehlen dennoch, neue Services mit dem neuen Decorator auszustatten – di
 
 > Übrigens: Das Konzept eines `@Service()`-Decorators für Angular wurde von Johannes als Gedankenexperiment in einem [eigenen Blogpost](/blog/2025-09-service-decorator) durchgespielt – jetzt gibt es ihn wirklich!
 
+
+
+
+
+## ChangeDetection.OnPush ist jetzt Default
+
+Mit Angular 22 wird ein weiterer großer Schritt in Richtung Performance gegangen:
+**`ChangeDetectionStrategy.OnPush` ist nun die Standard-Strategie** für alle Komponenten.
+Dies basiert auf dem [RFC zum Thema](https://github.com/angular/angular/discussions/66779), an dem die Community lange mitdiskutiert hat.
+
+Komponenten, in denen das Property `changeDetection` nicht explizit gesetzt wurde, verwenden jetzt automatisch die Strategie `OnPush`.
+Damit setzt das Angular-Team konsequent den eingeschlagenen Weg fort:
+Mit Angular 21 wurde Zoneless Change Detection zum Standard, Signals sind seit Längerem das zentrale Reaktivitätsprimitiv, und nun ist auch die granulare Change Detection per Default aktiv.
+Das Ergebnis ist eine bessere Performance "out of the box", weil unnötige Durchläufe der Change Detection vermieden werden.
+
+Wenn deine Anwendung schon durchgehend auf Signals basiert, sollte die Umstellung kein Problem sein.
+Schon seit einigen Jahren wird empfohlen, `OnPush` einzusetzen, sodass viele Projekte bereits gut darauf abgestimmt sind.
+
+Für ältere Anwendungen hat die Migration allerdings Stolperfallen:
+Komponenten, die ihren View-Status über direkte Property-Zuweisungen aus einer Subscription heraus aktualisieren, ohne zusätzlich `markForCheck()` aufzurufen, können stillschweigend "einfrieren".
+Die Daten kommen an, aber die Anzeige im Template aktualisiert sich nicht, weil Angular nicht mehr automatisch erkennt, dass eine Aktualisierung nötig ist.
+
+Die saubere Lösung ist, Subscriptions auf Signals umzustellen, beispielsweise mit `toSignal()`.
+Alternativ kann man explizit `markForCheck()` aufrufen oder den Wert über die AsyncPipe in das Template binden.
+Wer schon konsequent auf Signals setzt, muss in seinen eigenen Komponenten in der Regel gar nichts anpassen.
+
+Besondere Vorsicht ist bei eigenen Bibliotheken gefragt:
+Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komponenten sich auf das alte Verhalten verlassen – die `changeDetection`-Property explizit auf `ChangeDetectionStrategy.Eager` setzen, damit nichts unerwartet bricht.
+
+
+
+## HttpClient: Fetch API ist jetzt der Default
+
+Der `HttpClient` nutzt nun unter der Haube standardmäßig die moderne Fetch API des Browsers.
+Bisher musste Fetch explizit über `withFetch()` aktiviert werden, ansonsten verwendete der `HttpClient` das ältere `XMLHttpRequest`.
+
+Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, müssen wir für die EInrichtung nichts weiter tun: Wir können den `HttpClient` direkt per `inject()` in der Anwendung nutzen.
+Fetch funktioniert ab Angular 22 ganz von allein, und ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig.
+
+```ts
+@Service()
+export class BookStore {
+  // HttpClient ist out of the box verfügbar – mit Fetch als Default
+  #http = inject(HttpClient);
+}
+```
+
+Die Vorteile: bessere Kompatibilität mit Server-Side Rendering, eine moderne Browser-API und ein etwas schlankeres Bundle, weil der XHR-Pfad nicht mehr standardmäßig benötigt wird.
+
+Allerdings ist diese Umstellung ein Breaking Change, der eine wichtige Einschränkung mit sich bringt:
+Das `FetchBackend` unterstützt **keine Upload-Progress-Events**.
+Wer in seiner Anwendung mit `reportProgress: true` den Fortschritt von Datei-Uploads tracken möchte, muss bei den betroffenen Requests explizit auf das XHR-Backend zurückwechseln.
+Dafür rufen wir `provideHttpClient()` weiterhin manuell auf und konfigurieren das XHR-Backend:
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withXhr())
+  ]
+};
+```
+
+
+
+## HTML-Kommentare in Angular-Templates
+
+Eine kleine, aber im Alltag sehr nützliche Verbesserung betrifft die Templates:
+Angular 22 erlaubt nun **Kommentare innerhalb von Template-Elementen**, zusätzlich zu den klassischen HTML-Kommentaren `<!-- ... -->`.
+
+Bisher konnte man Attribute, Inputs oder Event-Bindings in einem mehrzeiligen Element-Tag nicht einfach auskommentieren oder mit einer kurzen Notiz versehen.
+Jetzt akzeptiert der Template-Parser auch JavaScript-typische Kommentare im Stil `// ...` für einzelne Zeilen sowie `/* ... */` für mehrzeilige Kommentare direkt zwischen den Attributen.
+
+```html
+<app-book-card
+  // Pass a book as input
+  [book]="b"
+  /* Process received 'like' event */
+  (like)="addLikedBook($event)"
+/>
+```
+
+## Debounced Signals
+
+Im neuen Release wurde die experimentelle Funktion **`debounced()`** vorgestellt.
+Damit können wir ein Signal *entprellen*, sodass es seinen Wert erst nach einer kurzen Wartezeit ausgibt.
+Das ist ein Klassiker bei Such-Eingabefeldern: Während der Eingabe soll nicht nach jedem Tastendruck eine Anfrage abgeschickt werden, sondern erst, wenn die Eingabe zur Ruhe gekommen ist.
+
+Bisher war dieses Muster fest in der Welt von RxJS verankert: Man musste das Signal mit `toObservable()` in einen Observable umwandeln, `debounceTime()` verwenden und das Ergebnis mit `toSignal()` zurückkonvertieren.
+Mit `debounced()` geht das nun ohne Umwege direkt in der Signal-Welt.
+
+```ts
+import { debounced, resource, signal } from '@angular/core';
+
+@Component({/* ... */})
+export class Search {
+  protected readonly query = signal('');
+  protected readonly debouncedQuery = debounced(this.query, 300);
+
+  protected readonly results = resource({
+    params: () => this.debouncedQuery.value(),
+    loader: ({ params }) => fetchResults(params),
+  });
+}
+```
+
+Die Funktion `debounced()` liefert eine `Resource` zurück, deren Wert erst nach Ablauf der angegebenen Wartezeit (in Millisekunden) aktualisiert wird.
+Während des Wartens hat die Resource den Status `loading`, danach `resolved`.
+Statt einer festen Millisekundenzahl kann auch eine eigene Wait-Funktion übergeben werden, die ein `Promise<void>` zurückgibt.
+Damit lassen sich z. B. unterschiedliche Wartezeiten je nach Eingabelänge realisieren.
+
+Wichtig: `debounced()` muss in einem Injection Context aufgerufen werden, damit Angular die zugehörigen Timer beim Zerstören des Injectors automatisch aufräumen kann.
+
+In Signal Forms gibt es zusätzlich die verwandte Schema-Funktion `debounce()`, mit der sich asynchrone Validatoren entprellen lassen.
+Dieses Hilfsmittel können wir z. B. einsetzen, um nicht bei jedem Tastendruck eine serverseitige Eindeutigkeitsprüfung anzustoßen.
 
 ## `injectAsync()`: Services lazy laden
 
