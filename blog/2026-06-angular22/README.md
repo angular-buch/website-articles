@@ -191,21 +191,24 @@ Mit Angular 22 wird ein weiterer großer Schritt in Richtung Performance gegange
 **`ChangeDetectionStrategy.OnPush` ist nun die Standard-Strategie** für alle Komponenten.
 Dies basiert auf dem [RFC zum Thema](https://github.com/angular/angular/discussions/66779), an dem die Community lange mitdiskutiert hat.
 
-Komponenten, in denen die `changeDetection`-Property nicht explizit gesetzt wurde, verhalten sich also ab sofort wie zuvor `OnPush`.
+Komponenten, in denen das Property `changeDetection` nicht explizit gesetzt wurde, verwenden jetzt automatisch die Strategie `OnPush`.
 Damit setzt das Angular-Team konsequent den eingeschlagenen Weg fort:
-Mit Angular 21 wurde Zoneless Change Detection zum Standard, Signals sind seit Längerem das zentrale Reaktivitätsprimitiv – und nun ist auch die granulare Change Detection per Default aktiv.
-Das Ergebnis ist eine bessere Performance "out of the box", weil unnötige Change-Detection-Durchläufe vermieden werden.
+Mit Angular 21 wurde Zoneless Change Detection zum Standard, Signals sind seit Längerem das zentrale Reaktivitätsprimitiv, und nun ist auch die granulare Change Detection per Default aktiv.
+Das Ergebnis ist eine bessere Performance "out of the box", weil unnötige Durchläufe der Change Detection vermieden werden.
 
-Bei der Migration gibt es allerdings eine Stolperfalle:
+Wenn deine Anwendung schon durchgehend auf Signals basiert, sollte die Umstellung kein Problem sein.
+Schon seit einigen Jahren wird empfohlen, `OnPush` einzusetzen, sodass viele Projekte bereits gut darauf abgestimmt sind.
+
+Für ältere Anwendungen hat die Migration allerdings Stolperfallen:
 Komponenten, die ihren View-Status über direkte Property-Zuweisungen aus einer Subscription heraus aktualisieren, ohne zusätzlich `markForCheck()` aufzurufen, können stillschweigend "einfrieren".
-Die Daten kommen an, aber die Anzeige im Template aktualisiert sich nicht – weil Angular nicht mehr automatisch erkennt, dass eine Aktualisierung nötig ist.
+Die Daten kommen an, aber die Anzeige im Template aktualisiert sich nicht, weil Angular nicht mehr automatisch erkennt, dass eine Aktualisierung nötig ist.
 
 Die saubere Lösung ist, Subscriptions auf Signals umzustellen, beispielsweise mit `toSignal()`.
-Alternativ kann man explizit `markForCheck()` aufrufen oder den Wert über die `async`-Pipe in das Template binden.
+Alternativ kann man explizit `markForCheck()` aufrufen oder den Wert über die AsyncPipe in das Template binden.
 Wer schon konsequent auf Signals setzt, muss in seinen eigenen Komponenten in der Regel gar nichts anpassen.
 
 Besondere Vorsicht ist bei eigenen Bibliotheken gefragt:
-Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komponenten sich auf das alte Verhalten verlassen – die `changeDetection`-Property explizit auf `ChangeDetectionStrategy.Default` setzen, damit nichts unerwartet bricht.
+Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komponenten sich auf das alte Verhalten verlassen – die `changeDetection`-Property explizit auf `ChangeDetectionStrategy.Eager` setzen, damit nichts unerwartet bricht.
 
 
 ## HTML-Kommentare in Angular-Templates
