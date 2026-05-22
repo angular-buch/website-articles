@@ -1,7 +1,7 @@
 ---
 title: 'WebMCP: KI-Agenten in Angular-Apps integrieren'
-author: Angular Buch Team
-mail: team@angular-buch.com
+author: Danny Koppenhagen
+mail: mail@k9n.dev
 published: 2026-05-27
 lastModified: 2026-05-27
 keywords:
