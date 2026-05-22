@@ -26,11 +26,11 @@ sticky: true
 isUpdatePost: true
 ---
 
-Mit Beginn des Monats Juni gibt es Neuigkeiten aus der Angular-Welt: **Angular 22** ist da!
-Dieses Release zieht viele Konzepte, die in den letzten Versionen reifen durften, über die Ziellinie:
-**Signal Forms**, die **Resource API** und das Paket **`@angular/aria`** sind stable, der `HttpClient` setzt nun standardmäßig auf die moderne Fetch-API und ein neuer `@Service()`-Decorator stellt eine vereinfachte Version vom bisherigen `@Injectable()` dar.
-Hinzu kommen einige spannende neue Bausteine wie `injectAsync()`, `debounced()` und eine erste Integration für **WebMCP**.
-Auf der Werkzeug-Seite werden die alten Webpack-basierten Builder als veraltet markiert, und die Angular CLI bringt einen neuen Migrationspfad von `fakeAsync` auf die Fake Timers von Vitest mit.
+Es gibt wieder Neuigkeiten aus der Angular-Welt: **Angular 22** ist da!
+Dieses Release zieht viele Konzepte über die Ziellinie:
+**Signal Forms**, **Resource API** und **`@angular/aria`** sind stable.
+Der `HttpClient` setzt nun standardmäßig auf die moderne Fetch API, und es wurde ein neuer `@Service()`-Decorator eingeführt.
+Diese und einige weietre Neuerungen stellen wir in diesem Blogpost vor.
 
 Im [Angular-Blog](TODO) findest du die offiziellen Informationen zum neuen Release.
 Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng update` verwenden, siehe [Angular Update Guide](https://angular.dev/update-guide).
