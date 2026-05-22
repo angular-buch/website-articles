@@ -32,7 +32,7 @@ Dieses Release zieht viele Konzepte über die Ziellinie:
 Der `HttpClient` setzt nun standardmäßig auf die moderne Fetch API, und es wurde ein neuer `@Service()`-Decorator eingeführt.
 Diese und einige weietre Neuerungen stellen wir in diesem Blogpost vor.
 
-Im [Angular-Blog](TODO) findest du die offiziellen Informationen zum neuen Release.
+<!-- Im [Angular-Blog](TODO) findest du die offiziellen Informationen zum neuen Release.-->
 Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng update` verwenden, siehe [Angular Update Guide](https://angular.dev/update-guide).
 
 <!-- > 🇬🇧 This article is available in English language here: [Angular 22 is here!](https://angular.schule/blog/TODO) -->
