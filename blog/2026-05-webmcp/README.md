@@ -38,7 +38,7 @@ Mit WebMCP hingegen reichen ein oder zwei deklarierte Tools, die direkt aufgeruf
 Das funktioniert schneller, zuverlässiger und mit weniger Token-Verbrauch.
 
 > Eine eindrucksvolle Visualisierung dieses Unterschieds bietet die [WebMCP-Demo von Sarah Drasner](https://webmcp-demo-sdras.netlify.app/).
-> Dort wird dasselbe Widget einmal per DOM-Scraping und einmal per WebMCP-Tools gesteuert – der Unterschied ist sofort sichtbar.
+> Dort wird dasselbe Widget einmal per DOM-Scraping und einmal per WebMCP-Tools gesteuert.
 
 ### Wie funktioniert WebMCP?
 
