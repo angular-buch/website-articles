@@ -20,18 +20,21 @@ header: webmcp.jpg
 ---
 
 Die Integration von KI-Agenten in Web-Anwendungen wird in den nächsten Jahren ein zentrales Thema.
-Mit dem aufkommenden Webstandard **WebMCP** (Web Model Context Protocol) können Webseiten dem Browser – und damit angeschlossenen KI-Agenten – strukturierte **Tools** zur Verfügung stellen.
+Mit dem in Entwicklung befindlichen Vorschlag **WebMCP** (Web Model Context Protocol) sollen Webseiten dem Browser – und damit angeschlossenen KI-Agenten – strukturierte **Tools** zur Verfügung stellen können.
 Heute müssen Agenten den DOM parsen, den Accessibility Tree auswerten oder Screenshots analysieren – das ist langsam, fehleranfällig und anfällig für Prompt-Injection-Angriffe.
-WebMCP bietet einen besseren Weg: Die Webseite deklariert ihre Fähigkeiten, und der Agent ruft sie direkt auf.
+WebMCP soll einen besseren Weg bieten: Die Webseite deklariert ihre Fähigkeiten, und der Agent ruft sie direkt auf.
 
 Angular bringt ab Version 22 experimentelle Unterstützung für WebMCP mit.
 In diesem Artikel zeigen wir, wie das Ganze funktioniert und wie wir es in unseren Angular-Anwendungen einsetzen können.
 
 ## Was ist WebMCP?
 
-[WebMCP](https://github.com/webmachinelearning/webmcp) ist ein neuer Webstandard, der von der [W3C Web Machine Learning Community Group](https://www.w3.org/community/webmachinelearning/) entwickelt wird.
-Die Idee: Statt dass ein KI-Agent die DOM-Struktur einer Seite analysieren, den Accessibility Tree parsen oder Screenshots auswerten muss, kann eine Web-App ihre Funktionalität als strukturierte Tools deklarieren.
-Externe Agenten wie Gemini, Claude oder ChatGPT-Erweiterungen können diese Tools entdecken und auf Wunsch der Nutzer:innen aufrufen.
+[WebMCP](https://github.com/webmachinelearning/webmcp) ist ein Vorschlag, der von der [W3C Web Machine Learning Community Group](https://www.w3.org/community/webmachinelearning/) entwickelt wird.
+Die Spezifikation hat aktuell den Status eines _Unofficial Draft_ – sie ist also weder ein verabschiedeter W3C-Standard noch befindet sie sich auf dem offiziellen W3C Standards Track.
+Bislang gibt es nur eine experimentelle Umsetzung in Chrome (hinter einem Flag); andere Browser-Hersteller haben noch keine Implementierungsabsicht signalisiert.
+
+Die Idee dahinter: Statt dass ein KI-Agent die DOM-Struktur einer Seite analysieren, den Accessibility Tree parsen oder Screenshots auswerten muss, kann eine Web-App ihre Funktionalität als strukturierte Tools deklarieren.
+Externe Agenten wie Gemini, Claude oder ChatGPT-Erweiterungen sollen diese Tools entdecken und auf Wunsch der Nutzer:innen aufrufen können.
 
 Der Unterschied ist drastisch: Bei einer klassischen Anwendung ohne WebMCP muss der Agent z. B. über 40 DOM-Knoten parsen, um ein Formular zum Anlegen eines Buchs zu bedienen.
 Mit WebMCP hingegen reichen ein oder zwei deklarierte Tools, die direkt aufgerufen werden.
@@ -46,14 +49,17 @@ Der Ablauf lässt sich in drei Schritte zusammenfassen:
 
 1. **Die Webseite registriert Tools:** Auf jeder Seite können Aktionen deklariert werden, die ein Agent ausführen darf. Jedes Tool hat einen Namen, eine Beschreibung und ein JSON-Schema für die erwarteten Parameter.
 2. **Der Browser exponiert die Tools:** Ein WebMCP-fähiger Browser (oder eine Browser-Extension) sammelt die registrierten Tools und stellt sie dem angeschlossenen Agenten zur Verfügung.
-3. **Der Agent ruft die Tools auf:** Der Agent sieht einen klaren Vertrag, liefert strukturierte Argumente – und unser Code erledigt den Rest. Die Nutzer:innen behalten dabei die Kontrolle über Berechtigungen und Bestätigungen.
+3. **Der Agent ruft die Tools auf:** Der Agent sieht einen klaren Vertrag, liefert strukturierte Argumente – und unser Code erledigt den Rest. Die Nutzer:innen behalten dabei die Kontrolle über Berechtigungen und Bestätigungen.
 
-### Zwei APIs: imperativ und deklarativ
+
+### Zwei APIs: imperativ und deklarativ
+
 
 Die WebMCP-Spezifikation definiert zwei Wege, um Tools zu registrieren:
 
 - **Imperative API:** Tools werden per JavaScript über `navigator.modelContext.registerTool()` registriert. Das ist der Weg, den Angular unter der Haube nutzt.
-- **Deklarative API:** Für einfache Formulare reichen HTML-Attribute wie `toolname`, `tooldescription` und `toolparamdescription` direkt am `<form>`-Element, ganz ohne JavaScript.
+- **Deklarative API:** Für einfache Formulare reichen HTML-Attribute wie `toolname`, `tooldescription` und `toolparamdescription` direkt am `<form>`-Element, ganz ohne JavaScript.
+
 
 ```html
 <!-- Deklarative API: Formular als WebMCP-Tool per HTML-Attribute -->
@@ -76,7 +82,8 @@ Die deklarative API ist aber ein guter Einstieg für einfache Seiten ohne Framew
 
 ## WebMCP in Angular
 
-Angular 22.0 bringt experimentelle Unterstützung für WebMCP mit und integriert das Konzept sauber in die bestehende Architektur von Komponenten und Services.
+Angular 22.0 bringt experimentelle Unterstützung für WebMCP mit und integriert das Konzept sauber in die bestehende Architektur von Komponenten und Services.
+
 Tools lassen sich auf drei Ebenen registrieren:
 
 - **Global** für die gesamte Anwendung (über `provideExperimentalWebMcpTools()` in der App-Config)
@@ -84,7 +91,8 @@ Tools lassen sich auf drei Ebenen registrieren:
 - **In Services** (über `declareExperimentalWebMcpTool()` im Injection Context)
 
 Angular übernimmt dabei das Lifecycle-Handling: Tools werden automatisch wieder abgemeldet, wenn der zugehörige Injector zerstört wird.
-Wichtig ist, dass Tool-Namen eindeutig sein müssen. Eine doppelte Registrierung führt zu einem Laufzeitfehler.
+Wichtig ist, dass Tool-Namen eindeutig sein müssen. Eine doppelte Registrierung führt zu einem Laufzeitfehler.
+
 
 ## Tools global registrieren
 
@@ -202,7 +210,8 @@ In Komponenten-Konstruktoren kann es zu Namenskollisionen kommen, wenn die Kompo
 ## Signal Forms als WebMCP-Tools
 
 Besonders charmant ist die Brücke zwischen Signal Forms und WebMCP:
-Mit der Option `experimentalWebMcpTool` in der Funktion `form()` lässt sich ein Formular deklarativ als WebMCP-Tool registrieren.
+Mit der Option `experimentalWebMcpTool` in der Funktion `form()` lässt sich ein Formular deklarativ als WebMCP-Tool registrieren.
+
 Angular leitet das JSON-Schema automatisch aus dem initialen Wert des Form-Models ab – inklusive der Pflichtfelder, die sich aus den `required()`-Validatoren ergeben.
 Damit kann ein KI-Agent ein Formular stellvertretend "ausfüllen" und absenden, ohne dass wir per Hand ein eigenes Tool mit JSON-Schema definieren müssen.
 
@@ -324,10 +333,14 @@ console.log(JSON.parse(result));
 Zusätzlich gibt es eine [WebMCP Chrome Extension](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd), die das Debugging deutlich erleichtert.
 Mit der Extension können wir:
 
-- sehen, welche Tools auf einer Seite registriert sind (über die `navigator.modelContext`-API),
-- Tools manuell aufrufen und die Ergebnisse inspizieren,
-- prüfen, ob das JSON-Schema korrekt definiert ist und
-- per natürlicher Sprache mit dem Agenten interagieren und testen, ob er die richtigen Tools erkennt und aufruft.
+- sehen, welche Tools auf einer Seite registriert sind (über die `navigator.modelContext`-API),
+
+- Tools manuell aufrufen und die Ergebnisse inspizieren,
+
+- prüfen, ob das JSON-Schema korrekt definiert ist und
+
+- per natürlicher Sprache mit dem Agenten interagieren und testen, ob er die richtigen Tools erkennt und aufruft.
+
 
 ### Unit-Tests
 
@@ -335,9 +348,10 @@ Für automatisierte Unit-Tests empfiehlt die Angular-Dokumentation das Paket [`@
 
 ## Fazit
 
-WebMCP ist ein spannendes neues Konzept, das die Art und Weise verändern wird, wie KI-Agenten mit Web-Anwendungen interagieren.
-Angular macht den Einstieg durch die Integration in die bestehende Architektur – insbesondere die Brücke zu Signal Forms – besonders einfach.
-Die APIs sind noch experimentell, aber der Weg ist klar vorgezeichnet: Strukturierte Tools statt DOM-Scraping.
+WebMCP ist ein spannendes neues Konzept, das die Art und Weise verändern könnte, wie KI-Agenten mit Web-Anwendungen interagieren.
+Wichtig ist dabei zu betonen, dass es sich aktuell noch nicht um einen verabschiedeten Webstandard handelt, sondern um einen frühen Entwurf einer W3C Community Group, der bislang nur experimentell in Chrome verfügbar ist.
+Angular macht den Einstieg durch die Integration in die bestehende Architektur – insbesondere die Brücke zu Signal Forms – aber bereits heute bemerkenswert einfach.
+Die APIs sind explizit als experimentell markiert, und es bleibt abzuwarten, ob und in welcher Form sich der Vorschlag tatsächlich als Standard etablieren wird.
 
 Alle Details findest du im offiziellen [Angular WebMCP Guide](https://angular.dev/ai/webmcp).
 
