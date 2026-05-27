@@ -21,6 +21,7 @@ header: webmcp.jpg
 
 Die Integration von KI-Agenten in Web-Anwendungen wird in den nächsten Jahren ein zentrales Thema.
 Mit dem in Entwicklung befindlichen Vorschlag **WebMCP** (Web Model Context Protocol) sollen Webseiten dem Browser – und damit angeschlossenen KI-Agenten – strukturierte **Tools** zur Verfügung stellen können.
+
 Heute müssen Agenten den DOM parsen, den Accessibility Tree auswerten oder Screenshots analysieren – das ist langsam, fehleranfällig und anfällig für Prompt-Injection-Angriffe.
 WebMCP soll einen besseren Weg bieten: Die Webseite deklariert ihre Fähigkeiten, und der Agent ruft sie direkt auf.
 
