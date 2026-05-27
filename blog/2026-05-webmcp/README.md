@@ -229,7 +229,6 @@ Sobald die Komponente zerstört wird, meldet Angular die Tools automatisch ab.
 ## Tools in Services registrieren
 
 Für dynamische Anwendungsfälle können wir mit `declareExperimentalWebMcpTool()` ein Tool direkt in einem Injection Context registrieren.
-Das Tool wird automatisch abgemeldet, wenn der zugehörige Injector zerstört wird.
 
 ```ts
 import { Service, declareExperimentalWebMcpTool, signal } from '@angular/core';
@@ -251,8 +250,8 @@ export class Counter {
 }
 ```
 
-Weil `declareExperimentalWebMcpTool()` in jedem Injection Context funktioniert, sollten wir darauf achten, es bevorzugt in Root-Services zu verwenden.
-In Komponenten-Konstruktoren kann es zu Namenskollisionen kommen, wenn die Komponente mehrfach auf der Seite gerendert wird.
+Weil `declareExperimentalWebMcpTool()` in jedem Injection Context funktioniert, sollten wir darauf achten, es bevorzugt in Root-Services oder in gerouteten Komponenten zu verwenden – also dort, wo die Instanz garantiert nur einmal existiert.
+In Komponenten, die mehrfach auf der Seite gerendert werden können, würde derselbe Tool-Name mehrfach registriert und zu einem Laufzeitfehler führen.
 
 ## Signal Forms als WebMCP-Tools
 
