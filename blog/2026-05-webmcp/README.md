@@ -83,51 +83,54 @@ Die deklarative API ist aber ein guter Einstieg für einfache Seiten ohne Framew
 
 Angular 22.0 bringt experimentelle Unterstützung für WebMCP mit und integriert das Konzept sauber in die bestehende Architektur von Komponenten und Services.
 
-Tools lassen sich auf drei Ebenen registrieren:
+Tools lassen sich auf zwei Wegen registrieren:
 
-- **Global** für die gesamte Anwendung (über `provideExperimentalWebMcpTools()` in der App-Config)
-- **Pro Route** (über `provideExperimentalWebMcpTools()` in den Route-Providers)
-- **In Services** (über `declareExperimentalWebMcpTool()` im Injection Context)
+- Über die Provider-Funktion `provideExperimentalWebMcpTools()`, die wir in jedem Injector einsetzen können – also global in der App-Config, in den Providern einer Route oder in den Providern einer Komponente.
+- Über `declareExperimentalWebMcpTool()` im Injection Context, z. B. im Konstruktor eines Services.
 
 Angular übernimmt dabei das Lifecycle-Handling: Tools werden automatisch wieder abgemeldet, wenn der zugehörige Injector zerstört wird.
 Wichtig ist, dass Tool-Namen eindeutig sein müssen. Eine doppelte Registrierung führt zu einem Laufzeitfehler.
 
+## Tools mit `provideExperimentalWebMcpTools()` definieren
 
-## Tools global registrieren
+Mit der Funktion `provideExperimentalWebMcpTools()` definieren wir MCP-Tools als Provider.
+Sie nimmt ein Array von Tool-Definitionen entgegen und liefert einen Provider zurück, den wir an einen beliebigen Injector hängen können.
+Die Lebensdauer eines Tools entspricht damit der Lebensdauer des zugehörigen Injectors.
 
-Mit `provideExperimentalWebMcpTools()` registrieren wir Tools, die für die gesamte Lebensdauer der Anwendung verfügbar sein sollen.
-Der `execute`-Callback wird im Injection Context des zugehörigen Injectors ausgeführt – wir können also direkt `inject()` verwenden, um auf Services zuzugreifen.
+Ein Tool besteht aus folgenden Eigenschaften:
+
+- `name`: Eindeutiger Name des Tools, unter dem der Agent es aufrufen kann.
+- `description`: Beschreibung in natürlicher Sprache, anhand derer der Agent entscheidet, wann er das Tool nutzt.
+- `inputSchema`: JSON-Schema, das die erwarteten Parameter beschreibt.
+- `execute`: Callback, der beim Aufruf des Tools ausgeführt wird. Er läuft im Injection Context des zugehörigen Injectors, sodass wir direkt `inject()` verwenden können, um auf Services zuzugreifen.
+
+Ein einfaches Beispiel:
 
 ```ts
 import { provideExperimentalWebMcpTools, Service, inject } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
 
 @Service()
 class BookStore {
   search(query: string) { /* ... */ }
 }
 
-bootstrapApplication(App, {
-  providers: [
-    provideExperimentalWebMcpTools([{
-      name: 'searchBooks',
-      description: 'Searches the book catalog.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          query: { type: 'string', description: 'Search keywords.' },
-          maxResults: { type: 'number', description: 'Max results to return.' }
-        },
-        required: ['query'],
-        additionalProperties: false,
-      },
-      execute: ({ query, maxResults }) => {
-        const store = inject(BookStore);
-        return { content: [{ type: 'text', text: store.search(query) }] };
-      },
-    }]),
-  ],
-});
+provideExperimentalWebMcpTools([{
+  name: 'searchBooks',
+  description: 'Searches the book catalog.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      query: { type: 'string', description: 'Search keywords.' },
+      maxResults: { type: 'number', description: 'Max results to return.' }
+    },
+    required: ['query'],
+    additionalProperties: false,
+  },
+  execute: ({ query, maxResults }) => {
+    const store = inject(BookStore);
+    return { content: [{ type: 'text', text: store.search(query) }] };
+  },
+}])
 ```
 
 Die erwarteten Parameter werden über ein `inputSchema` im [JSON-Schema-Format](https://json-schema.org/) definiert.
@@ -137,10 +140,32 @@ Mit `required` markieren wir Pflichtfelder, und `additionalProperties: false` sc
 > **Tipp:** Angular validiert die Eingaben des Agenten nicht automatisch gegen das Schema.
 > Es empfiehlt sich, im `execute`-Callback eine explizite Prüfung der Argumente vorzunehmen.
 
-## Tools pro Route registrieren
+## Wo wir Tool-Provider registrieren können
+
+Da `provideExperimentalWebMcpTools()` ein gewöhnlicher Provider ist, können wir ihn an verschiedenen Stellen einsetzen.
+Vom Injector, in dem die Provider hängen, hängt die Gültigkeit der Tools ab.
+
+### Global im Root-Injector
+
+Sollen Tools für die gesamte Lebensdauer der Anwendung verfügbar sein, registrieren wir sie in der App-Config:
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideExperimentalWebMcpTools } from '@angular/core';
+
+bootstrapApplication(App, {
+  providers: [
+    provideExperimentalWebMcpTools([/* ... */]),
+  ],
+});
+```
+
+Der Root-Injector wird während der Laufzeit der Anwendung nicht zerstört, die Tools sind also dauerhaft verfügbar.
+
+### Pro Route
 
 In komplexen Anwendungen möchten wir bestimmte Tools nur dann verfügbar machen, wenn die Nutzer:innen eine bestimmte Route betrachten.
-Dafür können wir `provideExperimentalWebMcpTools()` direkt in der Route-Definition verwenden:
+Dafür hängen wir die Provider in die Route-Definition:
 
 ```ts
 import { provideExperimentalWebMcpTools } from '@angular/core';
@@ -176,7 +201,28 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Ohne diese Option bleiben WebMCP-Tools, die auf Routen registriert wurden, auch nach dem Navigieren weiterhin für den Agenten sichtbar.
+Ohne diese Option bleiben Tools, die auf Routen registriert wurden, auch nach dem Navigieren weiterhin für den Agenten sichtbar – die Route-Injectoren werden standardmäßig nicht zerstört.
+
+### Pro Komponententeilbaum
+
+Genauso lässt sich `provideExperimentalWebMcpTools()` in den `providers` einer Komponente einsetzen:
+
+```ts
+import { Component } from '@angular/core';
+import { provideExperimentalWebMcpTools } from '@angular/core';
+
+@Component({
+  selector: 'app-book-form',
+  providers: [
+    provideExperimentalWebMcpTools([/* ... */]),
+  ],
+  templateUrl: './book-form.html',
+})
+export class BookForm {}
+```
+
+Die Tools sind dann genau so lange registriert, wie die Komponente und ihr Teilbaum existieren.
+Sobald die Komponente zerstört wird, meldet Angular die Tools automatisch ab.
 
 ## Tools in Services registrieren
 
