@@ -33,7 +33,9 @@ In diesem Artikel zeigen wir, wie das Ganze funktioniert und wie wir es in unser
 Die Idee: Statt dass ein KI-Agent die DOM-Struktur einer Seite analysieren, den Accessibility Tree parsen oder Screenshots auswerten muss, kann eine Web-App ihre Funktionalität als strukturierte Tools deklarieren.
 Externe Agenten wie Gemini, Claude oder ChatGPT-Erweiterungen können diese Tools entdecken und auf Wunsch der Nutzer:innen aufrufen.
 
-Der Unterschied ist drastisch: Wo ein Agent heute über 40 DOM-Knoten parsen muss, um ein Formular zum Anlegen eines Buchs zu verstehen, reichen mit WebMCP ein oder zwei deklarierte Tools, die direkt aufgerufen werden – schneller, zuverlässiger und mit weniger Token-Verbrauch.
+Der Unterschied ist drastisch: Bei einer klassischen Anwendung ohne WebMCP muss der Agent z. B. über 40 DOM-Knoten parsen, um ein Formular zum Anlegen eines Buchs zu bedienen.
+Mit WebMCP hingegen reichen ein oder zwei deklarierte Tools, die direkt aufgerufen werden.
+Das funktioniert schneller, zuverlässiger und mit weniger Token-Verbrauch.
 
 > Eine eindrucksvolle Visualisierung dieses Unterschieds bietet die [WebMCP-Demo von Sarah Drasner](https://webmcp-demo-sdras.netlify.app/).
 > Dort wird dasselbe Widget einmal per DOM-Scraping und einmal per WebMCP-Tools gesteuert – der Unterschied ist sofort sichtbar.
