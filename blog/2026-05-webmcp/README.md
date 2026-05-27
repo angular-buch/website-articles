@@ -105,33 +105,46 @@ Ein Tool besteht aus folgenden Eigenschaften:
 - `inputSchema`: JSON-Schema, das die erwarteten Parameter beschreibt.
 - `execute`: Callback, der beim Aufruf des Tools ausgeführt wird. Er läuft im Injection Context des zugehörigen Injectors, sodass wir direkt `inject()` verwenden können, um auf Services zuzugreifen.
 
-Ein einfaches Beispiel:
+Ein einfaches Beispiel: Wir definieren zunächst einen Service, der die fachliche Logik kapselt.
 
 ```ts
-import { provideExperimentalWebMcpTools, Service, inject } from '@angular/core';
+// book-store.ts
+import { Service } from '@angular/core';
 
 @Service()
-class BookStore {
+export class BookStore {
   search(query: string) { /* ... */ }
 }
+```
 
-provideExperimentalWebMcpTools([{
-  name: 'searchBooks',
-  description: 'Searches the book catalog.',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      query: { type: 'string', description: 'Search keywords.' },
-      maxResults: { type: 'number', description: 'Max results to return.' }
-    },
-    required: ['query'],
-    additionalProperties: false,
-  },
-  execute: ({ query, maxResults }) => {
-    const store = inject(BookStore);
-    return { content: [{ type: 'text', text: store.search(query) }] };
-  },
-}])
+Anschließend definieren wir das Tool in der `app.config.ts` und nutzen den `BookStore`-Service im `execute`-Callback über `inject()`:
+
+```ts
+// app.config.ts
+import { ApplicationConfig, provideExperimentalWebMcpTools, inject } from '@angular/core';
+import { BookStore } from './book-store';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideExperimentalWebMcpTools([{
+      name: 'searchBooks',
+      description: 'Searches the book catalog.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: 'Search keywords.' },
+          maxResults: { type: 'number', description: 'Max results to return.' }
+        },
+        required: ['query'],
+        additionalProperties: false,
+      },
+      execute: ({ query, maxResults }) => {
+        const store = inject(BookStore);
+        return { content: [{ type: 'text', text: store.search(query) }] };
+      },
+    }]),
+  ],
+};
 ```
 
 Die erwarteten Parameter werden über ein `inputSchema` im [JSON-Schema-Format](https://json-schema.org/) definiert.
@@ -148,19 +161,7 @@ Vom Injector, in dem die Provider hängen, hängt die Gültigkeit der Tools ab.
 
 ### Global im Root-Injector
 
-Sollen Tools für die gesamte Lebensdauer der Anwendung verfügbar sein, registrieren wir sie in der App-Config:
-
-```ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideExperimentalWebMcpTools } from '@angular/core';
-
-bootstrapApplication(App, {
-  providers: [
-    provideExperimentalWebMcpTools([/* ... */]),
-  ],
-});
-```
-
+Sollen Tools für die gesamte Lebensdauer der Anwendung verfügbar sein, registrieren wir sie wie im Beispiel oben in der `app.config.ts`.
 Der Root-Injector wird während der Laufzeit der Anwendung nicht zerstört, die Tools sind also dauerhaft verfügbar.
 
 ### Pro Route
