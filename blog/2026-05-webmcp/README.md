@@ -261,8 +261,6 @@ Mit der Option `experimentalWebMcpTool` in der Funktion `form()` lässt sich ein
 Angular leitet das JSON-Schema automatisch aus dem initialen Wert des Form-Models ab – inklusive der Pflichtfelder, die sich aus den `required()`-Validatoren ergeben.
 Damit kann ein KI-Agent ein Formular stellvertretend "ausfüllen" und absenden, ohne dass wir per Hand ein eigenes Tool mit JSON-Schema definieren müssen.
 
-### Feature aktivieren
-
 Zunächst registrieren wir den Provider `provideExperimentalWebMcpForms()` in der App-Config:
 
 ```ts
@@ -275,8 +273,6 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 ```
-
-### Formular als Tool deklarieren
 
 Anschließend können wir ein Signal Form als WebMCP-Tool deklarieren, indem wir die Option `experimentalWebMcpTool` mit einem Namen und einer Beschreibung übergeben:
 
@@ -331,21 +327,19 @@ export class BookCreatePage {
 
 Angular generiert daraus ein WebMCP-Tool mit folgendem Verhalten:
 
-- Die Felder `isbn`, `title`, `subtitle`, `authors`, `description` und `imageUrl` werden als Parameter aus dem initialen Wert des Signals abgeleitet.
+- Die Felder `isbn`, `title`, `subtitle`, `authors`, `description` und `imageUrl` werden mitsamt ihrer Typen aus dem initialen Wert des Signals abgeleitet.
 - `title`, `isbn` und `description` werden als `required` markiert, weil sie einen `required()`-Validator besitzen.
-- `authors` wird als Array von Strings erkannt, weil der initiale Wert ein nicht-leeres Array ist.
 - Wenn der Agent das Tool aufruft, validiert Angular die Eingaben und gibt eventuelle Fehler zurück – der Agent kann sich selbst korrigieren und es erneut versuchen.
 - Bei erfolgreicher Validierung wird automatisch die `submission.action` ausgeführt.
 
 ### Einschränkungen beim Form-Model
 
-Angular leitet die Typen aus den initialen Werten ab.
-Dabei gelten zwei Einschränkungen:
+Damit Angular das JSON-Schema sauber aus dem Form-Model ableiten kann, gelten dieselben Anforderungen, die ohnehin für Signal Forms zutreffen:
 
 - Felder dürfen **nicht** mit `null` oder `undefined` initialisiert werden – Angular kann daraus keinen Typ ableiten.
 - Arrays müssen **mindestens einen Eintrag** enthalten, damit der Elementtyp erkannt werden kann.
 
-Außerdem werden asynchrone Validatoren beim Tool-Aufruf nicht ausgeführt.
+Spezifisch für die WebMCP-Integration ist hingegen folgende Einschränkung: Asynchrone Validatoren werden beim Tool-Aufruf nicht ausgeführt.
 Asynchrone Prüfungen (z. B. Eindeutigkeitschecks gegen einen Server) sollten stattdessen in der `submission.action` behandelt werden.
 
 ## Testen im Browser
