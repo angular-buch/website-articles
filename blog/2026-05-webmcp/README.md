@@ -46,14 +46,14 @@ Der Ablauf lässt sich in drei Schritte zusammenfassen:
 
 1. **Die Webseite registriert Tools:** Auf jeder Seite können Aktionen deklariert werden, die ein Agent ausführen darf. Jedes Tool hat einen Namen, eine Beschreibung und ein JSON-Schema für die erwarteten Parameter.
 2. **Der Browser exponiert die Tools:** Ein WebMCP-fähiger Browser (oder eine Browser-Extension) sammelt die registrierten Tools und stellt sie dem angeschlossenen Agenten zur Verfügung.
-3. **Der Agent ruft statt zu raten:** Der Agent sieht einen klaren Vertrag, liefert strukturierte Argumente – und unser Code erledigt den Rest. Die Nutzer:innen behalten dabei die Kontrolle über Berechtigungen und Bestätigungen.
+3. **Der Agent ruft die Tools auf:** Der Agent sieht einen klaren Vertrag, liefert strukturierte Argumente – und unser Code erledigt den Rest. Die Nutzer:innen behalten dabei die Kontrolle über Berechtigungen und Bestätigungen.
 
-### Zwei APIs: Imperativ und Deklarativ
+### Zwei APIs: imperativ und deklarativ
 
 Die WebMCP-Spezifikation definiert zwei Wege, um Tools zu registrieren:
 
 - **Imperative API:** Tools werden per JavaScript über `navigator.modelContext.registerTool()` registriert. Das ist der Weg, den Angular unter der Haube nutzt.
-- **Deklarative API:** Für einfache Formulare reichen HTML-Attribute wie `toolname`, `tooldescription` und `toolparamdescription` direkt am `<form>`-Element – ganz ohne JavaScript.
+- **Deklarative API:** Für einfache Formulare reichen HTML-Attribute wie `toolname`, `tooldescription` und `toolparamdescription` direkt am `<form>`-Element, ganz ohne JavaScript.
 
 ```html
 <!-- Deklarative API: Formular als WebMCP-Tool per HTML-Attribute -->
@@ -76,7 +76,7 @@ Die deklarative API ist aber ein guter Einstieg für einfache Seiten ohne Framew
 
 ## WebMCP in Angular
 
-Angular 22 bringt experimentelle Unterstützung für WebMCP mit und dockt das Konzept sauber an die bestehende Komponenten- und Service-Architektur an.
+Angular 22.0 bringt experimentelle Unterstützung für WebMCP mit und integriert das Konzept sauber in die bestehende Architektur von Komponenten und Services.
 Tools lassen sich auf drei Ebenen registrieren:
 
 - **Global** für die gesamte Anwendung (über `provideExperimentalWebMcpTools()` in der App-Config)
@@ -84,7 +84,7 @@ Tools lassen sich auf drei Ebenen registrieren:
 - **In Services** (über `declareExperimentalWebMcpTool()` im Injection Context)
 
 Angular übernimmt dabei das Lifecycle-Handling: Tools werden automatisch wieder abgemeldet, wenn der zugehörige Injector zerstört wird.
-Wichtig ist, dass Tool-Namen eindeutig sein müssen – eine doppelte Registrierung führt zu einem Laufzeitfehler.
+Wichtig ist, dass Tool-Namen eindeutig sein müssen. Eine doppelte Registrierung führt zu einem Laufzeitfehler.
 
 ## Tools global registrieren
 
@@ -202,7 +202,7 @@ In Komponenten-Konstruktoren kann es zu Namenskollisionen kommen, wenn die Kompo
 ## Signal Forms als WebMCP-Tools
 
 Besonders charmant ist die Brücke zwischen Signal Forms und WebMCP:
-Mit der Option `experimentalWebMcpTool` in der `form()`-Funktion lässt sich ein Formular deklarativ als WebMCP-Tool registrieren.
+Mit der Option `experimentalWebMcpTool` in der Funktion `form()` lässt sich ein Formular deklarativ als WebMCP-Tool registrieren.
 Angular leitet das JSON-Schema automatisch aus dem initialen Wert des Form-Models ab – inklusive der Pflichtfelder, die sich aus den `required()`-Validatoren ergeben.
 Damit kann ein KI-Agent ein Formular stellvertretend "ausfüllen" und absenden, ohne dass wir per Hand ein eigenes Tool mit JSON-Schema definieren müssen.
 
@@ -324,10 +324,10 @@ console.log(JSON.parse(result));
 Zusätzlich gibt es eine [WebMCP Chrome Extension](https://chromewebstore.google.com/detail/webmcp-model-context-tool/gbpdfapgefenggkahomfgkhfehlcenpd), die das Debugging deutlich erleichtert.
 Mit der Extension können wir:
 
-- Sehen, welche Tools auf einer Seite registriert sind (über die `navigator.modelContext`-API)
-- Tools manuell aufrufen und die Ergebnisse inspizieren
-- Prüfen, ob das JSON-Schema korrekt definiert ist
-- Per natürlicher Sprache mit dem Agenten interagieren und testen, ob er die richtigen Tools erkennt und aufruft
+- sehen, welche Tools auf einer Seite registriert sind (über die `navigator.modelContext`-API),
+- Tools manuell aufrufen und die Ergebnisse inspizieren,
+- prüfen, ob das JSON-Schema korrekt definiert ist und
+- per natürlicher Sprache mit dem Agenten interagieren und testen, ob er die richtigen Tools erkennt und aufruft.
 
 ### Unit-Tests
 
@@ -341,12 +341,6 @@ Die APIs sind noch experimentell, aber der Weg ist klar vorgezeichnet: Strukturi
 
 Alle Details findest du im offiziellen [Angular WebMCP Guide](https://angular.dev/ai/webmcp).
 
-<hr>
-
-Hast du Fragen zu WebMCP oder zu unserem Buch? Schreibe uns!
-
-**Viel Spaß wünschen
-Ferdinand, Danny und Johannes**
 
 <hr>
 
