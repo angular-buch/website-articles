@@ -54,6 +54,9 @@ Der Ablauf lässt sich in drei Schritte zusammenfassen:
 
 ### Zwei APIs: imperativ und deklarativ
 
+> **Wichtig:** Die WebMCP-Spezifikation befindet sich noch in einem frühen Stadium.
+> Die APIs sind experimentell und können sich auch außerhalb von Major-Releases ändern.
+> Chrome bietet seit Februar 2026 eine [Early Preview](https://developer.chrome.com/blog/webmcp-epp) an.
 
 Die WebMCP-Spezifikation definiert zwei Wege, um Tools zu registrieren:
 
@@ -75,10 +78,6 @@ Die WebMCP-Spezifikation definiert zwei Wege, um Tools zu registrieren:
 
 Für Angular-Anwendungen ist die imperative API relevanter, weil Angular die Tool-Registrierung in seine DI- und Lifecycle-Mechanismen integriert.
 Die deklarative API ist aber ein guter Einstieg für einfache Seiten ohne Framework.
-
-> **Wichtig:** Die WebMCP-Spezifikation befindet sich noch in einem frühen Stadium.
-> Die APIs sind experimentell und können sich auch außerhalb von Major-Releases ändern.
-> Chrome bietet seit Februar 2026 eine [Early Preview](https://developer.chrome.com/blog/webmcp-epp) an.
 
 ## WebMCP in Angular
 
