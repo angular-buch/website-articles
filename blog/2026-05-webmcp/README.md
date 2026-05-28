@@ -404,4 +404,4 @@ Alle Details findest du im offiziellen [Angular WebMCP Guide](https://angular.de
 
 <hr>
 
-<small>**Titelbild:** generiert mit Adobe Firefly, bearbeitet</small>
+<small>**Vielen Dank an Ferdinand Malcher** für Review und das wertvolle Feedback! **Titelbild:** generiert mit Adobe Firefly, bearbeitet</small>
