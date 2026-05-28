@@ -92,7 +92,7 @@ Tools lassen sich auf zwei Wegen registrieren:
 Angular übernimmt dabei das Lifecycle-Handling: Tools werden automatisch wieder abgemeldet, wenn der zugehörige Injector zerstört wird.
 Wichtig ist, dass Tool-Namen eindeutig sein müssen. Eine doppelte Registrierung führt zu einem Laufzeitfehler.
 
-## Tools mit `provideExperimentalWebMcpTools()` definieren
+## Tools definieren mit `provideExperimentalWebMcpTools()`
 
 Mit der Funktion `provideExperimentalWebMcpTools()` definieren wir MCP-Tools als Provider.
 Sie nimmt ein Array von Tool-Definitionen entgegen und liefert einen Provider zurück, den wir an einen beliebigen Injector hängen können.
@@ -117,7 +117,7 @@ export class BookStore {
 }
 ```
 
-Anschließend definieren wir das Tool in der `app.config.ts` und nutzen den `BookStore`-Service im `execute`-Callback über `inject()`:
+Anschließend definieren wir ein passendes MCP-Tool in der `app.config.ts` und nutzen den Service `BookStore` im `execute`-Callback über `inject()`:
 
 ```ts
 // app.config.ts
@@ -128,12 +128,12 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideExperimentalWebMcpTools([{
       name: 'searchBooks',
-      description: 'Searches the book catalog.',
+      description: 'Searches the book catalog',
       inputSchema: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: 'Search keywords.' },
-          maxResults: { type: 'number', description: 'Max results to return.' }
+          query: { type: 'string', description: 'Search keywords' },
+          maxResults: { type: 'number', description: 'Max results to return' }
         },
         required: ['query'],
         additionalProperties: false,
@@ -148,7 +148,7 @@ export const appConfig: ApplicationConfig = {
 ```
 
 Die erwarteten Parameter werden über ein `inputSchema` im [JSON-Schema-Format](https://json-schema.org/) definiert.
-Angular leitet daraus automatisch die TypeScript-Typen für den `execute`-Callback ab.
+Angular leitet daraus automatisch die TypeScript-Typen für das `execute`-Callback ab.
 Mit `required` markieren wir Pflichtfelder, und `additionalProperties: false` schränkt die erlaubten Parameter ein.
 
 > **Tipp:** Angular validiert die Eingaben des Agenten nicht automatisch gegen das Schema.
@@ -156,7 +156,7 @@ Mit `required` markieren wir Pflichtfelder, und `additionalProperties: false` sc
 
 ## Wo wir Tool-Provider registrieren können
 
-Da `provideExperimentalWebMcpTools()` ein gewöhnlicher Provider ist, können wir ihn an verschiedenen Stellen einsetzen.
+Da `provideExperimentalWebMcpTools()` einen gewöhnlichen Provider erzeugt, können wir die Funktion an verschiedenen Stellen einsetzen.
 Vom Injector, in dem die Provider hängen, hängt die Gültigkeit der Tools ab.
 
 ### Global im Root-Injector
@@ -203,7 +203,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Ohne diese Option bleiben Tools, die auf Routen registriert wurden, auch nach dem Navigieren weiterhin für den Agenten sichtbar – die Route-Injectoren werden standardmäßig nicht zerstört.
+Ohne diese Option bleiben Tools, die auf Routen registriert wurden, auch nach dem Navigieren weiterhin für den Agenten sichtbar, denn die Route-Injectoren werden standardmäßig nicht zerstört.
 
 ### Pro Komponententeilbaum
 
@@ -223,7 +223,7 @@ import { provideExperimentalWebMcpTools } from '@angular/core';
 export class BookForm {}
 ```
 
-Die Tools sind dann genau so lange registriert, wie die Komponente und ihr Teilbaum existieren.
+Die Tools sind dann genau so lange registriert, wie die Komponente existiert.
 Sobald die Komponente zerstört wird, meldet Angular die Tools automatisch ab.
 
 ## Tools in Services registrieren
@@ -264,6 +264,7 @@ Damit kann ein KI-Agent ein Formular stellvertretend "ausfüllen" und absenden, 
 Zunächst registrieren wir den Provider `provideExperimentalWebMcpForms()` in der App-Config:
 
 ```ts
+// app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideExperimentalWebMcpForms } from '@angular/forms/signals';
 
@@ -341,6 +342,11 @@ Damit Angular das JSON-Schema sauber aus dem Form-Model ableiten kann, gelten di
 
 Spezifisch für die WebMCP-Integration ist hingegen folgende Einschränkung: Asynchrone Validatoren werden beim Tool-Aufruf nicht ausgeführt.
 Asynchrone Prüfungen (z. B. Eindeutigkeitschecks gegen einen Server) sollten stattdessen in der `submission.action` behandelt werden.
+
+
+> **Tipp:** Zum neuen Ansatz *Signal Forms* haben wir im Blog eine mehrteilige Artikelserie veröffentlicht:<br>
+> **[Angular Signal Forms Part 1: Getting Started with the Basics](/blog/2025-10-signal-forms-part1)**
+
 
 ## Testen im Browser
 
