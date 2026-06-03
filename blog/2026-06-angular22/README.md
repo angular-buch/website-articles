@@ -275,7 +275,7 @@ Wer eine Angular-Anwendung mit Server-Side Rendering oder Prerendering ausliefer
 
 Bislang musste das Feature explizit über `provideClientHydration(withIncrementalHydration())` aktiviert werden. Mit Angular 22 ist Incremental Hydration der Standard und greift automatisch, wenn `provideClientHydration()` in der `app.config.ts` eingebunden ist.
 
-Wer das alte Verhalten weiterhin benötigt, kann es mit der neuen Funktion `withNoIncrementalHydration()` abschalten. Für bestehende Anwendungen liefert die Angular CLI ein Migrations-Schematic mit, das überflüssige `withIncrementalHydration()`-Aufrufe entfernt.
+Wer das alte Verhalten weiterhin benötigt, kann es mit der neuen Funktion `withNoIncrementalHydration()` abschalten. Für bestehende Anwendungen liefert die Angular CLI ein Migrations-Schematic mit, das überflüssige Aufrufe von `withIncrementalHydration()` entfernt.
 
 ## HTML-Kommentare in Angular-Templates
 
@@ -358,7 +358,7 @@ export class PostEditor {
 }
 ```
 
-Schwere Abhängigkeiten wie Markdown-Parser, Charting-Bibliotheken oder PDF-Renderer tauchen so nicht mehr im Initial-Bundle auf.
+Schwergewichtige Abhängigkeiten wie Markdown-Parser, Charting-Bibliotheken oder PDF-Renderer tauchen so nicht mehr im Initial-Bundle auf.
 Sie werden erst dann nachgeladen, wenn die jeweilige Funktion aufgerufen wird.
 
 Optional kann eine **Prefetch-Strategie** angegeben werden.
@@ -376,14 +376,15 @@ Angular dockt WebMCP sauber an die bestehende Architektur an: Tools lassen sich 
 Besonders elegant ist die Brücke zu Signal Forms: Mit der Option `experimentalWebMcpTool` in der Funktion `form()` wird ein Formular automatisch als WebMCP-Tool exponiert, inklusive JSON-Schema und Validierung.
 
 Wir haben dem Thema einen eigenen ausführlichen Artikel gewidmet:
-[**WebMCP: KI-Agenten in Angular-Apps integrieren**](/blog/2026-05-webmcp)
+[**WebMCP: KI-Agenten in Angular-Apps integrieren**](/blog/2026-05-webmcp).
 
 
 ## AI-Debugging-Tools
 
-Angular 22 erweitert die Brücke zu KI-gestütztem Tooling: Der Framework-Kern registriert im Development-Modus eine Reihe neuer Debug-Schnittstellen, die Agenten direkt im Browser ansprechen können — passend zum WebMCP-Support, den wir bereits oben kennengelernt haben.
+Angular 22 erweitert die Brücke zu KI-gestütztem Tooling: Das Framework registriert im Development-Modus eine Reihe neuer Debug-Schnittstellen, die Agenten direkt im Browser ansprechen können – passend zum WebMCP-Support, den wir bereits oben kennengelernt haben.
 
-Das prominenteste Tool ist `angular:di-graph`. Damit kann ein Agent (z. B. Claude oder Gemini) den vollständigen Dependency-Injection-Graphen einer Anwendung abfragen: alle Element- und Environment-Injectors, ihre Hierarchie und die enthaltenen Services. Für Debugging-Sessions mit einem KI-Assistenten oder beim Aufsetzen automatisierter Diagnose-Workflows ist das ein praktisches Werkzeug.
+Das prominenteste Tool ist `angular:di-graph`. Damit kann ein Agent (z. B. Claude oder Gemini) den vollständigen Dependency-Injection-Graphen einer Anwendung abfragen: alle Element- und Environment-Injectors, ihre Hierarchie und die enthaltenen Services.
+Für Debugging-Sessions mit einem KI-Assistenten oder beim Aufsetzen automatisierter Diagnose-Workflows ist das ein praktisches Werkzeug.
 
 ## Webpack-basierte Builder sind deprecated
 
