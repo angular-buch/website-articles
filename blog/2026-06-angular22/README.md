@@ -1,0 +1,485 @@
+---
+title: 'Angular 22 ist da!'
+author: Angular Buch Team
+mail: team@angular-buch.com
+published: 2026-06-01
+lastModified: 2026-06-01
+keywords:
+  - Angular
+  - Angular 22
+  - Signal Forms
+  - Resource API
+  - httpResource
+  - rxResource
+  - Fetch API
+  - OnPush
+  - Debounced Signals
+  - Service Decorator
+  - injectAsync
+  - WebMCP
+  - Angular ARIA
+  - Vitest
+  - Webpack
+language: de
+header: angular22.jpg
+sticky: true
+isUpdatePost: true
+---
+
+Es gibt wieder Neuigkeiten aus der Angular-Welt: **Angular 22** ist da!
+Dieses Release zieht mehrere Konzepte über die Ziellinie:
+**Signal Forms**, **Resource API** und **`@angular/aria`** sind stable.
+Der `HttpClient` setzt nun standardmäßig auf die moderne Fetch API, und es wurde ein neuer `@Service()`-Decorator eingeführt.
+Diese und einige weitere Neuerungen stellen wir in diesem Blogpost vor.
+
+<!-- Im [Angular-Blog](TODO) findest du die offiziellen Informationen zum neuen Release.-->
+Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng update` verwenden, siehe [Angular Update Guide](https://angular.dev/update-guide).
+
+<!-- > 🇬🇧 This article is available in English language here: [Angular 22 is here!](https://angular.schule/blog/TODO) -->
+
+## Versionen von TypeScript und Node.js
+
+Die folgenden Versionen von TypeScript und Node.js sind für Angular 22 notwendig:
+
+- TypeScript: >=6.0.0 <6.1.0
+- Node.js: ^22.22.0 || ^24.13.1 || >=26.0.0
+
+Ausführliche Infos zu den unterstützten Versionen findest du in der [Angular-Dokumentation](https://angular.dev/reference/versions).
+
+
+## Unser neues Angular-Buch
+
+Ende Mai 2026 erschien unser neues Angular-Buch im Handel! In der neuen 1. Auflage vermitteln wir einen fundierten praktischen Einstieg in Angular.
+Das Buch basiert auf der neuen Major-Version Angular 22 und ist auch für folgende Versionen geeignet.
+Unter anderem behandeln wir ausführlich die neuen Signal Forms und die Resource API.
+
+Das [Beispielprojekt "BookManager"](https://bm1.angular-buch.com) aus dem Buch läuft ebenfalls aktuell auf Angular 22.
+
+
+## Signal Forms sind stable
+
+Mit Angular 21 wurden die *Signal Forms* als experimentelles Feature eingeführt – jetzt, ein halbes Jahr später, sind sie offiziell *stabil*.
+Damit hat Angular einen ganz neuen Ansatz für die Verarbeitung von Formularen im Werkzeugkasten, der konsequent auf Signals setzt.
+
+Die Grundidee: Die Formulardaten werden in einem Signal gespeichert, das von uns verwaltet wird.
+Aus dieser Datenstruktur leitet Angular automatisch die Formularstruktur ab.
+Validierungsregeln werden über eine schemabasierte API mit Funktionen wie `required()`, `minLength()` oder `validate()` deklariert.
+Für die Datenbindung kommt im Template nur noch eine einzige Direktive zum Einsatz: `[formField]`.
+
+```ts
+import { schema, form, FormField, required, minLength } from '@angular/forms/signals';
+
+const bookFormSchema = schema<Book>(fieldPath => {
+  required(fieldPath.title);
+  minLength(fieldPath.isbn, 10);
+});
+
+@Component({
+  imports: [FormField],
+  template: `
+    <input [formField]="bookForm.title" />
+    <input [formField]="bookForm.isbn" />
+  `,
+})
+export class BookForm {
+  protected readonly bookData = signal<Book>({ title: '', isbn: '' });
+  protected readonly bookForm = form(this.bookData, bookFormSchema);
+}
+```
+
+Die Schnittstellen und Konzepte sind stabil, und der Einsatz in Produktion wird offiziell empfohlen.
+Wir gehen davon aus, dass *Reactive Forms* und *Template-Driven Forms* perspektivisch durch Signal Forms abgelöst werden.
+Bestehende Reactive Forms müssen aber nicht über Bord geworfen werden:
+Über die Compat-Schicht `@angular/forms/signals/compat` lassen sich beide Welten miteinander verzahnen.
+Eine ausführliche Anleitung mit Top-down- und Bottom-up-Strategien gibt es im [Migration Guide](https://angular.dev/guide/forms/signals/migration).
+
+In den letzten Monaten haben wir uns intensiv mit Signal Forms beschäftigt und eine vierteilige Blogpost-Serie veröffentlicht:
+
+- [**Part 1: Getting Started with the Basics**](/blog/2025-10-signal-forms-part1)
+- [**Part 2: Advanced Validation and Schema Patterns**](/blog/2025-10-signal-forms-part2)
+- [**Part 3: Child Forms and Custom UI Controls**](/blog/2025-10-signal-forms-part3)
+- [**Part 4: Metadata and Accessibility Handling**](/blog/2025-12-signal-forms-part4)
+
+Auch in unserem neuen Angular-Buch findest du drei ausführliche Kapitel zu Signal Forms.
+
+
+## Resource API ist stable
+
+Die Resource API wird mit Angular 22 ebenfalls als *stable* markiert!
+Eine Resource repräsentiert einen asynchron geladenen Datensatz.
+Sie liefert nicht nur den geladenen Wert, sondern auch reaktive Statusinformationen wie `isLoading`, `error` und `value`, jeweils als Signal.
+Damit lässt sich der gesamte Prozess zum Laden von Daten elegant abbilden, ohne sich um Subscriptions oder manuelles State-Management kümmern zu müssen.
+
+Die drei Varianten unterscheiden sich in ihrem Loader:
+
+- `resource()` arbeitet mit einem Promise-basierten Loader.
+- `rxResource()` ist die Brücke zur RxJS-Welt: Die Resource verarbeitet ein Observable.
+- `httpResource()` ist die HTTP-spezifische Variante. Sie nutzt unter der Haube den `HttpClient` und unterstützt damit auch alle HTTP-Interceptors.
+
+```ts
+import { httpResource } from '@angular/common/http';
+
+@Service()
+export class BookStore {
+  readonly selectedIsbn = signal<string | null>(null);
+
+  readonly book = httpResource<Book>(() => {
+    const isbn = this.selectedIsbn();
+    return isbn ? `/api/books/${isbn}` : undefined;
+  });
+}
+```
+
+Wir haben die Resource API bereits in einem ausführlichen Blogpost vorgestellt:
+[**Reactive Angular: Daten laden mit der Resource API**](/blog/2024-10-resource-api).
+Mit der Stabilisierung in Angular 22 ist das dort beschriebene Vorgehen offiziell der empfohlene Weg, um in Komponenten signal-basiert Daten zu laden.
+
+Für schreibende Operationen wird allerdings weiterhin der `HttpClient` eingesetzt. Eine Resource eignet sich nur, um Daten zu laden, die als Signals bereitgestellt werden.
+
+
+## Angular ARIA ist stable
+
+Das Paket [`@angular/aria`](https://angular.dev/guide/aria/overview) bietet eine Sammlung von Direktiven, die gängige [WAI-ARIA-Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) umsetzen – von Accordion über Combobox bis hin zu Tabs und Tree.
+Tastaturinteraktionen, ARIA-Attribute, Fokus-Management und Screen-Reader-Unterstützung sind dabei bereits eingebaut.
+Wir liefern lediglich die HTML-Struktur, das Styling und die fachliche Logik.
+
+
+Das neue Paket gilt ab Angular 22 ebenfalls als **stable**.
+Wir können die Direktiven nun also bedenkenlos in produktiven Anwendungen einsetzen.
+Die Installation erfolgt wie gewohnt über die Angular CLI:
+
+```bash
+ng add @angular/aria
+```
+
+
+
+
+## Der neue Decorator `@Service()`
+
+Mit Angular 22 wurde der neue Decorator `@Service()` eingeführt.
+Er ist die moderne und ergonomische Alternative zum etablierten Decorator `@Injectable()` mit der Einstellung `providedIn: 'root'`.
+
+Da das Klassennamen-Suffix `Service` [mit Angular 20 weggefallen ist](/blog/2025-05-angular20), ist der neue Decorator aus unserer Sicht eine sinnvolle Ergänzung.
+So ist auf den ersten Blick erkennbar, dass es sich bei einer Klasse um einen Service handelt.
+
+Der Decorator kann in den meisten Fällen direkt ersetzt werden:
+
+```ts
+// VORHER
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BookStore {}
+```
+
+```ts
+// NACHHER
+import { Service } from '@angular/core';
+
+@Service()
+export class BookStore {}
+```
+
+Die Angular CLI generiert Services mit `ng generate service` nun ebenfalls standardmäßig mit dem neuen Decorator.
+Um beim Generieren den älteren Decorator `@Injectable()` zu erhalten, können wir das Flag `--injectable` verwenden.
+
+```bash
+# mit Decorator `@Service()`
+ng g service book-store
+
+# mit Decorator `@Injectable()`
+ng g service book-store --injectable
+```
+
+Im Vergleich zu `@Injectable()` sieht `@Service()` keine Konfigurationsmöglichkeiten vor und ist damit bewusst schlank gehalten.
+Eine wichtige Eigenschaft sollte man dabei kennen: **Constructor Injection ist mit `@Service()` nicht erlaubt**.
+Dependencies müssen über die Funktion `inject()` aufgelöst werden – andernfalls wirft Angular einen Fehler.
+Diese Einschränkung schiebt uns sanft, aber bestimmt in Richtung des modernen, funktionalen DI-Stils.
+
+Für spezielle Fälle wie `providedIn: 'platform'` benötigen wir weiterhin den Decorator `@Injectable()`.
+Wir müssen also nicht befürchten, dass `@Injectable()` in naher Zukunft "deprecated" wird.
+Wir empfehlen dennoch, neue Services mit dem neuen Decorator auszustatten – die Syntax ist kürzer und es sieht auch ein wenig schicker aus.
+
+> Übrigens: Das Konzept eines `@Service()`-Decorators für Angular wurde von Johannes als Gedankenexperiment in einem [eigenen Blogpost](/blog/2025-09-service-decorator) durchgespielt – jetzt gibt es ihn wirklich!
+
+
+
+
+
+## Change Detection: OnPush ist jetzt Default
+
+Mit Angular 22 wird ein weiterer großer Schritt in Richtung Performance gegangen:
+**`ChangeDetectionStrategy.OnPush` ist nun die Standard-Strategie** für alle Komponenten.
+Dies basiert auf dem [RFC zum Thema](https://github.com/angular/angular/discussions/66779), an dem die Community lange mitdiskutiert hat.
+
+Komponenten, in denen das Property `changeDetection` nicht explizit gesetzt ist, verwenden jetzt automatisch die Strategie `OnPush`.
+Damit setzt das Angular-Team konsequent den eingeschlagenen Weg fort:
+Mit Angular 21 wurde Zoneless Change Detection zum Standard, Signals sind seit Längerem das zentrale Reaktivitätsprimitiv, und nun ist auch die granulare Change Detection per Default aktiv.
+Das Ergebnis ist eine bessere Performance "out of the box", weil unnötige Durchläufe der Change Detection vermieden werden.
+
+Wenn deine Anwendung schon durchgehend auf Signals basiert, sollte die Umstellung kein Problem sein.
+Schon seit einigen Jahren wird empfohlen, `OnPush` einzusetzen, sodass viele Projekte bereits gut darauf abgestimmt sind.
+
+Für ältere Anwendungen hat die Migration allerdings Stolperfallen:
+Komponenten, die ihren View-Status über direkte Property-Zuweisungen aus einer Subscription heraus aktualisieren, ohne zusätzlich `markForCheck()` aufzurufen, können stillschweigend "einfrieren".
+Die Daten kommen an, aber die Anzeige im Template aktualisiert sich nicht, weil Angular nicht mehr automatisch erkennt, dass eine Aktualisierung nötig ist.
+
+Die saubere Lösung ist, Subscriptions auf Signals umzustellen, beispielsweise mit `toSignal()`.
+Alternativ kann man explizit `markForCheck()` aufrufen oder den Wert über die AsyncPipe in das Template binden.
+Wer schon konsequent auf Signals setzt, muss in seinen eigenen Komponenten in der Regel gar nichts anpassen.
+
+Besondere Vorsicht ist bei eigenen Bibliotheken gefragt:
+Library-Autor:innen sollten ihre Komponenten überprüfen und – falls die Komponenten sich auf das alte Verhalten verlassen – die `changeDetection`-Property explizit auf `ChangeDetectionStrategy.Eager` setzen, damit nichts unerwartet bricht.
+`Eager` ist der neue Name für die alte Strategie `Default`.
+
+
+## HttpClient: Fetch API ist jetzt der Default
+
+Der `HttpClient` nutzt nun unter der Haube standardmäßig die moderne Fetch API des Browsers.
+Bisher musste Fetch explizit über `withFetch()` aktiviert werden, ansonsten verwendete der `HttpClient` das ältere `XMLHttpRequest`.
+
+Da seit Angular 21 die Providers für den `HttpClient` automatisch eingebunden werden, müssen wir für die Einrichtung nichts weiter tun: Wir können den `HttpClient` direkt per `inject()` in der Anwendung nutzen.
+Fetch funktioniert ab Angular 22 ganz von allein, und ein expliziter Aufruf von `provideHttpClient()` in der `app.config.ts` ist nicht mehr nötig.
+
+```ts
+@Service()
+export class BookStore {
+  // HttpClient ist out of the box verfügbar – mit Fetch als Default
+  #http = inject(HttpClient);
+}
+```
+
+Die Vorteile: bessere Kompatibilität mit Server-Side Rendering, eine moderne Browser-API und ein etwas schlankeres Bundle, weil der XHR-Pfad nicht mehr standardmäßig benötigt wird.
+
+Allerdings ist diese Umstellung ein Breaking Change, der eine wichtige Einschränkung mit sich bringt:
+Das `FetchBackend` unterstützt **keine Upload-Progress-Events**.
+Wer in seiner Anwendung mit `reportProgress: true` den Fortschritt von Datei-Uploads tracken möchte, muss bei den betroffenen Requests explizit auf das XHR-Backend zurückwechseln.
+Dafür rufen wir `provideHttpClient()` weiterhin manuell auf und konfigurieren das XHR-Backend:
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withXhr())
+  ]
+};
+```
+
+
+
+## Incremental Hydration ist jetzt Default
+
+Wer eine Angular-Anwendung mit Server-Side Rendering oder Prerendering ausliefert, profitiert seit Angular 19 von der *Incremental Hydration*: Statt die gesamte Anwendung auf einmal interaktiv zu machen, werden nur die Bereiche aktiviert, die der Nutzer tatsächlich sieht oder anklickt. So verkürzt sich die Zeit, bis die Seite für den Nutzer reaktionsfähig ist, spürbar.
+
+Bislang musste das Feature explizit über `provideClientHydration(withIncrementalHydration())` aktiviert werden. Mit Angular 22 ist Incremental Hydration der Standard und greift automatisch, wenn `provideClientHydration()` in der `app.config.ts` eingebunden ist.
+
+Wer das alte Verhalten weiterhin benötigt, kann es mit der neuen Funktion `withNoIncrementalHydration()` abschalten. Für bestehende Anwendungen liefert die Angular CLI ein Migrations-Schematic mit, das überflüssige Aufrufe von `withIncrementalHydration()` entfernt.
+
+## HTML-Kommentare in Angular-Templates
+
+Eine kleine, aber im Alltag sehr nützliche Verbesserung betrifft die Templates:
+Angular 22 erlaubt nun **Kommentare innerhalb von Template-Elementen**, zusätzlich zu den klassischen HTML-Kommentaren `<!-- ... -->`.
+
+Bisher konnte man Attribute, Inputs oder Event-Bindings in einem mehrzeiligen Element-Tag nicht einfach auskommentieren oder mit einer kurzen Notiz versehen.
+Jetzt akzeptiert der Template-Parser auch JavaScript-typische Kommentare im Stil `// ...` für einzelne Zeilen sowie `/* ... */` für mehrzeilige Kommentare direkt zwischen den Attributen.
+
+```html
+<app-book-card
+  // Pass a book as input
+  [book]="b"
+  /* Process received 'like' event */
+  (like)="addLikedBook($event)"
+/>
+```
+
+## Debounced Signals
+
+Im neuen Release wurde die experimentelle Funktion **`debounced()`** vorgestellt.
+Damit können wir ein Signal *entprellen*, sodass es seinen Wert erst nach einer kurzen Wartezeit ausgibt.
+Das ist ein Klassiker bei Such-Eingabefeldern: Während der Eingabe soll nicht nach jedem Tastendruck eine Anfrage abgeschickt werden, sondern erst, wenn die Eingabe zur Ruhe gekommen ist.
+
+Bisher war dieses Muster fest in der Welt von RxJS verankert: Man musste das Signal mit `toObservable()` in ein Observable umwandeln, `debounceTime()` verwenden und das Ergebnis mit `toSignal()` zurückkonvertieren.
+Mit `debounced()` geht das nun ohne Umwege direkt in der Signal-Welt.
+
+```ts
+import { debounced, resource, signal } from '@angular/core';
+
+@Component({/* ... */})
+export class Search {
+  protected readonly query = signal('');
+  protected readonly debouncedQuery = debounced(this.query, 300);
+
+  protected readonly results = resource({
+    params: () => this.debouncedQuery.value(),
+    loader: ({ params }) => fetchResults(params),
+  });
+}
+```
+
+Die Funktion `debounced()` liefert eine `Resource` zurück, deren Wert erst nach Ablauf der angegebenen Wartezeit (in Millisekunden) aktualisiert wird.
+Während des Wartens hat die Resource den Status `loading`, danach `resolved`.
+Statt einer festen Millisekundenzahl kann auch eine eigene Wait-Funktion übergeben werden, die ein `Promise<void>` zurückgibt.
+Damit lassen sich z. B. unterschiedliche Wartezeiten je nach Eingabelänge realisieren.
+
+Wichtig: `debounced()` muss in einem Injection Context aufgerufen werden, damit Angular die zugehörigen Timer beim Zerstören des Injectors automatisch aufräumen kann.
+
+In Signal Forms gibt es zusätzlich die verwandte Schema-Funktion `debounce()`, mit der sich asynchrone Validatoren entprellen lassen.
+Dieses Hilfsmittel können wir z. B. einsetzen, um nicht bei jedem Tastendruck eine serverseitige Eindeutigkeitsprüfung anzustoßen.
+
+
+## `injectAsync()`: Services lazy laden
+
+Ein weiteres neues Werkzeug im Bereich Dependency Injection ist die Funktion **`injectAsync()`**.
+Damit lassen sich Services und ihre Abhängigkeiten **lazy laden**, ohne dass sie im initialen Bundle der Anwendung landen.
+
+Bisher war das Pattern für lazy geladene Services umständlich:
+Man musste den `Injector` per `inject()` holen, den Service dynamisch importieren und das Ergebnis selbst über `Injector.get()` auflösen und cachen.
+Mit `injectAsync()` übernimmt Angular all diese Schritte automatisch.
+Die Funktion bekommt einen Loader übergeben, der die Service-Klasse über einen dynamischen `import()` zurückgibt.
+Um den Service zu verwenden, müssen wir selbst die Promise verarbeiten, die von der Funktion ausgegeben wird, z. B. mit `async`/`await`.
+Beim Aufruf wird die Klasse durch die Dependency Injection aufgelöst und für nachfolgende Aufrufe gecacht.
+
+```ts
+import { Component, injectAsync, onIdle, signal } from '@angular/core';
+
+@Component({ /* ... */ })
+export class PostEditor {
+  #markdownParser = injectAsync(
+    () => import('../markdown-parser').then(m => m.MarkdownParser),
+    { prefetch: onIdle }
+  );
+
+  async preview() {
+    const svc = await this.#markdownParser();
+    // ...
+  }
+}
+```
+
+Schwergewichtige Abhängigkeiten wie Markdown-Parser, Charting-Bibliotheken oder PDF-Renderer tauchen so nicht mehr im Initial-Bundle auf.
+Sie werden erst dann nachgeladen, wenn die jeweilige Funktion aufgerufen wird.
+
+Optional kann eine **Prefetch-Strategie** angegeben werden.
+Mit `prefetch: onIdle` lädt Angular die Abhängigkeit im Hintergrund, sobald der Browser idle ist.
+So bleibt das Initial-Bundle schlank, und die Nutzer:innen müssen trotzdem nicht warten, wenn sie das Feature später aufrufen – die Datei ist dann bereits im Cache.
+
+
+## WebMCP: KI-Agenten in Web-Apps integrieren
+
+Angular 22 bringt experimentelle Unterstützung für **[WebMCP](https://github.com/webmachinelearning/webmcp)** (Web Model Context Protocol) mit.
+Dieser aufkommende Webstandard ermöglicht es, aus einer Web-App heraus strukturierte Tools für KI-Agenten im Browser bereitzustellen.
+Statt DOM-Scraping und simulierten Klicks können Agenten wie Claude oder Gemini die deklarierten Tools direkt aufrufen, z. B. um ein Formular auszufüllen oder eine Suche auszulösen.
+
+Angular dockt WebMCP sauber an die bestehende Architektur an: Tools lassen sich global, pro Route oder in Services und Komponenten registrieren.
+Besonders elegant ist die Brücke zu Signal Forms: Mit der Option `experimentalWebMcpTool` in der Funktion `form()` wird ein Formular automatisch als WebMCP-Tool exponiert, inklusive JSON-Schema und Validierung.
+
+Wir haben dem Thema einen eigenen ausführlichen Artikel gewidmet:
+[**WebMCP: KI-Agenten in Angular-Apps integrieren**](/blog/2026-05-webmcp).
+
+
+## AI-Debugging-Tools
+
+Angular 22 erweitert die Brücke zu KI-gestütztem Tooling: Das Framework registriert im Development-Modus eine Reihe neuer Debug-Schnittstellen, die Agenten direkt im Browser ansprechen können – passend zum WebMCP-Support, den wir bereits oben kennengelernt haben.
+
+Das prominenteste Tool ist `angular:di-graph`. Damit kann ein Agent (z. B. Claude oder Gemini) den vollständigen Dependency-Injection-Graphen einer Anwendung abfragen: alle Element- und Environment-Injectors, ihre Hierarchie und die enthaltenen Services.
+Für Debugging-Sessions mit einem KI-Assistenten oder beim Aufsetzen automatisierter Diagnose-Workflows ist das ein praktisches Werkzeug.
+
+## Webpack-basierte Builder sind deprecated
+
+Auf der Werkzeug-Seite zieht das Angular-Team einen weiteren Schlussstrich:
+Die alten **Webpack-basierten Builder** (`@angular-devkit/build-angular:browser` und `@angular-devkit/build-angular:dev-server`) sind mit Angular 22 offiziell als **deprecated** markiert.
+
+Schon seit einigen Versionen ist der esbuild-basierte `application`-Builder der Standard für neue Projekte.
+Er ist deutlich schneller, unterstützt SSR direkt und integriert sich nahtlos in den Vitest-Test-Runner.
+Wer noch auf einer Webpack-Konfiguration unterwegs ist, sollte spätestens jetzt die Migration zum neuen Builder einplanen.
+Die Angular CLI stellt dafür ein passendes Migrationsskript bereit, das die `angular.json` automatisch umstellt:
+
+```bash
+ng update @angular/cli --name use-application-builder
+```
+
+Eine Entfernung der Webpack-Builder ist in einem der kommenden Major-Releases geplant.
+
+
+## Testing: `fakeAsync` zu Vitest Fake Timers migrieren
+
+Mit Angular 21 wurde Vitest zum neuen Standard-Test-Runner.
+Wer bestehende Tests migriert, stößt früher oder später auf eine Stolperfalle:
+Die altbekannten Helfer `fakeAsync()` und `tick()` aus `@angular/core/testing` basieren auf Zone.js und passen nicht mehr ohne Weiteres zum neuen, zonenlosen Setup.
+Vitest bringt mit den **Fake Timers** ein eigenes, modernes Konzept zur Steuerung von Zeit in Tests mit.
+
+Mit Angular 22 stellt die Angular CLI ein Schematic bereit, das Tests automatisch von `fakeAsync`/`tick` auf die Fake Timers von Vitest umstellt:
+
+```bash
+ng generate @schematics/angular:fake-async-to-vitest-fake-timers
+```
+
+Das Schematic ersetzt die `fakeAsync`-Wrapper durch `vi.useFakeTimers()`, übersetzt `tick(...)` in `vi.advanceTimersByTime(...)` und kümmert sich um die zugehörigen Imports.
+In unserem [Vitest-Migrationsleitfaden](/blog/2025-11-zu-vitest-migrieren#asynchronit%C3%A4t-ohne-zonejs-mit-vitest-timer) haben wir die verschiedenen Vitest-Timer-APIs ausführlich erklärt und zeigen auch, in welchen Fällen das Schematic an seine Grenzen stößt.
+
+
+## Sonstiges
+
+Im Changelog von [Angular](https://github.com/angular/angular/releases) und der [Angular CLI](https://github.com/angular/angular-cli/releases) findest du stets alle Detailinformationen zur aktuellen Entwicklung des Frameworks.
+Einige interessante Aspekte haben wir hier zusammengetragen:
+
+- **Strict Templates als Default:** Der Angular-Compiler aktiviert die strenge Template-Typprüfung jetzt standardmäßig. Beim `ng new` wird `"strictTemplates": true` deshalb nicht mehr in die `tsconfig.json` geschrieben — die Einstellung ist implizit aktiv (siehe [Commit](https://github.com/angular/angular-cli/commit/f98cc82eb0f46986e61b4f94b57dcd36e4eaf215)).
+- **Subresource Integrity für dynamische Module:** Der `@angular/build`-Builder erzeugt automatisch eine Import-Map mit SRI-Hashes für Lazy-Loading und `injectAsync()`. Damit lässt sich verifizieren, dass dynamisch nachgeladene JavaScript-Module nicht manipuliert wurden (siehe [Commit](https://github.com/angular/angular-cli/commit/58c7c7a9d80fc6af5cf8b82a6d87f1d3cf3808c6)).
+- **Bootstrap unter Shadow Roots:** Eine Angular-Anwendung kann nun innerhalb eines Shadow-DOM-Baums gebootstrapped werden. Praktisch z. B. für Micro-Frontends, die als Web Component in eine andere Anwendung eingebettet werden (siehe [Commit](https://github.com/angular/angular/commit/cdda51a3b2f48d5623acef0c6f54afb7af921b58)).
+- **SSR-Cache für Resources:** Mit der neuen Option `transferCacheKey` lassen sich Werte aus `resource()`/`rxResource()` über die `TransferState` vom Server zum Client übertragen. Doppelte Ladevorgänge werden so eingespart (siehe [Commit](https://github.com/angular/angular/commit/5a7c1e62dc2a4fa199b85150eca66914c107a6f4)).
+
+## Ausblick auf spätere Versionen
+
+Zwei spannende Features haben es leider nicht mehr in dieses Release geschafft und stehen daher auf der Roadmap für die nächsten Releases.
+
+### `linkedSignal` mit Write-Back
+
+`linkedSignal()` bekommt eine optionale `set`-Funktion, mit der wir das Schreibverhalten individuell festlegen können. Statt den Wert des Linked Signals direkt zu überschreiben, lässt sich die Aktualisierung auf eine andere Datenquelle umleiten. Der [zugehörige Commit](https://github.com/angular/angular/commit/124ba10ead58c9f93b0b74c4102022c4674db1f5) zeigt das mit einer Temperatur in Celsius als Source of Truth und einem abgeleiteten Linked Signal in Fahrenheit:
+
+```typescript
+const tempC = signal(0);
+const tempF = linkedSignal(() => (tempC() * 9) / 5 + 32, {
+  set: (valF) => tempC.set(((valF - 32) * 5) / 9),
+});
+
+tempF.set(212);
+console.log(tempC()); // 100
+console.log(tempF()); // 212
+```
+
+`tempC` bleibt die führende Quelle, `tempF` kann sowohl gelesen als auch geschrieben werden.
+
+### `@boundary` und `@error`: Error Boundaries für Templates
+
+Auf der Google I/O 2026 hat Mark Thompson vom Angular-Team eine neue Template-Syntax angekündigt: `@boundary` und `@error`. Tritt beim Rendern einer Komponente innerhalb der Boundary eine Exception auf, isoliert Angular den Fehler und rendert stattdessen das Fallback aus dem `@error`-Block. Der Fehler kann so nicht mehr den Rest der Anwendung beeinträchtigen.
+
+```html
+<section>
+  @boundary {
+    <app-payment-summary />
+  }
+  @error (let err) {
+    <app-payment-fallback />
+  }
+
+  <app-order-details />
+  <app-checkout-button />
+</section>
+```
+
+Die Funktion ist für das 3. Quartal 2026 als Developer Preview geplant.
+Wir können uns also schon jetzt auf die nächste Version von Angular freuen.
+
+<hr>
+
+Wir wünschen dir viel Spaß beim Entwickeln mit Angular 22!
+Hast du Fragen zur neuen Version von Angular oder zu unserem Buch? Schreibe uns!
+
+**Viel Spaß wünschen
+Ferdinand, Danny und Johannes**
+
+<hr>
+
+<small>**Titelbild:** Joshua Tree National Park, Kalifornien, USA, 2019. Foto von Ferdinand Malcher</small>
