@@ -35,7 +35,7 @@ Diese und einige weitere Neuerungen stellen wir in diesem Blogpost vor.
 Im [Angular-Blog](https://blog.angular.dev/announcing-angular-v22-c52bb83a4664) findest du die offiziellen Informationen zum neuen Release.
 Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng update` verwenden, siehe [Angular Update Guide](https://angular.dev/update-guide).
 
-<!-- > 🇬🇧 This article is available in English language here: [Angular 22 is here!](https://angular.schule/blog/TODO) -->
+> 🇬🇧 This article is available in English language here: [Angular 22 is here!](https://angular.schule/blog/2026-06-angular22)
 
 ## Versionen von TypeScript und Node.js
 
