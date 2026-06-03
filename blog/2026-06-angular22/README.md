@@ -269,6 +269,14 @@ export const appConfig: ApplicationConfig = {
 
 
 
+## Incremental Hydration ist jetzt Default
+
+Wer eine Angular-Anwendung mit Server-Side Rendering oder Prerendering ausliefert, profitiert seit Angular 19 von der *Incremental Hydration*: Statt die gesamte Anwendung auf einmal interaktiv zu machen, werden nur die Bereiche aktiviert, die der Nutzer tatsächlich sieht oder anklickt. So verkürzt sich die Zeit, bis die Seite für den Nutzer reaktionsfähig ist, spürbar.
+
+Bislang musste das Feature explizit über `provideClientHydration(withIncrementalHydration())` aktiviert werden. Mit Angular 22 ist Incremental Hydration der Standard und greift automatisch, wenn `provideClientHydration()` in der `app.config.ts` eingebunden ist.
+
+Wer das alte Verhalten weiterhin benötigt, kann es mit der neuen Funktion `withNoIncrementalHydration()` abschalten. Für bestehende Anwendungen liefert die Angular CLI ein Migrations-Schematic mit, das überflüssige `withIncrementalHydration()`-Aufrufe entfernt.
+
 ## HTML-Kommentare in Angular-Templates
 
 Eine kleine, aber im Alltag sehr nützliche Verbesserung betrifft die Templates:
