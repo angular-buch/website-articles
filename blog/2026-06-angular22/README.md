@@ -415,6 +415,48 @@ Einige interessante Aspekte haben wir hier zusammengetragen:
 - **Bootstrap unter Shadow Roots:** Eine Angular-Anwendung kann nun innerhalb eines Shadow-DOM-Baums gebootstrapped werden. Praktisch z. B. für Micro-Frontends, die als Web Component in eine andere Anwendung eingebettet werden (siehe [Commit](https://github.com/angular/angular/commit/cdda51a3b2f48d5623acef0c6f54afb7af921b58)).
 - **SSR-Cache für Resources:** Mit der neuen Option `transferCacheKey` lassen sich Werte aus `resource()`/`rxResource()` über die `TransferState` vom Server zum Client übertragen. Doppelte Ladevorgänge werden so eingespart (siehe [Commit](https://github.com/angular/angular/commit/5a7c1e62dc2a4fa199b85150eca66914c107a6f4)).
 
+## Ausblick auf spätere Versionen
+
+Zwei spannende Features haben es leider nicht mehr in dieses Release geschafft und stehen daher auf der Roadmap für die nächsten Releases.
+
+### `linkedSignal` mit Write-Back
+
+`linkedSignal()` bekommt eine optionale `set`-Funktion, mit der wir das Schreibverhalten individuell festlegen können. Statt den Wert des Linked Signals direkt zu überschreiben, lässt sich die Aktualisierung auf eine andere Datenquelle umleiten. Der [zugehörige Commit](https://github.com/angular/angular/commit/124ba10ead58c9f93b0b74c4102022c4674db1f5) zeigt das mit einer Temperatur in Celsius als Source of Truth und einem abgeleiteten Linked Signal in Fahrenheit:
+
+```typescript
+const tempC = signal(0);
+const tempF = linkedSignal(() => (tempC() * 9) / 5 + 32, {
+  set: (valF) => tempC.set(((valF - 32) * 5) / 9),
+});
+
+tempF.set(212);
+console.log(tempC()); // 100
+console.log(tempF()); // 212
+```
+
+`tempC` bleibt die führende Quelle, `tempF` kann sowohl gelesen als auch geschrieben werden.
+
+### `@boundary` und `@error`: Error Boundaries für Templates
+
+Auf der Google I/O 2026 hat Mark Thompson vom Angular-Team eine neue Template-Syntax angekündigt: `@boundary` und `@error`. Tritt beim Rendern einer Komponente innerhalb der Boundary eine Exception auf, isoliert Angular den Fehler und rendert stattdessen das Fallback aus dem `@error`-Block. Der Fehler kann so nicht mehr den Rest der Anwendung beeinträchtigen.
+
+```html
+<section>
+  @boundary {
+    <app-payment-summary />
+  }
+  @error (let err) {
+    <app-payment-fallback />
+  }
+
+  <app-order-details />
+  <app-checkout-button />
+</section>
+```
+
+Die Funktion ist für das 3. Quartal 2026 als Developer Preview geplant.
+Wir können uns also schon jetzt auf die nächste Version von Angular freuen.
+
 <hr>
 
 Wir wünschen dir viel Spaß beim Entwickeln mit Angular 22!
