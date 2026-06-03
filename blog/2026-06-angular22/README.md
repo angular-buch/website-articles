@@ -411,7 +411,10 @@ Im Changelog von [Angular](https://github.com/angular/angular/releases) und der 
 Einige interessante Aspekte haben wir hier zusammengetragen:
 
 - **`set`-Logik für `linkedSignal()`:** Für ein Linked Signal können wir jetzt eigene Logik für die `set`-Operation hinterlegen. Bei Wertänderungen durch `set()`/`update()` wird dann nicht der Wert des Signals verändert, sondern die selbst definierte Funktion ausgeführt (siehe [Commit](https://github.com/angular/angular/commit/124ba10ead58c9f93b0b74c4102022c4674db1f5)).
-- **TODO:** TODO (siehe [Commit](https://github.com/angular/angular/commit/TODO)).
+- **Strict Templates als Default:** Der Angular-Compiler aktiviert die strenge Template-Typprüfung jetzt standardmäßig. Beim `ng new` wird `"strictTemplates": true` deshalb nicht mehr in die `tsconfig.json` geschrieben — die Einstellung ist implizit aktiv (siehe [Commit](https://github.com/angular/angular-cli/commit/f98cc82eb0f46986e61b4f94b57dcd36e4eaf215)).
+- **Subresource Integrity für dynamische Module:** Der `@angular/build`-Builder erzeugt automatisch eine Import-Map mit SRI-Hashes für Lazy-Loading und `injectAsync()`. Damit lässt sich verifizieren, dass dynamisch nachgeladene JavaScript-Module nicht manipuliert wurden (siehe [Commit](https://github.com/angular/angular-cli/commit/58c7c7a9d80fc6af5cf8b82a6d87f1d3cf3808c6)).
+- **Bootstrap unter Shadow Roots:** Eine Angular-Anwendung kann nun innerhalb eines Shadow-DOM-Baums gebootstrapped werden. Praktisch z. B. für Micro-Frontends, die als Web Component in eine andere Anwendung eingebettet werden (siehe [Commit](https://github.com/angular/angular/commit/cdda51a3b2f48d5623acef0c6f54afb7af921b58)).
+- **SSR-Cache für Resources:** Mit der neuen Option `transferCacheKey` lassen sich Werte aus `resource()`/`rxResource()` über die `TransferState` vom Server zum Client übertragen. Doppelte Ladevorgänge werden so eingespart (siehe [Commit](https://github.com/angular/angular/commit/5a7c1e62dc2a4fa199b85150eca66914c107a6f4)).
 
 <hr>
 
