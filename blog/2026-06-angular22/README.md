@@ -379,6 +379,12 @@ Wir haben dem Thema einen eigenen ausführlichen Artikel gewidmet:
 [**WebMCP: KI-Agenten in Angular-Apps integrieren**](/blog/2026-05-webmcp)
 
 
+## AI-Debugging-Tools
+
+Angular 22 erweitert die Brücke zu KI-gestütztem Tooling: Der Framework-Kern registriert im Development-Modus eine Reihe neuer Debug-Schnittstellen, die Agenten direkt im Browser ansprechen können — passend zum WebMCP-Support, den wir bereits oben kennengelernt haben.
+
+Das prominenteste Tool ist `angular:di-graph`. Damit kann ein Agent (z. B. Claude oder Gemini) den vollständigen Dependency-Injection-Graphen einer Anwendung abfragen: alle Element- und Environment-Injectors, ihre Hierarchie und die enthaltenen Services. Für Debugging-Sessions mit einem KI-Assistenten oder beim Aufsetzen automatisierter Diagnose-Workflows ist das ein praktisches Werkzeug.
+
 ## Webpack-basierte Builder sind deprecated
 
 Auf der Werkzeug-Seite zieht das Angular-Team einen weiteren Schlussstrich:
