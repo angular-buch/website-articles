@@ -27,7 +27,7 @@ isUpdatePost: true
 ---
 
 Es gibt wieder Neuigkeiten aus der Angular-Welt: **Angular 22** ist da!
-Dieses Release zieht viele Konzepte über die Ziellinie:
+Dieses Release zieht mehrere Konzepte über die Ziellinie:
 **Signal Forms**, **Resource API** und **`@angular/aria`** sind stable.
 Der `HttpClient` setzt nun standardmäßig auf die moderne Fetch API, und es wurde ein neuer `@Service()`-Decorator eingeführt.
 Diese und einige weitere Neuerungen stellen wir in diesem Blogpost vor.
@@ -58,7 +58,7 @@ Das [Beispielprojekt "BookManager"](https://bm1.angular-buch.com) aus dem Buch l
 
 ## Signal Forms sind stable
 
-Mit Angular 21 wurden die *Signal Forms* als experimentelles Feature eingeführt – jetzt, ein halbes Jahr später, sind sie offiziell **stabil**.
+Mit Angular 21 wurden die *Signal Forms* als experimentelles Feature eingeführt – jetzt, ein halbes Jahr später, sind sie offiziell *stabil*.
 Damit hat Angular einen ganz neuen Ansatz für die Verarbeitung von Formularen im Werkzeugkasten, der konsequent auf Signals setzt.
 
 Die Grundidee: Die Formulardaten werden in einem Signal gespeichert, das von uns verwaltet wird.
@@ -209,13 +209,13 @@ Wir empfehlen dennoch, neue Services mit dem neuen Decorator auszustatten – di
 
 
 
-## ChangeDetection.OnPush ist jetzt Default
+## Change Detection: OnPush ist jetzt Default
 
 Mit Angular 22 wird ein weiterer großer Schritt in Richtung Performance gegangen:
 **`ChangeDetectionStrategy.OnPush` ist nun die Standard-Strategie** für alle Komponenten.
 Dies basiert auf dem [RFC zum Thema](https://github.com/angular/angular/discussions/66779), an dem die Community lange mitdiskutiert hat.
 
-Komponenten, in denen das Property `changeDetection` nicht explizit gesetzt wurde, verwenden jetzt automatisch die Strategie `OnPush`.
+Komponenten, in denen das Property `changeDetection` nicht explizit gesetzt ist, verwenden jetzt automatisch die Strategie `OnPush`.
 Damit setzt das Angular-Team konsequent den eingeschlagenen Weg fort:
 Mit Angular 21 wurde Zoneless Change Detection zum Standard, Signals sind seit Längerem das zentrale Reaktivitätsprimitiv, und nun ist auch die granulare Change Detection per Default aktiv.
 Das Ergebnis ist eine bessere Performance "out of the box", weil unnötige Durchläufe der Change Detection vermieden werden.
