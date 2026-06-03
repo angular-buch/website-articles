@@ -2,8 +2,8 @@
 title: 'Angular 22 ist da!'
 author: Angular Buch Team
 mail: team@angular-buch.com
-published: 2026-06-01
-lastModified: 2026-06-01
+published: 2026-06-03
+lastModified: 2026-06-03
 keywords:
   - Angular
   - Angular 22
