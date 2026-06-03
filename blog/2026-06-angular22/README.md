@@ -37,6 +37,10 @@ Um ein bestehendes Projekt auf Angular 22 zu migrieren, kannst du den Befehl `ng
 
 > 🇬🇧 This article is available in English language here: [Angular 22 is here!](https://angular.schule/blog/2026-06-angular22)
 
+## Inhalt
+
+[[toc]]
+
 ## Versionen von TypeScript und Node.js
 
 Die folgenden Versionen von TypeScript und Node.js sind für Angular 22 notwendig:
