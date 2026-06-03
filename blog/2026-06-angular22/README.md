@@ -410,7 +410,7 @@ In unserem [Vitest-Migrationsleitfaden](/blog/2025-11-zu-vitest-migrieren#asynch
 Im Changelog von [Angular](https://github.com/angular/angular/releases) und der [Angular CLI](https://github.com/angular/angular-cli/releases) findest du stets alle Detailinformationen zur aktuellen Entwicklung des Frameworks.
 Einige interessante Aspekte haben wir hier zusammengetragen:
 
-- **`set`-Logik für `linkedSignal()`:** Für ein Linked Signal können wir jetzt eigene Logik für die `set`-Operation hinterlegen. Bei Wertänderungen durvch `set()`/`update()` wird dann nicht der Wert des Signals verändert, sondern die selbst definierte Funktion ausgeführt (siehe [Commit](https://github.com/angular/angular/commit/124ba10ead58c9f93b0b74c4102022c4674db1f5)).
+- **`set`-Logik für `linkedSignal()`:** Für ein Linked Signal können wir jetzt eigene Logik für die `set`-Operation hinterlegen. Bei Wertänderungen durch `set()`/`update()` wird dann nicht der Wert des Signals verändert, sondern die selbst definierte Funktion ausgeführt (siehe [Commit](https://github.com/angular/angular/commit/124ba10ead58c9f93b0b74c4102022c4674db1f5)).
 - **TODO:** TODO (siehe [Commit](https://github.com/angular/angular/commit/TODO)).
 
 <hr>
