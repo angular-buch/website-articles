@@ -59,6 +59,7 @@ export const appConfig: ApplicationConfig = {
     // ...
     // VERALTETE Change Detection mit Zone.js aktivieren
     provideZoneChangeDetection({ eventCoalescing: true }),
+  ]
 };
 ```
 
