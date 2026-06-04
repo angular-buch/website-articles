@@ -26,10 +26,10 @@ Ab sofort ist die neue 1. Auflage des bewährten Standardwerks im Handel verfüg
 Wir präsentieren dir einen praktischen Einstieg in das Webframework Angular.
 Nach vier erfolgreichen Vorauflagen war es Zeit für einen echten Neuanfang: Wir haben das Buch nicht überarbeitet, sondern von der ersten bis zur letzten Seite neu geschrieben.
 Beispielprojekt, Texte und Aufbau sind vollständig neu entstanden.
-Es war unser Ziel, ein zeitloses und umfangreiches Nachschlagewerk für den Entwicklungsalltag zu schaffen.
+Es war unser Ziel, ein umfangreiches Nachschlagewerk zu schaffen, das dich auch über die kommenden Angular-Versionen hinweg zuverlässig begleitet.
 
 Alle Inhalte sind auf dem aktuellen Stand von Angular 22.
-Die neuesten Themen aus der Angular-Welt haben wir von Anfang an berücksichtigt: Reaktivität mit Signals, die Resource API, Signal Forms, KI-Unterstützung für Angular und Unit-Testing mit Vitest.
+Die neuesten Themen aus der Angular-Welt haben wir von Anfang an berücksichtigt: Reaktivität mit Signals, die Resource API, Signal Forms, Barrierefreiheit (a11y), KI-Unterstützung für Angular und Unit-Testing mit Vitest.
 Damit ist das Buch auch für die kommenden Versionen des Angular-Frameworks geeignet.
 
 Das Buch ist zum Preis von 39,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
@@ -72,10 +72,10 @@ Auf der Website zum Buch veröffentlichen wir außerdem regelmäßig Aktualisier
 
 <img src="bilder/schreibtisch.jpg" alt="Für Einsteiger und Fortgeschrittene" style="float: right; width: 40%; max-width: 400px; margin: 0.3rem 0 1rem 1.8rem;">
 
-### Neu in dieser Auflage:
+### Das erwartet dich:
 
-* durchgängig auf Angular 22 und neuere Versionen aktualisiert
-* alle Inhalte vollständig überarbeitet und neu strukturiert
+* auf dem aktuellen Stand von Angular 22 und für kommende Versionen geeignet
+* komplett neu geschrieben und neu strukturiert
 * mit den neuesten Themen aus der Angular-Welt:
   * Reaktivität mit Signals
   * Resource API
@@ -104,13 +104,16 @@ Neben dem gedruckten Buch stellen wir ausgewählte Themen als Online-Kapitel ber
 Hier vertiefen wir Inhalte, die den Rahmen des Buchs sprengen würden, und greifen weiterführende Konzepte auf.
 Die Online-Kapitel werden regelmäßig aktualisiert und erweitert:
 
-* Einführung in TypeScript
-* Direktiven: Logik für DOM-Elemente
-* Interceptors: HTTP-Requests erfassen und transformieren
-* Reactive Forms und Template-Driven Forms
-* Server-Side Rendering (SSR)
-* Lokalisierung (l10n) und Internationalisierung (i18n)
-* und viele weitere
+* [Einführung in TypeScript](/material/typescript)
+* [Direktiven: Logik für DOM-Elemente](/material/directives)
+* [Content Projection: Inhalte an Komponenten übergeben](/material/content-projection)
+* [Interceptors: HTTP-Requests erfassen und transformieren](/material/interceptors)
+* [Formulare mit Reactive Forms](/material/reactive-forms)
+* [Formulare mit Template-Driven Forms](/material/template-forms)
+* [Resolvers: Daten beim Routing vorladen](/material/resolvers)
+* [Server-Side Rendering (SSR) mit Angular](/material/ssr)
+* [Lokalisierung (l10n) und Internationalisierung (i18n) mit Angular](/material/i18n)
+* und viele weitere folgen
 
 <div style="clear: both;"></div>
 
