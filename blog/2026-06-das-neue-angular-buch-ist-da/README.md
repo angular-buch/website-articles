@@ -16,7 +16,7 @@ keywords:
   - Vitest
   - Angular 22
 language: de
-header: header1a.png
+header: header.jpg
 sticky: false
 ---
 
@@ -32,11 +32,6 @@ Alle Inhalte sind auf dem aktuellen Stand von Angular 22.
 Die neuesten Themen aus der Angular-Welt haben wir von Anfang an berücksichtigt: Reaktivität mit Signals, die Resource API, Signal Forms, Barrierefreiheit (a11y), KI-Unterstützung für Angular und Unit-Testing mit Vitest.
 Damit ist das Buch auch für die kommenden Versionen des Angular-Frameworks geeignet.
 
-Das Buch ist zum Preis von 39,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
-Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt.
-
-> **Das Buch ist auch als E-Book erhältlich – in den Formaten PDF, ePub und Mobi sowie im Bundle (Print + E-Book). Alle Bezugsquellen findest du unter ["Jetzt kaufen"](/kaufen).**
-
 <img src="bilder/buecher.jpg" alt="Das neue Angular-Buch, 1. Auflage" style="float: right; width: 40%; max-width: 400px; margin: 0.3rem 0 1rem 1.8rem;">
 
 ## Das große Praxisbuch zu Angular!
@@ -50,9 +45,22 @@ Aufgrund ihres Engagements rund um Angular wurden Ferdinand und Johannes als Goo
 
 <div style="clear: both;"></div>
 
+<hr>
+
+<div style="text-align: center; margin: 0.5rem 0;">
+  <p>Das Buch ist auch als E-Book erhältlich – in den Formaten PDF und ePub sowie im Bundle (Print + E-Book).</p>
+  <a class="btn btn-primary cta__button" role="button" target="_blank" href="/kaufen">Jetzt kaufen</a>
+</div>
+
+<hr>
+
+<div style="clear: both;"></div>
+
 <img src="bilder/berg.jpg" alt="Der praktische Einstieg in Angular" style="float: left; width: 40%; max-width: 400px; margin: 0.3rem 1.8rem 1rem 0;">
 
 ### Aus dem Inhalt:
+
+Egal ob Einstieg oder Vertiefung: Das Buch deckt die gesamte Bandbreite der modernen Angular-Entwicklung ab – unter anderem:
 
 * Komponenten und Signals
 * Template-Syntax, Bindings und Control Flow
@@ -138,11 +146,21 @@ Das Buch ist auf dem aktuellen Stand von Angular 22.
 Damit decken wir den signalbasierten, reaktiven Ansatz von Angular fundiert ab – von Komponenten mit Signals über die Resource API bis zu Signal Forms.
 Auch die KI-Unterstützung für die Angular-Entwicklung und das Unit-Testing mit Vitest behandeln wir ausführlich.
 
+<div style="text-align: center;">
+  <a class="btn btn-outline-primary cta__button index__cta mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage1.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
+</div>
+
+## Immer auf dem neuesten Stand
+
 Weiterhin werden wir in unseren Blogartikeln über neue Features in Angular informieren.
 Den Code zum Beispielprojekt aus dem Buch werden wir regelmäßig aktualisieren.
 Sollten Breaking Changes auftreten, findest du die wichtigsten Infos dazu immer in unserem Blog.
 
 Wir freuen uns, dass das neue Buch nach intensiver Arbeit nun im Handel erhältlich ist – und wir hoffen, dass es dein treuer Begleiter bei der täglichen Arbeit mit Angular wird!
+
+<div style="text-align: center;">
+  <a class="btn btn-primary cta__button mb-4" role="button" target="_blank" href="/kaufen">Jetzt kaufen</a>
+</div>
 
 Solltest du Feedback, Anmerkungen oder Fragen haben, zögere nicht, uns zu schreiben!
 Wir sind per Mail unter [team@angular-buch.com](mailto:team@angular-buch.com) für dich da.
@@ -150,8 +168,3 @@ Wir sind per Mail unter [team@angular-buch.com](mailto:team@angular-buch.com) f�
 Mit besten Grüßen –
 das Autorenteam<br>
 **Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe**
-
-<div style="clear: both;"></div>
-
-<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage1.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
-<a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="/kaufen">Jetzt bestellen</a>
