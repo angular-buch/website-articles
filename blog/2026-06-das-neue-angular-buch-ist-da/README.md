@@ -32,11 +32,10 @@ Alle Inhalte sind auf dem aktuellen Stand von Angular 22.
 Die neuesten Themen aus der Angular-Welt haben wir von Anfang an berücksichtigt: Reaktivität mit Signals, die Resource API, Signal Forms, KI-Unterstützung für Angular und Unit-Testing mit Vitest.
 Damit ist das Buch auch für die kommenden Versionen des Angular-Frameworks geeignet.
 
-<!-- TODO: Preis ergänzen, sobald final (zum Vergleich: 4. Auflage war 42,90 €) -->
-Das Buch ist in jeder Buchhandlung und im Online-Handel erhältlich.
+Das Buch ist zum Preis von 39,90 € in jeder Buchhandlung und im Online-Handel erhältlich.
 Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt.
 
-> **Das Buch ist auch als E-Book erhältlich. Du kannst es in den Formaten PDF, ePub und Mobi sowie im Bundle (Print + E-Book) <!-- TODO: dpunkt-Produktlink für die neue Auflage ergänzen -->[direkt beim dpunkt.verlag](https://dpunkt.de/produkt/angular/) erwerben.**
+> **Das Buch ist auch als E-Book erhältlich – in den Formaten PDF, ePub und Mobi sowie im Bundle (Print + E-Book). Alle Bezugsquellen findest du unter ["Jetzt kaufen"](/kaufen).**
 
 <div class="row">
   <div class="col-6">
@@ -161,6 +160,5 @@ das Autorenteam<br>
 
 
 
-<!-- TODO: Leseprobe-PDF für die neue 1. Auflage hochladen und URL ergänzen -->
-<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
+<a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage1.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
 <a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="/kaufen">Jetzt bestellen</a>
