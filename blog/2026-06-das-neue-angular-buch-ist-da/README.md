@@ -37,14 +37,7 @@ Eine Übersicht haben wir unter **["Jetzt kaufen"](/kaufen)** zusammengestellt.
 
 > **Das Buch ist auch als E-Book erhältlich – in den Formaten PDF, ePub und Mobi sowie im Bundle (Print + E-Book). Alle Bezugsquellen findest du unter ["Jetzt kaufen"](/kaufen).**
 
-<div class="row">
-  <div class="col-6">
-    <img src="bilder/buecher.jpg" alt="Das neue Angular-Buch, 1. Auflage">
-  </div>
-  <div class="col-6">
-    <img src="bilder/berg.jpg" alt="Der praktische Einstieg in Angular">
-  </div>
-</div>
+<img src="bilder/buecher.jpg" alt="Das neue Angular-Buch, 1. Auflage" style="float: right; width: 40%; max-width: 400px; margin: 0.3rem 0 1rem 1.8rem;">
 
 ## Das große Praxisbuch zu Angular!
 
@@ -55,6 +48,9 @@ Die Autoren sind erfahrene Workshopleiter, Entwickler und internationale Konfere
 In diesem praxisorientierten Buch verpacken die drei Autoren ihr Wissen aus über zehn Jahren täglicher Arbeit mit Angular.
 Aufgrund ihres Engagements rund um Angular wurden Ferdinand und Johannes als Google Developer Experts (GDE) ausgezeichnet.
 
+<div style="clear: both;"></div>
+
+<img src="bilder/berg.jpg" alt="Der praktische Einstieg in Angular" style="float: left; width: 40%; max-width: 400px; margin: 0.3rem 1.8rem 1rem 0;">
 
 ### Aus dem Inhalt:
 
@@ -72,6 +68,10 @@ Erste Kenntnisse in JavaScript und HTML sind von Vorteil, aber keine Voraussetzu
 Wer nicht mit TypeScript vertraut ist, findet eine fundierte Einführung in unseren Online-Kapiteln.
 Auf der Website zum Buch veröffentlichen wir außerdem regelmäßig Aktualisierungen und Neuigkeiten rund um Angular.
 
+<div style="clear: both;"></div>
+
+<img src="bilder/schreibtisch.jpg" alt="Für Einsteiger und Fortgeschrittene" style="float: right; width: 40%; max-width: 400px; margin: 0.3rem 0 1rem 1.8rem;">
+
 ### Neu in dieser Auflage:
 
 * durchgängig auf Angular 22 und neuere Versionen aktualisiert
@@ -83,6 +83,9 @@ Auf der Website zum Buch veröffentlichen wir außerdem regelmäßig Aktualisier
   * KI-Unterstützung für Angular
   * Unit-Testing mit Vitest
 
+<div style="clear: both;"></div>
+
+<img src="bilder/tablet-beispielprojekt.jpg" alt="Das komplette Beispielprojekt zum Buch" style="float: left; width: 40%; max-width: 400px; margin: 0.3rem 1.8rem 1rem 0;">
 
 ### Online verfügbar: das komplette Beispielprojekt zum Buch
 
@@ -90,6 +93,10 @@ Anhand eines durchgängigen Beispielprojekts führen wir dich schrittweise an di
 Du erhältst den vollständigen Quelltext, Demos und eine Differenzansicht, mit der du die Entwicklung zwischen den Praxiskapiteln schnell nachvollziehen kannst.
 Auf jeden Umsetzungsschritt folgen außerdem umfangreiche Unit- und Integrationstests.
 Das [Beispielprojekt „BookManager"](https://bm1.angular-buch.com) läuft bereits auf Angular 22.
+
+<div style="clear: both;"></div>
+
+<img src="bilder/laptop-angular.jpg" alt="Zusatzthemen als Online-Kapitel" style="float: right; width: 40%; max-width: 400px; margin: 0.3rem 0 1rem 1.8rem;">
 
 ### Zusatzthemen als Online-Kapitel
 
@@ -105,20 +112,9 @@ Die Online-Kapitel werden regelmäßig aktualisiert und erweitert:
 * Lokalisierung (l10n) und Internationalisierung (i18n)
 * und viele weitere
 
+<div style="clear: both;"></div>
 
-
-
-<div class="row">
-  <div class="col-4">
-    <img src="bilder/schreibtisch.jpg" alt="Für Einsteiger und Fortgeschrittene">
-  </div>
-  <div class="col-4">
-    <img src="bilder/tablet-beispielprojekt.jpg" alt="Das komplette Beispielprojekt zum Buch">
-  </div>
-  <div class="col-4">
-    <img src="bilder/laptop-angular.jpg" alt="Zusatzthemen als Online-Kapitel">
-  </div>
-</div>
+<img src="bilder/team-google.jpg" alt="Die Autoren: Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe" style="float: left; width: 40%; max-width: 400px; margin: 0.3rem 1.8rem 1rem 0;">
 
 ## Hintergrund
 
@@ -152,13 +148,7 @@ Mit besten Grüßen –
 das Autorenteam<br>
 **Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe**
 
-<div class="row mb-5">
-  <div class="col">
-    <img src="bilder/team-google.jpg" alt="Die Autoren: Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe">
-  </div>
-</div>
-
-
+<div style="clear: both;"></div>
 
 <a class="btn btn-outline-primary cta__button index__cta mr-2 mb-2" role="button" target="_blank" href="https://angular-buch.com/assets/angular-buch-leseprobe-auflage1.pdf">Kostenlose Leseprobe <img src="assets/img/symbol-cloud.svg"></a>
 <a class="btn btn-primary cta__button mb-2" role="button" target="_blank" href="/kaufen">Jetzt bestellen</a>
