@@ -24,8 +24,8 @@ sticky: false
 Ab sofort ist die neue 1. Auflage des bewährten Standardwerks im Handel verfügbar.
 
 Wir präsentieren dir einen praktischen Einstieg in das Webframework Angular.
-Nach vier erfolgreichen Vorauflagen haben wir das Buch unter einem neuen Titel von Grund auf neu erarbeitet:
-Wir haben das Beispielprojekt, alle Texte und den Aufbau des Buchs kritisch hinterfragt und zum großen Teil neu geschrieben.
+Nach vier erfolgreichen Vorauflagen war es Zeit für einen echten Neuanfang: Wir haben das Buch nicht überarbeitet, sondern von der ersten bis zur letzten Seite neu geschrieben.
+Beispielprojekt, Texte und Aufbau sind vollständig neu entstanden.
 Es war unser Ziel, ein zeitloses und umfangreiches Nachschlagewerk für den Entwicklungsalltag zu schaffen.
 
 Alle Inhalte sind auf dem aktuellen Stand von Angular 22.
