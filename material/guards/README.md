@@ -226,7 +226,7 @@ export interface HasUnsavedChanges {
 
 export const leaveGuard: CanDeactivateFn<HasUnsavedChanges> =
   (component) => {
-    if (component.hasUnsavedChanges) {
+    if (component.hasUnsavedChanges()) {
       return confirm('Du hast ungespeicherte Änderungen. Möchtest du die Seite wirklich verlassen?');
     }
     return true;
