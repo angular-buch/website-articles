@@ -258,8 +258,8 @@ const routes: Routes = [
     path: 'users',
     canActivateChild: [adminChildGuard],
     children: [
-      { path: 'list', component: UserListComponent },
-      { path: 'detail/:id', component: UserDetailComponent },
+      { path: 'list', component: UserListPage },
+      { path: 'detail/:id', component: UserDetailPage },
     ],
   },
 ];
