@@ -154,7 +154,7 @@ export const myActivateGuard: CanActivateFn = () => {
 
 ### Umleitung mit RedirectCommand
 
-Seit Angular 18.1 gibt es eine weitere Möglichkeit, eine Umleitung aus einem Guard heraus auszulösen: das `RedirectCommand`.
+Seit Angular 18 gibt es eine weitere Möglichkeit, eine Umleitung aus einem Guard heraus auszulösen: das `RedirectCommand`.
 Im Gegensatz zum `UrlTree` können wir damit zusätzliche Navigationsoptionen angeben, z. B. `replaceUrl` oder `skipLocationChange`:
 
 ```typescript
