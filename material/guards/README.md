@@ -30,7 +30,7 @@ Damit ist es möglich, asynchrone Operationen im Guard zu verarbeiten: Zum Beisp
 
 > ⚠️ **Wichtig:** Guards steuern die Nutzerführung, aber sie sind kein Sicherheitsfeature!
 > Der gesamte kompilierte Code der Anwendung kann vom Browser jederzeit heruntergeladen werden.
-> Die Sicherheit der Daten muss immer vom Backend ausgehen: Nur wenn die bedienende Person authentifiziert und autorisiert ist, darf der Server die Daten an den Client senden.
+> Die Sicherheit der Daten muss immer vom Backend ausgehen: Nur wenn der Client authentifiziert ist, darf der Server die Daten herausgeben oder geschützte Aktionen durchführen.
 > Guards helfen uns, abhängig von diesen Zuständen die Nutzerführung zu steuern.
 
 ## Varianten von Guards
@@ -118,13 +118,14 @@ export const myActivateGuard: CanActivateFn =
 
 Wenn eine Navigation nicht erlaubt ist, kann es sinnvoll sein, stattdessen zu einer anderen Route umzuleiten.
 Dafür können wir aus dem Guard ein Objekt vom Typ `UrlTree` zurückgeben.
-Dieser `UrlTree` ist eine von Angular geparste Route und gibt dem Router die Anweisung, zu dieser Route zu navigieren.
+Ein `UrlTree` ist die interne Repräsentation einer Route und gibt dem Router die Anweisung, zu dieser Route zu navigieren.
 Er lässt sich mithilfe des Routers erzeugen: Die Methode `Router.parseUrl()` wandelt eine URL in einen `UrlTree` um:
 
 ```typescript
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
+// Variante 1: nur true/false
 export const myActivateGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
 
@@ -145,6 +146,7 @@ Außerdem können wir im zweiten Argument ein Objekt mit weiteren Optionen notie
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
+// Variante 2: Umleitung über UrlTree
 export const myActivateGuard: CanActivateFn = () => {
   // ...
   const router = inject(Router);
@@ -161,6 +163,7 @@ Im Gegensatz zum `UrlTree` können wir damit zusätzliche Navigationsoptionen an
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, RedirectCommand } from '@angular/router';
 
+// Variante 3: Umleitung über RedirectCommand mit Navigationsoptionen
 export const myActivateGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
 
@@ -202,23 +205,23 @@ import { MyComponent } from './my.component';
 
 export const leaveGuard: CanDeactivateFn<MyComponent> =
   (component) => {
-    return !component.hasUnsavedChanges;
+    return !component.hasUnsavedChanges();
   };
 ```
 
-Wenn wir den Guard in der Route verwenden, wird die Navigation weg von der Komponente `MyComponent` nur ausgeführt, wenn das Property `hasUnsavedChanges` in der Komponente den Wert `false` hat.
+Wenn wir den Guard in der Route verwenden, wird das Verlassen der Komponente `MyComponent` nur erlaubt, wenn das Signal `hasUnsavedChanges` in der Komponente den Wert `false` hat.
 Diese Eigenschaft ist selbst definiert und muss natürlich innerhalb der Komponente gesteuert werden.
 
 > **Tipp: Guard wiederverwenden**
 >
 > Durch den generischen Typparameter ist der gezeigte `CanDeactivate`-Guard spezifisch für eine bestimmte Komponente.
-> Um das zu vermeiden, empfehlen wir, ein Interface anzulegen, das die benötigte Schnittstelle der Komponente vorgibt, z. B. das Property `hasUnsavedChanges`.
+> Um das zu vermeiden, empfehlen wir, ein Interface anzulegen, das die benötigte Schnittstelle der Komponente vorgibt, z. B. das Property `hasUnsavedChanges` mit einem Signal.
 > Alle Komponenten, die diese Schnittstelle für den Guard anbieten, müssen das Interface implementieren.
 > Der Guard verwendet in seinem Typparameter dann ebenfalls das Interface. So kann der Guard mit verschiedenen Komponenten arbeiten und ist nicht nur für eine einzelne Komponente verwendbar.
 
 ```typescript
 export interface HasUnsavedChanges {
-  hasUnsavedChanges: boolean;
+  hasUnsavedChanges: Signal<boolean>;
 }
 
 export const leaveGuard: CanDeactivateFn<HasUnsavedChanges> =
