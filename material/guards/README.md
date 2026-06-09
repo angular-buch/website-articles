@@ -294,12 +294,12 @@ Entscheidet der Guard, dass die erste Route nicht berücksichtigt wird, wird die
 const routes: Routes = [
   {
     path: 'myfeature',
-    component: FeatureComponent,
+    component: FeaturePage,
     canMatch: [myMatchGuard]
   },
   {
     path: 'myfeature',
-    component: AnonymousFeatureComponent
+    component: AnonymousFeaturePage
   }
 ];
 ```
