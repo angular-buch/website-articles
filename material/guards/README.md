@@ -304,8 +304,8 @@ const routes: Routes = [
 ];
 ```
 
-Liefert das Signal `isAuthenticated` vom `AuthService` den Wert `true` zurück, wird die erste Route mit der `FeatureComponent` geladen.
-Steht der Zustand auf `false`, wird die `AnonymousFeatureComponent` angezeigt.
+Liefert das Signal `isAuthenticated` vom `AuthService` den Wert `true` zurück, wird die erste Route mit der `FeaturePage` geladen.
+Steht der Zustand auf `false`, wird die `AnonymousFeaturePage` angezeigt.
 
 Dieses Muster eignet sich hervorragend für Feature Flags, A/B-Testing oder bedingte Routenauswahl.
 
