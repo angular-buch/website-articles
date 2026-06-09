@@ -235,7 +235,7 @@ export const leaveGuard: CanDeactivateFn<HasUnsavedChanges> =
 
 ### CanActivateChild: Dürfen Kind-Routen betreten werden?
 
-Ein Guard mit dem Typ `CanActivateChildFn` entscheidet, ob zu den Kindern der betreffenden Route navigiert werden darf.
+Ein Guard mit dem Typ `CanActivateChildFn` entscheidet, ob zu den Kind-Routen der betreffenden Route navigiert werden darf.
 Dieser Guard wird für *alle* Kind-Routen ausgeführt, die mit `children` definiert sind.
 Das ist besonders nützlich, um eine ganze Gruppe von Routen mit einer einzigen Prüfung abzusichern.
 
@@ -318,14 +318,14 @@ Wollen wir einen Guard nur einmalig nutzen, können wir die Funktion auch direkt
 const routes: Routes = [
   {
     path: 'bar',
-    component: MyComponent,
+    component: BarPage,
     canDeactivate: [
-      (comp: MyComponent) => !comp.hasUnsavedChanges,
+      (comp: MyComponent) => !comp.hasUnsavedChanges(),
     ]
   },
   {
     path: 'secret',
-    component: SecretComponent,
+    component: SecretPage,
     canActivate: [() => inject(AuthService).isAuthenticated()]
   }
 ];
