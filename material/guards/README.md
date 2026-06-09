@@ -63,7 +63,7 @@ export const routes: Routes = [
   },
   {
     path: 'bar',
-    component: BarPage
+    component: BarPage,
     canDeactivate: [leaveGuard]
   }
 ];
