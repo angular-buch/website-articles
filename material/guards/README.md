@@ -90,7 +90,7 @@ ng generate guard bar --guardType CanMatch
 
 Mit einem `CanActivate`-Guard können wir prüfen, ob eine bestimmte Route betreten werden darf.
 Wir verwenden den Typ `CanActivateFn`, um die Guard-Funktion zu typisieren.
-Sie erhält zwei optionale Argumente:
+Sie kann zwei Argumente entgegennehmen:
 
 - `ActivatedRouteSnapshot`: Informationen zur angefragten Route, z. B. Routenparameter.
 - `RouterStateSnapshot`: Der gesamte Zustand des Routers.
