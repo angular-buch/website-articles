@@ -360,6 +360,7 @@ export const authGuard: CanActivateFn = () => {
 };
 ```
 
+In einer realen Anwendung würden wir hier eine eigene UI-Komponente einsetzen, etwa eine Toast-Benachrichtigung oder einen Bestätigungsdialog. Für dieses Beispiel reicht uns hier aber der einfache `alert()`-Aufruf.
 ### Guard in der Route verwenden
 
 In der Routenkonfiguration fügen wir die Eigenschaft `canActivate` hinzu und geben die Guard-Funktion an.
