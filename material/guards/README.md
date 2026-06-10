@@ -1,11 +1,11 @@
 ---
 title: 'Guards: Routen absichern'
-published: 2026-05-23
-lastModified: 2026-05-23
+published: 2026-06-10
+lastModified: 2026-06-10
 ---
 
 Normalerweise kann jede Route einer Angular-Anwendung uneingeschränkt betreten und wieder verlassen werden.
-In komplexeren Anwendungen gibt es allerdings Bereiche, die nur unter bestimmten Umständen aufgerufen werden sollen – z. B. abhängig von Authentifizierung, Berechtigungen oder dem Zustand der Anwendung.
+In komplexeren Anwendungen gibt es allerdings Bereiche, die nur unter bestimmten Umständen aufgerufen werden sollen, z. B. abhängig von Authentifizierung, Berechtigungen oder dem Zustand der Anwendung.
 Der Angular-Router bietet dafür ein Feature an, mit dem wir Routen absichern können: *Route Guards*.
 
 ## Inhalt
@@ -15,8 +15,13 @@ Der Angular-Router bietet dafür ein Feature an, mit dem wir Routen absichern k�
 ## Grundlagen zu Guards
 
 Ein Guard ist eine Funktion, die entscheidet, ob ein Navigationsschritt ausgeführt werden darf oder nicht.
-Routen können von Guards „beschützt" werden, sodass stets der Guard durchlaufen werden muss, bevor die Navigation tatsächlich ausgeführt wird.
+Routen können von Guards "beschützt" werden, sodass stets der Guard durchlaufen werden muss, bevor die Navigation tatsächlich ausgeführt wird.
 Auf diese Weise können Guards die Nutzerführung in der Anwendung steuern.
+
+> ⚠️ **Wichtig:** Guards steuern die Nutzerführung, aber sie sind kein Sicherheitsfeature!
+> Der gesamte kompilierte Code der Anwendung kann vom Browser jederzeit heruntergeladen werden.
+> Die Sicherheit der Daten muss immer vom Backend ausgehen: Nur wenn der Client authentifiziert ist, darf der Server die Daten herausgeben oder geschützte Aktionen durchführen.
+> Guards helfen uns, abhängig von diesen Zuständen die Nutzerführung zu steuern.
 
 Die Entscheidung, ob die Navigation durchgeführt wird, wird durch den Rückgabewert der Guard-Funktion ausgedrückt.
 Dafür sind diese Varianten möglich:
@@ -28,10 +33,6 @@ Dafür sind diese Varianten möglich:
 Dieser Rückgabewert kann synchron aus der Funktion zurückgegeben werden, oder er kann in ein Observable oder in eine Promise verpackt werden.
 Damit ist es möglich, asynchrone Operationen im Guard zu verarbeiten: Zum Beispiel kann ein HTTP-Request durchgeführt werden, dessen Antwort entscheidet, ob navigiert werden darf.
 
-> ⚠️ **Wichtig:** Guards steuern die Nutzerführung, aber sie sind kein Sicherheitsfeature!
-> Der gesamte kompilierte Code der Anwendung kann vom Browser jederzeit heruntergeladen werden.
-> Die Sicherheit der Daten muss immer vom Backend ausgehen: Nur wenn der Client authentifiziert ist, darf der Server die Daten herausgeben oder geschützte Aktionen durchführen.
-> Guards helfen uns, abhängig von diesen Zuständen die Nutzerführung zu steuern.
 
 ## Varianten von Guards
 
@@ -44,7 +45,7 @@ Wir unterscheiden verschiedene Arten von Guards, mit denen wir unsere Routen abs
 | `CanDeactivate` | eine Route verlassen werden darf (wegnavigieren) |
 | `CanMatch` | eine Route bei der Auswertung berücksichtigt wird |
 
-Ein Guard wird immer als Funktion entwickelt, die einer bestimmten Signatur folgt.
+Ein Guard wird immer als Funktion entwickelt, die einer bestimmten Signatur folgt, dazu gleich mehr.
 
 ## Guards verwenden
 
@@ -92,15 +93,17 @@ Mit einem `CanActivate`-Guard können wir prüfen, ob eine bestimmte Route betre
 Wir verwenden den Typ `CanActivateFn`, um die Guard-Funktion zu typisieren.
 Sie kann zwei Argumente entgegennehmen:
 
-- `ActivatedRouteSnapshot`: Informationen zur angefragten Route, z. B. Routenparameter.
-- `RouterStateSnapshot`: Der gesamte Zustand des Routers.
+- `ActivatedRouteSnapshot`: Informationen zur angefragten Route, z. B. Routenparameter
+- `RouterStateSnapshot`: der gesamte Zustand des Routers
 
 Wollen wir im Guard auf Services zugreifen, z. B. um die Entscheidung abhängig von einem zentralen Zustand zu machen, verwenden wir die Funktion `inject()`.
+Im folgenden Beispiel haben wir das mit einem Signal `isAuthenticated` angedeutet.
 
 ```typescript
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 
+// Variante 1: nur true/false
 export const myActivateGuard: CanActivateFn =
   (route, state) => {
     // Routenparameter lesen
@@ -119,13 +122,13 @@ export const myActivateGuard: CanActivateFn =
 Wenn eine Navigation nicht erlaubt ist, kann es sinnvoll sein, stattdessen zu einer anderen Route umzuleiten.
 Dafür können wir aus dem Guard ein Objekt vom Typ `UrlTree` zurückgeben.
 Ein `UrlTree` ist die interne Repräsentation einer Route und gibt dem Router die Anweisung, zu dieser Route zu navigieren.
-Er lässt sich mithilfe des Routers erzeugen: Die Methode `Router.parseUrl()` wandelt eine URL in einen `UrlTree` um:
+Er lässt sich mithilfe des Routers erzeugen: Die Methoden `Router.parseUrl()` und `Router.createUrlTree()` wandeln eine URL in einen `UrlTree` um.
 
 ```typescript
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-// Variante 1: nur true/false
+// Variante 2.1: Umleitung über UrlTree
 export const myActivateGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
 
@@ -146,15 +149,15 @@ Außerdem können wir im zweiten Argument ein Objekt mit weiteren Optionen notie
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-// Variante 2: Umleitung über UrlTree
+// Variante 2.2: Umleitung über UrlTree
 export const myActivateGuard: CanActivateFn = () => {
   // ...
   const router = inject(Router);
-  return router.createUrlTree(['login']);
+  return router.createUrlTree(['/login']);
 };
 ```
 
-### Umleitung mit RedirectCommand
+### Umleitung mit `RedirectCommand`
 
 Seit Angular 18 gibt es eine weitere Möglichkeit, eine Umleitung aus einem Guard heraus auszulösen: das `RedirectCommand`.
 Im Gegensatz zum `UrlTree` können wir damit zusätzliche Navigationsoptionen angeben, z. B. `replaceUrl` oder `skipLocationChange`:
@@ -196,7 +199,7 @@ Die Guard-Funktion erhält als erstes Argument eine Referenz auf die Komponente,
 Der Typ dieser Komponente wird mit dem generischen Typparameter `T` im Typ `CanDeactivateFn<T>` angegeben.
 
 Die Funktion erhält die gesamte Instanz der Komponente als Argument:
-Wir können also Daten aus der Komponente abfragen und die Entscheidung abhängig vom Zustand machen.
+Wir können also Daten aus der Komponente abfragen und die Entscheidung abhängig von ihrem Zustand machen.
 Das ist z. B. sinnvoll, um zu prüfen, ob Änderungen in einem Formular vorgenommen wurden, die nicht verworfen werden sollen.
 
 ```typescript
@@ -333,8 +336,8 @@ const routes: Routes = [
 
 ## Praxisbeispiel: Admin-Bereich absichern
 
-Schauen wir uns ein vollständiges Beispiel an.
-Wir wollen den Administrationsbereich einer Anwendung absichern, sodass er nur für angemeldete Personen zugänglich ist.
+Wir schauen uns ein vollständiges Beispiel an.
+Der Administrationsbereich einer Anwendung soll abgesichert werden, sodass er nur für angemeldete Personen zugänglich ist.
 Die Information zum Authentifizierungsstatus erhalten wir aus einem `AuthService`.
 
 ### Guard implementieren
@@ -361,6 +364,8 @@ export const authGuard: CanActivateFn = () => {
 ```
 
 In einer realen Anwendung würden wir hier eine eigene UI-Komponente einsetzen, etwa eine Toast-Benachrichtigung oder einen Bestätigungsdialog. Für dieses Beispiel reicht uns hier aber der einfache `alert()`-Aufruf.
+
+
 ### Guard in der Route verwenden
 
 In der Routenkonfiguration fügen wir die Eigenschaft `canActivate` hinzu und geben die Guard-Funktion an.
@@ -410,6 +415,9 @@ export const authGuard: CanActivateFn = () => {
 
 Es ist wichtig, dass wir die Länge des Datenstroms mithilfe von `take(1)` begrenzen: Wir sind nur an einem einzigen Wert interessiert, nicht an allen danach folgenden.
 
+Wichtig ist auch, dass der Router auf die asynchrone Operation wartet und die Navigation verzögert.
+Hier sollten also keine zeitintensiven Operationen durchgeführt werden.
+
 ## Diskussion: den richtigen Guard-Typ wählen
 
 Die Wahl des Guard-Typs hängt davon ab, *wann* die Prüfung stattfinden soll:
@@ -438,7 +446,7 @@ const routes: Routes = [
 ];
 ```
 
-In diesem Beispiel muss die Person sowohl authentifiziert sein als auch die Admin-Rolle besitzen, um die Route zu betreten.
+In diesem Beispiel muss die Person authentifiziert sein *und* auch die Admin-Rolle besitzen, um die Route zu betreten.
 
 ## Zusammenfassung
 
