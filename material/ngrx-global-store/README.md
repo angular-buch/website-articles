@@ -34,7 +34,7 @@ Als Grundlage für diesen praktischen Teil verwenden wir das Beispielprojekt Boo
 Im Projektverzeichnis müssen wir zunächst alle Abhängigkeiten installieren, die wir für die Arbeit mit NgRx benötigen. NgRx verfügt über eigene Schematics zur Einrichtung in einem bestehenden Angular-Projekt. Die folgenden Befehle integrieren einen vorbereiteten Store in die bestehende Anwendung:
 
 ```bash
-ng add @ngrx/store --defaults
+ng add @ngrx/store
 ng add @ngrx/store-devtools
 ng add @ngrx/effects
 ```
@@ -83,7 +83,7 @@ Mit dieser Konfiguration ist der Store zwar schon aktiv, aber wir haben noch nic
 Unsere Anwendung ist bereits in Features strukturiert, die einzelne Bereiche kapseln und in der Regel per Lazy Loading geladen werden. Diese Einteilung findet sich auch wieder, wenn es um die Einrichtung des Stores für NgRx geht. Jedes Feature erhält einen eigenen Satz an Actions, Reducers und Effects, die auch nur für genau dieses Feature und den zugehörigen State zuständig sind. So verhindern wir eine monolithische Struktur, in der verschiedene Zuständigkeiten ungewollt vermischt werden. Um NgRx für ein bestehendes Feature aufzusetzen, verwenden wir den folgenden Befehl:
 
 ```bash
-ng g feature books/store/book --api --defaults
+ng g feature books/store/book --api
 ```
 
 Dieser Aufruf legt das Feature `book` im Ordner `src/app/books/store` an. Wir haben hier bewusst den Unterordner `store` gewählt, um alle Bestandteile von NgRx sauber in einem gemeinsamen Unterordner zu gruppieren. Wichtig ist, dass der Feature-Name `book` hier im Singular angegeben wird, denn die CLI fügt beim Anlegen automatisch ein Plural-s für einige Bausteine hinzu. Mit der Option `--api` generieren wir außerdem das nötige Grundgerüst, um Daten zu behandeln, die von einer API abgerufen werden. Wie sich das auswirkt, werden wir gleich noch betrachten.
@@ -996,7 +996,7 @@ Als Beispiel wollen wir den bekannten Effect zum Laden der Bücher so erweitern,
 
 Es ist für dieses Szenario notwendig, dass wir den bestehenden State im Effect berücksichtigen. Dies können wir mit dem Operator `concatLatestFrom()` realisieren: Wir übergeben ein anderes Observable als Argument, und der Operator reichert den Hauptdatenstrom mit dem jeweils letzten Element aus diesem Observable an. Das bedeutet also, dass uns in den Effects neben dem Payload aus den Actions auch zusätzlich Daten aus dem Store zur Verfügung stehen. Wir verwenden hier direkt unseren Selektor `selectAllBooks`, um die aktuelle Buchliste aus dem Store zu erhalten. Anhand der Buchliste können wir dann mit dem Operator `filter()` entscheiden, ob die Bücher neu heruntergeladen werden sollen oder nicht.
 
-> **Hinweis:** Der Operator `concatLatestFrom()` ist mit NgRx 18 vom Paket `@ngrx/effects` in das Paket `@ngrx/operators` umgezogen. Wir importieren ihn deshalb aus `@ngrx/operators`.
+> **Hinweis:** Seit NgRx 18 importieren wir den Operator `concatLatestFrom()` aus dem Paket `@ngrx/operators`. Zuvor war er Teil von `@ngrx/effects` (dort seit NgRx 17 als veraltet markiert).
 
 ```ts
 // books/store/book.effects.ts
