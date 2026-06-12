@@ -407,7 +407,7 @@ export class MyComponent {
 
 Das resultierende Observable gibt das Ergebnis nur aus, wenn der Wert sich tatsächlich verändert hat.
 
-<!-- TODO: Abbildung "Selektor mit store.select() verwenden" aus dem Buch als SVG übernehmen (Quelle: tex/images/statemanagement/selectors-gap.graphml) -->
+![Diagramm: Der Store gibt bei jeder Änderung den gesamten State aus (loading wechselt false, true, true, false). Der Selektor store.select(state => state.book.loading) gibt darunter nur dann einen neuen Wert aus, wenn sich das loading-Flag tatsächlich ändert (false, true, false).](./selectors-gap.svg "Selektor mit store.select() verwenden")
 
 Wenn wir das Beispiel so implementieren, stoßen wir allerdings auf ein weiteres Problem: Die Struktur des States wird dynamisch verändert, wenn einzelne Feature-Module mithilfe von `forFeature()` einen Teilbaum des States registrieren. Durch eine statische Typanalyse allein ist es also nicht möglich, die vollständige Struktur des States zu ermitteln: Der TypeScript-Compiler weiß nicht, dass das Property `book` im State existiert.
 
@@ -514,7 +514,7 @@ Mit Effects kommen wir in den Genuss des vollen Erlebnisses von reaktiver Progra
 
 Technisch ist ein Effect also immer ein `Observable<Action>`. Alle so erzeugten Actions werden automatisch in den Store dispatcht – darum kümmert sich das Framework. Effects werden in einer eigenen Klasse untergebracht, die wie ein Service aufgebaut ist: Sie trägt den Decorator `@Injectable()` und kann über ihren Konstruktor Abhängigkeiten anfordern. Damit die Effects funktionieren, muss die Klasse allerdings explizit registriert werden. Dazu muss jede Effects-Klasse in einem Modul mithilfe des `EffectsModule` eingebunden werden. Für das `BooksModule` wurde dieser Schritt bereits bei der Einrichtung erledigt:
 
-<!-- TODO: Abbildung "Datenfluss in NgRx mit Effects" aus dem Buch als SVG übernehmen (Quelle: tex/images/statemanagement/ngrx-flow-full.graphml) -->
+![Diagramm: Wie der einfache Redux-Fluss, aber erweitert um Effects. Eine Action triggert nicht nur den Reducer, sondern löst auch einen Effect aus. Der Effect ruft einen Service auf, der mit einer API kommuniziert, und löst seinerseits eine neue Action aus, die wieder in den Reducer fließt.](./ngrx-flow-full.svg "Datenfluss in NgRx mit Effects")
 
 ```ts
 // books/books.module.ts
@@ -1203,7 +1203,7 @@ Damit sind die Komponenten stets abhängig von den Bausteinen des Frameworks NgR
 
 Um diese Unschönheiten zu lösen, können wir eine *Facade* verwenden: Dafür erstellen wir einen Service, der eine Schnittstelle zwischen der Komponente und dem Store bildet. Die Komponente kommuniziert über Methoden und Propertys mit der Facade. Das Framework NgRx bleibt dabei verborgen, und wir halten die Komponente frei von frameworkspezifischem Code.
 
-<!-- TODO: Abbildung "NgRx Flow mit Facade" aus dem Buch als SVG übernehmen (Quelle: tex/images/statemanagement/facade.graphml) -->
+![Diagramm: Zwischen Component und Store liegt eine Facade. Die Component ruft Methoden der Facade auf (doThings()) und liest Daten über ein Observable (data$). Die Facade kommuniziert per dispatch() und select() mit dem Store, sodass die Component selbst keinen direkten Kontakt zu NgRx hat.](./facade.svg "NgRx Flow mit Facade")
 
 Zur Implementierung nutzen wir einen einfachen Service, der mit dem Store kommuniziert. Als öffentliche Schnittstelle werden gut lesbare Methoden und Propertys angeboten.
 

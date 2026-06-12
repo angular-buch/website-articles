@@ -323,7 +323,7 @@ Das State-Objekt im Store hat zwei elementare Eigenschaften: Es ist *immutable* 
 
 Neben dem zentralen Store mit dem State-Objekt verwendet Redux zwei weitere wesentliche Bausteine: Alle fachlichen Ereignisse in der Anwendung werden mit Nachrichten abgebildet – im Kontext von Redux nennt man diese Nachrichten *Actions*. Eine Action wird von der Anwendung (z. B. von den Komponenten) in den Store gesendet (*dispatch*) und kann eine Zustandsänderung auslösen. Im Store werden die eingehenden Actions von *Reducers* verarbeitet. Diese Funktionen nehmen den aktuellen State und die neue Action als Grundlage und errechnen daraus den neuen State. Der Datenfluss in der Redux-Architektur ist in der folgenden Abbildung grafisch dargestellt. Hier ist gut erkennbar, dass die Daten stets in eine Richtung fließen und dass Lesen und Schreiben klar voneinander getrennt sind.
 
-<!-- TODO: Abbildung "Datenfluss in Redux" aus dem Buch als SVG übernehmen (Quelle: tex/images/statemanagement/redux-flow-simple.graphml) -->
+![Diagramm: Die Component löst eine Action aus, die in den Store fließt. Dort triggert die Action einen Reducer, der einen neuen State erzeugt. Der State wird zurück an die Component gepusht. Die Daten fließen so im Kreis in eine Richtung.](./redux-flow-simple.svg "Datenfluss in Redux")
 
 Bringt man diese Bausteine in den Kontext des einführenden Beispiels, so entspricht der zentrale Service dem Store von Redux. Die gesendeten Nachrichten entsprechen den Actions. Die Funktion `calculateState()`, die wir zur Veranschaulichung verwendet haben, ist genauso aufgebaut wie die Reducers von Redux. Der Operator `scan()` ist tatsächlich auch die technische Grundlage des Frameworks NgRx, das wir in diesem Kapitel für das State Management nutzen werden.
 
