@@ -29,4 +29,5 @@
 <path fill-rule="nonzero" fill="rgb(0%, 0%, 0%)" fill-opacity="1" d="M 67 199.019531 L 59.5 217.019531 L 67 212.519531 L 74.5 217.019531 Z M 67 199.019531 "/>
 <path fill="none" stroke-width="3" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(0%, 0%, 0%)" stroke-opacity="1" stroke-miterlimit="1.45" d="M 582.03125 312 L 717.28125 312 " transform="matrix(1, 0, 0, 1, -321, -251)"/>
 <path fill-rule="nonzero" fill="rgb(0%, 0%, 0%)" fill-opacity="1" d="M 406.28125 61 L 391.28125 54.75 L 395.03125 61 L 391.28125 67.25 Z M 406.28125 61 "/>
+<rect x="373" y="361" width="114" height="22" fill="rgb(100%,100%,100%)"/><text x="375" y="379" fill="rgb(0%,0%,0%)" font-family="'DejaVu Sans Mono', Menlo, monospace" font-size="17">selectSignal()</text>
 </svg>

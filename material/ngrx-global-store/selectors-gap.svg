@@ -428,4 +428,5 @@
 <use xlink:href="#glyph-3-7" x="593.95876" y="203.650274"/>
 <use xlink:href="#glyph-3-3" x="604.746437" y="203.650274"/>
 </g>
+<rect x="24.683594" y="117.898438" width="636.429687" height="36.335937" fill="rgb(39.99939%, 39.99939%, 39.99939%)"/><text x="342.9" y="142.5" text-anchor="middle" fill="rgb(100%,100%,100%)" font-family="'DejaVu Sans Mono', Menlo, monospace" font-size="18">store.selectSignal(state =&gt; state.book.loading)</text>
 </svg>
