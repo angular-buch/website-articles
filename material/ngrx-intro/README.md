@@ -1,7 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 1: Wie kommen wir zu zentralem State Management?"
 published: "2026-06-11"
-lastModified: "2026-06-12"
+lastModified: "2026-06-13"
 hidden: true
 ---
 
@@ -166,7 +166,7 @@ export class StateService {
 
 Wir haben durch die "Pseudo-Immutability" den Weg geebnet, um die Strategie für die Change Detection zu optimieren: Wenn ein Objekt bei einer Änderung stets eine neue Referenz erhält, so können wir in den Kindkomponenten die Strategie `OnPush` einsetzen. Dies kann die Performance der Anwendung entscheidend verbessern.
 
-Bitte beachten Sie, dass der Spread-Operator stets nur eine flache Kopie (Shallow Copy) eines Objekts erstellt. Ist ein Objekt oder Array verschachtelt, so müssen wir bei Änderungen auch immer das direkt betroffene Objekt kopieren.
+Wir müssen beachten, dass der Spread-Operator stets nur eine flache Kopie (Shallow Copy) eines Objekts erstellt. Ist ein Objekt oder Array verschachtelt, so müssen wir bei Änderungen auch immer das direkt betroffene Objekt kopieren.
 
 ### Nachrichten
 
@@ -340,7 +340,7 @@ Die originale Implementierung von Redux stammt aus der Welt von React. Alle enth
 
 NgRx ist das bekannteste Projekt aus dieser Kategorie. Das Framework wurde von Mitgliedern des Angular-Teams aktiv mitentwickelt und gilt als De-facto-Standard für zentrales State Management mit Angular. Es lohnt sich außerdem, einen Blick auf die Community-Projekte NGXS und Elf zu werfen.
 
-Welches der Frameworks Sie für die Zustandsverwaltung einsetzen sollten, hängt von den konkreten Anforderungen und auch von persönlichen Präferenzen ab. Sie sollten alle Projekte vergleichen und Ihren Favoriten nach Kriterien wie Codestruktur und Features auswählen. Dazu möchten wir Ihnen einen Blogartikel empfehlen, in dem NgRx, NGXS, Akita und eine eigene Lösung mit RxJS gegenübergestellt werden: [Angular state management comparison](https://ordina-jworks.github.io/angular/2018/10/08/angular-state-management-comparison.html).
+Welches der Frameworks wir für die Zustandsverwaltung einsetzen, hängt von den konkreten Anforderungen und auch von persönlichen Präferenzen ab. Wir sollten alle Projekte vergleichen und unseren Favoriten nach Kriterien wie Codestruktur und Features auswählen. Dazu möchten wir einen Blogartikel empfehlen, in dem NgRx, NGXS, Akita und eine eigene Lösung mit RxJS gegenübergestellt werden: [Angular state management comparison](https://ordina-jworks.github.io/angular/2018/10/08/angular-state-management-comparison.html).
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 2: Global Store mit NgRx"
 published: "2026-06-11"
-lastModified: "2026-06-12"
+lastModified: "2026-06-13"
 hidden: true
 ---
 
