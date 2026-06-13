@@ -33,6 +33,7 @@ We will learn about custom schema validation, cross-field validation, conditiona
 - *Part 2: Advanced Validation and Schema Patterns* (this post)
 - [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
 - [Part 4: Metadata and Accessibility Handling](/blog/2025-12-signal-forms-part4)
+- [Part 5: Migration and Compatibility](/blog/2026-04-signal-forms-part5)
 
 
 ## ARIA Support for Error Display
@@ -547,14 +548,16 @@ In this second part, we've explored advanced validation techniques and schema pa
 - Field state control with `disabled()`, `readonly()`, and `hidden()`
 - Server-side error handling
 
-In **Part 3**, we'll cover specialized topics that help you build complex, modular forms:
+In **[Part 3](/blog/2025-10-signal-forms-part3)**, we'll cover specialized topics that help you build complex, modular forms:
 
 - Creating reusable child form components
 - Building custom UI controls that integrate seamlessly with Signal Forms
 - Provide a custom `SignalFormsConfig`
 
-In **Part 4**, we'll explore field metadata and we'll create a directive which adds accessibility features that help create more inclusive and user-friendly forms.
+In **[Part 4](/blog/2025-12-signal-forms-part4)**, we'll explore field metadata and we'll create a directive which adds accessibility features that help create more inclusive and user-friendly forms.
 
-Ready for the final part? Check out [Part 3: Child Forms and Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)!
+In **[Part 5](/blog/2026-04-signal-forms-part5)**, we'll look at migration strategies and how `FormUiControl` makes custom form controls compatible with all three form approaches.
+
+Ready for the next part? Check out [Part 3: Child Forms and Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)!
 
 <small>**Cover image:** Picture from [Pixabay](https://pixabay.com/photos/journal-write-blank-pages-notes-2850091/), edited</small>

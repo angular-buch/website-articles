@@ -37,6 +37,7 @@ Last but not least, we'll have a look at providing a custom `SignalFormsConfig`.
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - *Part 3: Child Forms, Custom UI Controls and SignalFormsConfig* (this post)
 - [Part 4: Metadata and Accessibility Handling](/blog/2025-12-signal-forms-part4)
+- [Part 5: Migration and Compatibility](/blog/2026-04-signal-forms-part5)
 
 ## Integrating Child Forms
 
@@ -475,7 +476,7 @@ You can find a complete demo application for this blog series on GitHub and Stac
 
 ## Conclusion
 
-In this four-part series, we've explored the full spectrum of Angular Signal Forms:
+In this five-part series, we've explored the full spectrum of Angular Signal Forms:
 
 **[Part 1](/blog/2025-10-signal-forms-part1/)** covered the fundamentals:
 - Data models and field structures
@@ -498,6 +499,11 @@ In this four-part series, we've explored the full spectrum of Angular Signal For
 - Providing field metadata
 - Provide a generic component for displaying form field information
 - Creating a directive for adding ARIA attributes based on a field state
+
+**[Part 5](/blog/2026-04-signal-forms-part5/)** addresses migration and compatibility:
+- How `FormUiControl` makes `ControlValueAccessor` obsolete
+- Building universal form controls for all three form approaches
+- The role of `ModelSignal` as the bridge between Signal Forms, Reactive Forms, and Template-Driven Forms
 
 Signal Forms are the third major approach of form handling in Angular.
 After Template-Driven Forms and Reactive Forms, Signal Forms aim to make form handling more type-safe, reactive, and declarative.
