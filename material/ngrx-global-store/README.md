@@ -135,9 +135,9 @@ Dieser Aufruf von `provideState()` ist essenziell, denn er definiert die Struktu
 
 Nun folgt der erste inhaltliche Schritt auf dem Weg zum State Management: Wir müssen die Struktur des Feature-States für das Feature `book` definieren. Dazu befindet sich in der Datei `books/store/book.reducer.ts` ein Interface mit dem Namen `State`. Dieser Feature-State ist der erste Zweig des zentralen Objekt-Baums.
 
-Im Interface `State` legen wir fest, welche Zustände und Daten wir speichern möchten. Es soll zunächst nur darum gehen, die Buchliste vom Server abzurufen, im Store zu speichern und schließlich darzustellen. Wir benötigen also eine Liste von Büchern und integrieren außerdem einen Ladeindikator.
+Im Interface `State` legen wir fest, welche Zustände und Daten wir speichern möchten. Es soll zunächst nur darum gehen, die Buchliste vom Server abzurufen, im Store zu speichern und schließlich darzustellen. Wir benötigen also eine Liste von Büchern und integrieren außerdem einen Ladeindikator sowie ein Feld für eventuelle Fehlermeldungen.
 
-Direkt darunter befindet sich die Variable `initialState`. Damit das System weiß, welche Zustände direkt nach dem Start herrschen, müssen wir hier einen initialen Zustand definieren. Für unsere Anwendung ist die Buchliste beim Start leer und der Ladeindikator steht auf `false`:
+Direkt darunter befindet sich die Variable `initialState`. Damit das System weiß, welche Zustände direkt nach dem Start herrschen, müssen wir hier einen initialen Zustand definieren. Für unsere Anwendung ist die Buchliste beim Start leer, der Ladeindikator steht auf `false`, und es liegt zunächst kein Fehler vor:
 
 ```ts
 // books/store/book.reducer.ts
@@ -146,11 +146,13 @@ export const bookFeatureKey = 'book';
 export interface State {
   books: Book[];
   loading: boolean;
+  error: string | null;
 }
 
 export const initialState: State = {
   books: [],
-  loading: false
+  loading: false,
+  error: null
 };
 ```
 
@@ -348,8 +350,8 @@ export const reducer = createReducer(
     };
   }),
 
-  on(BookActions.loadBooksFailure, (state): State => {
-    return { ...state, loading: false };
+  on(BookActions.loadBooksFailure, (state, action): State => {
+    return { ...state, loading: false, error: action.error };
   })
 );
 ```
@@ -587,6 +589,162 @@ provideEffects(bookEffects)
 ```
 
 Beide Varianten – klassenbasiert mit `inject()` und funktional – sind gleichwertig. Welche wir wählen, ist vor allem eine Frage des Stils.
+
+### Bücher anlegen, ändern und löschen
+
+Bisher haben wir die Buchliste nur geladen. Eine echte Anwendung muss Daten auch verändern. Im Global Store durchläuft jede Mutation denselben Weg wie das Laden: Eine Komponente dispatcht eine Action, ein Effect erledigt den HTTP-Request, eine Erfolgs-Action landet im Reducer, und der Reducer passt den State an.
+
+**Actions.** Für Anlegen, Ändern und Löschen definieren wir jeweils ein Trio aus Auslöser-, Erfolgs- und Fehler-Action:
+
+```ts
+// books/store/book.actions.ts
+export const createBook = createAction('[Book] Create Book', props<{ book: Book }>());
+export const createBookSuccess = createAction('[Book] Create Book Success', props<{ book: Book }>());
+export const createBookFailure = createAction('[Book] Create Book Failure', props<{ error: string }>());
+
+export const updateBook = createAction('[Book] Update Book', props<{ book: Book }>());
+export const updateBookSuccess = createAction('[Book] Update Book Success', props<{ book: Book }>());
+export const updateBookFailure = createAction('[Book] Update Book Failure', props<{ error: string }>());
+
+export const deleteBook = createAction('[Book] Delete Book', props<{ isbn: string }>());
+export const deleteBookSuccess = createAction('[Book] Delete Book Success', props<{ isbn: string }>());
+export const deleteBookFailure = createAction('[Book] Delete Book Failure', props<{ error: string }>());
+```
+
+Schon an dieser Liste zeigt sich der Preis des Patterns: Drei CRUD-Operationen ergeben neun zusätzliche Actions. (Kompakter notieren lässt sich das mit `createActionGroup()`, siehe Abschnitt "Wie geht's weiter?".)
+
+**Effects.** Jede Mutation löst einen HTTP-Request aus. Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei **schreibenden** Operationen wollen wir laufende Requests aber *nicht* abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl. Der `BookStoreService` bietet dazu die Methoden `create()`, `update()` und `remove()` an:
+
+```ts
+// books/store/book.effects.ts (Ergänzung in der Klasse BookEffects)
+import { concatMap } from 'rxjs/operators';
+
+createBook$ = createEffect(() => {
+  return this.actions$.pipe(
+    ofType(BookActions.createBook),
+    concatMap(({ book }) =>
+      this.service.create(book).pipe(
+        map(created => BookActions.createBookSuccess({ book: created })),
+        catchError(error => of(BookActions.createBookFailure({ error: error.message })))
+      )
+    )
+  );
+});
+
+updateBook$ = createEffect(() => {
+  return this.actions$.pipe(
+    ofType(BookActions.updateBook),
+    concatMap(({ book }) =>
+      this.service.update(book).pipe(
+        map(updated => BookActions.updateBookSuccess({ book: updated })),
+        catchError(error => of(BookActions.updateBookFailure({ error: error.message })))
+      )
+    )
+  );
+});
+
+deleteBook$ = createEffect(() => {
+  return this.actions$.pipe(
+    ofType(BookActions.deleteBook),
+    concatMap(({ isbn }) =>
+      this.service.remove(isbn).pipe(
+        map(() => BookActions.deleteBookSuccess({ isbn })),
+        catchError(error => of(BookActions.deleteBookFailure({ error: error.message })))
+      )
+    )
+  );
+});
+```
+
+**Reducer.** Im Reducer passen wir den State immutabel an: anhängen mit dem Spread-Operator, ersetzen mit `map()`, entfernen mit `filter()`. Auf die drei Fehlerfälle reagieren wir mit *einem* `on()` gleichzeitig (das ist möglich, weil ein Reducer für jede Action durchlaufen wird):
+
+```ts
+// books/store/book.reducer.ts (Ergänzung in createReducer)
+on(BookActions.createBookSuccess, (state, action): State => ({
+  ...state,
+  books: [...state.books, action.book]
+})),
+
+on(BookActions.updateBookSuccess, (state, action): State => ({
+  ...state,
+  books: state.books.map(b => b.isbn === action.book.isbn ? action.book : b)
+})),
+
+on(BookActions.deleteBookSuccess, (state, action): State => ({
+  ...state,
+  books: state.books.filter(b => b.isbn !== action.isbn)
+})),
+
+on(
+  BookActions.createBookFailure,
+  BookActions.updateBookFailure,
+  BookActions.deleteBookFailure,
+  (state, action): State => ({ ...state, error: action.error })
+)
+```
+
+**Selektor und Komponente.** Für die Fehleranzeige ergänzen wir einen Selektor `selectBooksError` und lesen ihn – wie schon `books` und `loading` – per `selectSignal()`. Aktionen lösen wir aus, indem wir die Action Creators dispatchen:
+
+```ts
+// books/store/book.selectors.ts
+export const selectBooksError = createSelector(
+  selectBookState,
+  state => state.error
+);
+```
+
+```ts
+// books/book-list/book-list.component.ts
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import * as BookActions from '../store/book.actions';
+import { selectAllBooks, selectBooksError, selectBooksLoading } from '../store/book.selectors';
+import { Book } from '../../shared/book';
+
+@Component({ /* ... */ })
+export class BookListComponent {
+  private store = inject(Store);
+
+  books = this.store.selectSignal(selectAllBooks);
+  loading = this.store.selectSignal(selectBooksLoading);
+  error = this.store.selectSignal(selectBooksError);
+
+  constructor() {
+    this.store.dispatch(BookActions.loadBooks());
+  }
+
+  deleteBook(isbn: string): void {
+    this.store.dispatch(BookActions.deleteBook({ isbn }));
+  }
+
+  createBook(book: Book): void {
+    this.store.dispatch(BookActions.createBook({ book }));
+  }
+}
+```
+
+Im Template zeigen wir die Fehlermeldung an und lösen das Löschen über einen Button aus:
+
+```html
+<!-- books/book-list/book-list.component.html -->
+@if (error(); as error) {
+  <div class="error">{{ error }}</div>
+}
+
+<ul class="book-list">
+  @for (book of books(); track book.isbn) {
+    <li>
+      {{ book.title }}
+      <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
+    </li>
+  }
+</ul>
+```
+
+Damit haben wir ein vollständiges CRUD-Feature. Für drei Operationen waren neun Actions, drei Effects und drei Reducer-Fälle nötig – genau diese Menge an Bausteinen zieht der SignalStore in [Teil 3](/material/ngrx-signal-store) auf wenige Methoden in einer einzigen Datei zusammen.
+
+> **Tipp:** Die wiederkehrenden Array-Operationen im Reducer (`[...state.books, …]`, `map()`, `filter()`) übernimmt das Paket `@ngrx/entity` mit fertigen Adaptern (`addOne`, `updateOne`, `removeOne`) – siehe den Abschnitt "Entity Management" weiter unten.
 
 ### Geschafft!
 

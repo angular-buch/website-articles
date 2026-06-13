@@ -38,7 +38,7 @@ Kurz gesagt: Der Global Store ist *ein* großes, strenges System. Der SignalStor
 
 ## Der SignalStore im Detail
 
-Schauen wir uns die Bausteine konkret an. Als durchgehendes Beispiel verwenden wir wieder den BookMonkey und laden – genau wie in Teil 2 – die Buchliste vom Server, samt Ladeindikator. So lässt sich der direkte Vergleich zum Global Store ziehen.
+Schauen wir uns die Bausteine konkret an. Als durchgehendes Beispiel verwenden wir wieder den BookMonkey. Wir bauen Schritt für Schritt einen vollständigen `BookStore`, der die Buchliste vom Server lädt **und** Bücher anlegen, ändern und löschen kann – inklusive Lade- und Fehleranzeige. So lässt sich der direkte Vergleich zum Global Store aus Teil 2 ziehen.
 
 ### Installation
 
@@ -54,6 +54,8 @@ Anders als beim Global Store gibt es hier **nichts in der `app.config.ts` zu reg
 
 Einen SignalStore erzeugen wir mit der Funktion `signalStore()`. Sie nimmt eine Reihe von *Features* entgegen und gibt einen injizierbaren Service zurück. Das grundlegendste Feature ist `withState()`: Es definiert den initialen Zustand. Für jeden State-Slice wird automatisch ein passendes Signal erzeugt.
 
+Unser State umfasst die Buchliste, ein `loading`-Flag für den Ladeindikator und ein `error`-Feld, in dem wir Fehlermeldungen für die Oberfläche ablegen:
+
 ```ts
 // books/book.store.ts
 import { signalStore, withState } from '@ngrx/signals';
@@ -62,11 +64,13 @@ import { Book } from '../shared/book';
 type BookState = {
   books: Book[];
   loading: boolean;
+  error: string | null;
 };
 
 const initialState: BookState = {
   books: [],
-  loading: false
+  loading: false,
+  error: null
 };
 
 export const BookStore = signalStore(
@@ -74,7 +78,7 @@ export const BookStore = signalStore(
 );
 ```
 
-Allein dadurch besitzt eine Instanz von `BookStore` bereits zwei Signale: `books: Signal<Book[]>` und `loading: Signal<boolean>`. Verschachtelte Objekte werden übrigens zu einem `DeepSignal`, das zusätzlich für jede Eigenschaft ein eigenes Signal bereitstellt.
+Allein dadurch besitzt eine Instanz von `BookStore` bereits drei Signale: `books: Signal<Book[]>`, `loading: Signal<boolean>` und `error: Signal<string | null>`. Verschachtelte Objekte werden übrigens zu einem `DeepSignal`, das zusätzlich für jede Eigenschaft ein eigenes Signal bereitstellt.
 
 ### Den Store bereitstellen: lokal oder global
 
@@ -89,7 +93,7 @@ export const BookStore = signalStore(
 );
 ```
 
-**Lokal** (eine eigene Instanz pro Komponente, gebunden an deren Lebenszyklus) – über das `providers`-Array der Komponente oder Route:
+**Lokal** (eine eigene Instanz pro Komponente, gebunden an deren Lebenszyklus) – über das `providers`-Array der Komponente:
 
 ```ts
 @Component({
@@ -101,24 +105,46 @@ export class BookListComponent {
 }
 ```
 
-Diese Wahlfreiheit ist einer der größten Vorteile gegenüber dem Global Store: Zustand, der nur eine Komponente betrifft, muss nicht global abgelegt werden.
+Auch eine **Route** kann den Store bereitstellen – ideal für ein lazy geladenes Feature, dessen State mit der Route entsteht und verschwindet:
+
+```ts
+// books/books.routes.ts
+import { Routes } from '@angular/router';
+import { BookStore } from './book.store';
+
+export const booksRoutes: Routes = [
+  {
+    path: '',
+    providers: [BookStore], // eigener Store-Lebenszyklus für dieses Feature
+    children: [
+      // ... Routen des Features
+    ]
+  }
+];
+```
+
+Diese Wahlfreiheit ist einer der größten Vorteile gegenüber dem Global Store: Zustand, der nur eine Komponente oder ein Feature betrifft, muss nicht global abgelegt werden. Für unser Beispiel verwenden wir einen global bereitgestellten Store (`{ providedIn: 'root' }`).
 
 ### Zustand lesen
 
-Da jeder State-Slice ein Signal ist, lesen wir ihn direkt – im Code wie im Template. Eine `AsyncPipe` brauchen wir nicht mehr; wir rufen das Signal einfach als Funktion auf:
+Da jeder State-Slice ein Signal ist, lesen wir ihn direkt – im Code wie im Template. Eine `AsyncPipe` brauchen wir nicht mehr; wir rufen das Signal einfach als Funktion auf. Im Template zeigen wir Ladeindikator, Fehlermeldung und Buchliste an:
 
 ```html
 <h1>Books</h1>
 
 @if (store.loading()) {
   <div class="loader">Loading ...</div>
-} @else {
-  <ul class="book-list">
-    @for (book of store.books(); track book.isbn) {
-      <li><!-- ... --></li>
-    }
-  </ul>
 }
+
+@if (store.error(); as error) {
+  <div class="error">{{ error }}</div>
+}
+
+<ul class="book-list">
+  @for (book of store.books(); track book.isbn) {
+    <li>{{ book.title }}</li>
+  }
+</ul>
 ```
 
 Der Vergleich zu Teil 2 ist aufschlussreich: Dort haben wir das Signal erst über `store.selectSignal(selectAllBooks)` aus dem globalen Store herausgelöst. Beim SignalStore *ist* der State bereits ein Signal – ein Zwischenschritt über Selektoren entfällt.
@@ -144,40 +170,149 @@ Wie bei den memoisierten Selektoren in Teil 2 wird auch ein `computed`-Signal nu
 
 ### Zustand ändern: `withMethods` und `patchState`
 
-Verhalten fügen wir mit dem Feature `withMethods()` hinzu. Die Factory erhält die Store-Instanz (und kann über `inject()` Abhängigkeiten anfordern) und gibt ein Objekt mit Methoden zurück. Den Zustand aktualisieren wir innerhalb der Methoden mit der Funktion `patchState()` – immer **immutabel**, ganz wie in einem Reducer:
+Verhalten fügen wir mit dem Feature `withMethods()` hinzu. Die Factory erhält die Store-Instanz (und kann über `inject()` Abhängigkeiten anfordern) und gibt ein Objekt mit Methoden zurück. Den Zustand aktualisieren wir innerhalb der Methoden mit der Funktion `patchState()` – immer **immutabel**, ganz wie in einem Reducer.
+
+`patchState()` nimmt den Store gefolgt von einem **partiellen State-Objekt** oder einer **Updater-Funktion** entgegen. Die Updater-Funktion bekommt den aktuellen State und gibt die Änderung zurück – damit aktualisieren wir auch Arrays und verschachtelte Strukturen sauber unveränderlich:
 
 ```ts
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { Book } from '../shared/book';
 
 export const BookStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => ({
-    reset(): void {
-      patchState(store, { books: [], loading: false });
+    // partielles State-Objekt:
+    clearError(): void {
+      patchState(store, { error: null });
+    },
+    // Updater-Funktion: neuen State aus dem alten ableiten (immutabel!)
+    addBookLocal(book: Book): void {
+      patchState(store, state => ({ books: [...state.books, book] }));
     }
   }))
 );
 ```
 
-`patchState()` nimmt den Store gefolgt von einem partiellen State-Objekt oder einer Updater-Funktion entgegen. Hier liegt der zentrale Unterschied zum Global Store: Es gibt keine Action und keinen Reducer als Zwischenschicht – die Methode beschreibt die Zustandsänderung direkt.
+Hier liegt der zentrale Unterschied zum Global Store: Es gibt keine Action und keinen Reducer als Zwischenschicht – die Methode beschreibt die Zustandsänderung direkt.
 
 Übrigens ist der State eines SignalStore standardmäßig **vor Änderungen von außen geschützt** (Option `protectedState`, Default `true`): `patchState()` greift dann nur innerhalb des Stores. Erst wenn wir den Store mit `{ protectedState: false }` definieren, sind Änderungen auch von außen möglich. Der geschützte Standard hält den Datenfluss kontrollierbar – ähnlich der read-only-Eigenschaft des Global-Store-States.
 
-### Asynchrone Seiteneffekte: `rxMethod`
+### Asynchrone Seiteneffekte mit `rxMethod`: Daten laden
 
-Für das Laden der Bücher brauchen wir einen asynchronen Seiteneffekt – die Aufgabe, die im Global Store ein Effect übernommen hat. Einfache asynchrone Abläufe lassen sich direkt mit einer `async`-Methode und einem Promise erledigen. Für reaktive Abläufe mit RxJS bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
+Für das Laden der Bücher brauchen wir einen asynchronen Seiteneffekt – die Aufgabe, die im Global Store ein Effect übernommen hat. Einfache Abläufe lassen sich direkt mit einer `async`-Methode und einem Promise erledigen. Für reaktive Abläufe mit RxJS bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
 
-Damit bauen wir den vollständigen `BookStore`. Zum sicheren Verarbeiten der HTTP-Antwort nutzen wir den Operator `tapResponse` aus `@ngrx/operators`:
+Zum sicheren Verarbeiten der HTTP-Antwort nutzen wir den Operator `tapResponse` aus `@ngrx/operators`. Er ruft je nach Ausgang den `next`-, `error`- oder `finalize`-Callback auf – und ein Fehler im Service-Aufruf beendet dadurch nicht den reaktiven Strom der Methode:
+
+```ts
+import { inject } from '@angular/core';
+import { pipe, switchMap, tap } from 'rxjs';
+import { patchState, withMethods } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { tapResponse } from '@ngrx/operators';
+import { BookStoreService } from '../shared/book-store.service';
+
+// innerhalb von signalStore(...):
+withMethods((store, service = inject(BookStoreService)) => ({
+  loadBooks: rxMethod<void>(
+    pipe(
+      tap(() => patchState(store, { loading: true, error: null })),
+      switchMap(() =>
+        service.getAll().pipe(
+          tapResponse({
+            next: books => patchState(store, { books }),
+            error: (err: { message: string }) =>
+              patchState(store, { error: err.message }),
+            finalize: () => patchState(store, { loading: false })
+          })
+        )
+      )
+    )
+  )
+}))
+```
+
+Die so erzeugte Methode rufen wir später einfach als `store.loadBooks()` auf. Wir haben hier `switchMap()` gewählt: Wird während eines laufenden Ladevorgangs erneut geladen, soll nur die letzte Anfrage zählen.
+
+### Schreiben: Bücher anlegen, ändern und löschen
+
+Jetzt zum Kern jeder echten Anwendung: Daten verändern. Wir definieren je eine Methode zum Anlegen, Ändern und Löschen. Jede löst einen HTTP-Request aus (über den `BookStoreService`, der `create()`, `update()` und `remove()` anbietet) und schreibt das Ergebnis anschließend immutabel in den State.
+
+Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei **schreibenden** Operationen wollen wir laufende Requests aber *nicht* abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl: Die Anfragen werden der Reihe nach abgearbeitet.
+
+```ts
+import { concatMap, pipe } from 'rxjs';
+
+// innerhalb von withMethods((store, service = inject(BookStoreService)) => ({ ... })):
+
+// Anlegen: an die Liste anhängen
+addBook: rxMethod<Book>(
+  pipe(
+    concatMap(book =>
+      service.create(book).pipe(
+        tapResponse({
+          next: created =>
+            patchState(store, state => ({ books: [...state.books, created] })),
+          error: (err: { message: string }) =>
+            patchState(store, { error: err.message })
+        })
+      )
+    )
+  )
+),
+
+// Ändern: das passende Buch in der Liste ersetzen
+updateBook: rxMethod<Book>(
+  pipe(
+    concatMap(book =>
+      service.update(book).pipe(
+        tapResponse({
+          next: updated =>
+            patchState(store, state => ({
+              books: state.books.map(b => b.isbn === updated.isbn ? updated : b)
+            })),
+          error: (err: { message: string }) =>
+            patchState(store, { error: err.message })
+        })
+      )
+    )
+  )
+),
+
+// Löschen: das Buch anhand seiner ISBN aus der Liste filtern
+deleteBook: rxMethod<string>(
+  pipe(
+    concatMap(isbn =>
+      service.remove(isbn).pipe(
+        tapResponse({
+          next: () =>
+            patchState(store, state => ({
+              books: state.books.filter(b => b.isbn !== isbn)
+            })),
+          error: (err: { message: string }) =>
+            patchState(store, { error: err.message })
+        })
+      )
+    )
+  )
+)
+```
+
+An diesen drei Methoden sieht man das Muster für jede Mutation: HTTP-Request auslösen, bei Erfolg den State **immutabel** anpassen (anhängen mit Spread, ersetzen mit `map()`, entfernen mit `filter()`), bei Fehler die Meldung in `error` schreiben. Genau diese immutable Logik ist auch das Herz eines Reducers im Global Store – nur dass wir sie hier direkt in der Methode notieren, ohne Action und Reducer dazwischen.
+
+### Das vollständige Beispiel
+
+Setzen wir alle Bausteine zusammen, ergibt sich der komplette, kopierbare `BookStore`. Über `withHooks()` lädt er seine Daten beim ersten Verwenden gleich selbst (`onInit`), sodass die Komponente nur noch liest und Aktionen auslöst:
 
 ```ts
 // books/book.store.ts
 import { computed, inject } from '@angular/core';
-import { pipe, switchMap, tap } from 'rxjs';
+import { concatMap, pipe, switchMap, tap } from 'rxjs';
 import {
   patchState,
   signalStore,
   withComputed,
+  withHooks,
   withMethods,
   withState
 } from '@ngrx/signals';
@@ -190,11 +325,13 @@ import { BookStoreService } from '../shared/book-store.service';
 type BookState = {
   books: Book[];
   loading: boolean;
+  error: string | null;
 };
 
 const initialState: BookState = {
   books: [],
-  loading: false
+  loading: false,
+  error: null
 };
 
 export const BookStore = signalStore(
@@ -206,55 +343,66 @@ export const BookStore = signalStore(
   withMethods((store, service = inject(BookStoreService)) => ({
     loadBooks: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, { loading: true })),
+        tap(() => patchState(store, { loading: true, error: null })),
         switchMap(() =>
           service.getAll().pipe(
             tapResponse({
               next: books => patchState(store, { books }),
-              error: console.error,
+              error: (err: { message: string }) =>
+                patchState(store, { error: err.message }),
               finalize: () => patchState(store, { loading: false })
             })
           )
         )
       )
+    ),
+    addBook: rxMethod<Book>(
+      pipe(
+        concatMap(book =>
+          service.create(book).pipe(
+            tapResponse({
+              next: created =>
+                patchState(store, state => ({ books: [...state.books, created] })),
+              error: (err: { message: string }) =>
+                patchState(store, { error: err.message })
+            })
+          )
+        )
+      )
+    ),
+    updateBook: rxMethod<Book>(
+      pipe(
+        concatMap(book =>
+          service.update(book).pipe(
+            tapResponse({
+              next: updated =>
+                patchState(store, state => ({
+                  books: state.books.map(b => b.isbn === updated.isbn ? updated : b)
+                })),
+              error: (err: { message: string }) =>
+                patchState(store, { error: err.message })
+            })
+          )
+        )
+      )
+    ),
+    deleteBook: rxMethod<string>(
+      pipe(
+        concatMap(isbn =>
+          service.remove(isbn).pipe(
+            tapResponse({
+              next: () =>
+                patchState(store, state => ({
+                  books: state.books.filter(b => b.isbn !== isbn)
+                })),
+              error: (err: { message: string }) =>
+                patchState(store, { error: err.message })
+            })
+          )
+        )
+      )
     )
-  }))
-);
-```
-
-Hier steckt der gesamte Lade-Ablauf in *einer* Datei und *einer* Methode: Ladeindikator setzen, HTTP-Request mit `switchMap()` auslösen, Ergebnis in den State schreiben, Ladeindikator zurücksetzen. In Teil 2 waren für genau diese Logik ein Effect, drei Actions und ein Reducer nötig.
-
-Die Komponente injiziert den Store und stößt das Laden an – mehr braucht sie nicht:
-
-```ts
-// books/book-list/book-list.component.ts
-import { Component, inject } from '@angular/core';
-import { BookStore } from '../book.store';
-
-@Component({
-  selector: 'bm-book-list',
-  templateUrl: './book-list.component.html'
-})
-export class BookListComponent {
-  protected store = inject(BookStore);
-
-  constructor() {
-    this.store.loadBooks();
-  }
-}
-```
-
-### Lebenszyklus: `withHooks`
-
-Oft soll ein Store sich beim Start selbst initialisieren, statt dass eine Komponente das Laden anstößt. Dafür gibt es das Feature `withHooks()` mit den Methoden `onInit` und `onDestroy`:
-
-```ts
-import { withHooks } from '@ngrx/signals';
-
-export const BookStore = signalStore(
-  { providedIn: 'root' },
-  withState(initialState),
-  withMethods(/* ... */),
+  })),
   withHooks({
     onInit(store) {
       store.loadBooks();
@@ -263,23 +411,83 @@ export const BookStore = signalStore(
 );
 ```
 
-Damit lädt der Store seine Daten von selbst, und die Komponente liest nur noch die Signale aus.
+Das ist der gesamte State-Management-Code für ein vollständiges CRUD-Feature – eine Datei, ohne Actions, Reducer, Selektoren-Dateien oder Effects-Klassen.
 
-### Entitäten verwalten: `withEntities`
+### Die Komponente: lesen und Aktionen auslösen
 
-Für Sammlungen von Objekten bietet das Plugin `@ngrx/signals/entities` das Feature `withEntities()` – das Gegenstück zu `@ngrx/entity` aus Teil 2. Es legt die Signale `entityMap`, `ids` und `entities` an und bringt eine Reihe von Updatern mit (`addEntity`, `setAllEntities`, `updateEntity`, `removeEntity`, …), die wir mit `patchState()` kombinieren.
-
-Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookMonkey über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an:
+Die Komponente injiziert den Store, liest die Signale im Template und ruft für Nutzeraktionen die Store-Methoden auf. Da der Store sich über `onInit` selbst lädt, braucht die Komponente keinen Lade-Code mehr:
 
 ```ts
+// books/book-list/book-list.component.ts
+import { Component, inject } from '@angular/core';
+import { BookStore } from '../book.store';
+import { Book } from '../shared/book';
+
+@Component({
+  selector: 'bm-book-list',
+  templateUrl: './book-list.component.html'
+})
+export class BookListComponent {
+  protected store = inject(BookStore);
+
+  deleteBook(isbn: string): void {
+    this.store.deleteBook(isbn);
+  }
+
+  createBook(book: Book): void {
+    this.store.addBook(book);
+  }
+}
+```
+
+Im Template lesen wir die Signale und lösen über Events die Methoden aus – ein Löschen-Button pro Buch, eine Fehlermeldung aus dem `error`-Signal:
+
+```html
+<!-- books/book-list/book-list.component.html -->
+<h1>Books ({{ store.booksCount() }})</h1>
+
+@if (store.loading()) {
+  <div class="loader">Loading ...</div>
+}
+
+@if (store.error(); as error) {
+  <div class="error">
+    {{ error }}
+    <button type="button" (click)="store.clearError()">OK</button>
+  </div>
+}
+
+<ul class="book-list">
+  @for (book of store.books(); track book.isbn) {
+    <li>
+      {{ book.title }}
+      <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
+    </li>
+  }
+</ul>
+```
+
+Ein Formular zum Anlegen würde im `(ngSubmit)` einfach `createBook(neuesBuch)` aufrufen. Weil der Store global (`providedIn: 'root'`) bereitsteht, teilen sich alle Komponenten dieselbe Instanz: Eine Detail- oder Formularkomponente, die `store.addBook()` aufruft, verändert denselben State, den die Liste anzeigt – die Oberfläche aktualisiert sich dank der Signale automatisch.
+
+### Weniger Boilerplate: Entitäten mit `withEntities`
+
+Die immutablen Array-Operationen aus unseren CRUD-Methoden (`[...state.books, created]`, `map(...)`, `filter(...)`) wiederholen sich in jeder Anwendung. Genau diese Routine nimmt uns das Plugin `@ngrx/signals/entities` mit dem Feature `withEntities()` ab – das Gegenstück zu `@ngrx/entity` aus Teil 2. Es legt die Signale `entityMap`, `ids` und `entities` an und bringt fertige Updater mit: `addEntity`, `updateEntity`, `removeEntity`, `setAllEntities` und weitere.
+
+Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookMonkey über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an. Bei `add*`-, `set*`- und `update*`-Updatern übergeben wir ihn als zweites Argument; die `remove*`-Updater ermitteln die ID automatisch:
+
+```ts
+// books/book.store.ts (Entity-Variante)
 import { inject } from '@angular/core';
-import { switchMap } from 'rxjs';
+import { concatMap, pipe, switchMap } from 'rxjs';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import {
   SelectEntityId,
+  addEntity,
+  removeEntity,
   setAllEntities,
+  updateEntity,
   withEntities
 } from '@ngrx/signals/entities';
 
@@ -301,12 +509,43 @@ export const BookStore = signalStore(
           })
         )
       )
+    ),
+    addBook: rxMethod<Book>(
+      concatMap(book =>
+        service.create(book).pipe(
+          tapResponse({
+            next: created => patchState(store, addEntity(created, { selectId })),
+            error: console.error
+          })
+        )
+      )
+    ),
+    updateBook: rxMethod<Book>(
+      concatMap(book =>
+        service.update(book).pipe(
+          tapResponse({
+            next: updated =>
+              patchState(store, updateEntity({ id: updated.isbn, changes: updated }, { selectId })),
+            error: console.error
+          })
+        )
+      )
+    ),
+    deleteBook: rxMethod<string>(
+      concatMap(isbn =>
+        service.remove(isbn).pipe(
+          tapResponse({
+            next: () => patchState(store, removeEntity(isbn)),
+            error: console.error
+          })
+        )
+      )
     )
   }))
 );
 ```
 
-In dieser Variante ersetzt `withEntities` das manuelle `books`-Array aus `withState`. Über das Signal `store.entities()` erhalten wir die Buchliste als Array – die mühsame Pflege von `entityMap` und `ids` übernimmt das Plugin.
+Die Entity-Updater automatisieren also exakt die immutablen Operationen, die wir zuvor von Hand geschrieben haben. Die Buchliste lesen wir nun über das mitgelieferte Signal `store.entities()`; die Pflege von `entityMap` und `ids` übernimmt das Plugin. Wollen wir zusätzlich eigene Felder wie `loading` oder `error` führen, kombinieren wir `withEntities()` einfach mit einem `withState(...)` für diese Felder.
 
 ### Wiederverwendbare Bausteine: `signalStoreFeature`
 
@@ -332,23 +571,36 @@ Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `s
 
 ### Testing
 
-Da ein SignalStore ein gewöhnlicher Service ist, testen wir ihn auch wie einen Service: Instanz beziehen, Methoden aufrufen, Signale auslesen. Mocks und ein vollständiges Store-Setup wie beim Global Store sind nicht nötig:
+Da ein SignalStore ein gewöhnlicher Service ist, testen wir ihn auch wie einen Service: Instanz beziehen, Methoden aufrufen, Signale auslesen. Ein vollständiges Store-Setup wie beim Global Store ist nicht nötig. Den HTTP-Service ersetzen wir wie gewohnt per `{ provide: …, useValue: … }`:
 
 ```ts
+// books/book.store.spec.ts
 import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { BookStore } from './book.store';
+import { BookStoreService } from '../shared/book-store.service';
+import { book } from './test-helper';
 
 describe('BookStore', () => {
-  it('zählt die geladenen Bücher', () => {
-    const store = TestBed.inject(BookStore);
+  it('lädt Bücher und zählt sie', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: BookStoreService,
+          useValue: { getAll: () => of([book(1), book(2), book(3)]) }
+        }
+      ]
+    });
 
-    expect(store.booksCount()).toBe(0);
-    // ... Bücher laden ...
+    const store = TestBed.inject(BookStore);
+    store.loadBooks();
+
     expect(store.booksCount()).toBe(3);
   });
 });
 ```
 
-> **Hinweis:** Injiziert eine Methode einen Service, ersetzen wir ihn im Test wie gewohnt per `{ provide: …, useValue: … }`. Den geschützten State können wir in Tests mit dem Helfer `unprotected()` aus `@ngrx/signals/testing` gezielt setzen.
+> **Hinweis:** Den geschützten State können wir in Tests mit dem Helfer `unprotected()` aus `@ngrx/signals/testing` gezielt setzen, falls einmal kein passender öffentlicher Setter zur Verfügung steht.
 
 ### Was ist mit den Redux DevTools?
 
@@ -364,7 +616,7 @@ Beide Bausteine stammen aus dem NgRx-Projekt und lösen dieselbe Aufgabe, setzen
 | --- | --- | --- |
 | Grundidee | zentrales Redux-Pattern | deklarativ zusammengesetzter Service |
 | Anzahl Stores | ein globaler State-Baum | viele kleine Stores |
-| Geltungsbereich | immer global | lokal (komponentengebunden) **oder** global |
+| Geltungsbereich | immer global | lokal (komponenten-/routengebunden) **oder** global |
 | Lesen | Selektoren + `selectSignal()` | State *ist* direkt ein Signal: `store.books()` |
 | Schreiben | Action `dispatch()` → Reducer | Methode aufrufen → `patchState()` |
 | Indirektion | hoch (Action/Reducer/Effect getrennt) | gering (Methode ändert State direkt) |
