@@ -341,6 +341,9 @@ export const BookStore = signalStore(
     booksCount: computed(() => books().length)
   })),
   withMethods((store, service = inject(BookStoreService)) => ({
+    clearError(): void {
+      patchState(store, { error: null });
+    },
     loadBooks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { loading: true, error: null })),

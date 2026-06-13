@@ -1,0 +1,18 @@
+<h1>Books ({{ books().length }})</h1>
+
+@if (loading()) {
+  <p>Loading ...</p>
+}
+
+@if (error(); as error) {
+  <p class="error">{{ error }}</p>
+}
+
+<ul>
+  @for (book of books(); track book.isbn) {
+    <li>
+      {{ book.title }}
+      <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
+    </li>
+  }
+</ul>

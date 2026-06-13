@@ -1,0 +1,21 @@
+<h1>Books ({{ store.booksCount() }})</h1>
+
+@if (store.loading()) {
+  <p>Loading ...</p>
+}
+
+@if (store.error(); as error) {
+  <p class="error">
+    {{ error }}
+    <button type="button" (click)="store.clearError()">OK</button>
+  </p>
+}
+
+<ul>
+  @for (book of store.books(); track book.isbn) {
+    <li>
+      {{ book.title }}
+      <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
+    </li>
+  }
+</ul>
