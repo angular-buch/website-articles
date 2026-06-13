@@ -31,7 +31,7 @@ Bevor wir Code schreiben, lohnt sich der Blick auf die grundlegend andere Archit
 
 Ein zweiter, ebenso wichtiger Unterschied ist der **Geltungsbereich**:
 
-- Der **Global Store** ist immer **global**. Jeder Feature-State hängt im einen zentralen State-Objekt.
+- Der **Global Store** ist immer **global**. Jeder Feature-State ist Teil des einen zentralen State-Objekts.
 - Ein **SignalStore** kann **global *oder* lokal** sein. Wir können ihn mit `{ providedIn: 'root' }` global bereitstellen – oder ihn an eine Komponente binden, sodass er mit der Komponente entsteht und wieder zerstört wird. Damit eignet sich der SignalStore auch hervorragend für komponenten- oder feature-lokalen Zustand. Konzeptionell ersetzt er damit auch das ältere Projekt `@ngrx/component-store`.
 
 Kurz gesagt: Der Global Store ist *ein* großes, strenges System. Der SignalStore ist eine Sammlung *vieler* kleiner, flexibler Stores.
@@ -222,7 +222,7 @@ export const BookStore = signalStore(
 );
 ```
 
-Hier steckt der gesamte Lade-Ablauf in *einer* Datei und *einer* Methode: Ladeindikator setzen, HTTP-Request mit `switchMap()` auslösen, Ergebnis in den State schreiben, Ladeindikator zurücksetzen. In Teil 2 war für genau diese Logik ein Effect, drei Actions und ein Reducer nötig.
+Hier steckt der gesamte Lade-Ablauf in *einer* Datei und *einer* Methode: Ladeindikator setzen, HTTP-Request mit `switchMap()` auslösen, Ergebnis in den State schreiben, Ladeindikator zurücksetzen. In Teil 2 waren für genau diese Logik ein Effect, drei Actions und ein Reducer nötig.
 
 Die Komponente injiziert den Store und stößt das Laden an – mehr braucht sie nicht:
 
@@ -306,11 +306,11 @@ export const BookStore = signalStore(
 );
 ```
 
-Über das Signal `store.entities()` erhalten wir die Buchliste als Array – die mühsame Pflege von `entityMap` und `ids` übernimmt das Plugin.
+In dieser Variante ersetzt `withEntities` das manuelle `books`-Array aus `withState`. Über das Signal `store.entities()` erhalten wir die Buchliste als Array – die mühsame Pflege von `entityMap` und `ids` übernimmt das Plugin.
 
 ### Wiederverwendbare Bausteine: `signalStoreFeature`
 
-Ein besonders elegantes Konzept sind eigene Features. Mit `signalStoreFeature()` bündeln wir State, computed Signals und Methoden zu einem wiederverwendbaren Baustein – etwa einen Lade-Status, den viele Stores brauchen:
+Ein besonders elegantes Konzept sind eigene Features. Mit `signalStoreFeature()` bündeln wir State, computed Signals und Methoden zu einem wiederverwendbaren Baustein – etwa einem Lade-Status, den viele Stores brauchen:
 
 ```ts
 import { computed } from '@angular/core';
@@ -328,7 +328,7 @@ export function withRequestStatus() {
 }
 ```
 
-Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `signalStore(withEntities<Book>(), withRequestStatus())`. Eine derart einfache Wiederverwendung quer über Stores hinweg gibt es im Global Store nicht.
+Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `signalStore(withEntities<Book>(), withRequestStatus())`. Eine derart bequeme, geschlossene Wiederverwendung quer über Stores hinweg bietet der Global Store nicht.
 
 ### Testing
 
@@ -374,13 +374,13 @@ Beide Bausteine stammen aus dem NgRx-Projekt und lösen dieselbe Aufgabe, setzen
 | DevTools / Time Travel | ja (Redux DevTools) | nicht offiziell (Angular DevTools / Community) |
 | Erzwungener unidirektionaler Fluss | ja | optional (Events-Plugin) |
 
-Der entscheidende Gegensatz: Der Global Store kauft sich mit *mehr Code* *mehr Struktur und Nachvollziehbarkeit*. Der SignalStore kauft sich mit *weniger Struktur* *deutlich weniger Code und mehr Flexibilität* – insbesondere die Möglichkeit, Zustand lokal zu halten.
+Der entscheidende Gegensatz: Der Global Store erkauft sich mit *mehr Code* *mehr Struktur und Nachvollziehbarkeit*. Der SignalStore bekommt für *weniger Struktur* *deutlich weniger Code und mehr Flexibilität* – insbesondere die Möglichkeit, Zustand lokal zu halten.
 
 ## Fazit: Wann was?
 
 SignalStore und Global Store sind keine Konkurrenten, die einander ablösen – sie decken unterschiedliche Bedürfnisse ab.
 
-**Der SignalStore ist heute für die meisten Fälle die naheliegende erste Wahl.** Er ist signal-nativ, kommt mit wenig Code aus, lässt sich lokal wie global einsetzen und ist leicht zu testen. Für komponenten- oder feature-lokalen Zustand, für überschaubare Anwendungen und überall dort, wo der volle Redux-Apparat zu schwer wäre, ist er ideal. Er ersetzt damit auch das ältere `@ngrx/component-store`.
+**Der SignalStore ist heute für die meisten Fälle die naheliegende erste Wahl.** Er ist signal-nativ, kommt mit wenig Code aus, lässt sich lokal wie global einsetzen und ist leicht zu testen. Für komponenten- oder feature-lokalen Zustand, für überschaubare Anwendungen und überall dort, wo der volle Redux-Apparat zu schwer wäre, ist er ideal.
 
 **Der Global Store lohnt sich, wenn die Stärken des Redux-Patterns wirklich gebraucht werden:** ein großer, von vielen Stellen geteilter und komplex verwobener Anwendungszustand, ein strikt nachvollziehbarer, auditierbarer Datenfluss und der Komfort der Redux DevTools mit Time Travel. In großen Anwendungen und Teams kann die strenge, einheitliche Struktur ein echter Vorteil sein – genau die Investition, die wir in Teil 2 beschrieben haben.
 
