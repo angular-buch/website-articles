@@ -31,6 +31,8 @@ export const reducer = createReducer(
     error: action.error
   })),
 
+  on(BookActions.clearError, (state): State => ({ ...state, error: null })),
+
   // Schreibvorgänge: beim Auslösen eine alte Fehlermeldung zurücksetzen.
   on(
     BookActions.createBook,

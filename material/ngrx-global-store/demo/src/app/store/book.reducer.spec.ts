@@ -26,6 +26,11 @@ describe('Book Reducer', () => {
     expect(state.error).toBe('boom');
   });
 
+  it('clearError setzt die Fehlermeldung zurück', () => {
+    const state = reducer({ ...initialState, error: 'boom' }, BookActions.clearError());
+    expect(state.error).toBeNull();
+  });
+
   it('createBookSuccess hängt ein Buch immutabel an', () => {
     const start: State = { ...initialState, books: [b('1')] };
     const state = reducer(start, BookActions.createBookSuccess({ book: b('2') }));

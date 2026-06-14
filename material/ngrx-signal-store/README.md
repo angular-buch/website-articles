@@ -19,7 +19,7 @@ In [Teil 2](/material/ngrx-global-store) haben wir den **Global Store** kennenge
 
 Der Global Store ist mächtig, bringt für viele Anwendungsfälle aber spürbar viel Zeremonie mit: Schon das Laden einer simplen Buchliste verteilt sich über Actions, einen Reducer, Selektoren und einen Effect. Genau hier setzt der **SignalStore** aus dem Paket `@ngrx/signals` an. Er ist eine leichtgewichtige, signal-basierte Alternative, die mit deutlich weniger Code auskommt und sich nahtlos in modernes, signal-zentriertes Angular einfügt.
 
-> **Hinweis zur Version:** Wir verwenden **Angular 22** und die dazu passende NgRx-Version. Der SignalStore wohnt im Paket `@ngrx/signals` und wird unabhängig vom Global Store (`@ngrx/store`) installiert.
+> **Hinweis zur Version:** Wir verwenden **Angular 22** mit **NgRx 21** – zum Zeitpunkt der Veröffentlichung die aktuelle NgRx-Version, die problemlos unter Angular 22 läuft (in der Beispiel-App per `legacy-peer-deps` installiert). Der SignalStore wohnt im Paket `@ngrx/signals` und wird unabhängig vom Global Store (`@ngrx/store`) installiert.
 
 ## Der architektonische Unterschied zum Global Store
 
@@ -279,7 +279,7 @@ updateBook: rxMethod<Book>(
         tapResponse({
           next: updated =>
             patchState(store, state => ({
-              books: state.books.map(b => b.isbn === updated.isbn ? updated : b)
+              books: state.books.map(b => (b.isbn === updated.isbn ? updated : b))
             })),
           error: (err: unknown) => patchState(store, { error: toMessage(err) })
         })
@@ -443,11 +443,13 @@ import { Book } from '../shared/book';
 export class BookListComponent {
   protected store = inject(BookStore);
 
-  addBook(isbn: string, title: string): void {
-    if (!isbn || !title) {
+  addBook(isbn: HTMLInputElement, title: HTMLInputElement): void {
+    if (!isbn.value || !title.value) {
       return;
     }
-    this.store.addBook({ isbn, title, rating: 0 });
+    this.store.addBook({ isbn: isbn.value, title: title.value, rating: 0 });
+    isbn.value = '';
+    title.value = '';
   }
 
   rateUp(book: Book): void {
@@ -479,11 +481,9 @@ Im Template lesen wir die Signale und lösen über Events die Methoden aus: ein 
 }
 
 <div class="add-form">
-  <input #isbnEl placeholder="ISBN" />
-  <input #titleEl placeholder="Titel" />
-  <button type="button" (click)="addBook(isbnEl.value, titleEl.value); isbnEl.value = ''; titleEl.value = ''">
-    Anlegen
-  </button>
+  <input #isbnEl aria-label="ISBN" placeholder="ISBN" />
+  <input #titleEl aria-label="Titel" placeholder="Titel" />
+  <button type="button" (click)="addBook(isbnEl, titleEl)">Anlegen</button>
 </div>
 
 <ul class="book-list">
@@ -497,7 +497,7 @@ Im Template lesen wir die Signale und lösen über Events die Methoden aus: ein 
 </ul>
 ```
 
-Die Eingabefelder lesen wir bewusst ohne `FormsModule` über lokale Template-Referenzen (`#isbnEl`) aus, um den Fokus auf den SignalStore zu behalten. Weil der Store global (`providedIn: 'root'`) bereitsteht, teilen sich alle Komponenten dieselbe Instanz: Eine separate Detail- oder Formularkomponente, die `store.addBook()` aufruft, verändert denselben State, den die Liste anzeigt – die Oberfläche aktualisiert sich dank der Signale automatisch.
+Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Anlegen die Felder leert – so bleibt der Fokus auf dem SignalStore. Weil der Store global (`providedIn: 'root'`) bereitsteht, teilen sich alle Komponenten dieselbe Instanz: Eine separate Detail- oder Formularkomponente, die `store.addBook()` aufruft, verändert denselben State, den die Liste anzeigt – die Oberfläche aktualisiert sich dank der Signale automatisch.
 
 ### Weniger Boilerplate: Entitäten mit `withEntities`
 
@@ -612,7 +612,7 @@ import { BookStoreService } from '../shared/book-store.service';
 import { Book } from '../shared/book';
 
 // kleine Hilfsfunktion, um schnell Testdaten zu erzeugen
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({ isbn, title });
+const b = (isbn: string, title = `Title ${isbn}`): Book => ({ isbn, title });
 
 describe('BookStore', () => {
   it('lädt Bücher und zählt sie', () => {

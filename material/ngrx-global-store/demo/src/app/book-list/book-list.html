@@ -5,15 +5,16 @@
 }
 
 @if (error(); as error) {
-  <div class="error">{{ error }}</div>
+  <div class="error">
+    {{ error }}
+    <button type="button" (click)="clearError()">OK</button>
+  </div>
 }
 
 <div class="add-form">
-  <input #isbnEl placeholder="ISBN" />
-  <input #titleEl placeholder="Titel" />
-  <button type="button" (click)="addBook(isbnEl.value, titleEl.value); isbnEl.value = ''; titleEl.value = ''">
-    Anlegen
-  </button>
+  <input #isbnEl aria-label="ISBN" placeholder="ISBN" />
+  <input #titleEl aria-label="Titel" placeholder="Titel" />
+  <button type="button" (click)="addBook(isbnEl, titleEl)">Anlegen</button>
 </div>
 
 <ul class="book-list">

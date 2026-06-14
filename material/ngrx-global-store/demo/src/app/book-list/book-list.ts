@@ -21,11 +21,13 @@ export class BookList {
     this.store.dispatch(BookActions.loadBooks());
   }
 
-  addBook(isbn: string, title: string): void {
-    if (!isbn || !title) {
+  addBook(isbn: HTMLInputElement, title: HTMLInputElement): void {
+    if (!isbn.value || !title.value) {
       return;
     }
-    this.store.dispatch(BookActions.createBook({ book: { isbn, title, rating: 0 } }));
+    this.store.dispatch(BookActions.createBook({ book: { isbn: isbn.value, title: title.value, rating: 0 } }));
+    isbn.value = '';
+    title.value = '';
   }
 
   rateUp(book: Book): void {
@@ -35,5 +37,9 @@ export class BookList {
 
   deleteBook(isbn: string): void {
     this.store.dispatch(BookActions.deleteBook({ isbn }));
+  }
+
+  clearError(): void {
+    this.store.dispatch(BookActions.clearError());
   }
 }

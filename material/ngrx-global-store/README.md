@@ -17,7 +17,7 @@ Dieser Artikel ist **Teil 2** einer dreiteiligen Serie zum Thema State Managemen
 
 Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentrales State Management erarbeitet und dabei die Grundprinzipien von Redux kennengelernt. Jetzt setzen wir diese Ideen mit dem Framework NgRx in die Praxis um.
 
-> **Hinweis zur Version:** Wir verwenden in diesem Artikel **Angular 22** mit der dazu passenden NgRx-Version (NgRx folgt dem Major-Versionsschema von Angular). Wir setzen durchgängig auf Standalone APIs und Signals: Den Store richten wir ausschließlich über die `provide…`-Funktionen ein und lesen ihn mit `selectSignal()` als Signal aus. Konstruktor-Injection brauchen wir nicht mehr – auch das offizielle Effect-Schematic erzeugt seine Abhängigkeiten inzwischen mit `inject()`.
+> **Hinweis zur Version:** Wir verwenden in diesem Artikel **Angular 22**. NgRx folgt normalerweise dem Major-Versionsschema von Angular; zum Zeitpunkt der Veröffentlichung ist jedoch **NgRx 21** die aktuelle Version, die problemlos unter Angular 22 läuft (in den Beispiel-Apps per `legacy-peer-deps` installiert). Wir setzen durchgängig auf Standalone APIs und Signals: Den Store richten wir ausschließlich über die `provide…`-Funktionen ein und lesen ihn mit `selectSignal()` als Signal aus. Konstruktor-Injection brauchen wir nicht mehr – auch das offizielle Effect-Schematic erzeugt seine Abhängigkeiten inzwischen mit `inject()`.
 
 ## NgRx: Reactive State for Angular
 
@@ -717,6 +717,16 @@ export const selectBooksError = createSelector(
 );
 ```
 
+Damit Nutzerinnen und Nutzer eine Fehlermeldung auch aktiv wegklicken können, ergänzen wir eine schlanke `clearError`-Action und behandeln sie im Reducer:
+
+```ts
+// books/store/book.actions.ts
+export const clearError = createAction('[Book] Clear Error');
+
+// books/store/book.reducer.ts (Ergänzung in createReducer)
+on(BookActions.clearError, (state): State => ({ ...state, error: null }))
+```
+
 ```ts
 // books/book-list/book-list.component.ts
 import { Component, inject } from '@angular/core';
@@ -738,11 +748,13 @@ export class BookListComponent {
     this.store.dispatch(BookActions.loadBooks());
   }
 
-  addBook(isbn: string, title: string): void {
-    if (!isbn || !title) {
+  addBook(isbn: HTMLInputElement, title: HTMLInputElement): void {
+    if (!isbn.value || !title.value) {
       return;
     }
-    this.store.dispatch(BookActions.createBook({ book: { isbn, title, rating: 0 } }));
+    this.store.dispatch(BookActions.createBook({ book: { isbn: isbn.value, title: title.value, rating: 0 } }));
+    isbn.value = '';
+    title.value = '';
   }
 
   rateUp(book: Book): void {
@@ -753,23 +765,28 @@ export class BookListComponent {
   deleteBook(isbn: string): void {
     this.store.dispatch(BookActions.deleteBook({ isbn }));
   }
+
+  clearError(): void {
+    this.store.dispatch(BookActions.clearError());
+  }
 }
 ```
 
-Im Template zeigen wir die Fehlermeldung an, bieten ein kleines Formular zum Anlegen und lösen Ändern (Bewertung erhöhen) sowie Löschen über Buttons aus. Die Eingabefelder lesen wir bewusst ohne `FormsModule` über lokale Template-Referenzen (`#isbnEl`) aus, um den Fokus auf NgRx zu behalten:
+Im Template zeigen wir die Fehlermeldung (mit einem Button zum Wegklicken) an, bieten ein kleines Formular zum Anlegen und lösen Ändern (Bewertung erhöhen) sowie Löschen über Buttons aus. Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Dispatch die Felder leert – so bleibt der Fokus auf NgRx:
 
 ```html
 <!-- books/book-list/book-list.component.html -->
 @if (error(); as error) {
-  <div class="error">{{ error }}</div>
+  <div class="error">
+    {{ error }}
+    <button type="button" (click)="clearError()">OK</button>
+  </div>
 }
 
 <div class="add-form">
-  <input #isbnEl placeholder="ISBN" />
-  <input #titleEl placeholder="Titel" />
-  <button type="button" (click)="addBook(isbnEl.value, titleEl.value); isbnEl.value = ''; titleEl.value = ''">
-    Anlegen
-  </button>
+  <input #isbnEl aria-label="ISBN" placeholder="ISBN" />
+  <input #titleEl aria-label="Titel" placeholder="Titel" />
+  <button type="button" (click)="addBook(isbnEl, titleEl)">Anlegen</button>
 </div>
 
 <ul class="book-list">
@@ -1018,7 +1035,7 @@ Auf diese Weise können wir die Verwaltung von Entitäten im State sehr effizien
 
 Alle auf Grundlage von NgRx entwickelten Bausteine sollten auch getestet werden. Dafür möchten wir in diesem Abschnitt einige Hinweise geben. Grundsätzlich werden bei der Initialisierung mit den Schematics von NgRx bereits Grundgerüste für die Unit-Tests angelegt – wir können also direkt loslegen.
 
-> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; mit Vitest stehen die äquivalenten Helfer unter `vi` bzw. über `vitest-marbles` bereit.
+> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; in einem Vitest-Projekt würde man stattdessen `vi.spyOn()` und z. B. das Paket `vitest-marbles` verwenden. Die Beispiel-App selbst vergleicht die Datenströme bewusst direkt (ohne Marbles).
 
 #### Actions
 
@@ -1060,7 +1077,7 @@ import { selectAllBooks } from './book.selectors';
 import { Book } from '../../shared/book';
 
 // kleine Hilfsfunktion, um schnell Testdaten zu erzeugen
-const book = (isbn: string): Book => ({ isbn, title: `Titel ${isbn}`, rating: 0 });
+const book = (isbn: string): Book => ({ isbn, title: `Title ${isbn}`, rating: 0 });
 
 describe('Book Selectors', () => {
   it('should select all books', () => {

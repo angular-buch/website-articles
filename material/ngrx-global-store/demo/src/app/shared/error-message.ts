@@ -3,9 +3,9 @@
  * sicher in eine lesbare Meldung um. Der Fehler ist als `unknown` typisiert –
  * wir prüfen die Form, statt sie blind anzunehmen.
  *
- * Bei einem echten HttpClient-Backend wäre der Fehler in der Regel eine
- * `HttpErrorResponse`, die ebenfalls eine `message`-Eigenschaft trägt; die
- * Prüfung ließe sich dafür leicht erweitern.
+ * Hinweis: Eine `HttpErrorResponse` ist KEIN `instanceof Error` und liefe hier
+ * in den Fallback. Für ein echtes HttpClient-Backend würden wir die Prüfung
+ * erweitern, z. B. `if (error instanceof HttpErrorResponse) return error.message;`.
  */
 export function toMessage(error: unknown): string {
   return error instanceof Error ? error.message : 'Ein unbekannter Fehler ist aufgetreten.';

@@ -10,11 +10,13 @@ import { Book } from '../shared/book';
 export class BookList {
   protected store = inject(BookStore);
 
-  addBook(isbn: string, title: string): void {
-    if (!isbn || !title) {
+  addBook(isbn: HTMLInputElement, title: HTMLInputElement): void {
+    if (!isbn.value || !title.value) {
       return;
     }
-    this.store.addBook({ isbn, title, rating: 0 });
+    this.store.addBook({ isbn: isbn.value, title: title.value, rating: 0 });
+    isbn.value = '';
+    title.value = '';
   }
 
   rateUp(book: Book): void {

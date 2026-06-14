@@ -9,7 +9,7 @@ Sie zeigt den kompletten `BookStore` aus dem Artikel in Aktion: Buchliste laden 
 
 > **Hinweis:** NgRx 21 gibt als Peer-Range noch `@angular/core: ^21.0.0` an, läuft aber problemlos unter Angular 22. Damit `npm install` nicht an dieser Range scheitert, liegt im Projekt eine `.npmrc` mit `legacy-peer-deps=true`.
 
-> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookMonkey (Feature-Ordner `books/…`); hier liegt der Store direkt unter `src/app/book.store.ts`.
+> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookMonkey (Feature-Ordner `books/…`, Komponente `BookListComponent`, Selektor `bm-book-list`); die Demo nutzt dagegen die flachen Angular-CLI-Standardnamen (`src/app/book.store.ts`, `BookList`, `app-book-list`).
 
 ## Befehle
 
