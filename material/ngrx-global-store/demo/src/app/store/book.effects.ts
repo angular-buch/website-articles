@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 
 import * as BookActions from './book.actions';
 import { BookStoreService } from '../shared/book-store.service';
+import { toMessage } from '../shared/error-message';
 
 @Injectable()
 export class BookEffects {
@@ -18,7 +19,7 @@ export class BookEffects {
       switchMap(() =>
         this.service.getAll().pipe(
           map(data => BookActions.loadBooksSuccess({ data })),
-          catchError(error => of(BookActions.loadBooksFailure({ error: error.message })))
+          catchError((error: unknown) => of(BookActions.loadBooksFailure({ error: toMessage(error) })))
         )
       )
     )
@@ -31,7 +32,7 @@ export class BookEffects {
       concatMap(({ book }) =>
         this.service.create(book).pipe(
           map(created => BookActions.createBookSuccess({ book: created })),
-          catchError(error => of(BookActions.createBookFailure({ error: error.message })))
+          catchError((error: unknown) => of(BookActions.createBookFailure({ error: toMessage(error) })))
         )
       )
     )
@@ -43,7 +44,7 @@ export class BookEffects {
       concatMap(({ book }) =>
         this.service.update(book).pipe(
           map(updated => BookActions.updateBookSuccess({ book: updated })),
-          catchError(error => of(BookActions.updateBookFailure({ error: error.message })))
+          catchError((error: unknown) => of(BookActions.updateBookFailure({ error: toMessage(error) })))
         )
       )
     )
@@ -55,7 +56,7 @@ export class BookEffects {
       concatMap(({ isbn }) =>
         this.service.remove(isbn).pipe(
           map(() => BookActions.deleteBookSuccess({ isbn })),
-          catchError(error => of(BookActions.deleteBookFailure({ error: error.message })))
+          catchError((error: unknown) => of(BookActions.deleteBookFailure({ error: toMessage(error) })))
         )
       )
     )

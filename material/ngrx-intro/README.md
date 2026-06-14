@@ -1,11 +1,11 @@
 ---
 title: "State Management mit NgRx – Teil 1: Wie kommen wir zu zentralem State Management?"
 published: "2026-06-11"
-lastModified: "2026-06-13"
+lastModified: "2026-06-14"
 hidden: true
 ---
 
-**Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (4. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
+**Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
 
 Dieser Artikel ist **Teil 1** einer dreiteiligen Serie zum Thema State Management mit NgRx.
 
@@ -30,9 +30,9 @@ Mit wachsender Größe der Anwendung ergeben sich immer wieder folgende Fragen:
 - Wie reagieren wir an verschiedenen Stellen auf Ereignisse, die in der Anwendung auftreten?
 - Wie verwalten wir die Daten, die über die gesamte Anwendung verteilt sind?
 
-Eine häufige Lösung für all diese Herausforderungen ist die *Zentralisierung*. Liegen die Daten an einem zentralen Ort in der Anwendung vor, so können sie von überall aus genutzt und verändert werden. Diesen Schritt geht man häufig ganz selbstverständlich, indem man etwa an einer geeigneten Stelle (z. B. im `BookStoreService`) einen Cache einbaut. Doch die Idee der Zentralisierung kann man noch viel weiter treiben: Bislang waren Komponenten die "Hüterinnen" der Daten. Jede Komponente hatte ihren eigenen Zustand und bildete eine abgeschottete Einheit zu den anderen Komponenten. Diese Idee wollen wir nun auf den Kopf stellen. Die Komponenten sollen dazu ihre bisherige Kontrolle über die Daten und die Koordination der Prozesse an eine zentrale Stelle abgeben. Die Aufgabe der Komponenten ist es dann nur noch, Daten für die Anzeige zu lesen, neue Daten zu erfassen und Events an die zentrale Stelle zu senden. Diese Art der Zentralisierung ist ein entscheidender Unterschied zum bisherigen Vorgehen, wo alle Zustände über den gesamten Komponentenbaum hinweg verteilt waren.
+Eine häufige Lösung für all diese Herausforderungen ist die *Zentralisierung*. Liegen die Daten an einem zentralen Ort in der Anwendung vor, so können sie von überall aus genutzt und verändert werden. Diesen Schritt geht man häufig ganz selbstverständlich, indem man etwa an einer geeigneten Stelle (z. B. im `BookStoreService`) einen Cache einbaut. Doch die Idee der Zentralisierung kann man noch viel weiter treiben: Bislang waren Komponenten die "Hüterinnen" der Daten. Jede Komponente hatte ihren eigenen Zustand und bildete eine gegenüber den anderen Komponenten abgeschottete Einheit. Diese Idee wollen wir nun auf den Kopf stellen. Die Komponenten sollen dazu ihre bisherige Kontrolle über die Daten und die Koordination der Prozesse an eine zentrale Stelle abgeben. Die Aufgabe der Komponenten ist es dann nur noch, Daten für die Anzeige zu lesen, neue Daten zu erfassen und Events an die zentrale Stelle zu senden. Diese Art der Zentralisierung ist ein entscheidender Unterschied zum bisherigen Vorgehen, wo alle Zustände über den gesamten Komponentenbaum hinweg verteilt waren.
 
-Wir wollen in diesem Kapitel besprechen, wie eine solche zentrale Zustandsverwaltung (engl. *State Management*) realisiert werden kann. Dabei lernen wir das Architekturmuster *Redux* kennen und nutzen das populäre Framework *Reactive Extensions for Angular (NgRx)*, um den Anwendungszustand zu verwalten und unsere Prozesse zu koordinieren.
+Wir wollen in diesem Artikel besprechen, wie eine solche zentrale Zustandsverwaltung (engl. *State Management*) realisiert werden kann. Dabei lernen wir das Architekturmuster *Redux* kennen und nutzen das populäre Framework *Reactive State for Angular (NgRx)*, um den Anwendungszustand zu verwalten und unsere Prozesse zu koordinieren.
 
 ## Ein Modell für zentrales State Management
 
@@ -319,7 +319,7 @@ Redux ist ein populäres Pattern zur Zustandsverwaltung in Webanwendungen. Die I
 
 Der zentrale Bestandteil der Architektur ist ein *Store*, in dem der gesamte Anwendungszustand als eine einzige große verschachtelte Datenstruktur hinterlegt ist. Der Store ist die *Single Source of Truth* für die Anwendung und enthält alle Zustände: vom Server heruntergeladene Daten, gesetzte Einstellungen, die aktuell geladene Route oder Infos zum eigenen Account – alles, was sich zur Laufzeit in der Anwendung verändert und den Zustand beschreibt.
 
-Das State-Objekt im Store hat zwei elementare Eigenschaften: Es ist *immutable* und *read-only*. Wir können die Daten aus dem State nicht verändern, sondern ausschließlich lesend darauf zugreifen. Möchten wir den State "verändern", so muss das existierende Objekt durch eine Kopie ausgetauscht werden, die die Änderungen enthält. Solche Änderungen am State werden durch Nachrichten ausgelöst, die aus der Anwendung in den Store gesendet werden. Die Grundidee dieser Architektur haben wir bereits in der Einleitung zu diesem Kapitel gemeinsam entwickelt.
+Das State-Objekt im Store hat zwei elementare Eigenschaften: Es ist *immutable* und *read-only*. Wir können die Daten aus dem State nicht verändern, sondern ausschließlich lesend darauf zugreifen. Möchten wir den State "verändern", so muss das existierende Objekt durch eine Kopie ausgetauscht werden, die die Änderungen enthält. Solche Änderungen am State werden durch Nachrichten ausgelöst, die aus der Anwendung in den Store gesendet werden. Die Grundidee dieser Architektur haben wir bereits in der Einleitung zu diesem Artikel gemeinsam entwickelt.
 
 > **Hinweis:** Das State-Objekt ist theoretisch mutierbar, wir werden es aber stets immutable behandeln. NgRx setzt also auf die Pseudo-Immutability.
 
@@ -327,13 +327,13 @@ Neben dem zentralen Store mit dem State-Objekt verwendet Redux zwei weitere wese
 
 ![Diagramm: Die Component löst eine Action aus, die in den Store fließt. Dort triggert die Action einen Reducer, der einen neuen State erzeugt. Der State wird zurück an die Component gepusht. Die Daten fließen so im Kreis in eine Richtung.](./redux-flow-simple.svg "Datenfluss in Redux")
 
-Bringt man diese Bausteine in den Kontext des einführenden Beispiels, so entspricht der zentrale Service dem Store von Redux. Die gesendeten Nachrichten entsprechen den Actions. Die Funktion `calculateState()`, die wir zur Veranschaulichung verwendet haben, ist genauso aufgebaut wie die Reducers von Redux. Der Operator `scan()` ist tatsächlich auch die technische Grundlage des Frameworks NgRx, das wir in diesem Kapitel für das State Management nutzen werden.
+Bringt man diese Bausteine in den Kontext des einführenden Beispiels, so entspricht der zentrale Service dem Store von Redux. Die gesendeten Nachrichten entsprechen den Actions. Die Funktion `calculateState()`, die wir zur Veranschaulichung verwendet haben, ist genauso aufgebaut wie die Reducers von Redux. Dasselbe Prinzip – das Aufsummieren eines Stroms von Nachrichten zu einem Zustand – steckt auch im Kern von NgRx, das wir in diesem Artikel für das State Management nutzen werden.
 
 ### Redux und Angular
 
 Die originale Implementierung von Redux stammt aus der Welt von React. Alle enthaltenen Ideen können aber problemlos auch auf die Architektur einer Angular-Anwendung übertragen werden. Es existieren verschiedene Frameworks und Bibliotheken, die ein zentrales State Management für Angular ermöglichen. Sie alle folgen der grundsätzlichen Idee von Redux:
 
-- Reactive Extensions for Angular (NgRx)
+- Reactive State for Angular (NgRx)
 - NGXS
 - Akita
 - Elf

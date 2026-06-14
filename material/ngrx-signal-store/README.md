@@ -1,11 +1,11 @@
 ---
 title: "State Management mit NgRx – Teil 3: SignalStore"
 published: "2026-06-11"
-lastModified: "2026-06-13"
+lastModified: "2026-06-14"
 hidden: true
 ---
 
-**Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (4. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
+**Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
 
 Dieser Artikel ist **Teil 3** einer dreiteiligen Serie zum Thema State Management mit NgRx.
 
@@ -200,7 +200,7 @@ Hier liegt der zentrale Unterschied zum Global Store: Es gibt keine Action und k
 
 ### Asynchrone Seiteneffekte mit `rxMethod`: Daten laden
 
-Für das Laden der Bücher brauchen wir einen asynchronen Seiteneffekt – die Aufgabe, die im Global Store ein Effect übernommen hat. Einfache Abläufe lassen sich direkt mit einer `async`-Methode und einem Promise erledigen. Für reaktive Abläufe mit RxJS bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
+Für das Laden der Bücher brauchen wir einen asynchronen Seiteneffekt – die Aufgabe, die im Global Store ein Effect übernommen hat. Eine Store-Methode darf eine ganz gewöhnliche Methode sein; einfache Abläufe ließen sich daher auch mit einer `async`-Methode und einem Promise erledigen, die das Ergebnis am Ende per `patchState()` in den State schreibt. Wir zeigen hier aber den reaktiven Weg mit RxJS, weil er sich nahtlos mit einem HttpClient kombinieren lässt: Dafür bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
 
 Zum sicheren Verarbeiten der HTTP-Antwort nutzen wir den Operator `tapResponse` aus `@ngrx/operators`. Er ruft je nach Ausgang den `next`-, `error`- oder `finalize`-Callback auf – und ein Fehler im Service-Aufruf beendet dadurch nicht den reaktiven Strom der Methode:
 
@@ -211,6 +211,7 @@ import { patchState, withMethods } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { BookStoreService } from '../shared/book-store.service';
+import { toMessage } from '../shared/error-message';
 
 // innerhalb von signalStore(...):
 withMethods((store, service = inject(BookStoreService)) => ({
@@ -221,8 +222,7 @@ withMethods((store, service = inject(BookStoreService)) => ({
         service.getAll().pipe(
           tapResponse({
             next: books => patchState(store, { books }),
-            error: (err: { message: string }) =>
-              patchState(store, { error: err.message }),
+            error: (err: unknown) => patchState(store, { error: toMessage(err) }),
             finalize: () => patchState(store, { loading: false })
           })
         )
@@ -232,29 +232,38 @@ withMethods((store, service = inject(BookStoreService)) => ({
 }))
 ```
 
+Den Fehler behandeln wir wie in Teil 2 mit der kleinen Hilfsfunktion `toMessage()`. Der `error`-Callback von `tapResponse` liefert den Fehler als `unknown` – wir prüfen also die Form, statt blind auf eine Eigenschaft zuzugreifen:
+
+```ts
+// shared/error-message.ts
+export function toMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Ein unbekannter Fehler ist aufgetreten.';
+}
+```
+
 Die so erzeugte Methode rufen wir später einfach als `store.loadBooks()` auf. Wir haben hier `switchMap()` gewählt: Wird während eines laufenden Ladevorgangs erneut geladen, soll nur die letzte Anfrage zählen.
 
 ### Schreiben: Bücher anlegen, ändern und löschen
 
-Jetzt zum Kern jeder echten Anwendung: Daten verändern. Wir definieren je eine Methode zum Anlegen, Ändern und Löschen. Jede löst einen HTTP-Request aus (über den `BookStoreService`, der `create()`, `update()` und `remove()` anbietet) und schreibt das Ergebnis anschließend immutabel in den State.
+Jetzt zum Kern jeder echten Anwendung: Daten verändern. Wir definieren je eine Methode zum Anlegen, Ändern und Löschen. Jede löst einen HTTP-Request aus – über den `BookStoreService`, der wie schon in Teil 2 die HTTP-Aufrufe mit dem `HttpClient` kapselt und `create()`, `update()` und `remove()` anbietet (`provideHttpClient()` gehört dafür in die `app.config.ts`) – und schreibt das Ergebnis anschließend immutabel in den State.
 
 Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei **schreibenden** Operationen wollen wir laufende Requests aber *nicht* abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl: Die Anfragen werden der Reihe nach abgearbeitet.
 
 ```ts
-import { concatMap, pipe } from 'rxjs';
+import { concatMap, pipe, tap } from 'rxjs';
 
 // innerhalb von withMethods((store, service = inject(BookStoreService)) => ({ ... })):
 
 // Anlegen: an die Liste anhängen
 addBook: rxMethod<Book>(
   pipe(
+    tap(() => patchState(store, { error: null })),
     concatMap(book =>
       service.create(book).pipe(
         tapResponse({
           next: created =>
             patchState(store, state => ({ books: [...state.books, created] })),
-          error: (err: { message: string }) =>
-            patchState(store, { error: err.message })
+          error: (err: unknown) => patchState(store, { error: toMessage(err) })
         })
       )
     )
@@ -264,6 +273,7 @@ addBook: rxMethod<Book>(
 // Ändern: das passende Buch in der Liste ersetzen
 updateBook: rxMethod<Book>(
   pipe(
+    tap(() => patchState(store, { error: null })),
     concatMap(book =>
       service.update(book).pipe(
         tapResponse({
@@ -271,8 +281,7 @@ updateBook: rxMethod<Book>(
             patchState(store, state => ({
               books: state.books.map(b => b.isbn === updated.isbn ? updated : b)
             })),
-          error: (err: { message: string }) =>
-            patchState(store, { error: err.message })
+          error: (err: unknown) => patchState(store, { error: toMessage(err) })
         })
       )
     )
@@ -282,6 +291,7 @@ updateBook: rxMethod<Book>(
 // Löschen: das Buch anhand seiner ISBN aus der Liste filtern
 deleteBook: rxMethod<string>(
   pipe(
+    tap(() => patchState(store, { error: null })),
     concatMap(isbn =>
       service.remove(isbn).pipe(
         tapResponse({
@@ -289,8 +299,7 @@ deleteBook: rxMethod<string>(
             patchState(store, state => ({
               books: state.books.filter(b => b.isbn !== isbn)
             })),
-          error: (err: { message: string }) =>
-            patchState(store, { error: err.message })
+          error: (err: unknown) => patchState(store, { error: toMessage(err) })
         })
       )
     )
@@ -298,7 +307,7 @@ deleteBook: rxMethod<string>(
 )
 ```
 
-An diesen drei Methoden sieht man das Muster für jede Mutation: HTTP-Request auslösen, bei Erfolg den State **immutabel** anpassen (anhängen mit Spread, ersetzen mit `map()`, entfernen mit `filter()`), bei Fehler die Meldung in `error` schreiben. Genau diese immutable Logik ist auch das Herz eines Reducers im Global Store – nur dass wir sie hier direkt in der Methode notieren, ohne Action und Reducer dazwischen.
+An diesen drei Methoden sieht man das Muster für jede Mutation: zu Beginn eine alte Fehlermeldung zurücksetzen, den HTTP-Request auslösen, bei Erfolg den State **immutabel** anpassen (anhängen mit Spread, ersetzen mit `map()`, entfernen mit `filter()`) und bei Fehler die Meldung in `error` schreiben. Genau diese immutable Logik ist auch das Herz eines Reducers im Global Store – nur dass wir sie hier direkt in der Methode notieren, ohne Action und Reducer dazwischen.
 
 ### Das vollständige Beispiel
 
@@ -321,6 +330,7 @@ import { tapResponse } from '@ngrx/operators';
 
 import { Book } from '../shared/book';
 import { BookStoreService } from '../shared/book-store.service';
+import { toMessage } from '../shared/error-message';
 
 type BookState = {
   books: Book[];
@@ -351,8 +361,7 @@ export const BookStore = signalStore(
           service.getAll().pipe(
             tapResponse({
               next: books => patchState(store, { books }),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message }),
+              error: (err: unknown) => patchState(store, { error: toMessage(err) }),
               finalize: () => patchState(store, { loading: false })
             })
           )
@@ -361,13 +370,13 @@ export const BookStore = signalStore(
     ),
     addBook: rxMethod<Book>(
       pipe(
+        tap(() => patchState(store, { error: null })),
         concatMap(book =>
           service.create(book).pipe(
             tapResponse({
               next: created =>
                 patchState(store, state => ({ books: [...state.books, created] })),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message })
+              error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
         )
@@ -375,15 +384,15 @@ export const BookStore = signalStore(
     ),
     updateBook: rxMethod<Book>(
       pipe(
+        tap(() => patchState(store, { error: null })),
         concatMap(book =>
           service.update(book).pipe(
             tapResponse({
               next: updated =>
                 patchState(store, state => ({
-                  books: state.books.map(b => b.isbn === updated.isbn ? updated : b)
+                  books: state.books.map(b => (b.isbn === updated.isbn ? updated : b))
                 })),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message })
+              error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
         )
@@ -391,6 +400,7 @@ export const BookStore = signalStore(
     ),
     deleteBook: rxMethod<string>(
       pipe(
+        tap(() => patchState(store, { error: null })),
         concatMap(isbn =>
           service.remove(isbn).pipe(
             tapResponse({
@@ -398,8 +408,7 @@ export const BookStore = signalStore(
                 patchState(store, state => ({
                   books: state.books.filter(b => b.isbn !== isbn)
                 })),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message })
+              error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
         )
@@ -422,28 +431,37 @@ Die Komponente injiziert den Store, liest die Signale im Template und ruft für 
 
 ```ts
 // books/book-list/book-list.component.ts
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { BookStore } from '../book.store';
 import { Book } from '../shared/book';
 
 @Component({
   selector: 'bm-book-list',
-  templateUrl: './book-list.component.html'
+  templateUrl: './book-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookListComponent {
   protected store = inject(BookStore);
 
-  deleteBook(isbn: string): void {
-    this.store.deleteBook(isbn);
+  addBook(isbn: string, title: string): void {
+    if (!isbn || !title) {
+      return;
+    }
+    this.store.addBook({ isbn, title, rating: 0 });
   }
 
-  createBook(book: Book): void {
-    this.store.addBook(book);
+  rateUp(book: Book): void {
+    const rating = Math.min((book.rating ?? 0) + 1, 5);
+    this.store.updateBook({ ...book, rating });
+  }
+
+  deleteBook(isbn: string): void {
+    this.store.deleteBook(isbn);
   }
 }
 ```
 
-Im Template lesen wir die Signale und lösen über Events die Methoden aus – ein Löschen-Button pro Buch, eine Fehlermeldung aus dem `error`-Signal:
+Im Template lesen wir die Signale und lösen über Events die Methoden aus: ein kleines Formular zum Anlegen, pro Buch ein Button zum Erhöhen der Bewertung und ein Löschen-Button sowie eine Fehlermeldung aus dem `error`-Signal:
 
 ```html
 <!-- books/book-list/book-list.component.html -->
@@ -460,17 +478,26 @@ Im Template lesen wir die Signale und lösen über Events die Methoden aus – e
   </div>
 }
 
+<div class="add-form">
+  <input #isbnEl placeholder="ISBN" />
+  <input #titleEl placeholder="Titel" />
+  <button type="button" (click)="addBook(isbnEl.value, titleEl.value); isbnEl.value = ''; titleEl.value = ''">
+    Anlegen
+  </button>
+</div>
+
 <ul class="book-list">
   @for (book of store.books(); track book.isbn) {
     <li>
-      {{ book.title }}
+      {{ book.title }} – ★ {{ book.rating ?? 0 }}
+      <button type="button" (click)="rateUp(book)">★ +1</button>
       <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
     </li>
   }
 </ul>
 ```
 
-Ein Formular zum Anlegen würde im `(ngSubmit)` einfach `createBook(neuesBuch)` aufrufen. Weil der Store global (`providedIn: 'root'`) bereitsteht, teilen sich alle Komponenten dieselbe Instanz: Eine Detail- oder Formularkomponente, die `store.addBook()` aufruft, verändert denselben State, den die Liste anzeigt – die Oberfläche aktualisiert sich dank der Signale automatisch.
+Die Eingabefelder lesen wir bewusst ohne `FormsModule` über lokale Template-Referenzen (`#isbnEl`) aus, um den Fokus auf den SignalStore zu behalten. Weil der Store global (`providedIn: 'root'`) bereitsteht, teilen sich alle Komponenten dieselbe Instanz: Eine separate Detail- oder Formularkomponente, die `store.addBook()` aufruft, verändert denselben State, den die Liste anzeigt – die Oberfläche aktualisiert sich dank der Signale automatisch.
 
 ### Weniger Boilerplate: Entitäten mit `withEntities`
 
@@ -574,7 +601,7 @@ Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `s
 
 ### Testing
 
-Da ein SignalStore ein gewöhnlicher Service ist, testen wir ihn auch wie einen Service: Instanz beziehen, Methoden aufrufen, Signale auslesen. Ein vollständiges Store-Setup wie beim Global Store ist nicht nötig. Den HTTP-Service ersetzen wir wie gewohnt per `{ provide: …, useValue: … }`:
+Da ein SignalStore ein gewöhnlicher Service ist, testen wir ihn auch wie einen Service: Instanz beziehen, Methoden aufrufen, Signale auslesen. Ein vollständiges Store-Setup wie beim Global Store ist nicht nötig. Den HTTP-Service ersetzen wir wie gewohnt per `{ provide: …, useValue: … }`. Weil unser Store sich über `onInit` beim Injizieren selbst lädt, müssen wir `loadBooks()` im Test nicht eigens aufrufen:
 
 ```ts
 // books/book.store.spec.ts
@@ -582,7 +609,10 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { BookStore } from './book.store';
 import { BookStoreService } from '../shared/book-store.service';
-import { book } from './test-helper';
+import { Book } from '../shared/book';
+
+// kleine Hilfsfunktion, um schnell Testdaten zu erzeugen
+const b = (isbn: string, title = `Titel ${isbn}`): Book => ({ isbn, title });
 
 describe('BookStore', () => {
   it('lädt Bücher und zählt sie', () => {
@@ -590,13 +620,13 @@ describe('BookStore', () => {
       providers: [
         {
           provide: BookStoreService,
-          useValue: { getAll: () => of([book(1), book(2), book(3)]) }
+          useValue: { getAll: () => of([b('1'), b('2'), b('3')]) }
         }
       ]
     });
 
+    // onInit löst loadBooks() bereits beim Injizieren aus:
     const store = TestBed.inject(BookStore);
-    store.loadBooks();
 
     expect(store.booksCount()).toBe(3);
   });
@@ -623,7 +653,7 @@ Beide Bausteine stammen aus dem NgRx-Projekt und lösen dieselbe Aufgabe, setzen
 | Lesen | Selektoren + `selectSignal()` | State *ist* direkt ein Signal: `store.books()` |
 | Schreiben | Action `dispatch()` → Reducer | Methode aufrufen → `patchState()` |
 | Indirektion | hoch (Action/Reducer/Effect getrennt) | gering (Methode ändert State direkt) |
-| Seiteneffekte | Effects (`@ngrx/effects`) | Methoden (`async`) oder `rxMethod` |
+| Seiteneffekte | Effects (`@ngrx/effects`) | `rxMethod` (oder einfache `async`-Methoden) |
 | Boilerplate | viel (Actions, Reducer, Selektoren, Effects) | wenig (`with…`-Features in einer Datei) |
 | Entitäten | `@ngrx/entity` | `withEntities` (`@ngrx/signals/entities`) |
 | DevTools / Time Travel | ja (Redux DevTools) | nicht offiziell (Angular DevTools / Community) |

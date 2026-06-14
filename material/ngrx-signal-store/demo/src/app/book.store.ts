@@ -13,6 +13,7 @@ import { tapResponse } from '@ngrx/operators';
 
 import { Book } from './shared/book';
 import { BookStoreService } from './shared/book-store.service';
+import { toMessage } from './shared/error-message';
 
 type BookState = {
   books: Book[];
@@ -43,8 +44,7 @@ export const BookStore = signalStore(
           service.getAll().pipe(
             tapResponse({
               next: books => patchState(store, { books }),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message }),
+              error: (err: unknown) => patchState(store, { error: toMessage(err) }),
               finalize: () => patchState(store, { loading: false })
             })
           )
@@ -53,13 +53,13 @@ export const BookStore = signalStore(
     ),
     addBook: rxMethod<Book>(
       pipe(
+        tap(() => patchState(store, { error: null })),
         concatMap(book =>
           service.create(book).pipe(
             tapResponse({
               next: created =>
                 patchState(store, state => ({ books: [...state.books, created] })),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message })
+              error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
         )
@@ -67,6 +67,7 @@ export const BookStore = signalStore(
     ),
     updateBook: rxMethod<Book>(
       pipe(
+        tap(() => patchState(store, { error: null })),
         concatMap(book =>
           service.update(book).pipe(
             tapResponse({
@@ -74,8 +75,7 @@ export const BookStore = signalStore(
                 patchState(store, state => ({
                   books: state.books.map(b => (b.isbn === updated.isbn ? updated : b))
                 })),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message })
+              error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
         )
@@ -83,6 +83,7 @@ export const BookStore = signalStore(
     ),
     deleteBook: rxMethod<string>(
       pipe(
+        tap(() => patchState(store, { error: null })),
         concatMap(isbn =>
           service.remove(isbn).pipe(
             tapResponse({
@@ -90,8 +91,7 @@ export const BookStore = signalStore(
                 patchState(store, state => ({
                   books: state.books.filter(b => b.isbn !== isbn)
                 })),
-              error: (err: { message: string }) =>
-                patchState(store, { error: err.message })
+              error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
         )

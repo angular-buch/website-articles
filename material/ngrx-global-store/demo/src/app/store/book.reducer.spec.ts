@@ -1,3 +1,5 @@
+import { Action } from '@ngrx/store';
+
 import { initialState, reducer, State } from './book.reducer';
 import * as BookActions from './book.actions';
 import { Book } from '../shared/book';
@@ -43,6 +45,11 @@ describe('Book Reducer', () => {
     expect(state.books.map(x => x.isbn)).toEqual(['2']);
   });
 
+  it('ein Schreibvorgang (Auslöser-Action) setzt eine alte Fehlermeldung zurück', () => {
+    const state = reducer({ ...initialState, error: 'alt' }, BookActions.createBook({ book: b('9') }));
+    expect(state.error).toBeNull();
+  });
+
   it('alle Failure-Actions setzen error (Mehrfach-on)', () => {
     expect(reducer(initialState, BookActions.createBookFailure({ error: 'c' })).error).toBe('c');
     expect(reducer(initialState, BookActions.updateBookFailure({ error: 'u' })).error).toBe('u');
@@ -50,7 +57,7 @@ describe('Book Reducer', () => {
   });
 
   it('lässt den State bei unbekannter Action unverändert', () => {
-    const state = reducer(initialState, { type: 'unbekannt' } as never);
+    const state = reducer(initialState, { type: 'unbekannt' } as Action);
     expect(state).toBe(initialState);
   });
 });

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import * as BookActions from '../store/book.actions';
@@ -7,7 +7,8 @@ import { Book } from '../shared/book';
 
 @Component({
   selector: 'app-book-list',
-  templateUrl: './book-list.html'
+  templateUrl: './book-list.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookList {
   private store = inject(Store);
@@ -20,11 +21,19 @@ export class BookList {
     this.store.dispatch(BookActions.loadBooks());
   }
 
-  deleteBook(isbn: string): void {
-    this.store.dispatch(BookActions.deleteBook({ isbn }));
+  addBook(isbn: string, title: string): void {
+    if (!isbn || !title) {
+      return;
+    }
+    this.store.dispatch(BookActions.createBook({ book: { isbn, title, rating: 0 } }));
   }
 
-  addBook(book: Book): void {
-    this.store.dispatch(BookActions.createBook({ book }));
+  rateUp(book: Book): void {
+    const rating = Math.min((book.rating ?? 0) + 1, 5);
+    this.store.dispatch(BookActions.updateBook({ book: { ...book, rating } }));
+  }
+
+  deleteBook(isbn: string): void {
+    this.store.dispatch(BookActions.deleteBook({ isbn }));
   }
 }

@@ -1,11 +1,11 @@
 ---
 title: "State Management mit NgRx – Teil 2: Global Store mit NgRx"
 published: "2026-06-11"
-lastModified: "2026-06-13"
+lastModified: "2026-06-14"
 hidden: true
 ---
 
-**Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (4. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
+**Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
 
 Dieser Artikel ist **Teil 2** einer dreiteiligen Serie zum Thema State Management mit NgRx.
 
@@ -19,9 +19,9 @@ Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentra
 
 > **Hinweis zur Version:** Wir verwenden in diesem Artikel **Angular 22** mit der dazu passenden NgRx-Version (NgRx folgt dem Major-Versionsschema von Angular). Wir setzen durchgängig auf Standalone APIs und Signals: Den Store richten wir ausschließlich über die `provide…`-Funktionen ein und lesen ihn mit `selectSignal()` als Signal aus. Konstruktor-Injection brauchen wir nicht mehr – auch das offizielle Effect-Schematic erzeugt seine Abhängigkeiten inzwischen mit `inject()`.
 
-## NgRx: Reactive Extensions for Angular
+## NgRx: Reactive State for Angular
 
-Das Framework *Reactive Extensions for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` integriert es sich außerdem nahtlos in die signal-basierte Welt von modernem Angular. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
+Das Framework *Reactive State for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` integriert es sich außerdem nahtlos in die signal-basierte Welt von modernem Angular. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
 
 Wir wollen in diesem Abschnitt die Struktur und die Bausteine in der Welt von NgRx genauer besprechen. Außerdem wollen wir im BookMonkey einen Aspekt mithilfe von NgRx umsetzen, um so alle Bausteine auch praktisch zu üben.
 
@@ -162,7 +162,8 @@ Damit haben wir die Struktur unseres Feature-States definiert. Die restlichen In
 {
   book: {
     books: [],
-    loading: false
+    loading: false,
+    error: null
   }
 }
 ```
@@ -225,7 +226,7 @@ export const loadBooksSuccess = createAction(
 );
 ```
 
-Der generische Typparameter der Funktion `props()` gibt an, welche zusätzlichen Eigenschaften die Action enthalten soll. Wir haben hier den generischen Namen `data` gewählt, die Payload-Propertys können wir allerdings nach Belieben benennen. Das erzeugte Action-Objekt hat den folgenden Aufbau:
+Der generische Typparameter der Funktion `props()` gibt an, welche zusätzlichen Eigenschaften die Action enthalten soll. Wir haben hier den generischen Namen `data` gewählt, die Payload-Properties können wir allerdings nach Belieben benennen. Das erzeugte Action-Objekt hat den folgenden Aufbau:
 
 ```ts
 {
@@ -331,7 +332,7 @@ Wir wollen nun auch für den BookMonkey passende Reducers entwickeln. Dazu über
 - `loadBooksSuccess`: Buchliste einfügen und Ladeindikator auf `false` setzen
 - `loadBooksFailure`: Ladeindikator auf `false` setzen
 
-Die Implementierung bringen wir in der Datei `books/store/book.reducer.ts` unter, in der das Grundgerüst der Reducer-Funktion bereits vorbereitet ist. Statt *switch/case* wird hier die Funktion `createReducer()` genutzt. Für jede Fallunterscheidung existiert ein Block, der in ein `on()` gekapselt ist. Als erstes Argument geben wir hier immer die Action an, die behandelt werden soll. Im zweiten Argument ist die Reducer-Funktion notiert, die schließlich anhand der eingehenden Action den neuen State generiert. Für die einzelnen Reducer-Funktionen sollten wir den Body in geschweiften Klammern definieren und von dort das State-Objekt direkt zurückgeben. Außerdem sollte der Rückgabetyp der Funktion immer explizit mit `State` definiert sein.
+Die Implementierung bringen wir in der Datei `books/store/book.reducer.ts` unter, in der das Grundgerüst der Reducer-Funktion bereits vorbereitet ist. Statt *switch/case* wird hier die Funktion `createReducer()` genutzt. Für jede Fallunterscheidung existiert ein Block, der in ein `on()` gekapselt ist. Als erstes Argument geben wir hier immer die Action an, die behandelt werden soll. Im zweiten Argument ist die Reducer-Funktion notiert, die schließlich anhand der eingehenden Action den neuen State generiert. Für die einzelnen Reducer-Funktionen geben wir stets ein neues State-Objekt zurück und definieren den Rückgabetyp immer explizit mit `State`. Ob wir dafür die ausführliche Form mit `return` oder die kompakte Pfeilschreibweise (`(state): State => ({ ... })`) wählen, ist eine Frage des Stils – in der lauffähigen Beispiel-App verwenden wir die kompakte Variante.
 
 ```ts
 // books/store/book.reducer.ts
@@ -339,7 +340,7 @@ export const reducer = createReducer(
   initialState,
 
   on(BookActions.loadBooks, (state): State => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: null };
   }),
 
   on(BookActions.loadBooksSuccess, (state, action): State => {
@@ -423,7 +424,7 @@ Das resultierende Signal aktualisiert sich nur dann, wenn sich der selektierte W
 
 ![Diagramm: Der Store gibt bei jeder Änderung den gesamten State aus (loading wechselt false, true, true, false). Der Selektor store.selectSignal(state => state.book.loading) gibt darunter nur dann einen neuen Wert aus, wenn sich das loading-Flag tatsächlich ändert (false, true, false).](./selectors-gap.svg "Selektor mit store.selectSignal() verwenden")
 
-Wir legen die Signale direkt als Propertys in der Komponentenklasse ab. Wenn wir unsere Anwendung sauber strukturieren, sollten die Komponenten immer so aussehen und keine zusätzliche Logik für die Datenaufbereitung beinhalten. Da wir die Buchliste nun aus dem Store beziehen, benötigen wir den `BookStoreService` in der Komponente nicht mehr.
+Wir legen die Signale direkt als Properties in der Komponentenklasse ab. Wenn wir unsere Anwendung sauber strukturieren, sollten die Komponenten immer so aussehen und keine zusätzliche Logik für die Datenaufbereitung beinhalten. Da wir die Buchliste nun aus dem Store beziehen, benötigen wir den `BookStoreService` in der Komponente nicht mehr.
 
 ```ts
 // books/book-list/book-list.component.ts
@@ -484,7 +485,7 @@ Technisch ist ein Effect also immer ein `Observable<Action>`. Alle so erzeugten 
 
 ![Diagramm: Wie der einfache Redux-Fluss, aber erweitert um Effects. Eine Action triggert nicht nur den Reducer, sondern löst auch einen Effect aus. Der Effect ruft einen Service auf, der mit einer API kommuniziert, und löst seinerseits eine neue Action aus, die wieder in den Reducer fließt.](./ngrx-flow-full.svg "Datenfluss in NgRx mit Effects")
 
-Die Klasse `BookEffects` befindet sich in der Datei `books/store/book.effects.ts`. Ein Effect wird als ein Property in dieser Klasse definiert. Der Name des Propertys spielt keine Rolle, sollte aber passend zur Aufgabe benannt werden. Das Ziel ist es, hier ein Observable zu entwickeln, das Actions ausgibt. Jeden Effect kapseln wir mit der Funktion `createEffect()`, sodass er automatisch in den Lebenszyklus von NgRx integriert wird. Ein erster Effect zum Laden von Daten wurde bereits automatisch generiert, weil wir beim Anlegen die Einstellung `--api` verwendet haben. Dieses Grundgerüst wollen wir vervollständigen, um die Buchliste per HTTP zu laden.
+Die Klasse `BookEffects` befindet sich in der Datei `books/store/book.effects.ts`. Ein Effect wird als ein Property in dieser Klasse definiert. Der Name des Properties spielt keine Rolle, sollte aber passend zur Aufgabe benannt werden. Das Ziel ist es, hier ein Observable zu entwickeln, das Actions ausgibt. Jeden Effect kapseln wir mit der Funktion `createEffect()`, sodass er automatisch in den Lebenszyklus von NgRx integriert wird. Ein erster Effect zum Laden von Daten wurde bereits automatisch generiert, weil wir beim Anlegen die Einstellung `--api` verwendet haben. Dieses Grundgerüst wollen wir vervollständigen, um die Buchliste per HTTP zu laden.
 
 In die Klasse holen wir mit `inject()` zwei Abhängigkeiten: den `BookStoreService`, der die HTTP-Kommunikation kapselt, und den Service `Actions`. Über `Actions` erhalten wir ein Observable, das alle Actions liefert, die in der Anwendung auftreten. Dieser Datenstrom ist meist die Grundlage für unsere Effects. (Ein Effect muss nicht auf Actions basieren. Einige Beispiele für solche Effects haben wir in einem Blogartikel zusammengefasst: [5 useful NgRx effects that don't rely on actions](https://angular.schule/blog/2018-06-5-useful-effects-without-actions).)
 
@@ -499,6 +500,7 @@ import { of } from 'rxjs';
 
 import * as BookActions from './book.actions';
 import { BookStoreService } from '../../shared/book-store.service';
+import { toMessage } from '../../shared/error-message';
 
 @Injectable()
 export class BookEffects {
@@ -511,7 +513,8 @@ export class BookEffects {
       switchMap(() =>
         this.service.getAll().pipe(
           map(data => BookActions.loadBooksSuccess({ data })),
-          catchError(error => of(BookActions.loadBooksFailure({ error: error.message })))
+          catchError((error: unknown) =>
+            of(BookActions.loadBooksFailure({ error: toMessage(error) })))
         )
       )
     );
@@ -525,7 +528,14 @@ Für jede dieser Actions wollen wir nun einen HTTP-Request ausführen und die Er
 
 Mithilfe von `switchMap()` lösen wir den HTTP-Request aus, indem wir den `BookStoreService` mit der Methode `getAll()` einsetzen, die ein Observable zurückgibt. Unser Effect ist nun ein Observable, das ein Array von Büchern liefert. Damit die Buchliste im Store verarbeitet werden kann, müssen wir sie in eine Action verpacken. Wir nutzen dazu den Operator `map()` und wandeln damit die Buchliste um in eine Action `loadBooksSuccess`, die die Liste enthält.
 
-Ähnlich gehen wir für den Fehlerfall vor: Hier nutzen wir den Operator `catchError()`, um einen Fehler in der Ausführung abzufangen. Wir werfen den Fehler allerdings an der Stelle nicht weiter, sondern kapseln ihn in eine Action `loadBooksFailure`, die wir als reguläres Element des Datenstroms weitergeben. Dabei verwenden wir das Property `message` auf dem Fehlerobjekt, um die Meldung auszulesen.
+Ähnlich gehen wir für den Fehlerfall vor: Hier nutzen wir den Operator `catchError()`, um einen Fehler in der Ausführung abzufangen. Wir werfen den Fehler allerdings an der Stelle nicht weiter, sondern kapseln ihn in eine Action `loadBooksFailure`, die wir als reguläres Element des Datenstroms weitergeben. Der Fehler im `catchError()` ist als `unknown` typisiert – an dieser Stelle kann schließlich alles Mögliche ankommen (ein `Error`, bei einem echten Backend eine `HttpErrorResponse`, im Extremfall ein String). Statt blind auf eine Eigenschaft wie `message` zuzugreifen, prüfen wir die Form des Fehlers in einer kleinen Hilfsfunktion `toMessage()`:
+
+```ts
+// shared/error-message.ts
+export function toMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Ein unbekannter Fehler ist aufgetreten.';
+}
+```
 
 Auf diese Weise erzeugen wir einen Datenstrom, der nacheinander verschiedene Actions ausgeben kann. Die Funktion `createEffect()` sorgt dafür, dass dieser Datenstrom automatisch abonniert wird. Die resultierenden Actions werden in den Store dispatcht und durchlaufen dort die Reducers. In einem Effect sollten wir also niemals selbst die Methode `store.dispatch()` aufrufen.
 
@@ -563,6 +573,7 @@ import { of } from 'rxjs';
 
 import * as BookActions from './book.actions';
 import { BookStoreService } from '../../shared/book-store.service';
+import { toMessage } from '../../shared/error-message';
 
 export const loadBooks$ = createEffect(
   (actions$ = inject(Actions), service = inject(BookStoreService)) => {
@@ -571,7 +582,8 @@ export const loadBooks$ = createEffect(
       switchMap(() =>
         service.getAll().pipe(
           map(data => BookActions.loadBooksSuccess({ data })),
-          catchError(error => of(BookActions.loadBooksFailure({ error: error.message })))
+          catchError((error: unknown) =>
+            of(BookActions.loadBooksFailure({ error: toMessage(error) })))
         )
       )
     );
@@ -625,7 +637,8 @@ createBook$ = createEffect(() => {
     concatMap(({ book }) =>
       this.service.create(book).pipe(
         map(created => BookActions.createBookSuccess({ book: created })),
-        catchError(error => of(BookActions.createBookFailure({ error: error.message })))
+        catchError((error: unknown) =>
+          of(BookActions.createBookFailure({ error: toMessage(error) })))
       )
     )
   );
@@ -637,7 +650,8 @@ updateBook$ = createEffect(() => {
     concatMap(({ book }) =>
       this.service.update(book).pipe(
         map(updated => BookActions.updateBookSuccess({ book: updated })),
-        catchError(error => of(BookActions.updateBookFailure({ error: error.message })))
+        catchError((error: unknown) =>
+          of(BookActions.updateBookFailure({ error: toMessage(error) })))
       )
     )
   );
@@ -649,17 +663,27 @@ deleteBook$ = createEffect(() => {
     concatMap(({ isbn }) =>
       this.service.remove(isbn).pipe(
         map(() => BookActions.deleteBookSuccess({ isbn })),
-        catchError(error => of(BookActions.deleteBookFailure({ error: error.message })))
+        catchError((error: unknown) =>
+          of(BookActions.deleteBookFailure({ error: toMessage(error) })))
       )
     )
   );
 });
 ```
 
-**Reducer.** Im Reducer passen wir den State immutabel an: anhängen mit dem Spread-Operator, ersetzen mit `map()`, entfernen mit `filter()`. Auf die drei Fehlerfälle reagieren wir mit *einem* `on()` gleichzeitig (das ist möglich, weil ein Reducer für jede Action durchlaufen wird):
+**Reducer.** Im Reducer passen wir den State immutabel an: anhängen mit dem Spread-Operator, ersetzen mit `map()`, entfernen mit `filter()`. Beim Auslösen eines Schreibvorgangs setzen wir – wie schon beim Laden – eine alte Fehlermeldung zurück. Auf die drei Fehlerfälle reagieren wir mit *einem* `on()` gleichzeitig (das ist möglich, weil ein Reducer für jede Action durchlaufen wird):
 
 ```ts
 // books/store/book.reducer.ts (Ergänzung in createReducer)
+
+// Beim Auslösen eines Schreibvorgangs eine alte Fehlermeldung zurücksetzen:
+on(
+  BookActions.createBook,
+  BookActions.updateBook,
+  BookActions.deleteBook,
+  (state): State => ({ ...state, error: null })
+),
+
 on(BookActions.createBookSuccess, (state, action): State => ({
   ...state,
   books: [...state.books, action.book]
@@ -714,17 +738,25 @@ export class BookListComponent {
     this.store.dispatch(BookActions.loadBooks());
   }
 
-  deleteBook(isbn: string): void {
-    this.store.dispatch(BookActions.deleteBook({ isbn }));
+  addBook(isbn: string, title: string): void {
+    if (!isbn || !title) {
+      return;
+    }
+    this.store.dispatch(BookActions.createBook({ book: { isbn, title, rating: 0 } }));
   }
 
-  createBook(book: Book): void {
-    this.store.dispatch(BookActions.createBook({ book }));
+  rateUp(book: Book): void {
+    const rating = Math.min((book.rating ?? 0) + 1, 5);
+    this.store.dispatch(BookActions.updateBook({ book: { ...book, rating } }));
+  }
+
+  deleteBook(isbn: string): void {
+    this.store.dispatch(BookActions.deleteBook({ isbn }));
   }
 }
 ```
 
-Im Template zeigen wir die Fehlermeldung an und lösen das Löschen über einen Button aus:
+Im Template zeigen wir die Fehlermeldung an, bieten ein kleines Formular zum Anlegen und lösen Ändern (Bewertung erhöhen) sowie Löschen über Buttons aus. Die Eingabefelder lesen wir bewusst ohne `FormsModule` über lokale Template-Referenzen (`#isbnEl`) aus, um den Fokus auf NgRx zu behalten:
 
 ```html
 <!-- books/book-list/book-list.component.html -->
@@ -732,10 +764,19 @@ Im Template zeigen wir die Fehlermeldung an und lösen das Löschen über einen 
   <div class="error">{{ error }}</div>
 }
 
+<div class="add-form">
+  <input #isbnEl placeholder="ISBN" />
+  <input #titleEl placeholder="Titel" />
+  <button type="button" (click)="addBook(isbnEl.value, titleEl.value); isbnEl.value = ''; titleEl.value = ''">
+    Anlegen
+  </button>
+</div>
+
 <ul class="book-list">
   @for (book of books(); track book.isbn) {
     <li>
-      {{ book.title }}
+      {{ book.title }} – ★ {{ book.rating ?? 0 }}
+      <button type="button" (click)="rateUp(book)">★ +1</button>
       <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
     </li>
   }
@@ -822,7 +863,7 @@ export const BookActions = createActionGroup({
 });
 ```
 
-Die Besonderheit an diesem Ansatz ist, dass wir die Variablennamen nicht mehr von Hand notieren müssen. Wir können die Actions z. B. als `BookActions.loadBooks()` verwenden – der Name des Propertys wird automatisch aus dem Action Type ermittelt. Auf diese Weise sparen wir uns viel Tipparbeit.
+Die Besonderheit an diesem Ansatz ist, dass wir die Variablennamen nicht mehr von Hand notieren müssen. Wir können die Actions z. B. als `BookActions.loadBooks()` verwenden – der Name des Properties wird automatisch aus dem Action Type ermittelt. Auf diese Weise sparen wir uns viel Tipparbeit.
 
 Um die Actions zu verwenden, importieren wir nun immer das gesamte Objekt `BookActions`, nicht die einzelnen Actions. In den Komponenten, Reducers und Effects sind also auch Anpassungen nötig, um diesen Ansatz zu nutzen.
 
@@ -836,9 +877,9 @@ export const bookFeature = createFeature({
   name: 'book',
   reducer: createReducer(
     initialState,
-    on(BookActions.loadBooks, (state): State => ({ ...state, loading: true })),
+    on(BookActions.loadBooks, (state): State => ({ ...state, loading: true, error: null })),
     on(BookActions.loadBooksSuccess, (state, { data }): State => ({ ...state, books: data, loading: false })),
-    on(BookActions.loadBooksFailure, (state): State => ({ ...state, loading: false }))
+    on(BookActions.loadBooksFailure, (state, { error }): State => ({ ...state, loading: false, error }))
   )
 });
 
@@ -943,8 +984,8 @@ Alle Funktionen erhalten den aktuellen State und die zu verarbeitenden Werte als
 export const reducer = createReducer(
   initialState,
 
-  on(BookActions.createBook, (state, action) => {
-    return adapter.addOne(action.data, state);
+  on(BookActions.createBookSuccess, (state, action) => {
+    return adapter.addOne(action.book, state);
   }),
 
   on(BookActions.loadBooksSuccess, (state, action) => {
@@ -977,6 +1018,8 @@ Auf diese Weise können wir die Verwaltung von Entitäten im State sehr effizien
 
 Alle auf Grundlage von NgRx entwickelten Bausteine sollten auch getestet werden. Dafür möchten wir in diesem Abschnitt einige Hinweise geben. Grundsätzlich werden bei der Initialisierung mit den Schematics von NgRx bereits Grundgerüste für die Unit-Tests angelegt – wir können also direkt loslegen.
 
+> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; mit Vitest stehen die äquivalenten Helfer unter `vi` bzw. über `vitest-marbles` bereit.
+
 #### Actions
 
 Die Action Creators beinhalten keine spezifische Logik, die getestet werden muss. In manchen Blogartikeln wird vorgeschlagen, die korrekte Zusammensetzung der Objekte zu prüfen, damit eine Action stets den richtigen `type` besitzt. Wir sind der Meinung, dass solche trivialen Tests keinen Mehrwert liefern und deshalb nicht notwendig sind.
@@ -994,7 +1037,8 @@ describe('Book Reducer', () => {
   it('should enable the loading flag for loadBooks', () => {
     const state = {
       books: [],
-      loading: false
+      loading: false,
+      error: null
     };
     const action = loadBooks();
 
@@ -1013,13 +1057,16 @@ Die Hilfsfunktion `book()` haben wir selbst definiert. Sie generiert einfache Bu
 ```ts
 // books/store/book.selectors.spec.ts
 import { selectAllBooks } from './book.selectors';
-import { book } from './test-helper';
+import { Book } from '../../shared/book';
+
+// kleine Hilfsfunktion, um schnell Testdaten zu erzeugen
+const book = (isbn: string): Book => ({ isbn, title: `Titel ${isbn}`, rating: 0 });
 
 describe('Book Selectors', () => {
   it('should select all books', () => {
-    const books = [book(1), book(2), book(3)];
+    const books = [book('1'), book('2'), book('3')];
     const state = {
-      book: { books, loading: false }
+      book: { books, loading: false, error: null }
     };
 
     const result = selectAllBooks(state);
@@ -1034,8 +1081,8 @@ Bei komplexeren Selektoren, die mehrere andere Selektoren als Grundlage verwende
 // books/store/book.selectors.spec.ts
 describe('Book Selectors', () => {
   it('should select all books', () => {
-    const books = [book(1), book(2), book(3)];
-    const bookState = { books, loading: false };
+    const books = [book('1'), book('2'), book('3')];
+    const bookState = { books, loading: false, error: null };
 
     const result = selectAllBooks.projector(bookState);
     expect(result).toEqual(books);
@@ -1094,7 +1141,7 @@ describe('BookEffects', () => {
   });
 
   it('should fire loadBooksSuccess for loadBooks', () => {
-    const books = [book(1), book(2), book(3)];
+    const books = [book('1'), book('2'), book('3')];
 
     // Implementierung von getAll() ersetzen
     const bs = TestBed.inject(BookStoreService);
@@ -1134,7 +1181,7 @@ describe('BookEffects', () => {
   beforeEach(() => { /* ... */ });
 
   it('should fire loadBooksSuccess for loadBooks', () => {
-    const books = [book(1), book(2), book(3)];
+    const books = [book('1'), book('2'), book('3')];
     const bs = TestBed.inject(BookStoreService);
     spyOn(bs, 'getAll').and.callFake(() => of(books));
 
@@ -1153,7 +1200,7 @@ Komponenten und Effects greifen häufig auf den Store zu. Unter anderem werden A
 
 Als Beispiel wollen wir den bekannten Effect zum Laden der Bücher so erweitern, dass er nur dann Bücher lädt, wenn die Buchliste im State noch leer ist. Hat das Array bereits Einträge, soll nichts passieren.
 
-Es ist für dieses Szenario notwendig, dass wir den bestehenden State im Effect berücksichtigen. Dies können wir mit dem Operator `concatLatestFrom()` realisieren: Wir übergeben ein anderes Observable als Argument, und der Operator reichert den Hauptdatenstrom mit dem jeweils letzten Element aus diesem Observable an. Das bedeutet also, dass uns in den Effects neben dem Payload aus den Actions auch zusätzlich Daten aus dem Store zur Verfügung stehen. Wir verwenden hier direkt unseren Selektor `selectAllBooks`, um die aktuelle Buchliste aus dem Store zu erhalten. Anhand der Buchliste können wir dann mit dem Operator `filter()` entscheiden, ob die Bücher neu heruntergeladen werden sollen oder nicht.
+Es ist für dieses Szenario notwendig, dass wir den bestehenden State im Effect berücksichtigen. Dies können wir mit dem Operator `concatLatestFrom()` realisieren: Wir übergeben ein anderes Observable als Argument, und der Operator reichert den Hauptdatenstrom mit dem jeweils letzten Element aus diesem Observable an. Das bedeutet also, dass uns in den Effects neben dem Payload aus den Actions auch zusätzlich Daten aus dem Store zur Verfügung stehen. Wir verwenden hier direkt unseren Selektor `selectAllBooks`, um die aktuelle Buchliste aus dem Store zu erhalten. Anhand der Buchliste können wir dann mit dem Operator `filter()` entscheiden, ob die Bücher neu heruntergeladen werden sollen oder nicht. In Effects arbeiten wir im Observable-Kontext – deshalb nutzen wir hier `store.select()` (liefert ein Observable) und nicht `selectSignal()`.
 
 > **Hinweis:** Seit NgRx 18 importieren wir den Operator `concatLatestFrom()` aus dem Paket `@ngrx/operators`. Zuvor war er Teil von `@ngrx/effects` (dort seit NgRx 17 als veraltet markiert).
 
@@ -1180,7 +1227,8 @@ export class BookEffects {
       switchMap(() =>
         this.service.getAll().pipe(
           map(data => BookActions.loadBooksSuccess({ data })),
-          catchError(error => of(BookActions.loadBooksFailure({ error: error.message })))
+          catchError((error: unknown) =>
+            of(BookActions.loadBooksFailure({ error: toMessage(error) })))
         )
       )
     );
@@ -1231,7 +1279,7 @@ describe('BookEffects', () => {
     const store = TestBed.inject(MockStore);
     store.setState({
       book: {
-        books: [book(1)],
+        books: [book('1')],
         loading: false
       }
     });
@@ -1289,11 +1337,11 @@ Um den Anwendungszustand mit NgRx zu verwalten, kommunizieren die Komponenten mi
 
 Damit sind die Komponenten stets abhängig von den Bausteinen des Frameworks NgRx. Das erschwert insbesondere das Testing und die Wiederverwendbarkeit. Außerdem müssen wir uns für das State Management auf eine spezifische Lösung festlegen. Jeglicher State wird global im Store abgelegt, und ein Mischbetrieb mit anderen Ansätzen führt potenziell zu unsauberem Code in der Komponente.
 
-Um diese Unschönheiten zu lösen, können wir eine *Facade* verwenden: Dafür erstellen wir einen Service, der eine Schnittstelle zwischen der Komponente und dem Store bildet. Die Komponente kommuniziert über Methoden und Propertys mit der Facade. Das Framework NgRx bleibt dabei verborgen, und wir halten die Komponente frei von frameworkspezifischem Code.
+Um diese Unschönheiten zu lösen, können wir eine *Facade* verwenden: Dafür erstellen wir einen Service, der eine Schnittstelle zwischen der Komponente und dem Store bildet. Die Komponente kommuniziert über Methoden und Properties mit der Facade. Das Framework NgRx bleibt dabei verborgen, und wir halten die Komponente frei von frameworkspezifischem Code.
 
 ![Diagramm: Zwischen Component und Store liegt eine Facade. Die Component ruft Methoden der Facade auf (doThings()) und liest Daten über ein Signal (data). Die Facade kommuniziert per dispatch() und selectSignal() mit dem Store, sodass die Component selbst keinen direkten Kontakt zu NgRx hat.](./facade.svg "NgRx Flow mit Facade")
 
-Zur Implementierung nutzen wir einen einfachen Service, der mit dem Store kommuniziert. Als öffentliche Schnittstelle bieten wir gut lesbare Methoden und Propertys an.
+Zur Implementierung nutzen wir einen einfachen Service, der mit dem Store kommuniziert. Als öffentliche Schnittstelle bieten wir gut lesbare Methoden und Properties an.
 
 ```ts
 @Injectable()
@@ -1308,7 +1356,7 @@ export class BooksFacade {
 }
 ```
 
-In der Komponente nutzen wir die Facade, um die Daten aus den Propertys zu lesen und Aktionen mithilfe der angebotenen Methoden auszulösen.
+In der Komponente nutzen wir die Facade, um die Daten aus den Properties zu lesen und Aktionen mithilfe der angebotenen Methoden auszulösen.
 
 ```ts
 @Component({ /* ... */ })
@@ -1323,7 +1371,7 @@ export class BookListComponent {
 }
 ```
 
-Im Unit-Test können wir einen solchen Service leicht durch einen Stub ersetzen. Die Propertys und Methoden können dabei in einem einfachen Objekt nachgebildet werden, ohne die Schnittstelle des Stores ausmocken zu müssen.
+Im Unit-Test können wir einen solchen Service leicht durch einen Stub ersetzen. Die Properties und Methoden können dabei in einem einfachen Objekt nachgebildet werden, ohne die Schnittstelle des Stores ausmocken zu müssen.
 
 ```ts
 import { signal } from '@angular/core';

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Book } from './book';
 
 /**
  * In-Memory-Stand-in für ein echtes HTTP-Backend.
  * Die Methoden geben – wie ein HttpClient-Service – Observables zurück,
  * sodass der Effect-Code identisch zum Artikel bleibt.
+ *
+ * `create()` wirft bewusst einen Fehler, wenn die ISBN bereits existiert –
+ * so lässt sich die Fehleranzeige der Anwendung auch ohne Server auslösen.
  */
 @Injectable({ providedIn: 'root' })
 export class BookStoreService {
@@ -16,17 +19,20 @@ export class BookStoreService {
   ];
 
   getAll(): Observable<Book[]> {
-    return of([...this.books]);
+    return of(this.books.map(book => ({ ...book })));
   }
 
   create(book: Book): Observable<Book> {
-    this.books = [...this.books, book];
-    return of(book);
+    if (this.books.some(b => b.isbn === book.isbn)) {
+      return throwError(() => new Error(`Ein Buch mit der ISBN ${book.isbn} existiert bereits.`));
+    }
+    this.books = [...this.books, { ...book }];
+    return of({ ...book });
   }
 
   update(book: Book): Observable<Book> {
-    this.books = this.books.map(b => (b.isbn === book.isbn ? book : b));
-    return of(book);
+    this.books = this.books.map(b => (b.isbn === book.isbn ? { ...book } : b));
+    return of({ ...book });
   }
 
   remove(isbn: string): Observable<void> {

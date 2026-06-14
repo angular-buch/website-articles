@@ -1,17 +1,26 @@
 <h1>Books ({{ books().length }})</h1>
 
 @if (loading()) {
-  <p>Loading ...</p>
+  <div class="loader">Loading ...</div>
 }
 
 @if (error(); as error) {
-  <p class="error">{{ error }}</p>
+  <div class="error">{{ error }}</div>
 }
 
-<ul>
+<div class="add-form">
+  <input #isbnEl placeholder="ISBN" />
+  <input #titleEl placeholder="Titel" />
+  <button type="button" (click)="addBook(isbnEl.value, titleEl.value); isbnEl.value = ''; titleEl.value = ''">
+    Anlegen
+  </button>
+</div>
+
+<ul class="book-list">
   @for (book of books(); track book.isbn) {
     <li>
-      {{ book.title }}
+      {{ book.title }} – ★ {{ book.rating ?? 0 }}
+      <button type="button" (click)="rateUp(book)">★ +1</button>
       <button type="button" (click)="deleteBook(book.isbn)">Löschen</button>
     </li>
   }

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 
 import { BookStore } from './book.store';
 import { BookStoreService } from './shared/book-store.service';
@@ -23,6 +23,19 @@ describe('BookStore (SignalStore)', () => {
     expect(store.error()).toBeNull();
     expect(store.books().length).toBe(3);
     expect(store.booksCount()).toBe(3);
+  });
+
+  it('setzt loading=true, solange der Ladevorgang läuft', () => {
+    const response = new Subject<Book[]>();
+    const store = createStore({ getAll: () => response });
+    // onInit hat loadBooks() ausgelöst; die Antwort steht noch aus:
+    expect(store.loading()).toBe(true);
+
+    response.next([b('1')]);
+    response.complete();
+
+    expect(store.loading()).toBe(false);
+    expect(store.booksCount()).toBe(1);
   });
 
   it('addBook hängt ein Buch immutabel an die Liste an', () => {
@@ -64,16 +77,40 @@ describe('BookStore (SignalStore)', () => {
 
   it('schreibt eine Fehlermeldung in den State, wenn das Laden fehlschlägt', () => {
     const store = createStore({
-      getAll: () => throwError(() => ({ message: 'Netzwerkfehler' }))
+      getAll: () => throwError(() => new Error('Netzwerkfehler'))
     });
 
     expect(store.error()).toBe('Netzwerkfehler');
     expect(store.loading()).toBe(false);
   });
 
+  it('schreibt eine Fehlermeldung, wenn das Anlegen fehlschlägt', () => {
+    const store = createStore({
+      getAll: () => of([b('1')]),
+      create: () => throwError(() => new Error('Doppelte ISBN'))
+    });
+
+    store.addBook(b('1', 'Doppelt'));
+
+    expect(store.error()).toBe('Doppelte ISBN');
+    expect(store.booksCount()).toBe(1); // Liste bleibt unverändert
+  });
+
+  it('ein erfolgreiches Schreiben räumt eine alte Fehlermeldung weg', () => {
+    const store = createStore({
+      getAll: () => throwError(() => new Error('Netzwerkfehler')),
+      remove: () => of(undefined)
+    });
+    expect(store.error()).toBe('Netzwerkfehler');
+
+    store.deleteBook('1');
+
+    expect(store.error()).toBeNull();
+  });
+
   it('clearError setzt die Fehlermeldung zurück', () => {
     const store = createStore({
-      getAll: () => throwError(() => ({ message: 'Netzwerkfehler' }))
+      getAll: () => throwError(() => new Error('Netzwerkfehler'))
     });
     expect(store.error()).toBe('Netzwerkfehler');
 

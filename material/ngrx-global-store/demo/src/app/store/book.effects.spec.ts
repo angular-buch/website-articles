@@ -35,7 +35,7 @@ describe('BookEffects', () => {
   });
 
   it('loadBooks$ feuert loadBooksFailure bei einem Fehler', () => {
-    const effects = setup({ getAll: () => throwError(() => ({ message: 'Netzwerkfehler' })) });
+    const effects = setup({ getAll: () => throwError(() => new Error('Netzwerkfehler')) });
     actions$ = of(BookActions.loadBooks());
 
     let result: Action | undefined;
@@ -53,6 +53,34 @@ describe('BookEffects', () => {
     expect(result).toEqual(BookActions.createBookSuccess({ book }));
   });
 
+  it('createBook$ feuert createBookFailure bei einem Fehler', () => {
+    const effects = setup({ create: () => throwError(() => new Error('Doppelte ISBN')) });
+    actions$ = of(BookActions.createBook({ book: b('3', 'Neu') }));
+
+    let result: Action | undefined;
+    effects.createBook$.subscribe(action => (result = action));
+    expect(result).toEqual(BookActions.createBookFailure({ error: 'Doppelte ISBN' }));
+  });
+
+  it('updateBook$ feuert updateBookSuccess', () => {
+    const book = b('1', 'Geändert');
+    const effects = setup({ update: x => of(x) });
+    actions$ = of(BookActions.updateBook({ book }));
+
+    let result: Action | undefined;
+    effects.updateBook$.subscribe(action => (result = action));
+    expect(result).toEqual(BookActions.updateBookSuccess({ book }));
+  });
+
+  it('updateBook$ feuert updateBookFailure bei einem Fehler', () => {
+    const effects = setup({ update: () => throwError(() => new Error('Speicherfehler')) });
+    actions$ = of(BookActions.updateBook({ book: b('1') }));
+
+    let result: Action | undefined;
+    effects.updateBook$.subscribe(action => (result = action));
+    expect(result).toEqual(BookActions.updateBookFailure({ error: 'Speicherfehler' }));
+  });
+
   it('deleteBook$ feuert deleteBookSuccess mit der ISBN', () => {
     const effects = setup({ remove: () => of(undefined) });
     actions$ = of(BookActions.deleteBook({ isbn: '1' }));
@@ -60,5 +88,14 @@ describe('BookEffects', () => {
     let result: Action | undefined;
     effects.deleteBook$.subscribe(action => (result = action));
     expect(result).toEqual(BookActions.deleteBookSuccess({ isbn: '1' }));
+  });
+
+  it('deleteBook$ feuert deleteBookFailure bei einem Fehler', () => {
+    const effects = setup({ remove: () => throwError(() => new Error('Löschfehler')) });
+    actions$ = of(BookActions.deleteBook({ isbn: '1' }));
+
+    let result: Action | undefined;
+    effects.deleteBook$.subscribe(action => (result = action));
+    expect(result).toEqual(BookActions.deleteBookFailure({ error: 'Löschfehler' }));
   });
 });
