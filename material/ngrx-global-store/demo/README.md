@@ -9,7 +9,7 @@ Sie zeigt den kompletten Code aus dem Artikel in Aktion: Buchliste laden sowie B
 
 > **Hinweis:** NgRx 21 gibt als Peer-Range noch `@angular/core: ^21.0.0` an, läuft aber problemlos unter Angular 22. Damit `npm install` nicht an dieser Range scheitert, liegt im Projekt eine `.npmrc` mit `legacy-peer-deps=true`.
 
-> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookMonkey (Feature-Ordner `books/store/…`); die Demo liegt dagegen flach unter `src/app/store/…`. Klassen-, Datei- und Selektornamen (Präfix `bm-`, keine `.component`/`.service`-Suffixe) folgen in beiden Fällen denselben Angular-Konventionen.
+> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookManager (Feature-Ordner `books/store/…`); die Demo liegt dagegen flach unter `src/app/store/…`. Klassen-, Datei- und Selektornamen (Präfix `bm-`, keine `.component`/`.service`-Suffixe) folgen in beiden Fällen denselben Angular-Konventionen.
 
 ## Befehle
 

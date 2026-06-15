@@ -38,7 +38,7 @@ Kurz gesagt: Der Global Store ist *ein* großes, strenges System. Der SignalStor
 
 ## Der SignalStore im Detail
 
-Schauen wir uns die Bausteine konkret an. Als durchgehendes Beispiel verwenden wir wieder den BookMonkey. Wir bauen Schritt für Schritt einen vollständigen `BookStore`, der die Buchliste vom Server lädt **und** Bücher anlegen, ändern und löschen kann – inklusive Lade- und Fehleranzeige. So lässt sich der direkte Vergleich zum Global Store aus Teil 2 ziehen.
+Schauen wir uns die Bausteine konkret an. Als durchgehendes Beispiel verwenden wir wieder den BookManager. Wir bauen Schritt für Schritt einen vollständigen `BookStore`, der die Buchliste vom Server lädt **und** Bücher anlegen, ändern und löschen kann – inklusive Lade- und Fehleranzeige. So lässt sich der direkte Vergleich zum Global Store aus Teil 2 ziehen.
 
 ### Installation
 
@@ -503,7 +503,7 @@ Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Ref
 
 Die immutablen Array-Operationen aus unseren CRUD-Methoden (`[...state.books, created]`, `map(...)`, `filter(...)`) wiederholen sich in jeder Anwendung. Genau diese Routine nimmt uns das Plugin `@ngrx/signals/entities` mit dem Feature `withEntities()` ab – das Gegenstück zu `@ngrx/entity` aus Teil 2. Es legt die Signale `entityMap`, `ids` und `entities` an und bringt fertige Updater mit: `addEntity`, `updateEntity`, `removeEntity`, `setAllEntities` und weitere.
 
-Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookMonkey über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an. Bei `add*`-, `set*`- und `update*`-Updatern übergeben wir ihn als zweites Argument; die `remove*`-Updater ermitteln die ID automatisch:
+Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookManager über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an. Bei `add*`-, `set*`- und `update*`-Updatern übergeben wir ihn als zweites Argument; die `remove*`-Updater ermitteln die ID automatisch:
 
 ```ts
 // books/book.store.ts (Entity-Variante)

@@ -23,11 +23,11 @@ Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentra
 
 Das Framework *Reactive State for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` integriert es sich außerdem nahtlos in die signal-basierte Welt von modernem Angular. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
 
-Wir wollen in diesem Abschnitt die Struktur und die Bausteine in der Welt von NgRx genauer besprechen. Außerdem wollen wir im BookMonkey einen Aspekt mithilfe von NgRx umsetzen, um so alle Bausteine auch praktisch zu üben.
+Wir wollen in diesem Abschnitt die Struktur und die Bausteine in der Welt von NgRx genauer besprechen. Außerdem wollen wir im BookManager einen Aspekt mithilfe von NgRx umsetzen, um so alle Bausteine auch praktisch zu üben.
 
 ### Projekt vorbereiten
 
-Als Grundlage für diesen praktischen Teil verwenden wir das Beispielprojekt BookMonkey aus dem Buch. Wir bauen auf der Variante mit Standalone Components auf, wie sie die aktuelle Angular-Version vorgibt. Wer mitentwickeln möchte, kann das bestehende BookMonkey-Projekt verwenden.
+Als Grundlage für diesen praktischen Teil verwenden wir das Beispielprojekt BookManager aus dem Buch. Wir bauen auf der Variante mit Standalone Components auf, wie sie die aktuelle Angular-Version vorgibt. Wer mitentwickeln möchte, kann das bestehende BookManager-Projekt verwenden.
 
 ### Store einrichten
 
@@ -326,7 +326,7 @@ Um das State-Objekt vor der Verwendung und Änderung zu klonen, können wir den 
 
 > **Hinweis:** Ein verschachteltes Objekt können wir mit dem Spread-Operator klonen, indem wir jeden Zweig des Objekts einzeln kopieren. Wird das zu komplex, empfiehlt sich ein Hilfsmittel wie die native Funktion `structuredClone()`. Wir haben die verschiedenen Möglichkeiten in einem Blogartikel zusammengefasst: [10 useful operations for pure & immutable data structures](https://angular.schule/blog/2018-03-pure-immutable-operations).
 
-Wir wollen nun auch für den BookMonkey passende Reducers entwickeln. Dazu überlegen wir zunächst, welche Zustandsänderungen von den Actions ausgelöst werden:
+Wir wollen nun auch für den BookManager passende Reducers entwickeln. Dazu überlegen wir zunächst, welche Zustandsänderungen von den Actions ausgelöst werden:
 
 - `loadBooks`: Ladeindikator auf `true` setzen
 - `loadBooksSuccess`: Buchliste einfügen und Ladeindikator auf `false` setzen
@@ -403,7 +403,7 @@ export const selectMyData = createSelector(
 
 Wir können auf diese Weise ein komplexes Gerüst von Selektoren definieren. Die Selektoren bauen aufeinander auf und kombinieren die Daten aus dem State so, wie sie in den Komponenten benötigt werden. Jeder einzelne Selektor nutzt die Memoization, um die berechneten Werte zu cachen. Die Berechnung in der Projektionsfunktion wird nur neu ausgeführt, wenn sich einer der Eingabewerte tatsächlich ändert. So sind auch komplexe Projektionen in großen Anwendungen ohne Nachteile in der Performance möglich.
 
-Für den BookMonkey wollen wir zwei einfache Selektoren entwickeln, die uns Zugriff auf das `loading`-Flag und auf die Buchliste geben:
+Für den BookManager wollen wir zwei einfache Selektoren entwickeln, die uns Zugriff auf das `loading`-Flag und auf die Buchliste geben:
 
 ```ts
 // books/store/book.selectors.ts
