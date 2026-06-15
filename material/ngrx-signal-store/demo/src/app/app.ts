@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BookList } from './book-list/book-list';
 
 @Component({
-  selector: 'app-root',
+  selector: 'bm-root',
   imports: [BookList],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush

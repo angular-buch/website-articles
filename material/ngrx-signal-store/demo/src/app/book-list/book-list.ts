@@ -3,7 +3,7 @@ import { BookStore } from '../book.store';
 import { Book } from '../shared/book';
 
 @Component({
-  selector: 'app-book-list',
+  selector: 'bm-book-list',
   templateUrl: './book-list.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

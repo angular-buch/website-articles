@@ -6,7 +6,7 @@ import { selectAllBooks, selectBooksError, selectBooksLoading } from '../store/b
 import { Book } from '../shared/book';
 
 @Component({
-  selector: 'app-book-list',
+  selector: 'bm-book-list',
   templateUrl: './book-list.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
