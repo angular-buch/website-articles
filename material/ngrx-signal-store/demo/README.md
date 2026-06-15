@@ -4,10 +4,10 @@ Lauffähige Angular-Anwendung zum Artikel **[State Management mit NgRx – Teil 
 
 Sie zeigt den kompletten `BookStore` aus dem Artikel in Aktion: Buchliste laden sowie Bücher anlegen, ändern (Bewertung erhöhen) und löschen (CRUD) mit `signalStore`, `withState`, `withComputed`, `withMethods`, `rxMethod` und `patchState` – inklusive Lade- und Fehleranzeige.
 
-- **Angular 22** + **NgRx 21** (`@ngrx/signals`, `@ngrx/operators`)
+- **Angular** + **NgRx** (`@ngrx/signals`, `@ngrx/operators`) – die konkreten Versionen stehen in der `package.json`
 - Der `BookApi` ist ein In-Memory-Stand-in für ein echtes HTTP-Backend, damit die App ohne Server läuft. Er wirft bei einer doppelten ISBN bewusst einen Fehler, sodass sich die Fehleranzeige auch ohne Server auslösen lässt.
 
-> **Hinweis:** NgRx 21 gibt als Peer-Range noch `@angular/core: ^21.0.0` an, läuft aber problemlos unter Angular 22. Damit `npm install` nicht an dieser Range scheitert, liegt im Projekt eine `.npmrc` mit `legacy-peer-deps=true`.
+> **Hinweis:** NgRx und Angular folgen demselben Major-Versionsschema. Kurz nach einem neuen Angular-Major passt die NgRx-Peer-Range noch nicht; damit `npm install` trotzdem durchläuft, liegt eine `.npmrc` mit `legacy-peer-deps=true` bei. Sie stört nicht, sobald die Versionen wieder zusammenpassen.
 
 > **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookManager (Feature-Ordner `books/…`); die Demo liegt dagegen flach unter `src/app/…`. Klassen-, Datei- und Selektornamen (Präfix `bm-`, keine `.component`/`.service`-Suffixe) folgen in beiden Fällen denselben Angular-Konventionen.
 

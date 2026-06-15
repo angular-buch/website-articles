@@ -17,7 +17,7 @@ Dieser Artikel ist **Teil 2** einer dreiteiligen Serie zum Thema State Managemen
 
 Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentrales State Management erarbeitet und dabei die Grundprinzipien von Redux kennengelernt. Jetzt setzen wir diese Ideen mit dem Framework NgRx in die Praxis um.
 
-> **Hinweis zur Version:** Wir verwenden in diesem Artikel **Angular 22**. NgRx folgt normalerweise dem Major-Versionsschema von Angular; zum Zeitpunkt der Veröffentlichung ist jedoch **NgRx 21** die aktuelle Version, die problemlos unter Angular 22 läuft (in den Beispiel-Apps per `legacy-peer-deps` installiert). Wir setzen durchgängig auf Standalone APIs und Signals: Den Store richten wir ausschließlich über die `provide…`-Funktionen ein und lesen ihn mit `selectSignal()` als Signal aus. Konstruktor-Injection brauchen wir nicht mehr – auch das offizielle Effect-Schematic erzeugt seine Abhängigkeiten inzwischen mit `inject()`.
+> **Hinweis:** Wir setzen durchgängig auf moderne Standalone APIs und Signals: Den Store richten wir ausschließlich über die `provide…`-Funktionen ein und lesen ihn mit `selectSignal()` als Signal aus. Konstruktor-Injection brauchen wir nicht mehr – auch das offizielle Effect-Schematic erzeugt seine Abhängigkeiten mit `inject()`.
 
 ## NgRx: Reactive State for Angular
 
