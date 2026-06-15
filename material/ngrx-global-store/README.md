@@ -17,8 +17,6 @@ Dieser Artikel ist **Teil 2** einer dreiteiligen Serie zum Thema State Managemen
 
 Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentrales State Management erarbeitet und dabei die Grundprinzipien von Redux kennengelernt. Jetzt setzen wir diese Ideen mit dem Framework NgRx in die Praxis um.
 
-> **Hinweis:** Wir setzen durchgängig auf moderne Standalone APIs und Signals: Den Store richten wir ausschließlich über die `provide…`-Funktionen ein und lesen ihn mit `selectSignal()` als Signal aus. Konstruktor-Injection brauchen wir nicht mehr – auch das offizielle Effect-Schematic erzeugt seine Abhängigkeiten mit `inject()`.
-
 ## NgRx: Reactive State for Angular
 
 Das Framework *Reactive State for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` integriert es sich außerdem nahtlos in die signal-basierte Welt von modernem Angular. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.

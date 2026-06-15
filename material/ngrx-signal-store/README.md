@@ -19,8 +19,6 @@ In [Teil 2](/material/ngrx-global-store) haben wir den **Global Store** kennenge
 
 Der Global Store ist mächtig, bringt für viele Anwendungsfälle aber spürbar viel Zeremonie mit: Schon das Laden einer simplen Buchliste verteilt sich über Actions, einen Reducer, Selektoren und einen Effect. Genau hier setzt der **SignalStore** aus dem Paket `@ngrx/signals` an. Er ist eine leichtgewichtige, signal-basierte Alternative, die mit deutlich weniger Code auskommt und sich nahtlos in modernes, signal-zentriertes Angular einfügt.
 
-> **Hinweis:** Der SignalStore wohnt im eigenen Paket `@ngrx/signals` und wird unabhängig vom Global Store (`@ngrx/store`) installiert.
-
 ## Der architektonische Unterschied zum Global Store
 
 Bevor wir Code schreiben, lohnt sich der Blick auf die grundlegend andere Architektur. Global Store und SignalStore lösen dasselbe Problem – zentrale Zustandsverwaltung – auf gegensätzliche Weise.
