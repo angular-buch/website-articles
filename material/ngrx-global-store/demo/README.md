@@ -5,11 +5,11 @@ Lauffähige Angular-Anwendung zum Artikel **[State Management mit NgRx – Teil 
 Sie zeigt den kompletten Code aus dem Artikel in Aktion: Buchliste laden sowie Bücher anlegen, ändern (Bewertung erhöhen) und löschen (CRUD) mit Actions, Reducer, Selektoren und Effects – inklusive Lade- und Fehleranzeige.
 
 - **Angular 22** + **NgRx 21** (`@ngrx/store`, `@ngrx/effects`)
-- Der `BookStoreService` ist ein In-Memory-Stand-in für ein echtes HTTP-Backend, damit die App ohne Server läuft. Er wirft bei einer doppelten ISBN bewusst einen Fehler, sodass sich die Fehleranzeige auch ohne Server auslösen lässt.
+- Der `BookApi` ist ein In-Memory-Stand-in für ein echtes HTTP-Backend, damit die App ohne Server läuft. Er wirft bei einer doppelten ISBN bewusst einen Fehler, sodass sich die Fehleranzeige auch ohne Server auslösen lässt.
 
 > **Hinweis:** NgRx 21 gibt als Peer-Range noch `@angular/core: ^21.0.0` an, läuft aber problemlos unter Angular 22. Damit `npm install` nicht an dieser Range scheitert, liegt im Projekt eine `.npmrc` mit `legacy-peer-deps=true`.
 
-> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookMonkey (Feature-Ordner `books/store/…`, Komponente `BookListComponent`, Selektor `bm-book-list`); die Demo nutzt dagegen die flachen Angular-CLI-Standardnamen (`src/app/store/…`, `BookList`, `app-book-list`).
+> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookMonkey (Feature-Ordner `books/store/…`, Selektor-Präfix `bm-`); die Demo liegt dagegen flach unter `src/app/store/…` mit dem CLI-Standardpräfix `app-`. Klassen- und Dateinamen folgen in beiden Fällen der aktuellen Angular-Konvention ohne `.component`/`.service`-Suffix.
 
 ## Befehle
 

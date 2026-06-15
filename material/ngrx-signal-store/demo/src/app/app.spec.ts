@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { App } from './app';
-import { BookStoreService } from './shared/book-store.service';
+import { BookApi } from './shared/book-api';
 
 describe('App', () => {
   it('erzeugt die App und zeigt die Buchliste an', async () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
-        { provide: BookStoreService, useValue: { getAll: () => of([]) } }
+        { provide: BookApi, useValue: { getAll: () => of([]) } }
       ]
     }).compileComponents();
 

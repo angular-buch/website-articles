@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
 import { BookList } from './book-list';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 import { Book } from '../shared/book';
 
 const b = (isbn: string, title = `Title ${isbn}`, rating = 0): Book => ({ isbn, title, rating });
 
-function serviceMock(books: Book[], overrides: Partial<BookStoreService> = {}): Partial<BookStoreService> {
+function serviceMock(books: Book[], overrides: Partial<BookApi> = {}): Partial<BookApi> {
   return {
     getAll: () => of(books),
     create: (book: Book) => of(book),
@@ -18,10 +18,10 @@ function serviceMock(books: Book[], overrides: Partial<BookStoreService> = {}): 
 }
 
 describe('BookList (SignalStore)', () => {
-  async function setup(mock: Partial<BookStoreService>): Promise<ComponentFixture<BookList>> {
+  async function setup(mock: Partial<BookApi>): Promise<ComponentFixture<BookList>> {
     await TestBed.configureTestingModule({
       imports: [BookList],
-      providers: [{ provide: BookStoreService, useValue: mock }]
+      providers: [{ provide: BookApi, useValue: mock }]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(BookList);

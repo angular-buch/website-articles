@@ -4,13 +4,13 @@ import { catchError, concatMap, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import * as BookActions from './book.actions';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 import { toMessage } from '../shared/error-message';
 
 @Injectable()
 export class BookEffects {
   private actions$ = inject(Actions);
-  private service = inject(BookStoreService);
+  private service = inject(BookApi);
 
   // Lesen: switchMap – eine neue Anfrage macht die alte überflüssig.
   loadBooks$ = createEffect(() =>

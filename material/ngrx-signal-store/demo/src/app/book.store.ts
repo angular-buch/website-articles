@@ -12,7 +12,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 
 import { Book } from './shared/book';
-import { BookStoreService } from './shared/book-store.service';
+import { BookApi } from './shared/book-api';
 import { toMessage } from './shared/error-message';
 
 type BookState = {
@@ -33,7 +33,7 @@ export const BookStore = signalStore(
   withComputed(({ books }) => ({
     booksCount: computed(() => books().length)
   })),
-  withMethods((store, service = inject(BookStoreService)) => ({
+  withMethods((store, service = inject(BookApi)) => ({
     clearError(): void {
       patchState(store, { error: null });
     },

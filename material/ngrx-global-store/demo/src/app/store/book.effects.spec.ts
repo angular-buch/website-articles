@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { provideMockActions } from '@ngrx/effects/testing';
 
 import { BookEffects } from './book.effects';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 import * as BookActions from './book.actions';
 import { Book } from '../shared/book';
 
@@ -13,12 +13,12 @@ const b = (isbn: string, title = `Title ${isbn}`): Book => ({ isbn, title });
 describe('BookEffects', () => {
   let actions$: Observable<Action>;
 
-  function setup(serviceMock: Partial<BookStoreService>): BookEffects {
+  function setup(serviceMock: Partial<BookApi>): BookEffects {
     TestBed.configureTestingModule({
       providers: [
         BookEffects,
         provideMockActions(() => actions$),
-        { provide: BookStoreService, useValue: serviceMock }
+        { provide: BookApi, useValue: serviceMock }
       ]
     });
     return TestBed.inject(BookEffects);

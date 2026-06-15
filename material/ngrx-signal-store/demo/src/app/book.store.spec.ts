@@ -2,15 +2,15 @@ import { TestBed } from '@angular/core/testing';
 import { of, Subject, throwError } from 'rxjs';
 
 import { BookStore } from './book.store';
-import { BookStoreService } from './shared/book-store.service';
+import { BookApi } from './shared/book-api';
 import { Book } from './shared/book';
 
 const b = (isbn: string, title = `Title ${isbn}`): Book => ({ isbn, title });
 
-/** Erzeugt einen frischen Store mit gemocktem BookStoreService. */
-function createStore(mock: Partial<BookStoreService>) {
+/** Erzeugt einen frischen Store mit gemocktem BookApi. */
+function createStore(mock: Partial<BookApi>) {
   TestBed.configureTestingModule({
-    providers: [{ provide: BookStoreService, useValue: mock }]
+    providers: [{ provide: BookApi, useValue: mock }]
   });
   return TestBed.inject(BookStore);
 }

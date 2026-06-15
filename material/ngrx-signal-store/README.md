@@ -100,7 +100,7 @@ export const BookStore = signalStore(
   // ...
   providers: [BookStore]
 })
-export class BookListComponent {
+export class BookList {
   private store = inject(BookStore);
 }
 ```
@@ -210,11 +210,11 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { patchState, withMethods } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 import { toMessage } from '../shared/error-message';
 
 // innerhalb von signalStore(...):
-withMethods((store, service = inject(BookStoreService)) => ({
+withMethods((store, service = inject(BookApi)) => ({
   loadBooks: rxMethod<void>(
     pipe(
       tap(() => patchState(store, { loading: true, error: null })),
@@ -245,14 +245,14 @@ Die so erzeugte Methode rufen wir später einfach als `store.loadBooks()` auf. W
 
 ### Schreiben: Bücher anlegen, ändern und löschen
 
-Jetzt zum Kern jeder echten Anwendung: Daten verändern. Wir definieren je eine Methode zum Anlegen, Ändern und Löschen. Jede löst einen HTTP-Request aus – über den `BookStoreService`, der wie schon in Teil 2 die HTTP-Aufrufe mit dem `HttpClient` kapselt und `create()`, `update()` und `remove()` anbietet (`provideHttpClient()` gehört dafür in die `app.config.ts`) – und schreibt das Ergebnis anschließend immutabel in den State.
+Jetzt zum Kern jeder echten Anwendung: Daten verändern. Wir definieren je eine Methode zum Anlegen, Ändern und Löschen. Jede löst einen HTTP-Request aus – über den `BookApi`, der wie schon in Teil 2 die HTTP-Aufrufe mit dem `HttpClient` kapselt und `create()`, `update()` und `remove()` anbietet (`provideHttpClient()` gehört dafür in die `app.config.ts`) – und schreibt das Ergebnis anschließend immutabel in den State.
 
 Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei **schreibenden** Operationen wollen wir laufende Requests aber *nicht* abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl: Die Anfragen werden der Reihe nach abgearbeitet.
 
 ```ts
 import { concatMap, pipe, tap } from 'rxjs';
 
-// innerhalb von withMethods((store, service = inject(BookStoreService)) => ({ ... })):
+// innerhalb von withMethods((store, service = inject(BookApi)) => ({ ... })):
 
 // Anlegen: an die Liste anhängen
 addBook: rxMethod<Book>(
@@ -329,7 +329,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 
 import { Book } from '../shared/book';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 import { toMessage } from '../shared/error-message';
 
 type BookState = {
@@ -350,7 +350,7 @@ export const BookStore = signalStore(
   withComputed(({ books }) => ({
     booksCount: computed(() => books().length)
   })),
-  withMethods((store, service = inject(BookStoreService)) => ({
+  withMethods((store, service = inject(BookApi)) => ({
     clearError(): void {
       patchState(store, { error: null });
     },
@@ -430,17 +430,17 @@ Das ist der gesamte State-Management-Code für ein vollständiges CRUD-Feature �
 Die Komponente injiziert den Store, liest die Signale im Template und ruft für Nutzeraktionen die Store-Methoden auf. Da der Store sich über `onInit` selbst lädt, braucht die Komponente keinen Lade-Code mehr:
 
 ```ts
-// books/book-list/book-list.component.ts
+// books/book-list/book-list.ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { BookStore } from '../book.store';
 import { Book } from '../shared/book';
 
 @Component({
   selector: 'bm-book-list',
-  templateUrl: './book-list.component.html',
+  templateUrl: './book-list.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookListComponent {
+export class BookList {
   protected store = inject(BookStore);
 
   addBook(isbn: HTMLInputElement, title: HTMLInputElement): void {
@@ -466,7 +466,7 @@ export class BookListComponent {
 Im Template lesen wir die Signale und lösen über Events die Methoden aus: ein kleines Formular zum Anlegen, pro Buch ein Button zum Erhöhen der Bewertung und ein Löschen-Button sowie eine Fehlermeldung aus dem `error`-Signal:
 
 ```html
-<!-- books/book-list/book-list.component.html -->
+<!-- books/book-list/book-list.html -->
 <h1>Books ({{ store.booksCount() }})</h1>
 
 @if (store.loading()) {
@@ -522,14 +522,14 @@ import {
 } from '@ngrx/signals/entities';
 
 import { Book } from '../shared/book';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 
 const selectId: SelectEntityId<Book> = book => book.isbn;
 
 export const BookStore = signalStore(
   { providedIn: 'root' },
   withEntities<Book>(),
-  withMethods((store, service = inject(BookStoreService)) => ({
+  withMethods((store, service = inject(BookApi)) => ({
     loadBooks: rxMethod<void>(
       switchMap(() =>
         service.getAll().pipe(
@@ -608,7 +608,7 @@ Da ein SignalStore ein gewöhnlicher Service ist, testen wir ihn auch wie einen 
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { BookStore } from './book.store';
-import { BookStoreService } from '../shared/book-store.service';
+import { BookApi } from '../shared/book-api';
 import { Book } from '../shared/book';
 
 // kleine Hilfsfunktion, um schnell Testdaten zu erzeugen
@@ -619,7 +619,7 @@ describe('BookStore', () => {
     TestBed.configureTestingModule({
       providers: [
         {
-          provide: BookStoreService,
+          provide: BookApi,
           useValue: { getAll: () => of([b('1'), b('2'), b('3')]) }
         }
       ]

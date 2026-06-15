@@ -11,7 +11,7 @@ import { Book } from './book';
  * so lässt sich die Fehleranzeige der Anwendung auch ohne Server auslösen.
  */
 @Injectable({ providedIn: 'root' })
-export class BookStoreService {
+export class BookApi {
   private books: Book[] = [
     { isbn: '978-3-86490-900-1', title: 'Angular', rating: 5 },
     { isbn: '978-3-86490-466-2', title: 'Angular für Einsteiger', rating: 4 },
