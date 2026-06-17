@@ -1,0 +1,38 @@
+<section class="favorites">
+  <h2>Favoriten ({{ store.likedCount() }})</h2>
+  <button type="button" (click)="store.clearLikedBooks()">Leeren</button>
+  <ul>
+    @for (book of store.likedBooks(); track book.isbn) {
+      <li>{{ book.title }}</li>
+    } @empty {
+      <li>Noch keine Favoriten.</li>
+    }
+  </ul>
+</section>
+
+<section class="books">
+  <h2>Bücher ({{ store.booksCount() }})</h2>
+
+  @if (store.loading()) {
+    <p class="loader">Lädt …</p>
+  }
+
+  @if (store.error(); as error) {
+    <p class="error">
+      {{ error }}
+      <button type="button" (click)="store.clearError()">OK</button>
+    </p>
+  }
+
+  <div class="add-form">
+    <input #isbnEl aria-label="ISBN" placeholder="ISBN" />
+    <input #titleEl aria-label="Titel" placeholder="Titel" />
+    <button type="button" (click)="addBook(isbnEl, titleEl)">Anlegen</button>
+  </div>
+
+  <div class="book-grid">
+    @for (book of store.books(); track book.isbn) {
+      <app-book-card [book]="book" (like)="likeBook($event)" (remove)="deleteBook($event)" />
+    }
+  </div>
+</section>

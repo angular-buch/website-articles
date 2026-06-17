@@ -1,21 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+
 import { App } from './app';
-import { BookApi } from './shared/book-api';
+import { BookStore } from './shared/book-store';
 
 describe('App', () => {
-  it('erzeugt die App und zeigt die Buchliste an', async () => {
+  it('erzeugt die App und zeigt die Bücher-Übersicht an', async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [
-        { provide: BookApi, useValue: { getAll: () => of([]) } }
-      ]
+      providers: [{ provide: BookStore, useValue: { getAll: () => of([]) } }]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
 
-    const h1 = fixture.nativeElement.querySelector('h1') as HTMLElement;
-    expect(h1?.textContent).toContain('Books');
+    expect(fixture.nativeElement.querySelector('app-books-overview')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Bücher');
   });
 });

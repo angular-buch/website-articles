@@ -4,21 +4,28 @@ import { Action } from '@ngrx/store';
 import { provideMockActions } from '@ngrx/effects/testing';
 
 import { BookEffects } from './book.effects';
-import { BookApi } from '../shared/book-api';
+import { BookStore } from '../shared/book-store';
 import * as BookActions from './book.actions';
 import { Book } from '../shared/book';
 
-const b = (isbn: string, title = `Title ${isbn}`): Book => ({ isbn, title });
+const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
+  isbn,
+  title,
+  authors: ['Autor'],
+  description: 'Beschreibung',
+  imageUrl: 'https://example.com/cover.png',
+  createdAt: '2026-01-01T00:00:00.000Z'
+});
 
 describe('BookEffects', () => {
   let actions$: Observable<Action>;
 
-  function setup(serviceMock: Partial<BookApi>): BookEffects {
+  function setup(mock: Partial<BookStore>): BookEffects {
     TestBed.configureTestingModule({
       providers: [
         BookEffects,
         provideMockActions(() => actions$),
-        { provide: BookApi, useValue: serviceMock }
+        { provide: BookStore, useValue: mock }
       ]
     });
     return TestBed.inject(BookEffects);
@@ -55,30 +62,11 @@ describe('BookEffects', () => {
 
   it('createBook$ feuert createBookFailure bei einem Fehler', () => {
     const effects = setup({ create: () => throwError(() => new Error('Doppelte ISBN')) });
-    actions$ = of(BookActions.createBook({ book: b('3', 'Neu') }));
+    actions$ = of(BookActions.createBook({ book: b('3') }));
 
     let result: Action | undefined;
     effects.createBook$.subscribe(action => (result = action));
     expect(result).toEqual(BookActions.createBookFailure({ error: 'Doppelte ISBN' }));
-  });
-
-  it('updateBook$ feuert updateBookSuccess', () => {
-    const book = b('1', 'Geändert');
-    const effects = setup({ update: x => of(x) });
-    actions$ = of(BookActions.updateBook({ book }));
-
-    let result: Action | undefined;
-    effects.updateBook$.subscribe(action => (result = action));
-    expect(result).toEqual(BookActions.updateBookSuccess({ book }));
-  });
-
-  it('updateBook$ feuert updateBookFailure bei einem Fehler', () => {
-    const effects = setup({ update: () => throwError(() => new Error('Speicherfehler')) });
-    actions$ = of(BookActions.updateBook({ book: b('1') }));
-
-    let result: Action | undefined;
-    effects.updateBook$.subscribe(action => (result = action));
-    expect(result).toEqual(BookActions.updateBookFailure({ error: 'Speicherfehler' }));
   });
 
   it('deleteBook$ feuert deleteBookSuccess mit der ISBN', () => {

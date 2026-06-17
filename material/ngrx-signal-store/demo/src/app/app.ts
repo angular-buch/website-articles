@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { BookList } from './book-list/book-list';
+import { BooksOverview } from './books-overview/books-overview';
 
 @Component({
-  selector: 'bm-root',
-  imports: [BookList],
+  selector: 'app-root',
+  imports: [BooksOverview],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

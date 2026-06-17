@@ -19,3 +19,8 @@ export const selectBooksError = createSelector(
   selectBookState,
   state => state.error
 );
+
+export const selectLikedBooks = createSelector(
+  selectBookState,
+  state => state.likedBooks
+);

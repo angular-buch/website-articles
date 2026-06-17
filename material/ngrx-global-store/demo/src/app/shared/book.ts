@@ -1,5 +1,9 @@
 export interface Book {
   isbn: string;
   title: string;
-  rating?: number;
+  subtitle?: string;
+  authors: string[];
+  description: string;
+  imageUrl: string;
+  createdAt: string;
 }

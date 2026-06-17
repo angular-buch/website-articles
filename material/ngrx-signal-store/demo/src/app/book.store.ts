@@ -12,36 +12,51 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 
 import { Book } from './shared/book';
-import { BookApi } from './shared/book-api';
+import { BookStore } from './shared/book-store';
 import { toMessage } from './shared/error-message';
 
 type BookState = {
   books: Book[];
   loading: boolean;
   error: string | null;
+  likedBooks: Book[];
 };
 
 const initialState: BookState = {
   books: [],
   loading: false,
-  error: null
+  error: null,
+  likedBooks: []
 };
 
-export const BookStore = signalStore(
+export const BookSignalStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(({ books }) => ({
-    booksCount: computed(() => books().length)
+  withComputed(({ books, likedBooks }) => ({
+    booksCount: computed(() => books().length),
+    likedCount: computed(() => likedBooks().length)
   })),
-  withMethods((store, service = inject(BookApi)) => ({
+  withMethods((store, bookStore = inject(BookStore)) => ({
     clearError(): void {
       patchState(store, { error: null });
     },
+
+    // Favoriten – reiner Client-State, dedupliziert, ganz ohne Seiteneffekt.
+    likeBook(book: Book): void {
+      if (!store.likedBooks().some(b => b.isbn === book.isbn)) {
+        patchState(store, state => ({ likedBooks: [...state.likedBooks, book] }));
+      }
+    },
+    clearLikedBooks(): void {
+      patchState(store, { likedBooks: [] });
+    },
+
+    // Lesen: switchMap – eine neue Anfrage macht die alte überflüssig.
     loadBooks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { loading: true, error: null })),
         switchMap(() =>
-          service.getAll().pipe(
+          bookStore.getAll().pipe(
             tapResponse({
               next: books => patchState(store, { books }),
               error: (err: unknown) => patchState(store, { error: toMessage(err) }),
@@ -51,30 +66,16 @@ export const BookStore = signalStore(
         )
       )
     ),
+
+    // Schreiben: concatMap – laufende Requests werden nicht abgebrochen.
     addBook: rxMethod<Book>(
       pipe(
         tap(() => patchState(store, { error: null })),
         concatMap(book =>
-          service.create(book).pipe(
+          bookStore.create(book).pipe(
             tapResponse({
               next: created =>
                 patchState(store, state => ({ books: [...state.books, created] })),
-              error: (err: unknown) => patchState(store, { error: toMessage(err) })
-            })
-          )
-        )
-      )
-    ),
-    updateBook: rxMethod<Book>(
-      pipe(
-        tap(() => patchState(store, { error: null })),
-        concatMap(book =>
-          service.update(book).pipe(
-            tapResponse({
-              next: updated =>
-                patchState(store, state => ({
-                  books: state.books.map(b => (b.isbn === updated.isbn ? updated : b))
-                })),
               error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
           )
@@ -85,7 +86,7 @@ export const BookStore = signalStore(
       pipe(
         tap(() => patchState(store, { error: null })),
         concatMap(isbn =>
-          service.remove(isbn).pipe(
+          bookStore.remove(isbn).pipe(
             tapResponse({
               next: () =>
                 patchState(store, state => ({

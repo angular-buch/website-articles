@@ -8,12 +8,14 @@ export interface State {
   books: Book[];
   loading: boolean;
   error: string | null;
+  likedBooks: Book[];
 }
 
 export const initialState: State = {
   books: [],
   loading: false,
-  error: null
+  error: null,
+  likedBooks: []
 };
 
 export const reducer = createReducer(
@@ -34,20 +36,11 @@ export const reducer = createReducer(
   on(BookActions.clearError, (state): State => ({ ...state, error: null })),
 
   // Schreibvorgänge: beim Auslösen eine alte Fehlermeldung zurücksetzen.
-  on(
-    BookActions.createBook,
-    BookActions.updateBook,
-    BookActions.deleteBook,
-    (state): State => ({ ...state, error: null })
-  ),
+  on(BookActions.createBook, BookActions.deleteBook, (state): State => ({ ...state, error: null })),
 
   on(BookActions.createBookSuccess, (state, action): State => ({
     ...state,
     books: [...state.books, action.book]
-  })),
-  on(BookActions.updateBookSuccess, (state, action): State => ({
-    ...state,
-    books: state.books.map(b => (b.isbn === action.book.isbn ? action.book : b))
   })),
   on(BookActions.deleteBookSuccess, (state, action): State => ({
     ...state,
@@ -56,8 +49,15 @@ export const reducer = createReducer(
 
   on(
     BookActions.createBookFailure,
-    BookActions.updateBookFailure,
     BookActions.deleteBookFailure,
     (state, action): State => ({ ...state, error: action.error })
-  )
+  ),
+
+  // Favoriten – reiner Client-State, dedupliziert anhand der ISBN, kein Effect nötig.
+  on(BookActions.likeBook, (state, action): State =>
+    state.likedBooks.some(b => b.isbn === action.book.isbn)
+      ? state
+      : { ...state, likedBooks: [...state.likedBooks, action.book] }
+  ),
+  on(BookActions.clearLikedBooks, (state): State => ({ ...state, likedBooks: [] }))
 );
