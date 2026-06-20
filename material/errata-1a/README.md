@@ -61,7 +61,8 @@ ng g service book-store
 
 In Abschnitt 22.3 beschreiben wir, wie HTTP-Requests mit `httpResource()` getestet werden können.
 Im darunter liegenden Unterabschnitt "Resource mocken" erläutern wir: Um ein Resource-Objekt im Test zu erzeugen, müssen wir `useFactory` einsetzen, denn die Resource benötigt einen Injection Context.
-Tatsächlich funktioniert das inzwischen aber auch mit `useValue`, sodass wir nicht zwingend zu `useFactory` wechseln müssen.
+Das Beispiel funktioniert allerdings auch mit `useValue`, sodass wir nicht zwingend zu `useFactory` wechseln müssen.
+Der Grund: Die Resource wird in der Methode `getAll()` erzeugt, die von der Komponente in einem Injection Context aufgerufen wird.
 
 Die abgedruckte Variante mit `useFactory` ist dennoch nicht falsch und kann weiterhin so genutzt werden – nur die Erklärung ist nicht korrekt.
 
@@ -95,6 +96,22 @@ Die abgedruckte Variante mit `useFactory` ist dennoch nicht falsch und kann weit
 // ...
 ```
 
+Wenn die Resource hingegen im Test direkt erzeugt wird (ohne Funktion), ist `useFactory` notwendig, um einen Injection Context herzustellen:
+
+```ts
+// Hier ist `usefactory` notwendig:
+// Die Resource wird direkt im Test erzeugt.
+// ...
+{
+  provide: BookStore,
+  useFactory: () => ({
+    booksResource: resource({
+      loader: () => Promise.resolve(mockBooks),
+    })
+  })
+}
+// ...
+```
 
 
 ## 25.5.8 Logik für Schema-Funktionen
