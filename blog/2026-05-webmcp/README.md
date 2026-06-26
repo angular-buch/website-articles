@@ -3,7 +3,7 @@ title: 'WebMCP: KI-Agenten in Angular-Apps integrieren'
 author: Danny Koppenhagen
 mail: mail@k9n.dev
 published: 2026-05-28
-lastModified: 2026-05-28
+lastModified: 2026-06-26
 keywords:
   - Angular
   - Angular 22
@@ -41,8 +41,9 @@ Der Unterschied ist drastisch: Bei einer klassischen Anwendung ohne WebMCP muss 
 Mit WebMCP hingegen reichen ein oder zwei deklarierte Tools, die direkt aufgerufen werden.
 Das funktioniert schneller, zuverlässiger und mit weniger Token-Verbrauch.
 
-> Eine eindrucksvolle Visualisierung dieses Unterschieds bietet die [WebMCP-Demo von Sarah Drasner](https://webmcp-demo-sdras.netlify.app/).
+> Eine eindrucksvolle Visualisierung dieses Unterschieds bietet der [Explainer aus den offiziellen WebMCP Demos von Google](https://googlechromelabs.github.io/webmcp-tools/demos/explainer/).
 > Dort wird dasselbe Widget einmal per DOM-Scraping und einmal per WebMCP-Tools gesteuert.
+> Weitere Demos finden sich im [GoogleChromeLabs/webmcp-tools](https://github.com/GoogleChromeLabs/webmcp-tools/tree/main/demos)-Repository.
 
 ### Wie funktioniert WebMCP?
 
