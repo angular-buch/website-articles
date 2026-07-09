@@ -1,7 +1,7 @@
 ---
 title: "Mach aus deiner Angular-App eine PWA"
 author: Danny Koppenhagen
-mail: mail@d-koppenhagen.de
+mail: mail@k9n.dev
 published: 2019-07-24
 lastModified: 2020-11-17
 keywords:

@@ -1,7 +1,7 @@
 ---
 title: "Angular Signal Forms Part 1: Getting Started with the Basics"
 author: Danny Koppenhagen
-mail: mail@d-koppenhagen.de
+mail: mail@k9n.dev
 author2: Ferdinand Malcher
 mail2: ferdinand@malcher.media
 published: 2025-10-13
