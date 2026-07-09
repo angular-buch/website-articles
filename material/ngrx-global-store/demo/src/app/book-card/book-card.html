@@ -1,0 +1,17 @@
+@let b = book();
+
+<article class="book-card">
+  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" />
+  <div class="book-card__body">
+    <h3>{{ b.title }}</h3>
+    @if (b.subtitle) {
+      <p class="book-card__subtitle">{{ b.subtitle }}</p>
+    }
+    <p class="book-card__authors">{{ b.authors.join(', ') }}</p>
+    <p class="book-card__isbn">ISBN {{ b.isbn }}</p>
+  </div>
+  <footer class="book-card__footer">
+    <button type="button" (click)="likeBook()">★ Favorit</button>
+    <button type="button" (click)="removeBook()">Löschen</button>
+  </footer>
+</article>
