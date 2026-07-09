@@ -1,7 +1,7 @@
 ---
 title: "Angular 5: Änderungen für i18n"
 author: Ferdinand Malcher
-mail: mail@fmalcher.de
+mail: ferdinand@malcher.media
 published: 2017-12-07
 keywords:
   - Angular

@@ -1,7 +1,7 @@
 ---
 title: "NgRx v8 – das neue Major-Release ist da"
 author: Ferdinand Malcher
-mail: mail@fmalcher.de
+mail: ferdinand@malcher.media
 published: 2019-06-07
 lastModified: 2019-06-07
 keywords:

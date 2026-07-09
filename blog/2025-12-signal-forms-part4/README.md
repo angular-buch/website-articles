@@ -3,7 +3,7 @@ title: 'Angular Signal Forms Part 4: Metadata and Accessibility Handling'
 author: Danny Koppenhagen
 mail: mail@d-koppenhagen.de
 author2: Ferdinand Malcher
-mail2: mail@fmalcher.de
+mail2: ferdinand@malcher.media
 published: 2025-12-08
 lastModified: 2026-02-23
 keywords:
