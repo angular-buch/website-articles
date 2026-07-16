@@ -1,7 +1,7 @@
 ---
 title: "Errata zur 1. Auflage (2026)"
 published: 2026-03-13
-lastModified: 2026-05-15
+lastModified: 2026-07-16
 hidden: true
 ---
 
@@ -14,7 +14,6 @@ Bitte zögere nicht, und schreib uns eine E-Mail: [team@angular-buch.com](mailto
 > **Dies ist das Errata-Verzeichnis für die 1. Auflage (2026). Wenn du eine ältere Ausgabe besitzt, schau bitte in die Materialien zu den Vorausgaben.**
 
 ------
-
 
 ## 11 ff. Services: Decorator `@Service()` statt `@Injectable()`
 
@@ -135,3 +134,21 @@ disabled(path.password, {
   when: (ctx) => !ctx.valueOf(path.username) ? 'Username is empty.' : false
 });
 ```
+
+
+## 38 Release-Zyklus auf 12 Monate verlängert
+
+Im Kapitel 38 **"Angular aktualisieren"** und im **Vorwort des Buchs** berichten wir, dass alle 6 Monate eine neue Major-Version erscheint.
+Dieser Release-Zyklus galt viele Jahre, wurde aber mit Angular 22 geändert:
+Alle folgenden Versionen werden im Takt von 12 Monaten veröffentlicht.
+Wegen des längeren Zeitraums wird es außerdem planmäßig mehr Minor-Releases geben als zuvor.
+
+Nachdem Angular 22.0 im Juni 2026 erschien, ist die nächste Major-Version Angular 23 demnach für Juni 2027 geplant.
+Bis dahin werden 4-6 Minor-Versionen 22.x veröffentlicht.
+
+Angular setzt auf *Semantic Versioning*: Breaking Changes dürfen nur in Major-Releases eingeführt werden.
+Die Minor-Releases können neue Features in das Framework bringen.
+Die Patch-Versionen sind ausschließlich für Bugfixes und Security Patches gedacht.
+
+Der verlängerte Release-Zeitraum heißt also vor allem: weniger Breaking Changes und mehr Stabilität.
+Angular kann in der gewohnten Frequenz neue Features einführen.
