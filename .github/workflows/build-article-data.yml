@@ -35,6 +35,7 @@ jobs:
           STANDARD_SITE_NAME: Angular-Buch
           STANDARD_SITE_DESCRIPTION: Der Blog zum Angular-Buch – das deutschsprachige Praxisbuch zu Angular.
           STANDARD_SITE_EXPECTED_DID: did:plc:emeppmrqgb5rixbjcjihzd35
+          STANDARD_SITE_ICON: https://angular-buch.com/standard-site-icon.png
         run: |
           cd build
           npm install
