@@ -26,6 +26,15 @@ jobs:
           node-version: 22.x
 
       - name: Build
+        env:
+          # standard.site publisher (see build/STANDARD-SITE.md).
+          # The step is a no-op unless BSKY_APP_PASSWORD is set.
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          BSKY_HANDLE: angular-buch.com
+          STANDARD_SITE_URL: https://angular-buch.com
+          STANDARD_SITE_NAME: Angular-Buch
+          STANDARD_SITE_DESCRIPTION: Der Blog zum Angular-Buch – das deutschsprachige Praxisbuch zu Angular.
+          STANDARD_SITE_EXPECTED_DID: did:plc:emeppmrqgb5rixbjcjihzd35
         run: |
           cd build
           npm install
