@@ -1,18 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 
 import { BooksOverview } from './books-overview';
+import { BookCard } from '../book-card/book-card';
 import { BookStore } from '../shared/book-store';
 import { Book } from '../shared/book';
-
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
-  isbn,
-  title,
-  authors: ['Autor'],
-  description: 'Beschreibung',
-  imageUrl: 'https://example.com/cover.png',
-  createdAt: '2026-01-01T00:00:00.000Z'
-});
+import { b } from '../testing/book-factory';
 
 function serviceMock(books: Book[], overrides: Partial<BookStore> = {}): Partial<BookStore> {
   return {
@@ -24,7 +18,7 @@ function serviceMock(books: Book[], overrides: Partial<BookStore> = {}): Partial
 }
 
 describe('BooksOverview (SignalStore)', () => {
-  async function setup(mock: Partial<BookStore>): Promise<ComponentFixture<BooksOverview>> {
+  async function setup(mock: Partial<BookStore>) {
     await TestBed.configureTestingModule({
       imports: [BooksOverview],
       providers: [{ provide: BookStore, useValue: mock }]
@@ -32,17 +26,18 @@ describe('BooksOverview (SignalStore)', () => {
 
     const fixture = TestBed.createComponent(BooksOverview);
     await fixture.whenStable();
-    return fixture;
+    const el = fixture.nativeElement as HTMLElement;
+    const firstCard = () => fixture.debugElement.query(By.directive(BookCard));
+    return { fixture, el, firstCard };
   }
 
   it('rendert die geladenen Bücher als Karten', async () => {
-    const fixture = await setup(serviceMock([b('1'), b('2')]));
-    expect(fixture.nativeElement.querySelectorAll('app-book-card').length).toBe(2);
+    const { el } = await setup(serviceMock([b('1'), b('2')]));
+    expect(el.querySelectorAll('app-book-card').length).toBe(2);
   });
 
   it('legt ein Buch an und leert die Felder', async () => {
-    const fixture = await setup(serviceMock([b('1')]));
-    const el = fixture.nativeElement as HTMLElement;
+    const { fixture, el } = await setup(serviceMock([b('1')]));
     const [isbn, title] = el.querySelectorAll<HTMLInputElement>('.add-form input');
     isbn.value = '2';
     title.value = 'Neu';
@@ -52,28 +47,25 @@ describe('BooksOverview (SignalStore)', () => {
     expect(isbn.value).toBe('');
   });
 
-  it('entfernt ein Buch beim Klick auf Löschen', async () => {
-    const fixture = await setup(serviceMock([b('1')]));
-    const el = fixture.nativeElement as HTMLElement;
-    const buttons = el.querySelectorAll('app-book-card .book-card__footer button');
-    (buttons[1] as HTMLButtonElement).click();
+  it('entfernt ein Buch, wenn die Karte ein remove emittiert', async () => {
+    const { fixture, el, firstCard } = await setup(serviceMock([b('1')]));
+    firstCard().triggerEventHandler('remove', '1');
     await fixture.whenStable();
     expect(el.querySelectorAll('app-book-card').length).toBe(0);
   });
 
-  it('markiert ein Buch als Favorit', async () => {
-    const fixture = await setup(serviceMock([b('1', 'Lieblingsbuch')]));
-    const el = fixture.nativeElement as HTMLElement;
-    const likeButton = el.querySelector('app-book-card .book-card__footer button') as HTMLButtonElement;
-    likeButton.click();
+  it('markiert ein Buch als Favorit, wenn die Karte ein like emittiert', async () => {
+    const book = b('1', 'Lieblingsbuch');
+    const { fixture, el, firstCard } = await setup(serviceMock([book]));
+    firstCard().triggerEventHandler('like', book);
     await fixture.whenStable();
     expect(el.querySelector('.favorites')?.textContent).toContain('Lieblingsbuch');
   });
 
   it('leert die Favoriten', async () => {
-    const fixture = await setup(serviceMock([b('1', 'Lieblingsbuch')]));
-    const el = fixture.nativeElement as HTMLElement;
-    (el.querySelector('app-book-card .book-card__footer button') as HTMLButtonElement).click();
+    const book = b('1', 'Lieblingsbuch');
+    const { fixture, el, firstCard } = await setup(serviceMock([book]));
+    firstCard().triggerEventHandler('like', book);
     await fixture.whenStable();
     (el.querySelector('.favorites button') as HTMLButtonElement).click();
     await fixture.whenStable();
@@ -81,8 +73,7 @@ describe('BooksOverview (SignalStore)', () => {
   });
 
   it('blendet eine Fehlermeldung beim Klick auf OK wieder aus', async () => {
-    const fixture = await setup(serviceMock([], { getAll: () => throwError(() => new Error('Kaputt')) }));
-    const el = fixture.nativeElement as HTMLElement;
+    const { fixture, el } = await setup(serviceMock([], { getAll: () => throwError(() => new Error('Kaputt')) }));
     expect(el.querySelector('.error')?.textContent).toContain('Kaputt');
 
     (el.querySelector('.error button') as HTMLButtonElement).click();

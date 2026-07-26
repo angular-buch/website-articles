@@ -4,16 +4,9 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 
 import { BookStore } from './book-store';
 import { Book } from './book';
+import { b } from '../testing/book-factory';
 
 const API = 'https://api1.angular-buch.com';
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
-  isbn,
-  title,
-  authors: ['Autor'],
-  description: 'Beschreibung',
-  imageUrl: 'https://example.com/cover.png',
-  createdAt: '2026-01-01T00:00:00.000Z'
-});
 
 describe('BookStore (HTTP)', () => {
   let store: BookStore;

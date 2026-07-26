@@ -8,7 +8,7 @@ import {
   selectBooksLoading,
   selectLikedBooks
 } from '../store/book.selectors';
-import { Book } from '../shared/book';
+import { Book, newBook } from '../shared/book';
 import { BookCard } from '../book-card/book-card';
 
 @Component({
@@ -34,7 +34,7 @@ export class BooksOverview {
     if (!isbn.value || !title.value) {
       return;
     }
-    this.store.dispatch(BookActions.createBook({ book: this.#newBook(isbn.value, title.value) }));
+    this.store.dispatch(BookActions.createBook({ book: newBook(isbn.value, title.value) }));
     isbn.value = '';
     title.value = '';
   }
@@ -53,17 +53,5 @@ export class BooksOverview {
 
   clearError(): void {
     this.store.dispatch(BookActions.clearError());
-  }
-
-  // Ein vollständiges Buch mit sinnvollen Defaults, damit die echte API den POST annimmt.
-  #newBook(isbn: string, title: string): Book {
-    return {
-      isbn,
-      title,
-      authors: ['Unbekannt'],
-      description: 'Über die Demo angelegt.',
-      imageUrl: 'https://cdn.ng-buch.de/cover-placeholder.png',
-      createdAt: new Date().toISOString()
-    };
   }
 }

@@ -468,13 +468,13 @@ Das ist der gesamte State-Management-Code für das Feature – eine Datei, ohne 
 
 ### Die Komponenten: lesen und Aktionen auslösen
 
-Für die Oberfläche teilen wir die Verantwortung wie üblich in eine **smarte** und eine **präsentationale** Komponente auf. Die smarte `BooksOverview` injiziert den Store, liest die Signale im Template und ruft für Nutzeraktionen die Store-Methoden auf. Da der Store sich über `onInit` selbst lädt, braucht sie keinen Lade-Code mehr:
+Für die Oberfläche teilen wir die Verantwortung wie üblich in eine **smarte** und eine **präsentationale** Komponente auf. Die smarte `BooksOverview` injiziert den Store und ist bemerkenswert schlank: Da der Store sich über `onInit` selbst lädt und seine Methoden direkt im Template aufgerufen werden können, bleibt nur das Anlege-Formular als eigene Methode übrig. Weil ein `Book` mehrere Pflichtfelder hat (`authors`, `description`, `imageUrl`, `createdAt`), nutzen wir – wie in Teil 2 – eine Factory `newBook()` neben dem Modell, die sinnvolle Defaults ergänzt, damit die echte API den POST akzeptiert:
 
 ```ts
 // books/books-overview/books-overview.ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { Book } from '../../shared/book';
+import { newBook } from '../../shared/book';
 import { BookSignalStore } from '../book.store';
 import { BookCard } from '../book-card/book-card';
 
@@ -482,6 +482,7 @@ import { BookCard } from '../book-card/book-card';
   selector: 'app-books-overview',
   imports: [BookCard],
   templateUrl: './books-overview.html',
+  styleUrl: './books-overview.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooksOverview {
@@ -491,34 +492,12 @@ export class BooksOverview {
     if (!isbn.value || !title.value) {
       return;
     }
-    this.store.addBook(this.#newBook(isbn.value, title.value));
+    this.store.addBook(newBook(isbn.value, title.value));
     isbn.value = '';
     title.value = '';
   }
-
-  deleteBook(isbn: string): void {
-    this.store.deleteBook(isbn);
-  }
-
-  likeBook(book: Book): void {
-    this.store.likeBook(book);
-  }
-
-  // Ein vollständiges Buch mit sinnvollen Defaults, damit die echte API den POST annimmt.
-  #newBook(isbn: string, title: string): Book {
-    return {
-      isbn,
-      title,
-      authors: ['Unbekannt'],
-      description: 'Über die Demo angelegt.',
-      imageUrl: 'https://cdn.ng-buch.de/cover-placeholder.png',
-      createdAt: new Date().toISOString()
-    };
-  }
 }
 ```
-
-Da ein `Book` mehrere Pflichtfelder hat (`authors`, `description`, `imageUrl`, `createdAt`), füllt die kleine Hilfe `#newBook()` sie mit sinnvollen Defaults, damit die echte API den POST akzeptiert.
 
 Im Template lesen wir die Signale und lösen über Events die Methoden aus. Es gibt zwei Sektionen: oben die Favoriten (mit `likedCount` und einem Button zum Leeren), darunter die Bücherliste mit Ladeindikator, Fehlermeldung, einem kleinen Anlege-Formular und je einer Karte pro Buch:
 
@@ -558,13 +537,13 @@ Im Template lesen wir die Signale und lösen über Events die Methoden aus. Es g
 
   <div class="book-grid">
     @for (book of store.books(); track book.isbn) {
-      <app-book-card [book]="book" (like)="likeBook($event)" (remove)="deleteBook($event)" />
+      <app-book-card [book]="book" (like)="store.likeBook($event)" (remove)="store.deleteBook($event)" />
     }
   </div>
 </section>
 ```
 
-Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Anlegen die Felder leert – so bleibt der Fokus auf dem SignalStore.
+Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Anlegen die Felder leert – so bleibt der Fokus auf dem SignalStore. Auffällig ist der Unterschied zu Teil 2: Die Outputs der Karte und die Buttons rufen die Store-Methoden **direkt** auf (`store.likeBook($event)`), ganz ohne Durchreich-Methoden in der Komponente – der Store *ist* hier die API der Komponente.
 
 Die einzelne Buchkarte ist eine rein **präsentationale** Komponente: Sie kennt den Store gar nicht, sondern bekommt das Buch über ein `input` und meldet Nutzeraktionen über `output`s zurück nach oben:
 
@@ -576,6 +555,7 @@ import { Book } from '../../shared/book';
 @Component({
   selector: 'app-book-card',
   templateUrl: './book-card.html',
+  styleUrl: './book-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookCard {
@@ -598,7 +578,7 @@ export class BookCard {
 @let b = book();
 
 <article class="book-card">
-  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" />
+  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" loading="lazy" />
   <div class="book-card__body">
     <h3>{{ b.title }}</h3>
     @if (b.subtitle) {
@@ -715,17 +695,9 @@ import { of, throwError } from 'rxjs';
 
 import { BookSignalStore } from './book.store';
 import { BookStore } from '../shared/book-store';
-import { Book } from '../shared/book';
-
-// kleine Hilfsfunktion, um schnell vollständige Testdaten zu erzeugen
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
-  isbn,
-  title,
-  authors: ['Autor'],
-  description: 'Beschreibung',
-  imageUrl: 'https://example.com/cover.png',
-  createdAt: '2026-01-01T00:00:00.000Z'
-});
+// b() erzeugt vollständige Buch-Testdaten – eine kleine Factory,
+// die wir für alle Spec-Dateien in testing/book-factory.ts ablegen
+import { b } from '../testing/book-factory';
 
 /** Erzeugt einen frischen Store mit gemocktem BookStore-Service. */
 function createStore(mock: Partial<BookStore>) {

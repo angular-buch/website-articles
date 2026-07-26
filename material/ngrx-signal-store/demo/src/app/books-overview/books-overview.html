@@ -32,7 +32,7 @@
 
   <div class="book-grid">
     @for (book of store.books(); track book.isbn) {
-      <app-book-card [book]="book" (like)="likeBook($event)" (remove)="deleteBook($event)" />
+      <app-book-card [book]="book" (like)="store.likeBook($event)" (remove)="store.deleteBook($event)" />
     }
   </div>
 </section>

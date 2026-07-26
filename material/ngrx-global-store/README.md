@@ -742,7 +742,25 @@ on(BookActions.clearError, (state): State => ({ ...state, error: null }))
 
 **Smarte und präsentationale Komponente.** Wir teilen die Oberfläche in zwei Komponenten auf: eine smarte Komponente `BooksOverview`, die den Store kennt und Actions dispatcht, und eine präsentationale Komponente `BookCard`, die nur ein einzelnes Buch darstellt und über Outputs meldet, was Nutzerinnen und Nutzer tun möchten. Diese Trennung hält die Darstellung frei von NgRx und macht die Karte beliebig wiederverwendbar.
 
-Die smarte Komponente `BooksOverview` bezieht alle benötigten Daten als Signale aus dem Store und stößt im Konstruktor das Laden an. Die Eingabefelder des Anlege-Formulars reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Dispatch die Felder leert – so bleibt der Fokus auf NgRx. Da die API ein vollständiges Buch erwartet, füllen wir die übrigen Felder beim Anlegen mit sinnvollen Defaults:
+Die smarte Komponente `BooksOverview` bezieht alle benötigten Daten als Signale aus dem Store und stößt im Konstruktor das Laden an. Die Eingabefelder des Anlege-Formulars reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Dispatch die Felder leert – so bleibt der Fokus auf NgRx.
+
+Da die API ein vollständiges Buch erwartet, füllen wir die übrigen Felder beim Anlegen mit sinnvollen Defaults. Dieses Wissen über das Modell gehört allerdings nicht in die Komponente – jede weitere Formularkomponente müsste die Defaults sonst duplizieren. Wir definieren dafür eine kleine Factory direkt neben dem Modell:
+
+```ts
+// shared/book.ts (Ergänzung)
+export function newBook(isbn: string, title: string): Book {
+  return {
+    isbn,
+    title,
+    authors: ['Unbekannt'],
+    description: 'Über die Demo angelegt.',
+    imageUrl: 'https://cdn.ng-buch.de/cover-placeholder.png',
+    createdAt: new Date().toISOString()
+  };
+}
+```
+
+Damit bleibt die Komponente schlank:
 
 ```ts
 // books/books-overview/books-overview.ts
@@ -751,7 +769,7 @@ import { Store } from '@ngrx/store';
 
 import * as BookActions from '../store/book.actions';
 import { selectAllBooks, selectBooksError, selectBooksLoading } from '../store/book.selectors';
-import { Book } from '../../shared/book';
+import { Book, newBook } from '../../shared/book';
 import { BookCard } from '../book-card/book-card';
 
 @Component({
@@ -776,7 +794,7 @@ export class BooksOverview {
     if (!isbn.value || !title.value) {
       return;
     }
-    this.store.dispatch(BookActions.createBook({ book: this.#newBook(isbn.value, title.value) }));
+    this.store.dispatch(BookActions.createBook({ book: newBook(isbn.value, title.value) }));
     isbn.value = '';
     title.value = '';
   }
@@ -787,18 +805,6 @@ export class BooksOverview {
 
   clearError(): void {
     this.store.dispatch(BookActions.clearError());
-  }
-
-  // Ein vollständiges Buch mit sinnvollen Defaults, damit die echte API den POST annimmt.
-  #newBook(isbn: string, title: string): Book {
-    return {
-      isbn,
-      title,
-      authors: ['Unbekannt'],
-      description: 'Über die Demo angelegt.',
-      imageUrl: 'https://cdn.ng-buch.de/cover-placeholder.png',
-      createdAt: new Date().toISOString()
-    };
   }
 }
 ```
@@ -838,7 +844,7 @@ Im Template der Karte stellen wir die Daten des Buchs dar und bieten zwei Button
 @let b = book();
 
 <article class="book-card">
-  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" />
+  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" loading="lazy" />
   <div class="book-card__body">
     <h3>{{ b.title }}</h3>
     @if (b.subtitle) {
@@ -1019,6 +1025,8 @@ ng add @ngrx/store-devtools
 ```
 
 Damit werden die benötigten Abhängigkeiten installiert, und der Aufruf `provideStoreDevtools()` wird in die `app.config.ts` der Anwendung eingetragen (siehe Abschnitt "Grundstruktur").
+
+> **Hinweis:** Die Option `logOnly: !isDevMode()` reduziert im Production-Build nur den Funktionsumfang – das Action-Recording bleibt aktiv, und das Paket bleibt Teil des Bundles. Wer die DevTools aus dem Production-Build vollständig heraushalten möchte, registriert den Provider bedingt, z. B. mit `...(isDevMode() ? [provideStoreDevtools({ maxAge: 25 })] : [])`.
 
 ### Die DevTools nutzen
 
@@ -1221,12 +1229,13 @@ Alle auf Grundlage von NgRx entwickelten Bausteine sollten auch getestet werden.
 
 > **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Service, Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; in einem Vitest-Projekt würde man stattdessen `vi.spyOn()` und z. B. das Paket `vitest-marbles` verwenden. Die Beispiel-App selbst vergleicht die Datenströme bewusst direkt (ohne Marbles).
 
-In mehreren Tests benötigen wir Beispielbücher. Dafür definieren wir eine kleine Hilfsfunktion `b()`, die ein vollständiges `Book`-Objekt mit Beispieldaten erzeugt:
+In mehreren Tests benötigen wir Beispielbücher. Dafür definieren wir eine kleine Hilfsfunktion `b()`, die ein vollständiges `Book`-Objekt mit Beispieldaten erzeugt. Sie wandert in eine eigene Datei, damit alle Spec-Dateien dieselbe Factory nutzen:
 
 ```ts
+// testing/book-factory.ts
 import { Book } from '../shared/book';
 
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
+export const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
   isbn,
   title,
   authors: ['Autor'],

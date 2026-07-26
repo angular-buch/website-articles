@@ -6,16 +6,7 @@ import {
   selectLikedBooks
 } from './book.selectors';
 import { bookFeatureKey, State } from './book.reducer';
-import { Book } from '../shared/book';
-
-const b = (isbn: string): Book => ({
-  isbn,
-  title: `Titel ${isbn}`,
-  authors: ['Autor'],
-  description: 'Beschreibung',
-  imageUrl: 'https://example.com/cover.png',
-  createdAt: '2026-01-01T00:00:00.000Z'
-});
+import { b } from '../testing/book-factory';
 
 describe('Book Selectors', () => {
   const bookState: State = {

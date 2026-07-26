@@ -6,16 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { BookEffects } from './book.effects';
 import { BookStore } from '../shared/book-store';
 import * as BookActions from './book.actions';
-import { Book } from '../shared/book';
-
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
-  isbn,
-  title,
-  authors: ['Autor'],
-  description: 'Beschreibung',
-  imageUrl: 'https://example.com/cover.png',
-  createdAt: '2026-01-01T00:00:00.000Z'
-});
+import { b } from '../testing/book-factory';
 
 describe('BookEffects', () => {
   let actions$: Observable<Action>;

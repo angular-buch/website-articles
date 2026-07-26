@@ -2,16 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { initialState, reducer, State } from './book.reducer';
 import * as BookActions from './book.actions';
-import { Book } from '../shared/book';
-
-const b = (isbn: string, title = `Titel ${isbn}`): Book => ({
-  isbn,
-  title,
-  authors: ['Autor'],
-  description: 'Beschreibung',
-  imageUrl: 'https://example.com/cover.png',
-  createdAt: '2026-01-01T00:00:00.000Z'
-});
+import { b } from '../testing/book-factory';
 
 describe('Book Reducer', () => {
   it('loadBooks setzt loading=true und error=null', () => {

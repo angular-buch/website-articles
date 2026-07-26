@@ -1,7 +1,7 @@
 @let b = book();
 
 <article class="book-card">
-  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" />
+  <img class="book-card__cover" [src]="b.imageUrl" [alt]="b.title" loading="lazy" />
   <div class="book-card__body">
     <h3>{{ b.title }}</h3>
     @if (b.subtitle) {
