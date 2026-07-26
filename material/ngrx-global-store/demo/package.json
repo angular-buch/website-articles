@@ -17,6 +17,7 @@
     "@angular/platform-browser": "^22.0.1",
     "@ngrx/effects": "^21.1.1",
     "@ngrx/store": "^21.1.1",
+    "@ngrx/store-devtools": "^21.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

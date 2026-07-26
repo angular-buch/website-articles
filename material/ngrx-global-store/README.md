@@ -243,7 +243,7 @@ Zur Abfrage einer HTTP-Schnittstelle benötigen wir normalerweise drei zusammeng
 - `Load XXX Success`: Daten sind erfolgreich vom Server eingetroffen.
 - `Load XXX Failure`: Das Laden der Daten ist fehlgeschlagen.
 
-Die Actions werden in einer oder mehreren Dateien gesammelt. Beim Anlegen des Features mit `ng generate feature` wurde eine solche Datei bereits erstellt: `books/store/book.actions.ts`. Da wir das Feature mit der Option `--api` angelegt haben, sind in dieser Datei bereits die ersten drei Actions vorbereitet. Wir können dieses Grundgerüst nutzen und die Signaturen der Actions für unseren Anwendungsfall anpassen.
+Die Actions werden in einer oder mehreren Dateien gesammelt. Beim Anlegen des Features mit `ng generate feature` wurde eine solche Datei bereits erstellt: `books/store/book.actions.ts`. Da wir das Feature mit der Option `--api` angelegt haben, sind darin bereits drei Actions für genau dieses Muster vorbereitet – allerdings in der kompakten Schreibweise mit `createActionGroup()`, die wir erst im Abschnitt "Wie geht's weiter?" vorstellen. Um die Grundform kennenzulernen, ersetzen wir das generierte Grundgerüst zunächst durch einzelne `createAction()`-Aufrufe und passen die Signaturen für unseren Anwendungsfall an.
 
 Die Success-Action erhält als Payload eine Buchliste `Book[]`, die Failure-Action transportiert einen Fehler vom Typ `string`. (In der Praxis ist es sinnvoll, hier ein eigenes Fehlerobjekt zu verwenden, das mehr Informationen beinhaltet als nur den Fehlertext.) Die Action `loadBooks` benötigt keine weiteren Daten, denn die Intention wird schon durch den Action-Typ vollständig ausgedrückt.
 
@@ -322,7 +322,7 @@ Die wichtigste Eigenschaft der Reducer-Funktionen ist ihre "Reinheit": Reducers 
 
 Die Einhaltung dieser Einschränkungen ist besonders wichtig, um eine hohe Stabilität des Systems sicherzustellen. Nur wenn wir den strikten Regeln von Redux folgen, kann der Anwendungszustand zuverlässig kontrolliert werden.
 
-Ein Reducer darf deshalb ausschließlich den aktuellen State und die eintreffende Action verarbeiten. Alle notwendigen Informationen, um den neuen State zu erzeugen, müssen in State oder Action vorliegen. Außerdem muss der Reducer bei Änderungen stets eine *Kopie* des States zurückgeben, die die gewünschten Änderungen beinhaltet. Es dürfen niemals Änderungen direkt auf dem Objekt ausgeführt werden. Diese Eigenschaft der Immutability haben wir bereits in der Einleitung besprochen. Wir setzen mit NgRx in der Regel nicht auf "echte Unveränderlichkeit", sondern wenden Disziplin an und behandeln die Objekte lediglich als unveränderlich – auch wenn sie prinzipiell veränderlich sind. Während der Entwicklung sind außerdem sogenannte [Runtime Checks](https://ngrx.io/guide/store/configuration/runtime-checks) aktiv, die den State auf Unveränderlichkeit und Serialisierbarkeit prüfen. Jede versehentliche Änderung am State führt dann direkt zu einer Exception.
+Ein Reducer darf deshalb ausschließlich den aktuellen State und die eintreffende Action verarbeiten. Alle notwendigen Informationen, um den neuen State zu erzeugen, müssen in State oder Action vorliegen. Außerdem muss der Reducer bei Änderungen stets eine *Kopie* des States zurückgeben, die die gewünschten Änderungen beinhaltet. Es dürfen niemals Änderungen direkt auf dem Objekt ausgeführt werden. Diese Eigenschaft der Immutability haben wir bereits in der Einleitung besprochen. Wir setzen mit NgRx in der Regel nicht auf "echte Unveränderlichkeit", sondern wenden Disziplin an und behandeln die Objekte lediglich als unveränderlich – auch wenn sie prinzipiell veränderlich sind. Während der Entwicklung sind außerdem sogenannte [Runtime Checks](https://ngrx.io/guide/store/configuration/runtime-checks) aktiv, die State und Actions auf Unveränderlichkeit prüfen – jede versehentliche Änderung am State führt dann direkt zu einer Exception. (Zusätzliche Checks, etwa auf Serialisierbarkeit, sind standardmäßig deaktiviert und können bei Bedarf über die Konfiguration aktiviert werden.)
 
 Um das State-Objekt vor der Verwendung und Änderung zu klonen, können wir den Spread-Operator einsetzen. Wir beachten dabei, dass dieses Werkzeug stets nur eine flache Kopie (Shallow Copy) erzeugt. Wollen wir Änderungen an tiefer verzweigten Teilen des States vornehmen, müssen wir explizit eine tiefe Kopie (Deep Copy) des Objekts erzeugen.
 
@@ -559,7 +559,7 @@ Für jede dieser Actions wollen wir nun einen HTTP-Request ausführen und die Er
 
 Mithilfe von `switchMap()` lösen wir den HTTP-Request aus, indem wir den `BookStore` mit der Methode `getAll()` einsetzen, die ein Observable zurückgibt. Unser Effect ist nun ein Observable, das ein Array von Büchern liefert. Damit die Buchliste im Store verarbeitet werden kann, müssen wir sie in eine Action verpacken. Wir nutzen dazu den Operator `map()` und wandeln damit die Buchliste um in eine Action `loadBooksSuccess`, die die Liste enthält.
 
-Ähnlich gehen wir für den Fehlerfall vor: Hier nutzen wir den Operator `catchError()`, um einen Fehler in der Ausführung abzufangen. Wir werfen den Fehler allerdings an der Stelle nicht weiter, sondern kapseln ihn in eine Action `loadBooksFailure`, die wir als reguläres Element des Datenstroms weitergeben. Der Fehler im `catchError()` ist als `unknown` typisiert – an dieser Stelle kann schließlich alles Mögliche ankommen (ein `Error`, bei einem HTTP-Fehler eine `HttpErrorResponse`, im Extremfall ein String). Statt blind auf eine Eigenschaft wie `message` zuzugreifen, prüfen wir die Form des Fehlers in einer kleinen Hilfsfunktion `toMessage()`. Unsere API liefert ihre Fehlermeldungen als `{ error: string }` (z. B. HTTP 409 bei einer doppelten ISBN), verpackt in einer `HttpErrorResponse` – diesen Fall behandeln wir gezielt:
+Ähnlich gehen wir für den Fehlerfall vor: Hier nutzen wir den Operator `catchError()`, um einen Fehler in der Ausführung abzufangen. Wir werfen den Fehler allerdings an der Stelle nicht weiter, sondern kapseln ihn in eine Action `loadBooksFailure`, die wir als reguläres Element des Datenstroms weitergeben. Der Fehler im `catchError()` ist als `unknown` typisiert – an dieser Stelle kann schließlich alles Mögliche ankommen (ein `Error`, bei einem HTTP-Fehler eine `HttpErrorResponse`, im Extremfall ein String). Statt blind auf eine Eigenschaft wie `message` zuzugreifen, prüfen wir die Form des Fehlers in einer kleinen Hilfsfunktion `toMessage()`. Unsere API liefert ihre Fehlermeldungen als `{ error: string }` (z. B. HTTP 409 bei einer doppelten ISBN), verpackt in einer `HttpErrorResponse` – diesen Fall behandeln wir gezielt. Da der Response-Body (`error.error`) als `any` typisiert ist, prüfen wir auch ihn zur Laufzeit, bevor wir ihn als Meldung übernehmen:
 
 ```ts
 // shared/error-message.ts
@@ -567,7 +567,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 export function toMessage(error: unknown): string {
   if (error instanceof HttpErrorResponse) {
-    return error.error?.error ?? error.message;
+    const apiError = (error.error as { error?: unknown } | null)?.error;
+    return typeof apiError === 'string' && apiError ? apiError : error.message;
   }
   return error instanceof Error ? error.message : 'Ein unbekannter Fehler ist aufgetreten.';
 }
@@ -930,7 +931,18 @@ on(BookActions.likeBook, (state, action): State =>
 on(BookActions.clearLikedBooks, (state): State => ({ ...state, likedBooks: [] }))
 ```
 
-Es ist bemerkenswert, was hier **nicht** steht: Es gibt keinen Effect. Während `loadBooks`, `createBook` und `deleteBook` jeweils einen Effect benötigen, um mit dem `BookStore` zu sprechen, wandert die Favoriten-Action direkt vom Dispatch in den Reducer. Genau hier liegt die Grenze zwischen Server-State und Client-State: Ein Effect ist nur dann nötig, wenn ein Seiteneffekt auszuführen ist.
+Eine Kleinigkeit dürfen wir nicht vergessen: Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es gar nicht mehr gibt. Dazu erweitern wir den bestehenden Reducer für `deleteBookSuccess`:
+
+```ts
+// books/store/book.reducer.ts (angepasst)
+on(BookActions.deleteBookSuccess, (state, action): State => ({
+  ...state,
+  books: state.books.filter(b => b.isbn !== action.isbn),
+  likedBooks: state.likedBooks.filter(b => b.isbn !== action.isbn)
+})),
+```
+
+Es ist bemerkenswert, was im Favoriten-Code **nicht** steht: Es gibt keinen Effect. Während `loadBooks`, `createBook` und `deleteBook` jeweils einen Effect benötigen, um mit dem `BookStore` zu sprechen, wandert die Favoriten-Action direkt vom Dispatch in den Reducer. Genau hier liegt die Grenze zwischen Server-State und Client-State: Ein Effect ist nur dann nötig, wenn ein Seiteneffekt auszuführen ist.
 
 **Selektor.** Zum Auslesen ergänzen wir einen Selektor `selectLikedBooks`:
 
@@ -1161,9 +1173,9 @@ Die Mächtigkeit von `@ngrx/entity` entfaltet sich schließlich, wenn es um die 
 | `removeOne` | eine Entität aus der Kollektion entfernen |
 | `removeMany` | mehrere Entitäten aus der Kollektion entfernen (nach ID oder Prädikatsfunktion) |
 | `removeAll` | Kollektion leeren |
-| `updateOne` | eine Entität aktualisieren |
+| `updateOne` | eine Entität aktualisieren (mit partiellen Änderungen) |
 | `updateMany` | mehrere Entitäten aktualisieren |
-| `upsertOne` | eine Entität hinzufügen oder aktualisieren (mit partiellen Änderungen) |
+| `upsertOne` | eine vollständige Entität hinzufügen oder ersetzen |
 | `upsertMany` | mehrere Entitäten hinzufügen oder aktualisieren |
 | `map` | Kollektion aktualisieren mithilfe einer Projektionsfunktion |
 
@@ -1470,6 +1482,11 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+
+import * as BookActions from './book.actions';
+import { selectAllBooks } from './book.selectors';
+import { BookStore } from '../../shared/book-store';
+import { toMessage } from '../../shared/error-message';
 
 @Injectable()
 export class BookEffects {

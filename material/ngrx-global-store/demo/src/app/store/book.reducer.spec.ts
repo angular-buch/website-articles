@@ -51,6 +51,12 @@ describe('Book Reducer', () => {
     expect(state.books.map(x => x.isbn)).toEqual(['2']);
   });
 
+  it('deleteBookSuccess entfernt das Buch auch aus den Favoriten', () => {
+    const start: State = { ...initialState, books: [b('1')], likedBooks: [b('1'), b('2')] };
+    const state = reducer(start, BookActions.deleteBookSuccess({ isbn: '1' }));
+    expect(state.likedBooks.map(x => x.isbn)).toEqual(['2']);
+  });
+
   it('ein Schreibvorgang (Auslöser) setzt eine alte Fehlermeldung zurück', () => {
     const state = reducer({ ...initialState, error: 'alt' }, BookActions.createBook({ book: b('9') }));
     expect(state.error).toBeNull();

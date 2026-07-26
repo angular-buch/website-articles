@@ -112,7 +112,7 @@ export const BookSignalStore = signalStore(
   providers: [BookSignalStore]
 })
 export class BooksOverview {
-  private store = inject(BookSignalStore);
+  protected store = inject(BookSignalStore);
 }
 ```
 
@@ -215,7 +215,7 @@ Für das Laden der Bücher brauchen wir einen asynchronen Seiteneffekt – die A
 
 Eine Store-Methode darf eine ganz gewöhnliche Methode sein; einfache Abläufe ließen sich daher auch mit einer `async`-Methode und einem Promise erledigen, die das Ergebnis am Ende per `patchState()` in den State schreibt. Wir zeigen hier aber den reaktiven Weg mit RxJS, weil er sich nahtlos mit den `Observable`s des `BookStore`-Service kombinieren lässt: Dafür bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
 
-Zum sicheren Verarbeiten der HTTP-Antwort nutzen wir den Operator `tapResponse` aus `@ngrx/operators`. Er ruft je nach Ausgang den `next`-, `error`- oder `finalize`-Callback auf – und ein Fehler im Service-Aufruf beendet dadurch nicht den reaktiven Strom der Methode:
+Zum sicheren Verarbeiten der HTTP-Antwort nutzen wir den Operator `tapResponse` aus `@ngrx/operators`. Er ruft je nach Ausgang den `next`- oder den `error`-Callback auf – und ein Fehler im Service-Aufruf beendet dadurch nicht den reaktiven Strom der Methode:
 
 ```ts
 import { inject } from '@angular/core';
@@ -234,9 +234,9 @@ withMethods((store, bookStore = inject(BookStore)) => ({
       switchMap(() =>
         bookStore.getAll().pipe(
           tapResponse({
-            next: books => patchState(store, { books }),
-            error: (err: unknown) => patchState(store, { error: toMessage(err) }),
-            finalize: () => patchState(store, { loading: false })
+            next: books => patchState(store, { books, loading: false }),
+            error: (err: unknown) =>
+              patchState(store, { error: toMessage(err), loading: false })
           })
         )
       )
@@ -245,7 +245,9 @@ withMethods((store, bookStore = inject(BookStore)) => ({
 }))
 ```
 
-Den Fehler behandeln wir wie in Teil 2 mit der kleinen Hilfsfunktion `toMessage()`. Der `error`-Callback von `tapResponse` liefert den Fehler als `unknown` – wir prüfen also die Form, statt blind auf eine Eigenschaft zuzugreifen. Die BookManager-API liefert ihre Fehlermeldungen als `{ error: string }`, verpackt in einer `HttpErrorResponse` (etwa HTTP 409 bei einer doppelten ISBN); diesen Fall fangen wir gesondert ab:
+Das Beenden des Ladeindikators notieren wir bewusst in `next` **und** `error` – und nicht im ebenfalls verfügbaren `finalize`-Callback von `tapResponse`. Der Grund: `finalize` feuert auch dann, wenn `switchMap()` eine laufende Anfrage abbricht, weil eine neue gestartet wurde. Der Indikator würde in diesem Moment verschwinden, obwohl die neue Anfrage noch läuft.
+
+Den Fehler behandeln wir wie in Teil 2 mit der kleinen Hilfsfunktion `toMessage()`. Der `error`-Callback von `tapResponse` liefert den Fehler als `unknown` – wir prüfen also die Form, statt blind auf eine Eigenschaft zuzugreifen. Die BookManager-API liefert ihre Fehlermeldungen als `{ error: string }`, verpackt in einer `HttpErrorResponse` (etwa HTTP 409 bei einer doppelten ISBN); diesen Fall fangen wir gesondert ab. Da der Response-Body (`error.error`) als `any` typisiert ist, prüfen wir auch ihn zur Laufzeit, bevor wir ihn als Meldung übernehmen:
 
 ```ts
 // shared/error-message.ts
@@ -253,7 +255,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 export function toMessage(error: unknown): string {
   if (error instanceof HttpErrorResponse) {
-    return error.error?.error ?? error.message;
+    const apiError = (error.error as { error?: unknown } | null)?.error;
+    return typeof apiError === 'string' && apiError ? apiError : error.message;
   }
   return error instanceof Error ? error.message : 'Ein unbekannter Fehler ist aufgetreten.';
 }
@@ -336,6 +339,8 @@ clearLikedBooks(): void {
 }
 ```
 
+Eine Kleinigkeit dürfen wir nicht vergessen: Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es gar nicht mehr gibt. Dazu filtern wir in `deleteBook` zusätzlich die `likedBooks` (zu sehen im vollständigen Beispiel unten).
+
 Der Kontrast zu `loadBooks`, `addBook` und `deleteBook` ist lehrreich: Dort umhüllt `rxMethod` einen asynchronen HTTP-Aufruf, dessen Ausgang wir mit `tapResponse` abwarten. Hier passiert alles synchron im Speicher – eine schlichte Methode mit `patchState()` genügt. Eine Store-Methode muss eben *nicht* reaktiv sein; sie wird es nur dort, wo tatsächlich ein Seiteneffekt im Spiel ist.
 
 ### Das vollständige Beispiel
@@ -398,15 +403,18 @@ export const BookSignalStore = signalStore(
     },
 
     // Lesen: switchMap – eine neue Anfrage macht die alte überflüssig.
+    // loading beenden wir bewusst in next/error (nicht in finalize):
+    // finalize feuert auch beim Abbruch durch switchMap und würde den
+    // Ladeindikator zurücksetzen, obwohl die neue Anfrage noch läuft.
     loadBooks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { loading: true, error: null })),
         switchMap(() =>
           bookStore.getAll().pipe(
             tapResponse({
-              next: books => patchState(store, { books }),
-              error: (err: unknown) => patchState(store, { error: toMessage(err) }),
-              finalize: () => patchState(store, { loading: false })
+              next: books => patchState(store, { books, loading: false }),
+              error: (err: unknown) =>
+                patchState(store, { error: toMessage(err), loading: false })
             })
           )
         )
@@ -436,7 +444,10 @@ export const BookSignalStore = signalStore(
             tapResponse({
               next: () =>
                 patchState(store, state => ({
-                  books: state.books.filter(b => b.isbn !== isbn)
+                  books: state.books.filter(b => b.isbn !== isbn),
+                  // Auch aus den Favoriten entfernen, sonst bleibt dort ein
+                  // gelöschtes Buch zurück.
+                  likedBooks: state.likedBooks.filter(b => b.isbn !== isbn)
                 })),
               error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })
@@ -463,7 +474,7 @@ Für die Oberfläche teilen wir die Verantwortung wie üblich in eine **smarte**
 // books/books-overview/books-overview.ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { Book } from '../shared/book';
+import { Book } from '../../shared/book';
 import { BookSignalStore } from '../book.store';
 import { BookCard } from '../book-card/book-card';
 
@@ -560,7 +571,7 @@ Die einzelne Buchkarte ist eine rein **präsentationale** Komponente: Sie kennt 
 ```ts
 // books/book-card/book-card.ts
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { Book } from '../shared/book';
+import { Book } from '../../shared/book';
 
 @Component({
   selector: 'app-book-card',
@@ -609,7 +620,7 @@ Weil der Store global (`providedIn: 'root'`) bereitsteht, teilen sich alle Kompo
 
 Die immutablen Array-Operationen aus unseren Methoden (`[...state.books, created]`, `filter(...)`) wiederholen sich in jeder Anwendung. Genau diese Routine nimmt uns das Plugin `@ngrx/signals/entities` mit dem Feature `withEntities()` ab – das Gegenstück zu `@ngrx/entity` aus Teil 2. Es legt die Signale `entityMap`, `ids` und `entities` an und bringt fertige Updater mit: `addEntity`, `updateEntity`, `removeEntity`, `setAllEntities` und weitere.
 
-Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookManager über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an. Bei `add*`-, `set*`- und `update*`-Updatern übergeben wir ihn als zweites Argument; die `remove*`-Updater ermitteln die ID automatisch:
+Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookManager über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an. Bei `add*`-, `set*`- und `update*`-Updatern übergeben wir ihn als zweites Argument; die `remove*`-Updater brauchen keinen ID-Selektor, denn sie erhalten die ID direkt als Argument:
 
 ```ts
 // books/book.store.ts (Entity-Variante)
@@ -755,7 +766,7 @@ describe('BookSignalStore', () => {
 Den `BookStore`-Service selbst – also den echten HTTP-Zugriff – prüfen wir getrennt mit dem `HttpTestingController`:
 
 ```ts
-// books/shared/book-store.spec.ts
+// shared/book-store.spec.ts
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';

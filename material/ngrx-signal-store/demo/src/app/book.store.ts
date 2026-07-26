@@ -52,15 +52,18 @@ export const BookSignalStore = signalStore(
     },
 
     // Lesen: switchMap – eine neue Anfrage macht die alte überflüssig.
+    // loading beenden wir bewusst in next/error (nicht in finalize):
+    // finalize feuert auch beim Abbruch durch switchMap und würde den
+    // Ladeindikator zurücksetzen, obwohl die neue Anfrage noch läuft.
     loadBooks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { loading: true, error: null })),
         switchMap(() =>
           bookStore.getAll().pipe(
             tapResponse({
-              next: books => patchState(store, { books }),
-              error: (err: unknown) => patchState(store, { error: toMessage(err) }),
-              finalize: () => patchState(store, { loading: false })
+              next: books => patchState(store, { books, loading: false }),
+              error: (err: unknown) =>
+                patchState(store, { error: toMessage(err), loading: false })
             })
           )
         )
@@ -90,7 +93,10 @@ export const BookSignalStore = signalStore(
             tapResponse({
               next: () =>
                 patchState(store, state => ({
-                  books: state.books.filter(b => b.isbn !== isbn)
+                  books: state.books.filter(b => b.isbn !== isbn),
+                  // Auch aus den Favoriten entfernen, sonst bleibt dort ein
+                  // gelöschtes Buch zurück.
+                  likedBooks: state.likedBooks.filter(b => b.isbn !== isbn)
                 })),
               error: (err: unknown) => patchState(store, { error: toMessage(err) })
             })

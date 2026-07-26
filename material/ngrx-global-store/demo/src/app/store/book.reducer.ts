@@ -44,7 +44,9 @@ export const reducer = createReducer(
   })),
   on(BookActions.deleteBookSuccess, (state, action): State => ({
     ...state,
-    books: state.books.filter(b => b.isbn !== action.isbn)
+    books: state.books.filter(b => b.isbn !== action.isbn),
+    // Auch aus den Favoriten entfernen, sonst bleibt dort ein gelöschtes Buch zurück.
+    likedBooks: state.likedBooks.filter(b => b.isbn !== action.isbn)
   })),
 
   on(

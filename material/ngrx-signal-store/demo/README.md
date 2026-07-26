@@ -2,18 +2,20 @@
 
 Lauffähige Angular-Anwendung zum Artikel **[State Management mit NgRx – Teil 3: SignalStore](../README.md)**.
 
-Sie zeigt den kompletten `BookStore` aus dem Artikel in Aktion: Buchliste laden sowie Bücher anlegen, ändern (Bewertung erhöhen) und löschen (CRUD) mit `signalStore`, `withState`, `withComputed`, `withMethods`, `rxMethod` und `patchState` – inklusive Lade- und Fehleranzeige.
+Sie zeigt den kompletten `BookSignalStore` aus dem Artikel in Aktion: Buchliste laden, Bücher anlegen und löschen (mit `signalStore`, `withState`, `withComputed`, `withMethods`, `rxMethod` und `patchState`) sowie Favoriten als reinen Client-State ohne `rxMethod` – inklusive Lade- und Fehleranzeige.
 
 - **Angular** + **NgRx** (`@ngrx/signals`, `@ngrx/operators`)
-- Der `BookApi` ist ein In-Memory-Stand-in für ein echtes HTTP-Backend, damit die App ohne Server läuft. Er wirft bei einer doppelten ISBN bewusst einen Fehler, sodass sich die Fehleranzeige auch ohne Server auslösen lässt.
+- Der Datenservice `BookStore` spricht per `HttpClient` die echte BookManager-API unter `https://api1.angular-buch.com` an – die App braucht also kein eigenes Backend, aber eine Internetverbindung. Legt man ein Buch mit einer bereits vergebenen ISBN an, antwortet die API mit HTTP 409 und die Fehleranzeige erscheint.
 
-> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookManager (Feature-Ordner `books/…`); die Demo liegt dagegen flach unter `src/app/…`. Klassen-, Datei- und Selektornamen (Präfix `bm-`, keine `.component`/`.service`-Suffixe) folgen in beiden Fällen denselben Angular-Konventionen.
+> **Hinweis:** Die API ist eine öffentliche, geteilte Instanz – angelegte und gelöschte Bücher sehen also auch andere. Die Unit-Tests sprechen die API nicht an (`HttpTestingController` bzw. Service-Mocks).
+
+> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookManager (Feature-Ordner `books/…`); die Demo liegt dagegen flach unter `src/app/…`. Klassen-, Datei- und Selektornamen folgen in beiden Fällen denselben Angular-Konventionen (keine `.component`/`.service`-Suffixe).
 
 ## Befehle
 
 ```bash
 npm install
-npm test     # Vitest: Store-Tests (Laden, CRUD, Fehler) + Komponente
+npm test     # Vitest: Store-Tests (Laden, Anlegen/Löschen, Favoriten, Fehler) + Service + Komponente
 npm start    # ng serve
 npm run build
 ```

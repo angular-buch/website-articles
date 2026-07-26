@@ -43,6 +43,22 @@ describe('BookSignalStore', () => {
     expect(store.booksCount()).toBe(1);
   });
 
+  it('bricht bei erneutem Laden die alte Anfrage ab, ohne den Ladeindikator zurückzusetzen', () => {
+    const first = new Subject<Book[]>();
+    const second = new Subject<Book[]>();
+    let call = 0;
+    const store = createStore({ getAll: () => (++call === 1 ? first : second) });
+    expect(store.loading()).toBe(true);
+
+    store.loadBooks(); // zweite Anfrage – switchMap bricht die erste ab
+    expect(store.loading()).toBe(true); // Indikator bleibt an, bis die neue Antwort da ist
+
+    second.next([b('1')]);
+    second.complete();
+    expect(store.loading()).toBe(false);
+    expect(store.booksCount()).toBe(1);
+  });
+
   it('addBook hängt ein Buch an die Liste an', () => {
     const store = createStore({ getAll: () => of([b('1')]), create: book => of(book) });
     store.addBook(b('2', 'Neu'));
@@ -53,6 +69,13 @@ describe('BookSignalStore', () => {
     const store = createStore({ getAll: () => of([b('1'), b('2')]), remove: () => of(undefined) });
     store.deleteBook('1');
     expect(store.books().map(x => x.isbn)).toEqual(['2']);
+  });
+
+  it('deleteBook entfernt das Buch auch aus den Favoriten', () => {
+    const store = createStore({ getAll: () => of([b('1'), b('2')]), remove: () => of(undefined) });
+    store.likeBook(b('1'));
+    store.deleteBook('1');
+    expect(store.likedCount()).toBe(0);
   });
 
   it('schreibt eine Fehlermeldung in den State, wenn das Laden fehlschlägt', () => {
