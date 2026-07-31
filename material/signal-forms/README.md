@@ -1,7 +1,7 @@
 ---
 title: 'Updates zu Signal Forms'
 published: 2026-05-06
-lastModified: 2026-05-15
+lastModified: 2026-07-31
 hidden: true
 ---
 
@@ -22,6 +22,37 @@ In unserer englischsprachigen Artikelserie zu Signal Forms gehen wir auch auf As
 - [Part 4: Metadata and Accessibility Handling](/blog/2025-12-signal-forms-part4)
 
 **In diesem Artikel sammeln wir dennoch einige kleinere Aspekte, die sich nach dem Release des Angular-Buchs geändert haben.**
+
+
+
+## 25.5.6 `validateHttp()` benötigt `onError`
+
+Im Buch stellen wir die Funktion `validateHttp()` mit den Optionen `request` und `onSuccess` vor.
+Dieses Beispiel funktioniert allerdings nicht, die Option `onError` ist zwingend erforderlich:
+
+```ts
+validateHttp(path.title, {
+  request: (ctx) => `/api/check?username=${ctx.value()}`,
+  onSuccess: (taken: boolean) => taken ? { kind: 'usernameTaken', message: 'Anmeldename ist schon vergeben.' } : undefined,
+  onError: (error, ctx) => ({ kind: 'usernameCheckFailed', message: 'Prüfung fehlgeschlagen' })
+});
+```
+
+Das Callback `onError` wird ausgeführt, wenn der HTTP-Request fehlschlägt.
+In unserem Beispiel ist das ein ungewünschter Fehlerfall: Der Endpunkt `/api/check` antwortet immer mit Erfolg und transportiert das Ergebnis `taken` in der Antwort.
+`onError` bedeutet also, dass die Prüfung gar nicht ausgeführt werden konnte.
+
+Wenn die API anders funktioniert, kann das Callback-Paar `onSuccess`/`onError` aber auch für die beiden Ergebnisse der Validierung eingesetzt werden.
+Im folgenden Beispiel fragen wir ein ganzes Buch beim Server an. Der Statuscode der Antwort entscheidet über die Validierung: Ein Fehler in der API-Antwort bedeutet hier, dass das Buch nicht existiert.
+
+```ts
+validateHttp(path.isbn, {
+  request: (ctx) => `https://api1.angular-buch.com/books/${ctx.value()}`,
+  onSuccess: () => ({ kind: 'isbnExists', message: 'ISBN existiert bereits.' }),
+  onError: () => undefined,
+});
+```
+
 
 
 ## 25.5.8 Logik für Schema-Funktionen mit `when`
