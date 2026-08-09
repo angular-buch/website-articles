@@ -65,30 +65,37 @@ Damit wird eine ganze Kategorie von Supply-Chain-Angriffen von Haus aus verhinde
 
 ### pnpm installieren und Version fixieren
 
-Der empfohlene Installationsweg führt über **Corepack**, das seit Node.js 16 mitgeliefert wird:
+Corepack wird seit Node.js 16.13 mitgeliefert. Die globale npm-Installation ist daher keine zusätzliche pnpm-Installation: Sie aktualisiert Corepack auf die aktuelle Version. Das ist insbesondere wegen veralteter Signaturen in älteren Corepack-Versionen sinnvoll. Falls Corepack in deiner Node.js-Installation bereits aktuell ist, kannst du diesen Schritt überspringen. Anschließend aktivierst du pnpm:
 
 ```bash
-corepack enable
-corepack prepare pnpm@latest --activate
+npm install --global corepack@latest
+corepack enable pnpm
 ```
-
-Die verwendete Version wird über das `packageManager`-Feld in der `package.json` festgehalten – Corepack aktiviert dann bei allen Teammitgliedern automatisch dieselbe pnpm-Version.
 
 ### Projekt erzeugen
 
 Beim Erstellen eines neuen Projekts muss der Package Manager explizit angegeben werden.
-Ein einfaches `pnpm dlx @angular/cli@latest new my-app` reicht **nicht** – die CLI würde trotzdem npm verwenden, da sie den aufrufenden Package Manager nicht automatisch erkennt.
+Ein einfaches `pnpm dlx @angular/cli@latest new book-monkey` reicht **nicht** – die CLI würde trotzdem npm verwenden, da sie den aufrufenden Package Manager nicht automatisch erkennt.
 
 ```bash
 # Bei globaler Installation:
-ng new my-app --package-manager pnpm
+ng new book-monkey --package-manager pnpm
 
 # Direkt ohne global installierte Angular CLI via npx:
-npx @angular/cli@latest new my-app --package-manager pnpm
+npx @angular/cli@latest new book-monkey --package-manager pnpm
 
 # Direkt mit pnpm dlx:
-pnpm dlx @angular/cli@latest new my-app --package-manager pnpm
+pnpm dlx @angular/cli@latest new book-monkey --package-manager pnpm
 ```
+
+Nach der Erstellung wechselst du in den Projektordner und fixierst dort die verwendete Version:
+
+```bash
+cd book-monkey
+corepack use pnpm@latest
+```
+
+Der Befehl ergänzt das `packageManager`-Feld in der `package.json` – Corepack aktiviert dann bei allen Teammitgliedern automatisch dieselbe pnpm-Version.
 
 Das Flag `--package-manager pnpm` bewirkt zwei Dinge:
 
@@ -108,7 +115,7 @@ Die CLI delegiert dann alle Paketoperationen transparent an pnpm – z. B. `ng a
 
 ## Projektstruktur und `node_modules`
 
-Wer zum ersten Mal ein pnpm-Projekt öffnet, wird feststellen, dass `node_modules` anders aufgebaut ist:
+Wenn du zum ersten Mal ein pnpm-Projekt öffnest, stellst du fest, dass `node_modules` anders aufgebaut ist:
 
 ```
 node_modules/
@@ -179,9 +186,9 @@ ignoredBuiltDependencies:
   - puppeteer
 ```
 
-Wird später ein neues Paket mit Build-Scripts hinzugefügt, erscheint die Meldung erneut – man entscheidet bewusst über die Freigabe.
+Wird später ein neues Paket mit Build-Scripts hinzugefügt, erscheint die Meldung erneut – du entscheidest bewusst über die Freigabe.
 
-> **Hinweis für Umsteiger von npm:** Wer bisher `ignore-scripts=true` in der `.npmrc` verwendet hat, sollte diese Einstellung bei pnpm 10+ **entfernen**.
+> **Hinweis beim Wechsel von npm:** Wenn du bisher `ignore-scripts=true` in der `.npmrc` verwendet hast, solltest du diese Einstellung bei pnpm 10+ **entfernen**.
 > pnpm blockiert Lifecycle Scripts von Dependencies bereits standardmäßig – ohne `.npmrc`-Eintrag.
 > Ein zusätzliches `ignore-scripts=true` würde auch die über `onlyBuiltDependencies` explizit freigegebenen Scripts blockieren und damit den granularen Freigabe-Mechanismus aushebeln.
 > Native Binaries (z.B. für esbuild) könnten dann trotz Freigabe nicht gebaut werden.
@@ -276,9 +283,9 @@ minimumReleaseAge: 1440
 
 ```json
 {
-  "name": "my-app",
+  "name": "book-monkey",
   "version": "0.0.0",
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@x.y.z",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "start": "ng serve",
@@ -305,7 +312,7 @@ minimumReleaseAge: 1440
 
 ## Skalierung: Workspace und Monorepo
 
-Wer mehrere Angular-Anwendungen oder eigene Libraries in einem Repository verwalten möchte, kann das pnpm-Setup ohne Architekturbruch erweitern.
+Wenn du mehrere Angular-Anwendungen oder eigene Libraries in einem Repository verwalten möchtest, kannst du das pnpm-Setup ohne Architekturbruch erweitern.
 Für Monorepos empfiehlt sich **Nx** als Build-Orchestrierung – es arbeitet hervorragend mit pnpm-Workspaces zusammen und bringt Features wie Affected Builds, Computation Caching und den Project Graph mit.
 
 ```yaml
@@ -334,6 +341,35 @@ Das sorgt für konsistente Versionen über alle Pakete hinweg.
 > `ng update` erkennt `catalog:`-Einträge und bricht mit einer Anleitung für manuelle Aktualisierung ab ([angular-cli#33566](https://github.com/angular/angular-cli/pull/33566)).
 > Catalogs lohnen sich daher primär in Monorepo-Setups, in denen Konsistenz über viele Pakete den manuellen Aufwand bei Updates rechtfertigt – idealerweise in Kombination mit Nx, das eigene Update-Mechanismen mitbringt.
 
+## Bestehende Anwendung auf pnpm umstellen
+
+Wenn du bereits eine Angular-Anwendung wie betreibst, brauchst du kein neues Projekt zu erzeugen. Die Unterschiede zum neuen Setup beschränken sich auf die Übernahme der bestehenden Konfiguration und Lockfile:
+
+1. **Arbeitsstand sichern:** Lege einen Git-Branch an und prüfe, dass die Anwendung vor der Migration funktioniert.
+2. **pnpm-Version festlegen:** Führe im Projektverzeichnis `corepack use pnpm@latest` aus. Corepack ergänzt das `packageManager`-Feld in der vorhandenen `package.json` und trägt die konkret aufgelöste Version ein.
+3. **Angular CLI konfigurieren:** Ergänze in der bestehenden `angular.json` unter `cli` die Eigenschaft `"packageManager": "pnpm"`. Andere Projekteinstellungen und der verwendete Builder bleiben unverändert:
+
+   ```json
+   {
+     "cli": {
+       "packageManager": "pnpm"
+     }
+   }
+   ```
+
+4. **Lockfile übernehmen:** Liegt eine `package-lock.json` oder `yarn.lock` vor, führe zunächst `pnpm import` aus. Dadurch entsteht die `pnpm-lock.yaml`. Lösche die alte Lockfile erst, nachdem du die neue geprüft hast.
+5. **Abhängigkeiten neu installieren:** Entferne `node_modules` und installiere anschließend mit `pnpm install`:
+
+   ```bash
+   rm -rf node_modules
+   pnpm install
+   ```
+
+6. **Automatisierung anpassen:** Ersetze in CI und lokalen Skripten `npm install` beziehungsweise `npm ci` durch `pnpm install` beziehungsweise `pnpm install --frozen-lockfile`. Prüfe außerdem direkte Aufrufe von `npx` und `npm`.
+7. **Migration prüfen:** Führe Build, Tests und Entwicklungsserver aus. Bei blockierten Build-Scripts entscheidest du mit `pnpm approve-builds`, welche Abhängigkeiten diese ausführen dürfen.
+
+Die ausführliche pnpm-Konfiguration aus den vorherigen Abschnitten – etwa `.npmrc`, `pnpm-workspace.yaml` und `onlyBuiltDependencies` – kannst du anschließend schrittweise übernehmen.
+
 ## Fazit
 
 pnpm bietet mehr als einen schnellen Package Manager – es liefert Werkzeuge, um Dependency Management bewusst zu gestalten:
@@ -343,7 +379,7 @@ pnpm bietet mehr als einen schnellen Package Manager – es liefert Werkzeuge, u
 - **Reproduzierbare Installationen** via Lockfile und `--frozen-lockfile` sichern konsistente Builds
 
 Dabei bleibt der gewohnte Angular-Workflow vollständig erhalten – die CLI delegiert Installationen transparent an pnpm.
-Wer später mehrere Anwendungen oder Libraries verwalten möchte, kann dieses Fundament ohne Architekturbruch um Workspaces, Catalogs und Nx erweitern.
+Wenn du später mehrere Anwendungen oder Libraries verwalten möchtest, kannst du dieses Fundament ohne Architekturbruch um Workspaces, Catalogs und Nx erweitern.
 
 ## Weiterführende Links
 
