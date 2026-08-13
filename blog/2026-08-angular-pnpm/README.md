@@ -16,7 +16,7 @@ keywords:
   - minimumReleaseAge
   - Nx
 language: de
-header: angular-pnpm.png
+header: angular-pnpm.jpg
 ---
 
 Die Zeiten, in denen der Paketmanager *npm* alternativlos war, sind längst vorbei.
@@ -364,4 +364,4 @@ Wenn du später mehrere Anwendungen oder Bibliotheken verwalten möchtest, kanns
 - [Corepack Dokumentation](https://nodejs.org/api/corepack.html)
 - [Socket.dev – Security-Analysen zu npm-Angriffen](https://socket.dev/blog)
 
-<small>**Cover image:** Generated with AI, edited</small>
+<small>**Titelbild:** generiert mit AI, bearbeitet</small>
