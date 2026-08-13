@@ -46,7 +46,7 @@ Das verhindert das *Phantom-Dependency*-Problem: Code kann nicht versehentlich a
 Durch den zentralen Store und Hardlinks sind Installationen deutlich schneller, insbesondere bei wiederholten Installationen und in CI-Pipelines.
 
 **Monorepo-Unterstützung:**
-pnpm bietet erstklassige Workspace-Unterstützung mit Catalogs (zentrale Versionsverwaltung), dem `workspace:`-Protokoll und effizienter Verwaltung mehrerer Pakete.
+pnpm bietet erstklassige [Workspace-Unterstützung](https://pnpm.io/workspaces) mit Catalogs (zentrale Versionsverwaltung), dem Workspace-Protokoll und effizienter Verwaltung mehrerer Pakete.
 
 **Security by Default:**
 Seit Version 10 blockiert pnpm standardmäßig Lifecycle-Scripts in Dependencys.
@@ -57,7 +57,7 @@ Damit wird eine ganze Kategorie von Supply-Chain-Angriffen von Haus aus verhinde
 | Speicherverbrauch | hoch (jedes Projekt eigene Kopie) | niedrig (Content-addressable Store) |
 | Installationsgeschwindigkeit | mittel | schnell |
 | Phantom Dependencies | möglich (flache Struktur) | ausgeschlossen (strikte Struktur) |
-| Lifecycle Scripts | werden ausgeführt | wtandardmäßig blockiert (ab v10) |
+| Lifecycle Scripts | werden ausgeführt | standardmäßig blockiert (ab v10) |
 | Monorepo-Support | Workspaces (basic) | Workspaces + Catalogs |
 | minimumReleaseAge | ab npm 11.10 (`min-release-age`) | ab pnpm 10.16 |
 
@@ -313,37 +313,6 @@ minimumReleaseAge: 1440
   }
 }
 ```
-
-## Skalierung: Workspace und Monorepo
-
-Wenn du mehrere Angular-Anwendungen oder eigene Libraries in einem Repository verwalten möchtest, kannst du das pnpm-Setup ohne Architekturbruch erweitern.
-Für Monorepos empfiehlt sich **Nx** als Build-Orchestrierung – es arbeitet hervorragend mit pnpm-Workspaces zusammen und bringt Features wie Affected Builds, Computation Caching und den Project Graph mit.
-
-```yaml
-# pnpm-workspace.yaml
-packages:
-  - apps/*
-  - libs/*
-```
-
-Zwischen Paketen im Workspace können `workspace:`-Referenzen verwendet werden:
-
-```json
-{
-  "dependencies": {
-    "@my-company/shared": "workspace:^"
-  }
-}
-```
-
-Das `workspace:`-Protokoll stellt sicher, dass die lokale Version verwendet wird – keine versehentlichen Downloads aus der Registry.
-
-pnpm bietet zusätzlich **Catalogs** an: Dependency-Versionen werden zentral in der `pnpm-workspace.yaml` definiert und in den `package.json`-Dateien nur per `"catalog:"` referenziert.
-Das sorgt für konsistente Versionen über alle Pakete hinweg.
-
-> **Hinweis:** Die Angular CLI kann Catalogs aktuell nicht automatisch aktualisieren.
-> `ng update` erkennt `catalog:`-Einträge und bricht mit einer Anleitung für manuelle Aktualisierung ab ([angular-cli#33566](https://github.com/angular/angular-cli/pull/33566)).
-> Catalogs lohnen sich daher primär in Monorepo-Setups, in denen Konsistenz über viele Pakete den manuellen Aufwand bei Updates rechtfertigt – idealerweise in Kombination mit Nx, das eigene Update-Mechanismen mitbringt.
 
 ## Bestehende Anwendung auf pnpm umstellen
 
