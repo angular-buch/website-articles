@@ -364,3 +364,7 @@ Wenn du später mehrere Anwendungen oder Bibliotheken verwalten möchtest, kanns
 - [Socket.dev – Security-Analysen zu npm-Angriffen](https://socket.dev/blog)
 
 <small>**Titelbild:** generiert mit AI, bearbeitet</small>
+
+<hr>
+
+<small>Vielen Dank an Ferdinand Malcher für das Review und das wertvolle Feedback!</small>
