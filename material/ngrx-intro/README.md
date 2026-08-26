@@ -299,7 +299,7 @@ Das Ergebnis ist das Observable `state$`, das für jede eintreffende Nachricht d
 
 Erneut haben wir unsere Zustandsverwaltung verbessert. Der Zustand ist nun aus den gesendeten Nachrichten abgeleitet. Ist die Historie aller Nachrichten bekannt, so kann man theoretisch jeden bisherigen Zustand jederzeit wieder reproduzieren, sofern unsere Reducer-Funktionen deterministisch sind. Diese Eigenschaften sorgen für ein sehr einfaches und gleichzeitig robustes System. Da die Funktionen sehr simpel sind, sind sie auch sehr einfach zu testen.
 
-> **Hinweis:** Um jeden gewünschten Zustand wieder reproduzieren zu können, müsste man die Historie aller Nachrichten speichern. Das tun wir in diesem Beispiel nicht, und auch eine mit Redux gebaute Anwendung speichert das Protokoll im Produktivbetrieb nicht dauerhaft. Während der Entwicklung zeichnen die Redux DevTools die letzten Actions allerdings sehr wohl auf und ermöglichen so Time Travel Debugging – das sehen wir in [Teil 2](/material/ngrx-global-store) in Aktion.
+> **Hinweis:** Um jeden gewünschten Zustand wieder reproduzieren zu können, müsste man die Historie aller Nachrichten speichern. Das tun wir in diesem Beispiel nicht, und auch eine mit Redux gebaute Anwendung speichert das Protokoll im Produktivbetrieb nicht dauerhaft. Während der Entwicklung zeichnen die Redux DevTools die letzten Actions allerdings sehr wohl auf und ermöglichen so Time Travel Debugging – darauf gehen wir in [Teil 2](/material/ngrx-global-store) genauer ein.
 
 ### Zusammenfassung aller Konzepte
 

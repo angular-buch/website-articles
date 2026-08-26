@@ -17,20 +17,20 @@ Dieser Artikel ist **Teil 3** einer dreiteiligen Serie zum Thema State Managemen
 
 In [Teil 2](/material/ngrx-global-store) haben wir den **Global Store** kennengelernt: das klassische Redux-Pattern mit Actions, Reducers, Selektoren und Effects. Wir setzen für diesen Teil voraus, dass der Global Store bekannt ist – wir bauen direkt darauf auf und vergleichen beide Ansätze.
 
-Der Global Store ist mächtig, bringt für viele Anwendungsfälle aber spürbar viel Zeremonie mit: Schon das Laden einer simplen Buchliste verteilt sich über Actions, einen Reducer, Selektoren und einen Effect. Genau hier setzt der **SignalStore** aus dem Paket `@ngrx/signals` an. Er ist eine leichtgewichtige, signal-basierte Alternative, die mit deutlich weniger Code auskommt und sich nahtlos in modernes, signal-zentriertes Angular einfügt.
+Der Global Store erfordert für viele Anwendungsfälle viel Code: Schon das Laden einer einfachen Buchliste verteilt sich über Actions, einen Reducer, Selektoren und einen Effect. Hier setzt der **SignalStore** aus dem Paket `@ngrx/signals` an. Er ist eine leichtgewichtige, signal-basierte Alternative, die mit deutlich weniger Code auskommt und direkt auf Signals aufbaut.
 
 ## Der architektonische Unterschied zum Global Store
 
 Bevor wir Code schreiben, lohnt sich der Blick auf die grundlegend andere Architektur. Global Store und SignalStore lösen dasselbe Problem – zentrale Zustandsverwaltung – auf gegensätzliche Weise.
 
-**Der Global Store ist ein zentrales, indirektes System.** Es gibt genau einen globalen State-Baum. Eine Komponente *beschreibt* mit einer Action nur, *was passiert ist* ("Load Books"); ein Reducer entscheidet an ganz anderer Stelle, *wie* sich der State daraufhin ändert; ein Effect kümmert sich wiederum getrennt um Seiteneffekte. Lesen und Schreiben sind strikt entkoppelt, der Datenfluss ist streng unidirektional. Diese Indirektion ist der eigentliche Wert des Patterns: Jeder Schritt ist nachvollziehbar, auditierbar (Redux DevTools, Time Travel) und klar getrennt – sie ist aber auch die Quelle des vielen Codes.
+**Der Global Store ist ein zentrales, indirektes System.** Es gibt genau einen globalen State-Baum. Eine Komponente *beschreibt* mit einer Action nur, *was passiert ist* ("Load Books"); ein Reducer entscheidet an ganz anderer Stelle, *wie* sich der State daraufhin ändert; ein Effect kümmert sich wiederum getrennt um Seiteneffekte. Lesen und Schreiben sind strikt entkoppelt, der Datenfluss ist streng unidirektional. Diese Indirektion macht jeden Schritt nachvollziehbar und in den Redux DevTools sichtbar – sie ist aber auch der Grund für die vielen Bausteine.
 
-**Der SignalStore ist ein zusammengesetzter Service mit direktem Zugriff.** Ein Store ist hier kein globaler Baum, sondern ein ganz normaler, injizierbarer Service, den wir *deklarativ aus Bausteinen zusammensetzen* (`withState`, `withComputed`, `withMethods`, …). Den Zustand lesen wir direkt als **Signal** (`store.books()`), und wir ändern ihn, indem wir eine selbst definierte **Methode** aufrufen, die den State über `patchState()` aktualisiert. Es gibt keine verpflichtende Trennung in Action und Reducer mehr: Das "Was passiert" und das "Wie ändert sich der State" liegen zusammen in einer Methode. Das ist weniger Indirektion, weniger Code – aber eben auch weniger eingebaute Nachvollziehbarkeit.
+**Der SignalStore ist ein zusammengesetzter Service mit direktem Zugriff.** Ein Store ist hier kein globaler Baum, sondern ein ganz normaler, injizierbarer Service, den wir *deklarativ aus Bausteinen zusammensetzen* (`withState`, `withComputed`, `withMethods`, …). Den Zustand lesen wir direkt als **Signal** (`store.books()`), und wir ändern ihn, indem wir eine selbst definierte **Methode** aufrufen, die den State über `patchState()` aktualisiert. Es gibt keine verpflichtende Trennung in Action und Reducer mehr: Das "Was passiert" und das "Wie ändert sich der State" liegen zusammen in einer Methode. Das reduziert den Code erheblich; allerdings verlieren wir die Nachvollziehbarkeit, die die Action-Historie im Global Store bietet.
 
 Ein zweiter, ebenso wichtiger Unterschied ist der **Geltungsbereich**:
 
 - Der **Global Store** ist immer **global**. Jeder Feature-State ist Teil des einen zentralen State-Objekts.
-- Ein **SignalStore** kann **global *oder* lokal** sein. Wir können ihn mit `{ providedIn: 'root' }` global bereitstellen – oder ihn an eine Komponente binden, sodass er mit der Komponente entsteht und wieder zerstört wird. Damit eignet sich der SignalStore auch hervorragend für komponenten- oder feature-lokalen Zustand. Konzeptionell ersetzt er damit auch das ältere Projekt `@ngrx/component-store`.
+- Ein **SignalStore** kann **global *oder* lokal** sein. Wir können ihn mit `{ providedIn: 'root' }` global bereitstellen – oder ihn an eine Komponente binden, sodass er mit der Komponente entsteht und wieder zerstört wird. Damit eignet sich der SignalStore auch für komponenten- oder feature-lokalen Zustand. Konzeptionell ersetzt er damit auch das ältere Projekt `@ngrx/component-store`.
 
 Kurz gesagt: Der Global Store ist *ein* großes, strenges System. Der SignalStore ist eine Sammlung *vieler* kleiner, flexibler Stores.
 
@@ -38,7 +38,7 @@ Kurz gesagt: Der Global Store ist *ein* großes, strenges System. Der SignalStor
 
 Schauen wir uns die Bausteine konkret an. Als durchgehendes Beispiel verwenden wir wieder den BookManager. Wir bauen Schritt für Schritt einen vollständigen Store, der die Buchliste vom Server lädt **und** Bücher anlegen und löschen kann – inklusive Lade- und Fehleranzeige. So lässt sich der direkte Vergleich zum Global Store aus Teil 2 ziehen.
 
-Ein Wort zur Benennung, bevor wir loslegen: Im BookManager kümmert sich – wie schon in Teil 2 – ein Datenservice um die HTTP-Aufrufe gegen die API. Dieser Service heißt `BookStore` und liegt in `shared/book-store.ts`. Den SignalStore, den wir gleich aufbauen, nennen wir deshalb zur klaren Abgrenzung `BookSignalStore` (Datei `book.store.ts`). Der `BookSignalStore` verwaltet den Zustand und ruft für den Datenzugriff den `BookStore`-Service auf.
+Ein Hinweis zur Benennung: Im BookManager kümmert sich – wie schon in Teil 2 – ein Datenservice um die HTTP-Aufrufe gegen die API. Dieser Service heißt `BookStore` und liegt in `shared/book-store.ts`. Den SignalStore, den wir gleich aufbauen, nennen wir deshalb zur klaren Abgrenzung `BookSignalStore` (Datei `book.store.ts`). Der `BookSignalStore` verwaltet den Zustand und ruft für den Datenzugriff den `BookStore`-Service auf.
 
 ### Installation
 
@@ -48,7 +48,7 @@ Der SignalStore wird über ein eigenes Paket installiert:
 ng add @ngrx/signals
 ```
 
-Anders als beim Global Store gibt es für den SignalStore selbst **nichts in der `app.config.ts` zu registrieren** – kein `provideStore()`, kein `provideEffects()`. Ein SignalStore ist ein gewöhnlicher Service und wird dort bereitgestellt, wo wir ihn brauchen. Lediglich der `HttpClient` für den Datenzugriff gehört wie üblich in die `app.config.ts`:
+Anders als beim Global Store gibt es für den SignalStore selbst nichts in der `app.config.ts` zu registrieren: `provideStore()` und `provideEffects()` entfallen. Ein SignalStore ist ein gewöhnlicher Service und wird dort bereitgestellt, wo wir ihn brauchen. Lediglich der `HttpClient` für den Datenzugriff gehört wie üblich in die `app.config.ts`:
 
 ```ts
 // app.config.ts
@@ -93,7 +93,7 @@ Allein dadurch besitzt eine Instanz von `BookSignalStore` bereits drei Signale: 
 
 ### Den Store bereitstellen: lokal oder global
 
-Ein SignalStore ist standardmäßig **an keinen Injector gebunden**. Wir entscheiden bewusst, wo er lebt.
+Ein SignalStore ist standardmäßig an keinen Injector gebunden – wir legen selbst fest, wo er bereitgestellt wird.
 
 **Global** (eine geteilte Instanz für die ganze Anwendung) – über die Option `{ providedIn: 'root' }` direkt bei der Definition:
 
@@ -158,7 +158,7 @@ Da jeder State-Slice ein Signal ist, lesen wir ihn direkt – im Code wie im Tem
 </ul>
 ```
 
-Der Vergleich zu Teil 2 ist aufschlussreich: Dort haben wir das Signal erst über `store.selectSignal(selectAllBooks)` aus dem globalen Store herausgelöst. Beim SignalStore *ist* der State bereits ein Signal – ein Zwischenschritt über Selektoren entfällt.
+In Teil 2 haben wir das Signal erst über `store.selectSignal(selectAllBooks)` aus dem globalen Store herausgelöst. Beim SignalStore ist der State bereits ein Signal – der Zwischenschritt über Selektoren entfällt.
 
 ### Abgeleitete Werte: `withComputed`
 
@@ -181,9 +181,9 @@ Wie bei den memoisierten Selektoren in Teil 2 wird auch ein `computed`-Signal nu
 
 ### Zustand ändern: `withMethods` und `patchState`
 
-Verhalten fügen wir mit dem Feature `withMethods()` hinzu. Die Factory erhält die Store-Instanz (und kann über `inject()` Abhängigkeiten anfordern) und gibt ein Objekt mit Methoden zurück. Den Zustand aktualisieren wir innerhalb der Methoden mit der Funktion `patchState()` – immer **immutabel**, ganz wie in einem Reducer.
+Verhalten fügen wir mit dem Feature `withMethods()` hinzu. Die Factory erhält die Store-Instanz (und kann über `inject()` Abhängigkeiten anfordern) und gibt ein Objekt mit Methoden zurück. Den Zustand aktualisieren wir innerhalb der Methoden mit der Funktion `patchState()` – immer immutabel, wie in einem Reducer.
 
-`patchState()` nimmt den Store gefolgt von einem **partiellen State-Objekt** oder einer **Updater-Funktion** entgegen. Die Updater-Funktion bekommt den aktuellen State und gibt die Änderung zurück – damit aktualisieren wir auch Arrays und verschachtelte Strukturen sauber unveränderlich:
+`patchState()` nimmt den Store gefolgt von einem **partiellen State-Objekt** oder einer **Updater-Funktion** entgegen. Die Updater-Funktion bekommt den aktuellen State und gibt die Änderung zurück – damit aktualisieren wir auch Arrays und verschachtelte Strukturen unveränderlich:
 
 ```ts
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
@@ -213,7 +213,7 @@ Hier liegt der zentrale Unterschied zum Global Store: Es gibt keine Action und k
 
 Für das Laden der Bücher brauchen wir einen asynchronen Seiteneffekt – die Aufgabe, die im Global Store ein Effect übernommen hat. Den eigentlichen HTTP-Aufruf übernimmt der `BookStore`-Service: Er kapselt wie schon in Teil 2 die Aufrufe mit dem `HttpClient` gegen die BookManager-API (`https://api1.angular-buch.com`) und bietet die Methoden `getAll()`, `create()` und `remove()` an, die jeweils ein `Observable` zurückgeben. Wir fordern ihn in der `withMethods`-Factory per `inject()` an.
 
-Eine Store-Methode darf eine ganz gewöhnliche Methode sein; einfache Abläufe ließen sich daher auch mit einer `async`-Methode und einem Promise erledigen, die das Ergebnis am Ende per `patchState()` in den State schreibt. Wir zeigen hier aber den reaktiven Weg mit RxJS, weil er sich nahtlos mit den `Observable`s des `BookStore`-Service kombinieren lässt: Dafür bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
+Eine Store-Methode darf eine ganz gewöhnliche Methode sein; einfache Abläufe ließen sich daher auch mit einer `async`-Methode und einem Promise erledigen, die das Ergebnis am Ende per `patchState()` in den State schreibt. Wir zeigen hier aber den reaktiven Weg mit RxJS, weil er sich direkt mit den `Observable`s des `BookStore`-Service kombinieren lässt: Dafür bietet das Interop-Plugin die Funktion `rxMethod()` aus `@ngrx/signals/rxjs-interop`. Sie nimmt eine Kette von RxJS-Operatoren entgegen und gibt eine reaktive Methode zurück.
 
 Zum sicheren Verarbeiten der HTTP-Antwort nutzen wir den Operator `tapResponse` aus `@ngrx/operators`. Er ruft je nach Ausgang den `next`- oder den `error`-Callback auf – und ein Fehler im Service-Aufruf beendet dadurch nicht den reaktiven Strom der Methode:
 
@@ -245,7 +245,7 @@ withMethods((store, bookStore = inject(BookStore)) => ({
 }))
 ```
 
-Das Beenden des Ladeindikators notieren wir bewusst in `next` **und** `error` – und nicht im ebenfalls verfügbaren `finalize`-Callback von `tapResponse`. Der Grund: `finalize` feuert auch dann, wenn `switchMap()` eine laufende Anfrage abbricht, weil eine neue gestartet wurde. Der Indikator würde in diesem Moment verschwinden, obwohl die neue Anfrage noch läuft.
+Das Beenden des Ladeindikators notieren wir bewusst sowohl in `next` als auch in `error` – und nicht im ebenfalls verfügbaren `finalize`-Callback von `tapResponse`. Der Grund: `finalize` feuert auch dann, wenn `switchMap()` eine laufende Anfrage abbricht, weil eine neue gestartet wurde. Der Indikator würde in diesem Moment verschwinden, obwohl die neue Anfrage noch läuft.
 
 Den Fehler behandeln wir wie in Teil 2 mit der kleinen Hilfsfunktion `toMessage()`. Der `error`-Callback von `tapResponse` liefert den Fehler als `unknown` – wir prüfen also die Form, statt blind auf eine Eigenschaft zuzugreifen. Die BookManager-API liefert ihre Fehlermeldungen als `{ error: string }`, verpackt in einer `HttpErrorResponse` (etwa HTTP 409 bei einer doppelten ISBN); diesen Fall fangen wir gesondert ab. Da der Response-Body (`error.error`) als `any` typisiert ist, prüfen wir auch ihn zur Laufzeit, bevor wir ihn als Meldung übernehmen:
 
@@ -266,9 +266,9 @@ Die so erzeugte Methode rufen wir später einfach als `store.loadBooks()` auf. W
 
 ### Schreiben: Bücher anlegen und löschen
 
-Jetzt zum Kern jeder echten Anwendung: Daten verändern. Wir definieren je eine Methode zum Anlegen und zum Löschen. Jede löst einen HTTP-Request über den `BookStore`-Service aus – dessen `create()` bzw. `remove()` – und schreibt das Ergebnis anschließend immutabel in den State.
+Als Nächstes wollen wir Daten verändern. Wir definieren je eine Methode zum Anlegen und zum Löschen. Jede löst einen HTTP-Request über den `BookStore`-Service aus – dessen `create()` bzw. `remove()` – und schreibt das Ergebnis anschließend immutabel in den State.
 
-Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei **schreibenden** Operationen wollen wir laufende Requests aber *nicht* abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl: Die Anfragen werden der Reihe nach abgearbeitet.
+Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei schreibenden Operationen wollen wir laufende Requests aber nicht abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl: Die Anfragen werden der Reihe nach abgearbeitet.
 
 ```ts
 import { concatMap, pipe, tap } from 'rxjs';
@@ -310,13 +310,13 @@ deleteBook: rxMethod<string>(
 )
 ```
 
-An diesen beiden Methoden sieht man das Muster für jede Mutation: zu Beginn eine alte Fehlermeldung zurücksetzen, den HTTP-Request auslösen, bei Erfolg den State **immutabel** anpassen (anhängen mit Spread, entfernen mit `filter()`) und bei Fehler die Meldung in `error` schreiben. Genau diese immutable Logik ist auch das Herz eines Reducers im Global Store – nur dass wir sie hier direkt in der Methode notieren, ohne Action und Reducer dazwischen.
+An diesen beiden Methoden sieht man das Muster für jede Mutation: zu Beginn eine alte Fehlermeldung zurücksetzen, den HTTP-Request auslösen, bei Erfolg den State immutabel anpassen (anhängen mit Spread, entfernen mit `filter()`) und bei Fehler die Meldung in `error` schreiben. Dieselbe immutable Logik steckt im Global Store in den Reducern – hier notieren wir sie direkt in der Methode, ohne Action und Reducer dazwischen.
 
 ### Reiner Client-State: Favoriten ohne `rxMethod`
 
-Bislang ging es um Zustand, der mit dem Server abgeglichen wird. Echte Anwendungen haben aber auch Zustand, der **nur im Client** lebt und nie zum Server wandert. Im BookManager ist das die Favoriten-Liste: Wer ein Buch mag, markiert es als Favorit – ein reines UI-Feature ohne HTTP-Aufruf.
+Bislang ging es um Zustand, der mit dem Server abgeglichen wird. Echte Anwendungen haben aber auch Zustand, der nur im Client lebt und nie zum Server wandert. Im BookManager ist das die Favoriten-Liste: Wer ein Buch mag, markiert es als Favorit – ein reines UI-Feature ohne HTTP-Aufruf.
 
-Genau hier zeigt sich ein didaktisch wichtiger Punkt: **Synchroner Client-State braucht keinen Seiteneffekt und damit auch kein `rxMethod`.** Wir ergänzen den State um einen Slice `likedBooks: Book[]`, leiten mit `withComputed` die Anzahl ab und ändern die Liste in gewöhnlichen Methoden direkt per `patchState()` – ganz ohne RxJS, ohne `tapResponse`, ohne Flattening-Operator. Das Anlegen dedupliziert dabei anhand der ISBN, damit ein Buch nicht doppelt in den Favoriten landet:
+Synchroner Client-State braucht keinen Seiteneffekt – und damit auch kein `rxMethod`. Wir ergänzen den State um einen Slice `likedBooks: Book[]`, leiten mit `withComputed` die Anzahl ab und ändern die Liste in gewöhnlichen Methoden direkt per `patchState()`; RxJS wird hier nicht benötigt. Das Anlegen dedupliziert dabei anhand der ISBN, damit ein Buch nicht doppelt in den Favoriten landet:
 
 ```ts
 // im State:
@@ -339,13 +339,13 @@ clearLikedBooks(): void {
 }
 ```
 
-Eine Kleinigkeit dürfen wir nicht vergessen: Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es gar nicht mehr gibt. Dazu filtern wir in `deleteBook` zusätzlich die `likedBooks` (zu sehen im vollständigen Beispiel unten).
+Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es nicht mehr gibt. Dazu filtern wir in `deleteBook` zusätzlich die `likedBooks` (zu sehen im vollständigen Beispiel unten).
 
-Der Kontrast zu `loadBooks`, `addBook` und `deleteBook` ist lehrreich: Dort umhüllt `rxMethod` einen asynchronen HTTP-Aufruf, dessen Ausgang wir mit `tapResponse` abwarten. Hier passiert alles synchron im Speicher – eine schlichte Methode mit `patchState()` genügt. Eine Store-Methode muss eben *nicht* reaktiv sein; sie wird es nur dort, wo tatsächlich ein Seiteneffekt im Spiel ist.
+Bei `loadBooks`, `addBook` und `deleteBook` umhüllt `rxMethod` einen asynchronen HTTP-Aufruf, dessen Ausgang wir mit `tapResponse` abwarten. Hier passiert alles synchron im Speicher: Eine Methode mit `patchState()` genügt. Eine Store-Methode muss also nur dann reaktiv sein, wenn tatsächlich ein Seiteneffekt ausgeführt wird.
 
 ### Das vollständige Beispiel
 
-Setzen wir alle Bausteine zusammen, ergibt sich der komplette, kopierbare `BookSignalStore`. Über `withHooks()` lädt er seine Daten beim ersten Verwenden gleich selbst (`onInit`), sodass die Komponente nur noch liest und Aktionen auslöst:
+Setzen wir alle Bausteine zusammen, ergibt sich der vollständige `BookSignalStore`. Über `withHooks()` lädt er seine Daten beim ersten Verwenden gleich selbst (`onInit`), sodass die Komponente nur noch liest und Aktionen auslöst:
 
 ```ts
 // books/book.store.ts
@@ -464,11 +464,11 @@ export const BookSignalStore = signalStore(
 );
 ```
 
-Das ist der gesamte State-Management-Code für das Feature – eine Datei, ohne Actions, Reducer, Selektoren-Dateien oder Effects-Klassen. Sie umfasst das Laden, Anlegen und Löschen der Bücher sowie die Favoriten als reinen Client-State.
+Der gesamte State-Management-Code für das Feature liegt damit in einer einzigen Datei. Sie umfasst das Laden, Anlegen und Löschen der Bücher sowie die Favoriten als reinen Client-State.
 
 ### Die Komponenten: lesen und Aktionen auslösen
 
-Für die Oberfläche teilen wir die Verantwortung wie üblich in eine **smarte** und eine **präsentationale** Komponente auf. Die smarte `BooksOverview` injiziert den Store und ist bemerkenswert schlank: Da der Store sich über `onInit` selbst lädt und seine Methoden direkt im Template aufgerufen werden können, bleibt nur das Anlege-Formular als eigene Methode übrig. Weil ein `Book` mehrere Pflichtfelder hat (`authors`, `description`, `imageUrl`, `createdAt`), nutzen wir – wie in Teil 2 – eine Factory `newBook()` neben dem Modell, die sinnvolle Defaults ergänzt, damit die echte API den POST akzeptiert:
+Für die Oberfläche teilen wir die Verantwortung wie üblich in eine **smarte** und eine **präsentationale** Komponente auf. Die smarte `BooksOverview` injiziert den Store. Da der Store sich über `onInit` selbst lädt und seine Methoden direkt im Template aufgerufen werden können, bleibt nur das Anlege-Formular als eigene Methode übrig. Weil ein `Book` mehrere Pflichtfelder hat (`authors`, `description`, `imageUrl`, `createdAt`), nutzen wir – wie in Teil 2 – eine Factory `newBook()` neben dem Modell, die sinnvolle Defaults ergänzt, damit die echte API den POST akzeptiert:
 
 ```ts
 // books/books-overview/books-overview.ts
@@ -543,7 +543,7 @@ Im Template lesen wir die Signale und lösen über Events die Methoden aus. Es g
 </section>
 ```
 
-Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Anlegen die Felder leert – so bleibt der Fokus auf dem SignalStore. Auffällig ist der Unterschied zu Teil 2: Die Outputs der Karte und die Buttons rufen die Store-Methoden **direkt** auf (`store.likeBook($event)`), ganz ohne Durchreich-Methoden in der Komponente – der Store *ist* hier die API der Komponente.
+Die Eingabefelder reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Anlegen die Felder leert – so bleibt der Fokus auf dem SignalStore. Anders als in Teil 2 rufen die Outputs der Karte und die Buttons die Store-Methoden direkt auf (`store.likeBook($event)`), ohne Durchreich-Methoden in der Komponente: Der Store übernimmt hier die Rolle der Komponenten-API.
 
 Die einzelne Buchkarte ist eine rein **präsentationale** Komponente: Sie kennt den Store gar nicht, sondern bekommt das Buch über ein `input` und meldet Nutzeraktionen über `output`s zurück nach oben:
 
@@ -664,7 +664,7 @@ Die Entity-Updater automatisieren also exakt die immutablen Operationen, die wir
 
 ### Wiederverwendbare Bausteine: `signalStoreFeature`
 
-Ein besonders elegantes Konzept sind eigene Features. Mit `signalStoreFeature()` bündeln wir State, computed Signals und Methoden zu einem wiederverwendbaren Baustein – etwa einem Lade-Status, den viele Stores brauchen:
+Mit `signalStoreFeature()` können wir eigene Features definieren: Es bündelt State, computed Signals und Methoden zu einem wiederverwendbaren Baustein – etwa einem Lade-Status, den viele Stores brauchen:
 
 ```ts
 import { computed } from '@angular/core';
@@ -682,7 +682,7 @@ export function withRequestStatus() {
 }
 ```
 
-Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `signalStore(withEntities<Book>(), withRequestStatus())`. Eine derart bequeme, geschlossene Wiederverwendung quer über Stores hinweg bietet der Global Store nicht.
+Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `signalStore(withEntities<Book>(), withRequestStatus())`. Eine vergleichbare Wiederverwendung über mehrere Stores hinweg bietet der Global Store nicht.
 
 ### Testing
 
@@ -776,7 +776,7 @@ describe('BookStore (HTTP)', () => {
 
 ### Was ist mit den Redux DevTools?
 
-Ein ehrlicher Punkt zum Abschluss der Vorstellung: Für den SignalStore gibt es **keine offizielle Anbindung an die Redux DevTools** und damit auch kein eingebautes Time Travel Debugging wie in Teil 2. Die Angular DevTools sollen Signals künftig unterstützen; bis dahin bietet das Community-Paket `@angular-architects/ngrx-toolkit` ein Feature `withDevtools()` an.
+Für den SignalStore gibt es keine offizielle Anbindung an die Redux DevTools und damit auch kein eingebautes Time Travel Debugging wie in Teil 2. Die Angular DevTools sollen Signals künftig unterstützen; bis dahin bietet das Community-Paket `@angular-architects/ngrx-toolkit` ein Feature `withDevtools()` an.
 
 Wer den klaren, ereignisbasierten Datenfluss des Redux-Patterns auch mit dem SignalStore möchte, kann das **Events-Plugin** nutzen (`@ngrx/signals/events`, seit NgRx 19.2). Es ergänzt den SignalStore um Events, Reducer und Effects und stellt so einen unidirektionalen Fluss im Stil von Redux her – die beiden Welten lassen sich also annähern.
 
@@ -798,19 +798,19 @@ Beide Bausteine stammen aus dem NgRx-Projekt und lösen dieselbe Aufgabe, setzen
 | DevTools / Time Travel | ja (Redux DevTools) | nicht offiziell (Angular DevTools / Community) |
 | Erzwungener unidirektionaler Fluss | ja | optional (Events-Plugin) |
 
-Der entscheidende Gegensatz: Der Global Store erkauft sich mit *mehr Code* *mehr Struktur und Nachvollziehbarkeit*. Der SignalStore bekommt für *weniger Struktur* *deutlich weniger Code und mehr Flexibilität* – insbesondere die Möglichkeit, Zustand lokal zu halten.
+Der Global Store bietet mehr Struktur und Nachvollziehbarkeit, erfordert dafür aber mehr Code. Der SignalStore kommt mit weniger Code aus und ist flexibler – insbesondere kann er Zustand lokal halten.
 
 ## Fazit: Wann was?
 
 SignalStore und Global Store sind keine Konkurrenten, die einander ablösen – sie decken unterschiedliche Bedürfnisse ab.
 
-**Der SignalStore ist heute für die meisten Fälle die naheliegende erste Wahl.** Er ist signal-nativ, kommt mit wenig Code aus, lässt sich lokal wie global einsetzen und ist leicht zu testen. Für komponenten- oder feature-lokalen Zustand, für überschaubare Anwendungen und überall dort, wo der volle Redux-Apparat zu schwer wäre, ist er ideal.
+Der SignalStore ist heute für die meisten Fälle die naheliegende erste Wahl. Er ist signal-nativ, kommt mit wenig Code aus, lässt sich lokal wie global einsetzen und ist leicht zu testen. Für komponenten- oder feature-lokalen Zustand, für überschaubare Anwendungen und überall dort, wo der volle Redux-Apparat zu schwer wäre, ist er ideal.
 
-**Der Global Store lohnt sich, wenn die Stärken des Redux-Patterns wirklich gebraucht werden:** ein großer, von vielen Stellen geteilter und komplex verwobener Anwendungszustand, ein strikt nachvollziehbarer, auditierbarer Datenfluss und der Komfort der Redux DevTools mit Time Travel. In großen Anwendungen und Teams kann die strenge, einheitliche Struktur ein echter Vorteil sein – genau die Investition, die wir in Teil 2 beschrieben haben.
+Der Global Store lohnt sich, wenn die Stärken des Redux-Patterns wirklich gebraucht werden: ein großer, von vielen Stellen geteilter und komplex verwobener Anwendungszustand, ein strikt nachvollziehbarer Datenfluss und der Komfort der Redux DevTools mit Time Travel. In großen Anwendungen und Teams kann die strenge, einheitliche Struktur ein echter Vorteil sein – genau die Investition, die wir in Teil 2 beschrieben haben.
 
-Eine gute Faustregel: **Wir beginnen mit dem SignalStore und greifen zum Global Store, wenn die Anwendung dessen Struktur und Werkzeuge tatsächlich erfordert.** Beide Ansätze lassen sich in einer Anwendung auch kombinieren – und mit dem Events-Plugin nähert sich der SignalStore bei Bedarf sogar dem Redux-Stil an.
+Eine gute Faustregel: Wir beginnen mit dem SignalStore und greifen zum Global Store, wenn die Anwendung dessen Struktur und Werkzeuge tatsächlich erfordert. Beide Ansätze lassen sich in einer Anwendung auch kombinieren – und mit dem Events-Plugin nähert sich der SignalStore bei Bedarf sogar dem Redux-Stil an.
 
-Damit schließen wir unsere dreiteilige Reise durch das State Management mit NgRx ab: vom selbst hergeleiteten Modell in [Teil 1](/material/ngrx-intro) über den klassischen [Global Store](/material/ngrx-global-store) bis zum modernen SignalStore. Welcher Weg der richtige ist, entscheidet am Ende die konkrete Anwendung – und mit beiden Werkzeugen im Gepäck treffen wir diese Entscheidung fundiert.
+Damit ist unsere dreiteilige Serie zum State Management mit NgRx abgeschlossen: vom selbst entwickelten Modell in [Teil 1](/material/ngrx-intro) über den klassischen [Global Store](/material/ngrx-global-store) bis zum SignalStore. Welcher Ansatz der richtige ist, hängt von der konkreten Anwendung ab – und mit beiden Werkzeugen können wir diese Entscheidung bewusst treffen.
 
 ---
 

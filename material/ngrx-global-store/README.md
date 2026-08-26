@@ -19,7 +19,7 @@ Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentra
 
 ## NgRx: Reactive State for Angular
 
-Das Framework *Reactive State for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` integriert es sich außerdem nahtlos in die signal-basierte Welt von modernem Angular. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
+Das Framework *Reactive State for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` können wir Daten aus dem Store außerdem direkt als Signals beziehen. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
 
 Wir wollen in diesem Abschnitt die Struktur und die Bausteine in der Welt von NgRx genauer besprechen. Außerdem wollen wir im BookManager einen Aspekt mithilfe von NgRx umsetzen, um so alle Bausteine auch praktisch zu üben.
 
@@ -420,7 +420,7 @@ export const selectAllBooks = createSelector(
 );
 ```
 
-Diese Selektoren lesen wir nun in der `BooksOverview` aus. Der Store stellt dafür die Methode `selectSignal()` bereit: Sie erwartet einen Selektor und liefert ein **Signal** des ausgewählten State-Slice zurück. Im Gegensatz zur Methode `select()`, die ein Observable liefert, erhalten wir mit `selectSignal()` direkt ein Signal – das passt nahtlos in die signal-basierte Welt von modernem Angular und wir benötigen im Template keine `AsyncPipe`.
+Diese Selektoren lesen wir nun in der `BooksOverview` aus. Der Store stellt dafür die Methode `selectSignal()` bereit: Sie erwartet einen Selektor und liefert ein **Signal** des ausgewählten State-Slice zurück. Im Gegensatz zur Methode `select()`, die ein Observable liefert, erhalten wir mit `selectSignal()` direkt ein Signal – so benötigen wir im Template keine `AsyncPipe`.
 
 Das resultierende Signal aktualisiert sich nur dann, wenn sich der selektierte Wert tatsächlich verändert hat. Obwohl der Store bei *jeder* Änderung den gesamten State neu erzeugt, gibt unser `loading`-Signal also nur dann einen neuen Wert aus, wenn sich das `loading`-Flag wirklich geändert hat. Die folgende Abbildung veranschaulicht das:
 
@@ -656,9 +656,9 @@ export const deleteBookSuccess = createAction('[Book] Delete Book Success', prop
 export const deleteBookFailure = createAction('[Book] Delete Book Failure', props<{ error: string }>());
 ```
 
-Schon an dieser Liste zeigt sich der Preis des Patterns: Zwei Operationen ergeben sechs zusätzliche Actions. (Kompakter notieren lässt sich das mit `createActionGroup()`, siehe Abschnitt "Wie geht's weiter?".)
+Für zwei Operationen benötigen wir also sechs zusätzliche Actions. (Kompakter notieren lässt sich das mit `createActionGroup()`, siehe Abschnitt "Wie geht's weiter?".)
 
-**Effects.** Jede Mutation löst einen HTTP-Request aus. Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei **schreibenden** Operationen wollen wir laufende Requests aber *nicht* abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl. Der `BookStore` bietet dazu die Methoden `create()` und `remove()` an:
+**Effects.** Jede Mutation löst einen HTTP-Request aus. Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei schreibenden Operationen wollen wir laufende Requests aber nicht abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl. Der `BookStore` bietet dazu die Methoden `create()` und `remove()` an:
 
 ```ts
 // books/store/book.effects.ts (Ergänzung in der Klasse BookEffects)
@@ -730,7 +730,7 @@ export const selectBooksError = createSelector(
 );
 ```
 
-Damit Nutzerinnen und Nutzer eine Fehlermeldung auch aktiv wegklicken können, ergänzen wir eine schlanke `clearError`-Action und behandeln sie im Reducer:
+Damit Nutzerinnen und Nutzer eine Fehlermeldung auch aktiv wegklicken können, ergänzen wir eine `clearError`-Action und behandeln sie im Reducer:
 
 ```ts
 // books/store/book.actions.ts
@@ -740,7 +740,7 @@ export const clearError = createAction('[Book] Clear Error');
 on(BookActions.clearError, (state): State => ({ ...state, error: null }))
 ```
 
-**Smarte und präsentationale Komponente.** Wir teilen die Oberfläche in zwei Komponenten auf: eine smarte Komponente `BooksOverview`, die den Store kennt und Actions dispatcht, und eine präsentationale Komponente `BookCard`, die nur ein einzelnes Buch darstellt und über Outputs meldet, was Nutzerinnen und Nutzer tun möchten. Diese Trennung hält die Darstellung frei von NgRx und macht die Karte beliebig wiederverwendbar.
+**Smarte und präsentationale Komponente.** Wir teilen die Oberfläche in zwei Komponenten auf: eine smarte Komponente `BooksOverview`, die den Store kennt und Actions dispatcht, und eine präsentationale Komponente `BookCard`, die nur ein einzelnes Buch darstellt und über Outputs meldet, was Nutzerinnen und Nutzer tun möchten. Diese Trennung hält die Darstellung frei von NgRx und macht die Karte wiederverwendbar.
 
 Die smarte Komponente `BooksOverview` bezieht alle benötigten Daten als Signale aus dem Store und stößt im Konstruktor das Laden an. Die Eingabefelder des Anlege-Formulars reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Dispatch die Felder leert – so bleibt der Fokus auf NgRx.
 
@@ -896,7 +896,7 @@ Damit haben wir ein vollständiges CRUD-Feature für Anlegen und Löschen. Für 
 
 ### Favoriten: Client-State ohne Seiteneffekt
 
-Nicht jeder Zustand muss über das Netzwerk wandern. Im BookManager können Nutzerinnen und Nutzer Bücher als Favoriten markieren. Diese Markierung lebt nur im Browser – wir schicken sie nicht an den Server. In der Welt von NgRx ist das ein lehrreicher Kontrast: Das Laden, Anlegen und Löschen sind **Server-State** und laufen über Effects. Die Favoriten sind dagegen reiner **Client-State** und kommen ganz ohne Effect aus. Wir dispatchen eine Action, der Reducer passt den State an – fertig.
+Nicht jeder Zustand muss über das Netzwerk wandern. Im BookManager können Nutzerinnen und Nutzer Bücher als Favoriten markieren. Diese Markierung lebt nur im Browser – wir schicken sie nicht an den Server. Damit unterscheiden sich die Favoriten grundlegend von den bisherigen Operationen: Laden, Anlegen und Löschen sind *Server-State* und laufen über Effects. Die Favoriten sind reiner *Client-State* und kommen ohne Effect aus. Wir dispatchen eine Action, und der Reducer passt den State an.
 
 **Actions.** Wir brauchen kein Trio aus Auslöser, Erfolg und Fehler, denn es gibt keinen asynchronen Vorgang, der fehlschlagen könnte. Eine Action zum Hinzufügen und eine zum Leeren genügen:
 
@@ -925,7 +925,7 @@ export const initialState: State = {
 };
 ```
 
-Im Reducer fügen wir ein Buch hinzu, sofern es nicht schon in der Liste steht. Die Deduplizierung anhand der ISBN ist hier nicht nur fachlich sinnvoll, sondern auch ein schönes Beispiel für eine Pure Function: Ist das Buch bereits ein Favorit, geben wir den **unveränderten** State zurück (dieselbe Referenz). So entsteht kein neuer State und nachgelagerte Selektoren bzw. die Oberfläche aktualisieren sich nicht unnötig. Das Leeren setzt die Liste auf ein leeres Array:
+Im Reducer fügen wir ein Buch hinzu, sofern es nicht schon in der Liste steht. Die Deduplizierung anhand der ISBN hat einen praktischen Nebeneffekt: Ist das Buch bereits ein Favorit, geben wir den unveränderten State zurück (dieselbe Referenz). So aktualisieren sich nachgelagerte Selektoren und die Oberfläche nicht unnötig. Das Leeren setzt die Liste auf ein leeres Array:
 
 ```ts
 // books/store/book.reducer.ts (Ergänzung in createReducer)
@@ -937,7 +937,7 @@ on(BookActions.likeBook, (state, action): State =>
 on(BookActions.clearLikedBooks, (state): State => ({ ...state, likedBooks: [] }))
 ```
 
-Eine Kleinigkeit dürfen wir nicht vergessen: Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es gar nicht mehr gibt. Dazu erweitern wir den bestehenden Reducer für `deleteBookSuccess`:
+Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es nicht mehr gibt. Dazu erweitern wir den bestehenden Reducer für `deleteBookSuccess`:
 
 ```ts
 // books/store/book.reducer.ts (angepasst)
@@ -948,7 +948,7 @@ on(BookActions.deleteBookSuccess, (state, action): State => ({
 })),
 ```
 
-Es ist bemerkenswert, was im Favoriten-Code **nicht** steht: Es gibt keinen Effect. Während `loadBooks`, `createBook` und `deleteBook` jeweils einen Effect benötigen, um mit dem `BookStore` zu sprechen, wandert die Favoriten-Action direkt vom Dispatch in den Reducer. Genau hier liegt die Grenze zwischen Server-State und Client-State: Ein Effect ist nur dann nötig, wenn ein Seiteneffekt auszuführen ist.
+Für die Favoriten gibt es keinen Effect: Während `loadBooks`, `createBook` und `deleteBook` jeweils einen Effect benötigen, um mit dem `BookStore` zu sprechen, wandert die Favoriten-Action direkt vom Dispatch in den Reducer. Ein Effect ist nur dann nötig, wenn ein Seiteneffekt auszuführen ist.
 
 **Selektor.** Zum Auslesen ergänzen wir einen Selektor `selectLikedBooks`:
 
@@ -992,7 +992,7 @@ Im Template ergänzen wir eine Favoriten-Sektion oberhalb der Buchliste:
 </section>
 ```
 
-Markiert nun jemand über die `BookCard` ein Buch als Favorit, so feuert deren `like`-Output, die `BooksOverview` dispatcht `likeBook`, und der Reducer pflegt die Liste – ohne dass ein einziger HTTP-Request entsteht.
+Markiert nun jemand über die `BookCard` ein Buch als Favorit, so feuert deren `like`-Output, die `BooksOverview` dispatcht `likeBook`, und der Reducer pflegt die Liste. Ein HTTP-Request entsteht dabei nicht.
 
 ### Geschafft!
 
@@ -1337,13 +1337,13 @@ describe('Book Reducer', () => {
 });
 ```
 
-Besonders schön zeigt sich hier die Reinheit der Funktion: Der Test zu `createBookSuccess` prüft, dass das ursprüngliche State-Objekt unverändert bleibt, und der Test zu `likeBook` stellt sicher, dass der Reducer bei einem bereits vorhandenen Favoriten *dieselbe* Referenz zurückgibt.
+Die beiden letzten Tests nutzen die Reinheit der Funktion aus: Der Test zu `createBookSuccess` prüft, dass das ursprüngliche State-Objekt unverändert bleibt, und der Test zu `likeBook` stellt sicher, dass der Reducer bei einem bereits vorhandenen Favoriten dieselbe Referenz zurückgibt.
 
 #### Selektoren
 
 Zum Testen von Selektoren gibt es verschiedene Herangehensweisen. Auch wenn ein Selektor mithilfe von `createSelector()` erstellt wurde, so ist er weiterhin nur eine Funktion, die den State als Argument erhält und Berechnungen über die Daten ausführt. Wir können also auch Selektoren isoliert testen, ohne dass wir einen Store oder das Angular-Framework benötigen. Dazu erstellen wir im Test ein State-Objekt, das alle benötigten Daten enthält. Wir wenden den Selektor darauf an und prüfen das Ergebnis. Wichtig ist, dass wir in diesem Stub stets die Struktur des Root-States abbilden, denn der ist ja auch der Ausgangspunkt eines jeden Selektors.
 
-Die Hilfsfunktion `b()` haben wir uns weiter oben definiert. Wichtig ist, dass wir im Stub stets die Struktur des Root-States abbilden – der Feature-State liegt unter dem Feature-Key `book`:
+Die Hilfsfunktion `b()` haben wir uns weiter oben definiert. Der Feature-State liegt im Stub unter dem Feature-Key `book`:
 
 ```ts
 // books/store/book.selectors.spec.ts
