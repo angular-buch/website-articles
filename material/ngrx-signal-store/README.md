@@ -1,8 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 3: SignalStore"
-published: "2026-06-11"
-lastModified: "2026-08-26"
-hidden: true
+published: "2026-09-01"
+lastModified: "2026-09-01"
 ---
 
 **Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
@@ -38,7 +37,7 @@ Kurz gesagt: Der Global Store ist *ein* großes, strenges System. Der SignalStor
 
 Schauen wir uns die Bausteine konkret an. Als durchgehendes Beispiel verwenden wir wieder den BookManager. Wir bauen Schritt für Schritt einen vollständigen Store, der die Buchliste vom Server lädt **und** Bücher anlegen und löschen kann – inklusive Lade- und Fehleranzeige. So lässt sich der direkte Vergleich zum Global Store aus Teil 2 ziehen.
 
-Ein Hinweis zur Benennung: Im BookManager kümmert sich – wie schon in Teil 2 – ein Datenservice um die HTTP-Aufrufe gegen die API. Dieser Service heißt `BookStore` und liegt in `shared/book-store.ts`. Den SignalStore, den wir gleich aufbauen, nennen wir deshalb zur klaren Abgrenzung `BookSignalStore` (Datei `book.store.ts`). Der `BookSignalStore` verwaltet den Zustand und ruft für den Datenzugriff den `BookStore`-Service auf.
+Ein Hinweis zur Benennung: Im BookManager kümmert sich – wie schon in Teil 2 – ein Datenservice um die HTTP-Aufrufe gegen die API. Dieser Service heißt `BookStore` und liegt in `shared/book-store.ts`. Den SignalStore, den wir gleich aufbauen, nennen wir deshalb zur klaren Abgrenzung `BookSignalStore` (Datei `book-signal-store.ts`). Der `BookSignalStore` verwaltet den Zustand und ruft für den Datenzugriff den `BookStore`-Service auf.
 
 ### Installation
 
@@ -68,7 +67,7 @@ Einen SignalStore erzeugen wir mit der Funktion `signalStore()`. Sie nimmt eine 
 Unser State umfasst die Buchliste, ein `loading`-Flag für den Ladeindikator und ein `error`-Feld, in dem wir Fehlermeldungen für die Oberfläche ablegen:
 
 ```ts
-// books/book.store.ts
+// books/book-signal-store.ts
 import { signalStore, withState } from '@ngrx/signals';
 import { Book } from '../shared/book';
 
@@ -121,7 +120,7 @@ Auch eine **Route** kann den Store bereitstellen – ideal für ein lazy geladen
 ```ts
 // books/books.routes.ts
 import { Routes } from '@angular/router';
-import { BookSignalStore } from './book.store';
+import { BookSignalStore } from './book-signal-store';
 
 export const booksRoutes: Routes = [
   {
@@ -341,6 +340,8 @@ clearLikedBooks(): void {
 
 Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es nicht mehr gibt. Dazu filtern wir in `deleteBook` zusätzlich die `likedBooks` (zu sehen im vollständigen Beispiel unten).
 
+Wie in Teil 2 leben die Favoriten nur im Speicher der laufenden Anwendung – nach einem Neuladen der Seite sind sie verloren. Für eine echte Anwendung müssten wir die Liste zusätzlich persistieren, etwa im `localStorage` oder über die API. Diese Erweiterung eignet sich gut als Übung.
+
 Bei `loadBooks`, `addBook` und `deleteBook` umhüllt `rxMethod` einen asynchronen HTTP-Aufruf, dessen Ausgang wir mit `tapResponse` abwarten. Hier passiert alles synchron im Speicher: Eine Methode mit `patchState()` genügt. Eine Store-Methode muss also nur dann reaktiv sein, wenn tatsächlich ein Seiteneffekt ausgeführt wird.
 
 ### Das vollständige Beispiel
@@ -348,7 +349,7 @@ Bei `loadBooks`, `addBook` und `deleteBook` umhüllt `rxMethod` einen asynchrone
 Setzen wir alle Bausteine zusammen, ergibt sich der vollständige `BookSignalStore`. Über `withHooks()` lädt er seine Daten beim ersten Verwenden gleich selbst (`onInit`), sodass die Komponente nur noch liest und Aktionen auslöst:
 
 ```ts
-// books/book.store.ts
+// books/book-signal-store.ts
 import { computed, inject } from '@angular/core';
 import { concatMap, pipe, switchMap, tap } from 'rxjs';
 import {
@@ -475,7 +476,7 @@ Für die Oberfläche teilen wir die Verantwortung wie üblich in eine **smarte**
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { newBook } from '../../shared/book';
-import { BookSignalStore } from '../book.store';
+import { BookSignalStore } from '../book-signal-store';
 import { BookCard } from '../book-card/book-card';
 
 @Component({
@@ -603,7 +604,7 @@ Die immutablen Array-Operationen aus unseren Methoden (`[...state.books, created
 Standardmäßig erwartet `withEntities` ein Property `id`. Da ein Buch im BookManager über seine `isbn` identifiziert wird, geben wir – wie schon bei `@ngrx/entity` – einen eigenen ID-Selektor an. Bei `add*`-, `set*`- und `update*`-Updatern übergeben wir ihn als zweites Argument; die `remove*`-Updater brauchen keinen ID-Selektor, denn sie erhalten die ID direkt als Argument:
 
 ```ts
-// books/book.store.ts (Entity-Variante)
+// books/book-signal-store.ts (Entity-Variante)
 import { inject } from '@angular/core';
 import { concatMap, pipe, switchMap } from 'rxjs';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
@@ -689,11 +690,11 @@ Dieses Feature lässt sich anschließend in beliebig vielen Stores einsetzen: `s
 Da ein SignalStore ein gewöhnlicher Service ist, testen wir ihn auch wie einen Service: Instanz beziehen, Methoden aufrufen, Signale auslesen. Ein vollständiges Store-Setup wie beim Global Store ist nicht nötig. Den `BookStore`-Service ersetzen wir wie gewohnt per `{ provide: BookStore, useValue: … }` durch ein Mock mit `Observable`-Rückgaben. Weil unser `BookSignalStore` sich über `onInit` beim Injizieren selbst lädt, müssen wir `loadBooks()` im Test nicht eigens aufrufen:
 
 ```ts
-// books/book.store.spec.ts
+// books/book-signal-store.spec.ts
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
-import { BookSignalStore } from './book.store';
+import { BookSignalStore } from './book-signal-store';
 import { BookStore } from '../shared/book-store';
 // b() erzeugt vollständige Buch-Testdaten – eine kleine Factory,
 // die wir für alle Spec-Dateien in testing/book-factory.ts ablegen

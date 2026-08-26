@@ -9,7 +9,7 @@ Sie zeigt den kompletten `BookSignalStore` aus dem Artikel in Aktion: Buchliste 
 
 > **Hinweis:** Die API ist eine öffentliche, geteilte Instanz – angelegte und gelöschte Bücher sehen also auch andere. Die Unit-Tests sprechen die API nicht an (`HttpTestingController` bzw. Service-Mocks).
 
-> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookManager (Feature-Ordner `books/…`); die Demo liegt dagegen flach unter `src/app/…`. Klassen-, Datei- und Selektornamen folgen in beiden Fällen denselben Angular-Konventionen (keine `.component`/`.service`-Suffixe).
+> **Projektstruktur:** Diese Demo ist eine abgeflachte Minimal-Reproduktion. Der Artikel beschreibt die Integration in den vollständigen BookManager (Feature-Ordner `books/…`); die Demo liegt dagegen flach unter `src/app/…` (SignalStore: `src/app/book-signal-store.ts`). Klassen-, Datei- und Selektornamen folgen in beiden Fällen denselben Angular-Konventionen (keine `.component`/`.service`-Suffixe).
 
 ## Befehle
 

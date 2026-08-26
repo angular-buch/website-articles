@@ -1,8 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 1: Wie kommen wir zu zentralem State Management?"
-published: "2026-06-11"
-lastModified: "2026-08-26"
-hidden: true
+published: "2026-09-01"
+lastModified: "2026-09-01"
 ---
 
 **Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
@@ -329,16 +328,9 @@ Bringt man diese Bausteine in den Kontext des einführenden Beispiels, so entspr
 
 ### Redux und Angular
 
-Die originale Implementierung von Redux stammt aus der Welt von React. Alle enthaltenen Ideen können aber problemlos auch auf die Architektur einer Angular-Anwendung übertragen werden. Es existieren verschiedene Frameworks und Bibliotheken, die ein zentrales State Management für Angular ermöglichen. Sie alle folgen der grundsätzlichen Idee von Redux:
+Die originale Implementierung von Redux stammt aus der Welt von React. Alle enthaltenen Ideen können aber problemlos auch auf die Architektur einer Angular-Anwendung übertragen werden. Für Angular hat sich dabei *Reactive State for Angular (NgRx)* als De-facto-Standard etabliert: Das Framework wurde von Mitgliedern des Angular-Teams aktiv mitentwickelt und ist das bekannteste Projekt in dieser Kategorie. Als aktiv gepflegte Alternative lohnt sich ein Blick auf das Community-Projekt [NGXS](https://www.ngxs.io/), das ebenfalls der Redux-Idee folgt.
 
-- Reactive State for Angular (NgRx)
-- NGXS
-- Akita
-- Elf
-
-NgRx ist das bekannteste Projekt aus dieser Kategorie. Das Framework wurde von Mitgliedern des Angular-Teams aktiv mitentwickelt und gilt als De-facto-Standard für zentrales State Management mit Angular. Es lohnt sich außerdem, einen Blick auf die Community-Projekte NGXS und Elf zu werfen.
-
-Welches der Frameworks wir für die Zustandsverwaltung einsetzen, hängt von den konkreten Anforderungen und auch von persönlichen Präferenzen ab. Wir sollten alle Projekte vergleichen und unseren Favoriten nach Kriterien wie Codestruktur und Features auswählen. Dazu möchten wir einen Blogartikel empfehlen, in dem NgRx, NGXS, Akita und eine eigene Lösung mit RxJS gegenübergestellt werden: [Angular state management comparison](https://blog.ordina-jworks.io/angular/2018/10/08/angular-state-management-comparison.html).
+Welches Framework wir für die Zustandsverwaltung einsetzen, hängt von den konkreten Anforderungen und auch von persönlichen Präferenzen ab. In dieser Serie konzentrieren wir uns auf NgRx.
 
 ---
 

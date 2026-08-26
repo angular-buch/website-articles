@@ -1,8 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 2: Global Store mit NgRx"
-published: "2026-06-11"
-lastModified: "2026-08-26"
-hidden: true
+published: "2026-09-01"
+lastModified: "2026-09-01"
 ---
 
 **Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
@@ -993,6 +992,8 @@ Im Template ergänzen wir eine Favoriten-Sektion oberhalb der Buchliste:
 ```
 
 Markiert nun jemand über die `BookCard` ein Buch als Favorit, so feuert deren `like`-Output, die `BooksOverview` dispatcht `likeBook`, und der Reducer pflegt die Liste. Ein HTTP-Request entsteht dabei nicht.
+
+Die Favoriten leben damit nur im Speicher der laufenden Anwendung – nach einem Neuladen der Seite sind sie verloren. Für eine echte Anwendung müssten wir die Liste zusätzlich persistieren, etwa im `localStorage` oder über die API. Diese Erweiterung eignet sich gut als Übung.
 
 ### Geschafft!
 

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of, Subject, throwError } from 'rxjs';
 
-import { BookSignalStore } from './book.store';
+import { BookSignalStore } from './book-signal-store';
 import { BookStore } from './shared/book-store';
 import { Book } from './shared/book';
 import { b } from './testing/book-factory';

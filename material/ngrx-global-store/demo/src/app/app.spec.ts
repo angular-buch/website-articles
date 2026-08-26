@@ -1,31 +1,28 @@
 import { TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
+import { provideRouter, Router } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 
 import { App } from './app';
-import {
-  selectAllBooks,
-  selectBooksError,
-  selectBooksLoading,
-  selectLikedBooks
-} from './store/book.selectors';
+import { booksRoutes } from './books.routes';
 
 describe('App', () => {
-  it('erzeugt die App und zeigt die Bücher-Übersicht an', async () => {
+  it('erzeugt die App und zeigt die Bücher-Übersicht über den Router an', async () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
-        provideMockStore({
-          selectors: [
-            { selector: selectAllBooks, value: [] },
-            { selector: selectLikedBooks, value: [] },
-            { selector: selectBooksLoading, value: false },
-            { selector: selectBooksError, value: null }
-          ]
-        })
+        provideRouter(booksRoutes),
+        provideStore(),
+        provideEffects(),
+        provideHttpClient(),
+        provideHttpClientTesting()
       ]
     }).compileComponents();
 
     const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/');
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('app-books-overview')).toBeTruthy();

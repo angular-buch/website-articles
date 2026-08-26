@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { newBook } from '../shared/book';
-import { BookSignalStore } from '../book.store';
+import { BookSignalStore } from '../book-signal-store';
 import { BookCard } from '../book-card/book-card';
 
 @Component({
