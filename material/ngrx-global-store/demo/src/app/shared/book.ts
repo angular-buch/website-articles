@@ -19,7 +19,7 @@ export function newBook(isbn: string, title: string): Book {
     title,
     authors: ['Unbekannt'],
     description: 'Über die Demo angelegt.',
-    imageUrl: 'https://cdn.ng-buch.de/cover-placeholder.png',
+    imageUrl: 'https://cdn.ng-buch.de/kochen.jpg',
     createdAt: new Date().toISOString()
   };
 }

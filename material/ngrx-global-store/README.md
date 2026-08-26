@@ -1,7 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 2: Global Store mit NgRx"
 published: "2026-06-11"
-lastModified: "2026-06-14"
+lastModified: "2026-08-26"
 hidden: true
 ---
 
@@ -576,7 +576,7 @@ export function toMessage(error: unknown): string {
 
 Auf diese Weise erzeugen wir einen Datenstrom, der nacheinander verschiedene Actions ausgeben kann. Die Funktion `createEffect()` sorgt dafür, dass dieser Datenstrom automatisch abonniert wird. Die resultierenden Actions werden in den Store dispatcht und durchlaufen dort die Reducers. In einem Effect sollten wir also niemals selbst die Methode `store.dispatch()` aufrufen.
 
-Bei der Fehlerbehandlung ist es wichtig, den Fehler so dicht wie möglich dort abzufangen, wo er entsteht. Wir setzen `catchError()` deshalb nicht im Hauptdatenstrom ein, sondern hängen `map()` und `catchError()` direkt an den Serviceaufruf an. Das `switchMap()` verarbeitet also ein Observable, das in jedem Fall eine Action liefert – so wird der Hauptdatenstrom nicht durch Fehler gefährdet. Wird ein Effect durch einen Fehler im Hauptdatenstrom gestört, so wird das zugrunde liegende Observable beendet, und der Effect kann danach nicht mehr auf weitere Actions reagieren.
+Bei der Fehlerbehandlung ist es wichtig, den Fehler so dicht wie möglich dort abzufangen, wo er entsteht. Wir setzen `catchError()` deshalb nicht im Hauptdatenstrom ein, sondern hängen `map()` und `catchError()` direkt an den Serviceaufruf an. Das `switchMap()` verarbeitet also ein Observable, das in jedem Fall eine Action liefert – so wird der Hauptdatenstrom nicht durch Fehler gefährdet. Wird ein Effect durch einen Fehler im Hauptdatenstrom gestört, so wird das zugrunde liegende Observable beendet. NgRx abonniert den Effect zwar standardmäßig automatisch neu (bis zu zehnmal), die auslösende Action geht dabei aber verloren – deshalb fangen wir Fehler immer direkt am inneren Observable ab.
 
 Probieren wir die Anwendung nun aus und beobachten wir auch die Actions in den Redux DevTools! Nachdem die Buchliste geladen wurde, wird `loadBooksSuccess` dispatcht, und der Reducer fügt die Buchliste in den State ein. Die Selektoren in der Komponente reagieren darauf, und die Bücher werden dargestellt.
 
@@ -754,7 +754,7 @@ export function newBook(isbn: string, title: string): Book {
     title,
     authors: ['Unbekannt'],
     description: 'Über die Demo angelegt.',
-    imageUrl: 'https://cdn.ng-buch.de/cover-placeholder.png',
+    imageUrl: 'https://cdn.ng-buch.de/kochen.jpg',
     createdAt: new Date().toISOString()
   };
 }
@@ -1227,7 +1227,7 @@ Auf diese Weise können wir die Verwaltung von Entitäten im State sehr effizien
 
 Alle auf Grundlage von NgRx entwickelten Bausteine sollten auch getestet werden. Dafür möchten wir in diesem Abschnitt einige Hinweise geben. Grundsätzlich werden bei der Initialisierung mit den Schematics von NgRx bereits Grundgerüste für die Unit-Tests angelegt – wir können also direkt loslegen.
 
-> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Service, Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; in einem Vitest-Projekt würde man stattdessen `vi.spyOn()` und z. B. das Paket `vitest-marbles` verwenden. Die Beispiel-App selbst vergleicht die Datenströme bewusst direkt (ohne Marbles).
+> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Service, Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; in einem Vitest-Projekt stehen dafür `vi.spyOn()` und der `TestScheduler` aus RxJS bereit. Die Beispiel-App selbst vergleicht die Datenströme direkt (ohne Marbles).
 
 In mehreren Tests benötigen wir Beispielbücher. Dafür definieren wir eine kleine Hilfsfunktion `b()`, die ein vollständiges `Book`-Objekt mit Beispieldaten erzeugt. Sie wandert in eine eigene Datei, damit alle Spec-Dateien dieselbe Factory nutzen:
 
@@ -1447,7 +1447,7 @@ it('createBook$ feuert createBookFailure bei einem Fehler', () => {
 
 > **Funktionale Effects testen:** Funktionale Effects lassen sich noch einfacher prüfen, denn wir können sie direkt als Funktion aufrufen und die benötigten Abhängigkeiten als Argumente übergeben – ganz ohne `TestBed` und `provideMockActions()`. Wir übergeben einfach ein Observable mit den Eingangs-Actions und einen Mock-Service.
 
-Der Aufbau lässt sich auch vereinfachen, wenn wir nur die Datenströme miteinander vergleichen. Dazu eignet sich das Konzept des *Marble Testing*: Anstatt ein Observable wie üblich zu erzeugen und dann darauf zu subscriben, notieren wir den geplanten Datenstrom als Marble-Diagramm direkt im Test und definieren damit die Eingabe und die erwartete Ausgabe. Die technische Grundlage bietet im Jasmine-Umfeld das Paket [jasmine-marbles](https://www.npmjs.com/package/jasmine-marbles); in einem Vitest-Projekt gibt es mit `vitest-marbles` ein passendes Gegenstück. Das folgende Listing zeigt die Technik exemplarisch mit `jasmine-marbles`. Das Projekt stellt auch den Matcher `toBeObservable()` zur Verfügung, mit dem wir in der Expectation direkt gegen das erzeugte Observable prüfen können:
+Der Aufbau lässt sich auch vereinfachen, wenn wir nur die Datenströme miteinander vergleichen. Dazu eignet sich das Konzept des *Marble Testing*: Anstatt ein Observable wie üblich zu erzeugen und dann darauf zu subscriben, notieren wir den geplanten Datenstrom als Marble-Diagramm direkt im Test und definieren damit die Eingabe und die erwartete Ausgabe. Die technische Grundlage bietet im Jasmine-Umfeld das Paket [jasmine-marbles](https://www.npmjs.com/package/jasmine-marbles); unabhängig vom Test-Runner bringt RxJS mit dem `TestScheduler` eine eingebaute Alternative mit. Das folgende Listing zeigt die Technik exemplarisch mit `jasmine-marbles`. Das Projekt stellt auch den Matcher `toBeObservable()` zur Verfügung, mit dem wir in der Expectation direkt gegen das erzeugte Observable prüfen können:
 
 ```ts
 // books/store/book.effects.spec.ts (Marble-Variante, hier mit jasmine-marbles)
@@ -1481,7 +1481,7 @@ Als Beispiel wollen wir den bekannten Effect zum Laden der Bücher so erweitern,
 
 Es ist für dieses Szenario notwendig, dass wir den bestehenden State im Effect berücksichtigen. Dies können wir mit dem Operator `concatLatestFrom()` realisieren: Wir übergeben ein anderes Observable als Argument, und der Operator reichert den Hauptdatenstrom mit dem jeweils letzten Element aus diesem Observable an. Das bedeutet also, dass uns in den Effects neben dem Payload aus den Actions auch zusätzlich Daten aus dem Store zur Verfügung stehen. Wir verwenden hier direkt unseren Selektor `selectAllBooks`, um die aktuelle Buchliste aus dem Store zu erhalten. Anhand der Buchliste können wir dann mit dem Operator `filter()` entscheiden, ob die Bücher neu heruntergeladen werden sollen oder nicht. In Effects arbeiten wir im Observable-Kontext – deshalb nutzen wir hier `store.select()` (liefert ein Observable) und nicht `selectSignal()`.
 
-> **Hinweis:** Seit NgRx 18 importieren wir den Operator `concatLatestFrom()` aus dem Paket `@ngrx/operators`. Zuvor war er Teil von `@ngrx/effects` (dort seit NgRx 17 als veraltet markiert).
+> **Hinweis:** Seit NgRx 18 importieren wir den Operator `concatLatestFrom()` aus dem Paket `@ngrx/operators` (bei Bedarf mit `npm install @ngrx/operators` nachinstallieren). Zuvor war er Teil von `@ngrx/effects` (dort seit NgRx 17 als veraltet markiert).
 
 ```ts
 // books/store/book.effects.ts

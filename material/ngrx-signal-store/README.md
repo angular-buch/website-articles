@@ -1,7 +1,7 @@
 ---
 title: "State Management mit NgRx – Teil 3: SignalStore"
 published: "2026-06-11"
-lastModified: "2026-06-14"
+lastModified: "2026-08-26"
 hidden: true
 ---
 
@@ -776,9 +776,9 @@ describe('BookStore (HTTP)', () => {
 
 ### Was ist mit den Redux DevTools?
 
-Für den SignalStore gibt es keine offizielle Anbindung an die Redux DevTools und damit auch kein eingebautes Time Travel Debugging wie in Teil 2. Die Angular DevTools sollen Signals künftig unterstützen; bis dahin bietet das Community-Paket `@angular-architects/ngrx-toolkit` ein Feature `withDevtools()` an.
+Für den SignalStore gibt es keine offizielle Anbindung an die Redux DevTools und damit auch kein eingebautes Time Travel Debugging wie in Teil 2. Die Angular DevTools enthalten inzwischen einen experimentellen *Signal Graph*, der die Abhängigkeiten zwischen Signals visualisiert. Auf den SignalStore zugeschnittenen Komfort bietet das Community-Paket `@angular-architects/ngrx-toolkit` mit dem Feature `withDevtools()`.
 
-Wer den klaren, ereignisbasierten Datenfluss des Redux-Patterns auch mit dem SignalStore möchte, kann das **Events-Plugin** nutzen (`@ngrx/signals/events`, seit NgRx 19.2). Es ergänzt den SignalStore um Events, Reducer und Effects und stellt so einen unidirektionalen Fluss im Stil von Redux her – die beiden Welten lassen sich also annähern.
+Wer den klaren, ereignisbasierten Datenfluss des Redux-Patterns auch mit dem SignalStore möchte, kann das **Events-Plugin** nutzen (`@ngrx/signals/events`, seit NgRx 19.2). Es ergänzt den SignalStore um Events, Reducer und Event Handler und stellt so einen unidirektionalen Fluss im Stil von Redux her – die beiden Welten lassen sich also annähern.
 
 ## SignalStore und Global Store im Vergleich
 
