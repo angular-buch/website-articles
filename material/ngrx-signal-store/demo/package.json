@@ -15,8 +15,8 @@
     "@angular/compiler": "^22.0.1",
     "@angular/core": "^22.0.1",
     "@angular/platform-browser": "^22.0.1",
-    "@ngrx/operators": "^22.0.0-beta.0",
-    "@ngrx/signals": "^22.0.0-beta.0",
+    "@ngrx/operators": "^22.0.0",
+    "@ngrx/signals": "^22.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
