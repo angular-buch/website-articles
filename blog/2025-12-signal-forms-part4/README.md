@@ -256,7 +256,6 @@ export class FieldAriaAttributes<T> {
 ```
 
 We can now remove our method `ariaInvalidState()` from the `RegistrationForm` component.
-We can now remove our method `ariaInvalidState()` from the `RegistrationForm` component.
 Also we remove the manual bindings for `aria-invalid` from the template of the `RegistrationForm` since this and other attributes will now be applied by our directive which manages four key ARIA attributes:
 
 - **`aria-invalid`**: set to `true` when the field has been touched and contains validation errors.
@@ -304,9 +303,117 @@ The directive ensures that your Signal Forms automatically provide excellent acc
 You may have noticed, we now used our new Directive and Component only in the main `RegistrationForm`.
 Of course we should also update our child component `IdentityForm`.
 
-> **Outlook:** Instead of using a separate `[formFieldAria]` selector, we could also combine both directives using Angular's [Directive Composition API](https://angular.dev/guide/directives/directive-composition-api).
-> With `hostDirectives` in the decorator, the `FieldAriaAttributes` directive could automatically include the `FormField` directive, so only a single binding would be needed in the template.
-> We chose the explicit approach here for clarity, but the Directive Composition API is a great alternative for reducing template verbosity.
+However, there's a downside to this approach: for every form field, we now need to apply two directives and pass the same field reference twice – once for `[formField]` and once for `[formFieldAria]`.
+This is verbose and error-prone, especially in larger forms.
+Let's fix this with a refactoring.
+
+## Refactoring: Using the Directive Composition API
+
+Angular's [Directive Composition API](https://angular.dev/guide/directives/directive-composition-api) allows us to compose multiple directives into one.
+With `hostDirectives` in the decorator, our `FieldAriaAttributes` directive can automatically include the `FormField` directive.
+This way, consumers only need a single binding per input element instead of two.
+
+### Composing `FormField` into `FieldAriaAttributes`
+
+We update the `FieldAriaAttributes` directive to use `hostDirectives`.
+The `FormField` directive is listed in the `hostDirectives` array, and its `formField` input is forwarded.
+We also change the selector to `[formField]`, so it matches the same binding as the original `FormField` directive.
+The input property of our directive is renamed from `formFieldAria` to `formField` accordingly.
+
+```typescript
+// field-aria-attributes.ts
+import { computed, Directive, input } from '@angular/core';
+import { FieldTree, FormField } from '@angular/forms/signals';
+
+@Directive({
+  selector: '[formField]',
+  host: {
+    '[aria-invalid]': 'ariaInvalid()',
+    '[aria-busy]': 'ariaBusy()',
+    '[aria-describedby]': 'ariaDescribedBy()',
+    '[aria-errormessage]': 'ariaErrorMessage()',
+  },
+  hostDirectives: [
+    { directive: FormField, inputs: ['formField'] }
+  ]
+})
+export class FieldAriaAttributes<T> {
+  readonly formField = input.required<FieldTree<T>>();
+  readonly fieldDescriptionId = input<string>();
+
+  readonly ariaInvalid = computed(() => {
+    const state = this.formField()();
+    return state.touched() && !state.pending() ? state.errors().length > 0 : undefined;
+  });
+
+  readonly ariaBusy = computed(() => {
+    const state = this.formField()();
+    return state.pending();
+  });
+
+  readonly ariaDescribedBy = computed(() => {
+    const id = this.fieldDescriptionId();
+    return !id || this.ariaInvalid() ? null : id;
+  });
+
+  readonly ariaErrorMessage = computed(() => {
+    const id = this.fieldDescriptionId();
+    return !id || !this.ariaInvalid() ? null : id;
+  });
+}
+```
+
+When Angular encounters `[formField]` in the template, it now matches our `FieldAriaAttributes` directive.
+Thanks to `hostDirectives`, Angular also creates an instance of the original `FormField` directive and forwards the `formField` input to it.
+This means the form control registration and two-way binding from `FormField` still work as expected – and our ARIA attributes are applied automatically on top.
+
+> ⚠️ **Important:** The `formField` input must be exposed as-is, without aliasing, to function properly.
+> Using an alias like `inputs: ['formField: formFieldAria']` in the `hostDirectives` configuration currently does not work.
+> This means we cannot use a custom selector like `[formFieldAria]` for the composed directive.
+> There is an [open issue on GitHub](https://github.com/angular/angular/issues/67982) tracking this limitation.
+
+### Removing the Original `FormField` Import
+
+Since `FieldAriaAttributes` now composes `FormField` internally via `hostDirectives`, we must remove the original `FormField` from the `imports` of every component that uses our directive.
+If we keep both, Angular would instantiate `FormField` twice on the same element – once through our composed directive and once directly – which leads to conflicts.
+
+In our `RegistrationForm` component, we remove the `FormField` import and only keep `FieldAriaAttributes`:
+
+```typescript
+@Component({
+  selector: 'app-registration-form',
+  imports: [FormFieldInfo, FieldAriaAttributes, /* other imports, but NOT FormField */],
+  // ...
+})
+export class RegistrationForm {
+  // ...
+}
+```
+
+The same applies to any child component that uses `[formField]`, such as `IdentityForm` – replace `FormField` with `FieldAriaAttributes` in the `imports` array.
+
+### Simplified Template
+
+Now we can simplify our template.
+Instead of applying two directives with the same field reference, we only need a single `[formField]` binding.
+The ARIA attributes are applied automatically by the composed directive:
+
+```html
+<label>
+  Username
+  <input
+    type="text"
+    fieldDescriptionId="username-info"
+    [formField]="registrationForm.username"
+  />
+  <app-form-field-info
+    id="username-info"
+    [fieldRef]="registrationForm.username"
+  />
+</label>
+```
+
+Compare this to the previous version where we needed both `[formField]` and `[formFieldAria]` – the template is now cleaner and less error-prone.
 
 > 💡 **Tip:** Besides Signal-Forms-specific accessibility features, don't forget about native HTML attributes like `autocomplete`. Setting appropriate `autocomplete` values (e.g. `autocomplete="username"`, `autocomplete="new-password"`) helps browsers and password managers fill in fields automatically. This improves usability for all users and is especially helpful for people with motor impairments or cognitive disabilities.
 
@@ -386,6 +493,7 @@ In this four-part series, we've explored the full spectrum of Angular Signal For
 - Assigning and accessing field metadata for enhanced user guidance
 - Creating a unified component for displaying field information, errors, and loading states
 - Building a directive that automatically adds ARIA attributes for better accessibility
+- Refactoring with the Directive Composition API to combine `FormField` and ARIA attributes into a single directive
 - Handling invalid form submissions by focusing the first invalid field
 
 Signal Forms are the third major approach of form handling in Angular.
