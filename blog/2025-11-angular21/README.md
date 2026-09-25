@@ -43,7 +43,7 @@ Ausführliche Infos zu den unterstützten Versionen findest du in der [Angular-D
 Schon seit einiger Zeit unterstützt Angular die zonenlose Change Detection.
 Früher wurde die Bibliothek Zone.js verwendet, um Änderungen an Daten zu ermitteln.
 Mit Signals als neuem Grundbaustein hat sich das Vorgehen deutlich geändert: Signals teilen explizit mit, dass sich ein Wert geändert hat.
-Wir haben darüber ausführlich im [Blogpost zu Angular 18](/blog/2024-05-angular18) berichtet.
+Wir haben darüber ausführlich im [Blogpost zu Angular 18](/blog/2024-06-angular18) berichtet.
 
 Nun gibt es zu dem Thema großartige Neuigkeiten: Zoneless Change Detection ist der neue Standard!
 Neue Anwendungen mit Angular 21 setzen also per Default auf den neuen Mechanismus.

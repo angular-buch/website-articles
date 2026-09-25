@@ -23,7 +23,7 @@ Template-Driven Forms sind der älteste der drei Ansätze.
 Sie eignen sich vor allem für überschaubare Formulare, bei denen die gesamte Formularlogik bequem im Template mit der Direktive `ngModel` abgebildet werden kann.
 
 Reactive Forms waren lange der De-facto-Standard für Formulare in Angular.
-Wenn du dich für diesen Ansatz interessierst, schau dir unseren [Artikel zu Reactive Forms](/reactive-forms) an.
+Wenn du dich für diesen Ansatz interessierst, schau dir unseren [Artikel zu Reactive Forms](/material/reactive-forms) an.
 
 ## Template-Driven Forms einrichten
 
@@ -304,4 +304,4 @@ Beispielsweise kennt das Objekt immer alle Zustände seiner Formularfelder, soda
 
 Template-Driven Forms werden nach wie vor vollständig vom Framework unterstützt.
 Sie eignen sich besonders für einfache Formulare, bei denen die Logik überschaubar bleibt.
-Für komplexere Szenarien empfehlen wir [Reactive Forms](/reactive-forms) oder – sobald die API stabil ist – die modernen **Signal Forms**, die wir im Angular-Buch ausführlich behandeln.
+Für komplexere Szenarien empfehlen wir [Reactive Forms](/material/reactive-forms) oder – sobald die API stabil ist – die modernen **Signal Forms**, die wir im Angular-Buch ausführlich behandeln.
