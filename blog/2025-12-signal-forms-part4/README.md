@@ -23,7 +23,7 @@ sticky: false
 ---
 
 
-In the previous parts of this series, we've covered the fundamentals of Signal Forms, advanced validation patterns, and modular form architecture. In this final part, we'll explore the power of assigning field metadata. We'll also have a look at how we can automatically add helpful ARIA attributes based on a field state to make our forms even more inclusive and accessible.
+In the previous parts of this series, we've covered the fundamentals of Signal Forms, advanced validation patterns, and modular form architecture. In this part, we'll explore the power of assigning field metadata. We'll also have a look at how we can automatically add helpful ARIA attributes based on a field state to make our forms even more inclusive and accessible.
 
 > ⚠️ **Experimental Feature:** Signal Forms are currently an experimental feature in Angular. The API and functionality may change in future releases.
 
@@ -35,6 +35,7 @@ In the previous parts of this series, we've covered the fundamentals of Signal F
 - [Part 2: Advanced Validation and Schema Patterns](/blog/2025-10-signal-forms-part2)
 - [Part 3: Child Forms, Custom UI Controls and SignalFormsConfig](/blog/2025-10-signal-forms-part3)
 - *Part 4: Metadata and Accessibility Handling* (this post)
+- [Part 5: Migration and Compatibility](/blog/2026-04-signal-forms-part5)
 
 ## Assigning Field Metadata
 
@@ -359,7 +360,7 @@ You can find a complete demo application for this blog series on GitHub and Stac
 
 ## Conclusion
 
-In this four-part series, we've explored the full spectrum of Angular Signal Forms:
+In this five-part series, we've explored the full spectrum of Angular Signal Forms:
 
 **[Part 1](/blog/2025-10-signal-forms-part1/)** covered the fundamentals:
 
@@ -387,6 +388,12 @@ In this four-part series, we've explored the full spectrum of Angular Signal For
 - Creating a unified component for displaying field information, errors, and loading states
 - Building a directive that automatically adds ARIA attributes for better accessibility
 - Handling invalid form submissions by focusing the first invalid field
+
+**[Part 5](/blog/2026-04-signal-forms-part5/)** addresses migration and compatibility:
+
+- How `FormUiControl` makes `ControlValueAccessor` obsolete
+- Building universal form controls for all three form approaches
+- The role of `ModelSignal` as the bridge between Signal Forms, Reactive Forms, and Template-Driven Forms
 
 Signal Forms are the third major approach of form handling in Angular.
 After Template-Driven Forms and Reactive Forms, Signal Forms aim to make form handling more type-safe, reactive, and declarative.
