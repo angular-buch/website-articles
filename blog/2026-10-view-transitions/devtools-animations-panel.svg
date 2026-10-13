@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 760 360" fill="none">
+  <rect width="760" height="360" rx="8" fill="#FFFFFF"/>
+
+  <!-- Panel-Rahmen -->
+  <rect x="24" y="24" width="712" height="252" rx="8" fill="#F8F8F8" stroke="#ced4da" stroke-width="1.5"/>
+
+  <!-- Toolbar -->
+  <rect x="24" y="24" width="712" height="40" rx="8" fill="#FFFFFF" stroke="#e9ecef" stroke-width="1"/>
+  <!-- Record -->
+  <circle cx="50" cy="44" r="7" fill="#e03131"/>
+  <!-- Clear -->
+  <circle cx="78" cy="44" r="7" fill="none" stroke="#868e96" stroke-width="1.5"/>
+  <path d="M74 44 L82 44 M78 40 L78 48" stroke="#868e96" stroke-width="1.2"/>
+  <!-- Replay -->
+  <polygon points="104,39 104,49 113,44" fill="#495057"/>
+  <!-- Speed-Dropdown -->
+  <rect x="150" y="34" width="90" height="20" rx="4" fill="#F1F3F5" stroke="#ced4da" stroke-width="1"/>
+  <text x="162" y="48" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#495057">25% ▾</text>
+
+  <!-- Zeitleisten-Lineal -->
+  <line x1="200" y1="78" x2="710" y2="78" stroke="#dee2e6" stroke-width="1"/>
+  <text x="205" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#adb5bd">0ms</text>
+  <text x="455" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#adb5bd">250ms</text>
+  <text x="690" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#adb5bd">500ms</text>
+  <!-- Abspielmarker -->
+  <line x1="330" y1="70" x2="330" y2="266" stroke="#8001c6" stroke-width="1.5"/>
+  <polygon points="324,70 336,70 330,78" fill="#8001c6"/>
+
+  <!-- Animations-Zeilen (Gruppen) -->
+  <!-- frame -->
+  <text x="40" y="104" font-family="ui-monospace, monospace" font-size="10" fill="#495057">book-frame</text>
+  <rect x="205" y="96" width="470" height="14" rx="4" fill="#8001c6" fill-opacity="0.25" stroke="#8001c6" stroke-width="1"/>
+  <!-- cover -->
+  <text x="40" y="130" font-family="ui-monospace, monospace" font-size="10" fill="#495057">book-cover</text>
+  <rect x="205" y="122" width="470" height="14" rx="4" fill="#8001c6" fill-opacity="0.25" stroke="#8001c6" stroke-width="1"/>
+  <!-- title -->
+  <text x="40" y="156" font-family="ui-monospace, monospace" font-size="10" fill="#495057">book-title</text>
+  <rect x="205" y="148" width="430" height="14" rx="4" fill="#8001c6" fill-opacity="0.25" stroke="#8001c6" stroke-width="1"/>
+  <!-- subtitle -->
+  <text x="40" y="182" font-family="ui-monospace, monospace" font-size="10" fill="#495057">book-subtitle</text>
+  <rect x="205" y="174" width="430" height="14" rx="4" fill="#8001c6" fill-opacity="0.25" stroke="#8001c6" stroke-width="1"/>
+  <!-- isbn -->
+  <text x="40" y="208" font-family="ui-monospace, monospace" font-size="10" fill="#495057">book-isbn</text>
+  <rect x="205" y="200" width="430" height="14" rx="4" fill="#8001c6" fill-opacity="0.25" stroke="#8001c6" stroke-width="1"/>
+  <!-- route-content -->
+  <text x="40" y="234" font-family="ui-monospace, monospace" font-size="10" fill="#868e96">route-content</text>
+  <rect x="205" y="226" width="240" height="14" rx="4" fill="#adb5bd" fill-opacity="0.3" stroke="#adb5bd" stroke-width="1"/>
+
+  <!-- Annotationen -->
+  <text x="50" y="302" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#e03131">● Record</text>
+  <text x="110" y="302" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#495057">▶ Replay</text>
+  <text x="195" y="302" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#495057">25% = Zeitlupe</text>
+  <text x="330" y="302" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#8001c6">Abspielmarker</text>
+
+  <text x="24" y="336" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#868e96">Jede Zeile ist eine aufgezeichnete Animationsgruppe. Lila: geteilte Elemente (Morph). Grau: Seiten-Crossfade.</text>
+</svg>
