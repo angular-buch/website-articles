@@ -87,6 +87,8 @@ Als Grundlage dient der [`book-manager` aus dem Angular-Buch in der Variante `15
 
 Ohne weitere Konfiguration ist der Wechsel von der Liste zur Detailansicht ein harter Schnitt. Diesen Übergang bauen wir Schritt für Schritt zu einer zusammenhängenden Animation aus.
 
+![Animierte Demo im Book Manager: Beim Klick auf ein Buch in der Liste morpht das Cover zusammen mit Titel, Untertitel und ISBN flüssig in die Detailansicht – und beim Zurücknavigieren wieder zurück.](view-transition-book-manager-demo.webp "Das Ziel: ein zusammenhängender Übergang von der Buchliste zur Detailseite.")
+
 ### View Transitions im Router aktivieren
 
 Der erste Schritt ist denkbar klein: Wir ergänzen die Router-Konfiguration um das Feature `withViewTransitions()`.
