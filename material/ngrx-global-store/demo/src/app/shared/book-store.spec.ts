@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { BookStore } from './book-store';
@@ -14,7 +13,7 @@ describe('BookStore (HTTP)', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [provideHttpClientTesting()]
     });
     store = TestBed.inject(BookStore);
     httpMock = TestBed.inject(HttpTestingController);

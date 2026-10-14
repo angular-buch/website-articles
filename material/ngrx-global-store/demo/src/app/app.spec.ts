@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
@@ -16,7 +15,6 @@ describe('App', () => {
         provideRouter(booksRoutes),
         provideStore(),
         provideEffects(),
-        provideHttpClient(),
         provideHttpClientTesting()
       ]
     }).compileComponents();

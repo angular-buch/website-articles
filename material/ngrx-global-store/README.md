@@ -1,7 +1,8 @@
 ---
 title: "State Management mit NgRx – Teil 2: Global Store mit NgRx"
-published: "2026-09-01"
-lastModified: "2026-09-01"
+published: 2026-10-14
+lastModified: 2026-10-14
+sortKey: 51
 ---
 
 **Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
@@ -18,13 +19,13 @@ Im ersten Teil haben wir uns Schritt für Schritt ein eigenes Modell für zentra
 
 ## NgRx: Reactive State for Angular
 
-Das Framework *Reactive State for Angular (NgRx)* ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` können wir Daten aus dem Store außerdem direkt als Signals beziehen. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
+Das Framework *NgRx* (*Reactive State for Angular*) ist eine der populärsten Implementierungen für State Management mit Angular. Durch die gezielte Ausrichtung auf Angular fügt sich der Code gut in die Strukturen und Lebenszyklen einer Angular-Anwendung ein. NgRx setzt stark auf die Möglichkeiten der reaktiven Programmierung mit RxJS, ist also an vielen Stellen von Observables und Datenströmen geprägt. Über `selectSignal()` können wir Daten aus dem Store außerdem direkt als Signals beziehen. Die große Community und eine Reihe von verwandten Projekten machen NgRx zum wohl bekanntesten Werkzeug für Zustandsverwaltung mit Angular.
 
 Wir wollen in diesem Abschnitt die Struktur und die Bausteine in der Welt von NgRx genauer besprechen. Außerdem wollen wir im BookManager einen Aspekt mithilfe von NgRx umsetzen, um so alle Bausteine auch praktisch zu üben.
 
 ### Projekt vorbereiten
 
-Als Grundlage für diesen praktischen Teil verwenden wir das Beispielprojekt BookManager aus dem Buch. Wir bauen auf der Variante mit Standalone Components auf, wie sie die aktuelle Angular-Version vorgibt. Wer mitentwickeln möchte, kann das bestehende BookManager-Projekt verwenden.
+Als Grundlage für diesen praktischen Teil verwenden wir das Beispielprojekt BookManager aus dem Buch. Wir bauen auf der Variante mit Standalone Components auf, wie sie die aktuelle Angular-Version vorgibt. Wer mitentwickeln möchte, kann das bestehende BookManager-Projekt verwenden. Den vollständigen Code dieses Artikels gibt es außerdem als lauffähige Beispiel-App [auf GitHub](https://github.com/angular-buch/website-articles/tree/main/material/ngrx-global-store/demo).
 
 ### Store einrichten
 
@@ -36,7 +37,7 @@ ng add @ngrx/store-devtools
 ng add @ngrx/effects
 ```
 
-Später wollen wir einen zusätzlichen Baustein kennenlernen, der im originalen Redux nicht vorgesehen ist und der spezifisch für NgRx ist: Effects auf Basis von `@ngrx/effects`. Deshalb haben wir das notwendige Paket in diesem Schritt gleich mit eingefügt. Die Store DevTools sind hilfreich zum Debugging der Anwendung – wir gehen später im Abschnitt zu den Redux DevTools genauer darauf ein, um den Lesefluss in diesem Kapitel nicht zu unterbrechen.
+Später wollen wir einen zusätzlichen Baustein kennenlernen, der im originalen Redux nicht vorgesehen ist und der spezifisch für NgRx ist: Effects auf Basis von `@ngrx/effects`. Deshalb haben wir das notwendige Paket in diesem Schritt gleich mit eingefügt. Das Paket `@ngrx/store-devtools` verbindet den Store mit der Browser-Erweiterung *Redux DevTools*, die beim Debugging hilft. Wir stellen sie im Abschnitt [Debugging mit den Redux DevTools](#debugging-mit-den-redux-devtools) genauer vor, um den Lesefluss hier nicht zu unterbrechen.
 
 Der Befehl `ng add` trägt die passenden `provide…`-Funktionen automatisch in die Datei `app.config.ts` ein.
 
@@ -48,18 +49,17 @@ Um nach der Einrichtung die Bausteine von NgRx mithilfe der Angular CLI anzulege
 ng add @ngrx/schematics
 ```
 
-Die Schematics von NgRx werden durch diesen Aufruf automatisch im Projekt registriert. Jeder Aufruf von `ng generate` durchsucht dann auch die Skripte in diesem Paket. So können wir bequem einen Befehl wie `ng generate action` verwenden, ohne die Zielkollektion explizit angeben zu müssen. Die Collection wird mit einem Eintrag in der Datei `angular.json` festgelegt, den wir jederzeit wieder löschen oder ändern können, falls wir die Skripte von NgRx nicht mehr nutzen möchten.
+Die Schematics von NgRx werden durch diesen Aufruf automatisch im Projekt registriert. Jeder Aufruf von `ng generate` durchsucht dann auch die Skripte in diesem Paket. So können wir bequem einen Befehl wie `ng generate action` verwenden, ohne die *Schematics-Collection* (die Sammlung der Generatoren) explizit angeben zu müssen. Die Collection wird mit dem Eintrag `cli.schematicCollections` in der Datei `angular.json` festgelegt, den wir jederzeit wieder löschen oder ändern können, falls wir die Skripte von NgRx nicht mehr nutzen möchten.
 
 ### Grundstruktur
 
 Die ausgeführten Befehle haben bereits alles Nötige eingerichtet, sodass wir sofort mit der Implementierung beginnen können. Vorher wollen wir jedoch einen Blick auf die Einrichtung des Stores werfen.
 
-In einer Standalone-Anwendung registrieren wir den Store über die Funktion `provideStore()` in der Datei `app.config.ts`. Sie bringt den Kern des NgRx-Stores in die Anwendung. Übergeben wir kein Argument, so startet der Store mit einem leeren State-Objekt – die einzelnen Features fügen ihre Zustände später selbst hinzu. Zusätzlich richten wir mit `provideEffects()` die Infrastruktur für Effects ein und binden mit `provideStoreDevtools()` die Store DevTools ein:
+In einer Standalone-Anwendung registrieren wir den Store über die Funktion `provideStore()` in der Datei `app.config.ts`. Sie bringt den Kern des NgRx-Stores in die Anwendung. Übergeben wir kein Argument, so startet der Store mit einem leeren State-Objekt: Die einzelnen Features fügen ihre Zustände später selbst hinzu. Zusätzlich richten wir mit `provideEffects()` die Infrastruktur für Effects ein und binden mit `provideStoreDevtools()` die Store DevTools ein:
 
 ```ts
 // app.config.ts
 import { ApplicationConfig, isDevMode } from '@angular/core';
-import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -67,7 +67,6 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 export const appConfig: ApplicationConfig = {
   providers: [
     // ...
-    provideHttpClient(withFetch()),
     provideStore(),
     provideEffects(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
@@ -75,7 +74,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Wir holen die Buchliste später per HTTP von einer echten API. Damit der `HttpClient` zur Verfügung steht, registrieren wir ihn hier gleich mit `provideHttpClient(withFetch())`.
+Die Buchliste holen wir später per HTTP von einer echten API. Für den `HttpClient` müssen wir dafür nichts registrieren: Angular stellt seine Providers automatisch bereit. Die Funktion `provideHttpClient()` brauchen wir nur, wenn wir die HTTP-Integration konfigurieren möchten.
 
 Mit dieser Konfiguration ist der Store zwar schon aktiv, aber wir haben noch nicht festgelegt, wie das zentrale State-Objekt strukturiert sein soll. Da wir auch mit NgRx modular entwickeln, definieren wir die State-Struktur nicht zentral, sondern lagern alle neuen Bausteine in eigene Dateien aus und registrieren sie pro Feature.
 
@@ -87,7 +86,7 @@ Unsere Anwendung ist bereits in Features strukturiert, die einzelne Bereiche kap
 ng g feature books/store/book --api
 ```
 
-Dieser Aufruf legt das Feature `book` im Ordner `src/app/books/store` an. Wir haben hier bewusst den Unterordner `store` gewählt, um alle Bestandteile von NgRx sauber in einem gemeinsamen Unterordner zu gruppieren. Wichtig ist, dass der Feature-Name `book` hier im Singular angegeben wird, denn die CLI fügt beim Anlegen automatisch ein Plural-s für einige Bausteine hinzu. Mit der Option `--api` generieren wir außerdem das nötige Grundgerüst, um Daten zu behandeln, die von einer API abgerufen werden. Wie sich das auswirkt, werden wir gleich noch betrachten.
+Dieser Aufruf legt das Feature `book` im Ordner `src/app/books/store` an. Wir haben hier bewusst den Unterordner `store` gewählt, um alle Bestandteile von NgRx in einem gemeinsamen Unterordner zu gruppieren. Wichtig ist, dass der Feature-Name `book` hier im Singular angegeben wird, denn die CLI fügt beim Anlegen automatisch ein Plural-s für einige Bausteine hinzu. Mit der Option `--api` generieren wir außerdem das nötige Grundgerüst, um Daten zu behandeln, die von einer API abgerufen werden. Wie sich das auswirkt, werden wir gleich noch betrachten.
 
 Die Dateistruktur in der Anwendung sieht nun wie folgt aus:
 
@@ -130,7 +129,7 @@ export const booksRoutes: Routes = [
 ];
 ```
 
-Dieser Aufruf von `provideState()` ist essenziell, denn er definiert die Struktur des globalen State-Objekts. Die Konstante `fromBook.bookFeatureKey` aus der Datei `book.reducer.ts` enthält den String `book`. Damit legen wir fest, unter welchem Namen die Zustände dieses Features im globalen State-Objekt zu finden sein werden. Das zentrale State-Objekt wird also durch diesen Aufruf von `provideState()` automatisch erweitert, und die Reducers aus dem Feature werden in die Anwendung integriert. Diese dynamische Erweiterung ist nötig, damit ein Feature auch mithilfe von Lazy Loading asynchron zur Laufzeit nachgeladen werden kann. Der Feature-Key `book` verweist auf den Teilbaum im State-Objekt, in den der Feature-State eingebaut wird.
+Ohne diesen Aufruf von `provideState()` gibt es den Feature-State nicht: Er legt die Struktur des globalen State-Objekts fest. Die Konstante `fromBook.bookFeatureKey` aus der Datei `book.reducer.ts` enthält den String `book`. Damit legen wir fest, unter welchem Namen die Zustände dieses Features im globalen State-Objekt zu finden sein werden. Das zentrale State-Objekt wird also durch diesen Aufruf von `provideState()` automatisch erweitert, und die Reducers aus dem Feature werden in die Anwendung integriert. Diese dynamische Erweiterung ist nötig, damit ein Feature auch mithilfe von Lazy Loading asynchron zur Laufzeit nachgeladen werden kann. Der Feature-Key `book` verweist auf den Teilbaum im State-Objekt, in den der Feature-State eingebaut wird.
 
 ### Struktur des Feature-States definieren
 
@@ -177,7 +176,7 @@ Alle relevanten Ereignisse in der Anwendung werden durch Actions repräsentiert,
 
 Dabei beschreiben Actions idealerweise eine abstrakte Sicht auf das Geschehen. Actions sollten keine technischen Kommandos für das System darstellen, sondern die dahinterliegende Intention beschreiben. Für unser Beispiel raten wir etwa von der Action `Show Loading Spinner` ab, denn sie beschreibt ein technisches Implementierungsdetail und kein fachliches Ereignis.
 
-Actions bilden die Grundlage für die Kommunikation mit dem Store und können Änderungen am Anwendungszustand auslösen. Dieses Konzept entspricht den Nachrichten, die wir im einführenden Beispiel an den Service gesendet haben. Die folgende Auflistung zeigt einige Beispiele für Actions, die in einer Anwendung vorkommen könnten:
+Actions bilden die Grundlage für die Kommunikation mit dem Store und können Änderungen am Anwendungszustand auslösen. Dieses Konzept entspricht den Nachrichten, die wir in [Teil 1](/material/ngrx-intro#nachrichten) an den `StateService` gesendet haben. Die folgende Auflistung zeigt einige Beispiele für Actions, die in einer Anwendung vorkommen könnten:
 
 - Load Books
 - Load Books Success
@@ -206,7 +205,7 @@ Technisch ist eine solche Action immer ein Objekt mit einer bestimmten vorgegebe
 
 Um eine starke Typisierung zu ermöglichen und Tippfehler zu vermeiden, notieren wir die Objekte jedoch nicht direkt im Code. Stattdessen nutzen wir einen sogenannten *Action Creator* – eine Funktion, die das Objekt mit der richtigen Struktur erzeugt.
 
-Dafür stellt NgRx die Funktion `createAction()` zur Verfügung. Als erstes Argument geben wir hier immer den Namen der Action an. Dieser `type` muss in der gesamten Anwendung eindeutig sein. Um die Nachvollziehbarkeit zu erhöhen und mögliche Kollisionen zu verhindern, notieren wir üblicherweise die Quelle der Action in eckigen Klammern im Namen. Damit erzeugen wir eine Art Namespace für den Action-Typ – es handelt sich dabei aber nur um eine Konvention.
+Dafür stellt NgRx die Funktion `createAction()` zur Verfügung. Als erstes Argument geben wir hier immer den Namen der Action an. Dieser `type` muss in der gesamten Anwendung eindeutig sein. Um die Nachvollziehbarkeit zu erhöhen und mögliche Kollisionen zu verhindern, notieren wir üblicherweise die Quelle der Action in eckigen Klammern im Namen. Damit erzeugen wir eine Art Namespace für den Action-Typ. Es handelt sich dabei aber nur um eine Konvention.
 
 ```ts
 import { createAction } from '@ngrx/store';
@@ -242,7 +241,7 @@ Zur Abfrage einer HTTP-Schnittstelle benötigen wir normalerweise drei zusammeng
 - `Load XXX Success`: Daten sind erfolgreich vom Server eingetroffen.
 - `Load XXX Failure`: Das Laden der Daten ist fehlgeschlagen.
 
-Die Actions werden in einer oder mehreren Dateien gesammelt. Beim Anlegen des Features mit `ng generate feature` wurde eine solche Datei bereits erstellt: `books/store/book.actions.ts`. Da wir das Feature mit der Option `--api` angelegt haben, sind darin bereits drei Actions für genau dieses Muster vorbereitet – allerdings in der kompakten Schreibweise mit `createActionGroup()`, die wir erst im Abschnitt "Wie geht's weiter?" vorstellen. Um die Grundform kennenzulernen, ersetzen wir das generierte Grundgerüst zunächst durch einzelne `createAction()`-Aufrufe und passen die Signaturen für unseren Anwendungsfall an.
+Die Actions werden in einer oder mehreren Dateien gesammelt. Beim Anlegen des Features mit `ng generate feature` wurde eine solche Datei bereits erstellt: `books/store/book.actions.ts`. Da wir das Feature mit der Option `--api` angelegt haben, sind darin bereits drei Actions für genau dieses Muster vorbereitet. Sie stehen dort allerdings in der kompakten Schreibweise mit `createActionGroup()`, die wir erst im Abschnitt [Actions gruppieren mit `createActionGroup()`](#actions-gruppieren-mit-createactiongroup) vorstellen. Um die Grundform kennenzulernen, ersetzen wir das generierte Grundgerüst zunächst durch einzelne `createAction()`-Aufrufe und passen die Signaturen für unseren Anwendungsfall an.
 
 Die Success-Action erhält als Payload eine Buchliste `Book[]`, die Failure-Action transportiert einen Fehler vom Typ `string`. (In der Praxis ist es sinnvoll, hier ein eigenes Fehlerobjekt zu verwenden, das mehr Informationen beinhaltet als nur den Fehlertext.) Die Action `loadBooks` benötigt keine weiteren Daten, denn die Intention wird schon durch den Action-Typ vollständig ausgedrückt.
 
@@ -299,7 +298,7 @@ export class BooksOverview {
 }
 ```
 
-Wenn wir bereits die Redux DevTools installiert haben, können wir nun überprüfen, ob die ausgelöste Action tatsächlich im Store eingetroffen ist. Wir betrachten die DevTools separat im Abschnitt zu den Redux DevTools weiter unten.
+Wenn wir bereits die Redux DevTools installiert haben, können wir nun überprüfen, ob die ausgelöste Action tatsächlich im Store eingetroffen ist. Wir betrachten die DevTools separat im Abschnitt [Debugging mit den Redux DevTools](#debugging-mit-den-redux-devtools).
 
 ### Reducers: den State aktualisieren
 
@@ -311,7 +310,7 @@ function reducer(state: State, action: Action): State {}
 
 Ein Reducer ist dabei immer für einen Teilbaum des States zuständig. Das Feature `book` besitzt einen eigenen Reducer, der ausschließlich diesen State verarbeitet. Ein solcher Feature-State wird auch *Slice* genannt. Wir verwenden die beiden Begriffe synonym.
 
-In unserem einführenden Beispiel haben wir zur Unterscheidung der Nachrichten ein *switch/case*-Statement verwendet. Traditionell wird in Redux auch genau dieser Ansatz genutzt. Der Einsatz von *switch/case* ist jedoch etwas gewöhnungsbedürftig, und auch die Menge an erforderlichem Code ist recht hoch. Daher stellt NgRx die Funktion `createReducer()` zur Verfügung, um Reducers sehr kompakt und typsicher zu implementieren. Die grundsätzliche Idee ist jedoch dieselbe: Der Reducer unterscheidet nach dem Action-Typ und nimmt für verschiedene Actions verschiedene Anpassungen am State vor. Wir entwickeln also für jede Action eine kleine Reducer-Funktion.
+In [Teil 1](/material/ngrx-intro#berechnung-des-zustands-auslagern) haben wir zur Unterscheidung der Nachrichten ein *switch/case*-Statement verwendet. Traditionell wird in Redux auch genau dieser Ansatz genutzt. Der Einsatz von *switch/case* ist jedoch etwas gewöhnungsbedürftig, und auch die Menge an erforderlichem Code ist recht hoch. Daher stellt NgRx die Funktion `createReducer()` zur Verfügung, um Reducers sehr kompakt und typsicher zu implementieren. Die grundsätzliche Idee ist jedoch dieselbe: Der Reducer unterscheidet nach dem Action-Typ und nimmt für verschiedene Actions verschiedene Anpassungen am State vor. Wir entwickeln also für jede Action eine kleine Reducer-Funktion.
 
 Die wichtigste Eigenschaft der Reducer-Funktionen ist ihre "Reinheit": Reducers sind Pure Functions. Dieses Konzept ist von drei wesentlichen Einschränkungen geprägt:
 
@@ -321,11 +320,11 @@ Die wichtigste Eigenschaft der Reducer-Funktionen ist ihre "Reinheit": Reducers 
 
 Die Einhaltung dieser Einschränkungen ist besonders wichtig, um eine hohe Stabilität des Systems sicherzustellen. Nur wenn wir den strikten Regeln von Redux folgen, kann der Anwendungszustand zuverlässig kontrolliert werden.
 
-Ein Reducer darf deshalb ausschließlich den aktuellen State und die eintreffende Action verarbeiten. Alle notwendigen Informationen, um den neuen State zu erzeugen, müssen in State oder Action vorliegen. Außerdem muss der Reducer bei Änderungen stets eine *Kopie* des States zurückgeben, die die gewünschten Änderungen beinhaltet. Es dürfen niemals Änderungen direkt auf dem Objekt ausgeführt werden. Diese Eigenschaft der Immutability haben wir bereits in der Einleitung besprochen. Wir setzen mit NgRx in der Regel nicht auf "echte Unveränderlichkeit", sondern wenden Disziplin an und behandeln die Objekte lediglich als unveränderlich – auch wenn sie prinzipiell veränderlich sind. Während der Entwicklung sind außerdem sogenannte [Runtime Checks](https://ngrx.io/guide/store/configuration/runtime-checks) aktiv, die State und Actions auf Unveränderlichkeit prüfen – jede versehentliche Änderung am State führt dann direkt zu einer Exception. (Zusätzliche Checks, etwa auf Serialisierbarkeit, sind standardmäßig deaktiviert und können bei Bedarf über die Konfiguration aktiviert werden.)
+Ein Reducer darf deshalb ausschließlich den aktuellen State und die eintreffende Action verarbeiten. Alle notwendigen Informationen, um den neuen State zu erzeugen, müssen in State oder Action vorliegen. Außerdem muss der Reducer bei Änderungen stets eine *Kopie* des States zurückgeben, die die gewünschten Änderungen beinhaltet. Es dürfen niemals Änderungen direkt auf dem Objekt ausgeführt werden. Diese Eigenschaft der Immutability haben wir bereits in [Teil 1](/material/ngrx-intro#unveränderlichkeit) besprochen. Wir setzen mit NgRx in der Regel nicht auf "echte Unveränderlichkeit", sondern wenden Disziplin an und behandeln die Objekte lediglich als unveränderlich, auch wenn sie prinzipiell veränderlich sind. Während der Entwicklung sind außerdem sogenannte [Runtime Checks](https://ngrx.io/guide/store/configuration/runtime-checks) aktiv, die State und Actions auf Unveränderlichkeit prüfen: Jede versehentliche Änderung am State führt dann direkt zu einer Exception. (Zusätzliche Checks, etwa auf Serialisierbarkeit, sind standardmäßig deaktiviert und können bei Bedarf über die Konfiguration aktiviert werden.)
 
-Um das State-Objekt vor der Verwendung und Änderung zu klonen, können wir den Spread-Operator einsetzen. Wir beachten dabei, dass dieses Werkzeug stets nur eine flache Kopie (Shallow Copy) erzeugt. Wollen wir Änderungen an tiefer verzweigten Teilen des States vornehmen, müssen wir explizit eine tiefe Kopie (Deep Copy) des Objekts erzeugen.
+Um das State-Objekt vor der Verwendung und Änderung zu klonen, können wir den Spread-Operator einsetzen. Wir beachten dabei, dass dieses Werkzeug stets nur eine flache Kopie (Shallow Copy) erzeugt. Wollen wir Änderungen an tiefer verzweigten Teilen des States vornehmen, müssen wir jede Ebene auf dem Pfad zur Änderung kopieren. Unveränderte Zweige behalten dabei ihre Referenz.
 
-> **Hinweis:** Ein verschachteltes Objekt können wir mit dem Spread-Operator klonen, indem wir jeden Zweig des Objekts einzeln kopieren. Wird das zu komplex, empfiehlt sich ein Hilfsmittel wie die native Funktion `structuredClone()`. Wir haben die verschiedenen Möglichkeiten in einem Blogartikel zusammengefasst: [10 useful operations for pure & immutable data structures](https://angular.schule/blog/2018-03-pure-immutable-operations).
+> **Hinweis:** Ein verschachteltes Objekt können wir mit dem Spread-Operator klonen, indem wir jeden Zweig auf dem Pfad zur Änderung einzeln kopieren. Eine vollständige tiefe Kopie (*Deep Copy*), etwa mit der nativen Funktion `structuredClone()`, ist dafür ungeeignet: Sie erzeugt auch für unveränderte Zweige neue Referenzen, sodass alle Selektoren neu rechnen. Wir haben die verschiedenen Möglichkeiten in einem Blogartikel zusammengefasst: [10 useful operations for pure & immutable data structures](https://angular.schule/blog/2018-03-pure-immutable-operations).
 
 Wir wollen nun auch für den BookManager passende Reducers entwickeln. Dazu überlegen wir zunächst, welche Zustandsänderungen von den Actions ausgelöst werden:
 
@@ -333,10 +332,16 @@ Wir wollen nun auch für den BookManager passende Reducers entwickeln. Dazu übe
 - `loadBooksSuccess`: Buchliste einfügen und Ladeindikator auf `false` setzen
 - `loadBooksFailure`: Ladeindikator auf `false` setzen
 
-Die Implementierung bringen wir in der Datei `books/store/book.reducer.ts` unter, in der das Grundgerüst der Reducer-Funktion bereits vorbereitet ist. Statt *switch/case* wird hier die Funktion `createReducer()` genutzt. Für jede Fallunterscheidung existiert ein Block, der in ein `on()` gekapselt ist. Als erstes Argument geben wir hier immer die Action an, die behandelt werden soll. Im zweiten Argument ist die Reducer-Funktion notiert, die schließlich anhand der eingehenden Action den neuen State generiert. Für die einzelnen Reducer-Funktionen geben wir stets ein neues State-Objekt zurück und definieren den Rückgabetyp immer explizit mit `State`. Ob wir dafür die ausführliche Form mit `return` oder die kompakte Pfeilschreibweise (`(state): State => ({ ... })`) wählen, ist eine Frage des Stils – in der lauffähigen Beispiel-App verwenden wir die kompakte Variante.
+Die Implementierung bringen wir in der Datei `books/store/book.reducer.ts` unter, in der das Grundgerüst der Reducer-Funktion bereits vorbereitet ist. Statt *switch/case* wird hier die Funktion `createReducer()` genutzt. Für jede Fallunterscheidung existiert ein Block, der in ein `on()` gekapselt ist. Als erstes Argument geben wir hier immer die Action an, die behandelt werden soll. Im zweiten Argument ist die Reducer-Funktion notiert, die schließlich anhand der eingehenden Action den neuen State generiert. Für die einzelnen Reducer-Funktionen geben wir stets ein neues State-Objekt zurück und definieren den Rückgabetyp immer explizit mit `State`. Ob wir dafür die ausführliche Form mit `return` oder die kompakte Pfeilschreibweise (`(state): State => ({ ... })`) wählen, ist eine Frage des Stils. In der [Beispiel-App](https://github.com/angular-buch/website-articles/tree/main/material/ngrx-global-store/demo) verwenden wir die kompakte Variante.
 
 ```ts
 // books/store/book.reducer.ts
+import { createReducer, on } from '@ngrx/store';
+
+import * as BookActions from './book.actions';
+
+// ...
+
 export const reducer = createReducer(
   initialState,
 
@@ -358,7 +363,7 @@ export const reducer = createReducer(
 );
 ```
 
-> **Reducers für mehrere Actions:** Übrigens wird jeder Reducer immer für jede Action durchlaufen. Das bedeutet, dass wir in einem Reducer auch auf mehrere Actions oder sogar auf Actions aus einem anderen Bereich der Anwendung reagieren können. Dazu geben wir im `on()` mehrere Actions nacheinander als einzelne Argumente an. Es gibt jedoch keine direkte Möglichkeit, in einem Reducer auf einen anderen Slice des States zuzugreifen.
+> **Hinweis:** Jeder Reducer wird immer für jede Action durchlaufen. Das bedeutet, dass wir in einem Reducer auch auf mehrere Actions oder sogar auf Actions aus einem anderen Bereich der Anwendung reagieren können. Dazu geben wir im `on()` mehrere Actions nacheinander als einzelne Argumente an. Es gibt jedoch keine direkte Möglichkeit, in einem Reducer auf einen anderen Slice des States zuzugreifen.
 
 Haben wir die Implementierung abgeschlossen, so können wir die State-Änderung in den Redux DevTools nachvollziehen. Für die dispatchte Action `loadBooks` ändert sich das `loading`-Flag im State von `false` auf `true`.
 
@@ -370,7 +375,7 @@ Für alle unbekannten Actions liefert der Reducer automatisch den aktuellen Stat
 
 Fassen wir kurz zusammen, wie weit wir bisher gekommen sind: Wir haben Action Creators definiert und die Action `loadBooks` von der `BooksOverview` aus in den Store dispatcht. Dort reagiert der Reducer auf die Actions und erzeugt einen neuen State mit der passenden Änderung: Das `loading`-Flag wird auf `true` gesetzt.
 
-Um den Kreislauf des Datenflusses zu schließen, wollen wir die Daten aus dem State nun auslesen und in der Komponente darstellen. Der Store gibt dabei stets den vollständigen State aus. Um einzelne Teile daraus zu lesen, benötigen wir eine Projektion. In der Praxis werden diese Lesezugriffe schnell komplexer: Mitunter wollen wir Daten nicht nur einfach auslesen, sondern Projektionen über verschiedene Teile des States ausführen. Stellen wir uns vor, wir besitzen eine Liste von Autoren und Autorinnen und eine Liste von Büchern – wollen aber nun nur die Bücher ausgeben, die von einer bestimmten Person verfasst wurden. Dazu ist zusätzliche Logik nötig, die nicht in die Komponenten gehört. Stattdessen lagern wir diese Logik in separate Funktionen aus, die unabhängig von den Komponenten sind. Wir können eine solche Funktion mit einer Datenbankabfrage vergleichen: Die Query wird einmal definiert und kann beliebig komplex sein. Verschiedene Teile der Anwendung können diese Query nutzen und die Daten genau im benötigten Format erhalten. Die Funktionen zur Abfrage von Daten aus dem Store werden *Selektoren* genannt.
+Um den Kreislauf des Datenflusses zu schließen, wollen wir die Daten aus dem State nun auslesen und in der Komponente darstellen. Der Store gibt dabei stets den vollständigen State aus. Um einzelne Teile daraus zu lesen, benötigen wir eine Projektion. In der Praxis werden diese Lesezugriffe schnell komplexer: Mitunter wollen wir Daten nicht nur einfach auslesen, sondern Projektionen über verschiedene Teile des States ausführen. Stellen wir uns vor, wir besitzen eine Liste von Autoren und Autorinnen und eine Liste von Büchern, wollen aber nun nur die Bücher ausgeben, die von einer bestimmten Person verfasst wurden. Dazu ist zusätzliche Logik nötig, die nicht in die Komponenten gehört. Stattdessen lagern wir diese Logik in separate Funktionen aus, die unabhängig von den Komponenten sind. Wir können eine solche Funktion mit einer Datenbankabfrage vergleichen: Die Query wird einmal definiert und kann beliebig komplex sein. Verschiedene Teile der Anwendung können diese Query nutzen und die Daten genau im benötigten Format erhalten. Die Funktionen zur Abfrage von Daten aus dem Store werden *Selektoren* genannt.
 
 Selektoren bringen wir ebenfalls in eigenen Dateien unter, die unabhängig von den Komponenten sind. Dazu wurde bereits die Datei `books/store/book.selectors.ts` erstellt. Zur Definition von Selektoren bringt NgRx eigene Hilfsfunktionen mit: `createFeatureSelector()` und `createSelector()`. Sie sorgen unter anderem dafür, dass die selektierten Daten korrekt typisiert sind, auch wenn der State zur Laufzeit dynamisch erweitert wird.
 
@@ -402,7 +407,7 @@ export const selectMyData = createSelector(
 );
 ```
 
-Wir können auf diese Weise ein komplexes Gerüst von Selektoren definieren. Die Selektoren bauen aufeinander auf und kombinieren die Daten aus dem State so, wie sie in den Komponenten benötigt werden. Jeder einzelne Selektor nutzt die Memoization, um die berechneten Werte zu cachen. Die Berechnung in der Projektionsfunktion wird nur neu ausgeführt, wenn sich einer der Eingabewerte tatsächlich ändert. So sind auch komplexe Projektionen in großen Anwendungen ohne Nachteile in der Performance möglich.
+Wir können auf diese Weise ein komplexes Gerüst von Selektoren definieren. Die Selektoren bauen aufeinander auf und kombinieren die Daten aus dem State so, wie sie in den Komponenten benötigt werden. Jeder einzelne Selektor nutzt die Memoization, um die berechneten Werte zu cachen. Die Berechnung in der Projektionsfunktion wird nur neu ausgeführt, wenn sich einer der Eingabewerte tatsächlich ändert. So bleiben auch komplexe Projektionen in großen Anwendungen in der Regel günstig, denn sie werden nur bei geänderten Eingaben neu berechnet. Der Cache merkt sich allerdings nur die jeweils letzten Eingabewerte.
 
 Für den BookManager wollen wir zwei einfache Selektoren entwickeln, die uns Zugriff auf das `loading`-Flag und auf die Buchliste geben:
 
@@ -419,13 +424,13 @@ export const selectAllBooks = createSelector(
 );
 ```
 
-Diese Selektoren lesen wir nun in der `BooksOverview` aus. Der Store stellt dafür die Methode `selectSignal()` bereit: Sie erwartet einen Selektor und liefert ein **Signal** des ausgewählten State-Slice zurück. Im Gegensatz zur Methode `select()`, die ein Observable liefert, erhalten wir mit `selectSignal()` direkt ein Signal – so benötigen wir im Template keine `AsyncPipe`.
+Diese Selektoren lesen wir nun in der `BooksOverview` aus. Der Store stellt dafür die Methode `selectSignal()` bereit: Sie erwartet einen Selektor und liefert ein **Signal** des ausgewählten State-Slice zurück. Im Gegensatz zur Methode `select()`, die ein Observable liefert, erhalten wir mit `selectSignal()` direkt ein Signal. So benötigen wir im Template keine `AsyncPipe`.
 
-Das resultierende Signal aktualisiert sich nur dann, wenn sich der selektierte Wert tatsächlich verändert hat. Obwohl der Store bei *jeder* Änderung den gesamten State neu erzeugt, gibt unser `loading`-Signal also nur dann einen neuen Wert aus, wenn sich das `loading`-Flag wirklich geändert hat. Die folgende Abbildung veranschaulicht das:
+Das resultierende Signal aktualisiert sich nur dann, wenn sich der selektierte Wert tatsächlich verändert hat. Obwohl der Store bei *jeder* Action einen neuen State ausgibt, gibt unser `loading`-Signal also nur dann einen neuen Wert aus, wenn sich das `loading`-Flag wirklich geändert hat. Die folgende Abbildung veranschaulicht das:
 
-![Diagramm: Der Store gibt bei jeder Änderung den gesamten State aus (loading wechselt false, true, true, false). Der Selektor store.selectSignal(state => state.book.loading) gibt darunter nur dann einen neuen Wert aus, wenn sich das loading-Flag tatsächlich ändert (false, true, false).](./selectors-gap.svg "Selektor mit store.selectSignal() verwenden")
+![Diagramm: Der Store gibt bei jeder Änderung den gesamten State aus (loading wechselt false, true, true, false). Der Selektor store.selectSignal(selectBooksLoading) gibt darunter nur dann einen neuen Wert aus, wenn sich das loading-Flag tatsächlich ändert (false, true, false).](./selectors-gap.svg "Selektor mit store.selectSignal() verwenden")
 
-Wir legen die Signale direkt als Properties in der Komponentenklasse ab. Wenn wir unsere Anwendung sauber strukturieren, sollten die Komponenten immer so aussehen und keine zusätzliche Logik für die Datenaufbereitung beinhalten. Da wir die Buchliste nun aus dem Store beziehen, benötigen wir den `BookStore` in der Komponente nicht mehr – die HTTP-Kommunikation findet jetzt ausschließlich im Effect statt.
+Wir legen die Signale direkt als Properties in der Komponentenklasse ab. Komponenten sollten so schlank bleiben und keine zusätzliche Logik für die Datenaufbereitung beinhalten.
 
 ```ts
 // books/books-overview/books-overview.ts
@@ -448,7 +453,7 @@ export class BooksOverview {
 }
 ```
 
-Im Template der Komponente lesen wir die Signale aus, indem wir sie wie eine Funktion aufrufen (`books()`). Für die Buchliste nutzen wir den nativen Control Flow mit `@for`, für den Ladeindikator `@if`. Unser globales Stylesheet bietet dafür die passende CSS-Klasse `loader` an.
+Im Template der Komponente lesen wir die Signale aus, indem wir sie wie eine Funktion aufrufen (`books()`). Für die Buchliste nutzen wir den nativen Control Flow mit `@for`, für den Ladeindikator `@if`. In der Beispiel-App stellt das globale Stylesheet `styles.css` dafür die CSS-Klasse `loader` bereit.
 
 ```html
 <!-- books/books-overview/books-overview.html -->
@@ -474,15 +479,15 @@ Was unserer Anwendung allerdings bis hierhin noch fehlt, ist die Kommunikation m
 
 Die grundsätzliche Aufgabe lässt sich wie folgt zusammenfassen: Wir wollen auf die Action `loadBooks` reagieren und einen HTTP-Request auslösen, um die Buchliste vom Server zu laden. Ist die HTTP-Antwort eingetroffen, so soll die Buchliste mit einer Action `loadBooksSuccess` in den Store gesendet werden. Schlägt die HTTP-Kommunikation fehl, so soll die Action `loadBooksFailure` ausgelöst werden.
 
-Um diese Aufgabe anzugehen, bietet NgRx ein ausgereiftes Modell zur Ausführung von Seiteneffekten: Mit `@ngrx/effects` können wir asynchrone Ereignisse und andere Seiteneffekte in der Anwendung koordinieren. In einem Effect ist "alles" erlaubt: HTTP-Kommunikation, Logging, Authentifizierung, LocalStorage, Routing, Anzeige von Meldungen usw. Effects sind kein Bestandteil der eigentlichen Redux-Architektur, sondern agieren außerhalb des Stores.
+Für diese Aufgabe bietet NgRx mit dem Paket `@ngrx/effects` ein eigenes Modell an: Damit koordinieren wir asynchrone Ereignisse und andere Seiteneffekte in der Anwendung. In einem Effect ist "alles" erlaubt: HTTP-Kommunikation, Logging, Authentifizierung, LocalStorage, Routing, Anzeige von Meldungen usw. Effects sind kein Bestandteil der eigentlichen Redux-Architektur, sondern agieren außerhalb des Stores.
 
-Mit Effects kommen wir in den Genuss des vollen Erlebnisses von reaktiver Programmierung. Ein Effect ist ein reaktiver Datenstrom, der
+Effects sind vollständig reaktiv aufgebaut. Ein Effect ist ein Datenstrom, der
 
 - auf Actions und andere Ereignisse reagiert,
 - Seiteneffekte ausführen kann und
 - neue Actions generiert.
 
-Technisch ist ein Effect also immer ein `Observable<Action>`. Alle so erzeugten Actions werden automatisch in den Store dispatcht – darum kümmert sich das Framework. Effects bringen wir in einer eigenen Klasse unter, die wie ein Service aufgebaut ist: Sie trägt den Decorator `@Injectable()` und fordert ihre Abhängigkeiten mit `inject()` an. Damit die Effects funktionieren, müssen wir die Klasse explizit registrieren – das haben wir bereits mit `provideEffects(BookEffects)` im `providers`-Array der Route erledigt. Der folgende Datenfluss entsteht dadurch:
+Technisch ist ein Effect also immer ein `Observable<Action>`. Alle so erzeugten Actions werden automatisch in den Store dispatcht; darum kümmert sich das Framework. Effects bringen wir in einer eigenen Klasse unter, die wie ein Service aufgebaut ist: Sie fordert ihre Abhängigkeiten mit `inject()` an und trägt den Decorator `@Injectable()`. Anders als ein Service mit `@Service()` wird diese Klasse nicht automatisch bereitgestellt. Wir registrieren sie explizit mit `provideEffects(BookEffects)` im `providers`-Array der Route, wie bereits gezeigt. Der folgende Datenfluss entsteht dadurch:
 
 ![Diagramm: Wie der einfache Redux-Fluss, aber erweitert um Effects. Eine Action triggert nicht nur den Reducer, sondern löst auch einen Effect aus. Der Effect ruft einen Service auf, der mit einer API kommuniziert, und löst seinerseits eine neue Action aus, die wieder in den Reducer fließt.](./ngrx-flow-full.svg "Datenfluss in NgRx mit Effects")
 
@@ -490,7 +495,7 @@ Die Klasse `BookEffects` befindet sich in der Datei `books/store/book.effects.ts
 
 In die Klasse holen wir mit `inject()` zwei Abhängigkeiten: den `BookStore`, der die HTTP-Kommunikation kapselt, und den Service `Actions`. Über `Actions` erhalten wir ein Observable, das alle Actions liefert, die in der Anwendung auftreten. Dieser Datenstrom ist meist die Grundlage für unsere Effects. (Ein Effect muss nicht auf Actions basieren. Einige Beispiele für solche Effects haben wir in einem Blogartikel zusammengefasst: [5 useful NgRx effects that don't rely on actions](https://angular.schule/blog/2018-06-5-useful-effects-without-actions).)
 
-Den Datenzugriff kapseln wir wie im Buch in einem Service `BookStore`. Er nutzt den `HttpClient`, um mit der API zu kommunizieren. Damit die Demo ohne eigenes Backend läuft, sprechen wir eine öffentlich gehostete Instanz der BookManager-API unter `https://api1.angular-buch.com` an. Der Service gibt bewusst `Observable`s zurück, denn unsere Effects arbeiten direkt mit Observables:
+Den Datenzugriff kapseln wir wie im Buch in einem Service `BookStore`. Trotz des Namens hat er nichts mit dem NgRx-`Store` zu tun: Er ist unser HTTP-Service. Der Decorator `@Service()` markiert die Klasse als Service und stellt sie automatisch im Dependency-Injection-System bereit. Der Service nutzt den `HttpClient`, um mit der API zu kommunizieren. Damit die Beispiel-App ohne eigenes Backend läuft, sprechen wir eine öffentlich gehostete Instanz der BookManager-API unter `https://api1.angular-buch.com` an. Der Service gibt `Observable`s zurück, denn unsere Effects arbeiten mit Observables. Die Komponente spricht den `BookStore` nicht an; die HTTP-Kommunikation liegt allein im Effect:
 
 ```ts
 // shared/book-store.ts
@@ -554,11 +559,11 @@ export class BookEffects {
 
 Der Datenfluss beginnt beim Strom aller Actions aus der gesamten Anwendung: `this.actions$`. Wir interessieren uns hier allerdings nur für Actions mit dem bestimmten Typ `loadBooks`. Um den Datenstrom zu filtern, eignet sich der Operator `filter()`. Das führt allerdings zu sehr technischem Code, erschwert die korrekte Typisierung und sagt wenig über die tatsächliche Semantik aus. NgRx bringt deshalb einen eigenen Operator mit, mit dem wir den Datenstrom nach dem Action-Typ filtern können: `ofType()`. Als Argument übergeben wir hier einen Action Creator. Anschließend liegt ein Datenstrom vor, der nur Actions vom Typ `loadBooks` ausgibt.
 
-Für jede dieser Actions wollen wir nun einen HTTP-Request ausführen und die Ergebnisse verarbeiten. Damit betreten wir erneut das Terrain der Higher-Order Observables. Wir müssen uns sorgfältig für einen der vier Flattening-Operatoren entscheiden. Unsere Wahl fällt hier auf `switchMap()`: Wird die Buchliste noch geladen und währenddessen erneut angefragt, soll nur die zuletzt gesendete Anfrage bearbeitet werden. Wir sollten allerdings nicht immer `switchMap()` in unseren Effects verwenden, sondern sorgfältig abwägen, welcher Flattening-Operator am besten zum jeweiligen Problem passt.
+Für jede dieser Actions wollen wir nun einen HTTP-Request ausführen und die Ergebnisse verarbeiten. Damit entsteht ein *Higher-Order Observable*: ein Observable, das für jede Action ein weiteres Observable (den HTTP-Request) liefert. Um es zu einem einfachen Datenstrom abzuflachen, nutzen wir einen der vier *Flattening-Operatoren* aus RxJS: `mergeMap()`, `concatMap()`, `switchMap()` oder `exhaustMap()`. Sie unterscheiden sich darin, wie sie mit einer neuen Action umgehen, während der vorherige Request noch läuft. Im Buch gehen wir im Kapitel zu RxJS ausführlich darauf ein. Unsere Wahl fällt hier auf `switchMap()`: Wird die Buchliste noch geladen und währenddessen erneut angefragt, soll nur die zuletzt gesendete Anfrage bearbeitet werden. Wir sollten allerdings nicht immer `switchMap()` in unseren Effects verwenden, sondern sorgfältig abwägen, welcher Flattening-Operator am besten zum jeweiligen Problem passt.
 
 Mithilfe von `switchMap()` lösen wir den HTTP-Request aus, indem wir den `BookStore` mit der Methode `getAll()` einsetzen, die ein Observable zurückgibt. Unser Effect ist nun ein Observable, das ein Array von Büchern liefert. Damit die Buchliste im Store verarbeitet werden kann, müssen wir sie in eine Action verpacken. Wir nutzen dazu den Operator `map()` und wandeln damit die Buchliste um in eine Action `loadBooksSuccess`, die die Liste enthält.
 
-Ähnlich gehen wir für den Fehlerfall vor: Hier nutzen wir den Operator `catchError()`, um einen Fehler in der Ausführung abzufangen. Wir werfen den Fehler allerdings an der Stelle nicht weiter, sondern kapseln ihn in eine Action `loadBooksFailure`, die wir als reguläres Element des Datenstroms weitergeben. Der Fehler im `catchError()` ist als `unknown` typisiert – an dieser Stelle kann schließlich alles Mögliche ankommen (ein `Error`, bei einem HTTP-Fehler eine `HttpErrorResponse`, im Extremfall ein String). Statt blind auf eine Eigenschaft wie `message` zuzugreifen, prüfen wir die Form des Fehlers in einer kleinen Hilfsfunktion `toMessage()`. Unsere API liefert ihre Fehlermeldungen als `{ error: string }` (z. B. HTTP 409 bei einer doppelten ISBN), verpackt in einer `HttpErrorResponse` – diesen Fall behandeln wir gezielt. Da der Response-Body (`error.error`) als `any` typisiert ist, prüfen wir auch ihn zur Laufzeit, bevor wir ihn als Meldung übernehmen:
+Ähnlich gehen wir für den Fehlerfall vor: Hier nutzen wir den Operator `catchError()`, um einen Fehler in der Ausführung abzufangen. Wir werfen den Fehler allerdings an der Stelle nicht weiter, sondern kapseln ihn in eine Action `loadBooksFailure`, die wir als reguläres Element des Datenstroms weitergeben. Der Fehler im `catchError()` ist als `unknown` typisiert, denn an dieser Stelle kann alles Mögliche ankommen: ein `Error`, bei einem HTTP-Fehler eine `HttpErrorResponse`, im Extremfall ein String. Statt blind auf eine Eigenschaft wie `message` zuzugreifen, prüfen wir die Form des Fehlers in einer kleinen Hilfsfunktion `toMessage()`. Unsere API liefert ihre Fehlermeldungen als `{ error: string }` (z. B. HTTP 409 bei einer doppelten ISBN), verpackt in einer `HttpErrorResponse`. Diesen Fall behandeln wir gezielt. Da der Response-Body (`error.error`) als `any` typisiert ist, prüfen wir auch ihn zur Laufzeit, bevor wir ihn als Meldung übernehmen:
 
 ```ts
 // shared/error-message.ts
@@ -575,17 +580,17 @@ export function toMessage(error: unknown): string {
 
 Auf diese Weise erzeugen wir einen Datenstrom, der nacheinander verschiedene Actions ausgeben kann. Die Funktion `createEffect()` sorgt dafür, dass dieser Datenstrom automatisch abonniert wird. Die resultierenden Actions werden in den Store dispatcht und durchlaufen dort die Reducers. In einem Effect sollten wir also niemals selbst die Methode `store.dispatch()` aufrufen.
 
-Bei der Fehlerbehandlung ist es wichtig, den Fehler so dicht wie möglich dort abzufangen, wo er entsteht. Wir setzen `catchError()` deshalb nicht im Hauptdatenstrom ein, sondern hängen `map()` und `catchError()` direkt an den Serviceaufruf an. Das `switchMap()` verarbeitet also ein Observable, das in jedem Fall eine Action liefert – so wird der Hauptdatenstrom nicht durch Fehler gefährdet. Wird ein Effect durch einen Fehler im Hauptdatenstrom gestört, so wird das zugrunde liegende Observable beendet. NgRx abonniert den Effect zwar standardmäßig automatisch neu (bis zu zehnmal), die auslösende Action geht dabei aber verloren – deshalb fangen wir Fehler immer direkt am inneren Observable ab.
+Bei der Fehlerbehandlung ist es wichtig, den Fehler so dicht wie möglich dort abzufangen, wo er entsteht. Wir setzen `catchError()` deshalb nicht im Hauptdatenstrom ein, sondern hängen `map()` und `catchError()` direkt an den Serviceaufruf an. Das `switchMap()` verarbeitet also ein Observable, das in jedem Fall eine Action liefert. So wird der Hauptdatenstrom nicht durch Fehler gefährdet. Wird ein Effect durch einen Fehler im Hauptdatenstrom gestört, so wird das zugrunde liegende Observable beendet. NgRx abonniert den Effect zwar standardmäßig automatisch neu (bis zu zehnmal), die auslösende Action geht dabei aber verloren. Deshalb fangen wir Fehler immer direkt am inneren Observable ab.
 
 Probieren wir die Anwendung nun aus und beobachten wir auch die Actions in den Redux DevTools! Nachdem die Buchliste geladen wurde, wird `loadBooksSuccess` dispatcht, und der Reducer fügt die Buchliste in den State ein. Die Selektoren in der Komponente reagieren darauf, und die Bücher werden dargestellt.
 
-Wir sollten beachten, dass wir mit einem ungünstig programmierten Effect schnell eine Endlosschleife erzeugen können, die den Browser "zum Glühen" bringt, wenn parallel `ng serve` läuft und die Anwendung sofort aktualisiert. Der folgende Effect empfängt alle Actions und leitet sie direkt in den Store zurück – es entsteht eine Endlosschleife:
+Wir sollten beachten, dass wir mit einem ungünstig programmierten Effect schnell eine Endlosschleife erzeugen können, die den Browser "zum Glühen" bringt, wenn parallel `ng serve` läuft und die Anwendung sofort aktualisiert. Der folgende Effect empfängt alle Actions und leitet sie direkt in den Store zurück. Es entsteht eine Endlosschleife:
 
 ```ts
 loopOfDeath$ = createEffect(() => this.actions$);
 ```
 
-Wir können einen Effect übrigens so konfigurieren, dass er die ausgegebenen Elemente des Datenstroms nicht als Actions dispatcht. Das ist immer dann nützlich, wenn ein Effect lediglich Seiteneffekte ausführt, aber keine weiteren Aktionen zur Folge hat. Denken wir z. B. daran, dass wir nach dem erfolgreichen Anlegen eines Buchs zur Detailseite navigieren möchten – nach diesem Schritt sollen keine weiteren Actions getriggert werden. Dazu setzen wir im zweiten Argument von `createEffect()` die Einstellung `{ dispatch: false }`:
+Wir können einen Effect übrigens so konfigurieren, dass er die ausgegebenen Elemente des Datenstroms nicht als Actions dispatcht. Das ist immer dann nützlich, wenn ein Effect lediglich Seiteneffekte ausführt, aber keine weiteren Aktionen zur Folge hat. Denken wir z. B. daran, dass wir nach dem erfolgreichen Anlegen eines Buchs zur Detailseite navigieren möchten; nach diesem Schritt sollen keine weiteren Actions getriggert werden. Dazu setzen wir im zweiten Argument von `createEffect()` die Einstellung `{ dispatch: false }`:
 
 ```ts
 navigate$ = createEffect(
@@ -636,7 +641,15 @@ import * as bookEffects from './store/book.effects';
 provideEffects(bookEffects)
 ```
 
-Beide Varianten – klassenbasiert mit `inject()` und funktional – sind gleichwertig. Welche wir wählen, ist vor allem eine Frage des Stils.
+Beide Varianten, klassenbasiert und funktional, sind gleichwertig. Welche wir wählen, ist vor allem eine Frage des Stils.
+
+### Geschafft!
+
+Sobald der Effect aktiv ist, wird unsere Anwendung die Bücher über HTTP laden und die Liste mittels `loadBooksSuccess` an den Reducer übergeben. Dieser berechnet einen neuen Zustand mit den geladenen Büchern. Abschließend aktualisiert ein Selektor die Oberfläche, und die neuen Bücher werden angezeigt.
+
+Und damit haben wir die Rundreise durch alle Bausteine von Redux und NgRx geschafft. Mithilfe eines zentralen Stores haben wir die Zustände der Anwendung zentralisiert und so die Buchliste vom Server abgerufen. Die Komponenten beinhalten mit dieser Architektur nur noch wenig Logik: Alles Nötige passiert im Store.
+
+Vielleicht haben wir nun das Gefühl, dass wir für eine kleine Aufgabe unnötig viel Code erzeugt haben. Betrachtet man das vorliegende Beispiel isoliert, so ist diese Empfindung richtig: Für kleine Anwendungen ist der Einsatz von Redux und dem Global Store nicht zwingend sinnvoll. Steigt allerdings die Komplexität des Projekts, so kann ein zentrales State Management mit klaren Regeln und einer durchdachten Architektur eine sinnvolle Investition sein.
 
 ### Bücher anlegen und löschen
 
@@ -655,9 +668,9 @@ export const deleteBookSuccess = createAction('[Book] Delete Book Success', prop
 export const deleteBookFailure = createAction('[Book] Delete Book Failure', props<{ error: string }>());
 ```
 
-Für zwei Operationen benötigen wir also sechs zusätzliche Actions. (Kompakter notieren lässt sich das mit `createActionGroup()`, siehe Abschnitt "Wie geht's weiter?".)
+Für zwei Operationen benötigen wir also sechs zusätzliche Actions. (Kompakter notieren lässt sich das mit `createActionGroup()`, siehe Abschnitt [Actions gruppieren mit `createActionGroup()`](#actions-gruppieren-mit-createactiongroup).)
 
-**Effects.** Jede Mutation löst einen HTTP-Request aus. Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei schreibenden Operationen wollen wir laufende Requests aber nicht abbrechen – sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl. Der `BookStore` bietet dazu die Methoden `create()` und `remove()` an:
+**Effects.** Jede Mutation löst einen HTTP-Request aus. Ein wichtiger Unterschied zum Laden betrifft den Flattening-Operator: Beim Laden ist `switchMap()` richtig (eine neue Anfrage macht die alte überflüssig). Bei schreibenden Operationen wollen wir laufende Requests aber nicht abbrechen, sonst ginge womöglich ein Speichervorgang verloren. Hier ist `concatMap()` die sichere Wahl. Der `BookStore` bietet dazu die Methoden `create()` und `remove()` an:
 
 ```ts
 // books/store/book.effects.ts (Ergänzung in der Klasse BookEffects)
@@ -690,7 +703,7 @@ deleteBook$ = createEffect(() =>
 );
 ```
 
-**Reducer.** Im Reducer passen wir den State immutabel an: anhängen mit dem Spread-Operator, entfernen mit `filter()`. Beim Auslösen eines Schreibvorgangs setzen wir – wie schon beim Laden – eine alte Fehlermeldung zurück. Auf die beiden Fehlerfälle reagieren wir mit *einem* `on()` gleichzeitig (das ist möglich, weil ein Reducer für jede Action durchlaufen wird):
+**Reducer.** Im Reducer passen wir den State immutabel an: anhängen mit dem Spread-Operator, entfernen mit `filter()`. Beim Auslösen eines Schreibvorgangs setzen wir, wie schon beim Laden, eine alte Fehlermeldung zurück. Auf die beiden Fehlerfälle reagieren wir mit *einem* `on()` gleichzeitig (das ist möglich, weil ein Reducer für jede Action durchlaufen wird):
 
 ```ts
 // books/store/book.reducer.ts (Ergänzung in createReducer)
@@ -719,7 +732,7 @@ on(
 )
 ```
 
-**Selektor.** Für die Fehleranzeige ergänzen wir einen Selektor `selectBooksError` und lesen ihn – wie schon `books` und `loading` – per `selectSignal()`. Aktionen lösen wir aus, indem wir die Action Creators dispatchen:
+**Selektor.** Für die Fehleranzeige ergänzen wir einen Selektor `selectBooksError` und lesen ihn wie schon `books` und `loading` per `selectSignal()`. Aktionen lösen wir aus, indem wir die Action Creators dispatchen:
 
 ```ts
 // books/store/book.selectors.ts
@@ -741,9 +754,9 @@ on(BookActions.clearError, (state): State => ({ ...state, error: null }))
 
 **Smarte und präsentationale Komponente.** Wir teilen die Oberfläche in zwei Komponenten auf: eine smarte Komponente `BooksOverview`, die den Store kennt und Actions dispatcht, und eine präsentationale Komponente `BookCard`, die nur ein einzelnes Buch darstellt und über Outputs meldet, was Nutzerinnen und Nutzer tun möchten. Diese Trennung hält die Darstellung frei von NgRx und macht die Karte wiederverwendbar.
 
-Die smarte Komponente `BooksOverview` bezieht alle benötigten Daten als Signale aus dem Store und stößt im Konstruktor das Laden an. Die Eingabefelder des Anlege-Formulars reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Dispatch die Felder leert – so bleibt der Fokus auf NgRx.
+Die smarte Komponente `BooksOverview` bezieht alle benötigten Daten als Signale aus dem Store und stößt im Konstruktor das Laden an. Die Eingabefelder des Anlege-Formulars reichen wir bewusst ohne `FormsModule` als lokale Template-Referenzen (`#isbnEl`) direkt an die Methode weiter, die nach dem Dispatch die Felder leert. So bleibt der Fokus auf NgRx. Die Felder leeren wir dabei sofort, noch bevor die API geantwortet hat. Schlägt das Anlegen fehl, etwa bei einer doppelten ISBN, ist die Eingabe verloren. In einer echten Anwendung würden wir das Formular erst nach `createBookSuccess` zurücksetzen.
 
-Da die API ein vollständiges Buch erwartet, füllen wir die übrigen Felder beim Anlegen mit sinnvollen Defaults. Dieses Wissen über das Modell gehört allerdings nicht in die Komponente – jede weitere Formularkomponente müsste die Defaults sonst duplizieren. Wir definieren dafür eine kleine Factory direkt neben dem Modell:
+Da die API ein vollständiges Buch erwartet, füllen wir die übrigen Felder beim Anlegen mit sinnvollen Defaults. Dieses Wissen über das Modell gehört allerdings nicht in die Komponente: Jede weitere Formularkomponente müsste die Defaults sonst duplizieren. Wir definieren dafür eine kleine Factory direkt neben dem Modell:
 
 ```ts
 // shared/book.ts (Ergänzung)
@@ -768,7 +781,7 @@ import { Store } from '@ngrx/store';
 
 import * as BookActions from '../store/book.actions';
 import { selectAllBooks, selectBooksError, selectBooksLoading } from '../store/book.selectors';
-import { Book, newBook } from '../../shared/book';
+import { newBook } from '../../shared/book';
 import { BookCard } from '../book-card/book-card';
 
 @Component({
@@ -859,7 +872,7 @@ Im Template der Karte stellen wir die Daten des Buchs dar und bieten zwei Button
 </article>
 ```
 
-Im Template der `BooksOverview` zeigen wir die Fehlermeldung (mit einem Button zum Wegklicken), bieten ein kleines Formular zum Anlegen und rendern für jedes Buch eine `BookCard`. Die Outputs der Karte verbinden wir mit den Methoden der smarten Komponente:
+Im Template der `BooksOverview` zeigen wir die Fehlermeldung (mit einem Button zum Wegklicken), bieten ein kleines Formular zum Anlegen und rendern für jedes Buch eine `BookCard`. Den Output `remove` der Karte verbinden wir mit der Methode `deleteBook()` der smarten Komponente:
 
 ```html
 <!-- books/books-overview/books-overview.html (Ausschnitt) -->
@@ -882,20 +895,20 @@ Im Template der `BooksOverview` zeigen wir die Fehlermeldung (mit einem Button z
 
 <div class="book-grid">
   @for (book of books(); track book.isbn) {
-    <app-book-card [book]="book" (like)="likeBook($event)" (remove)="deleteBook($event)" />
+    <app-book-card [book]="book" (remove)="deleteBook($event)" />
   }
 </div>
 ```
 
-Den `like`-Output verdrahten wir hier mit einer Methode `likeBook()` der smarten Komponente. Was dahinter passiert, sehen wir gleich im Abschnitt zu den Favoriten – denn dieser Zustand kommt ganz ohne Effect aus.
+Den Output `like` nutzen wir im nächsten Abschnitt für die Favoriten.
 
-Damit haben wir ein vollständiges CRUD-Feature für Anlegen und Löschen. Für zwei Operationen waren sechs Actions, zwei Effects und zwei Erfolgs-Reducer nötig – genau diese Menge an Bausteinen zieht der SignalStore in [Teil 3](/material/ngrx-signal-store) auf wenige Methoden in einer einzigen Datei zusammen.
+Damit kann die Anwendung Bücher laden, anlegen und löschen. Für Anlegen und Löschen waren sechs Actions, zwei Effects und zwei Erfolgs-Reducer nötig. Der SignalStore aus [Teil 3](/material/ngrx-signal-store) kommt dafür mit wenigen Methoden in einer einzigen Datei aus.
 
-> **Tipp:** Die wiederkehrenden Array-Operationen im Reducer (`[...state.books, …]`, `filter()`) übernimmt das Paket `@ngrx/entity` mit fertigen Adaptern (`addOne`, `removeOne`) – siehe den Abschnitt "Entity Management" weiter unten.
+> **Tipp:** Die wiederkehrenden Array-Operationen im Reducer (`[...state.books, …]`, `filter()`) übernimmt das Paket `@ngrx/entity` mit fertigen Adaptern (`addOne`, `removeOne`), siehe Abschnitt [Entity Management](#entity-management).
 
 ### Favoriten: Client-State ohne Seiteneffekt
 
-Nicht jeder Zustand muss über das Netzwerk wandern. Im BookManager können Nutzerinnen und Nutzer Bücher als Favoriten markieren. Diese Markierung lebt nur im Browser – wir schicken sie nicht an den Server. Damit unterscheiden sich die Favoriten grundlegend von den bisherigen Operationen: Laden, Anlegen und Löschen sind *Server-State* und laufen über Effects. Die Favoriten sind reiner *Client-State* und kommen ohne Effect aus. Wir dispatchen eine Action, und der Reducer passt den State an.
+Im BookManager können Nutzerinnen und Nutzer Bücher als Favoriten markieren. Diese Markierung speichern wir nur im Browser, nicht auf dem Server. Damit unterscheiden sich die Favoriten von den bisherigen Operationen: Laden, Anlegen und Löschen sind *Server-State* und laufen über Effects. Die Favoriten sind reiner *Client-State* und kommen ohne Effect aus. Wir dispatchen eine Action, und der Reducer passt den State an.
 
 **Actions.** Wir brauchen kein Trio aus Auslöser, Erfolg und Fehler, denn es gibt keinen asynchronen Vorgang, der fehlschlagen könnte. Eine Action zum Hinzufügen und eine zum Leeren genügen:
 
@@ -905,7 +918,7 @@ export const likeBook = createAction('[Book] Like Book', props<{ book: Book }>()
 export const clearLikedBooks = createAction('[Book] Clear Liked Books');
 ```
 
-**State und Reducer.** Wir erweitern den Feature-State um einen Slice `likedBooks: Book[]`, der initial leer ist:
+**State und Reducer.** Wir erweitern den Feature-State um eine Property `likedBooks: Book[]`, die initial leer ist:
 
 ```ts
 // books/store/book.reducer.ts
@@ -936,7 +949,7 @@ on(BookActions.likeBook, (state, action): State =>
 on(BookActions.clearLikedBooks, (state): State => ({ ...state, likedBooks: [] }))
 ```
 
-Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden – sonst bleibt dort ein Eintrag zurück, den es nicht mehr gibt. Dazu erweitern wir den bestehenden Reducer für `deleteBookSuccess`:
+Wird ein Buch gelöscht, soll es auch aus den Favoriten verschwinden, sonst bleibt dort ein Eintrag zurück, den es nicht mehr gibt. Dazu erweitern wir den bestehenden Reducer für `deleteBookSuccess`:
 
 ```ts
 // books/store/book.reducer.ts (angepasst)
@@ -963,6 +976,15 @@ export const selectLikedBooks = createSelector(
 
 ```ts
 // books/books-overview/books-overview.ts (Ergänzung)
+import { Book, newBook } from '../../shared/book';
+import {
+  selectAllBooks,
+  selectBooksError,
+  selectBooksLoading,
+  selectLikedBooks
+} from '../store/book.selectors';
+
+// ... in der Klasse BooksOverview:
 likedBooks = this.store.selectSignal(selectLikedBooks);
 
 likeBook(book: Book): void {
@@ -974,7 +996,7 @@ clearLikedBooks(): void {
 }
 ```
 
-Im Template ergänzen wir eine Favoriten-Sektion oberhalb der Buchliste:
+Im Template ergänzen wir eine Favoriten-Sektion oberhalb der Buchliste und verbinden den Output `like` der Karte mit der neuen Methode `likeBook()`:
 
 ```html
 <!-- books/books-overview/books-overview.html (Ausschnitt) -->
@@ -989,19 +1011,19 @@ Im Template ergänzen wir eine Favoriten-Sektion oberhalb der Buchliste:
     }
   </ul>
 </section>
+
+<!-- ... -->
+
+<div class="book-grid">
+  @for (book of books(); track book.isbn) {
+    <app-book-card [book]="book" (like)="likeBook($event)" (remove)="deleteBook($event)" />
+  }
+</div>
 ```
 
 Markiert nun jemand über die `BookCard` ein Buch als Favorit, so feuert deren `like`-Output, die `BooksOverview` dispatcht `likeBook`, und der Reducer pflegt die Liste. Ein HTTP-Request entsteht dabei nicht.
 
-Die Favoriten leben damit nur im Speicher der laufenden Anwendung – nach einem Neuladen der Seite sind sie verloren. Für eine echte Anwendung müssten wir die Liste zusätzlich persistieren, etwa im `localStorage` oder über die API. Diese Erweiterung eignet sich gut als Übung.
-
-### Geschafft!
-
-Sobald der Effect aktiv ist, wird unsere Anwendung die Bücher über HTTP laden und die Liste mittels `loadBooksSuccess` an den Reducer übergeben. Dieser berechnet einen neuen Zustand mit den geladenen Büchern. Abschließend aktualisiert ein Selektor die Oberfläche, und die neuen Bücher werden angezeigt.
-
-Und damit haben wir die Rundreise durch alle Bausteine von Redux und NgRx geschafft. Mithilfe eines zentralen Stores haben wir die Zustände der Anwendung zentralisiert und so die Buchliste vom Server abgerufen. Die Komponenten beinhalten mit dieser Architektur nur noch wenig Logik – alles Nötige passiert im Store.
-
-Vielleicht haben wir nun das Gefühl, dass wir für eine kleine Aufgabe unnötig viel Code erzeugt haben. Betrachtet man das vorliegende Beispiel isoliert, so ist diese Empfindung richtig: Für kleine Anwendungen ist der Einsatz von Redux und dem Global Store nicht zwingend sinnvoll. Steigt allerdings die Komplexität des Projekts, so kann ein zentrales State Management mit klaren Regeln und einer durchdachten Architektur eine sinnvolle Investition sein. Wir sollten also für jedes Projekt sorgfältig prüfen, ob sich der Einsatz wirklich lohnt. Eine leichtgewichtige Alternative für viele Fälle stellen wir in [Teil 3 dieser Serie](/material/ngrx-signal-store) mit dem SignalStore vor.
+Die Favoriten leben damit nur im Speicher der laufenden Anwendung. Nach einem Neuladen der Seite sind sie verloren. Für eine echte Anwendung müssten wir die Liste zusätzlich persistieren, etwa im `localStorage` oder über die API. Diese Erweiterung eignet sich gut als Übung.
 
 ## Debugging mit den Redux DevTools
 
@@ -1011,7 +1033,7 @@ Ein besonderer Vorteil der Redux-Architektur ist das sogenannte *Time Travel Deb
 
 ### Die DevTools installieren
 
-Die Redux DevTools sind eine Erweiterung für Google Chrome. Um sie zu verwenden, besuchen wir den Webstore und installieren die [Extension im Browser](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd).
+Die Redux DevTools sind eine Browser-Erweiterung, die es unter anderem für Chrome, Firefox und Edge gibt. Für Chrome installieren wir sie aus dem [Chrome Web Store](https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd).
 
 ![Die Redux DevTools im Chrome Web Store](./webstore-devtools.png "Die Redux DevTools als Erweiterung für Google Chrome installieren")
 
@@ -1025,9 +1047,9 @@ Der einfachste Weg zur Einrichtung ist es, das Paket mithilfe von `ng add` in da
 ng add @ngrx/store-devtools
 ```
 
-Damit werden die benötigten Abhängigkeiten installiert, und der Aufruf `provideStoreDevtools()` wird in die `app.config.ts` der Anwendung eingetragen (siehe Abschnitt "Grundstruktur").
+Damit werden die benötigten Abhängigkeiten installiert, und der Aufruf `provideStoreDevtools()` wird in die `app.config.ts` der Anwendung eingetragen (siehe Abschnitt [Grundstruktur](#grundstruktur)).
 
-> **Hinweis:** Die Option `logOnly: !isDevMode()` reduziert im Production-Build nur den Funktionsumfang – das Action-Recording bleibt aktiv, und das Paket bleibt Teil des Bundles. Wer die DevTools aus dem Production-Build vollständig heraushalten möchte, registriert den Provider bedingt, z. B. mit `...(isDevMode() ? [provideStoreDevtools({ maxAge: 25 })] : [])`.
+> **Hinweis:** Die Option `logOnly: !isDevMode()` reduziert im Production-Build nur den Funktionsumfang: Das Action-Recording bleibt aktiv, und das Paket bleibt Teil des Bundles. Wer die DevTools im Production-Build gar nicht registrieren möchte, bindet den Provider bedingt ein, z. B. mit `...(isDevMode() ? [provideStoreDevtools({ maxAge: 25 })] : [])`. Der Code des Pakets bleibt dabei allerdings im Bundle, denn `isDevMode()` wird erst zur Laufzeit ausgewertet.
 
 ### Die DevTools nutzen
 
@@ -1047,11 +1069,11 @@ In der folgenden Abbildung wurde die Action `[Book] Load Books Success` mit der 
 
 Weitere interessante Features verstecken sich hinter den Buttons am unteren Rand: Damit können wir unter anderem alle Actions und Zustände als JSON-Datei exportieren und später wieder importieren. Ein solcher Export kann z. B. an ein anderes Teammitglied übermittelt werden, das damit den gleichen Anwendungsstatus erzeugen kann wie wir.
 
-Mit diesem Debugging-Werkzeug haben wir also an einem Ort einen zentralen Überblick über alle Ereignisse der Anwendung. Wir können den Zustand des Systems überwachen und so auch Fehler bei der Entwicklung einfacher aufspüren.
+Mit diesem Debugging-Werkzeug haben wir einen Überblick über alle Ereignisse der Anwendung. Wir können den Zustand des Systems überwachen und so auch Fehler bei der Entwicklung einfacher aufspüren.
 
 ## Redux und NgRx: Wie geht's weiter?
 
-Wir haben in diesem Kapitel die Grundlagen der Redux-Architektur und des Frameworks NgRx kennengelernt. Tatsächlich geht die Reise aber noch viel weiter! Wir möchten in diesem Abschnitt einen Ausblick geben, welche Tools und Konzepte uns dabei noch begegnen werden.
+Wir haben in diesem Artikel die Grundlagen der Redux-Architektur und des Frameworks NgRx kennengelernt. Wir möchten in diesem Abschnitt einen Ausblick geben, welche Tools und Konzepte uns dabei noch begegnen werden.
 
 ### Actions gruppieren mit `createActionGroup()`
 
@@ -1073,7 +1095,7 @@ export const BookActions = createActionGroup({
 });
 ```
 
-Die Besonderheit an diesem Ansatz ist, dass wir die Variablennamen nicht mehr von Hand notieren müssen. Wir können die Actions z. B. als `BookActions.loadBooks()` verwenden – der Name des Properties wird automatisch aus dem Action Type ermittelt. Auf diese Weise sparen wir uns viel Tipparbeit.
+Die Besonderheit an diesem Ansatz ist, dass wir die Variablennamen nicht mehr von Hand notieren müssen. Wir können die Actions z. B. als `BookActions.loadBooks()` verwenden. Der Name des Properties wird automatisch aus dem Action Type ermittelt. Auf diese Weise sparen wir uns viel Tipparbeit.
 
 Um die Actions zu verwenden, importieren wir nun immer das gesamte Objekt `BookActions`, nicht die einzelnen Actions. In den Komponenten, Reducers und Effects sind also auch Anpassungen nötig, um diesen Ansatz zu nutzen.
 
@@ -1106,7 +1128,7 @@ Die generierten Selektoren `selectBooks` und `selectLoading` ersetzen unsere von
 
 ### Routing
 
-Der Anwendungszustand setzt sich nicht nur aus geladenen Daten und Einstellungen zusammen – die aktuell geladene Route und ihre Parameter gehören ebenfalls in den State. Beachten wir dies nicht, so sehen wir gegebenenfalls zum richtigen State die falsche Komponente auf der Oberfläche. Deshalb sollten Informationen zum Routing auch im NgRx-Store abgelegt werden. Den passenden Adapter zwischen Router und Store erhalten wir mit dem Paket `@ngrx/router-store`:
+Der Anwendungszustand setzt sich nicht nur aus geladenen Daten und Einstellungen zusammen: Auch die aktuell geladene Route und ihre Parameter gehören zum Zustand der Anwendung. Wer Routeninformationen in Selektoren oder Effects benötigt, kann den Router-Zustand deshalb im NgRx-Store abbilden. Den passenden Adapter zwischen Router und Store erhalten wir mit dem Paket `@ngrx/router-store`:
 
 ```bash
 ng add @ngrx/router-store
@@ -1118,7 +1140,7 @@ Das Paket verfügt über eigene Actions und Reducers und kommuniziert direkt mit
 - `routerNavigationAction`
 - `routerNavigatedAction`
 
-Die passenden Reducers fügen anschließend die Routeninformationen in den State ein, sodass wir z. B. die Routenparameter in den Komponenten, Reducers und Effects auslesen können.
+Der Reducer des Pakets fügt anschließend die Routeninformationen in den State ein. Mit den Selektoren aus `getRouterSelectors()` (z. B. `selectRouteParams`) lesen wir die Routenparameter dann in eigenen Selektoren, Komponenten und Effects aus.
 
 ### Entity Management
 
@@ -1170,7 +1192,7 @@ export const initialState: State =
   });
 ```
 
-Die Mächtigkeit von `@ngrx/entity` entfaltet sich schließlich, wenn es um die Implementierung der Reducers geht. Dazu stellt der Adapter eine Reihe von Methoden zur Verfügung, mit denen wir die Kollektion von Entitäten im State verwalten können:
+Den meisten Code spart `@ngrx/entity` in den Reducers: Der Adapter stellt eine Reihe von Methoden zur Verfügung, mit denen wir die Kollektion von Entitäten im State verwalten können:
 
 | Methode | Beschreibung |
 | --- | --- |
@@ -1184,11 +1206,11 @@ Die Mächtigkeit von `@ngrx/entity` entfaltet sich schließlich, wenn es um die 
 | `removeAll` | Kollektion leeren |
 | `updateOne` | eine Entität aktualisieren (mit partiellen Änderungen) |
 | `updateMany` | mehrere Entitäten aktualisieren |
-| `upsertOne` | eine vollständige Entität hinzufügen oder ersetzen |
+| `upsertOne` | eine Entität hinzufügen oder aktualisieren (vorhandene Properties werden flach zusammengeführt) |
 | `upsertMany` | mehrere Entitäten hinzufügen oder aktualisieren |
 | `map` | Kollektion aktualisieren mithilfe einer Projektionsfunktion |
 
-Alle Funktionen erhalten den aktuellen State und die zu verarbeitenden Werte als Argument und erzeugen einen neuen State. Wir können den so erzeugten State also direkt aus dem Reducer zurückgeben oder verwenden, um einen komplexeren State mit weiteren Änderungen zu erzeugen:
+Die Methoden erhalten den aktuellen State (und meist die zu verarbeitenden Werte) und liefern den resultierenden State zurück. Wir können diesen State also direkt aus dem Reducer zurückgeben oder verwenden, um einen komplexeren State mit weiteren Änderungen zu erzeugen:
 
 ```ts
 export const reducer = createReducer(
@@ -1207,28 +1229,22 @@ export const reducer = createReducer(
 );
 ```
 
-Der EntityAdapter stellt außerdem eine Reihe von Selektoren zur Verfügung, die wir nutzen können, um die Kollektion auszulesen. Die Selektoren werden mithilfe von `adapter.getSelectors()` erzeugt, müssen dann allerdings noch in einzelne Selektoren verpackt werden, die den jeweiligen Feature-State als Grundlage nutzen:
+Der EntityAdapter stellt außerdem eine Reihe von Selektoren zur Verfügung, die wir nutzen können, um die Kollektion auszulesen. Die Selektoren erzeugen wir mit `adapter.getSelectors()`. Übergeben wir dabei den Feature-Selektor, nutzen die erzeugten Selektoren direkt den Feature-State als Grundlage:
 
 ```ts
-const { selectAll, selectEntities,
-  selectIds, selectTotal } = adapter.getSelectors();
-
-export const selectAllBooks = createSelector(
-  selectBookState, selectAll
-);
-
-export const selectBookEntities = createSelector(
-  selectBookState, selectEntities
-);
+export const {
+  selectAll: selectAllBooks,
+  selectEntities: selectBookEntities,
+  selectIds: selectBookIds,
+  selectTotal: selectBookTotal
+} = adapter.getSelectors(selectBookState);
 ```
-
-Auf diese Weise können wir die Verwaltung von Entitäten im State sehr effizient durchführen.
 
 ### Testing
 
-Alle auf Grundlage von NgRx entwickelten Bausteine sollten auch getestet werden. Dafür möchten wir in diesem Abschnitt einige Hinweise geben. Grundsätzlich werden bei der Initialisierung mit den Schematics von NgRx bereits Grundgerüste für die Unit-Tests angelegt – wir können also direkt loslegen.
+Alle auf Grundlage von NgRx entwickelten Bausteine sollten auch getestet werden. Dafür möchten wir in diesem Abschnitt einige Hinweise geben. Grundsätzlich werden bei der Initialisierung mit den Schematics von NgRx bereits Grundgerüste für die Unit-Tests angelegt. Wir können also direkt loslegen.
 
-> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Die lauffähige Beispiel-App im Ordner `demo/` enthält vollständige, mit **Vitest** umgesetzte Tests für Service, Reducer, Selektoren, Effects und Komponente. Die `hot`/`cold`-Marbles und `spyOn()` aus den folgenden Beispielen setzen ein Jasmine-Setup voraus; in einem Vitest-Projekt stehen dafür `vi.spyOn()` und der `TestScheduler` aus RxJS bereit. Die Beispiel-App selbst vergleicht die Datenströme direkt (ohne Marbles).
+> **Hinweis:** Die folgenden Listings zeigen die grundsätzlichen Testtechniken. Sie sind wie die Tests der [Beispiel-App](https://github.com/angular-buch/website-articles/tree/main/material/ngrx-global-store/demo) mit **Vitest** geschrieben, die dort vollständig für Service, Reducer, Selektoren, Effects und Komponenten vorliegen. Eine Ausnahme bilden die beiden Listings zum *Marble Testing* (Abschnitte [Effects](#effects) und [Store](#store-mockstore-für-effects-und-komponenten)): Sie nutzen das Paket `jasmine-marbles` und setzen ein Jasmine-Setup voraus.
 
 In mehreren Tests benötigen wir Beispielbücher. Dafür definieren wir eine kleine Hilfsfunktion `b()`, die ein vollständiges `Book`-Objekt mit Beispieldaten erzeugt. Sie wandert in eine eigene Datei, damit alle Spec-Dateien dieselbe Factory nutzen:
 
@@ -1252,16 +1268,16 @@ Die Action Creators beinhalten keine spezifische Logik, die getestet werden muss
 
 #### Service
 
-Unser Datenservice `BookStore` kapselt die HTTP-Kommunikation. Damit im Test keine echten Requests an die API gehen, ersetzen wir den `HttpClient` durch das Test-Backend von Angular. Wir registrieren dazu `provideHttpClient()` zusammen mit `provideHttpClientTesting()` und steuern die Requests über den `HttpTestingController`. So prüfen wir, dass die richtige URL mit der richtigen HTTP-Methode aufgerufen wird, und liefern die Antwort mit `flush()` selbst aus:
+Unser Datenservice `BookStore` kapselt die HTTP-Kommunikation. Damit im Test keine echten Requests an die API gehen, ersetzen wir den `HttpClient` durch das Test-Backend von Angular. Wir registrieren dazu `provideHttpClientTesting()` und steuern die Requests über den `HttpTestingController`. So prüfen wir, dass die richtige URL mit der richtigen HTTP-Methode aufgerufen wird, und liefern die Antwort mit `flush()` selbst aus:
 
 ```ts
 // shared/book-store.spec.ts
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { BookStore } from './book-store';
 import { Book } from './book';
+import { b } from '../testing/book-factory';
 
 const API = 'https://api1.angular-buch.com';
 
@@ -1271,7 +1287,7 @@ describe('BookStore (HTTP)', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [provideHttpClientTesting()]
     });
     store = TestBed.inject(BookStore);
     httpMock = TestBed.inject(HttpTestingController);
@@ -1314,6 +1330,7 @@ Ein Reducer ist eine Pure Function, liefert also für die gleiche Eingabe immer 
 // books/store/book.reducer.spec.ts
 import { initialState, reducer, State } from './book.reducer';
 import * as BookActions from './book.actions';
+import { b } from '../../testing/book-factory';
 
 describe('Book Reducer', () => {
   it('loadBooks setzt loading=true und error=null', () => {
@@ -1344,12 +1361,13 @@ Die beiden letzten Tests nutzen die Reinheit der Funktion aus: Der Test zu `crea
 
 Zum Testen von Selektoren gibt es verschiedene Herangehensweisen. Auch wenn ein Selektor mithilfe von `createSelector()` erstellt wurde, so ist er weiterhin nur eine Funktion, die den State als Argument erhält und Berechnungen über die Daten ausführt. Wir können also auch Selektoren isoliert testen, ohne dass wir einen Store oder das Angular-Framework benötigen. Dazu erstellen wir im Test ein State-Objekt, das alle benötigten Daten enthält. Wir wenden den Selektor darauf an und prüfen das Ergebnis. Wichtig ist, dass wir in diesem Stub stets die Struktur des Root-States abbilden, denn der ist ja auch der Ausgangspunkt eines jeden Selektors.
 
-Die Hilfsfunktion `b()` haben wir uns weiter oben definiert. Der Feature-State liegt im Stub unter dem Feature-Key `book`:
+Die Factory `b()` importieren wir aus `testing/book-factory.ts`. Der Feature-State liegt im Stub unter dem Feature-Key `book`:
 
 ```ts
 // books/store/book.selectors.spec.ts
 import { selectAllBooks, selectLikedBooks } from './book.selectors';
 import { bookFeatureKey, State } from './book.reducer';
+import { b } from '../../testing/book-factory';
 
 describe('Book Selectors', () => {
   const bookState: State = {
@@ -1405,6 +1423,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { BookEffects } from './book.effects';
 import { BookStore } from '../../shared/book-store';
 import * as BookActions from './book.actions';
+import { b } from '../../testing/book-factory';
 
 describe('BookEffects', () => {
   let actions$: Observable<Action>;
@@ -1422,7 +1441,7 @@ describe('BookEffects', () => {
 });
 ```
 
-Für die konkreten Tests stellen wir ein Observable von Actions bereit, abonnieren das vom Effect ausgegebene Observable und vergleichen die erzeugte Action. Den Stub für den `BookStore` reichen wir gezielt pro Test in `setup()` hinein – einmal mit einer erfolgreichen Antwort, einmal mit einem Fehler:
+Für die konkreten Tests stellen wir ein Observable von Actions bereit, abonnieren das vom Effect ausgegebene Observable und vergleichen die erzeugte Action. Den Stub für den `BookStore` reichen wir gezielt pro Test in `setup()` hinein: einmal mit einer erfolgreichen Antwort, einmal mit einem Fehler.
 
 ```ts
 // books/store/book.effects.spec.ts
@@ -1446,7 +1465,7 @@ it('createBook$ feuert createBookFailure bei einem Fehler', () => {
 });
 ```
 
-> **Funktionale Effects testen:** Funktionale Effects lassen sich noch einfacher prüfen, denn wir können sie direkt als Funktion aufrufen und die benötigten Abhängigkeiten als Argumente übergeben – ganz ohne `TestBed` und `provideMockActions()`. Wir übergeben einfach ein Observable mit den Eingangs-Actions und einen Mock-Service.
+> **Hinweis:** Funktionale Effects können wir im Test direkt als Funktion aufrufen und die benötigten Abhängigkeiten als Argumente übergeben. `TestBed` und `provideMockActions()` sind dafür nicht nötig: Wir übergeben ein Observable mit den Eingangs-Actions und einen Mock-Service.
 
 Der Aufbau lässt sich auch vereinfachen, wenn wir nur die Datenströme miteinander vergleichen. Dazu eignet sich das Konzept des *Marble Testing*: Anstatt ein Observable wie üblich zu erzeugen und dann darauf zu subscriben, notieren wir den geplanten Datenstrom als Marble-Diagramm direkt im Test und definieren damit die Eingabe und die erwartete Ausgabe. Die technische Grundlage bietet im Jasmine-Umfeld das Paket [jasmine-marbles](https://www.npmjs.com/package/jasmine-marbles); unabhängig vom Test-Runner bringt RxJS mit dem `TestScheduler` eine eingebaute Alternative mit. Das folgende Listing zeigt die Technik exemplarisch mit `jasmine-marbles`. Das Projekt stellt auch den Matcher `toBeObservable()` zur Verfügung, mit dem wir in der Expectation direkt gegen das erzeugte Observable prüfen können:
 
@@ -1474,13 +1493,13 @@ describe('BookEffects', () => {
 });
 ```
 
-#### Store
+#### Store: MockStore für Effects und Komponenten
 
 Komponenten und Effects greifen häufig auf den Store zu. Unter anderem werden Actions in den Store gesendet (dispatcht), und der aktuelle Zustand wird mithilfe von Selektoren ermittelt. Wenn wir für solche Komponenten oder Effects einen Unit-Test definieren wollen, benötigen wir einen Ersatz für den echten Store. NgRx bietet uns hierfür die Funktion `provideMockStore()` an: Wir können damit einen gemockten Store registrieren, der einen von uns definierten Zustand besitzt. Dieser Zustand bleibt so lange unverändert, bis wir mittels `store.setState()` einen anderen Zustand setzen.
 
 Als Beispiel wollen wir den bekannten Effect zum Laden der Bücher so erweitern, dass er nur dann Bücher lädt, wenn die Buchliste im State noch leer ist. Hat das Array bereits Einträge, soll nichts passieren.
 
-Es ist für dieses Szenario notwendig, dass wir den bestehenden State im Effect berücksichtigen. Dies können wir mit dem Operator `concatLatestFrom()` realisieren: Wir übergeben ein anderes Observable als Argument, und der Operator reichert den Hauptdatenstrom mit dem jeweils letzten Element aus diesem Observable an. Das bedeutet also, dass uns in den Effects neben dem Payload aus den Actions auch zusätzlich Daten aus dem Store zur Verfügung stehen. Wir verwenden hier direkt unseren Selektor `selectAllBooks`, um die aktuelle Buchliste aus dem Store zu erhalten. Anhand der Buchliste können wir dann mit dem Operator `filter()` entscheiden, ob die Bücher neu heruntergeladen werden sollen oder nicht. In Effects arbeiten wir im Observable-Kontext – deshalb nutzen wir hier `store.select()` (liefert ein Observable) und nicht `selectSignal()`.
+Es ist für dieses Szenario notwendig, dass wir den bestehenden State im Effect berücksichtigen. Dies können wir mit dem Operator `concatLatestFrom()` realisieren: Wir übergeben ein anderes Observable als Argument, und der Operator reichert den Hauptdatenstrom mit dem jeweils letzten Element aus diesem Observable an. Das bedeutet also, dass uns in den Effects neben dem Payload aus den Actions auch zusätzlich Daten aus dem Store zur Verfügung stehen. Wir verwenden hier direkt unseren Selektor `selectAllBooks`, um die aktuelle Buchliste aus dem Store zu erhalten. Anhand der Buchliste können wir dann mit dem Operator `filter()` entscheiden, ob die Bücher neu heruntergeladen werden sollen oder nicht. In Effects arbeiten wir im Observable-Kontext. Deshalb nutzen wir hier `store.select()` (liefert ein Observable) und nicht `selectSignal()`.
 
 > **Hinweis:** Seit NgRx 18 importieren wir den Operator `concatLatestFrom()` aus dem Paket `@ngrx/operators` (bei Bedarf mit `npm install @ngrx/operators` nachinstallieren). Zuvor war er Teil von `@ngrx/effects` (dort seit NgRx 17 als veraltet markiert).
 
@@ -1521,7 +1540,7 @@ export class BookEffects {
 }
 ```
 
-Für diesen Effect sollten wir sicherstellen, dass bei einem leeren Array auch tatsächlich die Action `loadBooksSuccess` gefeuert wird – und dass dies bei einem gefüllten Array eben gerade nicht passiert. Mittels `provideMockStore()` stellen wir vor jeder Spezifikation zunächst den "vorgetäuschten" Store bereit. Für die zweite Spezifikation ändern wir den State anschließend noch einmal mittels `store.setState()` ab:
+Für diesen Effect sollten wir sicherstellen, dass bei einem leeren Array auch tatsächlich die Action `loadBooksSuccess` gefeuert wird und dass dies bei einem gefüllten Array nicht passiert. Mittels `provideMockStore()` stellen wir vor jeder Spezifikation zunächst den "vorgetäuschten" Store bereit. Für die zweite Spezifikation ändern wir den State anschließend noch einmal mittels `store.setState()` ab:
 
 ```ts
 // books/store/book.effects.spec.ts
@@ -1612,11 +1631,11 @@ describe('BooksOverview', () => {
 });
 ```
 
-Wie wir sehen, stellt NgRx einige Hilfen und Konzepte bereit, um die einzelnen Bausteine effektiv zu testen. Vor allem die Funktionen `provideMockActions()` und `provideMockStore()` erleichtern uns das Testing für komplexe Szenarien in NgRx.
+Vor allem die Funktionen `provideMockActions()` und `provideMockStore()` erleichtern uns das Testing für komplexe Szenarien in NgRx.
 
 ### Hilfsmittel für Komponenten: `@ngrx/component`
 
-Das Paket `@ngrx/component` stellt eine Sammlung von Helfern zur Verfügung, um mit reaktiven Datenströmen in Komponenten zu arbeiten – vor allem die Let-Direktive `ngrxLet` und die Pipe `ngrxPush`. Sie lösen Observables im Template auf, ohne auf Zone.js angewiesen zu sein, und können so in einer *zoneless* Umgebung als Alternative zur `AsyncPipe` dienen.
+Das Paket `@ngrx/component` stellt eine Sammlung von Helfern zur Verfügung, um mit reaktiven Datenströmen in Komponenten zu arbeiten, vor allem die Let-Direktive `ngrxLet` und die Pipe `ngrxPush`. Sie lösen Observables im Template auf. Die Direktive `ngrxLet` bietet dabei zusätzlich ein eigenes Template für den Zustand, in dem noch kein Wert vorliegt (`suspenseTpl`).
 
 > **Hinweis:** Das Paket `@ngrx/component` befindet sich laut offizieller Dokumentation im *Maintenance-Modus*; es erhält nur noch kritische Bugfixes. In modernem Angular lesen wir Store-Daten ohnehin meist als Signal (`selectSignal()`) und stellen sie mit dem nativen Control Flow (`@if`, `@for`) dar. Damit entfallen die meisten Probleme, die `@ngrx/component` ursprünglich gelöst hat, und wir benötigen das Paket nur noch selten.
 
@@ -1671,7 +1690,7 @@ const booksFacadeStub = {
 };
 ```
 
-Ein weiterer großer Vorteil dieser Idee liegt darin, dass wir die Implementierung für das State Management jederzeit austauschen oder variieren können. So ist es zum Beispiel möglich, bestimmte Teile des States rein lokal in der Facade zu verarbeiten und gar nicht an den zentralen NgRx Store zu übermitteln. Einen Ansatz für die Verwaltung von lokalem State bietet das Projekt `@ngrx/component-store`. Mit dem signal-basierten SignalStore stellen wir in [Teil 3 dieser Serie](/material/ngrx-signal-store) eine moderne Alternative dafür vor.
+Außerdem können wir mit einer Facade die Implementierung für das State Management jederzeit austauschen oder variieren. So ist es zum Beispiel möglich, bestimmte Teile des States rein lokal in der Facade zu verarbeiten und gar nicht an den zentralen NgRx Store zu übermitteln. Einen Ansatz für die Verwaltung von lokalem State bietet das Projekt `@ngrx/component-store`. Mit dem signal-basierten SignalStore stellen wir in [Teil 3 dieser Serie](/material/ngrx-signal-store) eine moderne Alternative dafür vor.
 
 Für eine Facade empfehlen wir übrigens, sie dort zu registrieren, wo wir auch den Feature-State bereitstellen – also im selben `providers`-Array wie `provideState()`. Auf diese Weise ist garantiert, dass der Feature-State korrekt registriert ist, wenn wir die Facade verwenden.
 
@@ -1679,7 +1698,7 @@ Für eine Facade empfehlen wir übrigens, sie dort zu registrieren, wo wir auch 
 
 Mithilfe von Redux und dem NgRx Global Store können wir die Zustandsverwaltung in der Anwendung zentralisieren. Redux setzt auf ein unveränderliches Zustandsobjekt, das mithilfe von Pure Functions im Store verwaltet wird. Alle Ereignisse der Anwendung werden durch Actions signalisiert, die Änderungen am Zustand auslösen können. Dabei erzeugen die Reducers einen neuen Zustand, den wir über Selektoren – als Observable oder als Signal – auslesen. Jeder Baustein von NgRx hat eine klar definierte Aufgabe, was eine konsistente Struktur in das Projekt bringt. Die Teile der Architektur sind stark entkoppelt, sodass wir sie unabhängig voneinander entwickeln und warten können.
 
-Mit Redux lassen sich komplexe Strukturen in Projekten harmonisieren. Das bedeutet allerdings nicht, dass Redux für jede Anwendung die passende Architektur ist. Wir sollten deshalb für jedes Projekt zunächst bewerten, ob sich der Einsatz wirklich lohnt. Die Thematik ist nicht trivial – um eine solche zentrale Zustandsverwaltung sicher und effektiv einzusetzen, braucht es Zeit und Übung. Die [offizielle Dokumentation von NgRx](https://ngrx.io/) ist ein guter Ausgangspunkt, um alle Funktionen und Konzepte weiter zu studieren.
+In großen Projekten sorgt Redux dafür, dass alle Features ihren State nach denselben Regeln verwalten. Das bedeutet allerdings nicht, dass Redux für jede Anwendung die passende Architektur ist. Wir sollten deshalb für jedes Projekt zunächst bewerten, ob sich der Einsatz lohnt. Eine leichtgewichtige Alternative für viele Fälle stellen wir in [Teil 3 dieser Serie](/material/ngrx-signal-store) mit dem SignalStore vor. Die Thematik ist nicht trivial: Um eine solche zentrale Zustandsverwaltung sicher und effektiv einzusetzen, braucht es Zeit und Übung. Die [offizielle Dokumentation von NgRx](https://ngrx.io/) ist ein guter Ausgangspunkt, um alle Funktionen und Konzepte weiter zu studieren.
 
 Für viele Anwendungen ist der Global Store aber zu schwergewichtig. NgRx bietet mit dem **SignalStore** eine leichtgewichtige, signal-basierte Alternative, die wir uns im nächsten Teil ansehen.
 

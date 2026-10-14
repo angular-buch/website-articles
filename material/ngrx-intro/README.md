@@ -1,7 +1,8 @@
 ---
 title: "State Management mit NgRx – Teil 1: Wie kommen wir zu zentralem State Management?"
-published: "2026-09-01"
-lastModified: "2026-09-01"
+published: 2026-10-14
+lastModified: 2026-10-14
+sortKey: 50
 ---
 
 **Zusatzmaterial zum Buch *Angular: Das große Praxisbuch (1. Auflage)* von Ferdinand Malcher, Danny Koppenhagen und Johannes Hoppe.**
@@ -14,9 +15,9 @@ Dieser Artikel ist **Teil 1** einer dreiteiligen Serie zum Thema State Managemen
 
 [[toc]]
 
-Wir haben unsere Anwendung bisher stets komponentenzentriert und serviceorientiert aufgebaut: Die Komponenten unserer Anwendung kommunizieren auf klar definierten Wegen über Property Bindings und Event Bindings. Um Daten zu erhalten und zu senden, nutzen die Komponenten verschiedene Services, in denen die HTTP-Kommunikation gekapselt ist oder über die wir Daten austauschen können.
+Im Buch haben wir den BookManager bisher stets komponentenzentriert und serviceorientiert aufgebaut: Die Komponenten der Anwendung kommunizieren auf klar definierten Wegen über Property Bindings und Event Bindings. Um Daten zu erhalten und zu senden, nutzen die Komponenten verschiedene Services, in denen die HTTP-Kommunikation gekapselt ist oder über die wir Daten austauschen können.
 
-Diese Herangehensweise funktioniert im Prinzip sehr gut, und wir haben so eine vollständige Anwendung entwickeln können. Unsere Beispielanwendung ist allerdings vergleichsweise klein und übersichtlich – in der Praxis werden die Anwendungen wesentlich größer: Viele Komponenten greifen dann gleichzeitig auf geteilte Daten zu und nutzen dieselben Services. Auch die Performance spielt eine immer größere Rolle, je komplexer die Anwendung wird. Wir erreichen mit der bisher vorgestellten Herangehensweise schnell einen Punkt, an dem wir den Überblick über die Kommunikationswege verlieren. Es kommt immer häufiger zu unerklärlichen Konstellationen, da man nicht mehr nachvollziehen kann, welche Komponente andere Komponenten oder Services aufruft und in welcher Reihenfolge dies geschieht. Gleichzeitig führen die vielen Kommunikationswege zu entsprechend vielen Änderungen an den Daten, die von der Change Detection erkannt und verarbeitet werden müssen. Kurzum: Die Anwendung wird zunehmend schwerfälliger.
+Diese Herangehensweise funktioniert im Prinzip sehr gut, und wir haben so eine vollständige Anwendung entwickeln können. Der BookManager ist allerdings vergleichsweise klein und übersichtlich. In der Praxis werden die Anwendungen wesentlich größer: Viele Komponenten greifen dann gleichzeitig auf geteilte Daten zu und nutzen dieselben Services. Je komplexer die Anwendung wird, desto wichtiger wird auch die Performance. Wir erreichen mit der bisher vorgestellten Herangehensweise schnell einen Punkt, an dem wir den Überblick über die Kommunikationswege verlieren. Es kommt immer häufiger zu unerklärlichen Konstellationen, da man nicht mehr nachvollziehen kann, welche Komponente andere Komponenten oder Services aufruft und in welcher Reihenfolge dies geschieht. Gleichzeitig führen die vielen Kommunikationswege zu entsprechend vielen Änderungen an den Daten, die von der Change Detection erkannt und verarbeitet werden müssen. Die Anwendung wird zunehmend schwerfälliger.
 
 Mit wachsender Größe der Anwendung ergeben sich immer wieder folgende Fragen:
 
@@ -25,9 +26,9 @@ Mit wachsender Größe der Anwendung ergeben sich immer wieder folgende Fragen:
 - Wie reagieren wir an verschiedenen Stellen auf Ereignisse, die in der Anwendung auftreten?
 - Wie verwalten wir die Daten, die über die gesamte Anwendung verteilt sind?
 
-Eine häufige Lösung für all diese Herausforderungen ist die *Zentralisierung*. Liegen die Daten an einem zentralen Ort in der Anwendung vor, so können sie von überall aus genutzt und verändert werden. Diesen Schritt geht man häufig ganz selbstverständlich, indem man etwa an einer geeigneten Stelle (z. B. im `BookStore`) einen Cache einbaut. Doch die Idee der Zentralisierung kann man noch viel weiter treiben: Bislang waren Komponenten die "Hüterinnen" der Daten. Jede Komponente hatte ihren eigenen Zustand und bildete eine gegenüber den anderen Komponenten abgeschottete Einheit. Diese Idee wollen wir nun auf den Kopf stellen. Die Komponenten sollen dazu ihre bisherige Kontrolle über die Daten und die Koordination der Prozesse an eine zentrale Stelle abgeben. Die Aufgabe der Komponenten ist es dann nur noch, Daten für die Anzeige zu lesen, neue Daten zu erfassen und Events an die zentrale Stelle zu senden. Diese Art der Zentralisierung ist ein entscheidender Unterschied zum bisherigen Vorgehen, wo alle Zustände über den gesamten Komponentenbaum hinweg verteilt waren.
+Eine häufige Lösung für all diese Herausforderungen ist die *Zentralisierung*. Liegen die Daten an einem zentralen Ort in der Anwendung vor, so können sie von überall aus genutzt und verändert werden. Diesen Schritt geht man oft, indem man an einer geeigneten Stelle einen Cache einbaut, etwa im Service `BookStore`, der im BookManager die HTTP-Kommunikation kapselt. Doch die Idee der Zentralisierung kann man noch viel weiter treiben: Bislang waren Komponenten die "Hüterinnen" der Daten. Jede Komponente hatte ihren eigenen Zustand und bildete eine gegenüber den anderen Komponenten abgeschottete Einheit. Diese Idee wollen wir nun auf den Kopf stellen. Die Komponenten sollen dazu ihre bisherige Kontrolle über die Daten und die Koordination der Prozesse an eine zentrale Stelle abgeben. Die Aufgabe der Komponenten ist es dann nur noch, Daten für die Anzeige zu lesen, neue Daten zu erfassen und Events an die zentrale Stelle zu senden. Damit unterscheidet sich dieser Ansatz grundlegend vom bisherigen Vorgehen, bei dem alle Zustände über den gesamten Komponentenbaum hinweg verteilt waren.
 
-Wir wollen in diesem Artikel besprechen, wie eine solche zentrale Zustandsverwaltung (engl. *State Management*) realisiert werden kann. Dabei lernen wir das Architekturmuster *Redux* kennen und nutzen das populäre Framework *Reactive State for Angular (NgRx)*, um den Anwendungszustand zu verwalten und unsere Prozesse zu koordinieren.
+Wir wollen in diesem Artikel besprechen, wie eine solche zentrale Zustandsverwaltung (engl. *State Management*) realisiert werden kann. Dabei entwickeln wir die Idee schrittweise und lernen das Architekturmuster *Redux* kennen. In [Teil 2](/material/ngrx-global-store) und [Teil 3](/material/ngrx-signal-store) setzen wir sie mit dem Framework *Reactive State for Angular (NgRx)* um.
 
 ## Ein Modell für zentrales State Management
 
@@ -56,7 +57,7 @@ export class StateService {
 }
 ```
 
-Unser Service hält ein Objekt mit einem initialen Zustand, das über die Methode `incrementCounter()` manipuliert werden kann. Alle Komponenten können diesen Service anfordern und die Daten aus dem Objekt nutzen und verändern. Die Change Detection von Angular hilft uns dabei, automatisch bei Änderungen die Views der Komponenten zu aktualisieren.
+Unser Service hält ein Objekt mit einem initialen Zustand, das über die Methode `incrementCounter()` manipuliert werden kann. Alle Komponenten können diesen Service anfordern und die Daten aus dem Objekt nutzen und verändern.
 
 ```ts
 @Component({ /* ... */ })
@@ -67,8 +68,6 @@ export class MyComponent {
 
 Den injizierten `StateService` können wir dann im Template nutzen, um die Daten anzuzeigen und die Methode `incrementCounter()` auszulösen:
 
-> **Hinweis:** Services sollten nicht direkt im Template verwendet werden, um die Abhängigkeiten auf eine konkrete Implementierung zu verringern. Deshalb werden injizierte Services in der Regel `private` gesetzt. Um das vorliegende Beispiel einfach zu halten, verzichten wir hier allerdings darauf.
-
 ```html
 <div class="counter">
   {{ service.state.counter }}
@@ -78,28 +77,31 @@ Den injizierten `StateService` können wir dann im Template nutzen, um die Daten
 </button>
 ```
 
-Wir haben in einem ersten Schritt unseren Zustand zentralisiert. Der Mehrwert zu einer isolierten Lösung besteht darin, dass alle Komponenten denselben Datensatz verwenden und anzeigen. Der Ort der Datenhaltung ist klar definiert, und es gibt keine Datensilos bei den einzelnen Komponenten.
+> **Hinweis:** Services sollten nicht direkt im Template verwendet werden, um die Abhängigkeiten auf eine konkrete Implementierung zu verringern. Deshalb werden injizierte Services in der Regel `private` gesetzt. Um das vorliegende Beispiel einfach zu halten, verzichten wir hier allerdings darauf.
+
+Wir haben in einem ersten Schritt unseren Zustand zentralisiert. Der Vorteil gegenüber einer isolierten Lösung besteht darin, dass alle Komponenten auf denselben Datensatz zugreifen. Der Ort der Datenhaltung ist klar definiert, und es gibt keine Datensilos bei den einzelnen Komponenten.
 
 ### Subject in einem Service
 
-Wir haben den Anwendungszustand an einer zentralen Stelle untergebracht, allerdings hat die Lösung einen Nachteil. Mit der aktuellen Architektur können wir nur über Umwege programmatisch auf Änderungen an den Daten reagieren. Eine Änderung am State wird zwar jederzeit korrekt angezeigt, aber dies basiert allein auf den Mechanismen der Change Detection. Wollen wir hingegen zusätzlich eine Routine anstoßen, sobald sich Daten ändern, haben wir aktuell keine direkte Möglichkeit dazu.
+Wir haben den Anwendungszustand an einer zentralen Stelle untergebracht, allerdings hat die Lösung einen Nachteil: Andere Teile der Anwendung erfahren nichts von einer Änderung. Angular prüft Komponenten standardmäßig mit der Change-Detection-Strategie `OnPush`. Eine Komponente wird dann nur aktualisiert, wenn sich die Referenz eines ihrer Inputs ändert, ein Event in ihrem Template ausgelöst wird oder sie ausdrücklich zur Prüfung markiert wird. Klicken wir auf den Button, so zeigt die geklickte Komponente den neuen Zählerstand an. Andere Komponenten, die denselben State darstellen, bleiben dagegen auf dem alten Stand. Ebenso wenig können wir programmatisch eine Routine anstoßen, sobald sich Daten ändern.
 
 Um das zu verbessern, ergänzen wir den Service mit einem Subject. Das Subject ist ein Baustein, mit dem wir ein Event an mehrere Subscriber verteilen können. Ein Subject implementiert hierfür sowohl alle Methoden eines Observers (Daten senden) als auch die eines Observables (Daten empfangen). Wenn der Zustand geändert wird, soll das Subject diese Neuigkeit mit einem Event bekannt machen, sodass die Komponenten darauf reagieren können.
 
 Für unser Beispiel eignet sich ein `BehaviorSubject`. Seine wichtigste Eigenschaft besteht darin, dass es den jeweils letzten Zustand speichert. Jeder neue Subscriber erhält die aktuellen Daten, ohne dass ein neues Event ausgelöst werden muss. Interessierte Komponenten können den Datenstrom also jederzeit abonnieren und auf die Ereignisse reagieren. Das `BehaviorSubject` muss mit einem Startwert initialisiert werden, der über den Konstruktor übergeben wird.
 
-Wir setzen im Service zunächst die Eigenschaft `state` auf privat, sodass man nun gezwungen ist, das Observable `state$` zu verwenden, anstatt direkt auf das Objekt zuzugreifen. Wird `incrementCounter()` aufgerufen und der State aktualisiert, so lösen wir das `BehaviorSubject` mit dem aktuellen State-Objekt aus. So werden alle Subscriber über den neuen Zustand informiert.
+Wir setzen im Service zunächst die Eigenschaft `state` auf privat, sodass man nun gezwungen ist, das Observable `state$` zu verwenden, anstatt direkt auf das Objekt zuzugreifen. Auch das `BehaviorSubject` halten wir privat und bieten nach außen mit `asObservable()` nur ein Observable an. So kann keine Komponente den Zustand selbst über `next()` überschreiben. Wird `incrementCounter()` aufgerufen und der State aktualisiert, so lösen wir das `BehaviorSubject` mit dem aktuellen State-Objekt aus. So werden alle Subscriber über den neuen Zustand informiert.
 
 ```ts
 @Injectable({ providedIn: 'root' })
 export class StateService {
   private state: MyState = { /* ... */ };
+  private stateSubject = new BehaviorSubject<MyState>(this.state);
 
-  state$ = new BehaviorSubject<MyState>(this.state);
+  readonly state$ = this.stateSubject.asObservable();
 
   incrementCounter() {
     this.state.counter++;
-    this.state$.next(this.state);
+    this.stateSubject.next(this.state);
   }
 }
 ```
@@ -115,35 +117,37 @@ export class MyComponent {
     map(state => state.counter)
   );
 
-  // ...
+  increment() {
+    this.service.incrementCounter();
+  }
 }
 ```
 
-Im Template nutzen wir schließlich die AsyncPipe, um das Observable zu abonnieren.
+Im Template nutzen wir schließlich die AsyncPipe, um das Observable zu abonnieren. Da der Service nun privat ist, ruft der Button die Methode `increment()` der Komponente auf.
 
 ```html
 <div class="counter">
   {{ counter$ | async }}
 </div>
 
-<button (click)="service.incrementCounter()">
+<button (click)="increment()">
   Increment
 </button>
 ```
 
-Dieser Ansatz bietet einen Mehrwert zum vorherigen Beispiel: Die Komponenten teilen sich nicht nur die Daten, sie können auch reaktiv Änderungen entgegennehmen. Zusätzlich sind wir in der Lage, bei Bedarf die Strategie der Change Detection für die Komponente zu ändern und so in einem komplexeren Szenario gegebenenfalls die Performance zu optimieren.
+Gegenüber dem vorherigen Beispiel erhalten die Komponenten Änderungen jetzt reaktiv. Das funktioniert auch mit der Strategie `OnPush`: Die AsyncPipe markiert die Komponente bei jedem neuen Wert zur Prüfung. So aktualisieren sich alle Komponenten, die den Zustand abonniert haben.
 
 ### Unveränderlichkeit
 
-Unser Beispiel hat sich gut entwickelt, hat aber noch ein grundlegendes Designproblem. Wir halten unsere Daten in einem zentralen Objekt, das mit wachsender Größe der Anwendung ebenfalls größer wird. Alle Änderungen werden *direkt* an diesem Objekt durchgeführt, und wir geben es lediglich als Referenzparameter (*Call by Reference*) an die aufrufende Funktion weiter. Wir stellen uns nun vor, das Objekt hätte viele weitere Eigenschaften und eine verschachtelte Datenstruktur. Die Ereignisse zum Ändern der Daten können weiterhin aus diversen Gründen ausgelöst werden. Wie können wir nun effizient herausfinden, ob das Objekt bzw. ein Teil der verschachtelten Datenstruktur verändert wurde? Die Antwort lautet: Wir können dies nicht ohne zusätzlichen Aufwand realisieren. Um eine Änderung festzustellen, ist es notwendig, das Objekt mit einer zuvor erstellten Kopie zu vergleichen. Da wir mit Referenzen arbeiten, müssen wir jede Eigenschaft der verschachtelten Datenstruktur mit dem Gegenstück aus der Kopie vergleichen.
+Unser Beispiel hat noch ein grundlegendes Designproblem. Wir halten unsere Daten in einem zentralen Objekt, das mit wachsender Größe der Anwendung ebenfalls größer wird. Alle Änderungen werden *direkt* an diesem Objekt durchgeführt, und wir geben über `next()` stets dieselbe Objektreferenz an die Subscriber weiter. Wir stellen uns nun vor, das Objekt hätte viele weitere Eigenschaften und eine verschachtelte Datenstruktur. Die Ereignisse zum Ändern der Daten können weiterhin aus diversen Gründen ausgelöst werden. Wie können wir nun effizient herausfinden, ob das Objekt bzw. ein Teil der verschachtelten Datenstruktur verändert wurde? Die Antwort lautet: Wir können dies nicht ohne zusätzlichen Aufwand realisieren. Um eine Änderung festzustellen, ist es notwendig, das Objekt mit einer zuvor erstellten Kopie zu vergleichen. Da wir mit Referenzen arbeiten, müssen wir jede Eigenschaft der verschachtelten Datenstruktur mit dem Gegenstück aus der Kopie vergleichen.
 
-Das wollen wir ändern, indem wir das Objekt *unveränderlich* (engl. *immutable*) machen. Zur Erstellung von unveränderlichen Objekten gibt es verschiedene Bibliotheken, darunter das Projekt [Immutable.js](https://immutable-js.github.io/immutable-js/) oder die leichtgewichtige Bibliothek [Immer](https://github.com/immerjs/immer). Für ein simples Szenario genügt auch die native JavaScript-Methode `Object.freeze()`. Damit können wir ein Objekt "einfrieren" und direkte Änderungen an den Daten verhindern.
+Das wollen wir ändern, indem wir das Objekt *unveränderlich* (engl. *immutable*) machen. Zur Erstellung von unveränderlichen Objekten gibt es verschiedene Bibliotheken, darunter das Projekt [Immutable.js](https://immutable-js.com/) oder die leichtgewichtige Bibliothek [Immer](https://github.com/immerjs/immer). Für ein simples Szenario genügt auch die native JavaScript-Methode `Object.freeze()`. Damit können wir ein Objekt "einfrieren" und direkte Änderungen an den Daten verhindern. Die Methode wirkt allerdings nur flach: Verschachtelte Objekte bleiben veränderbar, solange wir sie nicht ebenfalls einfrieren.
 
 Dadurch ändert sich ein grundlegender Aspekt: Da Änderungen nicht mehr direkt am bisherigen Objekt möglich sind, werden wir gezwungen, das Objekt auszutauschen. Wir erzeugen hierfür bei jeder Änderung eine Kopie des vorherigen Objekts mit einer Ausnahme: dem zu ändernden Wert. Eine Änderung festzustellen ist nun sehr einfach: Wir müssen lediglich Referenzen vergleichen. Das ist kein Problem, da wir durch die Unveränderlichkeit sicher sein können, dass keine Änderung durch direkte Manipulation des Objekts möglich sein kann. Versehentliche Änderungen sind damit ebenfalls ausgeschlossen.
 
-Für die meisten Anwendungsfälle benötigen wir allerdings gar keine echte Unveränderlichkeit! Es reicht im Prinzip schon aus, nur so zu tun, als wäre das Objekt unveränderlich, und dies konsequent beim Programmieren einzuhalten. Wir können hierfür den Spread-Operator nutzen und damit alle Eigenschaften kopieren. Den Spread-Operator und die Rest-Syntax erklären wir ausführlich im Artikel [Einführung in TypeScript](/material/typescript).
+Für die meisten Anwendungsfälle benötigen wir allerdings gar keine echte Unveränderlichkeit! Es reicht im Prinzip schon aus, nur so zu tun, als wäre das Objekt unveränderlich, und dies konsequent beim Programmieren einzuhalten. Dieses Vorgehen nennt man *Pseudo-Immutability*. Wir können hierfür die Spread-Syntax nutzen und damit alle Eigenschaften kopieren. Die Spread-Syntax und Rest-Parameter erklären wir ausführlich im Artikel [Einführung in TypeScript](/material/typescript).
 
-Im folgenden Listing demonstrieren wir die Verwendung. Die Methode `incrementCounter()` nutzt den Spread-Operator, um eine Kopie des vorherigen Objekts und damit eine neue Referenz zu erzeugen. Im selben Schritt schreiben wir den neuen Wert des Zählers in die Eigenschaft `counter`.
+Im folgenden Listing demonstrieren wir die Verwendung. Die Methode `incrementCounter()` nutzt die Spread-Syntax, um eine Kopie des vorherigen Objekts und damit eine neue Referenz zu erzeugen. Im selben Schritt schreiben wir den neuen Wert des Zählers in die Eigenschaft `counter`.
 
 ```ts
 @Injectable({ providedIn: 'root' })
@@ -156,14 +160,14 @@ export class StateService {
       counter: this.state.counter + 1
     };
 
-    this.state$.next(this.state);
+    this.stateSubject.next(this.state);
   }
 }
 ```
 
-Wir haben durch die "Pseudo-Immutability" den Weg geebnet, um die Strategie für die Change Detection zu optimieren: Wenn ein Objekt bei einer Änderung stets eine neue Referenz erhält, so können wir in den Kindkomponenten die Strategie `OnPush` einsetzen. Dies kann die Performance der Anwendung entscheidend verbessern.
+Die neuen Referenzen passen zur Change-Detection-Strategie `OnPush`: Reichen wir den State oder Teile davon über Inputs an Kindkomponenten weiter, so erkennen diese eine Änderung nur an einer neuen Referenz. Mit der Pseudo-Immutability ist das bei jeder Änderung gewährleistet, und Angular muss Kindkomponenten mit unveränderten Inputs nicht erneut prüfen.
 
-Wir müssen beachten, dass der Spread-Operator stets nur eine flache Kopie (Shallow Copy) eines Objekts erstellt. Ist ein Objekt oder Array verschachtelt, so müssen wir bei Änderungen auch immer das direkt betroffene Objekt kopieren.
+Wir müssen beachten, dass die Spread-Syntax stets nur eine flache Kopie (engl. *Shallow Copy*) eines Objekts erstellt. Ist ein Objekt oder Array verschachtelt, so müssen wir bei Änderungen jedes Objekt auf dem Pfad bis zum geänderten Wert kopieren, nicht nur das direkt betroffene. Sonst behalten die äußeren Objekte ihre alte Referenz, und die Änderung bleibt unbemerkt.
 
 ### Nachrichten
 
@@ -194,11 +198,11 @@ Mit der Idee von Nachrichten zum Datenaustausch und zur (Pseudo-)Unveränderlich
 
 Für unser kurzes Beispiel mit einem Counter ist dies kein Problem, denn wir haben nur wenige Zeilen Code. Wenn allerdings unsere Anwendung und damit die Zustandsverwaltung komplexer wird, so wächst auch der zentrale Service mit jedem Feature immer weiter an. Bald entsteht ein "Gottobjekt" (engl. *God Object*), und das müssen wir verhindern.
 
-Die Lösung des Problems ist, die Berechnung des Zustands in eine weitere unabhängige Funktion auszulagern. Wenn wir die Funktion richtig planen, so können wir die Berechnung bei zunehmender Komplexität auch in viele unabhängige Funktionen aufteilen. Weiterhin sollten diese ausgelagerten Funktionen keinen eigenen Zustand besitzen (engl. *stateless*), sodass sie bei gleichen Eingangswerten stets die gleichen Ausgangswerte erzeugen. Dadurch werden die Funktionen einfacher testbar.
+Die Lösung des Problems ist, die Berechnung des Zustands in eine weitere unabhängige Funktion auszulagern. Wenn wir die Funktion richtig planen, so können wir die Berechnung bei zunehmender Komplexität auch in viele unabhängige Funktionen aufteilen. Weiterhin sollten diese ausgelagerten Funktionen keinen eigenen Zustand besitzen (engl. *stateless*) und ausschließlich mit ihren Argumenten arbeiten, sodass sie bei gleichen Eingangswerten stets die gleichen Ausgangswerte erzeugen. Dadurch werden die Funktionen einfacher testbar.
 
 Über die gesamte Laufzeit der Anwendung betrachtet basiert unser Service auf einem Strom von Nachrichten, die jeweils Zustandsänderungen auslösen können. Wir besitzen die Grundlage für ein reaktives System, nun müssen wir uns diese Eigenschaft nur noch mithilfe unserer ausgelagerten Funktionen zunutze machen. Dazu entwickeln wir zunächst die Funktion, die für jede eintreffende Nachricht entscheidet, ob und wie der Zustand verändert werden soll.
 
-Den Datenfluss können wir dabei ganz einfach halten: Die Funktion erhält als Argumente den aktuell herrschenden Zustand und die eintreffende Nachricht. Die Fallunterscheidung anhand der Nachricht können wir mit einer *switch/case*-Anweisung realisieren.
+Der Datenfluss ist dabei überschaubar: Die Funktion erhält als Argumente den aktuell herrschenden Zustand und die eintreffende Nachricht. Die Fallunterscheidung anhand der Nachricht können wir mit einer *switch/case*-Anweisung realisieren.
 
 ```ts
 function calculateState(state: MyState, message: string): MyState {
@@ -235,7 +239,7 @@ export class StateService {
 
   dispatch(message: string) {
     this.state = calculateState(this.state, message);
-    this.state$.next(this.state);
+    this.stateSubject.next(this.state);
   }
 }
 ```
@@ -273,7 +277,7 @@ Mit einer solchen Reducer-Funktion und einer Liste von Nachrichten können wir d
 
 In den vorherigen Beispielen haben wir allerdings kein Array von Nachrichten verwendet, sondern alle eingehenden Nachrichten wurden direkt an `calculateState()` weitergegeben. Wir wollen den Service nun etwas umstrukturieren: Dazu setzen wir ein neues Subject ein, das alle Nachrichten nacheinander in einem Datenstrom `messages$` liefert. Die Methode `dispatch()` leitet die Nachrichten also nur an das Subject weiter.
 
-Wir wollen dann erneut die Funktion `calculateState()` nutzen, um aus der Sammlung aller Nachrichten den jeweils neuen Zustand zu generieren. Dieses Mal greifen wir auf das große Toolset von RxJS zurück und verwenden den Operator `scan()`. Die Caching-Eigenschaft des ehemaligen `BehaviorSubject` übernimmt nun `shareReplay(1)`: So teilen wir das resultierende Observable mit allen Subscribern und übermitteln den jeweils letzten Wert an alle neuen Subscriber. Um den Prozess einmalig anzustoßen, nutzen wir außerdem den Operator `startWith()` und erzeugen ein erstes Element im Strom der Nachrichten.
+Wir wollen dann erneut die Funktion `calculateState()` nutzen, um aus der Sammlung aller Nachrichten den jeweils neuen Zustand zu generieren. Dieses Mal verwenden wir den RxJS-Operator `scan()`. Die Caching-Eigenschaft des ehemaligen `BehaviorSubject` übernimmt nun `shareReplay(1)`: So teilen wir das resultierende Observable mit allen Subscribern und übermitteln den jeweils letzten Wert an alle neuen Subscriber. Um den Prozess einmalig anzustoßen, nutzen wir außerdem den Operator `startWith()` und erzeugen ein erstes Element im Strom der Nachrichten.
 
 ```ts
 @Injectable({ providedIn: 'root' })
@@ -294,11 +298,13 @@ export class StateService {
 }
 ```
 
-Das Ergebnis ist das Observable `state$`, das für jede eintreffende Nachricht den neuen Zustand ausgibt, der von der Funktion `calculateState()` berechnet wurde. Ausgehend vom Startzustand werden also alle Nachrichten "aufsummiert" – daraus ergibt sich immer der aktuelle Zustand. Mithilfe von `scan()` müssen wir das zentrale Objekt nicht mehr selbst pflegen; dies erledigt nun RxJS für uns.
+Das Ergebnis ist das Observable `state$`, das für jede eintreffende Nachricht den neuen Zustand ausgibt, der von der Funktion `calculateState()` berechnet wurde. Ausgehend vom Startzustand werden also alle Nachrichten "aufsummiert"; daraus ergibt sich immer der aktuelle Zustand. Mithilfe von `scan()` müssen wir das zentrale Objekt nicht mehr selbst pflegen; dies erledigt nun RxJS für uns.
 
-Erneut haben wir unsere Zustandsverwaltung verbessert. Der Zustand ist nun aus den gesendeten Nachrichten abgeleitet. Ist die Historie aller Nachrichten bekannt, so kann man theoretisch jeden bisherigen Zustand jederzeit wieder reproduzieren, sofern unsere Reducer-Funktionen deterministisch sind. Diese Eigenschaften sorgen für ein sehr einfaches und gleichzeitig robustes System. Da die Funktionen sehr simpel sind, sind sie auch sehr einfach zu testen.
+Eine Einschränkung hat dieses Modell: Der Strom startet erst mit dem ersten Subscriber. Nachrichten, die vorher über das einfache `Subject` eintreffen, gehen verloren, denn ein `Subject` puffert keine Werte. NgRx umgeht dieses Problem, indem der Store den Strom der Actions bereits beim Erzeugen selbst abonniert.
 
-> **Hinweis:** Um jeden gewünschten Zustand wieder reproduzieren zu können, müsste man die Historie aller Nachrichten speichern. Das tun wir in diesem Beispiel nicht, und auch eine mit Redux gebaute Anwendung speichert das Protokoll im Produktivbetrieb nicht dauerhaft. Während der Entwicklung zeichnen die Redux DevTools die letzten Actions allerdings sehr wohl auf und ermöglichen so Time Travel Debugging – darauf gehen wir in [Teil 2](/material/ngrx-global-store) genauer ein.
+Der Zustand ist nun aus den gesendeten Nachrichten abgeleitet. Ist die Historie aller Nachrichten bekannt, so kann man theoretisch jeden bisherigen Zustand jederzeit wieder reproduzieren, sofern unsere Reducer-Funktionen deterministisch sind. Weil die Reducer-Funktionen reine Funktionen sind, lassen sie sich außerdem ohne Mocks testen.
+
+> **Hinweis:** Um jeden gewünschten Zustand wieder reproduzieren zu können, müsste man die Historie aller Nachrichten speichern. Das tun wir in diesem Beispiel nicht, und auch eine mit Redux gebaute Anwendung speichert das Protokoll im Produktivbetrieb nicht dauerhaft. Während der Entwicklung zeichnet die Browser-Erweiterung *Redux DevTools* die letzten Nachrichten allerdings sehr wohl auf. So können wir zu einem früheren Zustand zurückspringen (engl. *Time Travel Debugging*). Darauf gehen wir in [Teil 2](/material/ngrx-global-store) genauer ein.
 
 ### Zusammenfassung aller Konzepte
 
@@ -308,29 +314,27 @@ Wir besitzen einen zentralen Service, der Nachrichten empfängt. Diese Nachricht
 
 Der Lesefluss und der Schreibfluss wurden vollständig entkoppelt: Die Komponenten erhalten die Daten über ein Observable und senden Nachrichten in den Service. Der Service ist die *Single Source of Truth* und hat als einziger Teil der Anwendung die Hoheit darüber, Nachrichten und Zustandsänderungen zu verarbeiten.
 
-Wir haben schrittweise ein robustes Modell für zentrales State Management entwickelt und dabei die Idee des Redux-Patterns kennengelernt.
-
 ## Das Architekturmodell Redux
 
-Redux ist ein populäres Pattern zur Zustandsverwaltung in Webanwendungen. Die Idee von Redux stammt ursprünglich aus der Welt des JavaScript-Frameworks React, das neben Angular eines der populärsten Entwicklungswerkzeuge für Single-Page-Anwendungen ist. Redux ist dabei zunächst eine Architekturidee, es gibt aber auch eine konkrete Implementierung in Form einer Bibliothek.
+Redux ist ein Pattern zur Zustandsverwaltung in Webanwendungen. Die Idee von Redux stammt ursprünglich aus dem Umfeld der JavaScript-Bibliothek React. Redux ist dabei zunächst eine Architekturidee, es gibt aber auch eine konkrete Implementierung in Form einer Bibliothek.
 
-Der zentrale Bestandteil der Architektur ist ein *Store*, in dem der gesamte Anwendungszustand als eine einzige große verschachtelte Datenstruktur hinterlegt ist. Der Store ist die *Single Source of Truth* für die Anwendung und enthält alle Zustände: vom Server heruntergeladene Daten, gesetzte Einstellungen, die aktuell geladene Route oder Infos zum eigenen Account – alles, was sich zur Laufzeit in der Anwendung verändert und den Zustand beschreibt.
+Der zentrale Bestandteil der Architektur ist ein *Store*, in dem der gesamte Anwendungszustand als eine einzige große verschachtelte Datenstruktur hinterlegt ist. Der Store ist die *Single Source of Truth* für die Anwendung und enthält alle Zustände: vom Server heruntergeladene Daten, gesetzte Einstellungen, die aktuell geladene Route oder Infos zum eigenen Account, also alles, was sich zur Laufzeit in der Anwendung verändert und den Zustand beschreibt.
 
-Das State-Objekt im Store hat zwei elementare Eigenschaften: Es ist *immutable* und *read-only*. Wir können die Daten aus dem State nicht verändern, sondern ausschließlich lesend darauf zugreifen. Möchten wir den State "verändern", so muss das existierende Objekt durch eine Kopie ausgetauscht werden, die die Änderungen enthält. Solche Änderungen am State werden durch Nachrichten ausgelöst, die aus der Anwendung in den Store gesendet werden. Die Grundidee dieser Architektur haben wir bereits in der Einleitung zu diesem Artikel gemeinsam entwickelt.
+Das State-Objekt im Store hat zwei elementare Eigenschaften: Es ist *immutable* und *read-only*. Wir können die Daten aus dem State nicht verändern, sondern ausschließlich lesend darauf zugreifen. Möchten wir den State "verändern", so muss das existierende Objekt durch eine Kopie ausgetauscht werden, die die Änderungen enthält. Solche Änderungen am State werden durch Nachrichten ausgelöst, die aus der Anwendung in den Store gesendet werden.
 
-> **Hinweis:** Das State-Objekt ist theoretisch mutierbar, wir werden es aber stets immutable behandeln. NgRx setzt also auf die Pseudo-Immutability.
+> **Hinweis:** Technisch ist das State-Objekt ein gewöhnliches JavaScript-Objekt und damit veränderbar. Wir behandeln es aber konsequent als unveränderlich, setzen also auf Pseudo-Immutability. NgRx unterstützt uns dabei: Im Entwicklungsmodus friert es State und Actions per Runtime Check ein, sodass versehentliche Mutationen als Fehler auffallen.
 
-Neben dem zentralen Store mit dem State-Objekt verwendet Redux zwei weitere wesentliche Bausteine: Alle fachlichen Ereignisse in der Anwendung werden mit Nachrichten abgebildet – im Kontext von Redux nennt man diese Nachrichten *Actions*. Eine Action wird von der Anwendung (z. B. von den Komponenten) in den Store gesendet (*dispatch*) und kann eine Zustandsänderung auslösen. Im Store werden die eingehenden Actions von *Reducers* verarbeitet. Diese Funktionen nehmen den aktuellen State und die neue Action als Grundlage und errechnen daraus den neuen State. Der Datenfluss in der Redux-Architektur ist in der folgenden Abbildung grafisch dargestellt. Hier ist gut erkennbar, dass die Daten stets in eine Richtung fließen und dass Lesen und Schreiben klar voneinander getrennt sind.
+Neben dem zentralen Store mit dem State-Objekt verwendet Redux zwei weitere wesentliche Bausteine: Alle fachlichen Ereignisse in der Anwendung werden mit Nachrichten abgebildet. Im Kontext von Redux nennt man diese Nachrichten *Actions*. Eine Action wird von der Anwendung (z. B. von den Komponenten) in den Store gesendet (*dispatch*) und kann eine Zustandsänderung auslösen. Im Store werden die eingehenden Actions von *Reducers* verarbeitet. Diese Funktionen nehmen den aktuellen State und die neue Action als Grundlage und errechnen daraus den neuen State. Der Datenfluss in der Redux-Architektur ist in der folgenden Abbildung grafisch dargestellt. Hier ist gut erkennbar, dass die Daten stets in eine Richtung fließen und dass Lesen und Schreiben klar voneinander getrennt sind.
 
 ![Diagramm: Die Component löst eine Action aus, die in den Store fließt. Dort triggert die Action einen Reducer, der einen neuen State erzeugt. Der State wird zurück an die Component gepusht. Die Daten fließen so im Kreis in eine Richtung.](./redux-flow-simple.svg "Datenfluss in Redux")
 
-Bringt man diese Bausteine in den Kontext des einführenden Beispiels, so entspricht der zentrale Service dem Store von Redux. Die gesendeten Nachrichten entsprechen den Actions. Die Funktion `calculateState()`, die wir zur Veranschaulichung verwendet haben, ist genauso aufgebaut wie die Reducers von Redux. Dasselbe Prinzip – das Aufsummieren eines Stroms von Nachrichten zu einem Zustand – steckt auch im Kern von NgRx, das wir in diesem Artikel für das State Management nutzen werden.
+Bringt man diese Bausteine in den Kontext unseres Modells, so entspricht der zentrale Service dem Store von Redux. Die gesendeten Nachrichten entsprechen den Actions. Die Funktion `calculateState()`, die wir zur Veranschaulichung verwendet haben, ist genauso aufgebaut wie die Reducers von Redux. Dasselbe Prinzip, das Aufsummieren eines Stroms von Nachrichten zu einem Zustand, steckt auch im Kern von NgRx, das wir in [Teil 2](/material/ngrx-global-store) und [Teil 3](/material/ngrx-signal-store) einsetzen.
 
 ### Redux und Angular
 
-Die originale Implementierung von Redux stammt aus der Welt von React. Alle enthaltenen Ideen können aber problemlos auch auf die Architektur einer Angular-Anwendung übertragen werden. Für Angular hat sich dabei *Reactive State for Angular (NgRx)* als De-facto-Standard etabliert: Das Framework wurde von Mitgliedern des Angular-Teams aktiv mitentwickelt und ist das bekannteste Projekt in dieser Kategorie. Als aktiv gepflegte Alternative lohnt sich ein Blick auf das Community-Projekt [NGXS](https://www.ngxs.io/), das ebenfalls der Redux-Idee folgt.
+Die originale Implementierung von Redux stammt aus der Welt von React. Alle enthaltenen Ideen können aber problemlos auch auf die Architektur einer Angular-Anwendung übertragen werden. Für Angular gibt es mit *Reactive State for Angular (NgRx)* eine etablierte Implementierung, deren Hauptversionen denen von Angular folgen. Als aktiv gepflegte Alternative lohnt sich ein Blick auf das Community-Projekt [NGXS](https://www.ngxs.io/), das ebenfalls der Redux-Idee folgt.
 
-Welches Framework wir für die Zustandsverwaltung einsetzen, hängt von den konkreten Anforderungen und auch von persönlichen Präferenzen ab. In dieser Serie konzentrieren wir uns auf NgRx.
+Welches Framework wir für die Zustandsverwaltung einsetzen, hängt von den konkreten Anforderungen und auch von persönlichen Präferenzen ab. In dieser Serie konzentrieren wir uns auf NgRx, und zwar auf zwei Ansätze: In [Teil 2](/material/ngrx-global-store) setzen wir das hier entwickelte Modell mit dem Redux-basierten *Global Store* im BookManager um, mit Actions, Reducers und Selektoren. Den Datenaustausch mit dem Server, der in unserem Modell noch fehlt, übernehmen dort *Effects*. In [Teil 3](/material/ngrx-signal-store) folgt der *SignalStore*, der den Zustand in Signals hält und ohne Actions und Reducers auskommt.
 
 ---
 
