@@ -26,9 +26,9 @@ In diesem Artikel bauen wir eine Übergangsanimation zwischen einer Buchliste un
 Das Ziel: Die Listen-Card „zoomt“ zur Detailseite, während Cover, Titel, Untertitel und ISBN von ihrer Position in der Liste an ihre neue Position auf der Detailseite wandern.
 Neu hinzukommende Inhalte wie Autoren und Beschreibung blenden sanft ein.
 Das Ganze funktioniert ohne zusätzliche Abhängigkeit, allein mit der Browser-API und ein wenig CSS.
-In Browsern ohne Unterstützung der modernen View Transition API degradiert der Übergang sauber zum gewohnten Verhalten.
+In Browsern ohne Unterstützung der View Transitions API findet der Routenwechsel wie gewohnt ohne Animation statt.
 
-> ⚠️ **Developer Preview:** Die hier vorgestellten Funktionen `withViewTransitions()` und `withRouterResources()` sind in Angular 22.2 als Developer Preview markiert.
+> ⚠️ **Developer Preview:** Die hier vorgestellten Funktionen `withViewTransitions()` und `withRouterResources()` sind (Stand Angular 22.2) als Developer Preview markiert.
 > Die APIs können sich in zukünftigen Versionen noch ändern.
 
 ## Inhalt
@@ -49,9 +49,9 @@ Zum Schluss animiert er den Übergang zwischen beiden Momentaufnahmen.
 ![Ablaufdiagramm der View Transitions API: alten Zustand als Snapshot erfassen, DOM aktualisieren, neuen Zustand erfassen, zwischen beiden Snapshots animieren.](view-transitions-flow.svg "Die vier Phasen einer View Transition.")
 
 Für die Animation legt der Browser im Hintergrund einen Baum aus Pseudo-Elementen an:
-Pro benanntem Bereich entstehen drei Elemente: `::view-transition-group()` interpoliert Position und Größe, `::view-transition-old()` und `::view-transition-new()` überblenden vom alten zum neuen Schnappschuss.
+Pro benanntem Bereich entsteht eine `::view-transition-group()`, die Position und Größe interpoliert. Darin liegt ein `::view-transition-image-pair()` mit `::view-transition-old()` und `::view-transition-new()`, die vom alten zum neuen Zustand überblenden.
 Diese Pseudo-Elemente lassen sich mit CSS gezielt ansprechen.
-Genau darüber steuern wir später die Animation.
+Darüber steuern wir später die Animation.
 
 Wichtig zur Einordnung: Hier ist keine Animations-Engine von Angular im Spiel. Es handelt sich um eine reine Browser-API. Angular klinkt sich lediglich in den Navigationszyklus des Routers ein.
 
@@ -59,23 +59,22 @@ Noch ein Detail, das man kennen sollte: Während der Übergang läuft, legt der 
 Diese Überlagerung fängt standardmäßig Zeiger-Interaktionen ab, sodass die Seite für die Dauer der Animation praktisch nicht bedienbar ist.
 Das ist ein guter Grund, Übergänge kurz zu halten (in unserem Beispiel eine halbe Sekunde): Je länger die Animation ist, desto länger kann die nutzende Person nicht klicken oder scrollen.
 
-### Zwei Spielarten: SPA (same-document) vs. MPA (cross-document)
+### Zwei Varianten: SPA (same-document) vs. MPA (cross-document)
 
 Die View Transitions API deckt zwei unterschiedliche Szenarien ab, jedes mit einem eigenen Einstiegspunkt:
 
-- **Same-document (SPA):** Der Übergang findet zwischen zwei DOM-Zuständen *innerhalb* derselben Seite statt. Er wird imperativ über `document.startViewTransition(callback)` ausgelöst. Genau diesen Weg nutzt der Angular-Router intern.
-- **Cross-document (MPA):** Der Übergang findet bei der Navigation *zwischen* zwei Dokumenten statt. Er wird deklarativ über die CSS-At-Rule `@view-transition { navigation: auto; }` aktiviert, und beide Seiten müssen von derselben Origin stammen. Das ist der Weg für klassische, serverseitig gerenderte Seiten ohne Framework.
+- **Same-document (SPA):** Der Übergang findet zwischen zwei DOM-Zuständen *innerhalb* derselben Seite statt. Er wird imperativ über `document.startViewTransition(callback)` ausgelöst. Diesen Weg nutzt der Angular-Router intern.
+- **Cross-document (MPA, Multi-Page Application):** Der Übergang findet bei der Navigation *zwischen* zwei Dokumenten statt. Er wird deklarativ über die CSS-At-Rule `@view-transition { navigation: auto; }` aktiviert, und beide Seiten müssen von derselben Origin stammen. Das ist der Weg für klassische, serverseitig gerenderte Seiten ohne Framework.
 
 Da eine Angular-Anwendung eine Single-Page-Anwendung (SPA) ist, geht es im weiteren Verlauf ausschließlich um den same-document-Weg.
-Die MPA-Variante ist ein eigenes Thema – sie kommt ganz ohne JavaScript aus – und ist hier nur zur Einordnung erwähnt.
+Die MPA-Variante kommt ganz ohne JavaScript aus. Sie ist ein eigenes Thema und hier nur zur Einordnung erwähnt.
 
 ### Browsersupport und Stand
 
-*Same-document View Transitions* werden in Chrome und Edge ab Version 126 sowie in Safari ab 18.2 unterstützt.
-In Firefox ist bisher der SPA-Teil noch nicht umgesetzt, es wird aber daran gearbeitet.
-Die API ist damit noch nicht flächendeckend als „Baseline“ verfügbar.
+*Same-document View Transitions* sind seit Oktober 2025 in allen großen Browsern verfügbar („Baseline Newly available“): Chrome und Edge ab 111, Safari ab 18, Firefox ab 144.
+Die in diesem Artikel verwendeten View-Transition-Klassen (`view-transition-class`) benötigen allerdings Chrome und Edge ab 125 bzw. Safari ab 18.2.
 
-Genau deshalb ist der Charakter als *Progressive Enhancement* so wichtig: In Browsern ohne Unterstützung führt Angular den Routenwechsel einfach ohne Animation aus.
+Der Charakter als *Progressive Enhancement* bleibt trotzdem wichtig: In Browsern ohne Unterstützung führt Angular den Routenwechsel einfach ohne Animation aus.
 Somit bleibt die Anwendung voll funktionsfähig.
 Da sich der Support laufend ändert, lohnt sich ein Blick auf die aktuelle [Browserkompatibilitätstabelle bei MDN](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API#browser_compatibility).
 
@@ -84,8 +83,9 @@ Da sich der Support laufend ändert, lohnt sich ein Blick auf die aktuelle [Brow
 Als Grundlage dient der [BookManager aus dem Angular-Buch in der Variante `15-rxjs`](https://bm1.angular-buch.com/#bm15). Die Anwendung hat zwei relevante Routen: eine Buchliste (`BooksOverviewPage`, die pro Buch eine `BookCard` rendert) und eine Detailseite (`BookDetailsPage`). Beide arbeiten mit demselben Datenmodell `Book`, das unter anderem ISBN, Titel, Autoren, die Cover-URL und weitere Metadaten enthält.
 
 Ohne weitere Konfiguration ist der Wechsel von der Liste zur Detailansicht ein harter Schnitt. Diesen Übergang bauen wir Schritt für Schritt zu einer zusammenhängenden Animation aus.
+Der Artikel zeigt dabei nur die relevanten Ausschnitte. Den vollständigen, lauffähigen Stand mit allen Namen und Styles gibt es als [StackBlitz-Projekt zum Nachbauen und Ausprobieren](https://stackblitz.com/edit/angular-buch-book-manager1-view-transition-api).
 
-![Animierte Demo im Book Manager: Beim Klick auf ein Buch in der Liste morpht das Cover zusammen mit Titel, Untertitel und ISBN flüssig in die Detailansicht – und beim Zurücknavigieren wieder zurück.](view-transition-book-manager-demo.webp "Das Ziel: ein zusammenhängender Übergang von der Buchliste zur Detailseite.")
+![Animierte Demo im Book Manager: Beim Klick auf ein Buch in der Liste morpht das Cover zusammen mit Titel, Untertitel und ISBN flüssig in die Detailansicht.](view-transition-book-manager-demo.webp "Das Ziel: ein zusammenhängender Übergang von der Buchliste zur Detailseite.")
 
 ### View Transitions im Router aktivieren
 
@@ -110,7 +110,7 @@ export const appConfig: ApplicationConfig = {
 Unterstützt der Browser die API nicht, bleibt alles beim normalen DOM-Wechsel und es treten keine Fehler auf.
 
 Schon jetzt gibt es einen sichtbaren Effekt: Der gesamte Seiteninhalt wird beim Routenwechsel sanft übergeblendet.
-Das ist das Standardverhalten, das der Browser mit einem automatischen `root`-Übergang mitbringt.
+Das ist das Standardverhalten des Browsers: Er gibt dem `<html>`-Element automatisch den `view-transition-name` `root` und blendet es als Ganzes über.
 
 ### Ein grundlegender Seitenübergang per CSS
 
@@ -142,7 +142,7 @@ router-outlet + * {
 }
 ```
 
-Ein entscheidender Punkt: Diese Regeln gehören zwingend in die **globalen** Styles, nicht in die gekapselten Styles einer Komponente.
+Diese Regeln gehören in die **globalen** Styles, nicht in die gekapselten Styles einer Komponente.
 Angulars View Encapsulation versieht komponentenlokale Stile mit Attributselektoren.
 Die vom Browser erzeugten `::view-transition-*`-Pseudo-Elemente liegen aber außerhalb jeder Komponente und werden von solchen Selektoren nicht erreicht.
 
@@ -164,6 +164,9 @@ In der `BookCard` sieht das für Cover und Titel so aus:
 
 ```html
 <!-- book-card.html (Ausschnitt) -->
+@let b = book();
+@let titleId = `title-${b.isbn}`;
+
 <img alt="Buchcover"
   [src]="b.imageUrl"
   [style.view-transition-name]="'book-cover-' + b.isbn"
@@ -189,11 +192,11 @@ Damit kann der Browser nun die entsprechenden Paare finden:
 
 Beim Styling lauert ein verbreiteter Stolperstein.
 Verlockend wäre es, auf `::view-transition-old()` und `::view-transition-new()` eigene `transform`-Keyframes zu legen, um die Bewegung direkt zu steuern.
-Genau das würde aber den Effekt zerstören: Die automatische Interpolation von Position und Größe steckt bereits in der `::view-transition-group()`.
+Das würde aber den Effekt zerstören: Die automatische Interpolation von Position und Größe steckt bereits in der `::view-transition-group()`.
 Überschreibt man `old`/`new` mit eigenen Transforms, bleibt nur noch ein Überblenden: das Element fadet, statt zu wandern.
 
 Richtig ist, die Bewegung dem Browser zu überlassen und über die Gruppe nur Dauer und Easing vorzugeben.
-Das `old`/`new`-Paar überblenden wir lediglich sauber ineinander:
+Das `old`/`new`-Paar überblenden wir lediglich ineinander:
 
 ```css
 ::view-transition-group(.book-cover) {
@@ -205,8 +208,9 @@ Das `old`/`new`-Paar überblenden wir lediglich sauber ineinander:
 ::view-transition-new(.book-cover) {
   animation-duration: 500ms;
   animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
-  /* Höhe an die Gruppe koppeln, damit das Bild beim Wandern nicht verzerrt */
+  /* Momentaufnahme füllt die Gruppe, Seitenverhältnis bleibt erhalten */
   height: 100%;
+  object-fit: cover;
 }
 ```
 
@@ -222,12 +226,11 @@ Für die geteilten Elemente existiert dann nur ein `::view-transition-old()`, ab
 Es gibt also kein Gegenstück, zu dem hin interpoliert werden könnte.
 Das Ergebnis ist genau das beobachtete Ausblenden statt eines Morphs.
 
-![Timeline-Vergleich: Bei async geladenem httpResource läuft der HTTP-Request noch, wenn der Browser den neuen Zustand erfasst – die Daten kommen zu spät, es bleibt beim Fade. Bei einer blockierenden Router Resource sind die Daten vor dem Capture da und das DOM ist vollständig – der Morph gelingt.](resource-timing.svg "Warum das Timing entscheidet: Das DOM muss beim Capture vollständig sein.")
+![Timeline-Vergleich: Bei async geladenem httpResource läuft der HTTP-Request noch, wenn der Browser den neuen Zustand erfasst. Die Daten kommen zu spät, es bleibt beim Fade. Bei einer blockierenden Router Resource sind die Daten vor dem Capture da und das DOM ist vollständig, der Morph gelingt.](resource-timing.svg "Warum das Timing entscheidet: Das DOM muss beim Capture vollständig sein.")
 
 Die Lösung: Das Buch muss schon beim Aktivieren der Route synchron vorliegen.
-Dafür nutzen wir eine *blockierende* Router Resource, die mit Angular 22.2 als experimentell eingeführt wurde.
-<!--Für Details dazu haben wir einen eigenständigen Artikel geschrieben.-->
-<!--TODO: Artikel schrieben und hier verlinken-->
+Ein vorab gefüllter Cache ist dafür ein möglicher Weg: Liegt das Buch bereits im Speicher, steht es ohne Verzögerung bereit.
+Verlässlich erzwingen lässt sich das synchrone Vorliegen aber über eine *blockierende* Router Resource, die mit Angular 22.2 als Developer Preview eingeführt wurde.
 Dafür aktivieren wir jetzt das Router-Feature `withRouterResources()`:
 
 ```typescript
@@ -269,7 +272,7 @@ getSingle(isbn: () => string): HttpResourceRef<Book | undefined> {
 ```
 
 Die Komponente schrumpft dadurch auf das Wesentliche.
-Das Ergebnis wird mittels *Component Input Binding* an ein Input der Komponente gebunden.
+Das Ergebnis wird mittels *Component Input Binding* an ein Input der Komponente gebunden: Der Schlüssel `book` aus dem `resources`-Objekt landet im gleichnamigen Input `book`.
 Statt eine Resource selbst zu verwalten, nimmt die Komponente also das fertige Buch einfach als Input entgegen:
 
 ```typescript
@@ -280,27 +283,27 @@ export class BookDetailsPage {
 }
 ```
 
-Dass eine *Non-Blocking Router Resource* hier keine Alternative ist, ergibt sich aus demselben Timing-Argument: Eine nicht blockierende Resource würde die Komponente sofort ohne Wert rendern.
+Dass eine *Non-Blocking Router Resource* hier keine Alternative ist, ergibt sich aus demselben Timing-Argument: Die Komponente bekäme dann die Resource selbst als Input und würde gerendert, bevor die Daten da sind.
 Der Effekt: Wir landen wieder beim Fade.
 
-Ein Trade-off bei der Nutzung von Router Resources bleibt aber ehrlicherweise bestehen: Die Navigation wartet kurz auf den Request, bevor der Übergang startet.
+Einen Trade-off haben Router Resources allerdings: Die Navigation wartet kurz auf den Request, bevor der Übergang startet.
 Bei einer schnellen Server-API ist das kaum wahrnehmbar.
-Dafür gibt es einen praktischen Zusatznutzen: Im Fall einer unbekannten ISBN, bei dem die blockierende Resource die Navigation abbrechen würde, lässt sich im Loader ein `RedirectCommand` werfen und so sauber umleiten.
+Dafür gibt es einen praktischen Zusatznutzen: Im Fall einer unbekannten ISBN, bei dem die blockierende Resource die Navigation abbrechen würde, lässt sich in der ladenden Funktion der Resource ein `RedirectCommand` werfen und so umleiten.
 Im Minimalbeispiel haben wir an dieser Stelle aber darauf verzichtet.
 
 > **Router Resources oder klassischer Resolver?** Der Gedanke, Daten „vor der Aktivierung“ blockierend zu laden, ist nicht neu: Klassischerweise haben wir dafür einen *Resolver* genutzt (`ResolveFn<T>`, registriert unter `resolve` in der Route).
 > Resolver und Router Resource teilen genau die Eigenschaft, auf die es uns hier ankommt: Beide blockieren die Navigation und stellen das Ergebnis über ein Component Input Binding synchron als Input bereit.
 > Für unseren Shared-Element-Morph wäre ein Resolver also grundsätzlich ebenso geeignet.
 >
-> Dass hier dennoch Router Resources zum Einsatz kommen, ist eine bewusste, keine dogmatische Entscheidung. Router Resources sind signal-basiert und somit auch reaktiv: ändert sich ein Routenparameter, lädt die Resource neu, und ein `reload()` ist ohne erneute Navigation möglich.
+> Wir setzen hier trotzdem Router Resources ein, weil sie signal-basiert und damit reaktiv sind: ändert sich ein Routenparameter, lädt die Resource neu, und ein `reload()` ist ohne erneute Navigation möglich.
 > Über die Routen-Hierarchie laufen mehrere Resources zudem *parallel*, während Resolver von der Eltern- zur Kindroute nacheinander abgearbeitet werden.
 > Außerdem fügen sie sich konsistent in ein Projekt ein, das ohnehin mit `httpResource` und Signals arbeitet, und `nonBlocking()` steht als expliziter Opt-out bereit, wenn man den Ladezustand doch in der Komponente behandeln möchte.
-> Die Fehlerbehandlung funktioniert in beiden Welten ähnlich: Resolver fangen Fehler an der Quelle ab (z. B. mit `catchError()`) oder nutzen `withNavigationErrorHandler()`. Eine Router Resource wirft im Loader ein `RedirectCommand`.
+> Die Fehlerbehandlung funktioniert in beiden Welten ähnlich: Resolver fangen Fehler an der Quelle ab (z. B. mit `catchError()`) oder nutzen `withNavigationErrorHandler()`. Eine Router Resource wirft in ihrer ladenden Funktion ein `RedirectCommand`.
 >
-> Wer Resolver im Projekt hat und zufrieden damit ist, muss nichts umbauen – sie bleiben ein valides Werkzeug. Eine ausführliche Behandlung inklusive Fehlerbehandlung und der UX-Problematik blockierender Navigation findet sich im Buch-Zusatzmaterial [Resolvers: Daten beim Routing vorladen](/material/resolvers).
+> Wer Resolver im Projekt hat und zufrieden damit ist, muss nichts umbauen. Resolver bleiben ein valides Werkzeug. Eine ausführliche Behandlung inklusive Fehlerbehandlung und der UX-Problematik blockierender Navigation findet sich im Buch-Zusatzmaterial [Resolvers: Daten beim Routing vorladen](/material/resolvers).
 > Dort argumentieren wir, dass blockierende Resolver aus UX-Sicht meist ungünstig sind.
-> Unser Fall ist die begründete Ausnahme: Hier ist das synchrone Vorliegen der Daten nicht bloß Komfort, sondern technische Voraussetzung dafür, dass die View Transition überhaupt morphen kann.
-> Hinzu kommt, dass die View Transition selbst die wahrgenommene Wartezeit überbrückt: Der animierte Übergang vermittelt – anders als ein harter Schnitt mit kurzer Pause – nicht das Gefühl, dass nichts passiert.
+> Unser Fall ist die begründete Ausnahme: Hier müssen die Daten synchron vorliegen, sonst kann die View Transition nicht morphen.
+> Hinzu kommt, dass die View Transition selbst die wahrgenommene Wartezeit überbrückt: Ein harter Schnitt mit kurzer Pause wirkt wie ein Hänger, der animierte Übergang zeigt dagegen, dass etwas passiert.
 
 ### Weitere zuordenbare Elemente und das Ein- und Ausblenden
 
@@ -309,6 +312,7 @@ Alles, was in beiden Ansichten vorkommt, bekommt einen geteilten Namen.
 Zusätzlich zum Cover und Titel verknüpfen wir also auch Untertitel (`book-subtitle-<isbn>`) und ISBN (`book-isbn-<isbn>`).
 Selbst dem umgebenden `<article>` geben wir einen Namen (`book-frame-<isbn>`).
 Dadurch morpht der Rahmen als Ganzes, und die kompakte Listen-Card „zoomt“ sichtbar zur ausgedehnten Detailseite.
+Wo genau diese Namen im Markup sitzen, zeigt das vollständige [`book-card.html` im StackBlitz-Projekt](https://stackblitz.com/edit/angular-buch-book-manager1-view-transition-api).
 
 Elemente, die nur in einer der beiden Ansichten existieren, behandelt der Browser automatisch sinnvoll: Neue Inhalte wie Autoren, Beschreibung und Datum blenden über den Standard-Überblendeffekt des Frames ein.
 
@@ -322,8 +326,8 @@ Der `<footer>` der Card mit dem Link „Details“ und dem Button „Like“ exi
 Über den Überblendeffekt des Frames würde er langsam ausfaden.
 Wir wollen aber, dass der gesamte Footer sofort verschwindet.
 
-Die saubere Lösung ist, dem gesamten `<footer>` einen eigenen `view-transition-name` samt Klasse `book-actions` zu geben.
-Da das Element nur in der Liste vorkommt, entsteht für ihn ausschließlich ein `::view-transition-old()`, aber kein `new` und keine `group`.
+Die Lösung ist, dem gesamten `<footer>` einen eigenen `view-transition-name` samt Klasse `book-actions` zu geben.
+Da das Element nur in der Liste vorkommt, enthält seine Gruppe nur ein `::view-transition-old()` und kein `::view-transition-new()`.
 
 Hier lauert noch eine Feinheit: `animation: none` wäre falsch, denn das ließe die Momentaufnahme über die gesamte Transition stehen.
 Der Footer bliebe also sichtbar.
@@ -339,7 +343,7 @@ Stattdessen setzen wir ihn in einem einzigen Schritt einfach auf `opacity: 0`:
 }
 ```
 
-Dieses Muster – ein eigener Name kombiniert mit einem `opacity: 0`-Keyframe – ist der allgemeine Weg, um Bereiche, die nur in einer Ansicht vorkommen, gezielt sofort ein- oder auszublenden, statt sie zu faden.
+Ein eigener Name kombiniert mit einem `opacity: 0`-Keyframe ist der allgemeine Weg, um Bereiche, die nur in einer Ansicht vorkommen, gezielt sofort ein- oder auszublenden, statt sie zu faden.
 
 ### Feinschliff: zeitlicher Versatz
 
@@ -370,10 +374,10 @@ Die offizielle Dokumentation dazu findet sich unter [Inspect CSS animations](htt
 ### Das Animations-Panel öffnen
 
 Am schnellsten geht es über das Command-Menü: Mit `Cmd`/`Ctrl` + `Shift` + `P` die Eingabe „Show Animations“ aufrufen.
-Alternativ lässt sich das Panel über das Drawer-Menü („More tools" → „Animations") öffnen.
+Alternativ lässt sich das Panel über das Drawer-Menü („More tools“ → „Animations“) öffnen.
 Das Panel zeigt die aufgezeichneten Animationsgruppen untereinander, jeweils als Balken auf einer gemeinsamen Zeitleiste, und bietet einen Abspielmarker, mit dem man die Animation manuell durch die Zeit ziehen kann.
 
-![Annotiertes Chrome-DevTools-Animations-Panel: Aufnahme-Button, Replay, ein Geschwindigkeitsregler und eine Zeitleiste mit je einer Spur pro view-transition-Gruppe (Rahmen, Cover, Titel, Untertitel, ISBN) sowie dem Seiten-Crossfade.](devtools-animations-panel.svg "Das Animations-Panel: Aufzeichnung, Zeitleiste und Abspielmarker.")
+![Annotiertes Chrome-DevTools-Animations-Panel: Buttons für „Clear all“ und „Pause all“, Geschwindigkeits-Buttons und eine Zeitleiste mit je einer Spur pro view-transition-Gruppe (Rahmen, Cover, Titel, Untertitel, ISBN) sowie dem Seiten-Crossfade.](devtools-animations-panel.svg "Das Animations-Panel: Zeitleiste, Geschwindigkeit und Abspielmarker.")
 
 ### Aufzeichnen und wiederholen
 
@@ -386,49 +390,28 @@ Mit dem Abspielmarker lässt sich der Übergang von Hand durch die Zeit ziehen, 
 ### Verlangsamen für die Analyse
 
 Im Panel lässt sich die Abspielgeschwindigkeit reduzieren, etwa auf 25 % oder 10 %. In dieser Zeitlupe wird unmittelbar sichtbar, was im Normaltempo verborgen bleibt: Verändert ein Element Position und Größe, läuft also tatsächlich eine `group`-Animation, dann funktioniert die Shared-Element-Transition.
-Blendet es dagegen nur ein oder aus, handelt es sich um ein reines Fade – ein deutliches Zeichen dafür, dass das Gegenstück im neuen DOM fehlt.
+Blendet es dagegen nur ein oder aus, handelt es sich um ein reines Fade. Dann fehlt das Gegenstück im neuen DOM.
 
 ### Nachweis: Morph oder Fade?
 
 Wer es genau wissen will, kann die laufenden Pseudo-Element-Animationen auch programmatisch auslesen.
 `document.getAnimations()` liefert alle aktiven Animationen, über deren `effect.pseudoElement` sich die zugehörigen `::view-transition-*`-Namen ablesen lassen.
 Das Erfolgskriterium ist eindeutig: Existiert für ein geteiltes Element sowohl eine `::view-transition-group(name)` als auch ein `::view-transition-new(name)`, handelt es sich um einen echten Morph.
-Findet sich dagegen nur ein `::view-transition-old(name)` ohne `new` und ohne `group`, fehlt das Element im neuen DOM – es kann nur faden.
+Findet sich dagegen nur ein `::view-transition-old(name)` ohne `::view-transition-new(name)`, fehlt das Element im neuen DOM. Es kann nur ausblenden.
 Das ist typischerweise die Signatur asynchron geladener Daten und führt direkt zurück zu unserer Lösung mit den Router Resources oder alternativ Resolvern.
 Zusätzlich lassen sich `transform`, `width` und `height` der Gruppe am Anfang und Ende auslesen, um die Interpolation schwarz auf weiß zu belegen.
 
 ## Barrierefreiheit: `prefers-reduced-motion`
 
-Beim Thema Bewegung sind zwei Konzepte sauber auseinanderzuhalten. Das eine ist Progressive Enhancement im Sinne fehlender Browserfähigkeiten.
+Beim Thema Bewegung sind zwei Konzepte auseinanderzuhalten. Das eine ist Progressive Enhancement im Sinne fehlender Browserfähigkeiten.
 Das deckt die View Transitions API bereits selbst ab, indem Angular ohne Unterstützung ein normales DOM-Update macht.
 Das andere ist `prefers-reduced-motion`: eine bewusste Nutzerpräferenz, etwa bei vestibulären Beschwerden.
 Das ist kein Fähigkeits-Fallback, sondern eine Opt-out-Entscheidung der nutzenden Person.
 
-Für diese Präferenz empfiehlt sich eine „opt-in“-Logik statt eines nachträglichen Abschaltens.
-Anstatt immer zu animieren und bei `reduce` jede Regel wieder zu deaktivieren, kapseln wir sämtliche Animationsregeln in `@media (prefers-reduced-motion: no-preference)`.
-Fehlt die Zustimmung – sei es durch `reduce` oder weil der Browser die Media Query nicht kennt – greifen unsere Keyframes gar nicht erst.
-Das ist robuster und erspart einen langen Abschalt-Block, in dem man leicht eine Regel vergisst.
-
-```css
-/* Animationen nur, wenn keine Reduktion gewünscht ist (opt-in) */
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-group(.book-cover) {
-    animation-duration: 500ms;
-    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-  /* … alle weiteren View-Transition-Regeln hier hinein … */
-}
-```
-
-Dieses CSS deaktiviert allerdings nur *unsere eigenen* Keyframes.
-Die View Transition als solche läuft weiter – inklusive des browsereigenen Standard-Überblendeffekts, der auch den gesamten Seiteninhalt betrifft.
-Für eine saubere Umsetzung sollten wir den Übergang bei `reduce` deshalb ganz überspringen.
-
-Dafür bietet Angulars View-Transitions-Integration ein Feature an.
+Die eigentliche Lösung liefert Angulars View-Transitions-Integration.
 `withViewTransitions()` akzeptiert ein Optionsobjekt mit dem Callback `onViewTransitionCreated`.
 Dieses läuft in einem Injection Context und bekommt unter anderem die native Instanz von `ViewTransition` übergeben.
-Darauf können wir `skipTransition()` aufrufen, was dazu führt, dass Animationen übersprungen werden.
-Das DOM-Update (also der Routenwechsel) wird allerdings trotzdem ausgeführt:
+Darauf rufen wir bei `reduce` `skipTransition()` auf. Das überspringt die Animation, während das DOM-Update (also der Routenwechsel) trotzdem ausgeführt wird:
 
 ```typescript
 // app.config.ts
@@ -448,13 +431,61 @@ provideRouter(
 )
 ```
 
-Damit haben wir beide Ebenen abgedeckt: Das CSS mit `no-preference` definiert unsere Animationen erst gar nicht, und `skipTransition()` unterbindet zusätzlich den browsereigenen Standardübergang.
-In beiden Fällen gilt: Inhalt und Navigation bleiben voll funktionsfähig, lediglich die zusätzliche Bewegung entfällt.
+`skipTransition()` deckt den View-Transition-Fall vollständig ab: Es unterbindet sowohl unsere eigenen Keyframes als auch den browsereigenen Standard-Überblendeffekt, der den gesamten Seiteninhalt betrifft.
+Inhalt und Navigation bleiben dabei voll funktionsfähig, lediglich die zusätzliche Bewegung entfällt.
 
-## Zusammenfassung
+Als zweite Absicherung können wir unsere eigenen Keyframes zusätzlich in `@media (prefers-reduced-motion: no-preference)` kapseln.
+Für die Angular-Integration ist das zwar nicht mehr nötig, da `skipTransition()` den Übergang ohnehin überspringt. Es ist aber eine gute Angewohnheit und greift auch dort, wo View Transitions ohne die Router-Integration zum Einsatz kommen:
+
+```css
+/* Animationen nur, wenn keine Reduktion gewünscht ist (opt-in) */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(.book-cover) {
+    animation-duration: 500ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  /* … alle weiteren View-Transition-Regeln hier hinein … */
+}
+```
+
+### Übergänge bei reinen Query-Parameter-Wechseln überspringen
+
+`onViewTransitionCreated` eignet sich noch für einen weiteren Fall.
+Der Router löst bei *jeder* Navigation einen Übergang aus, also auch dann, wenn sich nur Query-Parameter oder das Fragment ändern.
+Ein typisches Beispiel ist ein Suchfeld, das den Suchbegriff als Query-Parameter in die URL schreibt: Jeder Tastendruck würde eine View Transition samt Überblendung und blockierender Overlay-Schicht auslösen.
+
+Die Angular-Dokumentation zeigt dafür das passende Muster: den Übergang überspringen, wenn sich die eigentliche Route gar nicht ändert.
+Beide Bedingungen (reduzierte Bewegung und reiner Query-Parameter-Wechsel) lassen sich im selben Callback kombinieren:
+
+```typescript
+import { inject } from '@angular/core';
+import { Router, withViewTransitions, isActive, IsActiveMatchOptions } from '@angular/router';
+
+withViewTransitions({
+  onViewTransitionCreated: ({ transition }) => {
+    const router = inject(Router);
+    const targetUrl = router.currentNavigation()!.finalUrl!;
+
+    // Übergang überspringen, wenn sich nur Fragment oder Query-Parameter ändern
+    const config: Partial<IsActiveMatchOptions> = {
+      paths: 'exact',
+      matrixParams: 'exact',
+      fragment: 'ignored',
+      queryParams: 'ignored'
+    };
+    const isTargetRouteCurrent = isActive(targetUrl, router, config);
+
+    if (isTargetRouteCurrent()) {
+      transition.skipTransition();
+    }
+  }
+})
+```
+
+## Fazit
 
 Mit der View Transitions API lassen sich Routenwechsel in Angular ohne zusätzliche Abhängigkeit animieren.
-Es funktioniert als Progressive Enhancement, das in nicht unterstützenden Browsern sauber zum normalen Verhalten degradiert.
+Es funktioniert als Progressive Enhancement, das in nicht unterstützenden Browsern zum normalen Verhalten degradiert.
 Drei Bausteine tragen das Ergebnis:
 
 - `withViewTransitions()` aktiviert die Integration,
@@ -466,10 +497,13 @@ Die Chrome DevTools mit ihrem Animations-Panel und der Möglichkeit zum Verlangs
 Von hier aus lässt sich weiterdenken: View Transition Types für unterschiedliche Übergangsstile je nach Navigationsrichtung, eine eigene Choreografie für den Rückweg von der Detailseite zur Liste oder komplexere gestaffelte Abläufe.
 Und nicht vergessen: Die Angular-Implementierungen für View Transitions und Router Resources sind in Angular 22.2 noch Developer Preview.
 
+Wie setzt ihr View Transitions in euren Projekten ein? Schreibt uns gern eure Erfahrungen und Fragen.
+
 ## Weiterführende Links
 
+- Demo: [BookManager mit View Transitions auf StackBlitz](https://stackblitz.com/edit/angular-buch-book-manager1-view-transition-api)
 - Angular Guide: [Route transition animations](https://angular.dev/guide/routing/route-transition-animations)
-- Angular Guide: [Data fetching with resources](https://next.angular.dev/guide/routing/data-fetching-with-resources)
+- Angular Guide: [Data fetching with resources](https://angular.dev/guide/routing/data-fetching-with-resources)
 - Buch-Zusatzmaterial: [Resolvers – Daten beim Routing vorladen](/material/resolvers)
 - Chrome DevTools: [Animationen inspizieren](https://developer.chrome.com/docs/devtools/css/animations/)
 - Chrome Blog: [What's new in view transitions (2025)](https://developer.chrome.com/blog/view-transitions-in-2025)
