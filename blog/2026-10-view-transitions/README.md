@@ -242,7 +242,17 @@ provideRouter(
 
 In den Routen können wir nun Resources angeben, die automatisch vom Router aufgelöst werden.
 Bevor die Komponente aktiviert wird, wird blockierend auf den geladenen Wert der Resource gewartet. Erst danach wird die Komponente geladen.
-Da das Projekt im RxJS-Kapitel angesiedelt ist, verwenden wir `rxResource` mit der `stream`-Eigenschaft:
+Unser `BookStore` stellt bereits eine Methode `getSingle()` bereit, die auf einem signalbasierten `httpResource` aufsetzt und auf einen wechselnden ISBN-Parameter reagiert.
+Diese Resource können wir direkt verwenden. Wir übergeben den Routenparameter als Funktion, die die ISBN zurückgibt:
+
+```typescript
+// book-store.ts (Ausschnitt)
+getSingle(isbn: () => string): HttpResourceRef<Book | undefined> {
+  return httpResource<Book>(
+    () => `${this.#apiUrl}/books/${isbn()}`
+  );
+}
+```
 
 ```typescript
 // books-portal.routes.ts (Ausschnitt)
@@ -252,10 +262,7 @@ Da das Projekt im RxJS-Kapitel angesiedelt ist, verwenden wir `rxResource` mit d
   resources: (ctx) => {
     const bookStore = inject(BookStore);
     return {
-      book: rxResource({
-        params: () => ctx.params()['isbn'] as string,
-        stream: ({ params: isbn }) => bookStore.getById(isbn)
-      })
+      book: bookStore.getSingle(() => ctx.params()['isbn'] || '')
     };
   }
 }
