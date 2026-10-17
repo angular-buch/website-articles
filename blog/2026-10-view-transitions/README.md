@@ -2,8 +2,8 @@
 title: 'View Transitions in Angular: Shared-Element-Animationen zwischen Routen'
 author: Danny Koppenhagen
 mail: mail@k9n.dev
-published: 2026-10-20
-lastModified: 2026-10-20
+published: 2026-10-19
+lastModified: 2026-10-19
 keywords:
   - Angular
   - View Transitions
