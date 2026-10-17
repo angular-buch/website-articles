@@ -455,7 +455,7 @@ Der Router löst bei *jeder* Navigation einen Übergang aus, also auch dann, wen
 Ein typisches Beispiel ist ein Suchfeld, das den Suchbegriff als Query-Parameter in die URL schreibt: Jeder Tastendruck würde eine View Transition samt Überblendung und blockierender Overlay-Schicht auslösen.
 
 Die Angular-Dokumentation zeigt dafür das passende Muster: den Übergang überspringen, wenn sich die eigentliche Route gar nicht ändert.
-Beide Bedingungen (reduzierte Bewegung und reiner Query-Parameter-Wechsel) lassen sich im selben Callback kombinieren:
+Die Prüfung lässt sich mit der Bedingung für reduzierte Bewegung aus dem vorigen Abschnitt im selben Callback kombinieren:
 
 ```typescript
 import { inject } from '@angular/core';
