@@ -3,7 +3,7 @@ title: 'View Transitions in Angular: Shared-Element-Animationen zwischen Routen'
 author: Danny Koppenhagen
 mail: mail@k9n.dev
 published: 2026-10-19
-lastModified: 2026-10-19
+lastModified: 2026-10-20
 keywords:
   - Angular
   - View Transitions
@@ -408,7 +408,18 @@ Das deckt die View Transitions API bereits selbst ab, indem Angular ohne Unterst
 Das andere ist `prefers-reduced-motion`: eine bewusste Nutzerpräferenz, etwa bei vestibulären Beschwerden.
 Das ist kein Fähigkeits-Fallback, sondern eine Opt-out-Entscheidung der nutzenden Person.
 
-Die eigentliche Lösung liefert Angulars View-Transitions-Integration.
+Hier lohnt sich eine wichtige Einordnung: `prefers-reduced-motion: reduce` bedeutet *nicht* zwangsläufig „gar keine Bewegung“.
+Wie der [offizielle Chrome-Explainer zu View Transitions](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#react_to_the_reduced_motion_preference) betont, möchten viele Menschen mit dieser Präferenz keine vollständige Abwesenheit von Bewegung, sondern eine *reduzierte*, ruhigere Variante.
+Ein Übergang, der die Beziehung zwischen Elementen und den Datenfluss weiterhin ausdrückt, kann auch mit reduzierter Bewegung sinnvoll sein.
+Er sollte dann nur dezenter ausfallen, etwa als kurzes Überblenden statt eines weiten Flugs über den Bildschirm.
+
+Genau deshalb macht Angulars Router hier bewusst *nichts* automatisch.
+Würde das Framework den Übergang bei `reduce` von sich aus überspringen, nähme es der Anwendung die Entscheidung ab, wie reduzierte Bewegung aussehen soll.
+Diese Wahl liegt damit in unserer Hand und sollte bewusst getroffen werden. Es gibt dabei zwei Wege.
+
+### Weg 1: Den Übergang komplett überspringen
+
+Der zentrale Weg, ist, den Übergang bei `reduce` ganz zu überspringen.
 `withViewTransitions()` akzeptiert ein Optionsobjekt mit dem Callback `onViewTransitionCreated`.
 Dieses läuft in einem Injection Context und bekommt unter anderem die native Instanz von `ViewTransition` übergeben.
 Darauf rufen wir bei `reduce` `skipTransition()` auf. Das überspringt die Animation, während das DOM-Update (also der Routenwechsel) trotzdem ausgeführt wird:
@@ -434,11 +445,23 @@ provideRouter(
 `skipTransition()` deckt den View-Transition-Fall vollständig ab: Es unterbindet sowohl unsere eigenen Keyframes als auch den browsereigenen Standard-Überblendeffekt, der den gesamten Seiteninhalt betrifft.
 Inhalt und Navigation bleiben dabei voll funktionsfähig, lediglich die zusätzliche Bewegung entfällt.
 
-Als zweite Absicherung können wir unsere eigenen Keyframes zusätzlich in `@media (prefers-reduced-motion: no-preference)` kapseln.
-Für die Angular-Integration ist das zwar nicht mehr nötig, da `skipTransition()` den Übergang ohnehin überspringt. Es ist aber eine gute Angewohnheit und greift auch dort, wo View Transitions ohne die Router-Integration zum Einsatz kommen:
+Dieser Weg ist eine legitime, naheliegende Wahl, besonders bei aufwändigen, weiten oder lang laufenden Animationen.
+Er hat allerdings den Nachteil, dass dann wie zuvor gar kein Übergang stattfindet, obwohl `prefers-reduced-motion` genau genommen nur *reduzierte* und nicht zwingend gar keine Bewegung verlangt.
+Ob das vertretbar ist, sollte man also bewusst abwägen.
+
+### Weg 2: Bewegung gezielt per CSS reduzieren
+
+Statt den Übergang ganz zu unterbinden, können wir die Bewegung per CSS gezielt abschwächen und so eine dezentere Variante anbieten.
+Da die View-Transition-Pseudo-Elemente ganz normale CSS-Animationen sind, geht das rein deklarativ, ganz ohne den `onViewTransitionCreated`-Callback.
+
+Im Sinne von *Progressive Enhancement* und dem Prinzip, Animation als bewusstes Opt-in statt als Opt-out zu behandeln, drehen wir die Logik dabei um: Die ausladende Animation ist nicht der Standard, von dem wir bei `reduce` abweichen, sondern ein *Opt-in*, das nur bei `prefers-reduced-motion: no-preference` greift.
+Die zurückhaltende Grundannahme ist also „wenig Bewegung“, und die kräftige Animation kommt nur dann hinzu, wenn die nutzende Person nicht widersprochen hat.
+Das deckt auch ältere Browser ab, die die Media Query gar nicht kennen: Sie erhalten automatisch die ruhige Variante.
+
+Konkret kapseln wir alle aufwändigen View-Transition-Regeln in `@media (prefers-reduced-motion: no-preference)`:
 
 ```css
-/* Animationen nur, wenn keine Reduktion gewünscht ist (opt-in) */
+/* Kräftige Animationen nur, wenn keine Reduktion gewünscht ist (opt-in) */
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-group(.book-cover) {
     animation-duration: 500ms;
@@ -448,6 +471,24 @@ Für die Angular-Integration ist das zwar nicht mehr nötig, da `skipTransition(
 }
 ```
 
+Außerhalb dieses Blocks bleibt dann die dezente Grundvariante.
+Wer gar keine Zusatzanimation möchte, lässt dort den Browser-Standard wirken.
+Wer eine subtile Rückmeldung behalten will, definiert ein ruhiges, kurzes Überblenden ohne die weite Flugbewegung:
+
+```css
+/* Grundvariante für alle (inkl. reduce und unbekannte Browser): dezentes Fade */
+::view-transition-old(.book-cover),
+::view-transition-new(.book-cover) {
+  animation-duration: 120ms;
+  animation-timing-function: ease;
+}
+```
+
+So bleibt der Zusammenhang der beiden Ansichten erkennbar, ohne die ausladende Bewegung, die für empfindliche Personen problematisch sein kann.
+Dieser Ansatz greift auch dort, wo View Transitions ohne die Router-Integration zum Einsatz kommen.
+
+Welcher der beiden Wege der richtige ist, hängt vom konkreten Übergang ab: Je ausladender und länger die Animation, desto eher ist das vollständige Überspringen angebracht; bei ohnehin dezenten Übergängen genügt oft die per CSS reduzierte Variante.
+
 ### Übergänge bei reinen Query-Parameter-Wechseln überspringen
 
 `onViewTransitionCreated` eignet sich noch für einen weiteren Fall.
@@ -455,7 +496,7 @@ Der Router löst bei *jeder* Navigation einen Übergang aus, also auch dann, wen
 Ein typisches Beispiel ist ein Suchfeld, das den Suchbegriff als Query-Parameter in die URL schreibt: Jeder Tastendruck würde eine View Transition samt Überblendung und blockierender Overlay-Schicht auslösen.
 
 Die Angular-Dokumentation zeigt dafür das passende Muster: den Übergang überspringen, wenn sich die eigentliche Route gar nicht ändert.
-Die Prüfung lässt sich mit der Bedingung für reduzierte Bewegung aus dem vorigen Abschnitt im selben Callback kombinieren:
+Die Prüfung lässt sich mit der `reduce`-Bedingung aus Weg 1 im selben `onViewTransitionCreated`-Callback kombinieren:
 
 ```typescript
 import { inject } from '@angular/core';
@@ -507,6 +548,7 @@ Wie setzt ihr View Transitions in euren Projekten ein? Schreibt uns gern eure Er
 - Buch-Zusatzmaterial: [Resolvers – Daten beim Routing vorladen](/material/resolvers)
 - Chrome DevTools: [Animationen inspizieren](https://developer.chrome.com/docs/devtools/css/animations/)
 - Chrome Blog: [What's new in view transitions (2025)](https://developer.chrome.com/blog/view-transitions-in-2025)
+- Chrome Explainer: [Same-document view transitions und `prefers-reduced-motion`](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#react_to_the_reduced_motion_preference)
 - MDN: [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API)
 - MDN: [Browserkompatibilität der View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API#browser_compatibility)
 - MDN: [`@view-transition` – cross-document / MPA](https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition)
