@@ -3,7 +3,7 @@ title: 'Angular mit pnpm: sichere Dependencys und Best Practices'
 author: Danny Koppenhagen
 mail: mail@k9n.dev
 published: 2026-08-13
-lastModified: 2026-08-13
+lastModified: 2026-11-25
 keywords:
   - Angular
   - pnpm
