@@ -3,7 +3,7 @@ title: 'Angular mit pnpm: sichere Dependencys und Best Practices'
 author: Danny Koppenhagen
 mail: mail@k9n.dev
 published: 2026-08-13
-lastModified: 2026-08-13
+lastModified: 2026-11-25
 keywords:
   - Angular
   - pnpm
@@ -207,7 +207,7 @@ minimumReleaseAge: 1440
 Der Wert `1440` entspricht 24 Stunden (in Minuten).
 pnpm installiert keine Paketversion, die weniger als 24 Stunden alt ist, weder direkt noch transitiv.
 
-Zur Einordnung: Der [Angriff auf eslint-config-prettier](https://socket.dev/blog/eslint-prettier-malware) (2025) war nach 6 Stunden bereinigt, der [Shai-Hulud-Wurm](https://socket.dev/blog/shai-hulud-npm-worm) (2025) nach 12 Stunden, die [Kompromittierung von ua-parser-js](https://github.com/nicedoc/nicedoc/issues/1) (2021) nach 4 Stunden.
+Zur Einordnung: Der [Angriff auf eslint-config-prettier](https://socket.dev/blog/npm-phishing-campaign-leads-to-prettier-tooling-packages-compromise) (2025) war nach 6 Stunden bereinigt, der [Shai-Hulud-Wurm](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages) (2025) nach 12 Stunden, die [Kompromittierung von ua-parser-js](https://github.com/faisalman/ua-parser-js/issues/536) (2021) nach 4 Stunden.
 Mit einer 24-Stunden-Quarantäne wären alle diese Angriffe ins Leere gelaufen.
 
 > **Hinweis:** `minimumReleaseAge` schützt nicht grundsätzlich vor allen Supply-Chain-Angriffen, reduziert aber effektiv das Risiko kurzfristig kompromittierter Releases. Das ist die mit Abstand häufigste Angriffsform.
